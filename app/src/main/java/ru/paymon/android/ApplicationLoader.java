@@ -18,6 +18,10 @@ public class ApplicationLoader extends Application {
     @SuppressWarnings("JniMissingFunction")
     private static native int native_init(String host, short port, int version);
 
+    static {
+        System.loadLibrary("paymon-lib");
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -27,7 +31,6 @@ public class ApplicationLoader extends Application {
 
         User.loadConfig();
 
-        System.loadLibrary("paymon-lib");
         KeyGenerator.getInstance();
         native_init(Config.HOST, Config.PORT, Config.VERSION);
         final Intent connectorIntent = new Intent(ApplicationLoader.applicationContext, ConnectorService.class);
