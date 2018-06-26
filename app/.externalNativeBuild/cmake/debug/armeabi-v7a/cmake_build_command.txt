@@ -1,10 +1,10 @@
 Executable : C:\Users\vcimk\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe
 arguments : 
--HC:\PaymonAndroid\app
--BC:\PaymonAndroid\app\.externalNativeBuild\cmake\debug\armeabi-v7a
+-HC:\Users\vcimk\Desktop\paymonandroid\app
+-BC:\Users\vcimk\Desktop\paymonandroid\app\.externalNativeBuild\cmake\debug\armeabi-v7a
 -DANDROID_ABI=armeabi-v7a
 -DANDROID_PLATFORM=android-17
--DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\PaymonAndroid\app\build\intermediates\cmake\debug\obj\armeabi-v7a
+-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=C:\Users\vcimk\Desktop\paymonandroid\app\build\intermediates\cmake\debug\obj\armeabi-v7a
 -DCMAKE_BUILD_TYPE=Debug
 -DANDROID_NDK=C:\Users\vcimk\AppData\Local\Android\Sdk\ndk-bundle
 -DCMAKE_TOOLCHAIN_FILE=C:\Users\vcimk\AppData\Local\Android\Sdk\ndk-bundle\build\cmake\android.toolchain.cmake

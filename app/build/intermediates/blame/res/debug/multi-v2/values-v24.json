@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "C:\\PaymonAndroid\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v24\\values-v24.xml",
+            "outputFile": "C:\\Users\\vcimk\\Desktop\\paymonandroid\\app\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values-v24\\values-v24.xml",
             "map": [
                 {
                     "source": "C:\\Users\\vcimk\\.gradle\\caches\\transforms-1\\files-1.1\\support-media-compat-27.1.1.aar\\402ce63b82e74f19f7429555fdcd1305\\res\\values-v24\\values-v24.xml",

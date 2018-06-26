@@ -1,26 +1,26 @@
 {
   "buildFiles": [
-    "C:\\PaymonAndroid\\app\\CMakeLists.txt"
+    "C:\\Users\\vcimk\\Desktop\\paymonandroid\\app\\CMakeLists.txt"
   ],
   "cleanCommands": [
-    "C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\PaymonAndroid\\app\\.externalNativeBuild\\cmake\\debug\\armeabi-v7a --target clean"
+    "C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\vcimk\\Desktop\\paymonandroid\\app\\.externalNativeBuild\\cmake\\debug\\armeabi-v7a --target clean"
   ],
   "libraries": {
     "crypto-Debug-armeabi-v7a": {
       "artifactName": "crypto",
       "abi": "armeabi-v7a",
-      "output": "C:\\PaymonAndroid\\app\\libs\\boringssl\\build-android\\crypto\\libcrypto.a"
+      "output": "C:\\Users\\vcimk\\Desktop\\paymonandroid\\app\\libs\\boringssl\\build-android\\crypto\\libcrypto.a"
     },
     "ssl-Debug-armeabi-v7a": {
       "artifactName": "ssl",
       "abi": "armeabi-v7a",
-      "output": "C:\\PaymonAndroid\\app\\libs\\boringssl\\build-android\\ssl\\libssl.a"
+      "output": "C:\\Users\\vcimk\\Desktop\\paymonandroid\\app\\libs\\boringssl\\build-android\\ssl\\libssl.a"
     },
     "paymon-lib-Debug-armeabi-v7a": {
       "artifactName": "paymon-lib",
-      "buildCommand": "C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\PaymonAndroid\\app\\.externalNativeBuild\\cmake\\debug\\armeabi-v7a --target paymon-lib",
+      "buildCommand": "C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\Users\\vcimk\\Desktop\\paymonandroid\\app\\.externalNativeBuild\\cmake\\debug\\armeabi-v7a --target paymon-lib",
       "abi": "armeabi-v7a",
-      "output": "C:\\PaymonAndroid\\app\\build\\intermediates\\cmake\\debug\\obj\\armeabi-v7a\\libpaymon-lib.so"
+      "output": "C:\\Users\\vcimk\\Desktop\\paymonandroid\\app\\build\\intermediates\\cmake\\debug\\obj\\armeabi-v7a\\libpaymon-lib.so"
     }
   }
 }

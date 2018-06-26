@@ -1,3 +1,3 @@
-C:/PaymonAndroid/app/.externalNativeBuild/cmake/release/armeabi/CMakeFiles/paymon-lib.dir
-C:/PaymonAndroid/app/.externalNativeBuild/cmake/release/armeabi/CMakeFiles/edit_cache.dir
-C:/PaymonAndroid/app/.externalNativeBuild/cmake/release/armeabi/CMakeFiles/rebuild_cache.dir
+C:/Users/vcimk/Desktop/paymonandroid/app/.externalNativeBuild/cmake/release/armeabi/CMakeFiles/paymon-lib.dir
+C:/Users/vcimk/Desktop/paymonandroid/app/.externalNativeBuild/cmake/release/armeabi/CMakeFiles/edit_cache.dir
+C:/Users/vcimk/Desktop/paymonandroid/app/.externalNativeBuild/cmake/release/armeabi/CMakeFiles/rebuild_cache.dir

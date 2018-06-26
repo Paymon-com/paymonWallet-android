@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.davidecirillo.multichoicerecyclerview:multichoicerecyclerview-2.3.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/multichoicerecyclerview-2.3.0.aar/0f0dde5e9ae1ecc0875d916e822f30cd/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-1/files-1.1/multichoicerecyclerview-2.3.0.aar/0f0dde5e9ae1ecc0875d916e822f30cd/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.davidecirillo.multichoicerecyclerview/multichoicerecyclerview/2.3.0/d2e9e28ac293cc226d545c8efeb57ef5720a176/multichoicerecyclerview-2.3.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

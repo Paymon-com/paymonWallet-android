@@ -37,7 +37,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/KeyGenerator.cpp.o: CXX_COMPILER__p
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\KeyGenerator.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\KeyGenerator.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\KeyGenerator.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -47,7 +47,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/BuffersStorage.cpp.o: CXX_COMPILER_
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\BuffersStorage.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\BuffersStorage.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\BuffersStorage.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -57,7 +57,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/ByteArray.cpp.o: CXX_COMPILER__paym
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\ByteArray.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\ByteArray.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\ByteArray.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -67,7 +67,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/FileLog.cpp.o: CXX_COMPILER__paymon
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\FileLog.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\FileLog.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\FileLog.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -77,7 +77,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/SerializedBuffer.cpp.o: CXX_COMPILE
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\SerializedBuffer.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\SerializedBuffer.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\SerializedBuffer.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -87,7 +87,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/Packet.cpp.o: CXX_COMPILER__paymon-
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\Packet.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\Packet.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\Packet.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -97,7 +97,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/ByteStream.cpp.o: CXX_COMPILER__pay
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\ByteStream.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\ByteStream.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\ByteStream.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -107,7 +107,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/Socket.cpp.o: CXX_COMPILER__paymon-
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\Socket.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\Socket.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\Socket.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -117,7 +117,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/NetworkManager.cpp.o: CXX_COMPILER_
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\NetworkManager.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\NetworkManager.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\NetworkManager.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -127,7 +127,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/EventObject.cpp.o: CXX_COMPILER__pa
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\EventObject.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\EventObject.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\EventObject.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -137,7 +137,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/Timer.cpp.o: CXX_COMPILER__paymon-l
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\Timer.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\Timer.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\Timer.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -147,7 +147,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/Connection.cpp.o: CXX_COMPILER__pay
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\Connection.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\Connection.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\Connection.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -157,7 +157,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/RPC.cpp.o: CXX_COMPILER__paymon-lib
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\RPC.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\RPC.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\RPC.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -167,7 +167,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/Utils.cpp.o: CXX_COMPILER__paymon-l
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\Utils.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\Utils.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\Utils.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -177,7 +177,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/ClassStore.cpp.o: CXX_COMPILER__pay
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\ClassStore.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\ClassStore.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\ClassStore.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -187,7 +187,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/PaymonWrapper.cpp.o: CXX_COMPILER__
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\PaymonWrapper.cpp.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sources/cxx-stl/gnu-libstdc++/4.9/include/backward
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\PaymonWrapper.cpp
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\PaymonWrapper.cpp
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -197,7 +197,7 @@ build CMakeFiles/paymon-lib.dir/src/main/cpp/jni.c.o: C_COMPILER__paymon-lib ../
   DEP_FILE = CMakeFiles\paymon-lib.dir\src\main\cpp\jni.c.o.d
   FLAGS = -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/arm-linux-androideabi -D__ANDROID_API__=17 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -march=armv7-a -mfloat-abi=softfp -mfpu=vfpv3-d16 -mthumb -Wa,--noexecstack -Wformat -Werror=format-security  -Os -DNDEBUG  -fPIC
   INCLUDES = -I../../../../libs/boringssl/include
-  IN_ABS = C:\PaymonAndroid\app\src\main\cpp\jni.c
+  IN_ABS = C:\Users\vcimk\Desktop\paymonandroid\app\src\main\cpp\jni.c
   OBJECT_DIR = CMakeFiles\paymon-lib.dir
   OBJECT_FILE_DIR = CMakeFiles\paymon-lib.dir\src\main\cpp
   TARGET_COMPILE_PDB = CMakeFiles\paymon-lib.dir\
@@ -227,7 +227,7 @@ build ../../../../build/intermediates/cmake/release/obj/armeabi-v7a/libpaymon-li
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D C:\PaymonAndroid\app\.externalNativeBuild\cmake\release\armeabi-v7a && C:\Users\vcimk\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe -E echo "No interactive CMake dialog available.""
+  COMMAND = cmd.exe /C "cd /D C:\Users\vcimk\Desktop\paymonandroid\app\.externalNativeBuild\cmake\release\armeabi-v7a && C:\Users\vcimk\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe -E echo "No interactive CMake dialog available.""
   DESC = No interactive CMake dialog available...
   restat = 1
 build edit_cache: phony CMakeFiles/edit_cache.util
@@ -236,7 +236,7 @@ build edit_cache: phony CMakeFiles/edit_cache.util
 # Utility command for rebuild_cache
 
 build CMakeFiles/rebuild_cache.util: CUSTOM_COMMAND
-  COMMAND = cmd.exe /C "cd /D C:\PaymonAndroid\app\.externalNativeBuild\cmake\release\armeabi-v7a && C:\Users\vcimk\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe -HC:\PaymonAndroid\app -BC:\PaymonAndroid\app\.externalNativeBuild\cmake\release\armeabi-v7a"
+  COMMAND = cmd.exe /C "cd /D C:\Users\vcimk\Desktop\paymonandroid\app\.externalNativeBuild\cmake\release\armeabi-v7a && C:\Users\vcimk\AppData\Local\Android\Sdk\cmake\3.6.4111459\bin\cmake.exe -HC:\Users\vcimk\Desktop\paymonandroid\app -BC:\Users\vcimk\Desktop\paymonandroid\app\.externalNativeBuild\cmake\release\armeabi-v7a"
   DESC = Running CMake to regenerate build system...
   pool = console
   restat = 1
