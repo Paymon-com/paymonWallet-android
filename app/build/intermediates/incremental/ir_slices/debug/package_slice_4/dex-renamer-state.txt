@@ -1,4 +1,0 @@
-#Mon Jun 25 15:45:09 YEKT 2018
-base.0=C\:\\PaymonAndroid\\app\\build\\intermediates\\transforms\\dexMerger\\debug\\4
-path.0=classes.dex
-renamed.0=classes.dex

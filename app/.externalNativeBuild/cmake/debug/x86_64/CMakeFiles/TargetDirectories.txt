@@ -1,3 +1,0 @@
-C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/paymon-lib.dir
-C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/edit_cache.dir
-C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64/CMakeFiles/rebuild_cache.dir
