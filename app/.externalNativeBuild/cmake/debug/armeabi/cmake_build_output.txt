@@ -14,4 +14,4 @@
 -- Detecting CXX compile features - done
 -- Configuring done
 -- Generating done
--- Build files have been written to: C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/armeabi
+-- Build files have been written to: C:/Users/vcimk/Desktop/paymonandroid/app/.externalNativeBuild/cmake/debug/armeabi
