@@ -1,0 +1,26 @@
+{
+  "buildFiles": [
+    "C:\\PaymonAndroid\\app\\CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\PaymonAndroid\\app\\.externalNativeBuild\\cmake\\release\\armeabi --target clean"
+  ],
+  "libraries": {
+    "paymon-lib-Release-armeabi": {
+      "artifactName": "paymon-lib",
+      "buildCommand": "C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\PaymonAndroid\\app\\.externalNativeBuild\\cmake\\release\\armeabi --target paymon-lib",
+      "abi": "armeabi",
+      "output": "C:\\PaymonAndroid\\app\\build\\intermediates\\cmake\\release\\obj\\armeabi\\libpaymon-lib.so"
+    },
+    "crypto-Release-armeabi": {
+      "artifactName": "crypto",
+      "abi": "armeabi",
+      "output": "C:\\PaymonAndroid\\app\\libs\\boringssl\\build-android\\crypto\\libcrypto.a"
+    },
+    "ssl-Release-armeabi": {
+      "artifactName": "ssl",
+      "abi": "armeabi",
+      "output": "C:\\PaymonAndroid\\app\\libs\\boringssl\\build-android\\ssl\\libssl.a"
+    }
+  }
+}

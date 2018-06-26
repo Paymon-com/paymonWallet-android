@@ -1,0 +1,26 @@
+{
+  "buildFiles": [
+    "C:\\PaymonAndroid\\app\\CMakeLists.txt"
+  ],
+  "cleanCommands": [
+    "C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\PaymonAndroid\\app\\.externalNativeBuild\\cmake\\debug\\x86_64 --target clean"
+  ],
+  "libraries": {
+    "crypto-Debug-x86_64": {
+      "artifactName": "crypto",
+      "abi": "x86_64",
+      "output": "C:\\PaymonAndroid\\app\\libs\\boringssl\\build-android\\crypto\\libcrypto.a"
+    },
+    "ssl-Debug-x86_64": {
+      "artifactName": "ssl",
+      "abi": "x86_64",
+      "output": "C:\\PaymonAndroid\\app\\libs\\boringssl\\build-android\\ssl\\libssl.a"
+    },
+    "paymon-lib-Debug-x86_64": {
+      "artifactName": "paymon-lib",
+      "buildCommand": "C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\PaymonAndroid\\app\\.externalNativeBuild\\cmake\\debug\\x86_64 --target paymon-lib",
+      "abi": "x86_64",
+      "output": "C:\\PaymonAndroid\\app\\build\\intermediates\\cmake\\debug\\obj\\x86_64\\libpaymon-lib.so"
+    }
+  }
+}

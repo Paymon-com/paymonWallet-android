@@ -1,0 +1,15 @@
+# ninja log v5
+6	621	0	CMakeFiles/paymon-lib.dir/src/main/cpp/FileLog.cpp.o	ddb9c20f45d7b3f0
+4	633	0	CMakeFiles/paymon-lib.dir/src/main/cpp/Packet.cpp.o	982c7cd8fa2a3c4c
+3	843	0	CMakeFiles/paymon-lib.dir/src/main/cpp/BuffersStorage.cpp.o	a3b96391f7c7cdd8
+1	863	0	CMakeFiles/paymon-lib.dir/src/main/cpp/SerializedBuffer.cpp.o	86a57c84d28c34ed
+11	1636	0	CMakeFiles/paymon-lib.dir/src/main/cpp/Timer.cpp.o	1611dca06704739d
+13	2042	0	CMakeFiles/paymon-lib.dir/src/main/cpp/ClassStore.cpp.o	df2c4834e829fa2d
+15	2461	0	CMakeFiles/paymon-lib.dir/src/main/cpp/NetworkManager.cpp.o	3579474f248787e4
+21	417	0	CMakeFiles/paymon-lib.dir/src/main/cpp/jni.c.o	d01589c2f4145703
+9	836	0	CMakeFiles/paymon-lib.dir/src/main/cpp/ByteStream.cpp.o	de596acdec4cb39b
+16	1463	0	CMakeFiles/paymon-lib.dir/src/main/cpp/EventObject.cpp.o	57864b38853f5add
+14	1473	0	CMakeFiles/paymon-lib.dir/src/main/cpp/Utils.cpp.o	c711c6e46d41b33e
+6	1661	0	CMakeFiles/paymon-lib.dir/src/main/cpp/RPC.cpp.o	85a8e6fd63c6d237
+12	1673	0	CMakeFiles/paymon-lib.dir/src/main/cpp/Socket.cpp.o	880dc3e6056513a8
+10	1708	0	CMakeFiles/paymon-lib.dir/src/main/cpp/Connection.cpp.o	6ed6ed9bd53d017

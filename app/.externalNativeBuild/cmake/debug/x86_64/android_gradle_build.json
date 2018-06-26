@@ -1,0 +1,151 @@
+
+{
+	"buildFiles" : [ "C:/PaymonAndroid/app/CMakeLists.txt" ],
+	"cFileExtensions" : [ "c" ],
+	"cleanCommands" : 
+	[
+		"C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\PaymonAndroid\\app\\.externalNativeBuild\\cmake\\debug\\x86_64 --target clean"
+	],
+	"cppFileExtensions" : [ "cpp" ],
+	"libraries" : 
+	{
+		"crypto-Debug-x86_64" : 
+		{
+			"abi" : "x86_64",
+			"artifactName" : "crypto",
+			"buildType" : "debug",
+			"output" : "C:/PaymonAndroid/app/libs/boringssl/build-android/crypto/libcrypto.a",
+			"toolchain" : "3151761805"
+		},
+		"paymon-lib-Debug-x86_64" : 
+		{
+			"abi" : "x86_64",
+			"artifactName" : "paymon-lib",
+			"buildCommand" : "C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\cmake\\3.6.4111459\\bin\\cmake.exe --build C:\\PaymonAndroid\\app\\.externalNativeBuild\\cmake\\debug\\x86_64 --target paymon-lib",
+			"buildType" : "debug",
+			"files" : 
+			[
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/KeyGenerator.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/BuffersStorage.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/ByteArray.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/FileLog.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/SerializedBuffer.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/Packet.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/ByteStream.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/Socket.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/NetworkManager.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/EventObject.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/Timer.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/Connection.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/RPC.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/Utils.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/ClassStore.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot  -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\libs\\x86_64\\include -isystem C:\\Users\\vcimk\\AppData\\Local\\Android\\Sdk\\ndk-bundle\\sources\\cxx-stl\\gnu-libstdc++\\4.9\\include\\backward  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security   -Wall -std=c++11 -DANDROID -finline-functions -ffast-math -O0  -fPIC    -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/PaymonWrapper.cpp",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				},
+				
+				{
+					"flags" : "  --sysroot=C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot -Dpaymon_lib_EXPORTS -I..\\..\\..\\..\\libs\\boringssl\\include  -isystem C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/sysroot/usr/include/x86_64-linux-android -D__ANDROID_API__=21 -g -DANDROID -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -Wa,--noexecstack -Wformat -Werror=format-security  -O0  -fPIC      -c ",
+					"src" : "C:/PaymonAndroid/app/src/main/cpp/jni.c",
+					"workingDirectory" : "C:/PaymonAndroid/app/.externalNativeBuild/cmake/debug/x86_64"
+				}
+			],
+			"output" : "C:/PaymonAndroid/app/build/intermediates/cmake/debug/obj/x86_64/libpaymon-lib.so",
+			"toolchain" : "3151761805"
+		},
+		"ssl-Debug-x86_64" : 
+		{
+			"abi" : "x86_64",
+			"artifactName" : "ssl",
+			"buildType" : "debug",
+			"output" : "C:/PaymonAndroid/app/libs/boringssl/build-android/ssl/libssl.a",
+			"toolchain" : "3151761805"
+		}
+	},
+	"toolchains" : 
+	{
+		"3151761805" : 
+		{
+			"cCompilerExecutable" : "C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/toolchains/x86_64-4.9/prebuilt/windows-x86_64/bin/x86_64-linux-android-gcc.exe",
+			"cppCompilerExecutable" : "C:/Users/vcimk/AppData/Local/Android/Sdk/ndk-bundle/toolchains/x86_64-4.9/prebuilt/windows-x86_64/bin/x86_64-linux-android-g++.exe"
+		}
+	}
+}
