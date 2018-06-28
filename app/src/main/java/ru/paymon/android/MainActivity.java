@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChats;
+import ru.paymon.android.view.FragmentRegistrationEmailConfirmation;
 import ru.paymon.android.view.FragmentStart;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, NotificationManager.IListener {
