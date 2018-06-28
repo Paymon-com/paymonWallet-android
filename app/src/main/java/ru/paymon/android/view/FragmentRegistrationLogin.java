@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -73,7 +74,6 @@ public class FragmentRegistrationLogin extends Fragment {
 
         loginEditText = view.findViewById(R.id.registration_login_edit_text);
         hintError = view.findViewById(R.id.registration_login_error_hint);
-
         loginEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE) {
                 showFragmentRegistrationPassword();
