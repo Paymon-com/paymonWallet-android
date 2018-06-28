@@ -1,12 +1,9 @@
 package ru.paymon.android.view;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -23,7 +20,6 @@ import android.widget.Toast;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
@@ -64,7 +60,7 @@ public class FragmentAuthorization extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_authorization, container, false);
-        view.setBackgroundResource(R.drawable.backgroundt);
+        view.setBackgroundResource(R.drawable.background);
 
         dialog = new DialogProgress(getActivity());
         dialog.setCancelable(true);

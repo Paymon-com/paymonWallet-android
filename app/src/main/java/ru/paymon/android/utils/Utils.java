@@ -23,6 +23,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
@@ -146,6 +148,17 @@ public class Utils {
         }
 
         return result;
+    }
+
+    public static boolean emailCorrect(String email) {
+        Matcher matcher = Pattern.compile("^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$").matcher(email);
+        return matcher.find();
+    }
+
+    public static boolean loginCorrect(String userLogin) {
+        Matcher matcher;
+        matcher = Pattern.compile("^[a-zA-Z0-9-_\\.]+$").matcher(userLogin);
+        return userLogin.length() >= 3  && matcher.find();
     }
 
     public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {
