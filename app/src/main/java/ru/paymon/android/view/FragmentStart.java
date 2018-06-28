@@ -47,8 +47,6 @@ public class FragmentStart extends Fragment {
 
         Button authButton = (Button) view.findViewById(R.id.fragment_start_auth_button);
         Button registrationButton = (Button) view.findViewById(R.id.fragment_start_registration_button);
-        TextView hintTextView = (TextView) view.findViewById(R.id.fragment_start_already_have_button);
-        ImageView logoImageView = (ImageView) view.findViewById(R.id.fragment_start_logo_image_view);
 
         registrationButton.setOnClickListener((v) -> {
             final FragmentRegistrationLogin fragmentRegistrationLogin = FragmentRegistrationLogin.newInstance();
