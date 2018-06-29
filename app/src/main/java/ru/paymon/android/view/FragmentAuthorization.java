@@ -83,8 +83,8 @@ public class FragmentAuthorization extends Fragment {
         });
 
         recoveryPassword.setOnClickListener((v) -> {
-//            final FragmentRecoveryPasswordEmail fragmentRecoveryPasswordEmail = FragmentRecoveryPasswordEmail.newInstance();
-//            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentRecoveryPasswordEmail, null);
+            final FragmentRecoveryPasswordEmail fragmentRecoveryPasswordEmail = FragmentRecoveryPasswordEmail.newInstance();
+            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentRecoveryPasswordEmail, null);
         });
 
         passView.setOnKeyListener((v, keyCode, event) -> {
