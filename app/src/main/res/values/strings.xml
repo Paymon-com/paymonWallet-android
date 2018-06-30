@@ -534,11 +534,13 @@
     <string name="new_password">Новый пароль</string>
     <string name="enter_new_password_hint">Введите ваш новый пароль.</string>
     <string name="title_password_recovery">Восстановление пароля</string>
+    <string name="password_recovery_failed">Неверный код</string>
     <string name="send">Отправить</string>
     <string name="string_is_empty">Поле пустое. Введите электронную почту или логин.</string>
     <string name="email_not_linked">Аккаунт с этим адресом электронной почты не существует</string>
     <string name="login_not_linked">Аккаунт с этим логином не существует</string>
     <string name="confirmation_code_was_sent">На вашу электронную почту отправлен код подтверждения. Используйте его для восстановления пароля.</string>
+    <string name="confirmation_code_verified">Код верный, введите новый пароль.</string>
     <string name="string_code_is_empty">"Поле пустое. Введите код подтверждения."</string>
     <string name="password_was_changed">Пароль был успешно изменен.</string>
     <string name="invalid_confirmation_code">Неверный код подтверждения</string>

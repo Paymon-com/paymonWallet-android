@@ -17,23 +17,28 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
+import ru.paymon.android.net.NetworkManager;
+import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.R.id.send;
 
 public class FragmentRecoveryPasswordEmail extends Fragment {
+    public static final String PASSWORD_RECOVERY_LOGIN = "login";
     private static FragmentRecoveryPasswordEmail instance;
 
     private EditText emailEditText;
     private TextView hintError;
+    private DialogProgress dialogProgress;
 
-    public static synchronized FragmentRecoveryPasswordEmail newInstance(){
+    public static synchronized FragmentRecoveryPasswordEmail newInstance() {
         instance = new FragmentRecoveryPasswordEmail();
         return instance;
     }
 
-    public static synchronized FragmentRecoveryPasswordEmail getInstance(){
+    public static synchronized FragmentRecoveryPasswordEmail getInstance() {
         if (instance == null)
             instance = new FragmentRecoveryPasswordEmail();
         return instance;
@@ -53,8 +58,11 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
         emailEditText = view.findViewById(R.id.fragment_password_recovery_email_edit_text);
         hintError = view.findViewById(R.id.fragment_password_recovery_email_error_hint_text_view);
 
-        emailEditText.setOnEditorActionListener((textView,   i, keyEvent) -> {
-            if(i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE) {
+        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress.setCancelable(true);
+
+        emailEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE) {
                 showFragmentRecoveryPasswordCode();
             }
             return true;
@@ -106,21 +114,42 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showFragmentRecoveryPasswordCode(){
+    public void showFragmentRecoveryPasswordCode() {
         if (emailEditText.getText().toString().isEmpty()) {
             hintError.setText(R.string.string_is_empty);
             emailEditText.requestFocus();
             return;
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        builder.setTitle("Важное сообщение!")
-                .setMessage("Пиши серверную часть, паскуда!")
-                .setCancelable(false)
-                .setNegativeButton("ОК, иду", (dialogInterface, i) ->
-                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(),  FragmentRecoveryPasswordCode.newInstance(), null)
-                );
-        AlertDialog alert = builder.create();
-        alert.show();
+        RPC.PM_sendPasswordRecoveryCode passwordRecoveryCodeRequest = new RPC.PM_sendPasswordRecoveryCode();
+        passwordRecoveryCodeRequest.login = emailEditText.getText().toString();
+
+        dialogProgress.show();
+
+        final long requestID = NetworkManager.getInstance().sendRequest(passwordRecoveryCodeRequest, (response, error) -> {
+            if (error != null || (response != null && response instanceof RPC.PM_boolFalse)) {
+                if (dialogProgress != null && dialogProgress.isShowing())
+                    dialogProgress.cancel();
+                ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.password_recovery_failed));
+                return;
+            }
+
+            if (dialogProgress != null && dialogProgress.isShowing()) dialogProgress.dismiss();
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    .setMessage(getString(R.string.confirmation_code_was_sent))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                        Fragment fragment = FragmentRecoveryPasswordCode.newInstance();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(PASSWORD_RECOVERY_LOGIN, emailEditText.getText().toString());
+                        fragment.setArguments(bundle);
+                        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragment, null);
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });
+
+        dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false));
     }
 }

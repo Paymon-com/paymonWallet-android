@@ -47,9 +47,9 @@ public class RPC {
     public static final int ERROR_RESTORE_PASSWORD_INVALID_CODE = 0x1C;
 
     /**
-     Чтобы генерировать svuid (Serial Version Unique ID), нужно зайти в File->Settings->Editor->Live Templates,
-     затем нажать '+' и добавить свой шаблон как на скриншоте: http://imgur.com/a/aUM1V
-     (при написании svuid будет автоматически вызываться этот шаблон)
+     * Чтобы генерировать svuid (Serial Version Unique ID), нужно зайти в File->Settings->Editor->Live Templates,
+     * затем нажать '+' и добавить свой шаблон как на скриншоте: http://imgur.com/a/aUM1V
+     * (при написании svuid будет автоматически вызываться этот шаблон)
      */
 
     public static class PM_json extends Packet {
@@ -209,7 +209,7 @@ public class RPC {
 
         public static UserObject deserialize(SerializableData stream, int constructor, boolean exception) {
             UserObject result = null;
-            switch(constructor) {
+            switch (constructor) {
                 case PM_user.svuid:
                     result = new PM_user();
                     break;
@@ -416,7 +416,7 @@ public class RPC {
 
         public static Peer PMdeserialize(SerializableData stream, int constructor, boolean exception) {
             Peer result = null;
-            switch(constructor) {
+            switch (constructor) {
                 case 1202091136:
                     result = new PM_peerChannel();
                     break;
@@ -518,7 +518,9 @@ public class RPC {
         }
     }
 
-    /** Using for setting local wallet key or for wallet key container */
+    /**
+     * Using for setting local wallet key or for wallet key container
+     */
     public static class PM_BTC_setWalletKey extends Packet {
         public static int svuid = 353327501;
 
@@ -601,7 +603,7 @@ public class RPC {
 
         public static Message deserialize(SerializableData stream, int constructor, boolean exception) {
             Message result = null;
-            switch(constructor) {
+            switch (constructor) {
                 case PM_message.svuid:
                     result = new PM_message();
                     break;
@@ -622,7 +624,7 @@ public class RPC {
     public static class Update extends Packet {
         public static Update deserialize(SerializableData stream, int constructor, boolean exception) {
             Update result = null;
-            switch(constructor) {
+            switch (constructor) {
                 case PM_updateMessageID.svuid:
                     result = new PM_updateMessageID();
                     break;
@@ -1053,7 +1055,7 @@ public class RPC {
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags &~ MESSAGE_FLAG_UNREAD);
+            flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags & ~MESSAGE_FLAG_UNREAD);
             stream.writeInt32(flags);
             stream.writeInt64(id);
 
@@ -1121,7 +1123,7 @@ public class RPC {
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags &~ MESSAGE_FLAG_UNREAD);
+            flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags & ~MESSAGE_FLAG_UNREAD);
             stream.writeInt32(flags);
             stream.writeInt64(id);
 
@@ -1157,11 +1159,11 @@ public class RPC {
         public String lastName;
         public String patronymic;
         public String email;
-        public long   phone;
+        public long phone;
         public String country;
         public String city;
         public String birthdayDate;
-        public int    gender;
+        public int gender;
         public String walletKey;
         public byte[] walletBytes;
         public String inviteCode;
@@ -1577,7 +1579,7 @@ public class RPC {
 
         public static MessageMedia deserialize(SerializableData stream, int constructor, boolean exception) {
             MessageMedia result = null;
-            switch(constructor) {
+            switch (constructor) {
                 case PM_photo.svuid:
                     result = new PM_photo();
                     break;
@@ -1597,7 +1599,7 @@ public class RPC {
 
         public static Bool PMdeserialize(SerializableData stream, int constructor, boolean exception) {
             Bool result = null;
-            switch(constructor) {
+            switch (constructor) {
                 case SVUID_TRUE:
                     result = new PM_boolTrue();
                     break;
@@ -1677,6 +1679,7 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             hash = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(hash);
@@ -1723,6 +1726,7 @@ public class RPC {
             prefix = stream.readString(exception);
             privateKey = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(prefix);
@@ -1738,6 +1742,7 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             amount = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(amount);
@@ -1758,6 +1763,7 @@ public class RPC {
             receiverPrivateKey = stream.readString(exception);
             message = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(amount);
@@ -1775,6 +1781,7 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             hash = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(hash);
@@ -1789,6 +1796,7 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             privateKey = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(privateKey);
@@ -1803,6 +1811,7 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             amount = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(amount);
@@ -1814,6 +1823,7 @@ public class RPC {
 
         public void readParams(SerializableData stream, boolean exception) {
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
         }
@@ -1829,6 +1839,7 @@ public class RPC {
             walletKey = stream.readString(exception);
             privateKey = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(walletKey);
@@ -1844,6 +1855,7 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             privateKey = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(privateKey);
@@ -1858,6 +1870,7 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             publicKey = stream.readString(exception);
         }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(publicKey);
@@ -2003,7 +2016,7 @@ public class RPC {
         }
     }
 
-    public static class PM_restorePassword extends Packet {
+    public static class PM_passwordRecovery extends Packet {
         public static int svuid = 23582811;
 
         public int code;
@@ -2024,7 +2037,7 @@ public class RPC {
         }
     }
 
-    public static class PM_restorePasswordRequestCode extends Packet {
+    public static class PM_sendPasswordRecoveryCode extends Packet {
         public static int svuid = 564783058;
 
         public String login;
@@ -2036,6 +2049,24 @@ public class RPC {
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeString(login);
+        }
+    }
+
+    public static class PM_verifyPasswordRecoveryCode extends Packet {
+        public static int svuid = 569433023;
+
+        public String login;
+        public int code;
+
+        public void readParams(SerializableData stream, boolean exception) {
+            login = stream.readString(exception);
+            code = stream.readInt32(exception);
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            stream.writeString(login);
+            stream.writeInt32(code);
         }
     }
 }
