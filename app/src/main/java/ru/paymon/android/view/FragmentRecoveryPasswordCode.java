@@ -149,7 +149,7 @@ public class FragmentRecoveryPasswordCode extends Fragment {
                     .setMessage(getString(R.string.confirmation_code_verified))
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
-                        Fragment fragment = FragmentRecoveryPasswordNew.newInstance();
+                        Fragment fragment = FragmentRecoveryNewPassword.newInstance();
                         Bundle bundle = new Bundle();
                         bundle.putString(PASSWORD_RECOVERY_LOGIN, login);
                         bundle.putString(PASSWORD_RECOVERY_CODE, codeEditText.getText().toString());

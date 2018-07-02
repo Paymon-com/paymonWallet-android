@@ -27,8 +27,8 @@ import static ru.paymon.android.R.id.next;
 import static ru.paymon.android.view.FragmentRecoveryPasswordCode.PASSWORD_RECOVERY_CODE;
 import static ru.paymon.android.view.FragmentRecoveryPasswordEmail.PASSWORD_RECOVERY_LOGIN;
 
-public class FragmentRecoveryPasswordNew extends Fragment {
-    private static FragmentRecoveryPasswordNew instance;
+public class FragmentRecoveryNewPassword extends Fragment {
+    private static FragmentRecoveryNewPassword instance;
 
     private EditText newPassword;
     private EditText repeatNewPassword;
@@ -38,14 +38,14 @@ public class FragmentRecoveryPasswordNew extends Fragment {
     private String code;
 
 
-    public static synchronized FragmentRecoveryPasswordNew newInstance() {
-        instance = new FragmentRecoveryPasswordNew();
+    public static synchronized FragmentRecoveryNewPassword newInstance() {
+        instance = new FragmentRecoveryNewPassword();
         return instance;
     }
 
-    public static synchronized FragmentRecoveryPasswordNew getInstance() {
+    public static synchronized FragmentRecoveryNewPassword getInstance() {
         if (instance == null)
-            instance = new FragmentRecoveryPasswordNew();
+            instance = new FragmentRecoveryNewPassword();
         return instance;
     }
 
@@ -159,7 +159,7 @@ public class FragmentRecoveryPasswordNew extends Fragment {
         if (newPassword.getText().toString().length() < 8 || !repeatNewPassword.getText().toString().equals(newPassword.getText().toString()))
             return;
 
-        RPC.PM_passwordRecovery restorePassword = new RPC.PM_passwordRecovery();
+        RPC.PM_restorePassword restorePassword = new RPC.PM_restorePassword();
         restorePassword.login = login;
         restorePassword.code = Integer.parseInt(code);
         restorePassword.password = newPassword.getText().toString();

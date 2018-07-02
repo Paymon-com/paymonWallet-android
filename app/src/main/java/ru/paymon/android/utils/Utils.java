@@ -152,7 +152,7 @@ public class Utils {
 
     public static boolean emailCorrect(String email) {
         Matcher matcher = Pattern.compile("^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$").matcher(email);
-        return matcher.find();
+        return matcher.find() && !email.isEmpty();
     }
 
     public static boolean loginCorrect(String userLogin) {

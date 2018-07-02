@@ -121,7 +121,7 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
             return;
         }
 
-        RPC.PM_sendPasswordRecoveryCode passwordRecoveryCodeRequest = new RPC.PM_sendPasswordRecoveryCode();
+        RPC.PM_restorePasswordRequestCode passwordRecoveryCodeRequest = new RPC.PM_restorePasswordRequestCode();
         passwordRecoveryCodeRequest.login = emailEditText.getText().toString();
 
         dialogProgress.show();

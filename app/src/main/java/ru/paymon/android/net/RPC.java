@@ -2016,7 +2016,7 @@ public class RPC {
         }
     }
 
-    public static class PM_passwordRecovery extends Packet {
+    public static class PM_restorePassword extends Packet {
         public static int svuid = 23582811;
 
         public int code;
@@ -2037,7 +2037,7 @@ public class RPC {
         }
     }
 
-    public static class PM_sendPasswordRecoveryCode extends Packet {
+    public static class PM_restorePasswordRequestCode extends Packet {
         public static int svuid = 564783058;
 
         public String login;
@@ -2067,6 +2067,24 @@ public class RPC {
             stream.writeInt32(svuid);
             stream.writeString(login);
             stream.writeInt32(code);
+        }
+    }
+
+    public static class PM_checkEmailConfirmation extends Packet {
+        public static int svuid = 512435272;
+
+        public String login;
+        public String newEmail;
+
+        public void readParams(SerializableData stream, boolean exception) {
+            login = stream.readString(exception);
+            newEmail = stream.readString(exception);
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            stream.writeString(login);
+            stream.writeString(newEmail);
         }
     }
 }

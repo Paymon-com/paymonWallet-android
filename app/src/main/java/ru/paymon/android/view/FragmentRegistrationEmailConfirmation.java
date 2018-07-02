@@ -1,11 +1,13 @@
 package ru.paymon.android.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,8 +27,13 @@ import java.text.DateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
+import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
+import ru.paymon.android.User;
+import ru.paymon.android.net.NetworkManager;
+import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.R.id.next;
@@ -41,6 +48,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
     private TextView hintError;
     private TextView time;
     private CountDownTimer timer;
+    private DialogProgress dialogProgress;
 
     public static synchronized FragmentRegistrationEmailConfirmation newInstance() {
         instance = new FragmentRegistrationEmailConfirmation();
@@ -70,6 +78,8 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
         hintError = view.findViewById(R.id.email_confirmation_hint_error);
         time = view.findViewById(R.id.email_confirmation_timer);
 
+        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress.setCancelable(true);
 
         email.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE) {
@@ -98,7 +108,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
             }
         });
 
-        timer = new CountDownTimer(10000, 1000) {
+        timer = new CountDownTimer(30000, 1000) {
             @Override
             public void onTick(long l) {
                 time.setText("Время до след отправки : " + android.text.format.DateFormat.format("mm:ss", l).toString());
@@ -110,6 +120,8 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
                 time.setText("");
             }
         };
+
+        email.setText(User.currentUser.email);
 
         return view;
     }
@@ -138,10 +150,57 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
     public void confirmRegistration() {
         if (!emailCorrect(email.getText().toString())) return;
 
-        if(isSendingAvailable) {
+        if (isSendingAvailable) {
             isSendingAvailable = false;
-            Log.d(Config.TAG, "отправка");
-            //TODO: отправляем на серв
+
+            RPC.PM_checkEmailConfirmation checkEmailRequest = new RPC.PM_checkEmailConfirmation();
+            checkEmailRequest.login = User.currentUser.login;
+            checkEmailRequest.newEmail = email.getText().toString();
+
+            dialogProgress.show();
+
+            final long requestID = NetworkManager.getInstance().sendRequest(checkEmailRequest, (response, error) -> {
+                if (error != null) {
+                    if (dialogProgress != null && dialogProgress.isShowing())
+                        dialogProgress.cancel();
+                    switch (error.code) { //TODO: add text to string file
+                        case 1:
+                            ApplicationLoader.applicationHandler.post(() -> hintError.setText("Логин или емейл пустой"));
+                            break;
+                        case 2:
+                            ApplicationLoader.applicationHandler.post(() -> hintError.setText("Ошибка в емейле"));
+                            break;
+                        case 3:
+                            ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.registration_email_used));
+                            break;
+                    }
+                    return;
+                }
+
+                if (response != null) {
+                    if (response instanceof RPC.PM_boolFalse) {
+                        ApplicationLoader.applicationHandler.post(() -> hintError.setText(""));
+                        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                .setMessage(getString(R.string.confirmation_code_was_sent))
+                                .setCancelable(false);
+                        AlertDialog alertDialog = builder.create();
+                        alertDialog.show();
+                    }
+
+                    if (response instanceof RPC.PM_boolTrue) {
+                        User.currentUser.confirmed = true;
+                        User.saveConfig();
+
+                        Intent mainActivityIntent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
+                        mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(mainActivityIntent);
+                    }
+                }
+
+                if (dialogProgress != null && dialogProgress.isShowing()) dialogProgress.dismiss();
+            });
+
+            dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false));
             timer.start();
         }
     }
