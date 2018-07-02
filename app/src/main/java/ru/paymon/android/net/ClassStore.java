@@ -77,8 +77,8 @@ public class ClassStore {
         classStore.put(RPC.PM_getUserInfo.svuid, RPC.PM_getUserInfo.class);
         classStore.put(RPC.PM_getInvitedUsersCount.svuid, RPC.PM_getInvitedUsersCount.class);
         classStore.put(RPC.PM_invitedUsersCount.svuid, RPC.PM_invitedUsersCount.class);
-        classStore.put(RPC.PM_restorePassword.svuid, RPC.PM_restorePassword.class);
-        classStore.put(RPC.PM_restorePasswordRequestCode.svuid, RPC.PM_restorePasswordRequestCode.class);
+        classStore.put(RPC.PM_passwordRecovery.svuid, RPC.PM_passwordRecovery.class);
+        classStore.put(RPC.PM_sendPasswordRecoveryCode.svuid, RPC.PM_sendPasswordRecoveryCode.class);
     }
 
     private static ClassStore store = null;
