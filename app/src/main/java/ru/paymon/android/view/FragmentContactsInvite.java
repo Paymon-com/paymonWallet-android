@@ -73,12 +73,14 @@ public class FragmentContactsInvite extends Fragment {
 
         TabHost.TabSpec tabSpec = tabHost.newTabSpec(unregTabTag);
         tabSpec.setContent(R.id.linearLayout2);
-        tabSpec.setIndicator("Не зарегестрированные");
+        String inviteUnregistered = getString(R.string.invite_unregistered);
+        tabSpec.setIndicator(inviteUnregistered);
         tabHost.addTab(tabSpec);
 
         tabSpec = tabHost.newTabSpec(regTabTag);
         tabSpec.setContent(R.id.linearLayout);
-        tabSpec.setIndicator("Зарегестрированные");
+        String inviteRegistered = getString(R.string.invite_registered);
+        tabSpec.setIndicator(inviteRegistered);
         tabHost.addTab(tabSpec);
         tabHost.setCurrentTab(0);
 

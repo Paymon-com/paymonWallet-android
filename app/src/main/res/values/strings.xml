@@ -522,6 +522,8 @@
     <string name="copy_messages">Копировать сообщения</string>
     <string name="title_detailed_invited">Приглашенные пользователи</string>
     <string name="invite_information_count">Количество приглашенных:</string>
+    <string name="invite_registered">Зарегестрированные</string>
+    <string name="invite_unregistered">Не зарегестрированные</string>
     <string name="invite_information_invited_list">Список приглашенных пользователей</string>
     <string name="menu_clear_messages">Удалить историю сообщений</string>
     <string name="selected_messages_count">Выбрано</string>
