@@ -170,4 +170,10 @@ public class FragmentRegistrationPassword extends Fragment {
         fragmentRegistrationEmail.setArguments(passwordBundle);
         Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentRegistrationEmail, null);
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
+    }
 }

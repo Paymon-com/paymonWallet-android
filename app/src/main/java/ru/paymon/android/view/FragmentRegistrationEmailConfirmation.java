@@ -119,7 +119,14 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Utils.setActionBarWithTitle(getActivity(), getString(R.string.authorization));
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

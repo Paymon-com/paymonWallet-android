@@ -67,24 +67,24 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         messageInput = (EmojiconEditText) view.findViewById(R.id.input_edit_text);
         messageRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
 
+        View defaultCustomView;
+        if (isGroup)
+            defaultCustomView = createChatGroupCustomView();
+        else
+            defaultCustomView = createChatCustomView();
+
         final ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayShowCustomEnabled(false);
             supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
-
-            View defaultCustomView;
-            if (isGroup)
-                defaultCustomView = createChatGroupCustomView();
-            else
-                defaultCustomView = createChatCustomView();
-
             supportActionBar.setCustomView(defaultCustomView);
             supportActionBar.setDisplayShowCustomEnabled(true);
             supportActionBar.setDisplayShowHomeEnabled(true);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-
-            initChat(defaultCustomView);
         }
+
+        initChat(defaultCustomView);
+
         MessagesManager.getInstance().loadMessages(chatID, 15, 0, isGroup);
 
         return view;
@@ -185,6 +185,8 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
             LinkedList<Long> messages = (LinkedList<Long>) args[0];
             Boolean onScroll = (Boolean) args[1];
+
+            if (messagesAdapter == null || messagesAdapter.messageIDs == null) return;
 
             if (messagesAdapter.messageIDs.size() < 1)
                 messagesAdapter.messageIDs.addAll(0, messages);

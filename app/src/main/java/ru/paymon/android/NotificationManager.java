@@ -34,6 +34,7 @@ public class NotificationManager {
     public static final int prostocashApiKeyUpdated = totalEvents++;
     public static final int cancelDialog = totalEvents++;
     public static final int didPhotoUpdate = totalEvents++;
+    public static final int closeLoader = totalEvents++;
 
     public static final int screenStateChanged = totalEvents++;
     public static final int newSessionReceived = totalEvents++;

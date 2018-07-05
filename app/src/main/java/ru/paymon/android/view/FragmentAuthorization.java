@@ -120,11 +120,13 @@ public class FragmentAuthorization extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Utils.setActionBarWithTitle(getActivity(), getString(R.string.authorization));
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 
     @Override

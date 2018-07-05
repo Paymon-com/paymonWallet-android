@@ -1,5 +1,6 @@
 package ru.paymon.android.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Paint;
@@ -18,8 +19,10 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toolbar;
 
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -207,8 +210,8 @@ public class Utils {
         }
     }
 
-    public static void setActionBarWithTitle(FragmentActivity fragmentActivity, String title) {
-        ActionBar supportActionBar = ((AppCompatActivity) fragmentActivity).getSupportActionBar();
+    public static void setActionBarWithTitle(FragmentActivity activity, String title) {
+        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.show();
             supportActionBar.setTitle(title);
@@ -216,5 +219,22 @@ public class Utils {
             supportActionBar.setDisplayShowTitleEnabled(true);
             supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
         }
+//        ActionBar actionBar = activity.getActionBar();
+//        if (actionBar != null) {
+//            actionBar.setTitle(title);
+//            actionBar.setDisplayShowCustomEnabled(false);
+//            actionBar.setDisplayShowCustomEnabled(true);
+//            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
+//            actionBar.show();
+//        }
+    }
+
+    public static void hideActionBar(Activity activity) {
+//        ActionBar actionBar = activity.getActionBar();
+//        if (actionBar != null)
+//            actionBar.hide();
+        ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
+        if (actionBar != null)
+            actionBar.hide();
     }
 }

@@ -53,8 +53,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        NotificationManager.getInstance().addObserver(this, NotificationManager.dialogsNeedReload);
     }
 
     @Nullable
@@ -119,13 +117,15 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-
+        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_dialog));
+        NotificationManager.getInstance().addObserver(this, NotificationManager.dialogsNeedReload);
 //        MessageManager.getInstance().currentChatID = 0;
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
         NotificationManager.getInstance().removeObserver(this, NotificationManager.dialogsNeedReload);
     }
 
