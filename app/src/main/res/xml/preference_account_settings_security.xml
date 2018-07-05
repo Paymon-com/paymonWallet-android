@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/security_app"
+        android:key="pref_key_security__sett">
+        <CheckBoxPreference
+            android:title="@string/security_password_protect"
+            android:defaultValue="false"
+            android:key="check_password_protect"
+            android:summary="@string/security_password_protect_summary"/>
+        <Preference
+            android:enabled="false"
+            android:key="edit_password_protected"
+            android:title="@string/security_enter_password" />
+    </PreferenceCategory>
+    <!--<PreferenceCategory-->
+    <!--android:title="@string/security_chat"-->
+    <!--android:key="pref_key_chat_sett">-->
+    <!--<SwitchPreference-->
+    <!--android:title="@string/security_save_messages"-->
+    <!--android:key="switch_save_message"-->
+    <!--android:defaultValue="false"-->
+    <!--android:enabled="false"/>-->
+    <!--<ListPreference-->
+    <!--android:title="@string/security_save_location"-->
+    <!--android:dependency="switch_save_message"-->
+    <!--android:entries="@array/save_location_list"-->
+    <!--android:entryValues="@array/save_location_list"-->
+    <!--android:defaultValue="@string/default_save_location"/>-->
+
+    <!--</PreferenceCategory>-->
+</PreferenceScreen>

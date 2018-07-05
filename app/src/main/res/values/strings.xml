@@ -512,6 +512,8 @@
     <string name="invite_friends_hint">Приглашай своих друзей в Paymon и получай дополнительное вознаграждение после окончания ICO</string>
     <string name="invite_friends_hint_two">Чем больше людей зарегистрируются по твоему коду, тем больше будет твое вознаграждение</string>
     <string name="title_invite_fiends">Пригласить друзей</string>
+    <string name="title_invite_unreg_contacts">Пригласить</string>
+    <string name="title_invite_reg_contacts">Добавить</string>
     <string name="promotional_code">Код приглашение (не обязательно)</string>
     <string name="already_have_an_account">У вас уже есть аккаунт?</string>
     <string name="password_is_installed">Пароль успешно установлен</string>
@@ -520,6 +522,8 @@
     <string name="copy_messages">Копировать сообщения</string>
     <string name="title_detailed_invited">Приглашенные пользователи</string>
     <string name="invite_information_count">Количество приглашенных:</string>
+    <string name="invite_registered">Зарегестрированные</string>
+    <string name="invite_unregistered">Не зарегестрированные</string>
     <string name="invite_information_invited_list">Список приглашенных пользователей</string>
     <string name="menu_clear_messages">Удалить историю сообщений</string>
     <string name="selected_messages_count">Выбрано</string>

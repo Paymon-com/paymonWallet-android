@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sort_friends_list">
+        <item>По имени</item>
+        <item>По фамилии</item>
+        <item>По дате добавления</item>
+    </string-array>
+
+</resources>
