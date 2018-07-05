@@ -162,39 +162,30 @@ public class FragmentAuthorization extends Fragment {
 
 
     private void auth(final String login, final String password) {
-//        authing = true;
-//        if (Looper.myLooper() == null) {
-//            Looper.prepare();
-//        }
-
-        ApplicationLoader.applicationHandler.post(() -> {
-            dialog.show();
+        Utils.netQueue.postRunnable(() -> {
+            ApplicationLoader.applicationHandler.post(dialog::show);
 
             RPC.PM_auth request = new RPC.PM_auth();
             request.login = login;
             request.password = password;
 
             final long msgID = NetworkManager.getInstance().sendRequest(request, (response, error) -> {
-                if (dialog != null && dialog.isShowing())
-                    dialog.dismiss();
+                ApplicationLoader.applicationHandler.post(() -> {
+                    if (dialog != null && dialog.isShowing())
+                        dialog.dismiss();
+                });
 
                 if (response == null) return;
-
-                ApplicationLoader.applicationHandler.post(() -> {
-                    RPC.PM_userFull user = (RPC.PM_userFull) response;
-                    User.currentUser = user;
-                    User.saveConfig();
-                    User.loadConfig();
-                    Log.d(Config.TAG, "Login successful: " + user.login + " TOKEN:" + Utils.bytesToHexString(User.currentUser.token));
-                    NetworkManager.getInstance().setAuthorized(true);
-                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentChats.getInstance(), null);
-//                    NotificationManager.getInstance().postNotificationName(NotificationManager.userDidLoggedIn);
-                });
+                RPC.PM_userFull user = (RPC.PM_userFull) response;
+                User.currentUser = user;
+                User.saveConfig();
+                User.loadConfig();
+                Log.d(Config.TAG, "Login successful: " + user.login + " TOKEN:" + Utils.bytesToHexString(User.currentUser.token));
+                NetworkManager.getInstance().setAuthorized(true);
             });
 
-            dialog.setOnDismissListener((dialogInterface) ->
-                    NetworkManager.getInstance().cancelRequest(msgID, false)
-            );
+            ApplicationLoader.applicationHandler.post(() ->
+                    dialog.setOnDismissListener((dialogInterface) -> NetworkManager.getInstance().cancelRequest(msgID, false)));
         });
     }
 

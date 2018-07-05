@@ -10,8 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import ru.paymon.android.R;
 import ru.paymon.android.utils.Utils;
@@ -49,13 +47,11 @@ public class FragmentStart extends Fragment {
         Button registrationButton = (Button) view.findViewById(R.id.fragment_start_registration_button);
 
         registrationButton.setOnClickListener((v) -> {
-            final FragmentRegistrationLogin fragmentRegistrationLogin = FragmentRegistrationLogin.newInstance();
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentRegistrationLogin, "registr");
+            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentRegistrationLogin.newInstance(), null);
         });
 
         authButton.setOnClickListener((v) -> {
-            final FragmentAuthorization fragmentAuthorization = FragmentAuthorization.newInstance();
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentAuthorization, "auth");
+            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentAuthorization.newInstance(), null);
         });
 
         setHasOptionsMenu(true);

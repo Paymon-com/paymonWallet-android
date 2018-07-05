@@ -1,12 +1,13 @@
 package ru.paymon.android;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.MenuItem;
+
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChats;
 import ru.paymon.android.view.FragmentRegistrationEmailConfirmation;
@@ -64,7 +65,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public void didReceivedNotification(int id, Object... args) {
         if (id == NotificationManager.userAuthorized) {
             if (!User.currentUser.confirmed || User.currentUser.email.isEmpty()) {
-                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.getInstance(), null);
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance(), null);
             } else {
                 Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance(), null);
             }

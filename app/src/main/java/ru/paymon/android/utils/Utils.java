@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -20,8 +21,6 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -104,50 +103,38 @@ public class Utils {
         return text.length();
     }
 
+    //TODO:Добавить настройку юзера format24h
     public static String formatDateTime(long timestamp, boolean format24h, boolean inChat) {
-        String result;
+        final Date now = new Date(System.currentTimeMillis());
+        final Date msgDate = new Date(timestamp * 1000L);
+
+        final int yearDiff = Integer.parseInt((String) DateFormat.format("yyyy", now)) - Integer.parseInt((String) DateFormat.format("yyyy", msgDate));
+        final int monthDiff = Integer.parseInt((String) DateFormat.format("MM", now)) - Integer.parseInt((String) DateFormat.format("MM", msgDate));
+        final int dayDiff = Integer.parseInt((String) DateFormat.format("dd", now)) - Integer.parseInt((String) DateFormat.format("dd", msgDate));
+
         String pattern;
 
-        Date now = new Date(System.currentTimeMillis());
-        Date msgDate = new Date(timestamp * 1000L);
-        if (now.getYear() != msgDate.getYear()) {
-            if (inChat) {
-                if (!format24h)
-                    pattern = "d MMM yyyy hh:mm";
-                else
-                    pattern = "d MMM yyyy HH:mm";
-            } else {
-                if (!format24h)
-                    pattern = "d MMM yyyy";
-                else
-                    pattern = "d MMM yyyy";
-            }
-
-            result = new SimpleDateFormat(pattern).format(new Date(timestamp * 1000L));
-        } else if (now.getDay() - msgDate.getDay() > 1) {
-            if (!format24h)
-                pattern = "d MMM";
+        if (dayDiff == 0 && monthDiff == 0)
+            pattern = "HH:mm";
+        else if (dayDiff == 1 && monthDiff == 0)
+            if (format24h)
+                return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("HH:mm", msgDate);
             else
-                pattern = "d MMM";
-
-            result = new SimpleDateFormat(pattern).format(new Date(timestamp * 1000L));
-        } else if (now.getDay() - msgDate.getDay() == 1) {
-            if (!format24h)
-                pattern = "hh:mm";
+                return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("hh:mm", msgDate);
+        else if (dayDiff > 1 || monthDiff > 0)
+            pattern = "d MMM";
+        else if (yearDiff != 0)
+            if (inChat)
+                pattern = "d MMM yyyy HH:mm";
             else
-                pattern = "HH:mm";
+                pattern = "d MMM yyyy";
+        else
+            pattern = "HH:mm";
 
-            result = ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + new SimpleDateFormat(pattern).format(new Date(timestamp * 1000L));
-        } else {
-            if (!format24h)
-                pattern = "hh:mm";
-            else
-                pattern = "HH:mm";
+        if (!format24h)
+            pattern = pattern.replace("HH", "hh");
 
-            result = new SimpleDateFormat(pattern).format(new Date(timestamp * 1000L));
-        }
-
-        return result;
+        return (String) DateFormat.format(pattern, msgDate);
     }
 
     public static boolean emailCorrect(String email) {
@@ -158,7 +145,7 @@ public class Utils {
     public static boolean loginCorrect(String userLogin) {
         Matcher matcher;
         matcher = Pattern.compile("^[a-zA-Z0-9-_\\.]+$").matcher(userLogin);
-        return userLogin.length() >= 3  && matcher.find();
+        return userLogin.length() >= 3 && matcher.find();
     }
 
     public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {

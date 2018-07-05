@@ -7,12 +7,10 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
-
 import java.util.HashMap;
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
 import ru.paymon.android.utils.KeyGenerator;
@@ -139,12 +137,7 @@ public class NetworkManager {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            ApplicationLoader.applicationHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    NotificationManager.getInstance().postNotificationName(NotificationManager.didDisconnectedFromTheServer);
-                }
-            });
+            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didDisconnectedFromTheServer));
             connectorService = null;
             connectorServiceIsBound = false;
         }
@@ -202,13 +195,7 @@ public class NetworkManager {
     }
 
     public void reconnect() {
-        ApplicationLoader.applicationHandler.post(new Runnable() {
-            @Override
-            public void run() {
-                NotificationManager.getInstance().postNotificationName(NotificationManager.didDisconnectedFromTheServer);
-            }
-        });
-
+        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didDisconnectedFromTheServer));
         reset();
         native_reconnect();
     }
@@ -412,12 +399,7 @@ public class NetworkManager {
         if (state == 3) {
             NotificationManager.getInstance().postNotificationName(NotificationManager.didConnectedToServer);
         } else {
-            ApplicationLoader.applicationHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    NotificationManager.getInstance().postNotificationName(NotificationManager.didDisconnectedFromTheServer);
-                }
-            });
+            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didDisconnectedFromTheServer));
         }
         NetworkManager.getInstance().connectionState = state;
     }

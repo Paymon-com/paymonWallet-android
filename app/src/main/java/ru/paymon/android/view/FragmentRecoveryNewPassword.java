@@ -146,7 +146,6 @@ public class FragmentRecoveryNewPassword extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case next:
                 recoveryPassword();
@@ -159,33 +158,40 @@ public class FragmentRecoveryNewPassword extends Fragment {
         if (newPassword.getText().toString().length() < 8 || !repeatNewPassword.getText().toString().equals(newPassword.getText().toString()))
             return;
 
-        RPC.PM_restorePassword restorePassword = new RPC.PM_restorePassword();
-        restorePassword.login = login;
-        restorePassword.code = Integer.parseInt(code);
-        restorePassword.password = newPassword.getText().toString();
+        Utils.netQueue.postRunnable(() -> {
+            RPC.PM_restorePassword restorePassword = new RPC.PM_restorePassword();
+            restorePassword.login = login;
+            restorePassword.code = Integer.parseInt(code);
+            restorePassword.password = newPassword.getText().toString();
 
-        dialogProgress.show();
+            ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
-        final long requestID = NetworkManager.getInstance().sendRequest(restorePassword, (response, error) -> {
-            if (error != null || (response != null && response instanceof RPC.PM_boolFalse)) {
-                if (dialogProgress != null && dialogProgress.isShowing())
-                    dialogProgress.cancel();
-                ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.password_recovery_failed));
-                return;
-            }
+            final long requestID = NetworkManager.getInstance().sendRequest(restorePassword, (response, error) -> {
+                if (error != null || (response != null && response instanceof RPC.PM_boolFalse)) {
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        if (dialogProgress != null && dialogProgress.isShowing())
+                            dialogProgress.cancel();
+                        hintError.setText(R.string.password_recovery_failed);
+                    });
+                    return;
+                }
 
-            if (dialogProgress != null && dialogProgress.isShowing()) dialogProgress.dismiss();
+                ApplicationLoader.applicationHandler.post(() -> {
+                    if (dialogProgress != null && dialogProgress.isShowing())
+                        dialogProgress.dismiss();
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage(getString(R.string.password_was_changed))
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.ok), (dialogInterface, i) ->
-                            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentStart.newInstance(), null)
-                    );
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                            .setMessage(getString(R.string.password_was_changed))
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.ok), (dialogInterface, i) ->
+                                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentStart.newInstance(), null)
+                            );
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                });
+            });
+
+            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
         });
-
-        dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false));
     }
 }

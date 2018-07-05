@@ -770,4 +770,43 @@ public:
     }
 };
 
+
+class PM_verifyPasswordRecoveryCode : public Packet {
+public:
+    static const uint svuid = 569433023;
+
+    std::string login;
+    int32 code;
+
+    void readParams(SerializedBuffer *stream, bool &error) override {
+        login = stream->readString(&error);
+        code = stream->readInt32(&error);
+    }
+
+    void serializeToStream(SerializedBuffer *stream) override {
+        stream->writeInt32(svuid);
+        stream->writeString(login);
+        stream->writeInt32(code);
+    }
+};
+
+class PM_checkEmailConfirmation : public Packet {
+public:
+    static const uint svuid = 512435272;
+
+    std::string login;
+    std::string newEmail;
+
+    void readParams(SerializedBuffer *stream, bool &error) override {
+        login = stream->readString(&error);
+        newEmail = stream->readString(&error);
+    }
+
+    void serializeToStream(SerializedBuffer *stream) override {
+        stream->writeInt32(svuid);
+        stream->writeString(login);
+        stream->writeString(newEmail);
+    }
+};
+
 #endif //PAYMONSERVEREPOLL_RPC_H

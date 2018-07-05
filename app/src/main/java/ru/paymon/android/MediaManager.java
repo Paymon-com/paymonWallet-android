@@ -5,9 +5,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Environment;
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
-
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -50,6 +50,21 @@ public class MediaManager {
             }
         }
         return localInstance;
+    }
+
+    public void prepare() {
+        try {
+            File path = new File(Environment.getExternalStorageDirectory(), "Paymon");
+            path.mkdir();
+            File imagePath = new File(path, "photos");
+            imagePath.mkdir();
+            File videoPath = new File(path, "video");
+            videoPath.mkdir();
+            File stickersPath = new File(path, "stickers");
+            stickersPath.mkdir();
+        } catch (Exception e) {
+            Log.e(Config.TAG, e.getMessage());
+        }
     }
 
     private MediaManager() {
@@ -210,12 +225,7 @@ public class MediaManager {
                     }
                     stickerPacks.put(stickerPackResponse.id, stickerPack);
 
-                    ApplicationLoader.applicationHandler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            NotificationManager.getInstance().postNotificationName(NotificationManager.didLoadedStickerPack, stickerPackID);
-                        }
-                    });
+                    ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didLoadedStickerPack, stickerPackID));
                 }
             }
         });
@@ -254,12 +264,7 @@ public class MediaManager {
             final Bitmap bitmap = loadPhotoBitmap(photo.user_id, photo.id);
             if (bitmap != null) {
                 final Photo newPhoto = new Photo(photo.id, photo.user_id, bitmap);
-                ApplicationLoader.applicationHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ObservableMediaManager.getInstance().postPhotoNotification(newPhoto);
-                    }
-                });
+                ApplicationLoader.applicationHandler.post(() -> ObservableMediaManager.getInstance().postPhotoNotification(newPhoto));
             }
         }
     }
@@ -270,12 +275,7 @@ public class MediaManager {
             final Bitmap bitmap = loadStickerBitmap(getStickerPackIDByStickerID(sticker.id), sticker.id);
             sticker.image = new BitmapDrawable(ApplicationLoader.applicationContext.getResources(), bitmap);
             if (bitmap != null) {
-                ApplicationLoader.applicationHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        ObservableMediaManager.getInstance().postStickerNotification(sticker);
-                    }
-                });
+                ApplicationLoader.applicationHandler.post(() -> ObservableMediaManager.getInstance().postStickerNotification(sticker));
             }
         }
     }

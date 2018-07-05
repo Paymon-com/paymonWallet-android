@@ -1,13 +1,10 @@
 package ru.paymon.android.view;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,13 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
-
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.MainActivity;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
@@ -152,38 +145,44 @@ public class FragmentRegistrationEmail extends Fragment {
 
         Utils.hideKeyboard(this.getView());
 
-        final RPC.PM_register packet = new RPC.PM_register();
-        packet.login = login;
-        packet.password = password;
-        packet.walletKey = "0000000000000000000000000000000000";
-        packet.walletBytes = new byte[32];
-        packet.email = emailEditText.getText().toString().trim();
-        packet.inviteCode = promocodeEditText.getText().toString().trim().toLowerCase();
+        Utils.netQueue.postRunnable(() -> {
+            final RPC.PM_register packet = new RPC.PM_register();
+            packet.login = login;
+            packet.password = password;
+            packet.walletKey = "0000000000000000000000000000000000";
+            packet.walletBytes = new byte[32];
+            packet.email = emailEditText.getText().toString().trim();
+            packet.inviteCode = promocodeEditText.getText().toString().trim().toLowerCase();
 
-        dialogProgress.show();
+            ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
-        final long registration = NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
-            if (error != null && error.code == RPC.ERROR_REGISTER_USER_EXISTS) {
-                if (dialogProgress != null && dialogProgress.isShowing())
-                    dialogProgress.cancel();
-                ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.registration_email_used));
-                return;
-            }
+            final long registration = NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
+                if (error != null && error.code == RPC.ERROR_REGISTER_USER_EXISTS) {
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        if (dialogProgress != null && dialogProgress.isShowing())
+                            dialogProgress.cancel();
+                        hintError.setText(R.string.registration_email_used);
+                    });
+                    return;
+                }
 
-            if (response == null) return;
+                if (response == null) return;
 
-            User.currentUser = (RPC.PM_userFull) response;
-            User.saveConfig();
+                User.currentUser = (RPC.PM_userFull) response;
+                User.saveConfig();
 
-            if (dialogProgress != null && dialogProgress.isShowing()) dialogProgress.dismiss();
-
+                ApplicationLoader.applicationHandler.post(() -> {
+                    if (dialogProgress != null && dialogProgress.isShowing())
+                        dialogProgress.dismiss();
+                });
 //            NotificationManager.getInstance().postNotificationName(NotificationManager.userRegistered);
 //            Intent mainActivityIntent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
 //            mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 //            mainActivityIntent.putExtra(REGISTRATION_FLAG, true);
 //            startActivity(mainActivityIntent);
-        });
+            });
 
-        dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(registration, false));
+            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(registration, false)));
+        });
     }
 }

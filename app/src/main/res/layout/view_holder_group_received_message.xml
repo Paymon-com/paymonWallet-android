@@ -11,7 +11,7 @@
     android:paddingStart="8dp"
     android:paddingTop="4dp">
 
-    <ru.paymon.android.components.CircleImage
+    <ru.paymon.android.components.CircleImageView
         android:id="@+id/photo"
         android:layout_width="48dp"
         android:layout_height="48dp"
