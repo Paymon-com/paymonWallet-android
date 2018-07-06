@@ -33,6 +33,7 @@ public class FragmentProfile extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Nullable
@@ -41,6 +42,7 @@ public class FragmentProfile extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         Utils.setActionBarWithTitle(getActivity(), "");
+        Utils.setArrowBackInToolbar(getActivity());
 
         ImageView updateProfile = view.findViewById(R.id.profile_update_button);
 

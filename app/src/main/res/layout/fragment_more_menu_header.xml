@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ru.paymon.android.components.CircleImageView
-        android:id="@+id/more_menu_header_profile_avatar_image_view"
+        android:id="@+id/fragment_more_menu_header_profile_avatar_image_view"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
@@ -17,26 +17,26 @@
         app:srcCompat="@android:color/holo_green_dark" />
 
     <TextView
-        android:id="@+id/more_menu_header_profile_name_text_view"
+        android:id="@+id/fragment_more_menu_header_profile_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="TextView"
         android:textColor="@color/colorPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/more_menu_header_profile_hint_text_view"
-        app:layout_constraintStart_toEndOf="@+id/more_menu_header_profile_avatar_image_view"
-        app:layout_constraintTop_toTopOf="@+id/more_menu_header_profile_avatar_image_view" />
+        app:layout_constraintBottom_toTopOf="@+id/fragment_more_menu_header_profile_hint_text_view"
+        app:layout_constraintStart_toEndOf="@+id/fragment_more_menu_header_profile_avatar_image_view"
+        app:layout_constraintTop_toTopOf="@+id/fragment_more_menu_header_profile_avatar_image_view" />
 
     <TextView
-        android:id="@+id/more_menu_header_profile_hint_text_view"
+        android:id="@+id/fragment_more_menu_header_profile_hint_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/go_to_profile"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/more_menu_header_profile_avatar_image_view"
-        app:layout_constraintStart_toEndOf="@+id/more_menu_header_profile_avatar_image_view"
-        app:layout_constraintTop_toBottomOf="@+id/more_menu_header_profile_name_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/fragment_more_menu_header_profile_avatar_image_view"
+        app:layout_constraintStart_toEndOf="@+id/fragment_more_menu_header_profile_avatar_image_view"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_more_menu_header_profile_name_text_view"
         app:layout_constraintVertical_bias="0.0" />
 
     <FrameLayout

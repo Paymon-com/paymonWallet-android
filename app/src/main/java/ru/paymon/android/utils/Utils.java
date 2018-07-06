@@ -161,15 +161,15 @@ public class Utils {
         return userLogin.length() >= 3 && matcher.find();
     }
 
-//    public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {
-//        ApplicationLoader.applicationHandler.post(() -> {
-//            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.fade_to_back, R.anim.fade_to_up, R.anim.fade_to_back);
-//            fragmentTransaction.replace(R.id.container, fragment);
-//            fragmentTransaction.addToBackStack(tag);
-//            fragmentTransaction.commit();
-//        });
-//    }
+    public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {
+        ApplicationLoader.applicationHandler.post(() -> {
+            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
+            fragmentTransaction.replace(R.id.container, fragment);
+            fragmentTransaction.addToBackStack(tag);
+            fragmentTransaction.commit();
+        });
+    }
 
     public static void replaceFragmentWithAnimationFade(FragmentManager fragmentManager, Fragment fragment, String tag) {
 

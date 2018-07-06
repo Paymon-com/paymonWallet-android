@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,8 +17,6 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.utils.Utils;
-
-import static ru.paymon.android.Config.TAG;
 
 public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -51,14 +48,13 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
 
         final NavigationView moreMenu = view.findViewById(R.id.fragment_more_menu_navigation_view);
         final View headerView = moreMenu.getHeaderView(0);
-        final TextView name = headerView.findViewById(R.id.more_menu_header_profile_name_text_view);
-        final CircleImageView avatar = headerView.findViewById(R.id.more_menu_header_profile_avatar_image_view);
+        final TextView name = headerView.findViewById(R.id.fragment_more_menu_header_profile_name_text_view);
+        final CircleImageView avatar = headerView.findViewById(R.id.fragment_more_menu_header_profile_avatar_image_view);
 
         moreMenu.setNavigationItemSelectedListener(this);
 
         headerView.setOnClickListener(view1 -> {
             //TODO Вызвать вью профиля
-            Log.d(TAG, "onCreateView: " + "to profile");
         });
 
         name.setText(Utils.formatUserName(User.currentUser));
@@ -82,15 +78,13 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
 
         switch (itemId) {
             case R.id.more_menu_profit:
-                Log.d(TAG, "onCreateView: " + "to profit");
 
                 break;
             case R.id.more_menu_invite:
-                Log.d(TAG, "onCreateView: " + "to invite");
 
                 break;
             case R.id.more_menu_faq:
-                Log.d(TAG, "onCreateView: " + "to faq");
+                break;
 
         }
 

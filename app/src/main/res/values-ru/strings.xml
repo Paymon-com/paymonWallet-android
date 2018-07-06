@@ -14,7 +14,7 @@
     <string name="title_faq">Помощь</string>
     <string name="title_registration">Регистрация</string>
     <string name="additionally">Прочее</string>
-    <string name="logout">Выйти</string>
+    <string name="exit">Выйти</string>
 
     <string name="reg_name_correct">Имя содержит недопустимые символы</string>
     <string name="reg_surname_correct">Фамилия содержит недопустимые символы</string>
@@ -108,7 +108,7 @@
     <string name="default_sound">Notice</string>
 
     <string name="about_program_text">Paymon для Android</string>
-    <string name="about_program_text_version">"версия %1$d"</string>
+    <string name="about_program_text_version">"версия %s"</string>
 
     <string name="referal_share">Привет! Устанавливай и регистрируйся в приложении по коду \'%1$s\' и получи бесплатно криптовалюту от Paymon! https://paymon.org</string>
 

@@ -51,14 +51,8 @@ public class FragmentStart extends Fragment {
 
         registrationButton.setOnClickListener((v) -> {
             final FragmentRegistrationLogin fragmentRegistrationLogin = FragmentRegistrationLogin.newInstance();
-            Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentMoreMenu.getInstance(), "registr");
+            Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragmentRegistrationLogin, "registr");
         });
-
-//        registrationButton.setOnClickListener((v) -> {
-//            final FragmentRegistrationLogin fragmentRegistrationLogin = FragmentRegistrationLogin.newInstance();
-//            Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragmentRegistrationLogin, "registr");
-//        });
-
 
         authButton.setOnClickListener((v) -> {
             final FragmentAuthorization fragmentAuthorization = FragmentAuthorization.newInstance();
