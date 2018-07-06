@@ -141,7 +141,7 @@ public class FragmentRecoveryPasswordNew extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.registration_email_menu, menu);
+        inflater.inflate(R.menu.next_menu, menu);
     }
 
     @Override
@@ -180,7 +180,7 @@ public class FragmentRecoveryPasswordNew extends Fragment {
                     .setMessage(getString(R.string.password_was_changed))
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.ok), (dialogInterface, i) ->
-                            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentStart.newInstance(), null)
+                            Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentStart.newInstance(), null)
                     );
             AlertDialog alertDialog = builder.create();
             alertDialog.show();

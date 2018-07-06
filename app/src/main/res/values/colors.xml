@@ -70,5 +70,5 @@
     <color name="scan_result_view">#b0000000</color>
     <color name="scan_result_dots">#c099cc00</color>
 
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorAccent">@color/blue_dark</color>
 </resources>

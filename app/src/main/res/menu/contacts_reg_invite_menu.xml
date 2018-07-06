@@ -5,6 +5,6 @@
         android:id="@+id/inviteReg"
         android:titleCondensed="@string/title_invite_reg_contacts"
         app:showAsAction="ifRoom"
-        android:title="@string/next"/>
+        android:title="@string/title_invite_reg_contacts" />
 
 </menu>

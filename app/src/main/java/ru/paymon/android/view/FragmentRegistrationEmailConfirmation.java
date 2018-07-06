@@ -2,11 +2,9 @@ package ru.paymon.android.view;
 
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,13 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.TextView;
-
-import java.text.DateFormat;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
@@ -31,7 +24,6 @@ import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.R.id.next;
 import static ru.paymon.android.utils.Utils.emailCorrect;
-import static ru.paymon.android.utils.Utils.setActionBarWithTitle;
 
 public class FragmentRegistrationEmailConfirmation extends Fragment {
     private static FragmentRegistrationEmailConfirmation instance;
@@ -121,7 +113,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
     }
 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.registration_email_menu, menu);
+        inflater.inflate(R.menu.next_menu, menu);
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -65,26 +64,22 @@ public class FragmentAuthorization extends Fragment {
         dialog = new DialogProgress(getActivity());
         dialog.setCancelable(true);
 
-        loginView = (EditText) view.findViewById(R.id.login_authorization);
-        passView = (EditText) view.findViewById(R.id.password_authorization);
-        recoveryPassword = (TextView) view.findViewById(R.id.forgot_password);
+        loginView = view.findViewById(R.id.login_authorization);
+        passView = view.findViewById(R.id.password_authorization);
+        recoveryPassword = view.findViewById(R.id.forgot_password);
 
         Utils.setActionBarWithTitle(getActivity(), getString(R.string.authorization));
-        final Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        Utils.setArrowBackInToolbar(getActivity());
 
         getActivity().invalidateOptionsMenu();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setHasOptionsMenu(true);
 
-        toolbar.setNavigationOnClickListener((v) -> {
-            Utils.hideKeyboard(v);
-            getActivity().getSupportFragmentManager().popBackStack();
-        });
+
 
         recoveryPassword.setOnClickListener((v) -> {
             final FragmentRecoveryPasswordEmail fragmentRecoveryPasswordEmail = FragmentRecoveryPasswordEmail.newInstance();
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentRecoveryPasswordEmail, null);
+            Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragmentRecoveryPasswordEmail, null);
         });
 
         passView.setOnKeyListener((v, keyCode, event) -> {
@@ -187,7 +182,7 @@ public class FragmentAuthorization extends Fragment {
                     User.loadConfig();
                     Log.d(Config.TAG, "Login successful: " + user.login + " TOKEN:" + Utils.bytesToHexString(User.currentUser.token));
                     NetworkManager.getInstance().setAuthorized(true);
-                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentChats.getInstance(), null);
+                    Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentChats.getInstance(), null);
 //                    NotificationManager.getInstance().postNotificationName(NotificationManager.userDidLoggedIn);
                 });
             });

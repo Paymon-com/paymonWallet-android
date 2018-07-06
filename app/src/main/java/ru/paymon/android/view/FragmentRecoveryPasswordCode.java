@@ -108,7 +108,7 @@ public class FragmentRecoveryPasswordCode extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.registration_menu, menu);
+        inflater.inflate(R.menu.next_menu, menu);
     }
 
     @Override
@@ -154,7 +154,7 @@ public class FragmentRecoveryPasswordCode extends Fragment {
                         bundle.putString(PASSWORD_RECOVERY_LOGIN, login);
                         bundle.putString(PASSWORD_RECOVERY_CODE, codeEditText.getText().toString());
                         fragment.setArguments(bundle);
-                        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragment, null);
+                        Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragment, null);
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();

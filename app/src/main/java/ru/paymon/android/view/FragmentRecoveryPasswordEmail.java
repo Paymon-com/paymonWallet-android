@@ -144,7 +144,7 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString(PASSWORD_RECOVERY_LOGIN, emailEditText.getText().toString());
                         fragment.setArguments(bundle);
-                        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragment, null);
+                        Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragment, null);
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();

@@ -7,17 +7,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 
 import ru.paymon.android.GroupsManager;
@@ -25,14 +21,12 @@ import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ChatsAdapter;
 import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
 
@@ -69,8 +63,8 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
 
-        chatsRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_dialog_recycler_view);
-        progressBar = (ProgressBar) view.findViewById(R.id.chats_progress_bar);
+        chatsRecyclerView = view.findViewById(R.id.fragment_dialog_recycler_view);
+        progressBar = view.findViewById(R.id.chats_progress_bar);
         progressBar.setVisibility(View.GONE);
 
         initChats();
@@ -100,7 +94,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                         fragmentChat.setArguments(bundle);
 
                         final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentChat, null);
+                        Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentChat, null);
                     }
 
                     @Override
@@ -129,6 +123,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     public void onResume() {
         super.onResume();
 
+        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_dialog));
 //        MessageManager.getInstance().currentChatID = 0;
     }
 

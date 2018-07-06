@@ -45,27 +45,27 @@ public class FragmentSettings extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        TextView settProfileName = (TextView) view.findViewById(R.id.settings_name_text_view);
+        TextView settProfileName = view.findViewById(R.id.settings_name_text_view);
         settProfileName.setText(Utils.formatUserName(User.currentUser));
 
-        CircleImageView profilePhoto = (CircleImageView) view.findViewById(R.id.settings_avatar_image_view);
+        CircleImageView profilePhoto = view.findViewById(R.id.settings_avatar_image_view);
 
-        TextView updateProfile = (TextView) view.findViewById(R.id.settings_update_profile_button);
-        ImageView notifClick = (ImageView) view.findViewById(R.id.notif_click_image_view);
-        ImageView basicClick = (ImageView) view.findViewById(R.id.basic_click_image_view);
-        ImageView securityClick = (ImageView) view.findViewById(R.id.security_click_image_view);
-        ImageView aboutClick = (ImageView) view.findViewById(R.id.about_the_program_click_image_view);
+        TextView updateProfile = view.findViewById(R.id.settings_update_profile_button);
+        ImageView notifClick = view.findViewById(R.id.notif_click_image_view);
+        ImageView basicClick = view.findViewById(R.id.basic_click_image_view);
+        ImageView securityClick = view.findViewById(R.id.security_click_image_view);
+        ImageView aboutClick = view.findViewById(R.id.about_the_program_click_image_view);
 
         FragmentManager fragmentManager = Objects.requireNonNull(getActivity()).getSupportFragmentManager();
 
         updateProfile.setOnClickListener(v -> {
             final FragmentAccountSettingsUpdateProfile fragmentAccountSettingsUpdateProfile = FragmentAccountSettingsUpdateProfile.newInstance();
-            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentAccountSettingsUpdateProfile, null);
+            Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentAccountSettingsUpdateProfile, null);
         });
 
         notifClick.setOnClickListener(v -> {
             final FragmentAccountSettingsNotif fragmentAccountSettingsNotif = FragmentAccountSettingsNotif.newInstance();
-            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentAccountSettingsNotif, null);
+            Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentAccountSettingsNotif, null);
         });
 
 //        basicClick.setOnClickListener(v -> {
@@ -75,7 +75,7 @@ public class FragmentSettings extends Fragment {
 
         securityClick.setOnClickListener(v -> {
             final FragmentAccountSettingsSecurity fragmentAccountSettingsSecurity = FragmentAccountSettingsSecurity.newInstance();
-            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentAccountSettingsSecurity, null);
+            Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentAccountSettingsSecurity, null);
         });
 
         aboutClick.setOnClickListener(v -> {
@@ -84,7 +84,7 @@ public class FragmentSettings extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
             LayoutInflater image = LayoutInflater.from(getActivity());
             final View view1 = image.inflate(R.layout.about_program_dialog, null);
-            ((TextView) view1.findViewById(R.id.about_version)).setText(getString(R.string.about_program_text_version, Config.VERSION_STRING).replace('"', ' '));
+            ((TextView) view1.findViewById(R.id.about_version)).setText(String.format(getString(R.string.about_program_text_version), Config.VERSION).replace('"', ' '));
             builder.setView(view1);
 
             AlertDialog alert = builder.create();

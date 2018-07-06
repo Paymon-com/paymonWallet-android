@@ -13,13 +13,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -158,17 +158,26 @@ public class Utils {
     public static boolean loginCorrect(String userLogin) {
         Matcher matcher;
         matcher = Pattern.compile("^[a-zA-Z0-9-_\\.]+$").matcher(userLogin);
-        return userLogin.length() >= 3  && matcher.find();
+        return userLogin.length() >= 3 && matcher.find();
     }
 
-    public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {
-        ApplicationLoader.applicationHandler.post(() -> {
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.fade_to_back, R.anim.fade_to_up, R.anim.fade_to_back);
-            fragmentTransaction.replace(R.id.container, fragment);
-            fragmentTransaction.addToBackStack(tag);
-            fragmentTransaction.commit();
-        });
+//    public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {
+//        ApplicationLoader.applicationHandler.post(() -> {
+//            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.fade_to_back, R.anim.fade_to_up, R.anim.fade_to_back);
+//            fragmentTransaction.replace(R.id.container, fragment);
+//            fragmentTransaction.addToBackStack(tag);
+//            fragmentTransaction.commit();
+//        });
+//    }
+
+    public static void replaceFragmentWithAnimationFade(FragmentManager fragmentManager, Fragment fragment, String tag) {
+
+        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.animator.fade_to_up, R.animator.fade_to_back);
+        fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.addToBackStack(tag);
+        fragmentTransaction.commit();
     }
 
     public static byte[] hexStringToBytes(String s) {
@@ -201,10 +210,7 @@ public class Utils {
 
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     public static void hideKeyboard(View view) {
@@ -229,5 +235,14 @@ public class Utils {
             supportActionBar.setDisplayShowTitleEnabled(true);
             supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
         }
+    }
+
+    public static void setArrowBackInToolbar(FragmentActivity fragmentActivity) {
+        final Toolbar toolbar = fragmentActivity.findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(v -> {
+            Utils.hideKeyboard(v);
+            fragmentActivity.getSupportFragmentManager().popBackStack();
+        });
     }
 }

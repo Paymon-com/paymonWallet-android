@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-
 
 import java.util.ArrayList;
 
@@ -60,7 +57,7 @@ public class FragmentChat extends Fragment {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
 //        messageInput = (EmojiconEditText) view.findViewById(R.id.input_edit_text);
-        messageRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
+        messageRecyclerView = view.findViewById(R.id.chat_recview);
 
         final ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (supportActionBar != null) {
@@ -121,8 +118,8 @@ public class FragmentChat extends Fragment {
 
     private View createChatCustomView() {
         final View customView = getLayoutInflater().inflate(R.layout.chat_action_bar, null);
-        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.chat_title);
-        final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.chat_avatar);
+        final TextView chatTitleTextView = customView.findViewById(R.id.chat_title);
+        final CircleImageView toolbarAvatar = customView.findViewById(R.id.chat_avatar);
 
 //        final RPC.UserObject user = MessageManager.getInstance().users.get(chatID);//TODO: отделить действия с юзерами в отдельный менеджер
 //        if (user != null) {
@@ -145,9 +142,9 @@ public class FragmentChat extends Fragment {
 
     private View createChatGroupCustomView() {
         final View customView = getLayoutInflater().inflate(R.layout.chat_group_action_bar, null);
-        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.chat_title);
-        final TextView participantsCountTextView = (TextView) customView.findViewById(R.id.participants_count);
-        final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.chat_group_avatar);
+        final TextView chatTitleTextView = customView.findViewById(R.id.chat_title);
+        final TextView participantsCountTextView = customView.findViewById(R.id.participants_count);
+        final CircleImageView toolbarAvatar = customView.findViewById(R.id.chat_group_avatar);
 
 //        final RPC.Group group = MessageManager.getInstance().groups.get(chatID);//TODO: отделить действия с группами в отдельный менеджер
 //        if (group != null) {
@@ -162,7 +159,7 @@ public class FragmentChat extends Fragment {
 //            final FragmentGroupSettings fragmentGroupSettings = FragmentGroupSettings.newInstance();
 //            fragmentGroupSettings.setArguments(bundle);
 //            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentGroupSettings, null);
+//            Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentGroupSettings, null);
         });
 
         return customView;

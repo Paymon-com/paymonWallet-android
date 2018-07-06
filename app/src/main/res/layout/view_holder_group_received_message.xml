@@ -1,63 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator"
-    android:orientation="horizontal"
     android:paddingBottom="4dp"
     android:paddingEnd="72dp"
     android:paddingStart="8dp"
     android:paddingTop="4dp">
 
-    <ru.paymon.android.components.CircleImage
+    <ru.paymon.android.components.CircleImageView
         android:id="@+id/photo"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:layout_marginStart="8dp" />
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical|start"
+        android:layout_gravity="start"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:background="@drawable/background_msg_rcv">
+        android:layout_marginTop="8dp"
+        android:background="@drawable/background_msg_rcv"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/photo"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="start"
-            android:orientation="vertical"
-            android:padding="8dp">
-
-            <hani.momanii.supernova_emoji_library.helper.EmojiconTextView
+        <hani.momanii.supernova_emoji_library.helper.EmojiconTextView
             android:id="@+id/message_text_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="16dp"
             android:layout_gravity="start"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
             android:gravity="center_vertical|start"
             android:textColor="@color/default_message_sent_color"
             android:textSize="@dimen/default_message_text_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:text="textsdfasdfasdfasdfasdfsdf" />
 
-            <android.support.v4.widget.Space
-                android:layout_width="match_parent"
-                android:layout_height="4dp" />
+        <TextView
+            android:id="@+id/timestamp_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginBottom="4dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:gravity="center_vertical|start"
+            android:textColor="@color/default_tstamp_color"
+            android:textSize="@dimen/default_timestamp_text_size"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/message_text_view"
+            tools:text="12:10 am" />
 
-            <TextView
-                android:id="@+id/timestamp_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:gravity="center_vertical|start"
-                android:textColor="@color/default_tstamp_color"
-                android:textSize="@dimen/default_timestamp_text_size"
-                tools:text="12:10 am" />
+    </android.support.constraint.ConstraintLayout>
 
-        </LinearLayout>
-
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>

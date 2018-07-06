@@ -1,13 +1,9 @@
 package ru.paymon.android.view;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -17,13 +13,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
-
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.MainActivity;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
@@ -61,15 +53,10 @@ public class FragmentRegistrationEmail extends Fragment {
         super.onResume();
 
         Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_registration));
+        Utils.setArrowBackInToolbar(getActivity());
 
         setHasOptionsMenu(true);
 
-        final Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(v -> {
-            Utils.hideKeyboard(v);
-            getActivity().getSupportFragmentManager().popBackStack();
-        });
     }
 
     @Override
@@ -102,12 +89,12 @@ public class FragmentRegistrationEmail extends Fragment {
 
         agreementTextView.setOnClickListener(v -> {
             Utils.hideKeyboard(v);
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentAgreement.newInstance(), null);
+            Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentAgreement.newInstance(), null);
         });
 
         privacyPolicyTextView.setOnClickListener(v -> {
             Utils.hideKeyboard(v);
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentPrivacyPolicy.newInstance(), null);
+            Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentPrivacyPolicy.newInstance(), null);
         });
 
         emailEditText.addTextChangedListener(new TextWatcher() {
@@ -134,7 +121,7 @@ public class FragmentRegistrationEmail extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.registration_email_menu, menu);
+        inflater.inflate(R.menu.next_menu, menu);
     }
 
     @Override
