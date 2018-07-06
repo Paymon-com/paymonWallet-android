@@ -26,6 +26,7 @@ import ru.paymon.android.utils.Utils;
 public class FragmentAccountSettingsUpdateProfile extends Fragment {
     private static FragmentAccountSettingsUpdateProfile instance;
 
+
     public static synchronized FragmentAccountSettingsUpdateProfile newInstance(){
         instance = new FragmentAccountSettingsUpdateProfile();
         return instance;
@@ -45,7 +46,18 @@ public class FragmentAccountSettingsUpdateProfile extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
+
+        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_update_profile));
+
+        getActivity().invalidateOptionsMenu();
+
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.blue_dark));
+        toolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.white));
+
+        setHasOptionsMenu(true);
 
         return view;
     }
