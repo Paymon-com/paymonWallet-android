@@ -24,7 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="@color/light_gray"
-        local:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        local:layout_constraintBottom_toTopOf="@+id/bottom_navigation_view"
         local:layout_constraintEnd_toEndOf="parent"
         local:layout_constraintStart_toStartOf="parent"
         local:layout_constraintTop_toBottomOf="@+id/toolbar"
@@ -33,7 +33,7 @@
     </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
+        android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
