@@ -23,7 +23,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -175,7 +174,7 @@ public class Utils {
     public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment) {
         ApplicationLoader.applicationHandler.post(() -> {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.fade_to_back, R.anim.fade_to_up, R.anim.fade_to_back);
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
             fragmentTransaction.replace(R.id.container, fragment);
             fragmentTransaction.commit();
         });
@@ -246,8 +245,14 @@ public class Utils {
         }
     }
 
+    public static void hideActionBar(FragmentActivity activity){
+        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
+        if (supportActionBar != null)
+            supportActionBar.hide();
+    }
+
     public static void setArrowBackInToolbar(FragmentActivity fragmentActivity) {
-        final Toolbar toolbar = fragmentActivity.findViewById(R.id.toolbar);
+        final android.support.v7.widget.Toolbar toolbar = fragmentActivity.findViewById(R.id.toolbar);
         toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
         toolbar.setNavigationOnClickListener(v -> {
             Utils.hideKeyboard(v);

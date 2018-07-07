@@ -95,14 +95,12 @@ public class MediaManager {
     public RPC.PM_photo savePhoto(FileManager.DownloadingFile downloadedFile) {
         try {
             RPC.PM_photo photo = waitingPhotosList.get(downloadedFile.id);
-            if (photo == null) {
-                return null;
+
+            if (photo != null) {
+                Bitmap bitmap = BitmapFactory.decodeByteArray(downloadedFile.buffer.buffer.array(), downloadedFile.buffer.buffer.arrayOffset(), downloadedFile.buffer.buffer.limit());
+                if (bitmap != null)
+                    DiskLruImageCache.getInstance().put(Integer.toString(photo.user_id) + "_" + photo.id, bitmap);
             }
-
-            Bitmap bitmap = BitmapFactory.decodeByteArray(downloadedFile.buffer.buffer.array(), downloadedFile.buffer.buffer.arrayOffset(), downloadedFile.buffer.buffer.limit());
-
-            if (bitmap != null)
-                DiskLruImageCache.getInstance().put(Integer.toString(photo.user_id) + "_" + photo.id, bitmap);
 
             return photo;
         } catch (Exception e) {
@@ -140,14 +138,13 @@ public class MediaManager {
         int stickerPackID = 0;
         for (int i = 0; i < stickerPacks.size(); i++) {
             StickerPack sp = stickerPacks.get(stickerPacks.keyAt(i));
-            if (sp.stickers.containsKey(stickerID)) {
+            if (sp.stickers.containsKey(stickerID))
                 return sp.id;
-            }
         }
         return stickerPackID;
     }
 
-    public StickerPack.Sticker saveSticker(Context context, FileManager.DownloadingFile downloadedFile) {
+    public StickerPack.Sticker saveSticker(FileManager.DownloadingFile downloadedFile) {
         long stickerID = downloadedFile.id;
         int stickerPackID = getStickerPackIDByStickerID(stickerID);
         if (stickerPackID == 0) return null;
@@ -158,14 +155,14 @@ public class MediaManager {
 
         String path = Environment.getExternalStorageDirectory().toString();
         File file = new File(path + STICKERS_DIR + "/" + stickerPackID + "/");
-        if (!file.exists()) {
+
+        if (!file.exists())
             file.mkdirs();
-        }
+
         try {
             file = new File(path + STICKERS_DIR + "/" + stickerPackID + "/", stickerID + ".png");
-            if (!file.createNewFile()) {
+            if (!file.createNewFile())
                 new PrintWriter(file).close();
-            }
             RandomAccessFile raf = new RandomAccessFile(file, "rws");
             raf.write(downloadedFile.buffer.buffer.array(), downloadedFile.buffer.buffer.arrayOffset(), downloadedFile.buffer.buffer.limit());
             raf.close();
@@ -178,9 +175,7 @@ public class MediaManager {
     }
 
     public boolean checkStickerPackExists(int id) {
-        String path = Environment.getExternalStorageDirectory().toString();
-        File fileSrc = new File(path + STICKERS_DIR + "/" + id);
-        return fileSrc.exists();
+        return new File(Environment.getExternalStorageDirectory().toString() + STICKERS_DIR + "/" + id).exists();
     }
 
     public boolean requestPhoto(int userID, final long photoID) {
@@ -211,21 +206,18 @@ public class MediaManager {
             return false;
         RPC.PM_getStickerPack request = new RPC.PM_getStickerPack();
         request.id = stickerPackID;
-        NetworkManager.getInstance().sendRequest(request, new Packet.OnResponseListener() {
-            @Override
-            public void onResponse(Packet response, RPC.PM_error error) {
-                if (response != null) {
-                    RPC.PM_stickerPack stickerPackResponse = (RPC.PM_stickerPack) response;
-                    StickerPack stickerPack = new StickerPack(stickerPackResponse.id, stickerPackResponse.count, stickerPackResponse.title, stickerPackResponse.author);
-                    for (RPC.PM_sticker s : stickerPackResponse.stickers) {
-                        StickerPack.Sticker sticker = new StickerPack.Sticker();
-                        sticker.id = s.id;
-                        stickerPack.stickers.put(s.id, sticker);
-                    }
-                    stickerPacks.put(stickerPackResponse.id, stickerPack);
-
-                    ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didLoadedStickerPack, stickerPackID));
+        NetworkManager.getInstance().sendRequest(request, (response, error) -> {
+            if (response != null) {
+                RPC.PM_stickerPack stickerPackResponse = (RPC.PM_stickerPack) response;
+                StickerPack stickerPack = new StickerPack(stickerPackResponse.id, stickerPackResponse.count, stickerPackResponse.title, stickerPackResponse.author);
+                for (RPC.PM_sticker s : stickerPackResponse.stickers) {
+                    StickerPack.Sticker sticker = new StickerPack.Sticker();
+                    sticker.id = s.id;
+                    stickerPack.stickers.put(s.id, sticker);
                 }
+                stickerPacks.put(stickerPackResponse.id, stickerPack);
+
+                ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didLoadedStickerPack, stickerPackID));
             }
         });
         waitingStickerPacks.add(stickerPackID);
@@ -235,9 +227,9 @@ public class MediaManager {
     public StickerPack loadStickerPack(int spid) {
         if (checkStickerPackExists(spid)) {
             StickerPack sp = stickerPacks.get(spid);
-            if (sp != null) {
+
+            if (sp != null)
                 return sp;
-            }
 
             sp = new StickerPack(spid, 14, "Playman", "Sergey Pomelov");
             long id = 1;
@@ -269,13 +261,12 @@ public class MediaManager {
     }
 
     public void saveAndUpdateSticker(FileManager.DownloadingFile downloadingFile) {
-        final StickerPack.Sticker sticker = saveSticker(ApplicationLoader.applicationContext, downloadingFile);
+        final StickerPack.Sticker sticker = saveSticker(downloadingFile);
         if (sticker != null) {
             final Bitmap bitmap = loadStickerBitmap(getStickerPackIDByStickerID(sticker.id), sticker.id);
             sticker.image = new BitmapDrawable(ApplicationLoader.applicationContext.getResources(), bitmap);
-            if (bitmap != null) {
+            if (bitmap != null)
                 ApplicationLoader.applicationHandler.post(() -> ObservableMediaManager.getInstance().postStickerNotification(sticker));
-            }
         }
     }
 
@@ -284,8 +275,8 @@ public class MediaManager {
     }
 
     public Bitmap loadStickerBitmap(int stickerPackID, long stickerID) {
-        String path = Environment.getExternalStorageDirectory().toString();
-        File file = new File(path + STICKERS_DIR + "/" + stickerPackID + "/", stickerID + ".png");
+        File file = new File(Environment.getExternalStorageDirectory().toString() + STICKERS_DIR + "/" + stickerPackID + "/", stickerID + ".png");
+
         if (!file.exists()) return null;
 
         BitmapFactory.Options options = new BitmapFactory.Options();
@@ -304,15 +295,11 @@ public class MediaManager {
         request.id = photoID;
         request.userID = photo.user_id;
 
-        NetworkManager.getInstance().sendRequest(request, new Packet.OnResponseListener() {
-            @Override
-            public void onResponse(Packet response, RPC.PM_error error) {
-                if (response != null) {
-                    if (response instanceof RPC.PM_boolFalse) {
-                        waitingPhotosList.remove(photoID);
-                    }
-                    processPhotoRequest();
-                }
+        NetworkManager.getInstance().sendRequest(request, (response, error) -> {
+            if (response != null) {
+                if (response instanceof RPC.PM_boolFalse)
+                    waitingPhotosList.remove(photoID);
+                processPhotoRequest();
             }
         });
 

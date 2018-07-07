@@ -37,6 +37,10 @@ public class ContactManager {
         return localInstance;
     }
 
+    public void dispose() {
+        Instance = null;
+    }
+
     public static ArrayList<Contact> getAll(Context context) {
         ContentResolver cr = context.getContentResolver();
 
@@ -101,9 +105,5 @@ public class ContactManager {
             pCur.close();
         }
         return null;
-    }
-
-    public void dispose() {
-        Instance = null;
     }
 }

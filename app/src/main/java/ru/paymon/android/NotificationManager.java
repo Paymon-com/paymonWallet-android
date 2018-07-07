@@ -5,6 +5,8 @@ import android.util.SparseArray;
 import java.util.ArrayList;
 
 public class NotificationManager {
+    private static volatile NotificationManager Instance = null;
+
     private static int totalEvents = 1;
 
     public static final int userAuthorized = totalEvents++;
@@ -74,7 +76,6 @@ public class NotificationManager {
         private Object[] args;
     }
 
-    private static volatile NotificationManager Instance = null;
 
     public static NotificationManager getInstance() {
         NotificationManager localInstance = Instance;
@@ -170,13 +171,11 @@ public class NotificationManager {
             return;
         }
         ArrayList<Object> objects = observers.get(id);
-        if (objects == null) {
+        if (objects == null)
             observers.put(id, (objects = new ArrayList<>()));
-        }
-        if (objects.contains(observer)) {
-            return;
-        }
-        objects.add(observer);
+
+        if (!objects.contains(observer))
+            objects.add(observer);
     }
 
     public void removeObserver(Object observer, int id) {
@@ -190,8 +189,7 @@ public class NotificationManager {
             return;
         }
         ArrayList<Object> objects = observers.get(id);
-        if (objects != null) {
+        if (objects != null)
             objects.remove(observer);
-        }
     }
 }

@@ -85,12 +85,15 @@ public class ObservableMediaManager {
 
     public interface IPhotoListener {
         void didLoadedPhoto(final Photo photo);
+
         void didUpdatedPhotoID(long newPhotoID, int ownerID);
+
         void loadProgress(int progress);
     }
 
     private class DelayedPhotoPost {
         private Photo photo;
+
         private DelayedPhotoPost(Photo photo) {
             this.photo = photo;
         }
@@ -264,13 +267,11 @@ public class ObservableMediaManager {
             return;
         }
         ArrayList<Object> objects = photoObservers.get(photoID);
-        if (objects == null) {
+        if (objects == null)
             photoObservers.put(photoID, (objects = new ArrayList<>()));
-        }
-        if (objects.contains(observer)) {
-            return;
-        }
-        objects.add(observer);
+
+        if (!objects.contains(observer))
+            objects.add(observer);
     }
 
     public void removePhotoObserver(Object observer, long photoID) {
@@ -284,9 +285,8 @@ public class ObservableMediaManager {
             return;
         }
         ArrayList<Object> objects = photoObservers.get(photoID);
-        if (objects != null) {
+        if (objects != null)
             objects.remove(observer);
-        }
     }
 
     public void postStickerNotification(StickerPack.Sticker sticker) {
@@ -358,13 +358,11 @@ public class ObservableMediaManager {
             return;
         }
         ArrayList<Object> objects = stickerObservers.get(stickerID);
-        if (objects == null) {
+        if (objects == null)
             stickerObservers.put(stickerID, (objects = new ArrayList<>()));
-        }
-        if (objects.contains(observer)) {
-            return;
-        }
-        objects.add(observer);
+
+        if (!objects.contains(observer))
+            objects.add(observer);
     }
 
     public void removeStickerObserver(Object observer, long stickerID) {
@@ -378,8 +376,7 @@ public class ObservableMediaManager {
             return;
         }
         ArrayList<Object> objects = stickerObservers.get(stickerID);
-        if (objects != null) {
+        if (objects != null)
             objects.remove(observer);
-        }
     }
 }
