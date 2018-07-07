@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import java.util.LinkedList;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconTextView;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
@@ -130,9 +132,14 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
             final GroupReceiveMessageViewHolder groupReceiveMessageViewHolder = (GroupReceiveMessageViewHolder) holder;
             groupReceiveMessageViewHolder.msg.setText(groupReceiveMessageViewHolder.message.text);
             groupReceiveMessageViewHolder.time.setText(Utils.formatDateTime(groupReceiveMessageViewHolder.message.date, true, true));
-            //TODO: user photo
-//            if (MediaManager.getInstance().userProfilePhotoIDs.get(groupReceiveMessageViewHolder.message.from_id) != null)
-//                groupReceiveMessageViewHolder.avatar.setPhoto(groupReceiveMessageViewHolder.message.from_id, MediaManager.getInstance().userProfilePhotoIDs.get(groupReceiveMessageViewHolder.message.from_id));
+            int uid = groupReceiveMessageViewHolder.message.from_id;
+            Long pid = MediaManager.getInstance().userProfilePhotoIDs.get(uid);
+            if (pid != null) {
+                RPC.PM_photo photo = new RPC.PM_photo();
+                photo.user_id = uid;
+                photo.id = pid;
+                groupReceiveMessageViewHolder.avatar.setPhoto(photo);
+            }
         } else if (holder instanceof ActionMessageViewHolder) {
             final ActionMessageViewHolder actionMessageViewHolder = (ActionMessageViewHolder) holder;
             actionMessageViewHolder.msg.setText(actionMessageViewHolder.message.text);
