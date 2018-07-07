@@ -5,6 +5,6 @@
         android:id="@+id/next"
         android:titleCondensed="@string/next"
         app:showAsAction="ifRoom"
-        android:title="@string/next"/>
+        android:title="@string/next" />
 
 </menu>

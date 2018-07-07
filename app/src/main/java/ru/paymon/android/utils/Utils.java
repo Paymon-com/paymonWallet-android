@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
@@ -24,6 +25,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toolbar;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -154,11 +156,20 @@ public class Utils {
     public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {
         ApplicationLoader.applicationHandler.post(() -> {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.fade_to_back, R.anim.fade_to_up, R.anim.fade_to_back);
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
             fragmentTransaction.replace(R.id.container, fragment);
             fragmentTransaction.addToBackStack(tag);
             fragmentTransaction.commit();
         });
+    }
+
+    public static void replaceFragmentWithAnimationFade(FragmentManager fragmentManager, Fragment fragment, String tag) {
+
+        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.animator.fade_to_up, R.animator.fade_to_back);
+        fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.addToBackStack(tag);
+        fragmentTransaction.commit();
     }
 
     public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment) {
@@ -208,10 +219,7 @@ public class Utils {
 
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     public static void hideKeyboard(View view) {
@@ -236,22 +244,14 @@ public class Utils {
             supportActionBar.setDisplayShowTitleEnabled(true);
             supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
         }
-//        ActionBar actionBar = activity.getActionBar();
-//        if (actionBar != null) {
-//            actionBar.setTitle(title);
-//            actionBar.setDisplayShowCustomEnabled(false);
-//            actionBar.setDisplayShowCustomEnabled(true);
-//            actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
-//            actionBar.show();
-//        }
     }
 
-    public static void hideActionBar(Activity activity) {
-//        ActionBar actionBar = activity.getActionBar();
-//        if (actionBar != null)
-//            actionBar.hide();
-        ActionBar actionBar = ((AppCompatActivity) activity).getSupportActionBar();
-        if (actionBar != null)
-            actionBar.hide();
+    public static void setArrowBackInToolbar(FragmentActivity fragmentActivity) {
+        final Toolbar toolbar = fragmentActivity.findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(v -> {
+            Utils.hideKeyboard(v);
+            fragmentActivity.getSupportFragmentManager().popBackStack();
+        });
     }
 }

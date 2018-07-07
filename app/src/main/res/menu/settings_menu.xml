@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:title="@string/title_settings">
+        <menu>
+            <item
+                android:id="@+id/settings_notifications"
+                android:icon="@drawable/ic_settings_notifications"
+                android:title="@string/settings_notifications" />
+            <item
+                android:id="@+id/settings_basic"
+                android:icon="@drawable/ic_settings_basic"
+                android:title="@string/settings_basic" />
+            <item
+                android:id="@+id/settings_security"
+                android:icon="@drawable/ic_settings_security"
+                android:title="@string/settings_security" />
+        </menu>
+    </item>
+
+    <item android:title="@string/settings_other">
+        <menu>
+            <item
+                android:id="@+id/settings_about_programm"
+                android:icon="@drawable/ic_settings_about_program"
+                android:title="@string/settings_about_programm" />
+            <item
+                android:id="@+id/settings_exit"
+                android:icon="@drawable/ic_settings_exit"
+                android:title="@string/exit" />
+        </menu>
+    </item>
+
+</menu>

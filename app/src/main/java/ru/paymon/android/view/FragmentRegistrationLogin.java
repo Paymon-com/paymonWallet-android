@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -31,6 +30,7 @@ public class FragmentRegistrationLogin extends Fragment {
     private static FragmentRegistrationLogin instance;
     private EditText loginEditText;
     private TextView hintError;
+    private FragmentActivity activity;
 
 
     public static synchronized FragmentRegistrationLogin newInstance() {
@@ -47,23 +47,18 @@ public class FragmentRegistrationLogin extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.activity = getActivity();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_registration));
-
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setHasOptionsMenu(true);
 
-        final Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(v -> {
-            Utils.hideKeyboard(v);
-            getActivity().getSupportFragmentManager().popBackStack();
-        });
+        Utils.setActionBarWithTitle(activity, getString(R.string.title_registration));
+        Utils.setArrowBackInToolbar(activity);
     }
 
     @Nullable
@@ -107,7 +102,7 @@ public class FragmentRegistrationLogin extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.registration_menu, menu);
+        inflater.inflate(R.menu.next_menu, menu);
     }
 
     @Override
@@ -128,7 +123,7 @@ public class FragmentRegistrationLogin extends Fragment {
         loginBundle.putString(KEY_LOGIN_REGISTRATION, loginEditText.getText().toString());
         final FragmentRegistrationPassword fragmentRegistrationPassword = FragmentRegistrationPassword.newInstance();
         fragmentRegistrationPassword.setArguments(loginBundle);
-        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentRegistrationPassword, null);
+        Utils.replaceFragmentWithAnimationFade(activity.getSupportFragmentManager(), fragmentRegistrationPassword, null);
     }
 
     @Override
