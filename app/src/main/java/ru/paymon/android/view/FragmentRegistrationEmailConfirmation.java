@@ -135,7 +135,6 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case next:
                 confirmRegistration();

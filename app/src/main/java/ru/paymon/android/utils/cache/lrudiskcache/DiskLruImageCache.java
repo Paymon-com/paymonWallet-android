@@ -123,7 +123,6 @@ public class DiskLruImageCache {
         Bitmap bitmap = null;
         DiskLruCache.Snapshot snapshot = null;
         try {
-
             snapshot = mDiskCache.get(key);
             if (snapshot == null) {
                 bitmap = BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), ApplicationLoader.applicationContext.getResources().getIdentifier(key, "drawable", ApplicationLoader.applicationContext.getPackageName())); // this
