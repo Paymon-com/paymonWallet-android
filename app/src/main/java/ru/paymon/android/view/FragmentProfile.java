@@ -33,6 +33,7 @@ public class FragmentProfile extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
     }
 
     @Nullable
@@ -41,12 +42,13 @@ public class FragmentProfile extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         Utils.setActionBarWithTitle(getActivity(), "");
+        Utils.setArrowBackInToolbar(getActivity());
 
-        ImageView updateProfile = (ImageView) view.findViewById(R.id.profile_update_button);
+        ImageView updateProfile = view.findViewById(R.id.profile_update_button);
 
         updateProfile.setOnClickListener(v -> {
             final FragmentAccountSettingsUpdateProfile fragmentAccountSettingsUpdateProfile = FragmentAccountSettingsUpdateProfile.newInstance();
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentAccountSettingsUpdateProfile, null);
+            Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragmentAccountSettingsUpdateProfile, null);
         });
 
         setHasOptionsMenu(true);
@@ -63,7 +65,7 @@ public class FragmentProfile extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         final FragmentSettings fragmentSettings = FragmentSettings.newInstance();
-        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentSettings, null);
+        Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragmentSettings, null);
         return super.onOptionsItemSelected(item);
     }
 

@@ -32,16 +32,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <hani.momanii.supernova_emoji_library.helper.EmojiconEditText
+        <EditText
             android:id="@+id/input_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
             android:layout_toStartOf="@+id/smilesButton"
-            android:background="@drawable/background_chat_field"
+            android:background="@android:color/transparent"
             android:hint="@string/default_input_hint"
             android:imeOptions="actionSend"
             android:inputType="textCapSentences|textMultiLine"
@@ -69,6 +67,7 @@
             android:layout_marginEnd="16dp"
             android:layout_toStartOf="@+id/sendButton"
             android:gravity="end"
+            android:src="@drawable/ic_smile"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/sendButton"
             app:layout_constraintTop_toTopOf="parent" />

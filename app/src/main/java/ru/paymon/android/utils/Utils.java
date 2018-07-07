@@ -1,5 +1,6 @@
 package ru.paymon.android.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Paint;
@@ -13,13 +14,16 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.text.format.DateFormat;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-
+import android.widget.Toolbar;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -104,71 +108,85 @@ public class Utils {
         return text.length();
     }
 
+    //TODO:Добавить настройку юзера format24h
     public static String formatDateTime(long timestamp, boolean format24h, boolean inChat) {
-        String result;
+        final Date now = new Date(System.currentTimeMillis());
+        final Date msgDate = new Date(timestamp * 1000L);
+
+        final int yearDiff = Integer.parseInt((String) DateFormat.format("yyyy", now)) - Integer.parseInt((String) DateFormat.format("yyyy", msgDate));
+        final int monthDiff = Integer.parseInt((String) DateFormat.format("MM", now)) - Integer.parseInt((String) DateFormat.format("MM", msgDate));
+        final int dayDiff = Integer.parseInt((String) DateFormat.format("dd", now)) - Integer.parseInt((String) DateFormat.format("dd", msgDate));
+
         String pattern;
 
-        Date now = new Date(System.currentTimeMillis());
-        Date msgDate = new Date(timestamp * 1000L);
-        if (now.getYear() != msgDate.getYear()) {
-            if (inChat) {
-                if (!format24h)
-                    pattern = "d MMM yyyy hh:mm";
-                else
-                    pattern = "d MMM yyyy HH:mm";
-            } else {
-                if (!format24h)
-                    pattern = "d MMM yyyy";
-                else
-                    pattern = "d MMM yyyy";
-            }
-
-            result = new SimpleDateFormat(pattern).format(new Date(timestamp * 1000L));
-        } else if (now.getDay() - msgDate.getDay() > 1) {
-            if (!format24h)
-                pattern = "d MMM";
+        if (dayDiff == 0 && monthDiff == 0)
+            pattern = "HH:mm";
+        else if (dayDiff == 1 && monthDiff == 0)
+            if (format24h)
+                return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("HH:mm", msgDate);
             else
-                pattern = "d MMM";
-
-            result = new SimpleDateFormat(pattern).format(new Date(timestamp * 1000L));
-        } else if (now.getDay() - msgDate.getDay() == 1) {
-            if (!format24h)
-                pattern = "hh:mm";
+                return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("hh:mm", msgDate);
+        else if (dayDiff > 1 || monthDiff > 0)
+            pattern = "d MMM";
+        else if (yearDiff != 0)
+            if (inChat)
+                pattern = "d MMM yyyy HH:mm";
             else
-                pattern = "HH:mm";
+                pattern = "d MMM yyyy";
+        else
+            pattern = "HH:mm";
 
-            result = ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + new SimpleDateFormat(pattern).format(new Date(timestamp * 1000L));
-        } else {
-            if (!format24h)
-                pattern = "hh:mm";
-            else
-                pattern = "HH:mm";
+        if (!format24h)
+            pattern = pattern.replace("HH", "hh");
 
-            result = new SimpleDateFormat(pattern).format(new Date(timestamp * 1000L));
-        }
-
-        return result;
+        return (String) DateFormat.format(pattern, msgDate);
     }
 
     public static boolean emailCorrect(String email) {
         Matcher matcher = Pattern.compile("^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$").matcher(email);
-        return matcher.find();
+        return matcher.find() && !email.isEmpty();
     }
 
     public static boolean loginCorrect(String userLogin) {
         Matcher matcher;
         matcher = Pattern.compile("^[a-zA-Z0-9-_\\.]+$").matcher(userLogin);
-        return userLogin.length() >= 3  && matcher.find();
+        return userLogin.length() >= 3 && matcher.find();
     }
 
     public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {
         ApplicationLoader.applicationHandler.post(() -> {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.fade_to_back, R.anim.fade_to_up, R.anim.fade_to_back);
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
             fragmentTransaction.replace(R.id.container, fragment);
             fragmentTransaction.addToBackStack(tag);
             fragmentTransaction.commit();
         });
+    }
+
+    public static void replaceFragmentWithAnimationFade(FragmentManager fragmentManager, Fragment fragment, String tag) {
+
+        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(R.animator.fade_to_up, R.animator.fade_to_back);
+        fragmentTransaction.replace(R.id.container, fragment);
+        fragmentTransaction.addToBackStack(tag);
+        fragmentTransaction.commit();
+    }
+
+    public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment) {
+        ApplicationLoader.applicationHandler.post(() -> {
+            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.fade_to_back, R.anim.fade_to_up, R.anim.fade_to_back);
+            fragmentTransaction.replace(R.id.container, fragment);
+            fragmentTransaction.commit();
+        });
+    }
+
+    public static void clearStack(final FragmentManager fragmentManager) {
+        int count = fragmentManager.getBackStackEntryCount();
+        while (count > 0) {
+            fragmentManager.popBackStack();
+            count--;
+        }
     }
 
     public static byte[] hexStringToBytes(String s) {
@@ -201,10 +219,7 @@ public class Utils {
 
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 
-        if (networkInfo != null && networkInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
+        return networkInfo != null && networkInfo.isConnectedOrConnecting();
     }
 
     public static void hideKeyboard(View view) {
@@ -220,8 +235,8 @@ public class Utils {
         }
     }
 
-    public static void setActionBarWithTitle(FragmentActivity fragmentActivity, String title) {
-        ActionBar supportActionBar = ((AppCompatActivity) fragmentActivity).getSupportActionBar();
+    public static void setActionBarWithTitle(FragmentActivity activity, String title) {
+        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.show();
             supportActionBar.setTitle(title);
@@ -229,5 +244,14 @@ public class Utils {
             supportActionBar.setDisplayShowTitleEnabled(true);
             supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
         }
+    }
+
+    public static void setArrowBackInToolbar(FragmentActivity fragmentActivity) {
+        final Toolbar toolbar = fragmentActivity.findViewById(R.id.toolbar);
+        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        toolbar.setNavigationOnClickListener(v -> {
+            Utils.hideKeyboard(v);
+            fragmentActivity.getSupportFragmentManager().popBackStack();
+        });
     }
 }

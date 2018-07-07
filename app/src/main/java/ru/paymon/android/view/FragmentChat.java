@@ -9,27 +9,34 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-
-
 import java.util.ArrayList;
+import java.util.LinkedList;
 
+import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
+import ru.paymon.android.Config;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
+import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
+import ru.paymon.android.User;
+import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.MessagesAdapter;
 import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.Utils;
 
 
-public class FragmentChat extends Fragment {
+public class FragmentChat extends Fragment implements NotificationManager.IListener {
     private int chatID;
     private RecyclerView messageRecyclerView;
     private MessagesAdapter messagesAdapter;
-//    private EmojiconEditText messageInput;
+    private EmojiconEditText messageInput;
     private ArrayList<RPC.UserObject> groupUsers;
     private boolean isGroup;
     private boolean loadingMessages;
@@ -59,27 +66,28 @@ public class FragmentChat extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-//        messageInput = (EmojiconEditText) view.findViewById(R.id.input_edit_text);
+        messageInput = (EmojiconEditText) view.findViewById(R.id.input_edit_text);
         messageRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
+
+        View defaultCustomView;
+        if (isGroup)
+            defaultCustomView = createChatGroupCustomView();
+        else
+            defaultCustomView = createChatCustomView();
 
         final ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayShowCustomEnabled(false);
-            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
-
-            View defaultCustomView;
-            if (isGroup)
-                defaultCustomView = createChatGroupCustomView();
-            else
-                defaultCustomView = createChatCustomView();
-
+            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
             supportActionBar.setCustomView(defaultCustomView);
             supportActionBar.setDisplayShowCustomEnabled(true);
             supportActionBar.setDisplayShowHomeEnabled(true);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
-
-            initChat(defaultCustomView);
         }
+
+        initChat(defaultCustomView);
+
+        MessagesManager.getInstance().loadMessages(chatID, 15, 0, isGroup);
 
         return view;
     }
@@ -87,11 +95,13 @@ public class FragmentChat extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        NotificationManager.getInstance().addObserver(this, NotificationManager.chatAddMessages);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.chatAddMessages);
     }
 
     private void initChat(View defaultCustomView) {
@@ -102,7 +112,7 @@ public class FragmentChat extends Fragment {
         linearLayoutManager.setStackFromEnd(true);
         messageRecyclerView.setLayoutManager(linearLayoutManager);
 
-        messagesAdapter = new MessagesAdapter((AppCompatActivity) getActivity(), isGroup, chatID, defaultCustomView);
+        messagesAdapter = new MessagesAdapter((AppCompatActivity) getActivity(), isGroup, defaultCustomView);
         messageRecyclerView.setAdapter(messagesAdapter);
 
         messageRecyclerView
@@ -113,7 +123,7 @@ public class FragmentChat extends Fragment {
 
                         if (!loadingMessages && (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) && messagesAdapter.getItemCount() != 0) {
                             loadingMessages = true;
-//                            MessageManager.getInstance().loadMessages(chatID, 15, messagesAdapter.messageIDs.size(), isGroup);
+                            Utils.netQueue.postRunnable(() -> MessagesManager.getInstance().loadMessages(chatID, 15, messagesAdapter.messageIDs.size(), isGroup));
                         }
                     }
                 });
@@ -124,11 +134,14 @@ public class FragmentChat extends Fragment {
         final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.chat_title);
         final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.chat_avatar);
 
-//        final RPC.UserObject user = MessageManager.getInstance().users.get(chatID);//TODO: отделить действия с юзерами в отдельный менеджер
-//        if (user != null) {
-//            chatTitleTextView.setText(Utils.formatUserName(user));
-//            toolbarAvatar.setPhoto(user.id, user.photoID);
-//        }
+        final RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
+        if (user != null) {
+            chatTitleTextView.setText(Utils.formatUserName(user));
+            RPC.PM_photo photo = new RPC.PM_photo();
+            photo.id = user.photoID;
+            photo.user_id = user.id;
+            toolbarAvatar.setPhoto(photo);
+        }
 
         customView.setOnClickListener(v -> {
 //            final Bundle bundle = new Bundle();
@@ -149,12 +162,12 @@ public class FragmentChat extends Fragment {
         final TextView participantsCountTextView = (TextView) customView.findViewById(R.id.participants_count);
         final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.chat_group_avatar);
 
-//        final RPC.Group group = MessageManager.getInstance().groups.get(chatID);//TODO: отделить действия с группами в отдельный менеджер
-//        if (group != null) {
-//            chatTitleTextView.setText(group.title);
-//            toolbarAvatar.setPhoto(group.id, group.photo.id);
-//            participantsCountTextView.setText(getString(R.string.participants) + ": " + groupUsers.size());
-//        }
+        final RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
+        if (group != null) {
+            chatTitleTextView.setText(group.title);
+            toolbarAvatar.setPhoto(group.photo);
+            participantsCountTextView.setText(getString(R.string.participants) + ": " + groupUsers.size());
+        }
 
         customView.setOnClickListener(v -> {
 //            final Bundle bundle = new Bundle();
@@ -166,5 +179,34 @@ public class FragmentChat extends Fragment {
         });
 
         return customView;
+    }
+
+    @Override
+    public void didReceivedNotification(int id, Object... args) {
+        if (id == NotificationManager.chatAddMessages) {
+            if (args.length < 1) return;
+
+            LinkedList<Long> messages = (LinkedList<Long>) args[0];
+            Boolean onScroll = (Boolean) args[1];
+
+            if (messagesAdapter == null || messagesAdapter.messageIDs == null) return;
+
+            if (messagesAdapter.messageIDs.size() < 1)
+                messagesAdapter.messageIDs.addAll(0, messages);
+            else
+                messagesAdapter.messageIDs.addAll(messages);
+
+            messagesAdapter.notifyDataSetChanged();
+            if (!onScroll) {
+                if (((LinearLayoutManager) messageRecyclerView.getLayoutManager()).findLastVisibleItemPosition() >= messageRecyclerView.getAdapter().getItemCount() - 2)
+                    messageRecyclerView.smoothScrollToPosition(messageRecyclerView.getAdapter().getItemCount() - 1);
+            } else {
+                if (messagesAdapter.getItemCount() > 0) {
+                    int scrolledCount = (int) args[2];
+                    messageRecyclerView.scrollToPosition(scrolledCount + ((LinearLayoutManager) messageRecyclerView.getLayoutManager()).findLastVisibleItemPosition());
+                }
+            }
+            loadingMessages = false;
+        }
     }
 }

@@ -19,6 +19,7 @@ android {
         ndk {
             abiFilters 'armeabi-v7a'
         }
+        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -39,7 +40,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
 
     implementation 'com.android.support:appcompat-v7:27.1.1'
@@ -51,5 +52,4 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 
     implementation 'com.davidecirillo.multichoicerecyclerview:multichoicerecyclerview:2.3.0'
-
 }

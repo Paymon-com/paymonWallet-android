@@ -129,38 +129,45 @@ public class FragmentRecoveryPasswordCode extends Fragment {
             return;
         }
 
-        RPC.PM_verifyPasswordRecoveryCode verifyPasswordRecoveryCode = new RPC.PM_verifyPasswordRecoveryCode();
-        verifyPasswordRecoveryCode.login = login;
-        verifyPasswordRecoveryCode.code = Integer.parseInt(codeEditText.getText().toString()); //TODO: запрет ввода букв
+        Utils.netQueue.postRunnable(() -> {
+            RPC.PM_verifyPasswordRecoveryCode verifyPasswordRecoveryCode = new RPC.PM_verifyPasswordRecoveryCode();
+            verifyPasswordRecoveryCode.login = login;
+            verifyPasswordRecoveryCode.code = Integer.parseInt(codeEditText.getText().toString()); //TODO: запрет ввода букв
 
-        dialogProgress.show();
+            ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
-        final long requestID = NetworkManager.getInstance().sendRequest(verifyPasswordRecoveryCode, (response, error) -> {
-            if (error != null || (response != null && response instanceof RPC.PM_boolFalse)) {
-                if (dialogProgress != null && dialogProgress.isShowing())
-                    dialogProgress.cancel();
-                ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.password_recovery_failed));
-                return;
-            }
-
-            if (dialogProgress != null && dialogProgress.isShowing()) dialogProgress.dismiss();
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage(getString(R.string.confirmation_code_verified))
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
-                        Fragment fragment = FragmentRecoveryPasswordNew.newInstance();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(PASSWORD_RECOVERY_LOGIN, login);
-                        bundle.putString(PASSWORD_RECOVERY_CODE, codeEditText.getText().toString());
-                        fragment.setArguments(bundle);
-                        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragment, null);
+            final long requestID = NetworkManager.getInstance().sendRequest(verifyPasswordRecoveryCode, (response, error) -> {
+                if (error != null || (response != null && response instanceof RPC.PM_boolFalse)) {
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        if (dialogProgress != null && dialogProgress.isShowing())
+                            dialogProgress.cancel();
+                        hintError.setText(R.string.password_recovery_failed);
                     });
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-        });
+                    return;
+                }
 
-        dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false));
+                ApplicationLoader.applicationHandler.post(() -> {
+                    if (dialogProgress != null && dialogProgress.isShowing())
+                        dialogProgress.dismiss();
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                            .setMessage(getString(R.string.confirmation_code_verified))
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                                Fragment fragment = FragmentRecoveryNewPassword.newInstance();
+                                Bundle bundle = new Bundle();
+                                bundle.putString(PASSWORD_RECOVERY_LOGIN, login);
+                                bundle.putString(PASSWORD_RECOVERY_CODE, codeEditText.getText().toString());
+                                fragment.setArguments(bundle);
+                                Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragment, null);
+                            });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                });
+            });
+
+            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
+        });
     }
 
 }

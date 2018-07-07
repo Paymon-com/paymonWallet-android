@@ -1,15 +1,10 @@
 package ru.paymon.android.adapters;
 
-import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.Rect;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-
 
 import java.util.LinkedList;
 
@@ -60,21 +55,16 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         ChatsItem chatsItem = getItem(position);
 
-        RPC.PM_photo photo = chatsItem.photo;
-        String name = chatsItem.name;
-        String lastMessageText = chatsItem.lastMessageText;
+        final RPC.PM_photo photo = chatsItem.photo;
+        final String name = chatsItem.name;
+        final String lastMessageText = chatsItem.lastMessageText;
 
         ViewTypes viewTypes = ViewTypes.values()[this.getItemViewType(position)];
         switch (viewTypes) {
             case ITEM:
                 final ChatsViewHolder chatsViewHolder = (ChatsViewHolder) holder;
 
-                if (photo != null) {
-                    if (photo.id <= 0)
-                        chatsViewHolder.avatar.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
-                    else //TODO:change to origin bmp
-                        chatsViewHolder.avatar.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
-                }
+                chatsViewHolder.avatar.setPhoto(photo);
 
                 if (name != null && !name.isEmpty())
                     chatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(chatsViewHolder.name.getPaint(), name)));
@@ -91,12 +81,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case GROUP_ITEM:
                 final GroupChatsViewHolder groupChatsViewHolder = (GroupChatsViewHolder) holder;
 
-                if (photo != null) {
-                    if (photo.id <= 0)
-                        groupChatsViewHolder.avatar.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
-                    else //TODO:change to origin bmp
-                        groupChatsViewHolder.avatar.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
-                }
+                groupChatsViewHolder.avatar.setPhoto(photo);
 
                 if (name != null && !name.isEmpty())
                     groupChatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(groupChatsViewHolder.name.getPaint(), name)));
@@ -110,13 +95,11 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 if (chatsItem.fileType != FileManager.FileType.ACTION) {
                     RPC.PM_photo lastMsgPhoto = ((ChatsGroupItem) chatsItem).lastMsgPhoto;
-                    if (lastMsgPhoto != null) {
-                        if (groupChatsViewHolder.lastMshPhoto != null)
-                            groupChatsViewHolder.lastMshPhoto.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
-//                            groupChatsViewHolder.lastMshPhoto.setPhoto(lastMsgPhoto); //TODO:change to origin bmp
-                    }
+
+                    groupChatsViewHolder.lastMshPhoto.setPhoto(lastMsgPhoto);
                 }
 
+                groupChatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, true, false) : "");
                 break;
         }
     }
@@ -143,10 +126,10 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         ChatsViewHolder(View itemView) {
             super(itemView);
-            avatar = (CircleImageView) itemView.findViewById(R.id.avatar_dialog_image_view);
-            time = (TextView) itemView.findViewById(R.id.time_cell_dialog_text_view);
-            msg = (TextView) itemView.findViewById(R.id.msg_cell_dialog_text_view);
-            name = (TextView) itemView.findViewById(R.id.name_cell_dialog_text_view);
+            avatar = (CircleImageView) itemView.findViewById(R.id.chats_item_avatar);
+            time = (TextView) itemView.findViewById(R.id.chats_item_time);
+            msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
+            name = (TextView) itemView.findViewById(R.id.chats_item_name);
         }
     }
 
@@ -159,11 +142,11 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         GroupChatsViewHolder(View itemView) {
             super(itemView);
-            avatar = (CircleImageView) itemView.findViewById(R.id.avatar_dialog_image_view);
-            lastMshPhoto = (CircleImageView) itemView.findViewById(R.id.last_msg_user_photo);
-            time = (TextView) itemView.findViewById(R.id.time_cell_dialog_text_view);
-            msg = (TextView) itemView.findViewById(R.id.msg_cell_dialog_text_view);
-            name = (TextView) itemView.findViewById(R.id.name_cell_dialog_text_view);
+            avatar = (CircleImageView) itemView.findViewById(R.id.chats_item_avatar);
+            lastMshPhoto = (CircleImageView) itemView.findViewById(R.id.chats_item_last_msg_avatar);
+            time = (TextView) itemView.findViewById(R.id.chats_item_time);
+            msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
+            name = (TextView) itemView.findViewById(R.id.chats_item_name);
         }
     }
 }

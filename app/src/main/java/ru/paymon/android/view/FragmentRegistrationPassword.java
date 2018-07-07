@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
-import android.support.v7.widget.Toolbar;
 import android.widget.TextView;
 
 import ru.paymon.android.R;
@@ -65,12 +64,7 @@ public class FragmentRegistrationPassword extends Fragment {
         setHasOptionsMenu(true);
         getActivity().invalidateOptionsMenu();
 
-        final Toolbar toolbar = getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(v -> {
-            Utils.hideKeyboard(v);
-            getActivity().getSupportFragmentManager().popBackStack();
-        });
+        Utils.setArrowBackInToolbar(getActivity());
 
     }
 
@@ -144,7 +138,7 @@ public class FragmentRegistrationPassword extends Fragment {
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.registration_menu, menu);
+        inflater.inflate(R.menu.next_menu, menu);
     }
 
     @Override
@@ -168,6 +162,12 @@ public class FragmentRegistrationPassword extends Fragment {
 
         final FragmentRegistrationEmail fragmentRegistrationEmail = FragmentRegistrationEmail.newInstance();
         fragmentRegistrationEmail.setArguments(passwordBundle);
-        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentRegistrationEmail, null);
+        Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragmentRegistrationEmail, null);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 }

@@ -32,7 +32,7 @@ import android.widget.ImageView;
 import ru.paymon.android.R;
 
 
-public class CircleImageView extends AppCompatImageView {
+public class CircleImageView extends ObservableImageView {
 
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
 

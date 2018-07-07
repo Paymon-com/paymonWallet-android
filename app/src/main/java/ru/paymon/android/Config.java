@@ -9,6 +9,7 @@ public class Config {
     public static String HOST_ALT;
 
     public static final String TAG = "paymon-dbg";
+    public static final String VERSION_STRING = "0.01";
 
     public static short PORT = 7966;
     static {
@@ -23,4 +24,6 @@ public class Config {
     }
 
     public static final int VERSION = 0x1_08b;
+    public static final String VERSION_STRING = "0.8 beta";
+
 }

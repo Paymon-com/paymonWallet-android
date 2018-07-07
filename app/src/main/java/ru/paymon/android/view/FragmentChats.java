@@ -4,20 +4,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.LinkedList;
 
 import ru.paymon.android.GroupsManager;
@@ -25,14 +20,12 @@ import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ChatsAdapter;
 import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
 
@@ -60,8 +53,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        NotificationManager.getInstance().addObserver(this, NotificationManager.dialogsNeedReload);
     }
 
     @Nullable
@@ -98,9 +89,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
                         final FragmentChat fragmentChat = FragmentChat.newInstance();
                         fragmentChat.setArguments(bundle);
-
-                        final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentChat, null);
+                        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentChat, null);
                     }
 
                     @Override
@@ -114,13 +103,13 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsRecyclerView.setAdapter(chatsAdapter);
 
-        if (NetworkManager.getInstance().isAuthorized()) {
+        if (NetworkManager.getInstance().isAuthorized()) { //TODO: мб в apphandler + netQueue
             if (!isLoading) {
                 isLoading = true;
                 if (hintView != null)
                     hintView.setVisibility(View.GONE);
 
-                MessagesManager.getInstance().loadChats(!NetworkManager.getInstance().isConnected());
+                Utils.netQueue.postRunnable(() -> MessagesManager.getInstance().loadChats(!NetworkManager.getInstance().isConnected()));
             }
         }
     }
@@ -128,13 +117,15 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-
+        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_dialog));
+        NotificationManager.getInstance().addObserver(this, NotificationManager.dialogsNeedReload);
 //        MessageManager.getInstance().currentChatID = 0;
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
         NotificationManager.getInstance().removeObserver(this, NotificationManager.dialogsNeedReload);
     }
 
@@ -179,7 +170,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                 String lastMessageText = "";
 
                 Long lastMsgId = MessagesManager.getInstance().lastGroupMessages.get(group.id);
-                if(lastMsgId != null) {
+                if (lastMsgId != null) {
                     RPC.PM_photo lastMsgPhoto = null;
                     RPC.Message lastMessage = MessagesManager.getInstance().messages.get(lastMsgId);
                     if (lastMessage != null) {
@@ -217,9 +208,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
             }
 
             if (!array.isEmpty()) {
-                Collections.sort(array, (chatItem1, chatItem2) -> {
-                    return Long.compare(chatItem1.time, chatItem2.time) * -1;
-                });
+                Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
                 chatsAdapter.chatsItemsList.clear();
                 chatsAdapter.chatsItemsList.addAll(array);
                 chatsAdapter.notifyDataSetChanged();

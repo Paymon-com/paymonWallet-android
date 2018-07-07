@@ -1,6 +1,5 @@
 package ru.paymon.android;
 
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +24,6 @@ public class ApplicationLoader extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
 

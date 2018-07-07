@@ -14,11 +14,8 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
-
-
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -297,34 +294,31 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             Log.e(Config.TAG, "Packet with same ID has already been sent");
             return -1;
         }
-        Utils.netQueue.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(Config.TAG, String.format("send request %s with ID=%d", packet, messageID));
-                try {
-                    final int n = packet.getSize();
-                    SerializedBuffer buffer;
+        Utils.netQueue.postRunnable(() -> {
+            Log.d(Config.TAG, String.format("send request %s with ID=%d", packet, messageID));
+            try {
+                final int n = packet.getSize();
+                SerializedBuffer buffer;
 
-                    SerializedBuffer data = new SerializedBuffer(n);
-                    packet.serializeToStream(data);
-                    data.position(0);
-                    byte[] btp = new byte[data.buffer.limit()];
-                    System.arraycopy(data.buffer.array(), data.buffer.arrayOffset(), btp, 0, data.buffer.limit());
-                    int addr = KeyGenerator.getInstance().wrapData(messageID, data);
-                    buffer = SerializedBuffer.wrap(addr);
-                    buffer.position(0);
-                    btp = new byte[buffer.buffer.limit()];
-                    System.arraycopy(buffer.buffer.array(), buffer.buffer.arrayOffset(), btp, 0, buffer.buffer.limit());
+                SerializedBuffer data = new SerializedBuffer(n);
+                packet.serializeToStream(data);
+                data.position(0);
+                byte[] btp = new byte[data.buffer.limit()];
+                System.arraycopy(data.buffer.array(), data.buffer.arrayOffset(), btp, 0, data.buffer.limit());
+                int addr = KeyGenerator.getInstance().wrapData(messageID, data);
+                buffer = SerializedBuffer.wrap(addr);
+                buffer.position(0);
+                btp = new byte[buffer.buffer.limit()];
+                System.arraycopy(buffer.buffer.array(), buffer.buffer.arrayOffset(), btp, 0, buffer.buffer.limit());
 
-                    packet.freeResources();
-                    if (onComplete != null) {
-                        requestsMap.put(messageID, onComplete);
-                    }
-                    sendData(buffer, messageID);
-                } catch (Exception e) {
-                    Log.e(Config.TAG, "Error generating request");
-                    requestsMap.remove(messageID);
+                packet.freeResources();
+                if (onComplete != null) {
+                    requestsMap.put(messageID, onComplete);
                 }
+                sendData(buffer, messageID);
+            } catch (Exception e) {
+                Log.e(Config.TAG, "Error generating request");
+                requestsMap.remove(messageID);
             }
         });
         return messageID;
@@ -462,12 +456,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         } else if (packet instanceof RPC.PM_updatePhotoID) {
             final RPC.PM_updatePhotoID update = (RPC.PM_updatePhotoID) packet;
             MediaManager.getInstance().updatePhotoID(update.oldID, update.newID);
-            ApplicationLoader.applicationHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(update.oldID, update.newID);
-                }
-            });
+            ApplicationLoader.applicationHandler.post(() -> ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(update.oldID, update.newID));
         } else if (packet instanceof RPC.PM_photo) {
 //            RPC.PM_photo photo = (RPC.PM_photo) packet;
 //            MediaManager.getInstance().updatePhoto(photo);
@@ -477,12 +466,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
             Log.w(Config.TAG, String.format(Locale.getDefault(), "PM_error(%d): %s", error.code, error.text));
             final String text = error.text;
-            ApplicationLoader.applicationHandler.post(new Runnable() {
-                @Override
-                public void run() {
-                    Log.d("paymon_error_response", text);
-                }
-            });
+            ApplicationLoader.applicationHandler.post(() -> Log.d("paymon_error_response", text));
 
             if (error.code == ERROR_KEY) {
                 Log.e(Config.TAG, "ERROR_KEY, reconnecting");
