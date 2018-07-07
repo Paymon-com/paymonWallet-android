@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/bottom_menu_chats"
+        android:icon="@drawable/ic_menu_dialogs"
+        android:title="@string/title_chats" />
+    <item
+        android:id="@+id/bottom_menu_contacts"
+        android:icon="@drawable/ic_menu_contacts"
+        android:title="@string/title_contacts" />
+    <item
+        android:id="@+id/ic_menu_money"
+        android:icon="@drawable/ic_menu_money"
+        android:title="@string/title_money" />
+    <item
+        android:id="@+id/bottom_menu_games"
+        android:icon="@drawable/ic_menu_games"
+        android:title="@string/title_games" />
+    <item
+        android:id="@+id/bottom_menu_more"
+        android:icon="@drawable/ic_burger"
+        android:title="@string/title_more" />
+
+</menu>

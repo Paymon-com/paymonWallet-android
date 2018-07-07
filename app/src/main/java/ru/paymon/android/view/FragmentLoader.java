@@ -5,27 +5,21 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.AccelerateInterpolator;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.view.animation.AnticipateInterpolator;
 import android.view.animation.AnticipateOvershootInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ru.paymon.android.Config;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.components.LoaderAnimation;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentLoader extends Fragment implements NotificationManager.IListener {
@@ -52,9 +46,9 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
         if (supportActionBar != null)
             supportActionBar.hide();
 
-        TextView name = (TextView) view.findViewById(R.id.fragment_loader_name_text_view);
-        ImageView logo = (ImageView) view.findViewById(R.id.fragment_loader_logo_image_view);
-        ImageView point = (ImageView) view.findViewById(R.id.fragment_loader_point_image_view);
+        TextView name = view.findViewById(R.id.fragment_loader_name_text_view);
+        ImageView logo = view.findViewById(R.id.fragment_loader_logo_image_view);
+        ImageView point = view.findViewById(R.id.fragment_loader_point_image_view);
         point.setVisibility(View.GONE);
 
         if (text == null) {
@@ -184,6 +178,14 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
 //        point.startAnimation(animPoint);
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Utils.hideBottomBar(getActivity());
+
     }
 
     @Override

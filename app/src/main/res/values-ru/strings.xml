@@ -1,7 +1,7 @@
 <resources>
     <string name="ok">ОК</string>
     <string name="app_name">Paymon</string>
-    <string name="title_dialog">Диалоги</string>
+    <string name="title_chats">Чаты</string>
     <string name="title_more">Еще</string>
     <string name="title_update_profile">Редактирование профиля</string>
     <string name="title_contacts">Контакты</string>

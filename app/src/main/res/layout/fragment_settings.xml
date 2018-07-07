@@ -12,7 +12,7 @@
         android:layout_height="0dp"
         app:headerLayout="@layout/fragment_settings_header"
         app:itemBackground="@drawable/navigation_view_item_background"
-        app:itemIconTint="@drawable/drawer_item_icon"
+        app:itemIconTint="@drawable/navigation_menu_item_icon_tint"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

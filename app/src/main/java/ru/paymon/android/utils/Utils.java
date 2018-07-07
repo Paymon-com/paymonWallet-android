@@ -1,6 +1,5 @@
 package ru.paymon.android.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Paint;
@@ -8,6 +7,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -15,16 +15,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -259,4 +256,17 @@ public class Utils {
             fragmentActivity.getSupportFragmentManager().popBackStack();
         });
     }
+
+    public static void hideBottomBar(FragmentActivity fragmentActivity) {
+        final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottomNavigationView);
+        if (bottomNavigationView != null) bottomNavigationView.setVisibility(View.GONE);
+
+    }
+
+    public static void showBottomBar(FragmentActivity fragmentActivity) {
+        final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottomNavigationView);
+        if (bottomNavigationView != null) bottomNavigationView.setVisibility(View.VISIBLE);
+
+    }
+
 }

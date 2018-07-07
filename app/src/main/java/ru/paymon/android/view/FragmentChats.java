@@ -60,8 +60,8 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
 
-        chatsRecyclerView = (RecyclerView) view.findViewById(R.id.fragment_dialog_recycler_view);
-        progressBar = (ProgressBar) view.findViewById(R.id.chats_progress_bar);
+        chatsRecyclerView = view.findViewById(R.id.fragment_dialog_recycler_view);
+        progressBar = view.findViewById(R.id.chats_progress_bar);
         progressBar.setVisibility(View.GONE);
 
         initChats();
@@ -117,7 +117,8 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_dialog));
+        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_chats));
+        Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.dialogsNeedReload);
 //        MessageManager.getInstance().currentChatID = 0;
     }
