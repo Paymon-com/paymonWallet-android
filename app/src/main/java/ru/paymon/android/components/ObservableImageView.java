@@ -7,26 +7,26 @@ import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.ObservableMediaManager;
+import ru.paymon.android.R;
 import ru.paymon.android.StickerPack;
 import ru.paymon.android.User;
 import ru.paymon.android.models.Photo;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
 
 public class ObservableImageView extends AppCompatImageView implements ObservableMediaManager.IPhotoListener, ObservableMediaManager.IStickerListener {
-    public static Bitmap profilePhotoNoneBitmap;
-
     private long photoID;
     private int photoOwnerID;
     private int userId;
     private long itemID;
     private FileManager.FileType itemType;
     private BitmapDrawable bitmap;
-    private boolean added = false;
 
     public ObservableImageView(Context context) {
         super(context);
@@ -42,24 +42,12 @@ public class ObservableImageView extends AppCompatImageView implements Observabl
         super(context, attrs, defStyleAttr);
     }
 
-    public void subscribe(long photoID, int ownerID) {
-        if (photoID == 0 || this.photoID == photoID || ownerID == 0) return;
-        this.photoOwnerID = ownerID;
-
-        ObservableMediaManager.getInstance().removePhotoObserver(this, this.photoID);
-        ObservableMediaManager.getInstance().addPhotoObserver(this, photoID);
-        this.photoID = photoID;
-
-    }
-
     public void subscribeItem(FileManager.FileType itemType, long itemID) {
         this.itemType = itemType;
 
-        if (added) {
-            ObservableMediaManager.getInstance().removeStickerObserver(this, itemID);
-        }
+        ObservableMediaManager.getInstance().removeStickerObserver(this, this.itemID);
         ObservableMediaManager.getInstance().addStickerObserver(this, itemID);
-        added = true;
+
         this.itemID = itemID;
 
         tryLoadSticker();
@@ -74,41 +62,27 @@ public class ObservableImageView extends AppCompatImageView implements Observabl
     }
 
     public void setPhoto(RPC.PM_photo photo) {
-        setPhoto(photo.user_id, photo.id);
-    }
-
-    public void setPhoto(int ownerID, long photoID) {
-        if (this.photoID == photoID && this.photoOwnerID == ownerID) {
-            return;
+        if (photo != null && photo.id > 0) {
+            int userID = photo.user_id;
+            long photoID = photo.id;
+            subscribeProfilePhoto(userID, photoID);
         } else {
-            if (photoID == 0 || ownerID == 0) {
-                setImageBitmap(profilePhotoNoneBitmap);
-                return;
-            }
-            subscribeProfilePhoto(ownerID, photoID);
+            setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
         }
     }
 
     public void setSticker(FileManager.FileType itemType, long itemID) {
-        if (this.itemID == itemID && itemType == FileManager.FileType.NONE) {
-            return;
-        } else {
-            if (itemID == 0 || itemType == FileManager.FileType.NONE) {
-                return;
-            }
-            subscribeItem(itemType, itemID);
+        if (!(this.itemID == itemID && itemType == FileManager.FileType.NONE)) {
+            if (!(itemID == 0 || itemType == FileManager.FileType.NONE))
+                subscribeItem(itemType, itemID);
         }
     }
 
     public void subscribeProfilePhoto(int ownerID, long photoID) {
-        this.photoOwnerID = ownerID;
-        if (added) {
-            ObservableMediaManager.getInstance().removePhotoObserver(this, this.photoID);
-        }
+        ObservableMediaManager.getInstance().removePhotoObserver(this, this.photoID);
         ObservableMediaManager.getInstance().addPhotoObserver(this, photoID);
-        added = true;
+        this.photoOwnerID = ownerID;
         this.photoID = photoID;
-
         tryLoadBitmap();
     }
 
@@ -139,35 +113,20 @@ public class ObservableImageView extends AppCompatImageView implements Observabl
     }
 
     private void tryLoadBitmap() {
-        if (photoID <= 0 && photoOwnerID != User.currentUser.id) {
-            setImageBitmap(profilePhotoNoneBitmap);
-            return;
-        }
-        Log.d(Config.TAG, "trying to load bitmap " + photoOwnerID + "_" + photoID);
-
         BitmapDrawable bitmap = ObservableMediaManager.getInstance().loadPhotoBitmap(photoOwnerID, photoID);
 
         if (bitmap != null) {
             this.bitmap = bitmap;
             setImageDrawable(bitmap);
         } else {
-            setImageBitmap(profilePhotoNoneBitmap);
-
-            Utils.netQueue.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    MediaManager.getInstance().requestPhoto(photoOwnerID, photoID);
-                }
-            });
+            Utils.netQueue.postRunnable(() -> MediaManager.getInstance().requestPhoto(photoOwnerID, photoID));
         }
         invalidate();
     }
 
     private void tryLoadSticker() {
-        if (itemID <= 0) {
+        if (itemID <= 0)
             return;
-        }
-        Log.d(Config.TAG, "trying to load sticker " + itemType.toString() + "_" + itemID);
 
         BitmapDrawable bitmap = ObservableMediaManager.getInstance().loadStickerBitmap(itemID);
 
@@ -175,20 +134,12 @@ public class ObservableImageView extends AppCompatImageView implements Observabl
             this.bitmap = bitmap;
             setImageDrawable(bitmap);
         } else {
-            setImageBitmap(profilePhotoNoneBitmap);
-
-            Utils.netQueue.postRunnable(new Runnable() {
-                @Override
-                public void run() {
-                    MediaManager.getInstance().requestStickerPack(1);
-                }
-            });
+            Utils.netQueue.postRunnable(() -> MediaManager.getInstance().requestStickerPack(1));
         }
         invalidate();
     }
 
     public void destroy() {
         ObservableMediaManager.getInstance().removePhotoObserver(this, photoID);
-        added = false;
     }
 }

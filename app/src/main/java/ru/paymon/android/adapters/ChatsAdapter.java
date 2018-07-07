@@ -64,10 +64,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case ITEM:
                 final ChatsViewHolder chatsViewHolder = (ChatsViewHolder) holder;
 
-                if (photo != null && photo.id <= 0)
-                    chatsViewHolder.avatar.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
-                else //TODO:change to origin bmp
-                    chatsViewHolder.avatar.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
+                chatsViewHolder.avatar.setPhoto(photo);
 
                 if (name != null && !name.isEmpty())
                     chatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(chatsViewHolder.name.getPaint(), name)));
@@ -84,10 +81,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             case GROUP_ITEM:
                 final GroupChatsViewHolder groupChatsViewHolder = (GroupChatsViewHolder) holder;
 
-                if (photo != null && photo.id <= 0)
-                    groupChatsViewHolder.avatar.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
-                else //TODO:change to origin bmp
-                    groupChatsViewHolder.avatar.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
+                groupChatsViewHolder.avatar.setPhoto(photo);
 
                 if (name != null && !name.isEmpty())
                     groupChatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(groupChatsViewHolder.name.getPaint(), name)));
@@ -101,10 +95,8 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
                 if (chatsItem.fileType != FileManager.FileType.ACTION) {
                     RPC.PM_photo lastMsgPhoto = ((ChatsGroupItem) chatsItem).lastMsgPhoto;
-                    if (lastMsgPhoto != null && lastMsgPhoto.id <= 0)
-                        groupChatsViewHolder.lastMshPhoto.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
-                    else //TODO:change to origin bmp
-                        groupChatsViewHolder.lastMshPhoto.setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
+
+                    groupChatsViewHolder.lastMshPhoto.setPhoto(lastMsgPhoto);
                 }
 
                 groupChatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, true, false) : "");

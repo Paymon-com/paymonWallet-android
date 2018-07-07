@@ -161,6 +161,23 @@ public class Utils {
         });
     }
 
+    public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment) {
+        ApplicationLoader.applicationHandler.post(() -> {
+            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.anim.fade_to_back, R.anim.fade_to_up, R.anim.fade_to_back);
+            fragmentTransaction.replace(R.id.container, fragment);
+            fragmentTransaction.commit();
+        });
+    }
+
+    public static void clearStack(final FragmentManager fragmentManager) {
+        int count = fragmentManager.getBackStackEntryCount();
+        while (count > 0) {
+            fragmentManager.popBackStack();
+            count--;
+        }
+    }
+
     public static byte[] hexStringToBytes(String s) {
         int len = s.length();
         // safe for leading zero

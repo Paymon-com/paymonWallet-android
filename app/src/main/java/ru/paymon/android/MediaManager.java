@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.nfc.Tag;
 import android.os.Environment;
 import android.util.Log;
 import android.util.LongSparseArray;
@@ -26,6 +27,8 @@ import ru.paymon.android.net.Packet;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
+
+import static ru.paymon.android.Config.TAG;
 
 public class MediaManager {
     public static final String PHOTOS_DIR = "/Paymon/photos/";
@@ -63,7 +66,7 @@ public class MediaManager {
             File stickersPath = new File(path, "stickers");
             stickersPath.mkdir();
         } catch (Exception e) {
-            Log.e(Config.TAG, e.getMessage());
+            Log.e(TAG, e.getMessage());
         }
     }
 
@@ -193,14 +196,10 @@ public class MediaManager {
             request.id = photoID;
             request.userID = userID;
 
-            NetworkManager.getInstance().sendRequest(request, new Packet.OnResponseListener() {
-                @Override
-                public void onResponse(Packet response, RPC.PM_error error) {
-                    if (response != null) {
-                        if (response instanceof RPC.PM_boolFalse) {
-                            waitingPhotosList.remove(photoID);
-                        }
-                    }
+            NetworkManager.getInstance().sendRequest(request, (response, error) -> {
+                if (response != null) {
+                    if (response instanceof RPC.PM_boolFalse)
+                        waitingPhotosList.remove(photoID);
                 }
             });
         }

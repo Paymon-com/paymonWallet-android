@@ -157,7 +157,6 @@ public class MessagesManager implements NotificationManager.IListener {
     }
 
     public void loadMessages(int chatID, int count, int offset, boolean isGroup) {
-        ApplicationLoader.applicationHandler.post(() -> System.out.println("loadMessages " + chatID));
         if (User.currentUser == null || chatID == 0) return;
 
         RPC.PM_getChatMessages packet = new RPC.PM_getChatMessages();

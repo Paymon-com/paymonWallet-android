@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
+import ru.paymon.android.Config;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
@@ -76,7 +78,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         final ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (supportActionBar != null) {
             supportActionBar.setDisplayShowCustomEnabled(false);
-            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_HOME_AS_UP);
+            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
             supportActionBar.setCustomView(defaultCustomView);
             supportActionBar.setDisplayShowCustomEnabled(true);
             supportActionBar.setDisplayShowHomeEnabled(true);
@@ -94,14 +96,12 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     public void onResume() {
         super.onResume();
         NotificationManager.getInstance().addObserver(this, NotificationManager.chatAddMessages);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.messagesDidLoaded);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         NotificationManager.getInstance().removeObserver(this, NotificationManager.chatAddMessages);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.messagesDidLoaded);
     }
 
     private void initChat(View defaultCustomView) {
@@ -137,7 +137,10 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         final RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
         if (user != null) {
             chatTitleTextView.setText(Utils.formatUserName(user));
-//            toolbarAvatar.setPhoto(user.id, user.photoID);
+            RPC.PM_photo photo = new RPC.PM_photo();
+            photo.id = user.photoID;
+            photo.user_id = user.id;
+            toolbarAvatar.setPhoto(photo);
         }
 
         customView.setOnClickListener(v -> {
@@ -162,7 +165,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         final RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
         if (group != null) {
             chatTitleTextView.setText(group.title);
-//            toolbarAvatar.setPhoto(group.id, group.photo.id);
+            toolbarAvatar.setPhoto(group.photo);
             participantsCountTextView.setText(getString(R.string.participants) + ": " + groupUsers.size());
         }
 
@@ -204,27 +207,6 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
                 }
             }
             loadingMessages = false;
-        } else if (id == NotificationManager.messagesDidLoaded) { // TODO: USELESS NOTIFICATION
-            loadingMessages = false;
-            LongSparseArray<RPC.Message> messages = MessagesManager.getInstance().messages;
-            for (int i = 0; i < messages.size(); i++) {
-                long mid = messages.keyAt(i);
-                RPC.Message msg = messages.get(mid);
-                if (msg != null) {
-                    int to_id;
-                    if (isGroup) {
-                        to_id = msg.to_id.group_id;
-                    } else {
-                        to_id = msg.to_id.user_id;
-                    }
-                    if (to_id == 0) continue;
-
-                    if ((to_id == chatID && msg.from_id == User.currentUser.id) || (to_id == User.currentUser.id && msg.from_id == chatID)) {
-                        messagesAdapter.messageIDs.add(mid);//String.format(Locale.getDefault(), "%onDateSetListener: %s", msg.from_id, msg.text));
-                    }
-                }
-            }
-            messagesAdapter.notifyDataSetChanged();
         }
     }
 }

@@ -7,9 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 
 import ru.paymon.android.R;
@@ -41,18 +43,16 @@ public class FragmentStart extends Fragment {
         View view = inflater.inflate(R.layout.fragment_start, container, false);
         view.setBackgroundResource(R.drawable.background);
 
-        ((DrawerLayout) getActivity().findViewById(R.id.drawer_layout)).setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-
         Button authButton = (Button) view.findViewById(R.id.fragment_start_auth_button);
         Button registrationButton = (Button) view.findViewById(R.id.fragment_start_registration_button);
 
-        registrationButton.setOnClickListener((v) -> {
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentRegistrationLogin.newInstance(), null);
-        });
+        registrationButton.setOnClickListener((v) ->
+                Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentRegistrationLogin.newInstance(), null)
+        );
 
-        authButton.setOnClickListener((v) -> {
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentAuthorization.newInstance(), null);
-        });
+        authButton.setOnClickListener((v) ->
+                Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentAuthorization.newInstance(), null)
+        );
 
         setHasOptionsMenu(true);
 
@@ -62,12 +62,12 @@ public class FragmentStart extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
         Utils.hideActionBar(getActivity());
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 }
