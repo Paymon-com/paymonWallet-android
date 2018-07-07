@@ -1,2 +1,7 @@
-/build
-.externalNativeBuild/
+*.iml
+.gradle/
+local.properties
+.idea/
+.gradle/
+*.keystore
+obj/
