@@ -7,6 +7,7 @@ import android.os.Handler;
 
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.utils.KeyGenerator;
+import ru.paymon.android.utils.Utils;
 import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
 
 
@@ -26,6 +27,9 @@ public class ApplicationLoader extends Application {
         super.onCreate();
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
+
+        Utils.checkDisplaySize(getApplicationContext(), null);
+        Utils.maxSize = Utils.displaySize.x - Utils.displaySize.x / 100.0 * 45;
 
         User.loadConfig();
 

@@ -34,6 +34,8 @@ import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.net.RPC;
 
+import static ru.paymon.android.User.format24h;
+
 public class Utils {
     public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
     public static volatile DispatchQueue netQueue = new DispatchQueue("netQueue");
@@ -107,8 +109,7 @@ public class Utils {
         return text.length();
     }
 
-    //TODO:Добавить настройку юзера format24h
-    public static String formatDateTime(long timestamp, boolean format24h, boolean inChat) {
+    public static String formatDateTime(long timestamp, boolean inChat) {
         final Date now = new Date(System.currentTimeMillis());
         final Date msgDate = new Date(timestamp * 1000L);
 

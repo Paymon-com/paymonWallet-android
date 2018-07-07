@@ -21,9 +21,6 @@ public class MainActivity extends AppCompatActivity implements NotificationManag
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Utils.checkDisplaySize(getApplicationContext(), null);
-        Utils.maxSize = Utils.displaySize.x - Utils.displaySize.x / 100.0 * 45;
-
         if (User.currentUser == null)
             Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentStart.newInstance());
         else
@@ -36,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements NotificationManag
             if (!User.currentUser.confirmed || User.currentUser.email.isEmpty())
                 Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance());
             else
-                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance());
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.newInstance());
         }
     }
 

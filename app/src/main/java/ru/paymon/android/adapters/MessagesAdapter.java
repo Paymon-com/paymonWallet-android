@@ -115,23 +115,23 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
         if (holder instanceof SentMessageViewHolder) {
             final SentMessageViewHolder sentMessageViewHolder = (SentMessageViewHolder) holder;
             sentMessageViewHolder.msg.setText(sentMessageViewHolder.message.text);
-            sentMessageViewHolder.time.setText(Utils.formatDateTime(sentMessageViewHolder.message.date, true, true));
+            sentMessageViewHolder.time.setText(Utils.formatDateTime(sentMessageViewHolder.message.date, true));
         } else if (holder instanceof ReceiveMessageViewHolder) {
             final ReceiveMessageViewHolder receiveMessageViewHolder = (ReceiveMessageViewHolder) holder;
             receiveMessageViewHolder.msg.setText(receiveMessageViewHolder.message.text);
-            receiveMessageViewHolder.time.setText(Utils.formatDateTime(receiveMessageViewHolder.message.date, true, true));
+            receiveMessageViewHolder.time.setText(Utils.formatDateTime(receiveMessageViewHolder.message.date, true));
         } else if (holder instanceof SentMessageItemViewHolder) {
             final SentMessageItemViewHolder sentMessageItemViewHolder = (SentMessageItemViewHolder) holder;
             sentMessageItemViewHolder.item.setSticker(sentMessageItemViewHolder.message.itemType, sentMessageItemViewHolder.message.itemID);
-            sentMessageItemViewHolder.time.setText(Utils.formatDateTime(sentMessageItemViewHolder.message.date, true, true));
+            sentMessageItemViewHolder.time.setText(Utils.formatDateTime(sentMessageItemViewHolder.message.date, true));
         } else if (holder instanceof ReceiveMessageItemViewHolder) {
             final ReceiveMessageItemViewHolder receiveMessageItemViewHolder = (ReceiveMessageItemViewHolder) holder;
             receiveMessageItemViewHolder.item.setSticker(receiveMessageItemViewHolder.message.itemType, receiveMessageItemViewHolder.message.itemID);
-            receiveMessageItemViewHolder.time.setText(Utils.formatDateTime(receiveMessageItemViewHolder.message.date, true, true));
+            receiveMessageItemViewHolder.time.setText(Utils.formatDateTime(receiveMessageItemViewHolder.message.date, true));
         } else if (holder instanceof GroupReceiveMessageViewHolder) {
             final GroupReceiveMessageViewHolder groupReceiveMessageViewHolder = (GroupReceiveMessageViewHolder) holder;
             groupReceiveMessageViewHolder.msg.setText(groupReceiveMessageViewHolder.message.text);
-            groupReceiveMessageViewHolder.time.setText(Utils.formatDateTime(groupReceiveMessageViewHolder.message.date, true, true));
+            groupReceiveMessageViewHolder.time.setText(Utils.formatDateTime(groupReceiveMessageViewHolder.message.date, true));
             int uid = groupReceiveMessageViewHolder.message.from_id;
             Long pid = MediaManager.getInstance().userProfilePhotoIDs.get(uid);
             if (pid != null) {
@@ -143,7 +143,7 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
         } else if (holder instanceof ActionMessageViewHolder) {
             final ActionMessageViewHolder actionMessageViewHolder = (ActionMessageViewHolder) holder;
             actionMessageViewHolder.msg.setText(actionMessageViewHolder.message.text);
-            actionMessageViewHolder.time.setText(Utils.formatDateTime(actionMessageViewHolder.message.date, true, true));
+            actionMessageViewHolder.time.setText(Utils.formatDateTime(actionMessageViewHolder.message.date, true));
         }
     }
 
