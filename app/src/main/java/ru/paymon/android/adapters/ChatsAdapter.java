@@ -76,7 +76,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 else
                     chatsViewHolder.msg.setText("");
 
-                chatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, true, false) : "");
+                chatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
                 break;
             case GROUP_ITEM:
                 final GroupChatsViewHolder groupChatsViewHolder = (GroupChatsViewHolder) holder;
@@ -99,7 +99,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                     groupChatsViewHolder.lastMshPhoto.setPhoto(lastMsgPhoto);
                 }
 
-                groupChatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, true, false) : "");
+                groupChatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
                 break;
         }
     }

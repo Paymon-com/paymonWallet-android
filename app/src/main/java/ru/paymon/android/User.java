@@ -16,6 +16,8 @@ public class User {
     public static boolean notificationCheckVibration;
     public static Uri notificationRingtone;
 
+    public static boolean format24h;
+
     public static void loadConfig() {
         SharedPreferences userPreferences = ApplicationLoader.applicationContext.getSharedPreferences("user_config", Context.MODE_PRIVATE);
 
@@ -38,6 +40,9 @@ public class User {
 
         SharedPreferences clientPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationLoader.applicationContext);
         //TODO:
+        if(clientPreferences.contains("basic_format_time"))
+            format24h = clientPreferences.getBoolean("basic_format_time", true);
+
     }
 
     public static void saveConfig() {

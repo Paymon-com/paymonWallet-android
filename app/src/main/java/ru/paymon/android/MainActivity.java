@@ -28,9 +28,6 @@ public class MainActivity extends AppCompatActivity implements NotificationManag
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
-        Utils.checkDisplaySize(getApplicationContext(), null);
-        Utils.maxSize = Utils.displaySize.x - Utils.displaySize.x / 100.0 * 45;
-
         if (User.currentUser == null)
             Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentStart.newInstance());
         else
@@ -66,9 +63,9 @@ public class MainActivity extends AppCompatActivity implements NotificationManag
     public void didReceivedNotification(int id, Object... args) {
         if (id == NotificationManager.userAuthorized) {
             if (!User.currentUser.confirmed || User.currentUser.email.isEmpty())
-                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance(), null);
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance());
             else
-                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance(), null);
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.newInstance());
         }
     }
 
