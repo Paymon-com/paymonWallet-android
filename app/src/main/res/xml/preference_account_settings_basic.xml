@@ -9,5 +9,11 @@
             android:entryValues="@array/sort_friends_list"
             android:key="basic_sort_friends_list"
             android:title="@string/app_sort_friends" />
+        <ListPreference
+            android:defaultValue="@string/default_sort_friends"
+            android:entries="@array/format_time"
+            android:entryValues="@array/format_time"
+            android:key="basic_format_time"
+            android:title="@string/format_time" />
     </PreferenceCategory>
 </PreferenceScreen>

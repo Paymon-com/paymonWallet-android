@@ -5,5 +5,8 @@
         <item>По фамилии</item>
         <item>По дате добавления</item>
     </string-array>
-
+    <string-array name="format_time">
+        <item>12am</item>
+        <item>24h</item>
+    </string-array>
 </resources>

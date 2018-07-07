@@ -95,6 +95,7 @@
 
     <string name="app_title">Приложение</string>
     <string name="app_sort_friends">Сортировка списка друзей</string>
+    <string name="format_time">Формат времени</string>
 
     <string name="money_control_btc">Деноминация и точность BTC</string>
 
