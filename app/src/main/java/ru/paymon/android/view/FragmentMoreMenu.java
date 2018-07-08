@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.components.CircleImageView;
@@ -36,8 +37,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
     public void onResume() {
         super.onResume();
 
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_more));
-
+        Utils.setActionBarWithTitle(getActivity(), ApplicationLoader.applicationContext.getString(R.string.title_more));
     }
 
     @Nullable

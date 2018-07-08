@@ -12,10 +12,11 @@ import ru.paymon.android.components.BottomNavigationViewHelper;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChats;
 import ru.paymon.android.view.FragmentLoader;
+import ru.paymon.android.view.FragmentMoreMenu;
 import ru.paymon.android.view.FragmentRegistrationEmailConfirmation;
 import ru.paymon.android.view.FragmentStart;
 
-public class MainActivity extends AppCompatActivity implements NotificationManager.IListener, BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NotificationManager.IListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,35 +29,29 @@ public class MainActivity extends AppCompatActivity implements NotificationManag
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
+        bottomNavigationView.setOnNavigationItemSelectedListener((item) -> {
+            switch (item.getItemId()) {
+                case R.id.bottom_menu_chats:
+                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance());
+                    break;
+                case R.id.bottom_menu_contacts:
+                    break;
+                case R.id.ic_menu_money:
+                    break;
+                case R.id.bottom_menu_games:
+                    break;
+                case R.id.bottom_menu_more:
+                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoreMenu.getInstance());
+                    break;
+            }
+
+            return true;
+        });
+
         if (User.currentUser == null)
             Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentStart.newInstance());
         else
             Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentLoader.newInstance());
-    }
-
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case R.id.bottom_menu_chats:
-                break;
-
-            case R.id.bottom_menu_contacts:
-                break;
-
-            case R.id.ic_menu_money:
-                break;
-
-            case R.id.bottom_menu_games:
-                break;
-
-            case R.id.bottom_menu_more:
-                break;
-
-        }
-
-        return true;
     }
 
     @Override

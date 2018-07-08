@@ -2,6 +2,7 @@
     <string name="ok">ОК</string>
     <string name="app_name">Paymon</string>
     <string name="title_chats">Чаты</string>
+    <string name="title_more">Еще</string>
     <string name="title_update_profile">Редактирование профиля</string>
     <string name="title_contacts">Контакты</string>
     <string name="title_money">Деньги</string>
@@ -13,7 +14,7 @@
     <string name="title_faq">Помощь</string>
     <string name="title_registration">Регистрация</string>
     <string name="additionally">Прочее</string>
-    <string name="logout">Выйти</string>
+    <string name="exit">Выйти</string>
 
     <string name="reg_name_correct">Имя содержит недопустимые символы</string>
     <string name="reg_surname_correct">Фамилия содержит недопустимые символы</string>
@@ -95,7 +96,6 @@
 
     <string name="app_title">Приложение</string>
     <string name="app_sort_friends">Сортировка списка друзей</string>
-    <string name="format_time">Формат времени</string>
 
     <string name="money_control_btc">Деноминация и точность BTC</string>
 
@@ -108,7 +108,7 @@
     <string name="default_sound">Notice</string>
 
     <string name="about_program_text">Paymon для Android</string>
-    <string name="about_program_text_version">\"версия %1$s\"</string>
+    <string name="about_program_text_version">"версия %s"</string>
 
     <string name="referal_share">Привет! Устанавливай и регистрируйся в приложении по коду \'%1$s\' и получи бесплатно криптовалюту от Paymon! https://paymon.org</string>
 
@@ -233,7 +233,7 @@
     <string name="not_chosen">Не выбрано</string>
     <string name="contacts_hint">Здесь Вы можете искать и добавлять контакты. Если вы хотите поговорить с разработчиками, вы можете найти учетную запись с ником \'paymon\' и именем Paymon Inc.</string>
 
-    <string name="agreement_txt" >
+    <string name="agreement_txt">
 \n
 1. Общие положения \n
 2. Определения \n
@@ -345,7 +345,7 @@
 С уважением, Администрация Paymon.\n
 </string>
 
-    <string name="privacy_polycy_txt" >
+    <string name="privacy_polycy_txt">
         \n
 1. Общие положения\n
 2. Условия пользования сайтом и мобильным приложением\n
@@ -571,7 +571,7 @@
     <string name="find_more">Вы можете узнать больше на нашем сайте.</string>
     <string name="loading_one">"Загрузка.  "</string>
     <string name="loading_two">"Загрузка.. "</string>
-    <string name="loading_three">Загрузка...</string>
+    <string name="loading_three">Загрузка…</string>
     <string name="pmnt_hint">Чтобы узнать количество PMNT на вашем счету, добавьте кошелек Ethereum, на котором они хранятся</string>
     <string name="balance">Баланс</string>
     <string name="account">Аккаунт</string>
@@ -588,7 +588,7 @@
     <string name="funds_receipt_account">Счет получения</string>
     <string name="amount_of_payment">Сумма платежа</string>
     <string name="button_withdraw">Вывести</string>
-    <string name="please_wait">Пожалуйста подождите...</string>
+    <string name="please_wait">Пожалуйста подождите…</string>
     <string name="min">Мин</string>
     <string name="max">Макс</string>
     <string name="address_of_the_recipient">Адрес получателя</string>
@@ -613,4 +613,16 @@
     <string name="event">Событие</string>
 
     <string name="sys_group_msg">создал диалог</string>
+    <string name="graph_one_hour">1 Час</string>
+    <string name="graph_one_day">1 День</string>
+    <string name="graph_one_week">1 Неделя</string>
+    <string name="graph_one_month">1 Месяц</string>
+    <string name="graph_three_month">3 Месяца</string>
+    <string name="graph_six_month">6 Месяцев</string>
+    <string name="graph_one_year">1 Год</string>
+    <string name="chart">График</string>
+    <string name="go_to_profile">Перейти в профиль</string>
+
+    <string name="format_time">Формат времени</string>
+
 </resources>

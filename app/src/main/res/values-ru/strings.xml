@@ -622,4 +622,7 @@
     <string name="graph_one_year">1 Год</string>
     <string name="chart">График</string>
     <string name="go_to_profile">Перейти в профиль</string>
+
+    <string name="format_time">Формат времени</string>
+
 </resources>
