@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements NotificationManag
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
         bottomNavigationView.setOnNavigationItemSelectedListener((item) -> {

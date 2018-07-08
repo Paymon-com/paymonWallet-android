@@ -259,13 +259,13 @@ public class Utils {
     }
 
     public static void hideBottomBar(FragmentActivity fragmentActivity) {
-        final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottomNavigationView);
+        final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottom_navigation_view);
         if (bottomNavigationView != null) bottomNavigationView.setVisibility(View.GONE);
 
     }
 
     public static void showBottomBar(FragmentActivity fragmentActivity) {
-        final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottomNavigationView);
+        final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottom_navigation_view);
         if (bottomNavigationView != null) bottomNavigationView.setVisibility(View.VISIBLE);
 
     }
