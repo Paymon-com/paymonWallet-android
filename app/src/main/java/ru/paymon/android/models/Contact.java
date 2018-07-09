@@ -1,20 +1,14 @@
 package ru.paymon.android.models;
 
 public class Contact {
-    private String _name = "";
-    private String _phone = "";
-    private int _my_id;
+    public int id;
+    public String name = "";
+    public String phone = "";
 
-    public void setName(String name) {
-        _name = name;
-    }
-
-    public void setPhone(String phone) {
-        _phone = phone;
-    }
-
-    public void setMyId(int my_id) {
-        _my_id = my_id;
+    public Contact(int id, String name, String phone){
+        this.id= id;
+        this.name=name;
+        this.phone=phone;
     }
 }
 

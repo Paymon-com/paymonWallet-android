@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
 
+import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.ContactsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.ContactsInviteRegisteredAdapter;
 import ru.paymon.android.adapters.ContactsInviteUnregisteredAdapter;
@@ -51,13 +53,14 @@ public class FragmentContactsInvite extends Fragment {
         RecyclerView recyclerViewUnreg = (RecyclerView) view.findViewById(R.id.recViewUnreg);
 
 
+
         recyclerViewReg.setHasFixedSize(true);
         recyclerViewUnreg.setHasFixedSize(true);
         recyclerViewReg.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerViewUnreg.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ContactsInviteRegisteredAdapter contactsInviteRegisteredAdapter = new ContactsInviteRegisteredAdapter();
-        ContactsInviteUnregisteredAdapter contactsInviteUnregisteredAdapter = new ContactsInviteUnregisteredAdapter();
+        ContactsInviteRegisteredAdapter contactsInviteRegisteredAdapter = new ContactsInviteRegisteredAdapter(ContactsManager.getInstance().getRegistered());
+        ContactsInviteUnregisteredAdapter contactsInviteUnregisteredAdapter = new ContactsInviteUnregisteredAdapter(ContactsManager.getInstance().getUnregistered());
 
         recyclerViewReg.setAdapter(contactsInviteRegisteredAdapter);
         recyclerViewUnreg.setAdapter(contactsInviteUnregisteredAdapter);
@@ -84,7 +87,6 @@ public class FragmentContactsInvite extends Fragment {
         tabHost.addTab(tabSpec);
         tabHost.setCurrentTab(0);
 
-
         return view;
     }
 
@@ -92,6 +94,7 @@ public class FragmentContactsInvite extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_contacts));
+        Utils.setArrowBackInToolbar(getActivity());
         setHasOptionsMenu(true);
     }
 
@@ -134,10 +137,8 @@ public class FragmentContactsInvite extends Fragment {
     private void invite() {
         if (currentTabTag.equals(regTabTag)) {
             System.out.println("THIS IS REG");
-
         } else if (currentTabTag.equals(unregTabTag)) {
             System.out.println("THIS IS UNEG");
-
         }
     }
 }

@@ -12,13 +12,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ru.paymon.android.R;
+import ru.paymon.android.models.Contact;
 
 public class ContactsInviteRegisteredAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    ArrayList<Contact> registeredContacts;
 
-    public ContactsInviteRegisteredAdapter() {
-
+    public ContactsInviteRegisteredAdapter(ArrayList<Contact> registeredContacts) {
+        this.registeredContacts = registeredContacts;
     }
 
 

@@ -78,6 +78,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
             case R.id.more_menu_profit:
                 break;
             case R.id.more_menu_invite:
+                Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
                 break;
             case R.id.more_menu_faq:
                 break;
