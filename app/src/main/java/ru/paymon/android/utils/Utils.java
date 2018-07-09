@@ -135,7 +135,7 @@ public class Utils {
             pattern = "HH:mm";
 
         if (!format24h)
-            pattern = pattern.replace("HH", "hh");
+            pattern = pattern.replace("HH:mm", "hh:mm aa");
 
         return (String) DateFormat.format(pattern, msgDate);
     }
@@ -277,13 +277,10 @@ public class Utils {
     public static void hideBottomBar(FragmentActivity fragmentActivity) {
         final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottom_navigation_view);
         if (bottomNavigationView != null) bottomNavigationView.setVisibility(View.GONE);
-
     }
 
     public static void showBottomBar(FragmentActivity fragmentActivity) {
         final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottom_navigation_view);
         if (bottomNavigationView != null) bottomNavigationView.setVisibility(View.VISIBLE);
-
     }
-
 }

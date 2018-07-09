@@ -42,8 +42,6 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_loader, container, false);
 
-        Utils.hideActionBar(getActivity());
-
         TextView name = view.findViewById(R.id.fragment_loader_name_text_view);
         ImageView logo = view.findViewById(R.id.fragment_loader_logo_image_view);
 
@@ -136,7 +134,7 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
     @Override
     public void onResume() {
         super.onResume();
-
+        Utils.hideActionBar(getActivity());
         Utils.hideBottomBar(getActivity());
     }
 

@@ -68,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements NotificationManag
     protected void onResume() {
         super.onResume();
         NotificationManager.getInstance().addObserver(this, NotificationManager.userAuthorized);
-        Utils.hideBottomBar(this);
     }
 
     @Override

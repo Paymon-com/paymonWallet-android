@@ -63,6 +63,7 @@ public class FragmentStart extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideActionBar(getActivity());
+        Utils.hideBottomBar(getActivity());
     }
 
     @Override

@@ -17,6 +17,7 @@ import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.components.CircleImageView;
+import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentSettings extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
@@ -47,21 +48,22 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
-        final NavigationView settingsMenu = view.findViewById(R.id.fragment_settings_navigation_view);
-        final View headerView = settingsMenu.getHeaderView(0);
-        final TextView name = headerView.findViewById(R.id.fragment_settings_header_profile_name_text_view);
-        final CircleImageView avatar = headerView.findViewById(R.id.fragment_settings_header_profile_avatar_image_view);
+        final NavigationView settingsMenu = (NavigationView) view.findViewById(R.id.fragment_settings_navigation_view);
+        final View headerView = (View) settingsMenu.getHeaderView(0);
+        final TextView name = (TextView) headerView.findViewById(R.id.fragment_settings_header_profile_name_text_view);
+        final CircleImageView avatar = (CircleImageView) headerView.findViewById(R.id.fragment_settings_header_profile_avatar_image_view);
 
         settingsMenu.setNavigationItemSelectedListener(this);
 
-        headerView.setOnClickListener(view1 -> {
-            //TODO Вызвать вью редактирования профиля
-        });
+        headerView.setOnClickListener(view1 ->
+                Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentProfile.newInstance()));
 
         name.setText(Utils.formatUserName(User.currentUser));
 
-        //TODO: установка фото
-        avatar.setImageResource(R.drawable.ic_yandex);
+        RPC.PM_photo photo = new RPC.PM_photo();
+        photo.user_id = User.currentUser.id;
+        photo.id = User.currentUser.photoID;
+        avatar.setPhoto(photo);
 
         return view;
     }
@@ -69,8 +71,8 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
     @Override
     public void onResume() {
         super.onResume();
-
         Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_settings));
+        Utils.setArrowBackInToolbar(getActivity());
         setHasOptionsMenu(true);
     }
 
@@ -91,7 +93,6 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 final FragmentAccountSettingsSecurity fragmentAccountSettingsSecurity = FragmentAccountSettingsSecurity.newInstance();
                 Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentAccountSettingsSecurity, null);
                 break;
-
             case R.id.settings_about_programm:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
@@ -103,13 +104,9 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 AlertDialog alert = builder.create();
                 alert.show();
                 break;
-
             case R.id.settings_exit:
-
                 //TODO: Выход из учетной записи
-
                 break;
-
         }
 
         return true;

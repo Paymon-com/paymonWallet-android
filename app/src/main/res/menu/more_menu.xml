@@ -13,5 +13,9 @@
         android:id="@+id/more_menu_faq"
         android:icon="@drawable/ic_menu_faq"
         android:title="@string/title_faq" />
+    <item
+        android:id="@+id/more_menu_settings"
+        android:icon="@drawable/ic_menu_settings"
+        android:title="Настройки" /> <!--TODO:string-->
 
 </menu>

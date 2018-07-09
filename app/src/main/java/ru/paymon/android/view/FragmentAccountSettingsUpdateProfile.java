@@ -3,6 +3,7 @@ package ru.paymon.android.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -20,7 +21,9 @@ import android.widget.TextView;
 import java.util.Calendar;
 
 import ru.paymon.android.R;
+import ru.paymon.android.User;
 import ru.paymon.android.components.CircleImageView;
+import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentAccountSettingsUpdateProfile extends Fragment {
@@ -46,18 +49,48 @@ public class FragmentAccountSettingsUpdateProfile extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_update_profile));
+        CircleImageView avatar = (CircleImageView) view.findViewById(R.id.profile_update_photo);
+        TextInputEditText firstName = (TextInputEditText) view.findViewById(R.id.profile_update_name);
+        TextInputEditText lastName = (TextInputEditText) view.findViewById(R.id.profile_update_surname);
+        TextInputEditText birthday = (TextInputEditText) view.findViewById(R.id.profile_update_bday);
+        TextInputEditText phone = (TextInputEditText) view.findViewById(R.id.profile_update_phone_edit_text);
+        TextInputEditText city = (TextInputEditText) view.findViewById(R.id.profile_update_city);
+        TextInputEditText country = (TextInputEditText) view.findViewById(R.id.profile_update_country);
+        TextInputEditText email = (TextInputEditText) view.findViewById(R.id.profile_update_email);
+        CheckBox male = (CheckBox) view.findViewById(R.id.profile_update_male);
+        CheckBox female = (CheckBox) view.findViewById(R.id.profile_update_female);
+        Button saveButton = (Button) view.findViewById(R.id.profile_update_save_button);
 
-        getActivity().invalidateOptionsMenu();
+        RPC.PM_photo photo = new RPC.PM_photo();
+        photo.user_id = User.currentUser.id;
+        photo.id = User.currentUser.photoID;
+        avatar.setPhoto(photo);
 
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.blue_dark));
-        toolbar.setTitleTextColor(ContextCompat.getColor(getContext(), R.color.white));
+        firstName.setText(User.currentUser.first_name);
+        lastName.setText(User.currentUser.last_name);
+        email.setText(User.currentUser.email);
+        final String phoneNumber = String.valueOf(User.currentUser.phoneNumber);
+        if (!phoneNumber.isEmpty() && !phoneNumber.equals("0"))
+            phone.setText(String.valueOf(User.currentUser.phoneNumber));
+        else
+            phone.setText("");
+        city.setText(User.currentUser.city);
+        birthday.setText(User.currentUser.birthdate);
+        country.setText(User.currentUser.country);
 
-        setHasOptionsMenu(true);
+        if(User.currentUser.gender == 1) {
+            female.setChecked(false);
+            male.setChecked(true);
+        }else {
+            male.setChecked(false);
+            female.setChecked(true);
+        }
+
+        saveButton.setOnClickListener((view1) -> {
+            //TODO:send update profile request
+        });
 
         return view;
     }
@@ -65,5 +98,8 @@ public class FragmentAccountSettingsUpdateProfile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Utils.hideBottomBar(getActivity());
+        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_update_profile));
+        Utils.setArrowBackInToolbar(getActivity());
     }
 }
