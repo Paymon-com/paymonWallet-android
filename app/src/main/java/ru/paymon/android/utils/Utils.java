@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -235,11 +236,26 @@ public class Utils {
     public static void setActionBarWithTitle(FragmentActivity activity, String title) {
         ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
         if (supportActionBar != null) {
-            supportActionBar.show();
             supportActionBar.setTitle(title);
             supportActionBar.setDisplayShowCustomEnabled(false);
             supportActionBar.setDisplayShowTitleEnabled(true);
             supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
+            final android.support.v7.widget.Toolbar toolbar = activity.findViewById(R.id.toolbar);
+            toolbar.setNavigationIcon(null);
+            supportActionBar.show();
+        }
+    }
+
+    public static void setActionBarWithCustomView(FragmentActivity activity, View customView) {
+        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setDisplayShowCustomEnabled(false);
+            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
+            supportActionBar.setCustomView(customView);
+            supportActionBar.setDisplayShowCustomEnabled(true);
+            supportActionBar.setDisplayShowHomeEnabled(true);
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.show();
         }
     }
 

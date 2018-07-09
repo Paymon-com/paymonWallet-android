@@ -3,25 +3,37 @@ package ru.paymon.android.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.RotateAnimation;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Collections;
 import java.util.LinkedList;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
+import ru.paymon.android.MainActivity;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ChatsAdapter;
+import ru.paymon.android.components.CircleImageView;
+import ru.paymon.android.components.LoaderAnimation;
 import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
@@ -66,7 +78,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
         initChats();
 
-        getActivity().invalidateOptionsMenu();
+//        getActivity().invalidateOptionsMenu();
         setHasOptionsMenu(true);
 
         return view;
@@ -103,7 +115,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsRecyclerView.setAdapter(chatsAdapter);
 
-        if (NetworkManager.getInstance().isAuthorized()) { //TODO: мб в apphandler + netQueue
+        if (NetworkManager.getInstance().isAuthorized()) {
             if (!isLoading) {
                 isLoading = true;
                 if (hintView != null)
@@ -120,7 +132,8 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_chats));
         Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.dialogsNeedReload);
-//        MessageManager.getInstance().currentChatID = 0;
+        NotificationManager.getInstance().addObserver(this, NotificationManager.didDisconnectedFromTheServer);
+        MessagesManager.getInstance().currentChatID = 0;
     }
 
     @Override
@@ -128,6 +141,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         super.onPause();
         Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
         NotificationManager.getInstance().removeObserver(this, NotificationManager.dialogsNeedReload);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.didDisconnectedFromTheServer);
     }
 
     @Override
@@ -197,12 +211,11 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                         }
 
                         RPC.PM_photo photo = group.photo;
-                        if (photo.id == 0) {
+                        if (photo.id == 0)
                             photo.id = MediaManager.getInstance().generatePhotoID();
-                        }
-                        if (photo.user_id == 0) {
+
+                        if (photo.user_id == 0)
                             photo.user_id = -group.id;
-                        }
                         array.add(new ChatsGroupItem(group.id, photo, lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
                     }
                 }
@@ -225,10 +238,43 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
             isLoading = false;
         } else if (id == NotificationManager.didDisconnectedFromTheServer) {
+            View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
+            Utils.setActionBarWithCustomView(getActivity(), connectingView);
+
             isLoading = false;
 //            if (swipeRefreshLayout != null) {
 //                swipeRefreshLayout.setRefreshing(false);
 //            }
         }
+    }
+
+    private View createConnectingCustomView() {
+        final View customView = getLayoutInflater().inflate(R.layout.chats_connecting_action_bar, null);
+        final ConstraintLayout pointLayout = (ConstraintLayout) customView.findViewById(R.id.connecting_anim_layout);
+
+        Animation rotateAnimation = new RotateAnimation(0, 360, 50f, 50f);
+        rotateAnimation.setDuration(3000);
+
+        rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                rotateAnimation.reset();
+                pointLayout.startAnimation(rotateAnimation);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        pointLayout.startAnimation(rotateAnimation);
+
+        return customView;
     }
 }

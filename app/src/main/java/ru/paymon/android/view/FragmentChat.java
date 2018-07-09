@@ -4,12 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +17,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
-import ru.paymon.android.Config;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.MessagesAdapter;
 import ru.paymon.android.components.CircleImageView;
@@ -75,15 +71,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         else
             defaultCustomView = createChatCustomView();
 
-        final ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayShowCustomEnabled(false);
-            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
-            supportActionBar.setCustomView(defaultCustomView);
-            supportActionBar.setDisplayShowCustomEnabled(true);
-            supportActionBar.setDisplayShowHomeEnabled(true);
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-        }
+        Utils.setActionBarWithCustomView(getActivity(), defaultCustomView);
 
         initChat(defaultCustomView);
 
@@ -96,12 +84,14 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     public void onResume() {
         super.onResume();
         NotificationManager.getInstance().addObserver(this, NotificationManager.chatAddMessages);
+        MessagesManager.getInstance().currentChatID = chatID;
     }
 
     @Override
     public void onPause() {
         super.onPause();
         NotificationManager.getInstance().removeObserver(this, NotificationManager.chatAddMessages);
+        MessagesManager.getInstance().currentChatID = 0;
     }
 
     private void initChat(View defaultCustomView) {
@@ -131,7 +121,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
     private View createChatCustomView() {
         final View customView = getLayoutInflater().inflate(R.layout.chat_action_bar, null);
-        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.chat_title);
+        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.connecting_title);
         final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.chat_avatar);
 
         final RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
@@ -158,7 +148,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
     private View createChatGroupCustomView() {
         final View customView = getLayoutInflater().inflate(R.layout.chat_group_action_bar, null);
-        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.chat_title);
+        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.connecting_title);
         final TextView participantsCountTextView = (TextView) customView.findViewById(R.id.participants_count);
         final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.chat_group_avatar);
 

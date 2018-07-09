@@ -42,14 +42,10 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_loader, container, false);
 
-        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (supportActionBar != null)
-            supportActionBar.hide();
+        Utils.hideActionBar(getActivity());
 
         TextView name = view.findViewById(R.id.fragment_loader_name_text_view);
         ImageView logo = view.findViewById(R.id.fragment_loader_logo_image_view);
-        ImageView point = view.findViewById(R.id.fragment_loader_point_image_view);
-        point.setVisibility(View.GONE);
 
         if (text == null) {
             if (User.currentUser != null)
@@ -78,7 +74,6 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
         fadeInName.setInterpolator(new DecelerateInterpolator());
         fadeInName.setDuration(5000);
 
-
         Animation fadeOutName = new AlphaAnimation(1, 0);
         fadeOutName.setInterpolator(new DecelerateInterpolator());
         fadeOutName.setDuration(2500);
@@ -90,51 +85,10 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
         set.addAnimation(fadeInName);
         set.addAnimation(slide);
 
-//        LoaderAnimation animPoint = new LoaderAnimation(point, 250);
-//        animPoint.setDuration(8000);
-//        animPoint.setRepeatCount(100);
-
         Animation fadeOutPoint = new AlphaAnimation(1, 0);
 
         fadeOutPoint.setInterpolator(new DecelerateInterpolator());
         fadeOutPoint.setDuration(2500);
-
-//        fadeOutPoint.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                animation.reset();
-//                point.setVisibility(View.GONE);
-//                point.startAnimation(animPoint);
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//        });
-
-//        animPoint.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//                point.setVisibility(View.VISIBLE);
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                point.setTranslationY(-250);
-//                point.startAnimation(fadeOutPoint);
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//        });
 
         fadeInLogo.setAnimationListener(new Animation.AnimationListener() {
             @Override
@@ -175,7 +129,6 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
         name.setVisibility(View.VISIBLE);
         name.startAnimation(set);
         logo.startAnimation(fadeInLogo);
-//        point.startAnimation(animPoint);
 
         return view;
     }
@@ -185,7 +138,6 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
         super.onResume();
 
         Utils.hideBottomBar(getActivity());
-
     }
 
     @Override
