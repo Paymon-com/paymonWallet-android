@@ -35,8 +35,6 @@ public class ApplicationLoader extends Application {
 
         KeyGenerator.getInstance();
         native_init(Config.HOST, Config.PORT, Config.VERSION);
-        final Intent connectorIntent = new Intent(ApplicationLoader.applicationContext, ConnectorService.class);
-        ApplicationLoader.applicationContext.startService(connectorIntent);
     }
 
     public static void finish() {

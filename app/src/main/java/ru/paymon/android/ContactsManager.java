@@ -50,27 +50,14 @@ public class ContactsManager {
         if (pCur != null) {
             if (pCur.getCount() > 0) {
                 HashMap<Integer, ArrayList<String>> phones = new HashMap<>();
+
                 while (pCur.moveToNext()) {
                     Integer contactId = pCur.getInt(pCur.getColumnIndex(PHONE_CONTACT_ID));
                     ArrayList<String> curPhones = new ArrayList<>();
                     if (phones.containsKey(contactId)) {
                         curPhones = phones.get(contactId);
-                    }
-                    curPhones.add(pCur.getString(pCur.getColumnIndex(PHONE_CONTACT_ID)));
-                    phones.put(contactId, curPhones);
-                }
-
-                while (pCur.moveToNext()) {
-                    Integer contactId = pCur.getInt(pCur.getColumnIndex(PHONE_CONTACT_ID));
-
-                    ArrayList<String> curPhones = new ArrayList<>();
-
-                    if (phones.containsKey(contactId)) {
-                        curPhones = phones.get(contactId);
-
                     }
                     curPhones.add(pCur.getString(0));
-
                     phones.put(contactId, curPhones);
                 }
 
@@ -112,27 +99,14 @@ public class ContactsManager {
         if (pCur != null) {
             if (pCur.getCount() > 0) {
                 HashMap<Integer, ArrayList<String>> phones = new HashMap<>();
+
                 while (pCur.moveToNext()) {
                     Integer contactId = pCur.getInt(pCur.getColumnIndex(PHONE_CONTACT_ID));
                     ArrayList<String> curPhones = new ArrayList<>();
                     if (phones.containsKey(contactId)) {
                         curPhones = phones.get(contactId);
-                    }
-                    curPhones.add(pCur.getString(pCur.getColumnIndex(PHONE_CONTACT_ID)));
-                    phones.put(contactId, curPhones);
-                }
-
-                while (pCur.moveToNext()) {
-                    Integer contactId = pCur.getInt(pCur.getColumnIndex(PHONE_CONTACT_ID));
-
-                    ArrayList<String> curPhones = new ArrayList<>();
-
-                    if (phones.containsKey(contactId)) {
-                        curPhones = phones.get(contactId);
-
                     }
                     curPhones.add(pCur.getString(0));
-
                     phones.put(contactId, curPhones);
                 }
 
@@ -174,27 +148,14 @@ public class ContactsManager {
         if (pCur != null) {
             if (pCur.getCount() > 0) {
                 HashMap<Integer, ArrayList<String>> phones = new HashMap<>();
+
                 while (pCur.moveToNext()) {
                     Integer contactId = pCur.getInt(pCur.getColumnIndex(PHONE_CONTACT_ID));
                     ArrayList<String> curPhones = new ArrayList<>();
                     if (phones.containsKey(contactId)) {
                         curPhones = phones.get(contactId);
-                    }
-                    curPhones.add(pCur.getString(pCur.getColumnIndex(PHONE_CONTACT_ID)));
-                    phones.put(contactId, curPhones);
-                }
-
-                while (pCur.moveToNext()) {
-                    Integer contactId = pCur.getInt(pCur.getColumnIndex(PHONE_CONTACT_ID));
-
-                    ArrayList<String> curPhones = new ArrayList<>();
-
-                    if (phones.containsKey(contactId)) {
-                        curPhones = phones.get(contactId);
-
                     }
                     curPhones.add(pCur.getString(0));
-
                     phones.put(contactId, curPhones);
                 }
 

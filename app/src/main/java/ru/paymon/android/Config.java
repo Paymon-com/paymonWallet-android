@@ -25,4 +25,8 @@ public class Config {
 
     public static final int VERSION = 0x1_08b;
 
+
+    //Permissions
+    public static final int IMPORTANT_PERMISSIONS = 100;
+    public static final int READ_CONTACTS_PERMISSION = 101;
 }

@@ -27,6 +27,8 @@ import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
+import static ru.paymon.android.Config.READ_CONTACTS_PERMISSION;
+
 public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
     private static FragmentMoreMenu instance;
@@ -44,6 +46,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
     @Override
     public void onResume() {
         super.onResume();
+        Utils.showBottomBar(getActivity());
         Utils.setActionBarWithTitle(getActivity(), ApplicationLoader.applicationContext.getString(R.string.title_more));
     }
 
@@ -88,7 +91,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
                     Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
                 } else {
                     ((MainActivity) getActivity()).requestAppPermissions(new String[]{Manifest.permission.READ_CONTACTS},
-                            R.string.msg_permissions_required, 10);
+                            R.string.msg_permissions_required, READ_CONTACTS_PERMISSION);
                 }
                 break;
             case R.id.more_menu_faq:

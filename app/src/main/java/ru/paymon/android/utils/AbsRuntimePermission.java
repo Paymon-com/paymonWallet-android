@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -24,7 +25,7 @@ public abstract class AbsRuntimePermission extends AppCompatActivity {
 
     }
 
-    public abstract void onPermissionsGranted(int requestCode);
+    public abstract void onPermissionsGranted(final int requestCode);
 
     public void requestAppPermissions(final String[] requestedPermissions, final int stringId, final int requestCode) {
         mErrorString.put(requestCode, stringId);
@@ -50,7 +51,7 @@ public abstract class AbsRuntimePermission extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         int permissionCheck = PackageManager.PERMISSION_GRANTED;
         for (int permisson : grantResults) {
