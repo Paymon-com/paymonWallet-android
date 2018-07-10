@@ -1,10 +1,15 @@
 package ru.paymon.android.view;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +17,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.components.CircleImageView;
@@ -37,7 +44,6 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
     @Override
     public void onResume() {
         super.onResume();
-
         Utils.setActionBarWithTitle(getActivity(), ApplicationLoader.applicationContext.getString(R.string.title_more));
     }
 
@@ -78,13 +84,18 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
             case R.id.more_menu_profit:
                 break;
             case R.id.more_menu_invite:
-                Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
+                if (ContextCompat.checkSelfPermission(ApplicationLoader.applicationContext, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
+                } else {
+                    ((MainActivity) getActivity()).requestAppPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+                            R.string.msg_permissions_required, 10);
+                }
                 break;
             case R.id.more_menu_faq:
                 break;
             case R.id.more_menu_settings:
                 Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentSettings.newInstance(), null);
-            break;
+                break;
         }
 
         return true;

@@ -52,8 +52,6 @@ public class FragmentContactsInvite extends Fragment {
         RecyclerView recyclerViewReg = (RecyclerView) view.findViewById(R.id.recViewReg);
         RecyclerView recyclerViewUnreg = (RecyclerView) view.findViewById(R.id.recViewUnreg);
 
-
-
         recyclerViewReg.setHasFixedSize(true);
         recyclerViewUnreg.setHasFixedSize(true);
         recyclerViewReg.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -93,6 +91,7 @@ public class FragmentContactsInvite extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Utils.hideBottomBar(getActivity());
         Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_contacts));
         Utils.setArrowBackInToolbar(getActivity());
         setHasOptionsMenu(true);
@@ -138,7 +137,7 @@ public class FragmentContactsInvite extends Fragment {
         if (currentTabTag.equals(regTabTag)) {
             System.out.println("THIS IS REG");
         } else if (currentTabTag.equals(unregTabTag)) {
-            System.out.println("THIS IS UNEG");
+            System.out.println("THIS IS UNREG");
         }
     }
 }

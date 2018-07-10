@@ -11,8 +11,10 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import ru.paymon.android.components.BottomNavigationViewHelper;
+import ru.paymon.android.utils.AbsRuntimePermission;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChats;
 import ru.paymon.android.view.FragmentLoader;
@@ -20,12 +22,21 @@ import ru.paymon.android.view.FragmentMoreMenu;
 import ru.paymon.android.view.FragmentRegistrationEmailConfirmation;
 import ru.paymon.android.view.FragmentStart;
 
-public class MainActivity extends AppCompatActivity implements NotificationManager.IListener {
+public class MainActivity extends AbsRuntimePermission implements NotificationManager.IListener {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+
+        requestAppPermissions(new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                        Manifest.permission.VIBRATE,
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.ACCESS_NETWORK_STATE},
+                R.string.msg_permissions_required, 10);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -56,6 +67,11 @@ public class MainActivity extends AppCompatActivity implements NotificationManag
             Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentStart.newInstance());
         else
             Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentLoader.newInstance());
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode) {
+
     }
 
     @Override
