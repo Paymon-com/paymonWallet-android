@@ -22,7 +22,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.utils.Utils;
 
-public class FragmentLoader extends Fragment implements NotificationManager.IListener {
+public class FragmentLoader extends Fragment {
     private static FragmentLoader instance;
     private String text;
 
@@ -141,13 +141,5 @@ public class FragmentLoader extends Fragment implements NotificationManager.ILis
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    @Override
-    public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationManager.closeLoader) {
-            //TODO:close loader
-            //TODO:возможно переделать в активити
-        }
     }
 }

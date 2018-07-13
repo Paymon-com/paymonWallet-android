@@ -100,12 +100,6 @@ public class ObservableImageView extends AppCompatImageView implements Observabl
         invalidate();
     }
 
-
-    @Override
-    public void loadProgress(int progress) {
-
-    }
-
     @Override
     public void didUpdatedPhotoID(long newPhotoID, int userID) {
         this.photoID = newPhotoID;
@@ -139,7 +133,8 @@ public class ObservableImageView extends AppCompatImageView implements Observabl
         invalidate();
     }
 
-    public void destroy() {
+
+    public void destroy() { //TODO:удалять обсервер когда вью не станет!!!!
         ObservableMediaManager.getInstance().removePhotoObserver(this, photoID);
     }
 }

@@ -95,7 +95,7 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
         setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         setSize(LayoutParams.MATCH_PARENT, 255);
         setBackgroundDrawable(null);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.didLoadedStickerPack);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didLoadedStickerPack);
     }
 
     public EmojiconsPopup(View rootView, Context mContext, boolean useSystemDefault) {
@@ -108,7 +108,7 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
         setSoftInputMode(LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         setSize(LayoutParams.MATCH_PARENT, 255);
         setBackgroundDrawable(null);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.didLoadedStickerPack);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didLoadedStickerPack);
     }
 
     /**
@@ -177,7 +177,7 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
     public void dismiss() {
         super.dismiss();
         EmojiconRecentsManager.getInstance(mContext).saveRecents();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.didLoadedStickerPack);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didLoadedStickerPack);
     }
 
     /**
@@ -390,8 +390,8 @@ public class EmojiconsPopup extends PopupWindow implements ViewPager.OnPageChang
     }
 
     @Override
-    public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationManager.didLoadedStickerPack) {
+    public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
+        if (id == NotificationManager.NotificationEvent.didLoadedStickerPack) {
             if (args.length != 1) return;
 
             // Sticker Pack ID

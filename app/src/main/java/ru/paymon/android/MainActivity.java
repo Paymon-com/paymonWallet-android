@@ -80,6 +80,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentStart.newInstance());
                 else
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentLoader.newInstance());
+
                 final Intent connectorIntent = new Intent(ApplicationLoader.applicationContext, ConnectorService.class);
                 ApplicationLoader.applicationContext.startService(connectorIntent);
                 break;
@@ -90,8 +91,8 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     }
 
     @Override
-    public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationManager.userAuthorized) {
+    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
+        if (event == NotificationManager.NotificationEvent.userAuthorized) {
             if (!User.currentUser.confirmed || User.currentUser.email.isEmpty())
                 Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance());
             else
@@ -102,13 +103,13 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     @Override
     protected void onResume() {
         super.onResume();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.userAuthorized);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.userAuthorized);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.userAuthorized);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.userAuthorized);
     }
 
     @Override

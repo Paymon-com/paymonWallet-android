@@ -29,4 +29,5 @@ public class Config {
     //Permissions
     public static final int IMPORTANT_PERMISSIONS = 100;
     public static final int READ_CONTACTS_PERMISSION = 101;
+    public static final int CAMERA_PERMISSIONS = 102;
 }

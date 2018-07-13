@@ -24,56 +24,54 @@ import android.support.annotation.DrawableRes;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.AppCompatImageView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 
+import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.Config;
+import ru.paymon.android.MediaManager;
+import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
+import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.Utils;
+import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
 
 
-public class CircleImageView extends ObservableImageView {
-
+public class CircleImageView extends AppCompatImageView implements NotificationManager.IListener {
     private static final ScaleType SCALE_TYPE = ScaleType.CENTER_CROP;
-
     private static final Bitmap.Config BITMAP_CONFIG = Bitmap.Config.ARGB_8888;
     private static final int COLORDRAWABLE_DIMENSION = 2;
-
     private static final int DEFAULT_BORDER_WIDTH = 0;
     private static final int DEFAULT_BORDER_COLOR = Color.BLACK;
     private static final int DEFAULT_CIRCLE_BACKGROUND_COLOR = Color.TRANSPARENT;
     private static final boolean DEFAULT_BORDER_OVERLAY = false;
-
     private final RectF mDrawableRect = new RectF();
     private final RectF mBorderRect = new RectF();
-
     private final Matrix mShaderMatrix = new Matrix();
     private final Paint mBitmapPaint = new Paint();
     private final Paint mBorderPaint = new Paint();
     private final Paint mCircleBackgroundPaint = new Paint();
-
     private int mBorderColor = DEFAULT_BORDER_COLOR;
     private int mBorderWidth = DEFAULT_BORDER_WIDTH;
     private int mCircleBackgroundColor = DEFAULT_CIRCLE_BACKGROUND_COLOR;
-
     private Bitmap mBitmap;
     private BitmapShader mBitmapShader;
     private int mBitmapWidth;
     private int mBitmapHeight;
-
     private float mDrawableRadius;
     private float mBorderRadius;
-
     private ColorFilter mColorFilter;
-
     private boolean mReady;
     private boolean mSetupPending;
     private boolean mBorderOverlay;
     private boolean mDisableCircularTransformation;
+    private RPC.PM_photo photo;
 
     public CircleImageView(Context context) {
         super(context);
-
         init();
     }
 
@@ -104,7 +102,10 @@ public class CircleImageView extends ObservableImageView {
         init();
     }
 
-    private void init() {
+    private void init() {//TODO:!!!
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.PROFILE_PHOTO_UPDATED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.PHOTO_ID_CHANGED);
+
         super.setScaleType(SCALE_TYPE);
         mReady = true;
 
@@ -219,7 +220,6 @@ public class CircleImageView extends ObservableImageView {
      * Return the color drawn behind the circle-shaped drawable.
      *
      * @return The color drawn behind the drawable
-     *
      * @deprecated Use {@link #getCircleBackgroundColor()} instead.
      */
     @Deprecated
@@ -232,7 +232,6 @@ public class CircleImageView extends ObservableImageView {
      * this has no effect if the drawable is opaque or no drawable is set.
      *
      * @param fillColor The color to be drawn behind the drawable
-     *
      * @deprecated Use {@link #setCircleBackgroundColor(int)} instead.
      */
     @Deprecated
@@ -246,7 +245,6 @@ public class CircleImageView extends ObservableImageView {
      *
      * @param fillColorRes The color resource to be resolved to a color and
      *                     drawn behind the drawable
-     *
      * @deprecated Use {@link #setCircleBackgroundColorResource(int)} instead.
      */
     @Deprecated
@@ -423,7 +421,7 @@ public class CircleImageView extends ObservableImageView {
     }
 
     private RectF calculateBounds() {
-        int availableWidth  = getWidth() - getPaddingLeft() - getPaddingRight();
+        int availableWidth = getWidth() - getPaddingLeft() - getPaddingRight();
         int availableHeight = getHeight() - getPaddingTop() - getPaddingBottom();
 
         int sideLength = Math.min(availableWidth, availableHeight);
@@ -473,7 +471,50 @@ public class CircleImageView extends ObservableImageView {
             mBorderRect.roundOut(bounds);
             outline.setRoundRect(bounds, bounds.width() / 2.0f);
         }
-
     }
 
+    public void setPhoto(RPC.PM_photo photo) {
+        if (photo != null)
+            this.photo = photo;
+
+        if (photo != null && photo.id > 0) {
+            tryLoadBitmap();
+        } else {
+            setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
+        }
+    }
+
+    private void tryLoadBitmap() {
+        Bitmap bitmap = MediaManager.getInstance().loadPhotoBitmap(photo.user_id, photo.id);
+        if (bitmap != null) {
+            setImageBitmap(bitmap);
+        } else {
+            Utils.netQueue.postRunnable(() -> MediaManager.getInstance().requestPhoto(photo.user_id, photo.id));
+        }
+        invalidate();
+    }
+
+    @Override
+    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
+        if (event == NotificationManager.NotificationEvent.PROFILE_PHOTO_UPDATED) {
+            long oldID = (long) args[0];
+
+            if (oldID == this.photo.id) {
+                Log.d(Config.TAG, "OLDID == PHOTO_ID");
+                this.photo.id = (long) args[1];
+                setPhoto(this.photo);
+            }
+        } else if (event == NotificationManager.NotificationEvent.PHOTO_ID_CHANGED){
+            if (photo == null) return;
+
+            Log.e(Config.TAG, (long) args[0] + " " + this.photo.id);
+
+            long oldID = (long) args[0];
+
+            if(oldID == photo.id){
+                photo.id = (long) args[1];
+                setPhoto(photo);
+            }
+        }
+    }
 }

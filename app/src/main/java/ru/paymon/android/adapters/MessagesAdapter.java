@@ -255,7 +255,7 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
                             }
                         });
 
-                        NotificationManager.getInstance().postNotificationName(NotificationManager.cancelDialog);
+//                        NotificationManager.getInstance().postNotificationName(NotificationManager.cancelDialog);
                         deselectAll();
                     });
             AlertDialog alertDialog = builder.create();

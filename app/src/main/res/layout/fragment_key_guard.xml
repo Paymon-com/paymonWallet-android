@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".view.FragmentKeyGuard">
+
+    <ImageView
+        android:id="@+id/keyGuardImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop"/>
+
+    <com.nightonke.blurlockview.BlurLockView
+        android:id="@+id/blurlockview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </com.nightonke.blurlockview.BlurLockView>
+
+</FrameLayout>

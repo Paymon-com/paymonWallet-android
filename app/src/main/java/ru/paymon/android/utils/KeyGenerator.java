@@ -46,6 +46,10 @@ public class KeyGenerator {
 
     }
 
+    public void dispose(){
+        Instance= null;
+    }
+
     private DHParameterSpec dh;
     private KeyPair keyPairA;
     private KeyFactory keyFactory;

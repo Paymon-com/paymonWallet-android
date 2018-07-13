@@ -137,7 +137,7 @@ public class NetworkManager {
         }
 
         public void onServiceDisconnected(ComponentName className) {
-            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didDisconnectedFromTheServer));
+            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
             connectorService = null;
             connectorServiceIsBound = false;
         }
@@ -195,7 +195,7 @@ public class NetworkManager {
     }
 
     public void reconnect() {
-        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didDisconnectedFromTheServer));
+        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
         reset();
         native_reconnect();
     }
@@ -207,6 +207,10 @@ public class NetworkManager {
         keys.clear();
         waitingRequests.clear();
         futureRequests.clear();
+
+//        connectionState=0;//
+//        ApplicationLoader.applicationContext.stopService(new Intent(ApplicationLoader.applicationContext, ConnectorService.class));
+//        ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, ConnectorService.class));
         if (connectorService != null) {
             connectorService.requestsMap.clear();
             connectionState = 0;
@@ -286,7 +290,7 @@ public class NetworkManager {
 //                            blockchainService.init();
 
                     Log.d(TAG, "login successful, new token=" + Utils.bytesToHexString(User.currentUser.token));
-                    ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.userInfoDidLoaded));
+                    ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.userInfoDidLoaded));
                     setAuthorized(true);
                 });
             }
@@ -397,9 +401,9 @@ public class NetworkManager {
     public static void onConnectionStateChanged(int state) {
         Log.d(TAG, "ConnectionState=" + state);
         if (state == 3) {
-            NotificationManager.getInstance().postNotificationName(NotificationManager.didConnectedToServer);
+            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didConnectedToServer));
         } else {
-            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didDisconnectedFromTheServer));
+            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
         }
         NetworkManager.getInstance().connectionState = state;
     }
@@ -414,11 +418,15 @@ public class NetworkManager {
 
     public void setAuthorized(boolean authorized) {
         if (authorized) {
-            NotificationManager.getInstance().postNotificationName(NotificationManager.userAuthorized);
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.userAuthorized);
             if (!this.authorized) {
                 sendFutureRequests();
             }
         }
         this.authorized = authorized;
+    }
+
+    public void dispose(){
+        Instance = null;
     }
 }

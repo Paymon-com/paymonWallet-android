@@ -131,8 +131,8 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         super.onResume();
         Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_chats));
         Utils.showBottomBar(getActivity());
-        NotificationManager.getInstance().addObserver(this, NotificationManager.dialogsNeedReload);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.didDisconnectedFromTheServer);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
         MessagesManager.getInstance().currentChatID = 0;
     }
 
@@ -140,13 +140,13 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     public void onPause() {
         super.onPause();
         Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.dialogsNeedReload);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.didDisconnectedFromTheServer);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
     }
 
     @Override
-    public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationManager.dialogsNeedReload) {
+    public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
+        if (id == NotificationManager.NotificationEvent.dialogsNeedReload) {
             if (progressBar != null)
                 progressBar.setVisibility(View.GONE);
 
@@ -237,7 +237,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 //            }
 
             isLoading = false;
-        } else if (id == NotificationManager.didDisconnectedFromTheServer) {
+        } else if (id == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
             View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
             Utils.setActionBarWithCustomView(getActivity(), connectingView);
 

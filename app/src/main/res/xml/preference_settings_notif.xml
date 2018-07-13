@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--TODO:strings-->
+    <PreferenceCategory
+        android:key="MESSAGES_NOTIFICATION_CATEGORY"
+        android:title="@string/notif_messages">
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="CLIENT_MESSAGES_NOTIFY_DONT_WORRY_SWITCH"
+            android:title="@string/notif_do_not_disturb" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="CLIENT_MESSAGES_NOTIFY_VIBRATION_SWITCH"
+            android:title="@string/notif_vibration" />
+
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="CLIENT_MESSAGES_NOTIFY_NOTIFICATIONS_ENABLED_SWITCH"
+            android:title="Уведомления" />
+
+        <Preference
+            android:defaultValue="@string/default_sound"
+            android:key="CLIENT_MESSAGES_NOTIFY_SOUND_PREFERENCE"
+            android:ringtoneType="notification"
+            android:showDefault="true"
+            android:title="@string/notif_sound" />
+
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:key="MESSAGES_OTHER_NOTIFICATION_CATEGORY"
+        android:title="@string/notif_other">
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="CLIENT_MESSAGES_NOTIFY_TRANSACTIONS_SWITCH"
+            android:title="@string/notif_transactions" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="CLIENT_MESSAGES_NOTIFY_FRIENDS_INVITES_SWITCH"
+            android:title="Заявки в друзья" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="CLIENT_MESSAGES_NOTIFY_GROUP_INVITES_SWITCH"
+            android:title="Приглашение в группы" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:enabled="false"
+            android:key="CLIENT_MESSAGES_NOTIFY_GAMES_SWITCH"
+            android:title="Игры" />
+
+    </PreferenceCategory>
+</PreferenceScreen>
