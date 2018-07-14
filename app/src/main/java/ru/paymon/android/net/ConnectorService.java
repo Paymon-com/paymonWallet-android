@@ -74,7 +74,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 //                    });
 //                }
 //            } else {
-//                Toast.makeText(this, R.string.check_connected_to_server, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, R.string.check_connected_to_server, Toast.LENGTH_SHORT).showCD();
 //            }
         }
     }
