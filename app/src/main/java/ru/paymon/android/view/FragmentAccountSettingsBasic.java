@@ -24,7 +24,7 @@ public class FragmentAccountSettingsBasic extends PreferenceFragmentCompat {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.xml.preference_account_settings_basic);
+        addPreferencesFromResource(R.xml.preference_settings_basic);
     }
 
     @Override

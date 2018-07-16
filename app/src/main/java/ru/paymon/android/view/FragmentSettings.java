@@ -1,11 +1,15 @@
 package ru.paymon.android.view;
 
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.IntentCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -13,11 +17,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
+import ru.paymon.android.ContactsManager;
+import ru.paymon.android.GroupsManager;
+import ru.paymon.android.MainActivity;
+import ru.paymon.android.MediaManager;
+import ru.paymon.android.MessagesManager;
+import ru.paymon.android.NotificationManager;
+import ru.paymon.android.ObservableMediaManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.UsersManager;
 import ru.paymon.android.components.CircleImageView;
+import ru.paymon.android.net.ConnectorService;
+import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentSettings extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
@@ -73,6 +89,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
         super.onResume();
         Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_settings));
         Utils.setArrowBackInToolbar(getActivity());
+        Utils.hideBottomBar(getActivity());
         setHasOptionsMenu(true);
     }
 
@@ -82,16 +99,16 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
 
         switch (itemId) {
             case R.id.settings_notifications:
-                final FragmentAccountSettingsNotif fragmentAccountSettingsNotif = FragmentAccountSettingsNotif.newInstance();
-                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentAccountSettingsNotif, null);
+                final FragmentSettingsNotif fragmentSettingsNotif = FragmentSettingsNotif.newInstance();
+                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentSettingsNotif, null);
                 break;
             case R.id.settings_basic:
-                final FragmentAccountSettingsBasic fragmentAccountSettingsBasic = FragmentAccountSettingsBasic.newInstance();
-                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentAccountSettingsBasic, null);
+                final FragmentSettingsBasic fragmentSettingsBasic = FragmentSettingsBasic.newInstance();
+                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentSettingsBasic, null);
                 break;
             case R.id.settings_security:
-                final FragmentAccountSettingsSecurity fragmentAccountSettingsSecurity = FragmentAccountSettingsSecurity.newInstance();
-                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentAccountSettingsSecurity, null);
+                final FragmentSettingsSecurity fragmentSettingsSecurity = FragmentSettingsSecurity.newInstance();
+                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentSettingsSecurity, null);
                 break;
             case R.id.settings_about_programm:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -105,7 +122,13 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 alert.show();
                 break;
             case R.id.settings_exit:
-                //TODO: Выход из учетной записи
+                User.clearConfig();
+                PackageManager packageManager = ApplicationLoader.applicationContext.getPackageManager();
+                Intent intent = packageManager.getLaunchIntentForPackage(ApplicationLoader.applicationContext.getPackageName());
+                ComponentName componentName = intent.getComponent();
+                Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                ApplicationLoader.applicationContext.startActivity(mainIntent);
+                System.exit(0);
                 break;
         }
 
