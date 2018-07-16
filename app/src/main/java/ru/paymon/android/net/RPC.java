@@ -470,6 +470,14 @@ public class RPC {
     public static class PM_peerUser extends Peer {
         public static int svuid = 1226888699;
 
+        public PM_peerUser(){
+
+        }
+
+        public PM_peerUser(int uid){
+            this.user_id = uid;
+        }
+
         public void readParams(SerializableData stream, boolean exception) {
             user_id = stream.readInt32(exception);
         }
@@ -487,6 +495,14 @@ public class RPC {
 
     public static class PM_peerGroup extends Peer {
         public static int svuid = 1778284232;
+
+        public PM_peerGroup(){
+
+        }
+
+        public PM_peerGroup(int gid){
+            this.group_id = gid;
+        }
 
         public void readParams(SerializableData stream, boolean exception) {
             group_id = stream.readInt32(exception);

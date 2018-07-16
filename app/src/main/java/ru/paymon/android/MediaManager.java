@@ -217,7 +217,7 @@ public class MediaManager {
                 }
                 stickerPacks.put(stickerPackResponse.id, stickerPack);
 
-                ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didLoadedStickerPack, stickerPackID));
+                ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didLoadedStickerPack, stickerPackID));
             }
         });
         waitingStickerPacks.add(stickerPackID);

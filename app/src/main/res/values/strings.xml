@@ -1,5 +1,12 @@
 <resources>
+    <string name="date_format_24h">24 Hour</string>
+    <string name="date_format_12h">12 Hour AM/PM</string>
+
+    <string name="profile_edit_failed">Изменения не были сохранены.</string>
+    <string name="profile_edit_success">Профиль успешно изменен.</string>
+    <string name="reg_phone_correct">Проверьте правильность введенного номера телефона.</string>
     <string name="msg_permissions_required">Пожалуйста, предоставьте разрешения</string>
+    <string name="pick_image_intent_text">Выберите</string>
 
     <string name="ok">ОК</string>
     <string name="app_name">Paymon</string>
@@ -107,6 +114,8 @@
     <string name="security_password_protect_summary">Установите пароль при входе в приложение</string>
 
     <string name="default_sort_friends">По имени</string>
+    <string name="default_format_time">24h</string>
+    <string name="default_color_scheme">light</string>
     <string name="default_sound">Notice</string>
 
     <string name="about_program_text">Paymon для Android</string>
@@ -626,5 +635,6 @@
     <string name="go_to_profile">Перейти в профиль</string>
 
     <string name="format_time">Формат времени</string>
+    <string name="change_theme">Выбор темы</string>
 
 </resources>

@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!--TODO:add to strings-->
     <string-array name="sort_friends_list">
         <item>По имени</item>
         <item>По фамилии</item>
         <item>По дате добавления</item>
     </string-array>
     <string-array name="format_time">
-        <item>12am</item>
-        <item>24h</item>
+        <item>@string/date_format_12h</item>
+        <item>@string/date_format_24h</item>
+    </string-array>
+    <string-array name="color_scheme">
+        <item>light</item>
+        <item>dark</item>
     </string-array>
 </resources>

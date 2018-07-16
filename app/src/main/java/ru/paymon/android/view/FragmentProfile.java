@@ -5,9 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -53,7 +50,7 @@ public class FragmentProfile extends Fragment {
         TextView country = (TextView) view.findViewById(R.id.profile_country_text_view);
 
         updateProfile.setOnClickListener(v ->
-                Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentAccountSettingsUpdateProfile.newInstance(), null));
+                Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentProfileEdit.newInstance(), null));
 
         name.setText(Utils.formatUserName(User.currentUser));
 
@@ -63,9 +60,8 @@ public class FragmentProfile extends Fragment {
         avatar.setPhoto(photo);
 
         email.setText(User.currentUser.email);
-        final String phoneNumber = String.valueOf(User.currentUser.phoneNumber);
-        if (!phoneNumber.isEmpty() && !phoneNumber.equals("0"))
-            phone.setText(String.valueOf(User.currentUser.phoneNumber));
+        if (User.currentUser.phoneNumber != 0)
+            phone.setText(Utils.formatPhone(User.currentUser.phoneNumber));
         else
             phone.setText("Не указан");//TODO:string
         city.setText(User.currentUser.city);
@@ -80,5 +76,6 @@ public class FragmentProfile extends Fragment {
         super.onResume();
         Utils.setActionBarWithTitle(getActivity(), "Профиль"); //TODO: string
         Utils.setArrowBackInToolbar(getActivity());
+        Utils.hideBottomBar(getActivity());
     }
 }

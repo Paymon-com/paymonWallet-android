@@ -27,7 +27,6 @@ import ru.paymon.android.Config;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
-import ru.paymon.android.ObservableMediaManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
@@ -59,10 +58,10 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
 
     @Override
-    public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationManager.didConnectedToServer) {
+    public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
+        if (id == NotificationManager.NotificationEvent.didConnectedToServer) {
             NetworkManager.getInstance().handshake();
-        } else if (id == NotificationManager.didEstablishedSecuredConnection) {
+        } else if (id == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
             NetworkManager.getInstance().authByToken();
 //            if (Utils.isNetworkConnected(this)) {
 //                if (User.ethereumPassword != null && !User.ethereumPassword.isEmpty()) {
@@ -75,14 +74,14 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 //                    });
 //                }
 //            } else {
-//                Toast.makeText(this, R.string.check_connected_to_server, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, R.string.check_connected_to_server, Toast.LENGTH_SHORT).showCD();
 //            }
         }
     }
 
     private void loadEthereumWallet() {
         Log.d(Config.TAG, "loadEthereumWallet");
-        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.didLoadEthereumWallet));
+        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didLoadEthereumWallet));
 //        User.ethereumRestoreBackupOrLoad = false;
     }
 
@@ -93,16 +92,16 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 //        ApplicationLoader.init();
         notificationManager = (android.app.NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         registerReceiver();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.didConnectedToServer);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.didEstablishedSecuredConnection);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didConnectedToServer);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
     }
 
     @Override
     public void onDestroy() {
         Log.d(Config.TAG, "Connector service destroyed");
         unregisterReceiver();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.didConnectedToServer);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.didEstablishedSecuredConnection);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didConnectedToServer);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
         super.onDestroy();
     }
 
@@ -130,8 +129,8 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         Log.d(Config.TAG, "Connector service task removed");
         if (receiverRegistered)
             unregisterReceiver(broadcastReceiver);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.didConnectedToServer);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.didEstablishedSecuredConnection);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didConnectedToServer);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
         super.onTaskRemoved(rootIntent);
     }
 
@@ -205,8 +204,8 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 if (msg.to_id.group_id == MessagesManager.getInstance().currentChatID)
                     return;
 
-        if (!User.notificationCheckWorry) {
-            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), User.notificationRingtone);
+        if (!User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) {
+            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), User.CLIENT_MESSAGES_NOTIFY_SOUND_FILE);
             Bitmap bitmap = LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none);
             RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
             RPC.UserObject fromUser = user;
@@ -254,7 +253,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                         .setContentText(text)
                         .addAction(R.drawable.ic_answer_message, getString(R.string.replay_button), pIntentBtnReply);
 
-                if (User.notificationCheckVibration) {
+                if (User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION) {
                     builder.setVibrate(new long[]{100, 200, 100, 300});
                 }
 
@@ -423,7 +422,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             final LinkedList<RPC.Message> messages = new LinkedList<>();
             messages.add(msg);
             ApplicationLoader.applicationHandler.post(() -> {
-                NotificationManager.getInstance().postNotificationName(NotificationManager.didReceivedNewMessages, messages);
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES, messages);
                 RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
                 if (user == null) {
                     RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo();
@@ -451,16 +450,21 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 } else {
                     MessagesManager.getInstance().lastGroupMessages.put(msg.to_id.group_id, msg.id);
                 }
-                NotificationManager.getInstance().postNotificationName(NotificationManager.dialogsNeedReload);
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
             });
         } else if (packet instanceof RPC.PM_updatePhotoID) {
+            Log.e(Config.TAG, "UPDATE PHOTO ID");
             final RPC.PM_updatePhotoID update = (RPC.PM_updatePhotoID) packet;
-            MediaManager.getInstance().updatePhotoID(update.oldID, update.newID);
-            ApplicationLoader.applicationHandler.post(() -> ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(update.oldID, update.newID));
+            MediaManager.getInstance().updatePhotoID(update.oldID, update.newID); //TODO:proverit'
+//            User.currentUser.photoID = update.newID;
+
+//            ApplicationLoader.applicationHandler.post(() -> ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(update.oldID, update.newID));
         } else if (packet instanceof RPC.PM_photo) {
 //            RPC.PM_photo photo = (RPC.PM_photo) packet;
 //            MediaManager.getInstance().updatePhoto(photo);
         } else if (packet instanceof RPC.PM_error) {
+            Log.e(Config.TAG, "ERROR");
+
             error = (RPC.PM_error) packet;
             packet = null;
 
@@ -488,7 +492,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             NetworkManager.getInstance().setHandshaked(true);
 //            requestsMap.clear();
 //            requestsMap.remove(messageID);
-            NotificationManager.getInstance().postNotificationName(NotificationManager.didEstablishedSecuredConnection);
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
         } else if (packet instanceof RPC.PM_file) {
 //            requestsMap.remove(messageID);
             RPC.PM_file file = (RPC.PM_file) packet;

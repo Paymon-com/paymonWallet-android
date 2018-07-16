@@ -34,11 +34,11 @@ public class MessagesManager implements NotificationManager.IListener {
     }
 
     private MessagesManager() {
-        NotificationManager.getInstance().addObserver(this, NotificationManager.didReceivedNewMessages);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES);
     }
 
     public void dispose() {
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.didReceivedNewMessages);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES);
         Instance = null;
     }
 
@@ -112,7 +112,7 @@ public class MessagesManager implements NotificationManager.IListener {
 
             NetworkManager.getInstance().sendRequest(new RPC.PM_chatsAndMessages(), (response, error) -> {
                 if (response == null && error != null) {
-                    ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.dialogsNeedReload));
+                    ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload));
                     return;
                 }
 
@@ -150,7 +150,7 @@ public class MessagesManager implements NotificationManager.IListener {
                 }
 
                 ApplicationLoader.applicationHandler.post(() ->
-                        NotificationManager.getInstance().postNotificationName(NotificationManager.dialogsNeedReload)
+                        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload)
                 );
             });
         }
@@ -183,13 +183,13 @@ public class MessagesManager implements NotificationManager.IListener {
                 messagesToAdd.add(msg.id);
             }
 
-            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.chatAddMessages, messagesToAdd, true, receivedMessages.messages.size()));
+            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.chatAddMessages, messagesToAdd, true, receivedMessages.messages.size()));
         });
     }
 
     @Override
-    public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationManager.didReceivedNewMessages) {
+    public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
+        if (id == NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES) {
             LinkedList<RPC.Message> messages = (LinkedList<RPC.Message>) args[0];
             LinkedList<Long> messagesToShow = new LinkedList<>();
 
@@ -211,7 +211,7 @@ public class MessagesManager implements NotificationManager.IListener {
             }
             if (messagesToShow.size() > 0) {
                 Collections.sort(messagesToShow, Long::compareTo);
-                NotificationManager.getInstance().postNotificationName(NotificationManager.chatAddMessages, messagesToShow, false);
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.chatAddMessages, messagesToShow, false);
             }
         }
     }

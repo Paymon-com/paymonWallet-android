@@ -14,7 +14,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -22,6 +21,10 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+
+import com.google.i18n.phonenumbers.NumberParseException;
+import com.google.i18n.phonenumbers.PhoneNumberUtil;
+import com.google.i18n.phonenumbers.Phonenumber;
 
 import java.util.Date;
 import java.util.regex.Matcher;
@@ -32,7 +35,7 @@ import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.net.RPC;
 
-import static ru.paymon.android.User.format24h;
+import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_IS_24H;
 
 public class Utils {
     public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
@@ -120,7 +123,7 @@ public class Utils {
         if (dayDiff == 0 && monthDiff == 0)
             pattern = "HH:mm";
         else if (dayDiff == 1 && monthDiff == 0)
-            if (format24h)
+            if (CLIENT_BASIC_DATE_FORMAT_IS_24H)
                 return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("HH:mm", msgDate);
             else
                 return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("hh:mm", msgDate);
@@ -134,7 +137,7 @@ public class Utils {
         else
             pattern = "HH:mm";
 
-        if (!format24h)
+        if (!CLIENT_BASIC_DATE_FORMAT_IS_24H)
             pattern = pattern.replace("HH:mm", "hh:mm aa");
 
         return (String) DateFormat.format(pattern, msgDate);
@@ -259,7 +262,7 @@ public class Utils {
         }
     }
 
-    public static void hideActionBar(FragmentActivity activity){
+    public static void hideActionBar(FragmentActivity activity) {
         ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
         if (supportActionBar != null)
             supportActionBar.hide();
@@ -282,5 +285,34 @@ public class Utils {
     public static void showBottomBar(FragmentActivity fragmentActivity) {
         final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottom_navigation_view);
         if (bottomNavigationView != null) bottomNavigationView.setVisibility(View.VISIBLE);
+    }
+
+    public static boolean nameCorrect(String name) {
+        return !name.isEmpty() && Pattern.compile("^[a-zA-zа-яА-Я]{1,30}$").matcher(name).find();
+    }
+
+    public static boolean phoneCorrect(String phNumber) {
+        if (phNumber.isEmpty()) return true;
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        try {
+            Phonenumber.PhoneNumber phoneNumber = phoneNumberUtil.parse(phNumber, null);
+            return phoneNumberUtil.isValidNumber(phoneNumber);
+        } catch (NumberParseException ex) {
+            return false;
+        }
+    }
+
+    public static String formatPhone(long phone) {
+        if (phone == 0)
+            return "";
+
+        String phNumber = "+" + String.valueOf(phone);
+        PhoneNumberUtil phoneNumberUtil = PhoneNumberUtil.getInstance();
+        try {
+            Phonenumber.PhoneNumber phoneNumber = phoneNumberUtil.parse(phNumber, null);
+            return phoneNumberUtil.format(phoneNumber, PhoneNumberUtil.PhoneNumberFormat.INTERNATIONAL);
+        } catch (NumberParseException ex) {
+            return "";
+        }
     }
 }

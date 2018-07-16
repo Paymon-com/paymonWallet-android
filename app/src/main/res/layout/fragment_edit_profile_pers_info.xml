@@ -128,10 +128,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
-                android:enabled="false"
                 android:fontFamily="sans-serif-light"
                 android:hint="@string/bday"
                 android:maxLength="10"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:focusable="false"
+                android:clickable="true"/>
         </android.support.design.widget.TextInputLayout>
 </android.support.constraint.ConstraintLayout>

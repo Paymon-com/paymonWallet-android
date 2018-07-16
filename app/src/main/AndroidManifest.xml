@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="ru.paymon.android">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,8 +24,6 @@
         android:theme="@style/AppTheme"
         android:installLocation="internalOnly">
 
-        <!--android:largeHeap="true"-->
-        <!--android:hardwareAccelerated="false">-->
         <activity
             android:name=".MainActivity"
             android:configChanges="keyboardHidden|orientation"
@@ -40,6 +39,21 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".KeyGuardActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true"
+            tools:replace="android:authorities">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths"
+                tools:replace="android:resource"/>
+        </provider>
+
         <service
             android:name="ru.paymon.android.net.ConnectorService"
             android:enabled="true"
@@ -48,5 +62,7 @@
                 <action android:name="ru.paymon.android.net.Connector" />
             </intent-filter>
         </service>
+
+
     </application>
 </manifest>

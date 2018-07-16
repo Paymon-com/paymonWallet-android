@@ -52,4 +52,7 @@ dependencies {
     implementation 'com.android.support:recyclerview-v7:27.1.1'
 
     implementation 'com.davidecirillo.multichoicerecyclerview:multichoicerecyclerview:2.3.0'
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.10'
+//    implementation 'com.nightonke:blurlockview:1.0.0'
+
 }

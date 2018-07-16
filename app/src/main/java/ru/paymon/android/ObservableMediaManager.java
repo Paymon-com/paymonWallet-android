@@ -17,18 +17,14 @@ public class ObservableMediaManager {
     private LongSparseArray<ArrayList<Object>> removePhotoAfterBroadcast = new LongSparseArray<>();
     private LongSparseArray<ArrayList<Object>> addPhotoAfterBroadcast = new LongSparseArray<>();
     private LongSparseArray<Long> updatedPhotoIDs = new LongSparseArray<>();
-    private ArrayList<DelayedPhotoPost> delayedPhotoPosts = new ArrayList<>(10);
-    private ArrayList<DelayedPhotoUpdateIDPost> delayedUpdatePhotoIDPosts = new ArrayList<>(10);
     private LongSparseArray<BitmapDrawable> photoIDsBitmaps = new LongSparseArray<>(100);
+
     private LongSparseArray<ArrayList<Object>> stickerObservers = new LongSparseArray<>();
     private LongSparseArray<ArrayList<Object>> removeStickerAfterBroadcast = new LongSparseArray<>();
     private LongSparseArray<ArrayList<Object>> addStickerAfterBroadcast = new LongSparseArray<>();
-    private ArrayList<DelayedStickerPost> delayedStickerPosts = new ArrayList<>(10);
     private LongSparseArray<BitmapDrawable> stickerIDsBitmaps = new LongSparseArray<>(100);
-    private int broadcasting = 0;
-    private boolean animationInProgress;
 
-    private int[] allowedNotifications;
+    private int broadcasting = 0;
 
     private static volatile ObservableMediaManager Instance = null;
 
@@ -45,14 +41,16 @@ public class ObservableMediaManager {
         return localInstance;
     }
 
+    public interface IStickerListener {
+        void didLoadedSticker(StickerPack.Sticker sticker);
+    }
+
     public BitmapDrawable loadPhotoBitmap(int photoOwnerID, long photoID) {
         BitmapDrawable bitmapDrawable = photoIDsBitmaps.get(photoID);
         if (bitmapDrawable == null) {
             Bitmap bitmap = MediaManager.getInstance().loadPhotoBitmap(photoOwnerID, photoID);
             if (bitmap != null) {
-                bitmapDrawable = new BitmapDrawable(
-                        ApplicationLoader.applicationContext.getResources(),
-                        bitmap);
+                bitmapDrawable = new BitmapDrawable(ApplicationLoader.applicationContext.getResources(),bitmap);
                 photoIDsBitmaps.put(photoID, bitmapDrawable);
             } else {
                 return null;
@@ -67,11 +65,8 @@ public class ObservableMediaManager {
             int spid = MediaManager.getInstance().getStickerPackIDByStickerID(stickerID);
             if (spid != 0) {
                 Bitmap bitmap = MediaManager.getInstance().loadStickerBitmap(spid, stickerID);
-
                 if (bitmap != null) {
-                    bitmapDrawable = new BitmapDrawable(
-                            ApplicationLoader.applicationContext.getResources(),
-                            bitmap);
+                    bitmapDrawable = new BitmapDrawable(ApplicationLoader.applicationContext.getResources(),bitmap);
                     stickerIDsBitmaps.put(stickerID, bitmapDrawable);
                 } else {
                     return null;
@@ -87,71 +82,12 @@ public class ObservableMediaManager {
         void didLoadedPhoto(final Photo photo);
 
         void didUpdatedPhotoID(long newPhotoID, int ownerID);
-
-        void loadProgress(int progress);
     }
 
-    private class DelayedPhotoPost {
-        private Photo photo;
-
-        private DelayedPhotoPost(Photo photo) {
-            this.photo = photo;
-        }
-    }
-
-    public interface IStickerListener {
-        void didLoadedSticker(StickerPack.Sticker sticker);
-    }
-
-    private class DelayedStickerPost {
-        private StickerPack.Sticker sticker;
-
-        private DelayedStickerPost(StickerPack.Sticker sticker) {
-            this.sticker = sticker;
-        }
-    }
-
-    private class DelayedPhotoUpdateIDPost {
-        private long oldPhotoID;
-        private long newPhotoID;
-
-        private DelayedPhotoUpdateIDPost(long oldPhotoID, long newPhotoID) {
-            this.oldPhotoID = oldPhotoID;
-            this.newPhotoID = newPhotoID;
-        }
-    }
-
-    public void setAllowedNotificationsDutingAnimation(int notifications[]) {
-        allowedNotifications = notifications;
-    }
-
-    // !!! Изменить, если нужно сделать уведомление с задержкой
-    public void setAnimationInProgress(boolean flag) {
-        animationInProgress = flag;
-        if (!animationInProgress && !delayedPhotoPosts.isEmpty()) {
-            for (DelayedPhotoPost delayedPhotoPost : delayedPhotoPosts) {
-                postPhotoNotificationInternal(true, delayedPhotoPost.photo);
-            }
-            delayedPhotoPosts.clear();
-        }
-    }
-
-    public boolean isAnimationInProgress() {
-        return animationInProgress;
-    }
-
-    public void postPhotoNotification(final Photo photo) {
-        postPhotoNotificationInternal(false, photo);
-    }
-
-    public void postPhotoUpdateIDNotification(long oldPhotoID, long newPhotoID) {
-        postPhotoUpdateIDNotificationInternal(false, oldPhotoID, newPhotoID);
-    }
-
-    public void postPhotoUpdateIDNotificationInternal(boolean allowDuringAnimation, long oldPhotoID, long newPhotoID) {
+    public void postPhotoUpdateIDNotification( long oldPhotoID, long newPhotoID) {
         if (User.currentUser.photoID == oldPhotoID) {
             User.currentUser.photoID = newPhotoID;
-            NotificationManager.getInstance().postNotificationName(NotificationManager.profileUpdated);
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.profileUpdated);
         } else {
             SparseArray<RPC.Group> groups = GroupsManager.getInstance().groups;
             for (int i = 0; i < groups.size(); i++) {
@@ -163,11 +99,6 @@ public class ObservableMediaManager {
             }
         }
 
-        if (!allowDuringAnimation && animationInProgress) {
-            DelayedPhotoUpdateIDPost delayedPhotoPost = new DelayedPhotoUpdateIDPost(oldPhotoID, newPhotoID);
-            delayedUpdatePhotoIDPosts.add(delayedPhotoPost);
-            return;
-        }
         broadcasting++;
         ArrayList<Object> objects = photoObservers.get(oldPhotoID);
         if (objects != null && !objects.isEmpty()) {
@@ -183,12 +114,7 @@ public class ObservableMediaManager {
         }
     }
 
-    public void postPhotoNotificationInternal(boolean allowDuringAnimation, final Photo photo) {
-        if (!allowDuringAnimation && animationInProgress) {
-            DelayedPhotoPost delayedPhotoPost = new DelayedPhotoPost(photo);
-            delayedPhotoPosts.add(delayedPhotoPost);
-            return;
-        }
+    public void postPhotoNotification(final Photo photo) {
         broadcasting++;
         long photoID = photo.id;
         Long oldID = updatedPhotoIDs.get(photoID);
@@ -290,24 +216,6 @@ public class ObservableMediaManager {
     }
 
     public void postStickerNotification(StickerPack.Sticker sticker) {
-        boolean allowDuringAnimation = false;
-//        if (allowedNotifications != null) {
-//            for (int a = 0; a < allowedNotifications.length; a++) {
-//                if (allowedNotifications[a] == photo.getID()) {
-//                    allowDuringAnimation = true;
-//                    break;
-//                }
-//            }
-//        }
-        postStickerNotificationInternal(allowDuringAnimation, sticker);
-    }
-
-    public void postStickerNotificationInternal(boolean allowDuringAnimation, StickerPack.Sticker sticker) {
-        if (!allowDuringAnimation && animationInProgress) {
-            DelayedStickerPost delayedStickerPost = new DelayedStickerPost(sticker);
-            delayedStickerPosts.add(delayedStickerPost);
-            return;
-        }
         broadcasting++;
         long stickerID = sticker.id;
 
@@ -378,5 +286,9 @@ public class ObservableMediaManager {
         ArrayList<Object> objects = stickerObservers.get(stickerID);
         if (objects != null)
             objects.remove(observer);
+    }
+
+    public void dispose(){
+        Instance = null;
     }
 }

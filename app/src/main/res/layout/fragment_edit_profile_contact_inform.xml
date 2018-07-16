@@ -62,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif-light"
                 android:hint="@string/phone_number"
-                android:inputType="numberSigned"
-                android:maxLength="12"
+                android:inputType="phone"
+                android:maxLength="17"
                 android:maxLines="1" />
         </android.support.design.widget.TextInputLayout>
 

@@ -2,16 +2,10 @@ package ru.paymon.android;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.MenuItem;
-import android.widget.Toast;
+import android.util.Log;
 
 import ru.paymon.android.components.BottomNavigationViewHelper;
 import ru.paymon.android.net.ConnectorService;
@@ -36,6 +30,17 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
 
         setContentView(R.layout.activity_main);
 
+        if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
+            Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
+            intent.putExtra("request_code", 10);
+            startActivityForResult(intent, 10);
+            return;
+        }
+
+        init();
+    }
+
+    private void init(){
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -74,12 +79,13 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
 
     @Override
     public void onPermissionsGranted(final int requestCode) {
-        switch (requestCode){
+        switch (requestCode) {
             case IMPORTANT_PERMISSIONS:
                 if (User.currentUser == null)
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentStart.newInstance());
                 else
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentLoader.newInstance());
+
                 final Intent connectorIntent = new Intent(ApplicationLoader.applicationContext, ConnectorService.class);
                 ApplicationLoader.applicationContext.startService(connectorIntent);
                 break;
@@ -90,8 +96,8 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     }
 
     @Override
-    public void didReceivedNotification(int id, Object... args) {
-        if (id == NotificationManager.userAuthorized) {
+    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
+        if (event == NotificationManager.NotificationEvent.userAuthorized) {
             if (!User.currentUser.confirmed || User.currentUser.email.isEmpty())
                 Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance());
             else
@@ -102,17 +108,35 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     @Override
     protected void onResume() {
         super.onResume();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.userAuthorized);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.userAuthorized);
+        KeyGuardActivity.showCD();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.userAuthorized);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.userAuthorized);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.e("AAAA", requestCode + "");
+
+        if (requestCode == 10) {
+            if (resultCode == RESULT_OK) {
+                init();
+            }
+        } else if (requestCode == 20){
+            if(resultCode == RESULT_OK){
+                User.CLIENT_SECURITY_PASSWORD_VALUE = null;
+                User.CLIENT_SECURITY_PASSWORD_HINT = null;
+                User.saveConfig();
+            }
+        }
     }
 }
