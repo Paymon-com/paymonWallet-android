@@ -1,6 +1,5 @@
 package ru.paymon.android.view;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,13 +7,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -28,7 +25,6 @@ import ru.paymon.android.adapters.GroupSettingsAdapter;
 import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.data.CreateGroupItem;
 import ru.paymon.android.net.NetworkManager;
-import ru.paymon.android.net.Packet;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
@@ -66,11 +62,11 @@ public class FragmentGroupSettings extends Fragment {
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey("chat_id")) {
             chatID = bundle.getInt("chat_id");
-        }
 
-        int creatorID = group.creatorID;
-        isCreator = (creatorID == User.currentUser.id);
-        group = GroupsManager.getInstance().groups.get(chatID);
+            group = GroupsManager.getInstance().groups.get(chatID);
+            int creatorID = group.creatorID;
+            isCreator = (creatorID == User.currentUser.id);
+        }
     }
 
     @Nullable
@@ -81,6 +77,9 @@ public class FragmentGroupSettings extends Fragment {
         titleView = (EditText) view.findViewById(R.id.group_settings_title);
         contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
         photoView = (CircleImageView) view.findViewById(R.id.group_settings_photo);
+
+        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress.setCancelable(true);
 
         photoView.setPhoto(group.photo);
         titleView.setText(group.title);
@@ -104,7 +103,7 @@ public class FragmentGroupSettings extends Fragment {
                                 if (dialogProgress != null && dialogProgress.isShowing())
                                     dialogProgress.cancel();
                                 Toast toast = Toast.makeText(getContext(),
-                                        "У вас ошибка", Toast.LENGTH_SHORT);//TODO string
+                                        "Введите название группы", Toast.LENGTH_SHORT);//TODO string
                                 toast.show();
                             });
                             return;
