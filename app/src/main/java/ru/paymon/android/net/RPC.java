@@ -470,11 +470,11 @@ public class RPC {
     public static class PM_peerUser extends Peer {
         public static int svuid = 1226888699;
 
-        public PM_peerUser(){
+        public PM_peerUser() {
 
         }
 
-        public PM_peerUser(int uid){
+        public PM_peerUser(int uid) {
             this.user_id = uid;
         }
 
@@ -496,11 +496,11 @@ public class RPC {
     public static class PM_peerGroup extends Peer {
         public static int svuid = 1778284232;
 
-        public PM_peerGroup(){
+        public PM_peerGroup() {
 
         }
 
-        public PM_peerGroup(int gid){
+        public PM_peerGroup(int gid) {
             this.group_id = gid;
         }
 
@@ -1468,6 +1468,15 @@ public class RPC {
 //        public ArrayList<PhotoSize> sizes = new ArrayList<>();
         public int flags;
 
+        public PM_photo() {
+
+        }
+
+        public PM_photo(int uid, long id) {
+            this.id = id;
+            this.user_id = uid;
+        }
+
         public void readParams(SerializableData stream, boolean exception) {
 //            flags = stream.readInt32(exception);
             user_id = stream.readInt32(exception);
@@ -2101,6 +2110,21 @@ public class RPC {
             stream.writeInt32(svuid);
             stream.writeString(login);
             stream.writeString(newEmail);
+        }
+    }
+
+    public static class PM_getUsersByPhoneNumber extends Packet {//TODO: в ответ приходит PM_users
+        public static int svuid = 517290247;
+
+        public String phones;
+
+        public void readParams(SerializableData stream, boolean exception) {
+            phones = stream.readString(exception);
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            stream.writeString(phones);
         }
     }
 }
