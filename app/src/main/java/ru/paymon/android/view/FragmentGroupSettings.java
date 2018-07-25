@@ -1,5 +1,7 @@
 package ru.paymon.android.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,9 +23,13 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.adapters.AlertDialogCustomAdministratorsAdapter;
+import ru.paymon.android.adapters.AlertDialogCustomBlackListAdapter;
 import ru.paymon.android.adapters.GroupSettingsAdapter;
 import ru.paymon.android.components.CircleImageView;
-import ru.paymon.android.data.CreateGroupItem;
+import ru.paymon.android.models.AlertDialogCustomAdministratorsItem;
+import ru.paymon.android.models.AlertDialogCustomBlackListItem;
+import ru.paymon.android.models.CreateGroupItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -33,15 +39,12 @@ import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
 public class FragmentGroupSettings extends Fragment {
     private int chatID;
     private DialogProgress dialogProgress;
-    private boolean isCreator;
-
-    private Button addParticipants;
-    private RecyclerView contactsList;
+    boolean isCreator;
     private EditText titleView;
-    private CircleImageView photoView;
     private RPC.Group group;
-    private GroupSettingsAdapter adapter;
     private LinkedList<CreateGroupItem> list = new LinkedList<>();
+    private LinkedList<AlertDialogCustomBlackListItem> listAlertDialogBlackList = new LinkedList<>();
+    private LinkedList<AlertDialogCustomAdministratorsItem> listAlertDialogAdministrators = new LinkedList<>();
     private static FragmentGroupSettings instance;
 
     public static synchronized FragmentGroupSettings newInstance() {
@@ -75,8 +78,8 @@ public class FragmentGroupSettings extends Fragment {
         View view = inflater.inflate(R.layout.fragment_group_settings, container, false);
 
         titleView = (EditText) view.findViewById(R.id.group_settings_title);
-        contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
-        photoView = (CircleImageView) view.findViewById(R.id.group_settings_photo);
+        RecyclerView contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
+        CircleImageView photoView = (CircleImageView) view.findViewById(R.id.group_settings_photo);
 
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);
@@ -125,7 +128,7 @@ public class FragmentGroupSettings extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         contactsList.setLayoutManager(llm);
 
-        addParticipants = (Button) view.findViewById(R.id.group_settings_add);
+        Button addParticipants = (Button) view.findViewById(R.id.group_settings_add);
         addParticipants.setOnClickListener(view1 -> {
             final Bundle bundle = new Bundle();
             bundle.putInt("chat_id", chatID);
@@ -135,8 +138,46 @@ public class FragmentGroupSettings extends Fragment {
             Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentGroupAddParticipants, null);
         });
 
-        adapter = new GroupSettingsAdapter(list);
+        Button blackListButton = (Button) view.findViewById(R.id.group_settings_black_list);
+        blackListButton.setOnClickListener((view1) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Черный список");//TODO:string
+            view1 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_black_list, null);
+            builder.setView(view1);
+            builder.setPositiveButton("Добавить", (dialogInterface, i) -> {
+                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, new FragmentGroupAddBlackList(), null);
+            });
+            RecyclerView blackList = (RecyclerView) view1.findViewById(R.id.alert_dialog_custom_black_list_rv);
+            AlertDialogCustomBlackListAdapter adapter = new AlertDialogCustomBlackListAdapter(listAlertDialogBlackList, group.id, group.creatorID, dialogProgress);
+            blackList.setLayoutManager(new LinearLayoutManager(getContext()));
+            blackList.setAdapter(adapter);
+            builder.setCancelable(true);
+            builder.show();
+        });
+
+        Button adminListButton = (Button) view.findViewById(R.id.group_settings_administrators);
+        adminListButton.setOnClickListener(view12 -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Администраторы");//TODO:string
+            view12 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_administrators, null);
+            builder.setView(view12);
+            builder.setPositiveButton("Добавить", (dialogInterface, i) -> {
+                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, new FragmentGroupAddAdministrators(), null);
+            });
+            RecyclerView adminsList = (RecyclerView) view12.findViewById(R.id.alert_dialog_custom_administrators_rv);
+            AlertDialogCustomAdministratorsAdapter adapter = new AlertDialogCustomAdministratorsAdapter(listAlertDialogAdministrators, group.id, group.creatorID, dialogProgress);
+            adminsList.setLayoutManager(new LinearLayoutManager(getContext()));
+            adminsList.setAdapter(adapter);
+            builder.setCancelable(true);
+            builder.show();
+        });
+
+        GroupSettingsAdapter adapter = new GroupSettingsAdapter(list, group.id, group.creatorID, dialogProgress);
         contactsList.setAdapter(adapter);
+
+        setHasOptionsMenu(true);
 
         return view;
     }
@@ -157,4 +198,6 @@ public class FragmentGroupSettings extends Fragment {
             list.add(new CreateGroupItem(user.id, Utils.formatUserName(user), photo));
         }
     }
+
+
 }

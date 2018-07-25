@@ -62,10 +62,36 @@
             android:text="@string/add_participants"
             android:textColor="@color/blue_dark"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/group_settings_title" />
+
+        <Button
+            android:id="@+id/group_settings_black_list"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/black_list"
+            android:textColor="@color/blue_dark"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/group_settings_add" />
+
+        <Button
+            android:id="@+id/group_settings_administrators"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:background="@android:color/transparent"
+            android:fontFamily="sans-serif-light"
+            android:text="@string/administrators"
+            android:textColor="@color/blue_dark"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/group_settings_black_list" />
 
     </android.support.constraint.ConstraintLayout>
 

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/fragment_friend_profile_middle_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/personal_inf_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/contact_information"
+                android:textAllCaps="true"
+                android:textColor="@color/blue_dark"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/friend_profile_city_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/ic_profile_phone"
+                app:layout_constraintBottom_toBottomOf="@+id/friend_profile_phone_text_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/friend_profile_phone_text_view" />
+
+            <ImageView
+                android:id="@+id/friend_profile_phone_image_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="32dp"
+                android:src="@drawable/ic_profile_city"
+                app:layout_constraintBottom_toBottomOf="@+id/friend_profile_city_text_view"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/friend_profile_city_text_view" />
+
+            <TextView
+                android:id="@+id/friend_profile_city_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/city"
+                android:textColor="@color/very_dark_gray"
+                app:layout_constraintStart_toEndOf="@+id/friend_profile_phone_image_view"
+                app:layout_constraintTop_toBottomOf="@+id/personal_inf_text_view" />
+
+            <TextView
+                android:id="@+id/friend_profile_phone_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/phone_number"
+                android:textColor="@color/very_dark_gray"
+                app:layout_constraintStart_toEndOf="@+id/friend_profile_city_image_view"
+                app:layout_constraintTop_toBottomOf="@+id/friend_profile_city_text_view" />
+
+            <FrameLayout
+                android:id="@+id/fragment_money_frame"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:background="@color/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/friend_profile_phone_text_view">
+
+            </FrameLayout>
+
+        </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

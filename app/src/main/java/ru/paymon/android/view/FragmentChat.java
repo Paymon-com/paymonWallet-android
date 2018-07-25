@@ -43,6 +43,8 @@ import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 
 public class FragmentChat extends Fragment implements NotificationManager.IListener {
+    public static final String USER_ID_KEY = "USER_ID_KEY";
+    public static final String CHAT_ID_KEY = "CHAT_ID_KEY";
     private int chatID;
     private RecyclerView messagesRecyclerView;
     private MessagesAdapter messagesAdapter;
@@ -66,12 +68,11 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         final Bundle bundle = getArguments();
         if (bundle != null) {
-            if (bundle.containsKey("chat_id")) {
-                chatID = bundle.getInt("chat_id");
-                if (bundle.containsKey("groupUsers")) {
-                    isGroup = true;
-                    groupUsers = bundle.getParcelableArrayList("groupUsers");
-                }
+            if(bundle.containsKey(CHAT_ID_KEY))
+            chatID = bundle.getInt(CHAT_ID_KEY);
+            if (bundle.containsKey("users")) {
+                isGroup = true;
+                groupUsers = bundle.getParcelableArrayList("users");
             }
             if (bundle.containsKey(FORWARD_MESSAGES_KEY)) {
                 isForward = true;
@@ -137,6 +138,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.chatAddMessages);
         MessagesManager.getInstance().currentChatID = chatID;
         Utils.hideBottomBar(getActivity());
+        Utils.setArrowBackInToolbar(getActivity());
     }
 
     @Override
@@ -225,13 +227,12 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         }
 
         customView.setOnClickListener(v -> {
-//            final Bundle bundle = new Bundle();
-//            bundle.putInt(Config.KEY_USER_ID, chatID);
-//            bundle.putBoolean(Config.KEY_OPEN_FRIEND_PROFILE_FROM_CHAT, true);
-//            final FragmentFriendProfile fragmentFriendProfile = FragmentFriendProfile.newInstance();
-//            fragmentFriendProfile.setArguments(bundle);
-//            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//            Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);
+            final Bundle bundle = new Bundle();
+            bundle.putInt(USER_ID_KEY, chatID);
+            final FragmentFriendProfile fragmentFriendProfile = FragmentFriendProfile.newInstance();
+            fragmentFriendProfile.setArguments(bundle);
+            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);
         });
 
         return customView;

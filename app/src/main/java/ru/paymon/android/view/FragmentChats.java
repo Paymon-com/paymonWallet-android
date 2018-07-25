@@ -8,6 +8,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,17 +20,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.fading_entrances.FadeInLeftAnimator;
 import com.daimajia.androidviewhover.tools.Util;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -36,7 +36,6 @@ import java.util.List;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.DBHelper;
 import ru.paymon.android.GroupsManager;
-import ru.paymon.android.MainActivity;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
@@ -44,8 +43,9 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ChatsAdapter;
-import ru.paymon.android.components.CircleImageView;
-import ru.paymon.android.components.LoaderAnimation;
+import ru.paymon.android.adapters.DialogsAdapter;
+import ru.paymon.android.adapters.GroupsAdapter;
+import ru.paymon.android.adapters.SlidingChatsAdapter;
 import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
@@ -55,14 +55,24 @@ import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 
+import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
+
 public class FragmentChats extends Fragment implements NotificationManager.IListener {
     private static FragmentChats instance;
-    private ChatsAdapter chatsAdapter;
-    private RecyclerView chatsRecyclerView;
-    private ProgressBar progressBar;
     private TextView hintView;
     private boolean isLoading;
     private LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
+    private LinkedList<ChatsItem> dialogItemsList = new LinkedList<>();
+    private LinkedList<ChatsGroupItem> groupItemsList = new LinkedList<>();
+    private ProgressBar progressBarAllChats;
+//    private ProgressBar progressBarChats;
+//    private ProgressBar progressBarGroups;
+    private RecyclerView chatsAllRecyclerView;
+    private RecyclerView chatsRecyclerView;
+    private RecyclerView groupsRecyclerView;
+    private ChatsAdapter chatsAdapter;
+    private DialogsAdapter dialogsAdapter;
+    private GroupsAdapter groupsAdapter;
     private boolean isForward;
     private LinkedList<Long> forwardMessages;
 
@@ -90,22 +100,65 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         }
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chats, container, false);
+        List<View> pages = new ArrayList<>();
 
-        chatsRecyclerView = view.findViewById(R.id.fragment_dialog_recycler_view);
-        progressBar = view.findViewById(R.id.chats_progress_bar);
-        progressBar.setVisibility(View.GONE);
+        View pageChats = inflater.inflate(R.layout.fragment_chats_dialogs, container, false);
+        chatsRecyclerView = pageChats.findViewById(R.id.fragment_chats_recycler_view);
+//        progressBarChats = pageChats.findViewById(R.id.chats_progress_bar);
+//        progressBarChats.setVisibility(View.GONE);
+        pages.add(pageChats);
+
+        View pageAll = inflater.inflate(R.layout.fragment_chats, container, false);
+        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
+
+        pages.add(pageAll);
+
+        View pageGroups = inflater.inflate(R.layout.fragment_chats_groups, container, false);
+        groupsRecyclerView = pageGroups.findViewById(R.id.fragment_group_recycler_view);
+//        progressBarGroups = pageGroups.findViewById(R.id.groups_progress_bar);
+//        progressBarGroups.setVisibility(View.GONE);
+        pages.add(pageGroups);
+
+        progressBarAllChats = pageAll.findViewById(R.id.chats_all_progress_bar);
+        progressBarAllChats.setVisibility(View.GONE);
+
+        SlidingChatsAdapter pagerAdapter = new SlidingChatsAdapter(pages);
+        ViewPager viewPager = new ViewPager(getContext());
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0)
+                    Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
+                else if (position == 1)
+                    Utils.setActionBarWithTitle(getActivity(), "Чаты");
+                else
+                    Utils.setActionBarWithTitle(getActivity(), "Группы");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1);
 
         initChats();
 
 //        getActivity().invalidateOptionsMenu();
         setHasOptionsMenu(true);
 
-        return view;
+        return viewPager;
     }
 
     private void initChats() {
@@ -137,10 +190,20 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 //                })
 //        );
 
-        chatsAdapter = new ChatsAdapter(chatsItemsList, getActivity(), forwardMessages);
+        chatsAdapter = new ChatsAdapter(chatsItemsList);
+        chatsAllRecyclerView.setHasFixedSize(true);
+        chatsAllRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        chatsAllRecyclerView.setAdapter(chatsAdapter);
+
+        dialogsAdapter = new DialogsAdapter(dialogItemsList);
         chatsRecyclerView.setHasFixedSize(true);
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        chatsRecyclerView.setAdapter(chatsAdapter);
+        chatsRecyclerView.setAdapter(dialogsAdapter);
+
+        groupsAdapter = new GroupsAdapter(groupItemsList);
+        groupsRecyclerView.setHasFixedSize(true);
+        groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        groupsRecyclerView.setAdapter(groupsAdapter);
 
         if (NetworkManager.getInstance().isAuthorized()) {
             if (!isLoading) {
@@ -160,6 +223,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
             Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_chats));
         else
             Utils.setActionBarWithTitle(getActivity(), "Выберите получателя"); //TODO:string
+
         Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
@@ -176,6 +240,9 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
+        if (id == NotificationManager.NotificationEvent.dialogsNeedReload) {
+            if (progressBarAllChats != null)
+                progressBarAllChats.setVisibility(View.GONE);
         Utils.stageQueue.postRunnable(() -> {
             if (id == NotificationManager.NotificationEvent.dialogsNeedReload) {
                 ApplicationLoader.applicationHandler.post(() ->{
@@ -300,6 +367,14 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         MenuItem item = menu.findItem(R.id.create_group_item);
         item.setOnMenuItemClickListener(menuItem -> {
             Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null);
+            return true;
+        });
+
+        MenuItem itemSearch = menu.findItem(R.id.search_chat);
+        itemSearch.setOnMenuItemClickListener((menuItem) -> {
+            final FragmentSearch fragmentSearch = new FragmentSearch();
+            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentSearch, null);
             return true;
         });
     }

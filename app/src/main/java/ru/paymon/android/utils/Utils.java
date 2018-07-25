@@ -324,4 +324,43 @@ public class Utils {
         }
         return formatPhone(Long.parseLong(phone));
     }
+
+    public static String getETHorBTCpubKeyFromText(String text) {
+        Matcher matcher = Pattern.compile("^(^0x[a-fA-F0-9]{40,44}$)|(^[13][a-zA-Z0-9]{25,34}$)$").matcher(text);
+
+        if (!matcher.find()) return null;
+
+        int foundCount = 0;
+        while (matcher.find()) {
+            foundCount++;
+            if (foundCount > 1)
+                return null;
+        }
+
+        return matcher.group(1);
+    }
+
+    public static boolean veriftBTCpubKey(String key) {
+        Matcher matcher = Pattern.compile("^[13][a-zA-Z0-9]{25,34}$").matcher(key);
+        return !key.isEmpty() && matcher.find();
+    }
+
+    public static boolean veriftETHpubKey(String key) {
+        Matcher matcher = Pattern.compile("^0x[a-fA-F0-9]{40,44}$").matcher(key);
+        return !key.isEmpty() && matcher.find();
+    }
+
+    public static int WTF(String key){
+        if(key.isEmpty()) return 0;
+
+        Matcher matcher = Pattern.compile("^[13][a-zA-Z0-9]{25,34}$").matcher(key);
+        if(matcher.find())
+            return 1;
+
+         matcher = Pattern.compile("^0x[a-fA-F0-9]{40,44}$").matcher(key);
+        if(matcher.find())
+            return 2;
+
+        return 0;
+    }
 }

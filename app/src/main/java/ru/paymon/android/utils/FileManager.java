@@ -39,7 +39,8 @@ public class FileManager {
         AUDIO,
         DOCUMENT,
         STICKER,
-        ACTION
+        ACTION,
+        WALLET
     }
 
     public static class DownloadingFile {

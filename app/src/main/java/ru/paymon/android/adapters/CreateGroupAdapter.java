@@ -3,7 +3,6 @@ package ru.paymon.android.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -13,9 +12,7 @@ import java.util.List;
 
 import ru.paymon.android.R;
 import ru.paymon.android.components.CircleImageView;
-import ru.paymon.android.data.CreateGroupItem;
-
-import static android.view.MotionEvent.ACTION_DOWN;
+import ru.paymon.android.models.CreateGroupItem;
 
 public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.ViewHolder> {
     public List<CreateGroupItem> list;
