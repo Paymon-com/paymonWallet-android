@@ -12,6 +12,7 @@ import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.utils.AbsRuntimePermission;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChats;
+import ru.paymon.android.view.FragmentContacts;
 import ru.paymon.android.view.FragmentContactsInvite;
 import ru.paymon.android.view.FragmentLoader;
 import ru.paymon.android.view.FragmentMoreMenu;
@@ -53,6 +54,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance());
                     break;
                 case R.id.bottom_menu_contacts:
+                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentContacts.getInstance());
                     break;
                 case R.id.ic_menu_money:
                     break;

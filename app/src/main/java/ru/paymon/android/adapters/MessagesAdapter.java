@@ -3,16 +3,17 @@ package ru.paymon.android.adapters;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,7 +26,6 @@ import hani.momanii.supernova_emoji_library.helper.EmojiconTextView;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.components.CircleImageView;
@@ -40,6 +40,7 @@ import ru.paymon.android.utils.Utils;
 import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder> {
+    public static String WALLET_PUBLIC_KEY = "PUBLIC_WALLET_KEY";
     public LinkedList<Long> messageIDs;
     private LinkedList<Long> checkedMessageIDs;
     private boolean isGroup;
@@ -53,7 +54,10 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
         RECEIVED_MESSAGE_ITEM,
         GROUP_SENT_MESSAGE,
         GROUP_RECEIVED_MESSAGE,
-        ITEM_ACTION_MESSAGE
+        ITEM_ACTION_MESSAGE,
+        SENT_MESSAGE_WALLET,
+        RECEIVED_MESSAGE_WALLET,
+        GROUP_RECEIVED_MESSAGE_WALLET
     }
 
     public MessagesAdapter(AppCompatActivity activity, boolean isGroup, View defaultCustomView) {
@@ -102,6 +106,18 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
                 view = LayoutInflater.from(context).inflate(R.layout.view_holder_action_item, viewGroup, false);
                 vh = new ActionMessageViewHolder(view);
                 break;
+            case SENT_MESSAGE_WALLET:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_sent_message_wallet, viewGroup, false);
+                vh = new SentMessageWalletViewHolder(view);
+                break;
+            case RECEIVED_MESSAGE_WALLET:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_received_message_wallet, viewGroup, false);
+                vh = new ReceivedMessageWalletViewHolder(view);
+                break;
+            case GROUP_RECEIVED_MESSAGE_WALLET:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_group_received_message_wallet, viewGroup, false);
+                vh = new GroupReceivedMessageWalletViewHolder(view);
+                break;
         }
         return vh;
     }
@@ -144,7 +160,90 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
             final ActionMessageViewHolder actionMessageViewHolder = (ActionMessageViewHolder) holder;
             actionMessageViewHolder.msg.setText(actionMessageViewHolder.message.text);
             actionMessageViewHolder.time.setText(Utils.formatDateTime(actionMessageViewHolder.message.date, true));
+        } else if (holder instanceof SentMessageWalletViewHolder) {
+            final SentMessageWalletViewHolder sentMessageWalletViewHolder = (SentMessageWalletViewHolder) holder;
+            final String publicKey = Utils.getETHorBTCpubKeyFromText(sentMessageWalletViewHolder.message.text);
+            final int keyType = Utils.WTF(publicKey);
+
+            sentMessageWalletViewHolder.publicKey.setText(publicKey);
+
+            switch (keyType) {
+                case 1:
+                    sentMessageWalletViewHolder.imageWallet.setImageResource(R.drawable.ic_bitcoin);
+                    break;
+                case 2:
+                    sentMessageWalletViewHolder.imageWallet.setImageResource(R.drawable.ic_ethereum);
+                    break;
+            }
+
+            sentMessageWalletViewHolder.time.setText(Utils.formatDateTime(sentMessageWalletViewHolder.message.date, true));
+            sentMessageWalletViewHolder.text.setText(sentMessageWalletViewHolder.message.text);
+
+            sentMessageWalletViewHolder.buttonWallet.setOnClickListener((view -> {
+                Bundle bundle = new Bundle();
+                bundle.putString(WALLET_PUBLIC_KEY, publicKey);
+                //TODO:открытие вью работы с кошельком
+            }));
+        } else if (holder instanceof GroupReceivedMessageWalletViewHolder) {
+            final GroupReceivedMessageWalletViewHolder groupReceivedMessageWalletViewHolder = (GroupReceivedMessageWalletViewHolder) holder;
+            final String publicKey = Utils.getETHorBTCpubKeyFromText(groupReceivedMessageWalletViewHolder.message.text);
+            final int keyType = Utils.WTF(publicKey);
+
+            groupReceivedMessageWalletViewHolder.publicKey.setText(publicKey);
+
+            switch (keyType) {
+                case 1:
+                    groupReceivedMessageWalletViewHolder.imageWallet.setImageResource(R.drawable.ic_bitcoin);
+                    break;
+                case 2:
+                    groupReceivedMessageWalletViewHolder.imageWallet.setImageResource(R.drawable.ic_ethereum);
+                    break;
+            }
+
+            groupReceivedMessageWalletViewHolder.time.setText(Utils.formatDateTime(groupReceivedMessageWalletViewHolder.message.date, true));
+            groupReceivedMessageWalletViewHolder.text.setText(groupReceivedMessageWalletViewHolder.message.text);
+
+            groupReceivedMessageWalletViewHolder.buttonWallet.setOnClickListener((view -> {
+                Bundle bundle = new Bundle();
+                bundle.putString(WALLET_PUBLIC_KEY, publicKey);
+                //TODO:открытие вью работы с кошельком
+            }));
+
+            int uid = groupReceivedMessageWalletViewHolder.message.from_id;
+            Long pid = MediaManager.getInstance().userProfilePhotoIDs.get(uid);
+            if (pid != null) {
+                RPC.PM_photo photo = new RPC.PM_photo();
+                photo.user_id = uid;
+                photo.id = pid;
+                groupReceivedMessageWalletViewHolder.avatar.setPhoto(photo);
+            }
+        } else if (holder instanceof ReceivedMessageWalletViewHolder) {
+            final ReceivedMessageWalletViewHolder receivedMessageWalletViewHolder = (ReceivedMessageWalletViewHolder) holder;
+            final String publicKey = Utils.getETHorBTCpubKeyFromText(receivedMessageWalletViewHolder.message.text);
+            final int keyType = Utils.WTF(publicKey);
+
+            receivedMessageWalletViewHolder.publicKey.setText(publicKey);
+
+            switch (keyType) {
+                case 1:
+                    receivedMessageWalletViewHolder.imageWallet.setImageResource(R.drawable.ic_bitcoin);
+                    break;
+                case 2:
+                    receivedMessageWalletViewHolder.imageWallet.setImageResource(R.drawable.ic_ethereum);
+                    break;
+            }
+
+            receivedMessageWalletViewHolder.time.setText(Utils.formatDateTime(receivedMessageWalletViewHolder.message.date, true));
+            receivedMessageWalletViewHolder.text.setText(receivedMessageWalletViewHolder.message.text);
+
+            receivedMessageWalletViewHolder.buttonWallet.setOnClickListener((view -> {
+                Bundle bundle = new Bundle();
+                bundle.putString(WALLET_PUBLIC_KEY, publicKey);
+                //TODO:открытие вью работы с кошельком
+            }));
         }
+
+        //TODO:посмотреть что можно вынести в oncreateviewholder || в сам конструктор вьюхолдера
     }
 
     @Override
@@ -185,6 +284,8 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
             } else if (msg instanceof RPC.PM_messageItem) {
                 if (((RPC.PM_messageItem) msg).itemType == FileManager.FileType.ACTION)
                     viewType = ViewTypes.ITEM_ACTION_MESSAGE.ordinal();
+                else if (msg.itemType == FileManager.FileType.WALLET)
+                    viewType = ViewTypes.SENT_MESSAGE_WALLET.ordinal();
                 else
                     viewType = ViewTypes.SENT_MESSAGE_ITEM.ordinal();
             }
@@ -197,7 +298,12 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
             } else if (msg instanceof RPC.PM_messageItem) {
                 if (((RPC.PM_messageItem) msg).itemType == FileManager.FileType.ACTION)
                     viewType = ViewTypes.ITEM_ACTION_MESSAGE.ordinal();
-                else
+                else if (msg.itemType == FileManager.FileType.WALLET) {
+                    if (!isGroup)
+                        viewType = ViewTypes.RECEIVED_MESSAGE_WALLET.ordinal();
+                    else
+                        viewType = ViewTypes.GROUP_RECEIVED_MESSAGE_WALLET.ordinal();
+                } else
                     viewType = ViewTypes.RECEIVED_MESSAGE_ITEM.ordinal();
             }
         }
@@ -384,6 +490,59 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
             super(view);
             msg = (TextView) view.findViewById(R.id.message_text_view);
             time = (TextView) view.findViewById(R.id.timestamp_text_view);
+        }
+    }
+
+    public static class SentMessageWalletViewHolder extends BaseViewHolder {
+        EmojiconTextView text;
+        TextView time;
+        ImageButton buttonWallet;
+        ImageView imageWallet;
+        TextView publicKey;
+
+        public SentMessageWalletViewHolder(View itemView) {
+            super(itemView);
+            text = (EmojiconTextView) itemView.findViewById(R.id.wallet_sent_message_text_view);
+            time = (TextView) itemView.findViewById(R.id.wallet_sent_timestamp_text_view);
+            buttonWallet = (ImageButton) itemView.findViewById(R.id.wallet_sent_image_button);
+            imageWallet = (ImageView) itemView.findViewById(R.id.wallet_sent_image_view);
+            publicKey = (TextView) itemView.findViewById(R.id.wallet_sent_text_view);
+        }
+    }
+
+    public static class ReceivedMessageWalletViewHolder extends BaseViewHolder {
+        EmojiconTextView text;
+        TextView time;
+        ImageButton buttonWallet;
+        ImageView imageWallet;
+        TextView publicKey;
+
+        public ReceivedMessageWalletViewHolder(View itemView) {
+            super(itemView);
+            text = (EmojiconTextView) itemView.findViewById(R.id.wallet_received_message_text_view);
+            time = (TextView) itemView.findViewById(R.id.wallet_received_timestamp_text_view);
+            buttonWallet = (ImageButton) itemView.findViewById(R.id.wallet_received_image_button);
+            imageWallet = (ImageView) itemView.findViewById(R.id.wallet_received_image_view);
+            publicKey = (TextView) itemView.findViewById(R.id.wallet_received_text_view);
+        }
+    }
+
+    public static class GroupReceivedMessageWalletViewHolder extends BaseViewHolder {
+        EmojiconTextView text;
+        TextView time;
+        ImageButton buttonWallet;
+        ImageView imageWallet;
+        CircleImageView avatar;
+        TextView publicKey;
+
+        public GroupReceivedMessageWalletViewHolder(View itemView) {
+            super(itemView);
+            text = (EmojiconTextView) itemView.findViewById(R.id.wallet_received_group_message_text_view);
+            time = (TextView) itemView.findViewById(R.id.wallet_received_group_timestamp_text_view);
+            buttonWallet = (ImageButton) itemView.findViewById(R.id.wallet_received_group_image_button);
+            imageWallet = (ImageView) itemView.findViewById(R.id.wallet_received_group_image_view);
+            avatar = (CircleImageView) itemView.findViewById(R.id.photo_wallet_received_group);
+            publicKey = (TextView) itemView.findViewById(R.id.wallet_received_group_text_view);
         }
     }
 }

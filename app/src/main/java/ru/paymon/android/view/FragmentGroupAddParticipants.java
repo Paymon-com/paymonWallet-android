@@ -1,12 +1,9 @@
 package ru.paymon.android.view;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -19,7 +16,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -27,15 +23,12 @@ import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
-import ru.paymon.android.MainActivity;
-import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.CreateGroupAdapter;
-import ru.paymon.android.data.CreateGroupItem;
+import ru.paymon.android.models.CreateGroupItem;
 import ru.paymon.android.net.NetworkManager;
-import ru.paymon.android.net.Packet;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
@@ -101,6 +94,8 @@ public class FragmentGroupAddParticipants extends Fragment {
 
                 String text = editable.toString();
 
+                if(text.trim().isEmpty()) return;
+
                 for (CreateGroupItem user : addGroupList) {
                     if(user.name.toLowerCase().contains(text.toLowerCase())){
                         sortedUserList.add(user);
@@ -133,7 +128,7 @@ public class FragmentGroupAddParticipants extends Fragment {
 
         for (int i = 0; i < userContacts.size(); i++) {
             RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
-            if (group.users.contains(user)) continue;
+            if (group.users.contains(user) || user.id == User.currentUser.id) continue;
             RPC.PM_photo photo = new RPC.PM_photo();
             photo.id = user.photoID;
             photo.user_id = user.id;
@@ -181,7 +176,8 @@ public class FragmentGroupAddParticipants extends Fragment {
 
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
-                            dialogProgress.dismiss();
+                            dialogProgress.dismiss();dialogProgress.dismiss();
+                        getActivity().getSupportFragmentManager().popBackStack();
                     });
                 });
                 ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));

@@ -5,12 +5,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,20 +15,13 @@ import android.widget.Toast;
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.Config;
 import ru.paymon.android.GroupsManager;
-import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
-import ru.paymon.android.data.CreateGroupItem;
+import ru.paymon.android.models.CreateGroupItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
-
-import static ru.paymon.android.Config.TAG;
-import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 public class DialogFragmentCreateGroup extends DialogFragment {
     private DialogProgress dialogProgress;
@@ -41,7 +31,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
     private LinkedList<CreateGroupItem> createGroupList = new LinkedList<>();
 
 
-    public static synchronized DialogFragmentCreateGroup newInstance(){
+    public static synchronized DialogFragmentCreateGroup newInstance() {
         return new DialogFragmentCreateGroup();
     }
 
@@ -98,7 +88,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
                         Toast toast = Toast.makeText(getContext(),
-                                "Вы не ввели название группы", Toast.LENGTH_SHORT);//TODO string
+                                "Ошибка", Toast.LENGTH_SHORT);//TODO string
                         toast.show();
                     });
                     return;
@@ -136,17 +126,17 @@ public class DialogFragmentCreateGroup extends DialogFragment {
 //
 //                            msg.id = update.newID;
 //                            MessagesManager.getInstance().putMessage(msg);
-                            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
-                            getDialog().dismiss();
-                            Bundle bundle = new Bundle();
-                            bundle.putInt("chat_id", group.id);
-                            bundle.putParcelableArrayList("users", group.users);
-                            FragmentChat fragmentChat = new FragmentChat();
-                            fragmentChat.setArguments(bundle);
-                            FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                            fragmentTransaction.replace(R.id.container, fragmentChat);
-                            fragmentTransaction.commit();
+                    NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
+                    getDialog().dismiss();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("chat_id", group.id);
+                    bundle.putParcelableArrayList("users", group.users);
+                    FragmentChat fragmentChat = new FragmentChat();
+                    fragmentChat.setArguments(bundle);
+                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    fragmentTransaction.replace(R.id.container, fragmentChat);
+                    fragmentTransaction.commit();
 //                        });
 //                    });
                     //endregion

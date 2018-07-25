@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
 
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.ContactsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.ContactsInviteRegisteredAdapter;
@@ -49,8 +48,8 @@ public class FragmentContactsInvite extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts_invite, container, false);
 
-        RecyclerView recyclerViewReg = (RecyclerView) view.findViewById(R.id.recViewReg);
-        RecyclerView recyclerViewUnreg = (RecyclerView) view.findViewById(R.id.recViewUnreg);
+        RecyclerView recyclerViewReg = (RecyclerView) view.findViewById(R.id.recViewChats);
+        RecyclerView recyclerViewUnreg = (RecyclerView) view.findViewById(R.id.recViewMessages);
 
         recyclerViewReg.setHasFixedSize(true);
         recyclerViewUnreg.setHasFixedSize(true);

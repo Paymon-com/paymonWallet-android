@@ -5,8 +5,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,28 +15,26 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
-import ru.paymon.android.MainActivity;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ChatsAdapter;
-import ru.paymon.android.components.CircleImageView;
-import ru.paymon.android.components.LoaderAnimation;
+import ru.paymon.android.adapters.DialogsAdapter;
+import ru.paymon.android.adapters.GroupsAdapter;
+import ru.paymon.android.adapters.SlidingChatsAdapter;
 import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
@@ -44,15 +42,24 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
 
+import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
+
 public class FragmentChats extends Fragment implements NotificationManager.IListener {
     private static FragmentChats instance;
-    private ChatsAdapter chatsAdapter;
-    private RecyclerView chatsRecyclerView;
-    private ProgressBar progressBar;
     private TextView hintView;
     private boolean isLoading;
     private LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
-
+    private LinkedList<ChatsItem> dialogItemsList = new LinkedList<>();
+    private LinkedList<ChatsGroupItem> groupItemsList = new LinkedList<>();
+    private ProgressBar progressBarAllChats;
+//    private ProgressBar progressBarChats;
+//    private ProgressBar progressBarGroups;
+    private RecyclerView chatsAllRecyclerView;
+    private RecyclerView chatsRecyclerView;
+    private RecyclerView groupsRecyclerView;
+    private ChatsAdapter chatsAdapter;
+    private DialogsAdapter dialogsAdapter;
+    private GroupsAdapter groupsAdapter;
 
     public static synchronized FragmentChats newInstance() {
         instance = new FragmentChats();
@@ -73,23 +80,67 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chats, container, false);
+        List<View> pages = new ArrayList<>();
 
-        chatsRecyclerView = view.findViewById(R.id.fragment_dialog_recycler_view);
-        progressBar = view.findViewById(R.id.chats_progress_bar);
-        progressBar.setVisibility(View.GONE);
+        View pageChats = inflater.inflate(R.layout.fragment_chats_dialogs, container, false);
+        chatsRecyclerView = pageChats.findViewById(R.id.fragment_chats_recycler_view);
+//        progressBarChats = pageChats.findViewById(R.id.chats_progress_bar);
+//        progressBarChats.setVisibility(View.GONE);
+        pages.add(pageChats);
+
+        View pageAll = inflater.inflate(R.layout.fragment_chats, container, false);
+        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
+
+        pages.add(pageAll);
+
+        View pageGroups = inflater.inflate(R.layout.fragment_chats_groups, container, false);
+        groupsRecyclerView = pageGroups.findViewById(R.id.fragment_group_recycler_view);
+//        progressBarGroups = pageGroups.findViewById(R.id.groups_progress_bar);
+//        progressBarGroups.setVisibility(View.GONE);
+        pages.add(pageGroups);
+
+        progressBarAllChats = pageAll.findViewById(R.id.chats_all_progress_bar);
+        progressBarAllChats.setVisibility(View.GONE);
+
+        SlidingChatsAdapter pagerAdapter = new SlidingChatsAdapter(pages);
+        ViewPager viewPager = new ViewPager(getContext());
+
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0)
+                    Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
+                else if (position == 1)
+                    Utils.setActionBarWithTitle(getActivity(), "Чаты");
+                else
+                    Utils.setActionBarWithTitle(getActivity(), "Группы");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
+
+        viewPager.setAdapter(pagerAdapter);
+        viewPager.setCurrentItem(1);
 
         initChats();
 
-//        getActivity().invalidateOptionsMenu();
+        getActivity().invalidateOptionsMenu();
         setHasOptionsMenu(true);
 
-        return view;
+        return viewPager;
     }
 
     private void initChats() {
-        chatsRecyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getContext(), chatsRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        chatsAllRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), chatsAllRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
                         final ChatsItem chatsItem = chatsAdapter.getItem(position);
@@ -97,10 +148,55 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                         int chatID = chatsItem.chatID;
 
                         final Bundle bundle = new Bundle();
-                        bundle.putInt("chat_id", chatID);
+                        bundle.putInt(CHAT_ID_KEY, chatID);
 
                         if (isGroup)
-                            bundle.putParcelableArrayList("groupUsers", GroupsManager.getInstance().groupsUsers.get(chatID));
+                            bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(chatID));
+
+                        final FragmentChat fragmentChat = FragmentChat.newInstance();
+                        fragmentChat.setArguments(bundle);
+                        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentChat, null);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                    }
+                })
+        );
+
+        chatsRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), chatsRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        final ChatsItem dialogItem = dialogsAdapter.getItem(position);
+                        int chatID = dialogItem.chatID;
+
+                        final Bundle bundle = new Bundle();
+                        bundle.putInt(CHAT_ID_KEY, chatID);
+
+                        final FragmentChat fragmentChat = FragmentChat.newInstance();
+                        fragmentChat.setArguments(bundle);
+                        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentChat, null);
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+                    }
+                })
+        );
+
+        groupsRecyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(getContext(), groupsRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        final ChatsGroupItem groupItem = groupsAdapter.getItem(position);
+                        int chatID = groupItem.chatID;
+
+                        final Bundle bundle = new Bundle();
+                        bundle.putInt(CHAT_ID_KEY, chatID);
+
+//                        if (isGroup)
+                        bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(chatID));
 
                         final FragmentChat fragmentChat = FragmentChat.newInstance();
                         fragmentChat.setArguments(bundle);
@@ -114,9 +210,19 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         );
 
         chatsAdapter = new ChatsAdapter(chatsItemsList);
+        chatsAllRecyclerView.setHasFixedSize(true);
+        chatsAllRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        chatsAllRecyclerView.setAdapter(chatsAdapter);
+
+        dialogsAdapter = new DialogsAdapter(dialogItemsList);
         chatsRecyclerView.setHasFixedSize(true);
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        chatsRecyclerView.setAdapter(chatsAdapter);
+        chatsRecyclerView.setAdapter(dialogsAdapter);
+
+        groupsAdapter = new GroupsAdapter(groupItemsList);
+        groupsRecyclerView.setHasFixedSize(true);
+        groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        groupsRecyclerView.setAdapter(groupsAdapter);
 
         if (NetworkManager.getInstance().isAuthorized()) {
             if (!isLoading) {
@@ -132,7 +238,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_chats));
+
         Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
@@ -150,8 +256,8 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
         if (id == NotificationManager.NotificationEvent.dialogsNeedReload) {
-            if (progressBar != null)
-                progressBar.setVisibility(View.GONE);
+            if (progressBarAllChats != null)
+                progressBarAllChats.setVisibility(View.GONE);
 
             LinkedList<ChatsItem> array = new LinkedList<>();
             for (int i = 0; i < UsersManager.getInstance().userContacts.size(); i++) {
@@ -179,6 +285,98 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                     photo.id = user.photoID;
                     photo.user_id = user.id;
                     array.add(new ChatsItem(user.id, photo, username, lastMessageText, lastMsg.date, lastMsg.itemType));
+                }
+            }
+
+            LinkedList<ChatsItem> arrayDialog = new LinkedList<>();
+            for (int i = 0; i < UsersManager.getInstance().userContacts.size(); i++) {
+                RPC.UserObject user = UsersManager.getInstance().userContacts.get(UsersManager.getInstance().userContacts.keyAt(i));
+                String username = Utils.formatUserName(user);
+                String lastMessageText = "";
+
+                RPC.Message lastMsg = MessagesManager.getInstance().messages.get(MessagesManager.getInstance().lastMessages.get(user.id));
+                if (lastMsg != null) {
+                    if (lastMsg instanceof RPC.PM_message) {
+                        lastMessageText = lastMsg.text;
+                    } else if (lastMsg instanceof RPC.PM_messageItem) {
+                        switch (lastMsg.itemType) {
+                            case STICKER:
+                                lastMessageText = getString(R.string.sticker);
+                                break;
+
+                            case ACTION:
+                                lastMessageText = lastMsg.text;
+                                break;
+                        }
+                    }
+
+                    RPC.PM_photo photo = new RPC.PM_photo();
+                    photo.id = user.photoID;
+                    photo.user_id = user.id;
+                    arrayDialog.add(new ChatsItem(user.id, photo, username, lastMessageText, lastMsg.date, lastMsg.itemType));
+                }
+            }
+
+            if (!arrayDialog.isEmpty()) {
+                dialogsAdapter.dialogsItemsList.clear();
+                dialogsAdapter.dialogsItemsList.addAll(arrayDialog);
+                dialogsAdapter.notifyDataSetChanged();
+            } else {
+                if (hintView != null) {
+                    hintView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            LinkedList<ChatsGroupItem> arrayGroup = new LinkedList<>();
+            for (int i = 0; i < GroupsManager.getInstance().groups.size(); i++) {
+                RPC.Group group = GroupsManager.getInstance().groups.get(GroupsManager.getInstance().groups.keyAt(i));
+                String title = group.title;
+                String lastMessageText = "";
+
+                Long lastMsgId = MessagesManager.getInstance().lastGroupMessages.get(group.id);
+                if (lastMsgId != null) {
+                    RPC.PM_photo lastMsgPhoto = null;
+                    RPC.Message lastMessage = MessagesManager.getInstance().messages.get(lastMsgId);
+                    if (lastMessage != null) {
+                        if (lastMessage instanceof RPC.PM_message) {
+                            lastMessageText = lastMessage.text;
+                        } else if (lastMessage instanceof RPC.PM_messageItem) {
+                            switch (lastMessage.itemType) {
+                                case STICKER:
+                                    lastMessageText = getString(R.string.sticker);
+                                    break;
+
+                                case ACTION:
+                                    lastMessageText = lastMessage.text;
+                                    break;
+                            }
+
+                            RPC.UserObject user = UsersManager.getInstance().users.get(lastMessage.from_id);
+                            if (user != null) {
+                                lastMsgPhoto = new RPC.PM_photo();
+                                lastMsgPhoto.user_id = user.id;
+                                lastMsgPhoto.id = user.photoID;
+                            }
+                        }
+
+                        RPC.PM_photo photo = group.photo;
+                        if (photo.id == 0)
+                            photo.id = MediaManager.getInstance().generatePhotoID();
+
+                        if (photo.user_id == 0)
+                            photo.user_id = -group.id;
+                        arrayGroup.add(new ChatsGroupItem(group.id, photo, lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
+                    }
+                }
+            }
+
+            if (!arrayGroup.isEmpty()) {
+                groupsAdapter.groupsItemsList.clear();
+                groupsAdapter.groupsItemsList.addAll(arrayGroup);
+                groupsAdapter.notifyDataSetChanged();
+            } else {
+                if (hintView != null) {
+                    hintView.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -256,8 +454,16 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         inflater.inflate(R.menu.fragment_chats_menu, menu);
 
         MenuItem item = menu.findItem(R.id.create_group_item);
-        item.setOnMenuItemClickListener(menuItem ->{
+        item.setOnMenuItemClickListener(menuItem -> {
             Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null);
+            return true;
+        });
+
+        MenuItem itemSearch = menu.findItem(R.id.search_chat);
+        itemSearch.setOnMenuItemClickListener((menuItem) -> {
+            final FragmentSearch fragmentSearch = new FragmentSearch();
+            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentSearch, null);
             return true;
         });
     }

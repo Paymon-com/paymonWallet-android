@@ -14,6 +14,7 @@
     <string name="title_more">Еще</string>
     <string name="title_update_profile">Редактирование профиля</string>
     <string name="title_contacts">Контакты</string>
+    <string name="title_request">Заявки</string>
     <string name="title_money">Деньги</string>
     <string name="title_transfer">Перевод</string>
     <string name="title_deposit">Пополнение баланса</string>
@@ -42,6 +43,7 @@
     <string name="authorization">Авторизация</string>
 
     <string name="action_settings">Настройки</string>
+    <string name="friend_requests">Заявки в друзья</string>
 
     <!-- Strings related to login -->
     <string name="error_incorrect_double_password">Пароли не совпадают</string>
@@ -470,6 +472,8 @@
     <string name="agree">Принять</string>
     <string name="remove_wallet_dialog_hint">Вы уверены, что хотите удалить этот способ пополнения/вывода?</string>
     <string name="add_participants">Добавить участников</string>
+    <string name="administrators">Администраторы</string>
+    <string name="black_list">Черный список</string>
     <string name="group_settings">Настройки Беседы</string>
     <string name="remove_participant_q">Убрать участника?</string>
     <string name="insufficient_funds">На вашем кошельке не достаточно средств</string>

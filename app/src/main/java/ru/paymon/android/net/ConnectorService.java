@@ -147,7 +147,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 NetworkManager.getInstance().connect();
             }
             try {
-                TimeUnit.SECONDS.sleep(10);
+                TimeUnit.SECONDS.sleep(1);
                 getConnection();
             } catch (InterruptedException e) {
                 e.printStackTrace();
