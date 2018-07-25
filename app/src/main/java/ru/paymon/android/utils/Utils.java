@@ -315,4 +315,13 @@ public class Utils {
             return "";
         }
     }
+
+    public static String formatPhone(String phone) {
+        char[] chars = phone.toCharArray();
+        for (char ch : chars) {
+            if (!Character.isDigit(ch))
+                phone = phone.replace(String.valueOf(ch), "");
+        }
+        return formatPhone(Long.parseLong(phone));
+    }
 }

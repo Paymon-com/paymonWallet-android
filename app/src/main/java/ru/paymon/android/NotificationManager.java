@@ -26,6 +26,9 @@ public class NotificationManager {
         didLoadEthereumWallet,
         didDisconnectedFromTheServer,
         userInfoDidLoaded,
+
+        NETWORK_STATE_DISCONNECTED,
+        NETWORK_STATE_CONNECTED,
     }
 
     private SparseArray<ArrayList<Object>> observers = new SparseArray<>();

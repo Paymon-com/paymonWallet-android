@@ -13,24 +13,23 @@ import java.util.LinkedList;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
+import ru.paymon.android.net.ConnectorService;
+import ru.paymon.android.net.NetworkManager;
+import ru.paymon.android.net.Packet;
+import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.Config.TAG;
 
-
 public class NetworkManager {
-    public int connectionState;
-    //    private BlockchainServiceImpl blockchainService;
-    private ConnectorService connectorService;
-    private boolean connectorServiceIsBound;
+    private ConnectionState connectionState;
+    public NetworkState networkState;
     private boolean handshaked;
     private boolean authorized;
     private TimeHandler timeThread;
     private long lastOutgoingMessageId = 0;
-    private boolean willConnect = false;
-    private HashMap<Long, Byte[]> keys = new HashMap<>();
     private LinkedList<WaitingRequest> waitingRequests = new LinkedList<>();
     private LinkedList<FutureRequest> futureRequests = new LinkedList<>();
     private static volatile NetworkManager Instance = null;
@@ -47,11 +46,48 @@ public class NetworkManager {
         return localInstance;
     }
 
-    private NetworkManager() {
-        handshaked = false;
-        authorized = false;
+    //region enum's
+    public enum ConnectionState {
+        HZ,
+        DISCONNECTED,
+        CONNECTED,
     }
 
+    public enum NetworkState {
+        DISCONNECTED,
+        CONNECTED,
+    }
+    //endregion
+
+    //region connector service
+    public ConnectorService connectorService;
+    private ServiceConnection connection = new ServiceConnection() {
+        public void onServiceConnected(ComponentName className, IBinder service) {
+            connectorService = ((ConnectorService.LocalBinder) service).getService();
+            if (connectorService != null)
+                connect();
+        }
+
+        public void onServiceDisconnected(ComponentName className) {
+            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
+            connectorService = null;
+        }
+    };
+
+    public void bindServices() {
+        if (connectorService == null)
+            ApplicationLoader.applicationContext.bindService(new Intent(ApplicationLoader.applicationContext, ConnectorService.class), connection, Context.BIND_AUTO_CREATE);
+    }
+
+    public void unbindServices() {
+        if (connectorService != null) {
+            ApplicationLoader.applicationContext.unbindService(connection);
+            connectorService = null;
+        }
+    }
+    //endregion
+
+    //region jni func
     @SuppressWarnings("JniMissingFunction")
     private native void native_connect();
 
@@ -61,54 +97,70 @@ public class NetworkManager {
     @SuppressWarnings("JniMissingFunction")
     public native void native_sendData(int addr, int pos, int limit);
 
+    // called from jni
+    public static void onConnectionStateChanged(int state) {
+        Log.d(TAG, "ConnectionState=" + state);
+        if (state == 3) {
+            getInstance().connectionState = ConnectionState.CONNECTED;
+            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didConnectedToServer));
+        } else {
+            getInstance().connectionState = ConnectionState.DISCONNECTED;
+            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
+        }
+    }
+
+    // called from jni
+    public static void onConnectionDataReceived(int addr, int length) {
+        getInstance().timeThread.lastKeepAliveTime = System.currentTimeMillis() / 1000;
+        getInstance().connectorService.onConnectionDataReceived(SerializedBuffer.wrap(addr), length);
+    }
+    //endregion
+
+    //region connect func
+    private void reset(){
+        handshaked = false;
+        setAuthorized(false);
+        KeyGenerator.getInstance().reset();
+        waitingRequests.clear();
+        futureRequests.clear();
+
+        if (connectorService != null) {
+            connectorService.requestsMap.clear();
+            connectionState = ConnectionState.DISCONNECTED;
+            connectorService.lastKeepAlive = System.currentTimeMillis() / 1000;
+        }
+    }
+
+    public void connect() {
+        if (connectionState != ConnectionState.CONNECTED) {
+            reset();
+            native_connect();
+            if (NetworkManager.getInstance().timeThread != null) {
+                NetworkManager.getInstance().timeThread.halt();
+                try {
+                    NetworkManager.getInstance().timeThread.join();
+                } catch (InterruptedException e) {
+                }
+            }
+            NetworkManager.getInstance().timeThread = new TimeHandler();
+            NetworkManager.getInstance().timeThread.start();
+            processRequest();
+        }
+    }
+
+    public void reconnect() {
+        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
+        reset();
+        native_reconnect();
+    }
+    //endregion
+
+    //region static classes
+
     private static class WaitingRequest {
         public Packet packet;
         public Packet.OnResponseListener listener;
         public long messageID;
-    }
-
-    private static class TimeHandler extends Thread implements Runnable {
-        long lastKeepAliveTime;
-        boolean keepAliveSent = false;
-        boolean running = true;
-
-        @Override
-        public void run() {
-            final NetworkManager networkManager = NetworkManager.getInstance();
-            networkManager.connectorService.lastKeepAlive = System.currentTimeMillis() / 1000L;
-            lastKeepAliveTime = System.currentTimeMillis() / 1000L;
-
-            while (running) {
-                long curtime = System.currentTimeMillis() / 1000L;
-
-                if (networkManager.isConnected() && networkManager.connectorService != null) {
-                    if (curtime - lastKeepAliveTime >= 10 && !keepAliveSent) {
-                        lastKeepAliveTime = System.currentTimeMillis() / 1000L;
-                        networkManager.sendRequest(new RPC.PM_keepAlive(), new Packet.OnResponseListener() {
-                            @Override
-                            public void onResponse(Packet response, RPC.PM_error error) {
-                                networkManager.connectorService.lastKeepAlive = System.currentTimeMillis() / 1000L;
-                                keepAliveSent = false;
-                            }
-                        });
-                        keepAliveSent = true;
-                    }
-                    if (networkManager.connectorService != null && (curtime - networkManager.connectorService.lastKeepAlive > 30)) {
-                        networkManager.reconnect();
-                        keepAliveSent = false;
-                    }
-                }
-                try {
-                    Thread.sleep(750);
-                } catch (InterruptedException e) {
-
-                }
-            }
-        }
-
-        public void halt() {
-            running = false;
-        }
     }
 
     private static class FutureRequest {
@@ -123,110 +175,7 @@ public class NetworkManager {
         }
     }
 
-    public void setHandshaked(boolean flag) {
-        handshaked = flag;
-    }
-
-    private ServiceConnection connection = new ServiceConnection() {
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            connectorService = ((ConnectorService.LocalBinder) service).getService();
-            if (connectorService != null && willConnect) {
-                connect();
-            }
-            connectorServiceIsBound = true;
-        }
-
-        public void onServiceDisconnected(ComponentName className) {
-            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
-            connectorService = null;
-            connectorServiceIsBound = false;
-        }
-    };
-
-//    private ServiceConnection blockchainConnection = new ServiceConnection() {
-//        public void onServiceConnected(ComponentName className, IBinder service) {
-//            blockchainService = ((BlockchainServiceImpl.LocalBinder) service).getService();
-//        }
-//
-//        public void onServiceDisconnected(ComponentName className) {
-//            blockchainService = null;
-//        }
-//    };
-
-    public void connect() {
-        if (connectorService != null) {
-            if (connectionState != 3) {
-                reset();
-                native_connect();
-
-                if (NetworkManager.getInstance().timeThread != null) {
-                    NetworkManager.getInstance().timeThread.halt();
-                    try {
-                        NetworkManager.getInstance().timeThread.join();
-                    } catch (InterruptedException e) {
-                    }
-                }
-                NetworkManager.getInstance().timeThread = new TimeHandler();
-                NetworkManager.getInstance().timeThread.start();
-
-                processRequest();
-            }
-        } else {
-            willConnect = true;
-        }
-    }
-
-    public void bindServices() {
-        if (!connectorServiceIsBound && connectorService == null) {
-            ApplicationLoader.applicationContext.bindService(new Intent(ApplicationLoader.applicationContext, ConnectorService.class), connection, Context.BIND_AUTO_CREATE);
-        }
-//        ApplicationLoader.applicationContext.bindService(new Intent(ApplicationLoader.applicationContext, BlockchainServiceImpl.class), blockchainConnection, Context.BIND_AUTO_CREATE);
-    }
-
-    public void unbindServices() {
-        if (connectorServiceIsBound && connectorService != null) {
-            ApplicationLoader.applicationContext.unbindService(connection);
-            connectorService = null;
-        }
-    }
-
-    public ConnectorService getConnector() {
-        return connectorService;
-    }
-
-    public void reconnect() {
-        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
-        reset();
-        native_reconnect();
-    }
-
-    public void reset() {
-        handshaked = false;
-        setAuthorized(false);
-        KeyGenerator.getInstance().reset();
-        keys.clear();
-        waitingRequests.clear();
-        futureRequests.clear();
-
-//        connectionState=0;//
-//        ApplicationLoader.applicationContext.stopService(new Intent(ApplicationLoader.applicationContext, ConnectorService.class));
-//        ApplicationLoader.applicationContext.startService(new Intent(ApplicationLoader.applicationContext, ConnectorService.class));
-        if (connectorService != null) {
-            connectorService.requestsMap.clear();
-            connectionState = 0;
-            connectorService.lastKeepAlive = System.currentTimeMillis() / 1000;
-        }
-    }
-
-    public long generateMessageID() {
-        long messageId = (long) ((((double) System.currentTimeMillis() + 1000) * 4294967296.0) / 1000.0);
-        if (messageId <= lastOutgoingMessageId)
-            messageId = ++lastOutgoingMessageId;
-        while (messageId % 4 != 0)
-            messageId++;
-        lastOutgoingMessageId = messageId;
-        return messageId;
-    }
+    //endregion
 
     public void handshake() {
         if (handshaked) return;
@@ -272,6 +221,10 @@ public class NetworkManager {
         });
     }
 
+    public void setHandshaked(boolean flag) {
+        handshaked = flag;
+    }
+
     public void authByToken() {
         RPC.PM_userFull user = User.currentUser;
         if (user != null) {
@@ -297,10 +250,14 @@ public class NetworkManager {
         }
     }
 
-    // called from jni
-    public static void onConnectionDataReceived(int addr, int length) {
-        NetworkManager.getInstance().timeThread.lastKeepAliveTime = System.currentTimeMillis() / 1000;
-        NetworkManager.getInstance().getConnector().onConnectionDataReceived(SerializedBuffer.wrap(addr), length);
+    public void setAuthorized(boolean authorized) {
+        if (authorized) {
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.userAuthorized);
+            if (!this.authorized) {
+                sendFutureRequests();
+            }
+        }
+        this.authorized = authorized;
     }
 
     private boolean canSendApiRequests(final Packet packet, final Packet.OnResponseListener onComplete, final long messageID) {
@@ -397,36 +354,25 @@ public class NetworkManager {
             connectorService.cancelRequest(messageID, error);
     }
 
-
-    public static void onConnectionStateChanged(int state) {
-        Log.d(TAG, "ConnectionState=" + state);
-        if (state == 3) {
-            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didConnectedToServer));
-        } else {
-            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
-        }
-        NetworkManager.getInstance().connectionState = state;
+    public long generateMessageID() {
+        long messageId = (long) ((((double) System.currentTimeMillis() + 1000) * 4294967296.0) / 1000.0);
+        if (messageId <= lastOutgoingMessageId)
+            messageId = ++lastOutgoingMessageId;
+        while (messageId % 4 != 0)
+            messageId++;
+        lastOutgoingMessageId = messageId;
+        return messageId;
     }
 
     public boolean isConnected() {
-        return connectionState == 3;
+        return connectionState == ConnectionState.CONNECTED;
+    }
+
+    public boolean isNetworkConnected() {
+        return networkState == NetworkState.CONNECTED;
     }
 
     public boolean isAuthorized() {
         return authorized;
-    }
-
-    public void setAuthorized(boolean authorized) {
-        if (authorized) {
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.userAuthorized);
-            if (!this.authorized) {
-                sendFutureRequests();
-            }
-        }
-        this.authorized = authorized;
-    }
-
-    public void dispose(){
-        Instance = null;
     }
 }

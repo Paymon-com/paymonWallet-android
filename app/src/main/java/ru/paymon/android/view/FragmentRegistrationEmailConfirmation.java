@@ -150,11 +150,11 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
             isSendingAvailable = false;
 
             Utils.netQueue.postRunnable(() -> {
+                ApplicationLoader.applicationHandler.post(dialogProgress::show);
+
                 RPC.PM_checkEmailConfirmation checkEmailRequest = new RPC.PM_checkEmailConfirmation();
                 checkEmailRequest.login = User.currentUser.login;
                 checkEmailRequest.newEmail = email.getText().toString();
-
-                ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
                 final long requestID = NetworkManager.getInstance().sendRequest(checkEmailRequest, (response, error) -> {
                     if (error != null) {

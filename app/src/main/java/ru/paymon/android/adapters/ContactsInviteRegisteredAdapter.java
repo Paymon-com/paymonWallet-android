@@ -8,17 +8,21 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.paymon.android.R;
+import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.Contact;
+import ru.paymon.android.net.RPC;
 
 public class ContactsInviteRegisteredAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    ArrayList<Contact> registeredContacts;
+    public ArrayList<Contact> registeredContacts;
 
     public ContactsInviteRegisteredAdapter(ArrayList<Contact> registeredContacts) {
         this.registeredContacts = registeredContacts;
@@ -35,27 +39,31 @@ public class ContactsInviteRegisteredAdapter extends RecyclerView.Adapter<Recycl
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-
-
+        Contact contact = registeredContacts.get(position);
+        ContactsInviteRegisteredAdapter.ContactsInviteRegisteredViewHolder registeredViewHolder = ( ContactsInviteRegisteredAdapter.ContactsInviteRegisteredViewHolder) holder;
+        registeredViewHolder.name.setText(contact.name);
+        registeredViewHolder.phoneNumber.setText(contact.phone);
+        registeredViewHolder.avatar.setPhoto(new RPC.PM_photo());
+        registeredViewHolder.checkBox.setOnCheckedChangeListener((cbutton, newValue) -> contact.isChecked = newValue);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return registeredContacts.size();
     }
 
     private class ContactsInviteRegisteredViewHolder extends RecyclerView.ViewHolder {
-        private TextView userName;
+        private TextView name;
         private TextView phoneNumber;
         private CheckBox checkBox;
-        private ImageView imageView;
+        private CircleImageView avatar;
 
         private ContactsInviteRegisteredViewHolder(View itemView) {
             super(itemView);
-            userName = (TextView) itemView.findViewById(R.id.name_contact_invite_registered);
+            name = (TextView) itemView.findViewById(R.id.name_contact_invite_registered);
             phoneNumber = (TextView) itemView.findViewById(R.id.phone_contact_invite_registered);
             checkBox = (CheckBox) itemView.findViewById(R.id.checkbox_contact_invite_registered);
-            imageView = (ImageView) itemView.findViewById(R.id.image_contact_invite_registered);
+            avatar = (CircleImageView) itemView.findViewById(R.id.image_contact_invite_registered);
         }
     }
 

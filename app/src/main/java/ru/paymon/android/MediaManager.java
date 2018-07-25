@@ -1,10 +1,8 @@
 package ru.paymon.android;
 
-import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
-import android.nfc.Tag;
 import android.os.Environment;
 import android.util.Log;
 import android.util.LongSparseArray;
@@ -23,7 +21,6 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import ru.paymon.android.models.Photo;
 import ru.paymon.android.net.NetworkManager;
-import ru.paymon.android.net.Packet;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;

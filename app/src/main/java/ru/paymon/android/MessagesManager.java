@@ -3,12 +3,15 @@ package ru.paymon.android;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 
+import com.daimajia.androidviewhover.tools.Util;
+
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.Utils;
 
 public class MessagesManager implements NotificationManager.IListener {
     public int currentChatID = 0;
@@ -110,48 +113,50 @@ public class MessagesManager implements NotificationManager.IListener {
         } else {
             if (User.currentUser == null) return;
 
-            NetworkManager.getInstance().sendRequest(new RPC.PM_chatsAndMessages(), (response, error) -> {
-                if (response == null && error != null) {
-                    ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload));
-                    return;
-                }
+            Utils.netQueue.postRunnable(() -> {
+                NetworkManager.getInstance().sendRequest(new RPC.PM_chatsAndMessages(), (response, error) -> {
+                    if (response == null && error != null) {
+                        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload));
+                        return;
+                    }
 
-                RPC.PM_chatsAndMessages packet = (RPC.PM_chatsAndMessages) response;
+                    RPC.PM_chatsAndMessages packet = (RPC.PM_chatsAndMessages) response;
 
-                if (packet == null) return;
+                    if (packet == null) return;
 
-                for (RPC.Message msg : packet.messages)
-                    putMessage(msg);
+                    for (RPC.Message msg : packet.messages)
+                        putMessage(msg);
 
-                for (RPC.Group grp : packet.groups)
-                    GroupsManager.getInstance().putGroup(grp);
+                    for (RPC.Group grp : packet.groups)
+                        GroupsManager.getInstance().putGroup(grp);
 
-                for (RPC.UserObject usr : packet.users)
-                    UsersManager.getInstance().putUser(usr);
+                    for (RPC.UserObject usr : packet.users)
+                        UsersManager.getInstance().putUser(usr);
 
-                for (int i = 0; i < dialogsMessages.size(); i++) {
-                    LinkedList<RPC.Message> array = dialogsMessages.get(dialogsMessages.keyAt(i));
-                    Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.date, chatItem2.date) * -1);
-                    RPC.Message msg = array.getFirst();
-                    if (msg.to_id.user_id == User.currentUser.id)
-                        lastMessages.put(msg.from_id, msg.id);
-                    else
-                        lastMessages.put(msg.to_id.user_id, msg.id);
-                }
+                    for (int i = 0; i < dialogsMessages.size(); i++) {
+                        LinkedList<RPC.Message> array = dialogsMessages.get(dialogsMessages.keyAt(i));
+                        Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.date, chatItem2.date) * -1);
+                        RPC.Message msg = array.getFirst();
+                        if (msg.to_id.user_id == User.currentUser.id)
+                            lastMessages.put(msg.from_id, msg.id);
+                        else
+                            lastMessages.put(msg.to_id.user_id, msg.id);
+                    }
 
-                for (int i = 0; i < groupsMessages.size(); i++) {
-                    LinkedList<RPC.Message> array = groupsMessages.get(groupsMessages.keyAt(i));
-                    Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.date, chatItem2.date) * -1);
-                    RPC.Message msg = array.getFirst();
-                    if (msg.to_id.group_id == User.currentUser.id)
-                        lastGroupMessages.put(msg.from_id, msg.id);
-                    else
-                        lastGroupMessages.put(msg.to_id.group_id, msg.id);
-                }
+                    for (int i = 0; i < groupsMessages.size(); i++) {
+                        LinkedList<RPC.Message> array = groupsMessages.get(groupsMessages.keyAt(i));
+                        Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.date, chatItem2.date) * -1);
+                        RPC.Message msg = array.getFirst();
+                        if (msg.to_id.group_id == User.currentUser.id)
+                            lastGroupMessages.put(msg.from_id, msg.id);
+                        else
+                            lastGroupMessages.put(msg.to_id.group_id, msg.id);
+                    }
 
-                ApplicationLoader.applicationHandler.post(() ->
-                        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload)
-                );
+                    ApplicationLoader.applicationHandler.post(() ->
+                            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload)
+                    );
+                });
             });
         }
     }

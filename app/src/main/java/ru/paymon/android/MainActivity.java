@@ -9,6 +9,7 @@ import android.util.Log;
 
 import ru.paymon.android.components.BottomNavigationViewHelper;
 import ru.paymon.android.net.ConnectorService;
+import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.utils.AbsRuntimePermission;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChats;
@@ -86,6 +87,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
                 else
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentLoader.newInstance());
 
+//                NetworkManager.getInstance().connect();
                 final Intent connectorIntent = new Intent(ApplicationLoader.applicationContext, ConnectorService.class);
                 ApplicationLoader.applicationContext.startService(connectorIntent);
                 break;
@@ -125,8 +127,6 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.e("AAAA", requestCode + "");
-
         if (requestCode == 10) {
             if (resultCode == RESULT_OK) {
                 init();

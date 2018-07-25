@@ -14,7 +14,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.models.Contact;
 
 public class ContactsInviteUnregisteredAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    ArrayList<Contact> unregisteredContacts;
+    public ArrayList<Contact> unregisteredContacts;
 
     public ContactsInviteUnregisteredAdapter(ArrayList<Contact> unregisteredContacts){
         this.unregisteredContacts = unregisteredContacts;
@@ -23,7 +23,6 @@ public class ContactsInviteUnregisteredAdapter extends RecyclerView.Adapter<Recy
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_contacts_invite_unregistered, parent, false);
         RecyclerView.ViewHolder vh = new UnregisteredContactsViewHolder(view);
         return vh;
@@ -35,6 +34,7 @@ public class ContactsInviteUnregisteredAdapter extends RecyclerView.Adapter<Recy
         UnregisteredContactsViewHolder unregisteredContactsViewHolder = (UnregisteredContactsViewHolder) holder;
         unregisteredContactsViewHolder.name.setText(contact.name);
         unregisteredContactsViewHolder.phoneNumber.setText(contact.phone);
+        unregisteredContactsViewHolder.checkBox.setOnCheckedChangeListener((cbutton, newValue) -> contact.isChecked = newValue);
     }
 
     @Override

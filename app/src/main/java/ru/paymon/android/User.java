@@ -5,6 +5,15 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Base64;
+import android.util.Log;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.LinkedList;
 
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.SerializedStream;
@@ -28,6 +37,7 @@ public class User {
     public static final String CLIENT_SECURITY_PASSWORD_PREFERENCE = "CLIENT_SECURITY_PASSWORD_PREFERENCE";
     public static final String CLIENT_SECURITY_PASSWORD_VALUE_KEY = "CLIENT_SECURITY_PASSWORD_VALUE";
     public static final String CLIENT_SECURITY_PASSWORD_HINT_KEY = "CLIENT_SECURITY_PASSWORD_HINT";
+    public static final String CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY = "CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY";
 
     public static boolean CLIENT_BASIC_DATE_FORMAT_IS_24H;
     public static boolean CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY;
@@ -38,9 +48,39 @@ public class User {
     public static String CLIENT_SECURITY_PASSWORD_VALUE;
     public static String CLIENT_SECURITY_PASSWORD_HINT;
     public static Uri CLIENT_MESSAGES_NOTIFY_SOUND_FILE;
+    public static LinkedList<Integer> CLIENT_DO_NOT_DISTURB_CHATS_LIST;
     //endregion
 
+    private static String objectToString(Serializable object) {
+        String encoded = null;
+        try {
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
+            objectOutputStream.writeObject(object);
+            objectOutputStream.close();
+            encoded = new String(Base64.encodeToString(byteArrayOutputStream.toByteArray(),0));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return encoded;
+    }
 
+    @SuppressWarnings("unchecked")
+    private static Serializable stringToObject(String string){
+        byte[] bytes = Base64.decode(string,0);
+        Serializable object = null;
+        try {
+            ObjectInputStream objectInputStream = new ObjectInputStream( new ByteArrayInputStream(bytes) );
+            object = (Serializable)objectInputStream.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (ClassCastException e) {
+            e.printStackTrace();
+        }
+        return object;
+    }
 
     public static void loadConfig() {
         SharedPreferences userPreferences = ApplicationLoader.applicationContext.getSharedPreferences(USER_CONFIG, Context.MODE_PRIVATE);
@@ -72,6 +112,8 @@ public class User {
         CLIENT_SECURITY_PASSWORD_IS_ENABLED = clientPreferences.getBoolean(CLIENT_SECURITY_PASSWORD_ENABLED_CHECK, false);
         CLIENT_SECURITY_PASSWORD_VALUE = clientPreferences.getString(CLIENT_SECURITY_PASSWORD_VALUE_KEY, null);
         CLIENT_SECURITY_PASSWORD_HINT = clientPreferences.getString(CLIENT_SECURITY_PASSWORD_HINT_KEY, null);
+        String doNotDisturbListString = clientPreferences.getString(CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY, null);
+        CLIENT_DO_NOT_DISTURB_CHATS_LIST = doNotDisturbListString == null ? new LinkedList<>() : (LinkedList<Integer>) stringToObject(doNotDisturbListString);
     }
 
     public static void saveConfig() {
@@ -98,6 +140,8 @@ public class User {
 
         editor.putString(CLIENT_SECURITY_PASSWORD_VALUE_KEY, CLIENT_SECURITY_PASSWORD_VALUE);
         editor.putString(CLIENT_SECURITY_PASSWORD_HINT_KEY, CLIENT_SECURITY_PASSWORD_HINT);
+        if(CLIENT_DO_NOT_DISTURB_CHATS_LIST != null)
+        editor.putString(CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY, objectToString(CLIENT_DO_NOT_DISTURB_CHATS_LIST));
 
         editor.apply();
     }

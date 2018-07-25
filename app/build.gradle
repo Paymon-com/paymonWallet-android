@@ -9,6 +9,9 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true
+        vectorDrawables.useSupportLibrary = true
 
         externalNativeBuild {
             cmake {
@@ -19,7 +22,6 @@ android {
         ndk {
             abiFilters 'armeabi-v7a'
         }
-        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         release {
@@ -53,6 +55,8 @@ dependencies {
 
     implementation 'com.davidecirillo.multichoicerecyclerview:multichoicerecyclerview:2.3.0'
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.10'
-//    implementation 'com.nightonke:blurlockview:1.0.0'
-
+    implementation 'io.requery:sqlite-android:3.24.0'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'com.daimajia.androidanimations:library:1.1.2@aar'
+    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
 }

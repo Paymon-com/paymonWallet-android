@@ -809,4 +809,20 @@ public:
     }
 };
 
+class PM_getUsersByPhoneNumber : public Packet {
+public:
+    static const uint svuid = 517290247;
+
+    std::string phones;
+
+    void readParams(SerializedBuffer *stream, bool &error) override {
+        phones = stream->readString(&error);
+    }
+
+    void serializeToStream(SerializedBuffer *stream) override {
+        stream->writeInt32(svuid);
+        stream->writeString(phones);
+    }
+};
+
 #endif //PAYMONSERVEREPOLL_RPC_H

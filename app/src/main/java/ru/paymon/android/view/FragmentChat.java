@@ -9,6 +9,8 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,20 +19,26 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
+import ru.paymon.android.DBHelper;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.adapters.AttachmentsAdapter;
 import ru.paymon.android.adapters.MessagesAdapter;
 import ru.paymon.android.components.CircleImageView;
+import ru.paymon.android.models.attachments.AttachmentItem;
+import ru.paymon.android.models.attachments.AttachmentMessages;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
+import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 
@@ -43,6 +51,9 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private ArrayList<RPC.UserObject> groupUsers;
     private boolean isGroup;
     private boolean loadingMessages;
+    private boolean isForward;
+    private LinkedList<Long> forwardMessages;
+    private AttachmentsAdapter attachmentsAdapter;
 
     public static synchronized FragmentChat newInstance() {
         return new FragmentChat();
@@ -55,10 +66,16 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         final Bundle bundle = getArguments();
         if (bundle != null) {
-            chatID = bundle.getInt("chat_id");
-            if (bundle.containsKey("groupUsers")) {
-                isGroup = true;
-                groupUsers = bundle.getParcelableArrayList("groupUsers");
+            if (bundle.containsKey("chat_id")) {
+                chatID = bundle.getInt("chat_id");
+                if (bundle.containsKey("groupUsers")) {
+                    isGroup = true;
+                    groupUsers = bundle.getParcelableArrayList("groupUsers");
+                }
+            }
+            if (bundle.containsKey(FORWARD_MESSAGES_KEY)) {
+                isForward = true;
+                forwardMessages = (LinkedList<Long>) bundle.getSerializable(FORWARD_MESSAGES_KEY);
             }
         }
         MessagesManager.getInstance().currentChatID = chatID;
@@ -83,7 +100,33 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         initChat(defaultCustomView);
 
+        if (isForward) {
+            RecyclerView recyclerViewAttachments = (RecyclerView) view.findViewById(R.id.recViewAttachments);
+            recyclerViewAttachments.setHasFixedSize(true);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+            recyclerViewAttachments.setLayoutManager(layoutManager);
+            LinkedList<AttachmentItem> attachmentItems = new LinkedList<>();
+            AttachmentMessages attachmentMessages = new AttachmentMessages();
+            attachmentMessages.messages = forwardMessages;
+            attachmentItems.add(attachmentMessages);
+            attachmentsAdapter = new AttachmentsAdapter(attachmentItems);
+            recyclerViewAttachments.setAdapter(attachmentsAdapter);
+        }
+
         MessagesManager.getInstance().loadMessages(chatID, 15, 0, isGroup);
+
+//        LongSparseArray<RPC.Message> messageLongSparseArray = DBHelper.getAllMessages();
+//        for (int i =0 ; i< messageLongSparseArray.size(); i++) {
+//            RPC.Message message = messageLongSparseArray.get(messageLongSparseArray.keyAt(i));
+//            message.text = "HUI";
+//        }
+//        DBHelper.updateMessages(messageLongSparseArray);
+//        LongSparseArray<RPC.Message> mss = DBHelper.getAllMessages();
+//        for (int i =0 ; i< mss.size(); i++) {
+//            RPC.Message message = mss.get(mss.keyAt(i));
+//            Log.e("AAA", message.text);
+//        }
+//        DBHelper.updateMessages(messageLongSparseArray);
 
         return view;
     }
@@ -128,7 +171,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
                     }
                 });
 
-        sendButton.setOnClickListener((view) -> {
+        sendButton.setOnClickListener((view) -> { //TODO:отправка прикрепленных файлов\пересланных сообщений
             Utils.netQueue.postRunnable(() -> {
                 final String messageText = messageInput.getText().toString();
 
@@ -229,10 +272,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
             if (messagesAdapter == null || messagesAdapter.messageIDs == null) return;
 
-            if (messagesAdapter.messageIDs.size() < 1)
-                messagesAdapter.messageIDs.addAll(0, messages);
-            else
-                messagesAdapter.messageIDs.addAll(messages);
+            messagesAdapter.messageIDs.addAll(0, messages);
 
             messagesAdapter.notifyDataSetChanged();
             if (!onScroll) {

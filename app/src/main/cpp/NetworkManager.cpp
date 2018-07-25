@@ -558,7 +558,7 @@ void NetworkManager::cleanUp() {
 //
 //        for (std::map<uint32_t, Datacenter *>::iterator iter = datacenters.begin(); iter != datacenters.end(); iter++) {
 //            iter->second->recreateSessions();
-//            iter->second->authorized = false;
+//            iter->second->isAuthorized = false;
 //        }
 //        sessionsToDestroy.clear();
 //        currentUserId = 0;
@@ -1055,7 +1055,7 @@ void NetworkManager::processServerResponse(Packet *message, int64_t messageId, i
 //                                    cleanUp();
 //                                }
 //                            } else {
-//                                datacenter->authorized = false;
+//                                datacenter->isAuthorized = false;
 //                                saveConfig();
 //                                discardResponse = true;
 //                                if (request->connectionType & ConnectionTypeDownload || request->connectionType & ConnectionTypeUpload) {
@@ -1795,7 +1795,7 @@ void NetworkManager::cancelRequest(int32_t token, bool notifyServer) {
 //            }
 //            iter++;
 //            continue;
-//        } else if (!(request->requestFlags & RequestFlagEnableUnauthorized) && !requestDatacenter->authorized && request->datacenterId != DEFAULT_DATACENTER_ID && request->datacenterId != currentDatacenterId) {
+//        } else if (!(request->requestFlags & RequestFlagEnableUnauthorized) && !requestDatacenter->isAuthorized && request->datacenterId != DEFAULT_DATACENTER_ID && request->datacenterId != currentDatacenterId) {
 //            if (std::find(unauthorizedDatacenters.begin(), unauthorizedDatacenters.end(), requestDatacenter) == unauthorizedDatacenters.end()) {
 //                unauthorizedDatacenters.push_back(requestDatacenter);
 //            }
@@ -1991,7 +1991,7 @@ void NetworkManager::cancelRequest(int32_t token, bool notifyServer) {
 //            }
 //            iter++;
 //            continue;
-//        } else if (!(request->requestFlags & RequestFlagEnableUnauthorized) && !requestDatacenter->authorized && request->datacenterId != DEFAULT_DATACENTER_ID && request->datacenterId != currentDatacenterId) {
+//        } else if (!(request->requestFlags & RequestFlagEnableUnauthorized) && !requestDatacenter->isAuthorized && request->datacenterId != DEFAULT_DATACENTER_ID && request->datacenterId != currentDatacenterId) {
 //            if (std::find(unauthorizedDatacenters.begin(), unauthorizedDatacenters.end(), requestDatacenter) == unauthorizedDatacenters.end()) {
 //                unauthorizedDatacenters.push_back(requestDatacenter);
 //            }

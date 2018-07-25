@@ -6,21 +6,18 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
-import android.os.AsyncTask;
 import android.os.Binder;
-import android.os.Bundle;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
@@ -30,6 +27,11 @@ import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.net.ClassStore;
+import ru.paymon.android.net.ConnectorService;
+import ru.paymon.android.net.NetworkManager;
+import ru.paymon.android.net.Packet;
+import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
@@ -42,8 +44,7 @@ import static ru.paymon.android.net.RPC.ERROR_AUTH_TOKEN;
 import static ru.paymon.android.net.RPC.ERROR_KEY;
 import static ru.paymon.android.net.RPC.ERROR_SPAMMING;
 
-
-public class ConnectorService extends Service implements NotificationManager.IListener {
+public class ConnectorService extends Service implements NotificationManager.IListener{
     public HashMap<Long, Packet.OnResponseListener> requestsMap = new HashMap<>(2);
     public long lastKeepAlive;
     public String ACTION = "ACTION_NOTIFY_BUTTON";
@@ -56,144 +57,66 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     private RPC.Message msg;
     private boolean receiverRegistered;
 
-
-    @Override
-    public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
-        if (id == NotificationManager.NotificationEvent.didConnectedToServer) {
-            NetworkManager.getInstance().handshake();
-        } else if (id == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-            NetworkManager.getInstance().authByToken();
-//            if (Utils.isNetworkConnected(this)) {
-//                if (User.ethereumPassword != null && !User.ethereumPassword.isEmpty()) {
-//                    Log.d(Config.TAG, "onCreate: " + "Load Ethereum wallet");
-//                    Utils.stageQueue.postRunnable(() -> {
-//                        if (User.currentUser != null) {
-//                            boolean loaded = NewEthereumLibrary.getInstance().createOrLoadWallet(User.currentUser.id, User.ethereumPassword);
-//                            loadEthereumWallet();
-//                        }
-//                    });
-//                }
-//            } else {
-//                Toast.makeText(this, R.string.check_connected_to_server, Toast.LENGTH_SHORT).showCD();
-//            }
+    //region binding
+    public class LocalBinder extends Binder {
+        public ConnectorService getService() {
+            return ConnectorService.this;
         }
     }
 
-    private void loadEthereumWallet() {
-        Log.d(Config.TAG, "loadEthereumWallet");
-        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didLoadEthereumWallet));
-//        User.ethereumRestoreBackupOrLoad = false;
-    }
-
-    @Override
-    public void onCreate() {
-        Log.d(Config.TAG, "Connector service created");
-        super.onCreate();
-//        ApplicationLoader.init();
-        notificationManager = (android.app.NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
-        registerReceiver();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didConnectedToServer);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
-    }
-
-    @Override
-    public void onDestroy() {
-        Log.d(Config.TAG, "Connector service destroyed");
-        unregisterReceiver();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didConnectedToServer);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
-        super.onDestroy();
-    }
-
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d(Config.TAG, "Connector service started");
-        getConnection();
-        return START_STICKY;
-    }
-
+    @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        Log.d(Config.TAG, "Connector service bound");
         return binder;
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        Log.d(Config.TAG, "Connector service unbound");
         return super.onUnbind(intent);
+    }
+    //endregion
+
+    //region life cycle
+    @Override
+    public void onCreate() {
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didConnectedToServer);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
+        super.onCreate();
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
     }
 
     @Override
     public void onTaskRemoved(Intent rootIntent) {
-        Log.d(Config.TAG, "Connector service task removed");
-        if (receiverRegistered)
-            unregisterReceiver(broadcastReceiver);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didConnectedToServer);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
         super.onTaskRemoved(rootIntent);
     }
 
-    public static void getConnection() {
-        new ConnectorTask().execute();
+    @Override
+    public void onDestroy() {
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didConnectedToServer);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
+        super.onDestroy();
     }
+    //endregion
 
-    public static class ConnectorTask extends AsyncTask<Void, Void, Void> {
-        @Override
-        protected Void doInBackground(Void... params) {
-            if (NetworkManager.getInstance().getConnector() == null) {
-                NetworkManager.getInstance().bindServices();
-            } else if (NetworkManager.getInstance().connectionState != 3 && !NetworkManager.getInstance().isConnected()) {
-                NetworkManager.getInstance().connect();
-            }
-            try {
-                TimeUnit.SECONDS.sleep(10);
-                getConnection();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            return null;
+    @Override
+    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
+        if (event == NotificationManager.NotificationEvent.didConnectedToServer) {
+            NetworkManager.getInstance().handshake();
+        } else if (event == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
+            NetworkManager.getInstance().authByToken();
+        } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED){
+            NetworkManager.getInstance().connect();
+        } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED){
+
         }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-        }
-    }
-
-    void registerReceiver() {
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.d(Config.TAG, "Notify accepted action: " + intent.getStringExtra(ACTION));
-                String code = intent.getStringExtra(ACTION);
-
-                if (code.equals("close")) {
-                    Log.d(Config.TAG, "Notify: " + NOTIFY_ID + " clicked to reply button");
-                    Intent actIntent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-                    actIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    actIntent.putExtra("open_dialog", "open");
-                    Bundle bundle = new Bundle();
-                    if (msg.to_id.user_id != 0) {
-                        bundle.putInt("chat_id", msg.from_id);
-                    } else if (msg.to_id.group_id != 0) {
-                        bundle.putInt("chat_id", msg.to_id.group_id);
-                        bundle.putBoolean("isGroup", true);
-                    }
-                    actIntent.putExtra("bundleChatID", bundle);
-                    notificationManager.cancel(NOTIFY_ID);
-                    startActivity(actIntent);
-                }
-            }
-        };
-        IntentFilter filter = new IntentFilter(BROADCAST_ACTION);
-        registerReceiver(broadcastReceiver, filter);
-        receiverRegistered = true;
-    }
-
-    void unregisterReceiver() {
-        unregisterReceiver(broadcastReceiver);
-        receiverRegistered = false;
     }
 
     private void showNotify(RPC.Message msg) {
@@ -274,12 +197,6 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
     }
 
-    public class LocalBinder extends Binder {
-        public ConnectorService getService() {
-            return ConnectorService.this;
-        }
-    }
-
     public long sendRequest(final Packet packet) {
         return sendRequest(packet, null, generateMessageID());
     }
@@ -325,88 +242,6 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
     private synchronized void sendData(SerializedBuffer buffer, long messageID) {
         NetworkManager.getInstance().native_sendData(buffer.getAddress(), 0, buffer.limit());
-    }
-
-    public void onConnectionDataReceived(SerializedBuffer data, int length) {
-        if (length == 4) {
-            int code = data.readInt32(true);
-            Log.e(Config.TAG, "error = " + code);
-            NetworkManager.getInstance().reconnect();
-            return;
-        }
-        int mark = data.position();
-        long keyId;
-
-        try {
-            keyId = data.readInt64(true);
-        } catch (RuntimeException e) {
-            Log.e(Config.TAG, "onConnectionDataReceived: ERROR 1");
-            NetworkManager.getInstance().reconnect();
-            return;
-        }
-        if (keyId == 0) {
-            long messageID;
-            int messageLength;
-
-            try {
-                messageID = data.readInt64(true);
-                messageLength = data.readInt32(true);
-            } catch (RuntimeException e) {
-                Log.e(Config.TAG, "onConnectionDataReceived: ERROR 2");
-                NetworkManager.getInstance().reconnect();
-                return;
-            }
-
-//            if (NetworkManager.getInstance().isHandshaked()) {
-//                if (data.remaining() - messageLength >= 0) {
-//                    data.skip(messageLength);
-////                    NetworkManager.getInstance().reconnect();
-//                    return;
-//                }
-//            }
-            if (messageLength != data.remaining()) {
-                Log.e(Config.TAG, "connection received incorrect message length");
-                NetworkManager.getInstance().reconnect();
-                return;
-            }
-
-            final Packet object = ClassStore.Instance().TLdeserialize(data, data.readInt32(true), true);
-            if (object != null) {
-                Log.d(Config.TAG, "connection received object " + object.getClass().getName() + ", len " + messageLength + ", ID=" + messageID);
-                processServerResponse(object, messageID/*, messageSeqNo, messageServerSalt, connection, 0, 0*/);
-            }
-        } else {
-//            byte[] ba = new byte[data.limit()];
-//            System.arraycopy(data.buffer.array(), data.buffer.arrayOffset(), ba, 0, data.buffer.limit());
-//            Log.d("paymon-dbg-ocdr", Utils.bytesToHexString(ba));
-            int i = 24 + 12;
-            boolean b = KeyGenerator.getInstance().decryptMessage(keyId, data.getAddress(), length - 24, mark);
-            Log.d(Config.TAG, "onConnectionDataReceived: " + i + " " + b);
-            if (length < i || !b) {
-                Log.e(Config.TAG, "Can't decrypt packet");
-                NetworkManager.getInstance().reconnect();
-                return;
-            }
-
-//            data.position(mark + 20 + 8 + 4);
-            data.position(mark + 24);
-            long messageID = 0;
-            int messageLength = 0;
-
-            try {
-                messageID = data.readInt64(true);
-                messageLength = data.readInt32(true);
-            } catch (RuntimeException e) {
-//                NetworkManager.getInstance().reconnect();
-                return;
-            }
-//            Packet object = deserialize(nullptr, messageLength, data);
-            final Packet object = ClassStore.Instance().TLdeserialize(data, data.readInt32(true), true);
-            if (object != null) {
-                Log.d(Config.TAG, "connection received object " + object + ", len " + messageLength + ", ID=" + messageID);
-                processServerResponse(object, messageID/*, messageSeqNo, messageServerSalt, connection, 0, 0*/);
-            }
-        }
     }
 
     // TODO: сделать возможным передачу сообщения вместе с ошибкой
@@ -516,6 +351,88 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         NetworkManager.getInstance().processRequest();
     }
 
+    public void onConnectionDataReceived(SerializedBuffer data, int length) {
+        if (length == 4) {
+            int code = data.readInt32(true);
+            Log.e(Config.TAG, "error = " + code);
+            NetworkManager.getInstance().reconnect();
+            return;
+        }
+        int mark = data.position();
+        long keyId;
+
+        try {
+            keyId = data.readInt64(true);
+        } catch (RuntimeException e) {
+            Log.e(Config.TAG, "onConnectionDataReceived: ERROR 1");
+            NetworkManager.getInstance().reconnect();
+            return;
+        }
+        if (keyId == 0) {
+            long messageID;
+            int messageLength;
+
+            try {
+                messageID = data.readInt64(true);
+                messageLength = data.readInt32(true);
+            } catch (RuntimeException e) {
+                Log.e(Config.TAG, "onConnectionDataReceived: ERROR 2");
+                NetworkManager.getInstance().reconnect();
+                return;
+            }
+
+//            if (NetworkManager.getInstance().isHandshaked()) {
+//                if (data.remaining() - messageLength >= 0) {
+//                    data.skip(messageLength);
+////                    NetworkManager.getInstance().reconnect();
+//                    return;
+//                }
+//            }
+            if (messageLength != data.remaining()) {
+                Log.e(Config.TAG, "connection received incorrect message length");
+                NetworkManager.getInstance().reconnect();
+                return;
+            }
+
+            final Packet object = ClassStore.Instance().TLdeserialize(data, data.readInt32(true), true);
+            if (object != null) {
+                Log.d(Config.TAG, "connection received object " + object.getClass().getName() + ", len " + messageLength + ", ID=" + messageID);
+                processServerResponse(object, messageID/*, messageSeqNo, messageServerSalt, connection, 0, 0*/);
+            }
+        } else {
+//            byte[] ba = new byte[data.limit()];
+//            System.arraycopy(data.buffer.array(), data.buffer.arrayOffset(), ba, 0, data.buffer.limit());
+//            Log.d("paymon-dbg-ocdr", Utils.bytesToHexString(ba));
+            int i = 24 + 12;
+            boolean b = KeyGenerator.getInstance().decryptMessage(keyId, data.getAddress(), length - 24, mark);
+            Log.d(Config.TAG, "onConnectionDataReceived: " + i + " " + b);
+            if (length < i || !b) {
+                Log.e(Config.TAG, "Can't decrypt packet");
+                NetworkManager.getInstance().reconnect();
+                return;
+            }
+
+//            data.position(mark + 20 + 8 + 4);
+            data.position(mark + 24);
+            long messageID = 0;
+            int messageLength = 0;
+
+            try {
+                messageID = data.readInt64(true);
+                messageLength = data.readInt32(true);
+            } catch (RuntimeException e) {
+//                NetworkManager.getInstance().reconnect();
+                return;
+            }
+//            Packet object = deserialize(nullptr, messageLength, data);
+            final Packet object = ClassStore.Instance().TLdeserialize(data, data.readInt32(true), true);
+            if (object != null) {
+                Log.d(Config.TAG, "connection received object " + object + ", len " + messageLength + ", ID=" + messageID);
+                processServerResponse(object, messageID/*, messageSeqNo, messageServerSalt, connection, 0, 0*/);
+            }
+        }
+    }
+
     public void cancelRequest(long messageID, boolean error) {
         Packet.OnResponseListener listener = requestsMap.get(messageID);
         String errorText = "";
@@ -533,9 +450,5 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         if (error) {
             Toast.makeText(ApplicationLoader.applicationContext, errorText, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    public boolean isConnected() {
-        return false;
     }
 }

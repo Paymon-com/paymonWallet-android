@@ -3,6 +3,7 @@ package ru.paymon.android.adapters;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
@@ -13,10 +14,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidviewhover.tools.Util;
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 
 import java.util.LinkedList;
@@ -36,10 +39,13 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.MultiChoiceHelper;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.view.FragmentChat;
+import ru.paymon.android.view.FragmentChats;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder> {
+    public static String FORWARD_MESSAGES_KEY = "forward_messages";
     public LinkedList<Long> messageIDs;
     private LinkedList<Long> checkedMessageIDs;
     private boolean isGroup;
@@ -206,12 +212,20 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
     }
 
     private void init() {
-        //TODO: убрать активити, извлечь активити из ApplicationContext
         final View selectedCustomView = activity.getLayoutInflater().inflate(R.layout.selected_messages_action_bar, null);
         final TextView textViewSelectedTitle = (TextView) selectedCustomView.findViewById(R.id.selected_title);
         final ImageView imageViewSelectedDelete = (ImageView) selectedCustomView.findViewById(R.id.selected_delete);
         final ImageView imageViewSelectedCopy = (ImageView) selectedCustomView.findViewById(R.id.selected_copy);
+        final ImageView imageViewSelectedForward = (ImageView) selectedCustomView.findViewById(R.id.selected_forward);
         final ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+
+        imageViewSelectedForward.setOnClickListener((view -> {
+            FragmentChats fragmentChats = new FragmentChats();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(FORWARD_MESSAGES_KEY, checkedMessageIDs);
+            fragmentChats.setArguments(bundle);
+            Utils.replaceFragmentWithAnimationSlideFade(activity.getSupportFragmentManager(), fragmentChats);
+        }));
 
         imageViewSelectedDelete.setOnClickListener((view) -> {
             for (long msgid : checkedMessageIDs) {

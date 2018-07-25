@@ -14,19 +14,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TabHost;
 
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.ContactsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.ContactsInviteRegisteredAdapter;
 import ru.paymon.android.adapters.ContactsInviteUnregisteredAdapter;
+import ru.paymon.android.models.Contact;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentContactsInvite extends Fragment {
-    private static final String regTabTag = "registered";
-    private static final String unregTabTag = "unregistered";
+    private static final String REG_TAB_TAG = "registered";
+    private static final String UNREG_TAB_TAG = "unregistered";
     private static FragmentContactsInvite instance;
-    private TabHost tabHost;
     private String currentTabTag;
+    private ContactsInviteRegisteredAdapter contactsInviteRegisteredAdapter;
+    private ContactsInviteUnregisteredAdapter contactsInviteUnregisteredAdapter;
+    private DialogProgress dialogProgress;
 
     public static synchronized FragmentContactsInvite newInstance() {
         instance = new FragmentContactsInvite();
@@ -42,6 +44,7 @@ public class FragmentContactsInvite extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ContactsManager.newInstance(dialogProgress);
     }
 
     @Nullable
@@ -49,42 +52,44 @@ public class FragmentContactsInvite extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts_invite, container, false);
 
+        TabHost tabHost = view.findViewById(R.id.tabHost);
         RecyclerView recyclerViewReg = (RecyclerView) view.findViewById(R.id.recViewReg);
         RecyclerView recyclerViewUnreg = (RecyclerView) view.findViewById(R.id.recViewUnreg);
 
+        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress.setCancelable(true);
+
         recyclerViewReg.setHasFixedSize(true);
-        recyclerViewUnreg.setHasFixedSize(true);
         recyclerViewReg.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        recyclerViewUnreg.setHasFixedSize(true);
         recyclerViewUnreg.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ContactsInviteRegisteredAdapter contactsInviteRegisteredAdapter = new ContactsInviteRegisteredAdapter(ContactsManager.getInstance().getRegistered());
-        ContactsInviteUnregisteredAdapter contactsInviteUnregisteredAdapter = new ContactsInviteUnregisteredAdapter(ContactsManager.getInstance().getUnregistered());
-
+        contactsInviteRegisteredAdapter = new ContactsInviteRegisteredAdapter(ContactsManager.getInstance(dialogProgress).registeredContacts);
         recyclerViewReg.setAdapter(contactsInviteRegisteredAdapter);
+
+        contactsInviteUnregisteredAdapter = new ContactsInviteUnregisteredAdapter(ContactsManager.getInstance(dialogProgress).unregisteredContacts);
         recyclerViewUnreg.setAdapter(contactsInviteUnregisteredAdapter);
 
-        tabHost = view.findViewById(R.id.tabHost);
+        tabHost.setup();
+
+        TabHost.TabSpec tabSpec = tabHost.newTabSpec(REG_TAB_TAG);
+        tabSpec.setContent(R.id.linearLayout);
+        tabSpec.setIndicator(getString(R.string.invite_registered));
+        tabHost.addTab(tabSpec);
+
+        tabSpec = tabHost.newTabSpec(UNREG_TAB_TAG);
+        tabSpec.setContent(R.id.linearLayout2);
+        tabSpec.setIndicator(getString(R.string.invite_unregistered));
+        tabHost.addTab(tabSpec);
 
         tabHost.setOnTabChangedListener((tag) -> {
             currentTabTag = tag;
             getActivity().invalidateOptionsMenu();
         });
 
-        tabHost.setup();
-
-        TabHost.TabSpec tabSpec = tabHost.newTabSpec(unregTabTag);
-        tabSpec.setContent(R.id.linearLayout2);
-        String inviteUnregistered = getString(R.string.invite_unregistered);
-        tabSpec.setIndicator(inviteUnregistered);
-        tabHost.addTab(tabSpec);
-
-        tabSpec = tabHost.newTabSpec(regTabTag);
-        tabSpec.setContent(R.id.linearLayout);
-        String inviteRegistered = getString(R.string.invite_registered);
-        tabSpec.setIndicator(inviteRegistered);
-        tabHost.addTab(tabSpec);
-        tabHost.setCurrentTab(0);
-
+        tabHost.setCurrentTab(1);
+        tabHost.setCurrentTabByTag(REG_TAB_TAG);
         return view;
     }
 
@@ -104,13 +109,12 @@ public class FragmentContactsInvite extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        System.out.println(currentTabTag);
         switch (item.getItemId()) {
             case R.id.inviteReg:
-                invite();
+                inviteReg();
                 break;
             case R.id.inviteUnreg:
-                invite();
+                inviteUnreg();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -123,21 +127,30 @@ public class FragmentContactsInvite extends Fragment {
     }
 
     private void selectMenu(Menu menu) {
+        if (currentTabTag == null) return;
         menu.clear();
         MenuInflater inflater = getActivity().getMenuInflater();
 
-        if (currentTabTag.equals(regTabTag)) {
+        if (currentTabTag.equals(REG_TAB_TAG)) {
             inflater.inflate(R.menu.contacts_reg_invite_menu, menu);
-        } else if (currentTabTag.equals(unregTabTag)) {
+        } else if (currentTabTag.equals(UNREG_TAB_TAG)) {
             inflater.inflate(R.menu.contacts_unreg_invite_menu, menu);
         }
     }
 
-    private void invite() {
-        if (currentTabTag.equals(regTabTag)) {
-            System.out.println("THIS IS REG");
-        } else if (currentTabTag.equals(unregTabTag)) {
-            System.out.println("THIS IS UNREG");
+    private void inviteReg() {
+        for (Contact contact: contactsInviteRegisteredAdapter.registeredContacts) {
+            if(contact.isChecked){
+                //TODO:send invite request
+            }
+        }
+    }
+
+    private void inviteUnreg() {
+        for (Contact contact: contactsInviteUnregisteredAdapter.unregisteredContacts) {
+            if(contact.isChecked){
+                //TODO:send invite request
+            }
         }
     }
 }

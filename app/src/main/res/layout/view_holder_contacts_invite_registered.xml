@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="130dp">
 
-    <ImageView
+    <ru.paymon.android.components.CircleImageView
         android:id="@+id/image_contact_invite_registered"
         android:layout_width="100dp"
         android:layout_height="0dp"

@@ -22,7 +22,8 @@
         android:roundIcon="@mipmap/ic_launcher_paymon"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        android:installLocation="internalOnly">
+        android:installLocation="internalOnly"
+        tools:replace="android:icon">
 
         <activity
             android:name=".MainActivity"
@@ -63,6 +64,11 @@
             </intent-filter>
         </service>
 
-
+        <receiver android:name=".broadcastreceivers.NetworkStateReceiver"
+            android:enabled="true" android:label="NetworkStateReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
     </application>
 </manifest>

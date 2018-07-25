@@ -16,10 +16,27 @@
         android:divider="@android:drawable/screen_background_light_transparent"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"
-        app:layout_constraintBottom_toTopOf="@+id/chat_rl"
+        app:layout_constraintBottom_toTopOf="@+id/attachments"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/attachments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="30dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/chat_rl"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="#D9D9D9">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recViewAttachments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
 
     <android.support.constraint.ConstraintLayout
@@ -31,6 +48,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/attach_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:srcCompat="@drawable/ic_attach_file_black_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <hani.momanii.supernova_emoji_library.helper.EmojiconEditText
             android:id="@+id/input_edit_text"
@@ -56,7 +83,7 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/smilesButton"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/attach_button"
             app:layout_constraintTop_toTopOf="parent" />
         <!--emojicon:emojiconSize="28sp"-->
 
