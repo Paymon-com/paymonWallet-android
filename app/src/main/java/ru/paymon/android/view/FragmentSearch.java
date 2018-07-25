@@ -22,6 +22,8 @@ import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.adapters.ChatsSearchAdapter;
+import ru.paymon.android.adapters.MessagesSearchAdapter;
 import ru.paymon.android.adapters.ChatsAdapter;
 import ru.paymon.android.adapters.ChatsSearchAdapter;
 import ru.paymon.android.adapters.MessagesSearchAdapter;
@@ -56,8 +58,8 @@ public class FragmentSearch extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        RecyclerView recyclerViewChats = (RecyclerView) view.findViewById(R.id.recViewChats);
-        RecyclerView recyclerViewMessages = (RecyclerView) view.findViewById(R.id.recViewMessages);
+        RecyclerView recyclerViewChats = (RecyclerView) view.findViewById(R.id.recViewReg);
+        RecyclerView recyclerViewMessages = (RecyclerView) view.findViewById(R.id.recViewUnreg);
         EditText editText = view.findViewById(R.id.edit_text_search);
 
         LinkedList<ChatsSearchItem> listChats = new LinkedList<>();

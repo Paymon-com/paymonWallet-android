@@ -25,10 +25,10 @@ import android.view.animation.RotateAnimation;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import com.daimajia.androidanimations.library.fading_entrances.FadeInLeftAnimator;
 import com.daimajia.androidviewhover.tools.Util;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -53,15 +53,18 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
-
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
+
+import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 
 public class FragmentChats extends Fragment implements NotificationManager.IListener {
     private static FragmentChats instance;
     private TextView hintView;
     private boolean isLoading;
     private LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
+    private boolean isForward;
+    private LinkedList<Long> forwardMessages;
+
     private LinkedList<ChatsItem> dialogItemsList = new LinkedList<>();
     private LinkedList<ChatsGroupItem> groupItemsList = new LinkedList<>();
     private ProgressBar progressBarAllChats;
@@ -73,9 +76,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     private ChatsAdapter chatsAdapter;
     private DialogsAdapter dialogsAdapter;
     private GroupsAdapter groupsAdapter;
-    private boolean isForward;
-    private LinkedList<Long> forwardMessages;
-
 
     public static synchronized FragmentChats newInstance() {
         instance = new FragmentChats();
@@ -99,6 +99,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
             }
         }
     }
+
 
     @Nullable
     @Override
@@ -155,7 +156,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
         initChats();
 
-//        getActivity().invalidateOptionsMenu();
+        getActivity().invalidateOptionsMenu();
         setHasOptionsMenu(true);
 
         return viewPager;
@@ -190,7 +191,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 //                })
 //        );
 
-        chatsAdapter = new ChatsAdapter(chatsItemsList);
+        chatsAdapter = new ChatsAdapter(chatsItemsList, getActivity(), null);
         chatsAllRecyclerView.setHasFixedSize(true);
         chatsAllRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsAllRecyclerView.setAdapter(chatsAdapter);
@@ -223,7 +224,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
             Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_chats));
         else
             Utils.setActionBarWithTitle(getActivity(), "Выберите получателя"); //TODO:string
-
         Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
@@ -240,14 +240,11 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
-        if (id == NotificationManager.NotificationEvent.dialogsNeedReload) {
-            if (progressBarAllChats != null)
-                progressBarAllChats.setVisibility(View.GONE);
         Utils.stageQueue.postRunnable(() -> {
             if (id == NotificationManager.NotificationEvent.dialogsNeedReload) {
                 ApplicationLoader.applicationHandler.post(() ->{
-                    if (progressBar != null)
-                        progressBar.setVisibility(View.GONE);
+                    if (progressBarAllChats != null)
+                        progressBarAllChats.setVisibility(View.GONE);
                 });
 
                 LinkedList<ChatsItem> array = new LinkedList<>();
