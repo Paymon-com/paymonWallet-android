@@ -23,7 +23,8 @@ import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.DialogProgress;
 import ru.paymon.android.view.FragmentFriendProfile;
 
-import static ru.paymon.android.view.FragmentChat.USER_ID_KEY;
+import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
+
 
 public class AlertDialogCustomBlackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
@@ -91,7 +92,7 @@ public class AlertDialogCustomBlackListAdapter extends RecyclerView.Adapter<Recy
                 int position = getLayoutPosition();
                 final int uid = list.get(position).uid;
                 final Bundle bundle = new Bundle();
-                bundle.putInt(USER_ID_KEY, uid);
+                bundle.putInt(CHAT_ID_KEY, uid);
                 final FragmentFriendProfile fragmentFriendProfile = new FragmentFriendProfile();
                 fragmentFriendProfile.setArguments(bundle);
 

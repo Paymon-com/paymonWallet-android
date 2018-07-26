@@ -21,7 +21,6 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
-import static ru.paymon.android.view.FragmentChat.USER_ID_KEY;
 
 public class FragmentFriendProfile extends Fragment {
     private static FragmentFriendProfile instance;
@@ -51,8 +50,8 @@ public class FragmentFriendProfile extends Fragment {
 
         final Bundle bundle = getArguments();
         if (bundle != null)
-            if (bundle.containsKey(USER_ID_KEY))
-                userId = bundle.getInt(USER_ID_KEY);
+            if (bundle.containsKey(CHAT_ID_KEY))
+                userId = bundle.getInt(CHAT_ID_KEY);
 
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);

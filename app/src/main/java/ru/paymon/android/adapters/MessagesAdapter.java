@@ -46,7 +46,6 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder> {
     public static String WALLET_PUBLIC_KEY = "PUBLIC_WALLET_KEY";
     public static String FORWARD_MESSAGES_KEY = "forward_messages";
-    public static String WALLET_PUBLIC_KEY = "PUBLIC_WALLET_KEY";
     public LinkedList<Long> messageIDs;
     private LinkedList<Long> checkedMessageIDs;
     private boolean isGroup;

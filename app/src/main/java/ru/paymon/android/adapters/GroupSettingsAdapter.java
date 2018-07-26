@@ -29,7 +29,8 @@ import ru.paymon.android.view.DialogProgress;
 import ru.paymon.android.view.FragmentFriendProfile;
 import ru.paymon.android.view.FragmentGroupSettings;
 
-import static ru.paymon.android.view.FragmentChat.USER_ID_KEY;
+import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
+
 
 public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
@@ -137,7 +138,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 int position = getLayoutPosition();
                 final int uid = list.get(position).uid;
                 final Bundle bundle = new Bundle();
-                bundle.putInt(USER_ID_KEY, uid);
+                bundle.putInt(CHAT_ID_KEY, uid);
                 final FragmentFriendProfile fragmentFriendProfile = new FragmentFriendProfile();
                 fragmentFriendProfile.setArguments(bundle);
 

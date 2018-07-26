@@ -43,7 +43,6 @@ import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 
 public class FragmentChat extends Fragment implements NotificationManager.IListener {
-    public static final String USER_ID_KEY = "USER_ID_KEY";
     public static final String CHAT_ID_KEY = "CHAT_ID_KEY";
     private int chatID;
     private RecyclerView messagesRecyclerView;
@@ -228,7 +227,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         customView.setOnClickListener(v -> {
             final Bundle bundle = new Bundle();
-            bundle.putInt(USER_ID_KEY, chatID);
+            bundle.putInt(CHAT_ID_KEY, chatID);
             final FragmentFriendProfile fragmentFriendProfile = FragmentFriendProfile.newInstance();
             fragmentFriendProfile.setArguments(bundle);
             final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();

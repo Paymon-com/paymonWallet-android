@@ -68,8 +68,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     private LinkedList<ChatsItem> dialogItemsList = new LinkedList<>();
     private LinkedList<ChatsGroupItem> groupItemsList = new LinkedList<>();
     private ProgressBar progressBarAllChats;
-//    private ProgressBar progressBarChats;
-//    private ProgressBar progressBarGroups;
     private RecyclerView chatsAllRecyclerView;
     private RecyclerView chatsRecyclerView;
     private RecyclerView groupsRecyclerView;
@@ -104,23 +102,17 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        List<View> pages = new ArrayList<>();
-
         View pageChats = inflater.inflate(R.layout.fragment_chats_dialogs, container, false);
-        chatsRecyclerView = pageChats.findViewById(R.id.fragment_chats_recycler_view);
-//        progressBarChats = pageChats.findViewById(R.id.chats_progress_bar);
-//        progressBarChats.setVisibility(View.GONE);
-        pages.add(pageChats);
-
         View pageAll = inflater.inflate(R.layout.fragment_chats, container, false);
-        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
-
-        pages.add(pageAll);
-
         View pageGroups = inflater.inflate(R.layout.fragment_chats_groups, container, false);
+        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
+        chatsRecyclerView = pageChats.findViewById(R.id.fragment_chats_recycler_view);
         groupsRecyclerView = pageGroups.findViewById(R.id.fragment_group_recycler_view);
-//        progressBarGroups = pageGroups.findViewById(R.id.groups_progress_bar);
-//        progressBarGroups.setVisibility(View.GONE);
+
+
+        List<View> pages = new ArrayList<>();
+        pages.add(pageAll);
+        pages.add(pageChats);
         pages.add(pageGroups);
 
         progressBarAllChats = pageAll.findViewById(R.id.chats_all_progress_bar);

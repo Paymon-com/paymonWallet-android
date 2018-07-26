@@ -29,7 +29,8 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.view.FragmentChat.USER_ID_KEY;
+import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
+
 
 public class FragmentContacts extends Fragment {
     private static FragmentContacts instance;
@@ -118,7 +119,7 @@ public class FragmentContacts extends Fragment {
             public void onItemClick(View view, int position) {
                 final Bundle bundle = new Bundle();
                 int userID = ((ContactsAdapter) (recyclerViewContacts.getAdapter())).getItem(position).id;
-                bundle.putInt(USER_ID_KEY, userID);
+                bundle.putInt(CHAT_ID_KEY, userID);
                 final FragmentFriendProfile fragmentFriendProfile = FragmentFriendProfile.newInstance();
                 fragmentFriendProfile.setArguments(bundle);
                 final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
