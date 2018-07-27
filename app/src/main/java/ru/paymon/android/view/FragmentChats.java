@@ -111,25 +111,79 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         ViewPager viewPager = new ViewPager(getContext());
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            private int mCurrentPosition;
+            private int mScrollState;
 
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected(final int position) {
                 if (position == 0)
                     Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
                 else if (position == 1)
                     Utils.setActionBarWithTitle(getActivity(), "Чаты");
                 else
                     Utils.setActionBarWithTitle(getActivity(), "Группы");
+                mCurrentPosition = position;
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void onPageScrollStateChanged(final int state) {
+                handleScrollState(state);
+                mScrollState = state;
             }
+
+            private void handleScrollState(final int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    setNextItemIfNeeded();
+                }
+            }
+
+            private void setNextItemIfNeeded() {
+                if (!isScrollStateSettling()) {
+                    handleSetNextItem();
+                }
+            }
+
+            private boolean isScrollStateSettling() {
+                return mScrollState == ViewPager.SCROLL_STATE_SETTLING;
+            }
+
+            private void handleSetNextItem() {
+                final int lastPosition = viewPager.getAdapter().getCount() - 1;
+                if (mCurrentPosition == 0) {
+                    viewPager.setCurrentItem(lastPosition, false);
+                } else if (mCurrentPosition == lastPosition) {
+                    viewPager.setCurrentItem(0, false);
+                }
+            }
+
+            @Override
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
+            }
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                if (position == 0)
+//                    Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
+//                else if (position == 1)
+//                    Utils.setActionBarWithTitle(getActivity(), "Чаты");
+//                else
+//                    Utils.setActionBarWithTitle(getActivity(), "Группы");
+//
+//                int pageCount = pages.get(position).getScrollBarFadeDuration();
+//                if (position == 0)
+//                    viewPager.setCurrentItem(3);
+//                else if (position == 4)
+//                    viewPager.setCurrentItem(1);
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
         });
 
         viewPager.setAdapter(pagerAdapter);
