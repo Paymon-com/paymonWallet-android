@@ -5,15 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,21 +21,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import com.daimajia.androidanimations.library.fading_entrances.FadeInLeftAnimator;
-import com.daimajia.androidviewhover.tools.Util;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.DBHelper;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ChatsAdapter;
 import ru.paymon.android.adapters.DialogsAdapter;
@@ -50,10 +40,7 @@ import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
-
-import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 
@@ -122,25 +109,79 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         ViewPager viewPager = new ViewPager(getContext());
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
+            private int mCurrentPosition;
+            private int mScrollState;
 
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected(final int position) {
                 if (position == 0)
                     Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
                 else if (position == 1)
                     Utils.setActionBarWithTitle(getActivity(), "Чаты");
                 else
                     Utils.setActionBarWithTitle(getActivity(), "Группы");
+                mCurrentPosition = position;
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-
+            public void onPageScrollStateChanged(final int state) {
+                handleScrollState(state);
+                mScrollState = state;
             }
+
+            private void handleScrollState(final int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    setNextItemIfNeeded();
+                }
+            }
+
+            private void setNextItemIfNeeded() {
+                if (!isScrollStateSettling()) {
+                    handleSetNextItem();
+                }
+            }
+
+            private boolean isScrollStateSettling() {
+                return mScrollState == ViewPager.SCROLL_STATE_SETTLING;
+            }
+
+            private void handleSetNextItem() {
+                final int lastPosition = viewPager.getAdapter().getCount() - 1;
+                if (mCurrentPosition == 0) {
+                    viewPager.setCurrentItem(lastPosition, false);
+                } else if (mCurrentPosition == lastPosition) {
+                    viewPager.setCurrentItem(0, false);
+                }
+            }
+
+            @Override
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
+            }
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                if (position == 0)
+//                    Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
+//                else if (position == 1)
+//                    Utils.setActionBarWithTitle(getActivity(), "Чаты");
+//                else
+//                    Utils.setActionBarWithTitle(getActivity(), "Группы");
+//
+//                int pageCount = pages.get(position).getScrollBarFadeDuration();
+//                if (position == 0)
+//                    viewPager.setCurrentItem(3);
+//                else if (position == 4)
+//                    viewPager.setCurrentItem(1);
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
         });
 
         viewPager.setAdapter(pagerAdapter);
@@ -234,7 +275,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
         Utils.stageQueue.postRunnable(() -> {
             if (id == NotificationManager.NotificationEvent.dialogsNeedReload) {
-                ApplicationLoader.applicationHandler.post(() ->{
+                ApplicationLoader.applicationHandler.post(() -> {
                     if (progressBarAllChats != null)
                         progressBarAllChats.setVisibility(View.GONE);
                 });
@@ -333,7 +374,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
             } else if (id == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
                 View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
 
-                ApplicationLoader.applicationHandler.post(()->{
+                ApplicationLoader.applicationHandler.post(() -> {
                     Utils.setActionBarWithCustomView(getActivity(), connectingView);
                 });
 
@@ -342,7 +383,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 //                swipeRefreshLayout.setRefreshing(false);
 //            }
             } else if (id == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-                ApplicationLoader.applicationHandler.post(()->{
+                ApplicationLoader.applicationHandler.post(() -> {
                     Utils.setActionBarWithTitle(getActivity(), "Чаты");
                 });
             }
