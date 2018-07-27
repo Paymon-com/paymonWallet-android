@@ -33,9 +33,10 @@ import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChat;
 
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
+import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class ChatsAdapter extends RecyclerSwipeAdapter<ChatsAdapter.CommonChatsViewHolder> {
-    public LinkedList<ChatsItem> chatsItemsList;
+    public LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
     private AppCompatActivity activity;
     private LinkedList<Long> forwardMessages;
 
@@ -44,8 +45,8 @@ public class ChatsAdapter extends RecyclerSwipeAdapter<ChatsAdapter.CommonChatsV
         GROUP_ITEM
     }
 
-    public ChatsAdapter(LinkedList<ChatsItem> chatsItemsList, Activity activity, LinkedList<Long> forwardedMessages) {
-        this.chatsItemsList = chatsItemsList;
+    public ChatsAdapter(/*LinkedList<ChatsItem> chatsItemsList,*/ Activity activity, LinkedList<Long> forwardedMessages) {
+//        this.chatsItemsList = chatsItemsList;
         this.activity = (AppCompatActivity) activity;
         this.forwardMessages = forwardedMessages;
     }
@@ -157,14 +158,13 @@ public class ChatsAdapter extends RecyclerSwipeAdapter<ChatsAdapter.CommonChatsV
         final Bundle bundle = new Bundle();
 
         if (isGroup)
-            bundle.putParcelableArrayList("groupUsers", GroupsManager.getInstance().groupsUsers.get(chatID));
+            bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(chatID));
 
         if (forwardMessages != null && forwardMessages.size() > 0)
             bundle.putSerializable(FORWARD_MESSAGES_KEY, forwardMessages);
 
         holder.mainLayout.setOnClickListener((view -> {
-            bundle.putInt("chat_id", chatID);
-
+            bundle.putInt(CHAT_ID_KEY, chatID);
             final FragmentChat fragmentChat = FragmentChat.newInstance();
             fragmentChat.setArguments(bundle);
             Utils.replaceFragmentWithAnimationSlideFade(activity.getSupportFragmentManager(), fragmentChat, null);

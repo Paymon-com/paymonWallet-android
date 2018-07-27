@@ -5,15 +5,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,58 +17,49 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import java.util.ArrayList;
-import com.daimajia.androidanimations.library.fading_entrances.FadeInLeftAnimator;
-import com.daimajia.androidviewhover.tools.Util;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.DBHelper;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ChatsAdapter;
-import ru.paymon.android.adapters.DialogsAdapter;
-import ru.paymon.android.adapters.GroupsAdapter;
 import ru.paymon.android.adapters.SlidingChatsAdapter;
 import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
-
-import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 
 public class FragmentChats extends Fragment implements NotificationManager.IListener {
     private static FragmentChats instance;
-    private TextView hintView;
-    private boolean isLoading;
-    private LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
-    private boolean isForward;
-    private LinkedList<Long> forwardMessages;
 
-    private LinkedList<ChatsItem> dialogItemsList = new LinkedList<>();
-    private LinkedList<ChatsGroupItem> groupItemsList = new LinkedList<>();
-    private ProgressBar progressBarAllChats;
     private RecyclerView chatsAllRecyclerView;
     private RecyclerView chatsRecyclerView;
     private RecyclerView groupsRecyclerView;
     private ChatsAdapter chatsAdapter;
-    private DialogsAdapter dialogsAdapter;
-    private GroupsAdapter groupsAdapter;
+    private ChatsAdapter dialogsAdapter;
+    private ChatsAdapter groupsAdapter;
+//    private TextView chatsHintView;
+//    private TextView dialogsHintView;
+//    private TextView groupsHintView;
+//    private ProgressBar chatsProgressBar;
+//    private ProgressBar dialogsProgressBar;
+//    private ProgressBar groupsProgressBar;
+
+    private boolean isLoading;
+    private boolean isForward;
+    private LinkedList<Long> forwardMessages;
 
     public static synchronized FragmentChats newInstance() {
         instance = new FragmentChats();
@@ -102,21 +88,24 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View pageChats = inflater.inflate(R.layout.fragment_chats_dialogs, container, false);
+        View pageDialogs = inflater.inflate(R.layout.fragment_chats, container, false);
         View pageAll = inflater.inflate(R.layout.fragment_chats, container, false);
-        View pageGroups = inflater.inflate(R.layout.fragment_chats_groups, container, false);
-        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
-        chatsRecyclerView = pageChats.findViewById(R.id.fragment_chats_recycler_view);
-        groupsRecyclerView = pageGroups.findViewById(R.id.fragment_group_recycler_view);
+        View pageGroups = inflater.inflate(R.layout.fragment_chats, container, false);
 
+        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
+        chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
+        groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
+//        chatsProgressBar = pageAll.findViewById(R.id.chats_all_progress_bar);
+//        dialogsProgressBar = pageDialogs.findViewById(R.id.chats_all_progress_bar);
+//        groupsProgressBar = pageGroups.findViewById(R.id.chats_all_progress_bar);
+//        chatsHintView = pageAll.findViewById(R.id.dialogs_hint_text_view);
+//        dialogsHintView = pageDialogs.findViewById(R.id.dialogs_hint_text_view);
+//        groupsHintView = pageGroups.findViewById(R.id.dialogs_hint_text_view);
 
         List<View> pages = new ArrayList<>();
+        pages.add(pageDialogs);
         pages.add(pageAll);
-        pages.add(pageChats);
         pages.add(pageGroups);
-
-        progressBarAllChats = pageAll.findViewById(R.id.chats_all_progress_bar);
-        progressBarAllChats.setVisibility(View.GONE);
 
         SlidingChatsAdapter pagerAdapter = new SlidingChatsAdapter(pages);
         ViewPager viewPager = new ViewPager(getContext());
@@ -148,7 +137,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
         initChats();
 
-        getActivity().invalidateOptionsMenu();
         setHasOptionsMenu(true);
 
         return viewPager;
@@ -183,17 +171,17 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 //                })
 //        );
 
-        chatsAdapter = new ChatsAdapter(chatsItemsList, getActivity(), null);
+        chatsAdapter = new ChatsAdapter(getActivity(), forwardMessages);
         chatsAllRecyclerView.setHasFixedSize(true);
         chatsAllRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsAllRecyclerView.setAdapter(chatsAdapter);
 
-        dialogsAdapter = new DialogsAdapter(dialogItemsList);
+        dialogsAdapter = new ChatsAdapter(getActivity(), forwardMessages);
         chatsRecyclerView.setHasFixedSize(true);
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsRecyclerView.setAdapter(dialogsAdapter);
 
-        groupsAdapter = new GroupsAdapter(groupItemsList);
+        groupsAdapter = new ChatsAdapter(getActivity(), forwardMessages);
         groupsRecyclerView.setHasFixedSize(true);
         groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         groupsRecyclerView.setAdapter(groupsAdapter);
@@ -201,9 +189,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         if (NetworkManager.getInstance().isAuthorized()) {
             if (!isLoading) {
                 isLoading = true;
-                if (hintView != null)
-                    hintView.setVisibility(View.GONE);
-
                 MessagesManager.getInstance().loadChats(!NetworkManager.getInstance().isConnected());
             }
         }
@@ -234,12 +219,12 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
         Utils.stageQueue.postRunnable(() -> {
             if (id == NotificationManager.NotificationEvent.dialogsNeedReload) {
-                ApplicationLoader.applicationHandler.post(() ->{
-                    if (progressBarAllChats != null)
-                        progressBarAllChats.setVisibility(View.GONE);
-                });
+//                ApplicationLoader.applicationHandler.post(() -> {
+//                    if (progressBarAllChats != null)
+//                        progressBarAllChats.setVisibility(View.GONE);
+//                });
 
-                LinkedList<ChatsItem> array = new LinkedList<>();
+                LinkedList<ChatsItem> dialogsItems = new LinkedList<>();
                 for (int i = 0; i < UsersManager.getInstance().userContacts.size(); i++) {
                     RPC.UserObject user = UsersManager.getInstance().userContacts.get(UsersManager.getInstance().userContacts.keyAt(i));
                     String username = Utils.formatUserName(user);
@@ -264,10 +249,12 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                         RPC.PM_photo photo = new RPC.PM_photo();
                         photo.id = user.photoID;
                         photo.user_id = user.id;
-                        array.add(new ChatsItem(user.id, photo, username, lastMessageText, lastMsg.date, lastMsg.itemType));
+                        dialogsItems.add(new ChatsItem(user.id, photo, username, lastMessageText, lastMsg.date, lastMsg.itemType));
                     }
                 }
 
+
+                LinkedList<ChatsItem> groupItems = new LinkedList<>();
                 for (int i = 0; i < GroupsManager.getInstance().groups.size(); i++) {
                     RPC.Group group = GroupsManager.getInstance().groups.get(GroupsManager.getInstance().groups.keyAt(i));
                     String title = group.title;
@@ -305,46 +292,49 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
                             if (photo.user_id == 0)
                                 photo.user_id = -group.id;
-                            array.add(new ChatsGroupItem(group.id, photo, lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
+                            groupItems.add(new ChatsGroupItem(group.id, photo, lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
                         }
                     }
                 }
 
-                if (!array.isEmpty()) {
-                    Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
-                    chatsAdapter.chatsItemsList.clear();
-                    chatsAdapter.chatsItemsList.addAll(array);
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        chatsAdapter.notifyDataSetChanged();
-                    });
+                if (!dialogsItems.isEmpty()) {
+                    Collections.sort(dialogsItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
+                    dialogsAdapter.chatsItemsList = dialogsItems;
+                    ApplicationLoader.applicationHandler.post(() -> dialogsAdapter.notifyDataSetChanged());
                 } else {
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        if (hintView != null) {
-                            hintView.setVisibility(View.VISIBLE);
-                        }
-                    });
+//                    ApplicationLoader.applicationHandler.post(() -> {
+//                        if (hintView != null) hintView.setVisibility(View.VISIBLE);
+//                    });
                 }
 
-//            if (swipeRefreshLayout != null) {
-//                swipeRefreshLayout.setRefreshing(false);
-//            }
+                if (!groupItems.isEmpty()) {
+                    Collections.sort(groupItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
+                    groupsAdapter.chatsItemsList = groupItems;
+                    ApplicationLoader.applicationHandler.post(() -> groupsAdapter.notifyDataSetChanged());
+                } else {
+//                    ApplicationLoader.applicationHandler.post(() -> {
+//                        if (hintView != null) hintView.setVisibility(View.VISIBLE);
+//                    });
+                }
 
+                if (!dialogsItems.isEmpty() || !groupItems.isEmpty()) {
+                    LinkedList<ChatsItem> chatsItems = new LinkedList<>();
+                    chatsItems.addAll(dialogsItems);
+                    chatsItems.addAll(groupItems);
+                    Collections.sort(chatsItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
+                    chatsAdapter.chatsItemsList = chatsItems;
+                    ApplicationLoader.applicationHandler.post(() -> chatsAdapter.notifyDataSetChanged());
+                } else {
+//                    ApplicationLoader.applicationHandler.post(() -> {
+//                        if (hintView != null) hintView.setVisibility(View.VISIBLE);
+//                    });
+                }
                 isLoading = false;
             } else if (id == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
                 View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
-
-                ApplicationLoader.applicationHandler.post(()->{
-                    Utils.setActionBarWithCustomView(getActivity(), connectingView);
-                });
-
-//            isLoading = false;
-//            if (swipeRefreshLayout != null) {
-//                swipeRefreshLayout.setRefreshing(false);
-//            }
+                ApplicationLoader.applicationHandler.post(() -> Utils.setActionBarWithCustomView(getActivity(), connectingView));
             } else if (id == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-                ApplicationLoader.applicationHandler.post(()->{
-                    Utils.setActionBarWithTitle(getActivity(), "Чаты");
-                });
+                ApplicationLoader.applicationHandler.post(() -> Utils.setActionBarWithTitle(getActivity(), "Чаты"));
             }
         });
     }
