@@ -85,9 +85,9 @@ public class ChatsAdapter extends RecyclerSwipeAdapter<ChatsAdapter.CommonChatsV
         boolean isGroup = false;
 
         if (User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
-            holder.doNotDisturb.setImageResource(R.drawable.ic_notifications_none_white_24dp);
+            holder.doNotDisturb.setImageResource(R.drawable.ic_bell_o_64);
         else
-            holder.doNotDisturb.setImageResource(R.drawable.ic_notifications_off_black_24dp);
+            holder.doNotDisturb.setImageResource(R.drawable.ic_bell_slash_o_64);
 
         holder.doNotDisturb.setOnClickListener((view -> {
             if (!User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
