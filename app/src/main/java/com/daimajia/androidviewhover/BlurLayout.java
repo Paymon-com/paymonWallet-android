@@ -48,7 +48,7 @@ public class BlurLayout extends RelativeLayout {
     private boolean enableBackgroundZoom = false;
     private float mZoomRatio = 1.14f;
 
-    private boolean enableTouchEvent = true;
+    private boolean enableTouchEvent = false;
 
     private Animator mHoverAppearAnimator;
     private YoYo.AnimationComposer mHoverAppearAnimationComposer;
@@ -219,14 +219,7 @@ public class BlurLayout extends RelativeLayout {
         if(mHoverAppearAnimator != null)
             mHoverAppearAnimator.setTarget(mHoverView);
 
-        mHoverView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                dismissHover();
-
-            }
-        });
+        mHoverView.setOnClickListener(view -> dismissHover());
     }
 
     /**

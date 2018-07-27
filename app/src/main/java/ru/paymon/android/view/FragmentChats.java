@@ -74,6 +74,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+//        ApplicationLoader.initStrictMode();
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -159,31 +160,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
             @Override
             public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
             }
-//            @Override
-//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-//
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position) {
-//                if (position == 0)
-//                    Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
-//                else if (position == 1)
-//                    Utils.setActionBarWithTitle(getActivity(), "Чаты");
-//                else
-//                    Utils.setActionBarWithTitle(getActivity(), "Группы");
-//
-//                int pageCount = pages.get(position).getScrollBarFadeDuration();
-//                if (position == 0)
-//                    viewPager.setCurrentItem(3);
-//                else if (position == 4)
-//                    viewPager.setCurrentItem(1);
-//            }
-//
-//            @Override
-//            public void onPageScrollStateChanged(int state) {
-//
-//            }
         });
 
         viewPager.setAdapter(pagerAdapter);
@@ -197,34 +173,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     }
 
     private void initChats() {
-//        chatsRecyclerView.addOnItemTouchListener(
-//                new RecyclerItemClickListener(getContext(), chatsRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(View view, int position) {
-//                        final ChatsItem chatsItem = chatsAdapter.getItem(position);
-//                        final boolean isGroup = chatsItem instanceof ChatsGroupItem;
-//                        final int chatID = chatsItem.chatID;
-//
-//                        final Bundle bundle = new Bundle();
-//                        bundle.putInt("chat_id", chatID);
-//
-//                        if (isGroup)
-//                            bundle.putParcelableArrayList("groupUsers", GroupsManager.getInstance().groupsUsers.get(chatID));
-//
-//                        if(isForward)
-//                            bundle.putSerializable(FORWARD_MESSAGES_KEY, forwardMessages);
-//
-//                        final FragmentChat fragmentChat = FragmentChat.newInstance();
-//                        fragmentChat.setArguments(bundle);
-//                        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentChat, null);
-//                    }
-//
-//                    @Override
-//                    public void onLongItemClick(View view, int position) {
-//                    }
-//                })
-//        );
-
         chatsAdapter = new ChatsAdapter(getActivity(), forwardMessages);
         chatsAllRecyclerView.setHasFixedSize(true);
         chatsAllRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

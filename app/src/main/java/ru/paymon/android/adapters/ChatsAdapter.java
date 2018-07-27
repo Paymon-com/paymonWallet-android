@@ -12,18 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-//import com.daimajia.swipe.SwipeLayout;
-//import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
 
-
-import com.daimajia.swipe.SwipeLayout;
-import com.daimajia.swipe.adapters.RecyclerSwipeAdapter;
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidviewhover.BlurLayout;
 
 import java.util.LinkedList;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
@@ -35,7 +32,7 @@ import ru.paymon.android.view.FragmentChat;
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
-public class ChatsAdapter extends RecyclerSwipeAdapter<ChatsAdapter.CommonChatsViewHolder> {
+public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsViewHolder> {
     public LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
     private AppCompatActivity activity;
     private LinkedList<Long> forwardMessages;
@@ -45,8 +42,7 @@ public class ChatsAdapter extends RecyclerSwipeAdapter<ChatsAdapter.CommonChatsV
         GROUP_ITEM
     }
 
-    public ChatsAdapter(/*LinkedList<ChatsItem> chatsItemsList,*/ Activity activity, LinkedList<Long> forwardedMessages) {
-//        this.chatsItemsList = chatsItemsList;
+    public ChatsAdapter(Activity activity, LinkedList<Long> forwardedMessages) {
         this.activity = (AppCompatActivity) activity;
         this.forwardMessages = forwardedMessages;
     }
@@ -84,30 +80,30 @@ public class ChatsAdapter extends RecyclerSwipeAdapter<ChatsAdapter.CommonChatsV
         final int chatID = chatsItem.chatID;
         boolean isGroup = false;
 
-        if (User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
-            holder.doNotDisturb.setImageResource(R.drawable.ic_notifications_none_white_24dp);
-        else
-            holder.doNotDisturb.setImageResource(R.drawable.ic_notifications_off_black_24dp);
+//        if (User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
+//            holder.doNotDisturb.setImageResource(R.drawable.ic_notifications_none_white_24dp);
+//        else
+//            holder.doNotDisturb.setImageResource(R.drawable.ic_notifications_off_black_24dp);
 
-        holder.doNotDisturb.setOnClickListener((view -> {
-            if (!User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
-                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.add(chatID);
-            else
-                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.remove((Integer) chatID);
+//        holder.doNotDisturb.setOnClickListener((view -> {
+//            if (!User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
+//                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.add(chatID);
+//            else
+//                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.remove((Integer) chatID);
+//
+//            onBindViewHolder(holder, position);
+//            User.saveConfig();
+//        }));
 
-            onBindViewHolder(holder, position);
-            User.saveConfig();
-        }));
-
-        holder.remove.setOnClickListener((view) -> {
-            chatsItemsList.remove(position);
-            mItemManger.removeShownLayouts(holder.swipeLayout);
-            chatsItemsList.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, chatsItemsList.size());
-            mItemManger.closeAllItems();
-            notifyDataSetChanged();
-        });
+//        holder.remove.setOnClickListener((view) -> {
+//            chatsItemsList.remove(position);
+//            mItemManger.removeShownLayouts(holder.swipeLayout);
+//            chatsItemsList.remove(position);
+//            notifyItemRemoved(position);
+//            notifyItemRangeChanged(position, chatsItemsList.size());
+//            mItemManger.closeAllItems();
+//            notifyDataSetChanged();
+//        });
 
         ViewTypes viewTypes = ViewTypes.values()[this.getItemViewType(position)];
         switch (viewTypes) {
@@ -169,8 +165,6 @@ public class ChatsAdapter extends RecyclerSwipeAdapter<ChatsAdapter.CommonChatsV
             fragmentChat.setArguments(bundle);
             Utils.replaceFragmentWithAnimationSlideFade(activity.getSupportFragmentManager(), fragmentChat, null);
         }));
-
-        mItemManger.bindView(holder.itemView, position);
     }
 
     @Override
@@ -187,33 +181,40 @@ public class ChatsAdapter extends RecyclerSwipeAdapter<ChatsAdapter.CommonChatsV
         return chatsItemsList.get(position);
     }
 
-    @Override
-    public int getSwipeLayoutResourceId(int position) {
-        return R.id.swipe_layout;
-    }
-
     public static class CommonChatsViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout mainLayout;
-        SwipeLayout swipeLayout;
-        ImageView remove;
-        ImageView doNotDisturb;
+        private BlurLayout mSampleLayout;
+//        ImageView remove;
+//        ImageView doNotDisturb;
+
 
         public CommonChatsViewHolder(View itemView) {
             super(itemView);
+
             mainLayout = (ConstraintLayout) itemView.findViewById(R.id.main_layout);
-            swipeLayout = (SwipeLayout) itemView.findViewById(R.id.swipe_layout);
-            View swipeView = (View) itemView.findViewById(R.id.swipe_view);
-            remove = (ImageView) swipeView.findViewById(R.id.delete_item);
-            doNotDisturb = (ImageView) swipeView.findViewById(R.id.disable_notifications);
+            mSampleLayout = (BlurLayout) itemView.findViewById(R.id.blur_layout);
+            View hover = LayoutInflater.from(ApplicationLoader.applicationContext).inflate(R.layout.chats_item_hover, null);
 
-            View.OnLongClickListener onLongClickListener = ((view) -> {
-                swipeLayout.toggle();
+            mSampleLayout.setHoverView(hover);
+            mSampleLayout.setBlurDuration(550);
+            mSampleLayout.addChildAppearAnimator(hover, R.id.heart, Techniques.FlipInX, 550, 0);
+            mSampleLayout.addChildAppearAnimator(hover, R.id.share, Techniques.FlipInX, 550, 250);
+            mSampleLayout.addChildAppearAnimator(hover, R.id.more, Techniques.FlipInX, 550, 500);
+
+            mSampleLayout.addChildDisappearAnimator(hover, R.id.heart, Techniques.FlipOutX, 550, 500);
+            mSampleLayout.addChildDisappearAnimator(hover, R.id.share, Techniques.FlipOutX, 550, 250);
+            mSampleLayout.addChildDisappearAnimator(hover, R.id.more, Techniques.FlipOutX, 550, 0);
+
+            mSampleLayout.addChildAppearAnimator(hover, R.id.description, Techniques.FadeInUp);
+            mSampleLayout.addChildDisappearAnimator(hover, R.id.description, Techniques.FadeOutDown);
+
+            mainLayout.setOnLongClickListener((view -> {
+                mSampleLayout.toggleHover();
                 return true;
-            });
+            }));
 
-            swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-            swipeView.setOnLongClickListener(onLongClickListener);
-            mainLayout.setOnLongClickListener(onLongClickListener);
+//            remove = (ImageView) swipeView.findViewById(R.id.delete_item);
+//            doNotDisturb = (ImageView) swipeView.findViewById(R.id.disable_notifications);
         }
     }
 
