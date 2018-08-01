@@ -2968,7 +2968,7 @@ OPENSSL_EXPORT uint64_t SSL_get_write_sequence(const SSL *ssl);
 /* Obscure functions. */
 
 /* SSL_get_structure_sizes returns the sizes of the SSL, SSL_CTX and
- * SSL_SESSION structures so that a test can ensure that outside code agrees on
+ * SSL_SESSION structures so that a fragment_friend_profile can ensure that outside code agrees on
  * these values. */
 OPENSSL_EXPORT void SSL_get_structure_sizes(size_t *ssl_size,
                                             size_t *ssl_ctx_size,
@@ -3026,7 +3026,7 @@ OPENSSL_EXPORT void (*SSL_CTX_get_keylog_callback(const SSL_CTX *ctx))(
 /* SSL_CTX_set_current_time_cb configures a callback to retrieve the current
  * time, which should be set in |*out_clock|. This can be used for testing
  * purposes; for example, a callback can be configured that returns a time
- * set explicitly by the test. */
+ * set explicitly by the fragment_friend_profile. */
 OPENSSL_EXPORT void SSL_CTX_set_current_time_cb(
     SSL_CTX *ctx, void (*cb)(const SSL *ssl, struct timeval *out_clock));
 

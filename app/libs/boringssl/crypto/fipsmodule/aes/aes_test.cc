@@ -89,10 +89,10 @@ static bool TestRaw(FileTest *t) {
 }
 
 static bool TestKeyWrap(FileTest *t) {
-  // All test vectors use the default IV, so test both with implicit and
+  // All fragment_friend_profile vectors use the default IV, so fragment_friend_profile both with implicit and
   // explicit IV.
   //
-  // TODO(davidben): Find test vectors that use a different IV.
+  // TODO(davidben): Find fragment_friend_profile vectors that use a different IV.
   static const uint8_t kDefaultIV[] = {
       0xa6, 0xa6, 0xa6, 0xa6, 0xa6, 0xa6, 0xa6, 0xa6,
   };
@@ -182,7 +182,7 @@ int main(int argc, char **argv) {
   CRYPTO_library_init();
 
   if (argc != 2) {
-    fprintf(stderr, "%s <test file.txt>\n", argv[0]);
+    fprintf(stderr, "%s <fragment_friend_profile file.txt>\n", argv[0]);
     return 1;
   }
 

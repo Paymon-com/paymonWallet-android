@@ -407,7 +407,7 @@ static ssl_private_key_result_t AsyncPrivateKeyComplete(
   }
 
   if (test_state->private_key_retries < 2) {
-    // Only return the decryption on the second attempt, to test both incomplete
+    // Only return the decryption on the second attempt, to fragment_friend_profile both incomplete
     // |decrypt| and |decrypt_complete|.
     return ssl_private_key_retry;
   }
@@ -846,7 +846,7 @@ static void InfoCallback(const SSL *ssl, int type, int val) {
     if (GetTestConfig(ssl)->handshake_never_done) {
       fprintf(stderr, "Handshake unexpectedly completed.\n");
       // Abort before any expected error code is printed, to ensure the overall
-      // test fails.
+      // fragment_friend_profile fails.
       abort();
     }
     GetTestState(ssl)->handshake_done = true;
@@ -875,7 +875,7 @@ static int TicketKeyCallback(SSL *ssl, uint8_t *key_name, uint8_t *iv,
     GetTestState(ssl)->ticket_decrypt_done = true;
   }
 
-  // This is just test code, so use the all-zeros key.
+  // This is just fragment_friend_profile code, so use the all-zeros key.
   static const uint8_t kZeros[16] = {0};
 
   if (encrypt) {
@@ -1006,7 +1006,7 @@ class SocketCloser {
   ~SocketCloser() {
     // Half-close and drain the socket before releasing it. This seems to be
     // necessary for graceful shutdown on Windows. It will also avoid write
-    // failures in the test runner.
+    // failures in the fragment_friend_profile runner.
 #if defined(OPENSSL_WINDOWS)
     shutdown(sock_, SD_SEND);
 #else
@@ -1061,7 +1061,7 @@ static bssl::UniquePtr<SSL_CTX> SetupCtx(SSL_CTX *old_ctx,
   }
 
   if (config->async && config->is_server) {
-    // Disable the internal session cache. To test asynchronous session lookup,
+    // Disable the internal session cache. To fragment_friend_profile asynchronous session lookup,
     // we use an external session cache.
     SSL_CTX_set_session_cache_mode(
         ssl_ctx.get(), SSL_SESS_CACHE_BOTH | SSL_SESS_CACHE_NO_INTERNAL);
@@ -1199,7 +1199,7 @@ static bool RetryAsync(SSL *ssl, int ret) {
 
   if (test_state->packeted_bio != nullptr &&
       PacketedBioAdvanceClock(test_state->packeted_bio)) {
-    // The DTLS retransmit logic silently ignores write failures. So the test
+    // The DTLS retransmit logic silently ignores write failures. So the fragment_friend_profile
     // may progress, allow writes through synchronously.
     AsyncBioEnforceWriteQuota(test_state->async_bio, false);
     int timeout_ret = DTLSv1_handle_timeout(ssl);
@@ -1255,7 +1255,7 @@ static int DoRead(SSL *ssl, uint8_t *out, size_t max_out) {
   int ret;
   do {
     if (config->async) {
-      // The DTLS retransmit logic silently ignores write failures. So the test
+      // The DTLS retransmit logic silently ignores write failures. So the fragment_friend_profile
       // may progress, allow writes through synchronously. |SSL_read| may
       // trigger a retransmit, so disconnect the write quota.
       AsyncBioEnforceWriteQuota(test_state->async_bio, false);
@@ -1266,7 +1266,7 @@ static int DoRead(SSL *ssl, uint8_t *out, size_t max_out) {
       AsyncBioEnforceWriteQuota(test_state->async_bio, true);
     }
 
-    // Run the exporter after each read. This is to test that the exporter fails
+    // Run the exporter after each read. This is to fragment_friend_profile that the exporter fails
     // during a renegotiation.
     if (config->use_exporter_between_reads) {
       uint8_t buf;
@@ -1348,7 +1348,7 @@ static uint16_t GetProtocolVersion(const SSL *ssl) {
 
 // CheckHandshakeProperties checks, immediately after |ssl| completes its
 // initial handshake (or False Starts), whether all the properties are
-// consistent with the test configuration and invariants.
+// consistent with the fragment_friend_profile configuration and invariants.
 static bool CheckHandshakeProperties(SSL *ssl, bool is_resume) {
   const TestConfig *config = GetTestConfig(ssl);
 
@@ -1631,8 +1631,8 @@ static bool CheckHandshakeProperties(SSL *ssl, bool is_resume) {
   return true;
 }
 
-// DoExchange runs a test SSL exchange against the peer. On success, it returns
-// true and sets |*out_session| to the negotiated SSL session. If the test is a
+// DoExchange runs a fragment_friend_profile SSL exchange against the peer. On success, it returns
+// true and sets |*out_session| to the negotiated SSL session. If the fragment_friend_profile is a
 // resumption attempt, |is_resume| is true and |session| is the session from the
 // previous exchange.
 static bool DoExchange(bssl::UniquePtr<SSL_SESSION> *out_session,

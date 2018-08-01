@@ -44,8 +44,8 @@ const EVP_AEAD* EVP_aead_aes_256_gcm_fips_testonly(void) {
 }
 #endif
 
-// This program tests an AEAD against a series of test vectors from a file,
-// using the FileTest format. As an example, here's a valid test case:
+// This program tests an AEAD against a series of fragment_friend_profile vectors from a file,
+// using the FileTest format. As an example, here's a valid fragment_friend_profile case:
 //
 //   KEY: 5a19f3173586b4c42f8412f4d5a786531b3231753e9e00998aec12fda8df10e4
 //   NONCE: 978105dfce667bf4
@@ -422,7 +422,7 @@ int main(int argc, char **argv) {
   CRYPTO_library_init();
 
   if (argc != 3) {
-    fprintf(stderr, "%s <aead> <test file.txt>\n", argv[0]);
+    fprintf(stderr, "%s <aead> <fragment_friend_profile file.txt>\n", argv[0]);
     return 1;
   }
 
@@ -450,12 +450,12 @@ int main(int argc, char **argv) {
   }
 
   if (known_aead->truncated_tags && !TestTruncatedTags(aead)) {
-    fprintf(stderr, "Truncated tags test failed for %s.\n", known_aead->name);
+    fprintf(stderr, "Truncated tags fragment_friend_profile failed for %s.\n", known_aead->name);
     return 1;
   }
 
   if (!known_aead->limited_implementation && !TestWithAliasedBuffers(aead)) {
-    fprintf(stderr, "Aliased buffers test failed for %s.\n", known_aead->name);
+    fprintf(stderr, "Aliased buffers fragment_friend_profile failed for %s.\n", known_aead->name);
     return 1;
   }
 

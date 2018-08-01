@@ -77,7 +77,7 @@ int main(int argc, char **argv) {
       return 1;
     }
 
-    // Check the entire contents and test |lh_doall_arg|. This takes O(N) time,
+    // Check the entire contents and fragment_friend_profile |lh_doall_arg|. This takes O(N) time,
     // so only do it every few iterations.
     //
     // TODO(davidben): |lh_doall_arg| also supports modifying the suffix in the

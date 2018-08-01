@@ -96,8 +96,8 @@ static bool TestEmptySalt() {
   return true;
 }
 
-// Exercises test vectors taken from https://tools.ietf.org/html/rfc6070.
-// Note that each of these test vectors uses SHA-1 as the digest.
+// Exercises fragment_friend_profile vectors taken from https://tools.ietf.org/html/rfc6070.
+// Note that each of these fragment_friend_profile vectors uses SHA-1 as the digest.
 static bool TestRFC6070Vectors() {
   const uint8_t kKey1[] = {0x0c, 0x60, 0xc8, 0x0f, 0x96, 0x1f, 0x0e,
                            0x71, 0xf3, 0xa9, 0xb5, 0x24, 0xaf, 0x60,
@@ -122,14 +122,14 @@ static bool TestRFC6070Vectors() {
 
 // Tests key derivation using SHA-2 digests.
 static bool TestSHA2() {
-  // This test was taken from:
+  // This fragment_friend_profile was taken from:
   // http://stackoverflow.com/questions/5130513/pbkdf2-hmac-sha2-test-vectors.
   const uint8_t kKey1[] = {0xae, 0x4d, 0x0c, 0x95, 0xaf, 0x6b, 0x46, 0xd3,
                            0x2d, 0x0a, 0xdf, 0xf9, 0x28, 0xf0, 0x6d, 0xd0,
                            0x2a, 0x30, 0x3f, 0x8e, 0xf3, 0xc2, 0x51, 0xdf,
                            0xd6, 0xe2, 0xd8, 0x5a, 0x95, 0x47, 0x4c, 0x43};
 
-  // This test was taken from:
+  // This fragment_friend_profile was taken from:
   // http://stackoverflow.com/questions/15593184/pbkdf2-hmac-sha-512-test-vectors.
   const uint8_t kKey2[] = {
       0x8c, 0x05, 0x11, 0xf4, 0xc6, 0xe5, 0x97, 0xc6, 0xac, 0x63, 0x15,
@@ -172,7 +172,7 @@ static bool TestZeroIterations() {
     return false;
   }
 
-  // Flip the first key byte (so can later test if it got set).
+  // Flip the first key byte (so can later fragment_friend_profile if it got set).
   const uint8_t expected_first_byte = key[0];
   key[0] = ~key[0];
 

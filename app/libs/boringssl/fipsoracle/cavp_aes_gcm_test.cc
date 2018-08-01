@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_aes_gcm_test processes a NIST CAVP AES GCM test vector request file and
+// cavp_aes_gcm_test processes a NIST CAVP AES GCM fragment_friend_profile vector request file and
 // emits the corresponding response.
 
 #include <stdlib.h>
@@ -107,7 +107,7 @@ static bool TestAEADDecrypt(FileTest *t, void *arg) {
       ct.size() != pt_len ||
       aad.size() != aad_len ||
       tag.size() * 8 != strtoul(tag_len.c_str(), nullptr, 0)) {
-    t->PrintLine("Invalid test case");
+    t->PrintLine("Invalid fragment_friend_profile case");
     return false;
   }
 
@@ -124,7 +124,7 @@ static bool TestAEADDecrypt(FileTest *t, void *arg) {
 }
 
 static int usage(char *arg) {
-  fprintf(stderr, "usage: %s (enc|dec) <cipher> <test file>\n", arg);
+  fprintf(stderr, "usage: %s (enc|dec) <cipher> <fragment_friend_profile file>\n", arg);
   return 1;
 }
 

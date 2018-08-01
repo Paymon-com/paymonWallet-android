@@ -68,7 +68,7 @@ class ScopedSocket {
 };
 
 TEST(BIOTest, SocketConnect) {
-  static const char kTestMessage[] = "test";
+  static const char kTestMessage[] = "fragment_friend_profile";
 
   // Set up a listening socket on localhost.
   int listening_sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -97,7 +97,7 @@ TEST(BIOTest, SocketConnect) {
   bssl::UniquePtr<BIO> bio(BIO_new_connect(hostname));
   ASSERT_TRUE(bio);
 
-  // Write a test message to the BIO.
+  // Write a fragment_friend_profile message to the BIO.
   ASSERT_EQ(static_cast<int>(sizeof(kTestMessage)),
             BIO_write(bio.get(), kTestMessage, sizeof(kTestMessage)));
 
@@ -127,14 +127,14 @@ TEST(BIOTest, Printf) {
 
     std::string in(length, 'a');
 
-    int ret = BIO_printf(bio.get(), "test %s", in.c_str());
+    int ret = BIO_printf(bio.get(), "fragment_friend_profile %s", in.c_str());
     ASSERT_GE(ret, 0);
     EXPECT_EQ(5 + length, static_cast<size_t>(ret));
 
     const uint8_t *contents;
     size_t len;
     ASSERT_TRUE(BIO_mem_contents(bio.get(), &contents, &len));
-    EXPECT_EQ("test " + in,
+    EXPECT_EQ("fragment_friend_profile " + in,
               std::string(reinterpret_cast<const char *>(contents), len));
 
     ASSERT_TRUE(BIO_reset(bio.get()));

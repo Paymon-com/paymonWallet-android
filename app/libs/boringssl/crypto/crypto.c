@@ -94,7 +94,7 @@ uint32_t OPENSSL_armcap_P = 0;
 #endif
 
 #if defined(BORINGSSL_FIPS)
-/* In FIPS mode, the power-on self-test function calls |CRYPTO_library_init|
+/* In FIPS mode, the power-on self-fragment_friend_profile function calls |CRYPTO_library_init|
  * because we have to ensure that CPUID detection occurs first. */
 #define BORINGSSL_NO_STATIC_INITIALIZER
 #endif

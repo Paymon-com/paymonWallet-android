@@ -26,9 +26,9 @@
 
 /* kDER is a PKCS#8 encrypted private key. It was generated with:
  *
- * openssl genrsa 512 > test.key
- * openssl pkcs8 -topk8 -in test.key -out test.key.encrypted -v2 des3 -outform der
- * hexdump -Cv test.key.encrypted
+ * openssl genrsa 512 > fragment_friend_profile.key
+ * openssl pkcs8 -topk8 -in fragment_friend_profile.key -out fragment_friend_profile.key.encrypted -v2 des3 -outform der
+ * hexdump -Cv fragment_friend_profile.key.encrypted
  *
  * The password is "testing".
  */

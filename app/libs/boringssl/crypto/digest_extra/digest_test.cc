@@ -34,7 +34,7 @@
 struct MD {
   // name is the name of the digest.
   const char* name;
-  // md_func is the digest to test.
+  // md_func is the digest to fragment_friend_profile.
   const EVP_MD *(*func)(void);
   // one_shot_func is the convenience one-shot version of the
   // digest.
@@ -51,7 +51,7 @@ static const MD sha512 = { "SHA512", &EVP_sha512, &SHA512 };
 static const MD md5_sha1 = { "MD5-SHA1", &EVP_md5_sha1, nullptr };
 
 struct TestVector {
-  // md is the digest to test.
+  // md is the digest to fragment_friend_profile.
   const MD &md;
   // input is a NUL-terminated string to suffix.
   const char *input;

@@ -644,7 +644,7 @@ OPENSSL_EXPORT int BN_generate_dsa_nonce(BIGNUM *out, const BIGNUM *range,
  *                                    number.
  *   event=BN_GENCB_PRIME_TEST, n=-1: when finished trial division primality
  *                                    checks.
- *   event=BN_GENCB_PRIME_TEST, n=i:  when the i'th primality test has finished.
+ *   event=BN_GENCB_PRIME_TEST, n=i:  when the i'th primality fragment_friend_profile has finished.
  *
  * The callback can return zero to abort the generation progress or one to
  * allow it to continue.
@@ -708,13 +708,13 @@ enum bn_primality_result_t {
  * |BN_prime_checks|, then a value that results in a false positive rate lower
  * than the number-field sieve security level of |w| is used. It returns one on
  * success and zero on failure. If |cb| is not NULL, then it is called during
- * each iteration of the primality test. */
+ * each iteration of the primality fragment_friend_profile. */
 int BN_enhanced_miller_rabin_primality_test(
     enum bn_primality_result_t *out_result, const BIGNUM *w, int iterations,
     BN_CTX *ctx, BN_GENCB *cb);
 
 /* BN_primality_test sets |*is_probably_prime| to one if |candidate| is
- * probably a prime number by the Miller-Rabin test or zero if it's certainly
+ * probably a prime number by the Miller-Rabin fragment_friend_profile or zero if it's certainly
  * not.
  *
  * If |do_trial_division| is non-zero then |candidate| will be tested against a
@@ -734,7 +734,7 @@ OPENSSL_EXPORT int BN_primality_test(int *is_probably_prime,
                                      BN_GENCB *cb);
 
 /* BN_is_prime_fasttest_ex returns one if |candidate| is probably a prime
- * number by the Miller-Rabin test, zero if it's certainly not and -1 on error.
+ * number by the Miller-Rabin fragment_friend_profile, zero if it's certainly not and -1 on error.
  *
  * If |do_trial_division| is non-zero then |candidate| will be tested against a
  * list of small primes before Miller-Rabin tests. The probability of this

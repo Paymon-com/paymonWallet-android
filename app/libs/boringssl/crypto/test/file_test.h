@@ -30,10 +30,10 @@ OPENSSL_MSVC_PRAGMA(warning(disable : 4702))
 
 OPENSSL_MSVC_PRAGMA(warning(pop))
 
-// File-based test framework.
+// File-based fragment_friend_profile framework.
 //
-// This module provides a file-based test framework. The file format is based on
-// that of OpenSSL upstream's evp_test and BoringSSL's aead_test. NIST CAVP test
+// This module provides a file-based fragment_friend_profile framework. The file format is based on
+// that of OpenSSL upstream's evp_test and BoringSSL's aead_test. NIST CAVP fragment_friend_profile
 // vector files are also supported. Each input file is a sequence of attributes,
 // instructions and blank lines.
 //
@@ -61,26 +61,26 @@ OPENSSL_MSVC_PRAGMA(warning(pop))
 // Either '=' or ':' may be used to delimit the name from the value. Both the
 // name and value have leading and trailing spaces stripped.
 //
-// Each file contains a number of instruction blocks and test cases.
+// Each file contains a number of instruction blocks and fragment_friend_profile cases.
 //
 // An instruction block is a sequence of instructions followed by a blank line.
-// Instructions apply to all test cases following its appearance, until the next
+// Instructions apply to all fragment_friend_profile cases following its appearance, until the next
 // instruction block. Instructions are unordered.
 //
-// A test is a sequence of one or more attributes followed by a blank line.  For
-// tests that process multiple kinds of test cases, the first attribute is
-// parsed out as the test's type and parameter. Otherwise, attributes are
+// A fragment_friend_profile is a sequence of one or more attributes followed by a blank line.  For
+// tests that process multiple kinds of fragment_friend_profile cases, the first attribute is
+// parsed out as the fragment_friend_profile's type and parameter. Otherwise, attributes are
 // unordered. The first attribute is also included in the set of attributes, so
 // tests which do not dispatch may ignore this mechanism.
 //
 // Additional blank lines and lines beginning with # are ignored.
 //
 // Functions in this module freely output to |stderr| on failure. Tests should
-// also do so, and it is recommended they include the corresponding test's line
+// also do so, and it is recommended they include the corresponding fragment_friend_profile's line
 // number in any output. |PrintLine| does this automatically.
 //
-// Each attribute in a test and all instructions applying to it must be
-// consumed. When a test completes, if any attributes or insturctions haven't
+// Each attribute in a fragment_friend_profile and all instructions applying to it must be
+// consumed. When a fragment_friend_profile completes, if any attributes or insturctions haven't
 // been processed, the framework reports an error.
 
 
@@ -98,9 +98,9 @@ class FileTest {
     kReadError,
   };
 
-  // ReadNext reads the next test from the file. It returns |kReadSuccess| if
-  // successfully reading a test and |kReadEOF| at the end of the file. On
-  // error or if the previous test had unconsumed attributes, it returns
+  // ReadNext reads the next fragment_friend_profile from the file. It returns |kReadSuccess| if
+  // successfully reading a fragment_friend_profile and |kReadEOF| at the end of the file. On
+  // error or if the previous fragment_friend_profile had unconsumed attributes, it returns
   // |kReadError|.
   ReadResult ReadNext();
 
@@ -110,12 +110,12 @@ class FileTest {
 
   unsigned start_line() const { return start_line_; }
 
-  // GetType returns the name of the first attribute of the current test.
+  // GetType returns the name of the first attribute of the current fragment_friend_profile.
   const std::string &GetType();
-  // GetParameter returns the value of the first attribute of the current test.
+  // GetParameter returns the value of the first attribute of the current fragment_friend_profile.
   const std::string &GetParameter();
 
-  // HasAttribute returns true if the current test has an attribute named |key|.
+  // HasAttribute returns true if the current fragment_friend_profile has an attribute named |key|.
   bool HasAttribute(const std::string &key);
 
   // GetAttribute looks up the attribute with key |key|. It sets |*out_value| to
@@ -139,11 +139,11 @@ class FileTest {
   bool ExpectBytesEqual(const uint8_t *expected, size_t expected_len,
                         const uint8_t *actual, size_t actual_len);
 
-  // AtNewInstructionBlock returns true if the current test was immediately
+  // AtNewInstructionBlock returns true if the current fragment_friend_profile was immediately
   // preceded by an instruction block.
   bool IsAtNewInstructionBlock() const;
 
-  // HasInstruction returns true if the current test has an instruction.
+  // HasInstruction returns true if the current fragment_friend_profile has an instruction.
   bool HasInstruction(const std::string &key);
 
   // GetInstruction looks up the instruction with key |key|. It sets
@@ -152,8 +152,8 @@ class FileTest {
   // otherwise.
   bool GetInstruction(std::string *out_value, const std::string &key);
 
-  // CurrentTestToString returns the file content parsed for the current test.
-  // If the current test was preceded by an instruction block, the return test
+  // CurrentTestToString returns the file content parsed for the current fragment_friend_profile.
+  // If the current fragment_friend_profile was preceded by an instruction block, the return fragment_friend_profile
   // case is preceded by the instruction block and a single blank line. All
   // other blank or comment lines are omitted.
   const std::string &CurrentTestToString() const;
@@ -174,15 +174,15 @@ class FileTest {
   // line_ is the number of lines read.
   unsigned line_ = 0;
 
-  // start_line_ is the line number of the first attribute of the test.
+  // start_line_ is the line number of the first attribute of the fragment_friend_profile.
   unsigned start_line_ = 0;
-  // type_ is the name of the first attribute of the test.
+  // type_ is the name of the first attribute of the fragment_friend_profile.
   std::string type_;
   // parameter_ is the value of the first attribute.
   std::string parameter_;
-  // attributes_ contains all attributes in the test, including the first.
+  // attributes_ contains all attributes in the fragment_friend_profile, including the first.
   std::map<std::string, std::string> attributes_;
-  // instructions_ contains all instructions in scope for the test.
+  // instructions_ contains all instructions in scope for the fragment_friend_profile.
   std::map<std::string, std::string> instructions_;
 
   // unused_attributes_ is the set of attributes that have not been queried.
@@ -203,16 +203,16 @@ class FileTest {
 
 typedef bool (*FileTestFunc)(FileTest *t, void *arg);
 
-// FileTestMain runs a file-based test out of |path| and returns an exit code
+// FileTestMain runs a file-based fragment_friend_profile out of |path| and returns an exit code
 // suitable to return out of |main|. |run_test| should return true on pass and
 // false on failure. FileTestMain also implements common handling of the 'Error'
-// attribute. A test with that attribute is expected to fail. The value of the
+// attribute. A fragment_friend_profile with that attribute is expected to fail. The value of the
 // attribute is the reason string of the expected OpenSSL error code.
 //
 // Tests are guaranteed to run serially and may affect global state if need be.
 // It is legal to use "tests" which, for example, import a private key into a
 // list of keys. This may be used to initialize a shared set of keys for many
-// tests. However, if one test fails, the framework will continue to run
+// tests. However, if one fragment_friend_profile fails, the framework will continue to run
 // subsequent tests.
 int FileTestMain(FileTestFunc run_test, void *arg, const char *path);
 

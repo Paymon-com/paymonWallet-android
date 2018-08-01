@@ -407,7 +407,7 @@ BIGNUM *BN_mod_sqrt(BIGNUM *in, const BIGNUM *a, const BIGNUM *p, BN_CTX *ctx) {
 vrfy:
   if (!err) {
     /* verify the result -- the input might have been not a square
-     * (test added in 0.9.8) */
+     * (fragment_friend_profile added in 0.9.8) */
 
     if (!BN_mod_sqr(x, ret, p, ctx)) {
       err = 1;

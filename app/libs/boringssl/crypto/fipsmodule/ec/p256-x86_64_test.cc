@@ -493,7 +493,7 @@ int main(int argc, char **argv) {
       return TestPointAdd(t);
     }
 
-    t->PrintLine("Unknown test type: %s", t->GetParameter().c_str());
+    t->PrintLine("Unknown fragment_friend_profile type: %s", t->GetParameter().c_str());
     return false;
   }, nullptr, argv[1]);
 }

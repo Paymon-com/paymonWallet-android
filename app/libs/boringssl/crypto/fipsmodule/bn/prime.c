@@ -315,7 +315,7 @@ static const uint16_t primes[NUMPRIMES] = {
  * than the security level for an RSA prime of that many bits (calculated using
  * the FIPS SP 800-57 security level and 186-4 Section F.1; original paper:
  * Damgaard, Landrock, Pomerance: Average case error estimates for the strong
- * probable prime test. -- Math. Comp. 61 (1993) 177-194) */
+ * probable prime fragment_friend_profile. -- Math. Comp. 61 (1993) 177-194) */
 static int BN_prime_checks_for_size(int bits) {
   if (bits >= 3747) {
     return 3;
@@ -445,7 +445,7 @@ loop:
       if (!BN_GENCB_call(cb, i, c1 - 1)) {
         goto err;
       }
-      /* We have a safe prime test pass */
+      /* We have a safe prime fragment_friend_profile pass */
     }
   }
 
@@ -593,7 +593,7 @@ int BN_enhanced_miller_rabin_primality_test(
   }
 
   /* The following loop performs in inner iteration of the Enhanced Miller-Rabin
-   * Primality test (Step 4). */
+   * Primality fragment_friend_profile (Step 4). */
   for (int i = 1; i <= iterations; i++) {
     /* Step 4.1-4.2 */
     if (!BN_rand_range_ex(b, 2, w1)) {
@@ -688,7 +688,7 @@ again:
     return 0;
   }
 
-  /* we now have a random number 'rnd' to test. */
+  /* we now have a random number 'rnd' to fragment_friend_profile. */
   for (i = 1; i < NUMPRIMES; i++) {
     BN_ULONG mod = BN_mod_word(rnd, (BN_ULONG)primes[i]);
     if (mod == (BN_ULONG)-1) {
@@ -789,7 +789,7 @@ static int probable_prime_dh(BIGNUM *rnd, int bits, const BIGNUM *add,
       goto err;
     }
   }
-  /* we now have a random number 'rand' to test. */
+  /* we now have a random number 'rand' to fragment_friend_profile. */
 
 loop:
   for (i = 1; i < NUMPRIMES; i++) {
@@ -857,7 +857,7 @@ static int probable_prime_dh_safe(BIGNUM *p, int bits, const BIGNUM *padd,
     }
   }
 
-  /* we now have a random number 'rand' to test. */
+  /* we now have a random number 'rand' to fragment_friend_profile. */
   if (!BN_lshift1(p, q)) {
     goto err;
   }

@@ -1010,7 +1010,7 @@ TEST(SSLTest, InternalSessionCache) {
   bssl::UniquePtr<SSL_CTX> ctx(SSL_CTX_new(TLS_method()));
   ASSERT_TRUE(ctx);
 
-  // Prepare 10 test sessions.
+  // Prepare 10 fragment_friend_profile sessions.
   std::vector<bssl::UniquePtr<SSL_SESSION>> sessions;
   for (int i = 0; i < 10; i++) {
     bssl::UniquePtr<SSL_SESSION> session = CreateTestSession(i);
@@ -1020,7 +1020,7 @@ TEST(SSLTest, InternalSessionCache) {
 
   SSL_CTX_sess_set_cache_size(ctx.get(), 5);
 
-  // Insert all the test sessions.
+  // Insert all the fragment_friend_profile sessions.
   for (const auto &session : sessions) {
     ASSERT_TRUE(SSL_CTX_add_session(ctx.get(), session.get()));
   }
@@ -1566,7 +1566,7 @@ TEST(SSLTest, SetFD) {
   EXPECT_TRUE(SSL_set_wfd(ssl.get(), 1));
   ExpectFDs(ssl.get(), 1, 1);
 
-  // ASan builds will implicitly test that the internal |BIO| reference-counting
+  // ASan builds will implicitly fragment_friend_profile that the internal |BIO| reference-counting
   // is correct.
 }
 
@@ -1621,7 +1621,7 @@ TEST(SSLTest, SetBIO) {
   BIO_up_ref(bio2.get());
   SSL_set_bio(ssl.get(), bio2.get(), bio1.get());
 
-  // ASAN builds will implicitly test that the internal |BIO| reference-counting
+  // ASAN builds will implicitly fragment_friend_profile that the internal |BIO| reference-counting
   // is correct.
 }
 
@@ -3132,7 +3132,7 @@ TEST(SSLTest, SetChainAndKeyMismatch) {
       leaf.get(),
   };
 
-  // Should fail because |GetTestKey| doesn't match the chain-test certificate.
+  // Should fail because |GetTestKey| doesn't match the chain-fragment_friend_profile certificate.
   ASSERT_FALSE(SSL_CTX_set_chain_and_key(ctx.get(), &chain[0], chain.size(),
                                          key.get(), nullptr));
   ERR_clear_error();
@@ -3183,7 +3183,7 @@ TEST(SSLTest, EmptyCipherList) {
 }
 
 // ssl_test_ticket_aead_failure_mode enumerates the possible ways in which the
-// test |SSL_TICKET_AEAD_METHOD| can fail.
+// fragment_friend_profile |SSL_TICKET_AEAD_METHOD| can fail.
 enum ssl_test_ticket_aead_failure_mode {
   ssl_test_ticket_aead_ok = 0,
   ssl_test_ticket_aead_seal_fail,
@@ -3429,7 +3429,7 @@ TEST(SSLTest, SSL3Method) {
   bssl::UniquePtr<SSL> ssl(SSL_new(ssl3_ctx.get()));
   EXPECT_TRUE(ssl);
 
-  // Create a normal TLS context to test against.
+  // Create a normal TLS context to fragment_friend_profile against.
   bssl::UniquePtr<SSL_CTX> tls_ctx(SSL_CTX_new(TLS_method()));
   ASSERT_TRUE(tls_ctx);
   ASSERT_TRUE(SSL_CTX_use_certificate(tls_ctx.get(), cert.get()));

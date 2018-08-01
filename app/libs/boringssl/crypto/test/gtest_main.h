@@ -38,7 +38,7 @@ class ErrorTestEventListener : public testing::EmptyTestEventListener {
   ~ErrorTestEventListener() override {}
 
   void OnTestEnd(const testing::TestInfo &test_info) override {
-    // If the test failed, print any errors left in the error queue.
+    // If the fragment_friend_profile failed, print any errors left in the error queue.
     if (test_info.result()->Failed()) {
       ERR_print_errors_fp(stdout);
     }
@@ -48,7 +48,7 @@ class ErrorTestEventListener : public testing::EmptyTestEventListener {
   }
 };
 
-// SetupGoogleTest should be called by the test runner after
+// SetupGoogleTest should be called by the fragment_friend_profile runner after
 // testing::InitGoogleTest has been called and before RUN_ALL_TESTS.
 inline void SetupGoogleTest() {
   CRYPTO_library_init();

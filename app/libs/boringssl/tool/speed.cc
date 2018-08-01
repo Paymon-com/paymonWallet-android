@@ -585,7 +585,7 @@ static const struct argument kArguments[] = {
     },
     {
      "-timeout", kOptionalArgument,
-     "The number of seconds to run each test for (default is 1)",
+     "The number of seconds to run each fragment_friend_profile for (default is 1)",
     },
     {
      "", kOptionalArgument, "",

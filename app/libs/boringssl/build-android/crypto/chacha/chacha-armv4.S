@@ -45,7 +45,7 @@ ChaCha20_ctr32:
 	addeq	sp,sp,#4*3
 	beq	.Lno_data
 #if __ARM_MAX_ARCH__>=7
-	cmp	r2,#192			@ test len
+	cmp	r2,#192			@ fragment_friend_profile len
 	bls	.Lshort
 	ldr	r4,[r14,#-32]
 	ldr	r4,[r14,r4]

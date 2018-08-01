@@ -281,7 +281,7 @@ TEST_P(Base64Test, DecodeUpdateStreaming) {
           if (i == encoded_len ||
               (i + 1 == encoded_len && t.encoded[i] == '\n') ||
               /* If there was an '-' in the input (which means “EOF”) then
-               * this loop will continue to test that |EVP_DecodeUpdate| will
+               * this loop will continue to fragment_friend_profile that |EVP_DecodeUpdate| will
                * ignore the remainder of the input. */
               strchr(t.encoded, '-') != nullptr) {
             break;

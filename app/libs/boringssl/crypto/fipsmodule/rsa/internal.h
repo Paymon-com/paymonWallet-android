@@ -114,7 +114,7 @@ int RSA_private_transform(RSA *rsa, uint8_t *out, const uint8_t *in,
                           size_t len);
 
 
-/* The following utility functions are exported for test purposes. */
+/* The following utility functions are exported for fragment_friend_profile purposes. */
 
 extern const BN_ULONG kBoringSSLRSASqrtTwo[];
 extern const size_t kBoringSSLRSASqrtTwoLen;

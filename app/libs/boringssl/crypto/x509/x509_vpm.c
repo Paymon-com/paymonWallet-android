@@ -226,7 +226,7 @@ void X509_VERIFY_PARAM_free(X509_VERIFY_PARAM *param)
  * after the next call.
  */
 
-/* Macro to test if a field should be copied from src to dest */
+/* Macro to fragment_friend_profile if a field should be copied from src to dest */
 
 #define test_x509_verify_param_copy(field, def) \
   (to_overwrite ||                              \
@@ -237,7 +237,7 @@ void X509_VERIFY_PARAM_free(X509_VERIFY_PARAM *param)
 #define test_x509_verify_param_copy_id(idf, def) \
         test_x509_verify_param_copy(id->idf, def)
 
-/* Macro to test and copy a field if necessary */
+/* Macro to fragment_friend_profile and copy a field if necessary */
 
 #define x509_verify_param_copy(field, def) \
         if (test_x509_verify_param_copy(field, def)) \

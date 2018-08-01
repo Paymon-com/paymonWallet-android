@@ -149,7 +149,7 @@ OPENSSL_EXPORT int EVP_PKEY_CTX_ctrl(EVP_PKEY_CTX *ctx, int keytype, int optype,
  *      If the return value is <= 0, the key is rejected.
  *   1: Is called at the end of |EVP_PKEY_derive_set_peer| and |p2| contains a
  *      peer key. If the return value is <= 0, the key is rejected.
- *   2: Is called with |p2| == NULL to test whether the peer's key was used.
+ *   2: Is called with |p2| == NULL to fragment_friend_profile whether the peer's key was used.
  *      (EC)DH always return one in this case.
  *   3: Is called with |p2| == NULL to set whether the peer's key was used.
  *      (EC)DH always return one in this case. This was only used for GOST. */

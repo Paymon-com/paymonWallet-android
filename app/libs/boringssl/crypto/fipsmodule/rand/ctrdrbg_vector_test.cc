@@ -65,7 +65,7 @@ int main(int argc, char **argv) {
   CRYPTO_library_init();
 
   if (argc != 2) {
-    fprintf(stderr, "%s <test file>\n", argv[0]);
+    fprintf(stderr, "%s <fragment_friend_profile file>\n", argv[0]);
     return 1;
   }
 

@@ -224,7 +224,7 @@ static int TestGenerate(FILE *out) {
   uint8_t sig[256];
   unsigned int siglen;
 
-  fprintf(out, "test generation of DSA parameters\n");
+  fprintf(out, "fragment_friend_profile generation of DSA parameters\n");
 
   GenerateContext ctx;
   ctx.out = out;
@@ -299,7 +299,7 @@ static bool TestVerify(const uint8_t *sig, size_t sig_len, int expect) {
     return false;
   }
 
-  /* Clear any errors from a test with expected failure. */
+  /* Clear any errors from a fragment_friend_profile with expected failure. */
   ERR_clear_error();
   return true;
 }

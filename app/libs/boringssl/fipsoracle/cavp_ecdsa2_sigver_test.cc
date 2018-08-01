@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_ecdsa2_sigver_test processes a NIST CAVP ECDSA2 SigVer test vector
+// cavp_ecdsa2_sigver_test processes a NIST CAVP ECDSA2 SigVer fragment_friend_profile vector
 // request file and emits the corresponding response.
 
 #include <vector>
@@ -70,7 +70,7 @@ static bool TestECDSA2SigVer(FileTest *t, void *arg) {
 
 int cavp_ecdsa2_sigver_test_main(int argc, char **argv) {
   if (argc != 2) {
-    fprintf(stderr, "usage: %s <test file>\n",
+    fprintf(stderr, "usage: %s <fragment_friend_profile file>\n",
             argv[0]);
     return 1;
   }

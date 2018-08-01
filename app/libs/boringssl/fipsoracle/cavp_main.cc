@@ -66,6 +66,6 @@ int main(int argc, char **argv) {
     }
   }
 
-  fprintf(stderr, "invalid test suite: %s\n\n", argv[1]);
+  fprintf(stderr, "invalid fragment_friend_profile suite: %s\n\n", argv[1]);
   return usage(argv[0]);
 }

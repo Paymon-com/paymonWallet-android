@@ -476,7 +476,7 @@ static bool RunRFC5114Tests() {
       return false;
     }
 
-    printf("RFC5114 parameter test %u OK\n", i + 1);
+    printf("RFC5114 parameter fragment_friend_profile %u OK\n", i + 1);
   }
 
   return 1;

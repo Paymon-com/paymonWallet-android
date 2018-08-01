@@ -58,5 +58,5 @@ dependencies {
     implementation 'io.requery:sqlite-android:3.24.0'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.androidanimations:library:1.1.2@aar'
-    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+//    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
 }

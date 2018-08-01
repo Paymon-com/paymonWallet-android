@@ -492,7 +492,7 @@ int ssl_private_key_supports_signature_algorithm(SSL_HANDSHAKE *hs,
    * emLen be at least hLen + sLen + 2. Both hLen and sLen are the size of the
    * suffix in TLS. Reasonable RSA key sizes are large enough for the largest
    * defined RSASSA-PSS algorithm, but 1024-bit RSA is slightly too small for
-   * SHA-512. 1024-bit RSA is sometimes used for test credentials, so check the
+   * SHA-512. 1024-bit RSA is sometimes used for fragment_friend_profile credentials, so check the
    * size so that we can fall back to another algorithm in that case. */
   const SSL_SIGNATURE_ALGORITHM *alg = get_signature_algorithm(sigalg);
   if (alg->is_rsa_pss &&
