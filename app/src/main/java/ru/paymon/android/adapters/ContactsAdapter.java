@@ -2,98 +2,71 @@ package ru.paymon.android.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.components.CircleImageView;
-import ru.paymon.android.models.ContactsLineItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private LinkedList<RPC.UserObject> commonItems = new LinkedList<>();;
+    public LinkedList<RPC.UserObject> contactsItems = new LinkedList<>();
 
-    enum ViewTypes {
-        USER,
-        LINE
-    }
-
-    public ContactsAdapter(LinkedList<RPC.UserObject> contactsItems, LinkedList<RPC.UserObject> contactsGlobalItems) {
-        commonItems.addAll(contactsItems);
-        commonItems.add(new ContactsLineItem());
-        commonItems.addAll(contactsGlobalItems);
+    public ContactsAdapter() {
+        for (int i = 0; i < UsersManager.getInstance().userContacts.size(); i++) {
+            RPC.UserObject user = UsersManager.getInstance().userContacts.get(UsersManager.getInstance().userContacts.keyAt(i));
+            contactsItems.add(user);
+        }
     }
 
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RecyclerView.ViewHolder vh = null;
-        ViewTypes viewTypes = ViewTypes.values()[viewType];
-        switch (viewTypes) {
-            case USER:
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_contacts_item, parent, false);
-                vh = new ContactsItemViewHolder(view);
-                break;
-            case LINE:
-                view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_line_item, parent, false);
-                vh = new LineItemViewHolder(view);
-                break;
-        }
-        return vh;
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_contacts_item, parent, false);
+        return new ContactsItemViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if(holder instanceof ContactsItemViewHolder) {
-            RPC.UserObject user =  commonItems.get(position);
-            ContactsAdapter.ContactsItemViewHolder contactsItemViewHolder = (ContactsAdapter.ContactsItemViewHolder) holder;
-            contactsItemViewHolder.photo.setPhoto(new RPC.PM_photo(user.id, user.photoID));
-            contactsItemViewHolder.name.setText(Utils.formatUserName(user));
+        RPC.UserObject user = contactsItems.get(position);
+        ContactsItemViewHolder contactsItemViewHolder = (ContactsItemViewHolder) holder;
+        contactsItemViewHolder.photo.setPhoto(new RPC.PM_photo(user.id, user.photoID));
+
+        String username = "";
+        if (user.first_name != null && user.last_name != null && !user.first_name.equals("") && !user.last_name.equals("")) {
+            username = user.first_name + " " + user.last_name;
         }
-    }
-
-    public int getItemViewType(int position) {
-        RPC.UserObject user = commonItems.get(position);
-        int viewType = ViewTypes.USER.ordinal();
-        if(user instanceof ContactsLineItem)
-            viewType = ViewTypes.LINE.ordinal();
-
-        return viewType;
+        contactsItemViewHolder.name.setText(username);
+        contactsItemViewHolder.login.setText(String.format("@%s", user.login));
     }
 
     @Override
     public int getItemCount() {
-        return commonItems.size();
+        return contactsItems.size();
     }
 
     private class ContactsItemViewHolder extends RecyclerView.ViewHolder {
         public CircleImageView photo;
         public TextView name;
+        public TextView login;
 
         public ContactsItemViewHolder(View itemView) {
             super(itemView);
             photo = (CircleImageView) itemView.findViewById(R.id.contacts_photo);
             name = (TextView) itemView.findViewById(R.id.contacts_name);
+            login = (TextView) itemView.findViewById(R.id.contacts_login);
         }
     }
 
-    private class LineItemViewHolder extends RecyclerView.ViewHolder {
-        public View line;
-
-        public LineItemViewHolder(View itemView) {
-            super(itemView);
-            line = (View) itemView.findViewById(R.id.divider);
-        }
-    }
-
-    public RPC.UserObject getItem(int position){
-        return commonItems.get(position);
-    }
 }

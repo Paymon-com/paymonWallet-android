@@ -165,9 +165,9 @@ public class FragmentFriendProfile extends Fragment {
         isFABOpen = true;
         floatMenu.animate().rotation(180);
         chatButton.animate().translationY(getResources().getDimension(R.dimen.standard_55));
-        showBitcoin.animate().translationY(getResources().getDimension(R.dimen.standard_105));
-        showEthereum.animate().translationY(getResources().getDimension(R.dimen.standard_155));
-        blockButton.animate().translationY(565);
+        blockButton.animate().translationY(getResources().getDimension(R.dimen.standard_105));
+        showBitcoin.animate().translationY(getResources().getDimension(R.dimen.standard_155));
+        showEthereum.animate().translationY(getResources().getDimension(R.dimen.standard_205));
     }
 
     private void closeFABMenu() {
