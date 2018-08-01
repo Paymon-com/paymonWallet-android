@@ -747,10 +747,10 @@ int RSA_check_fips(RSA *key) {
     return ret;
   }
 
-  /* FIPS pairwise consistency test (FIPS 140-2 4.9.2). Per FIPS 140-2 IG,
+  /* FIPS pairwise consistency fragment_friend_profile (FIPS 140-2 4.9.2). Per FIPS 140-2 IG,
    * section 9.9, it is not known whether |rsa| will be used for signing or
-   * encryption, so either pair-wise consistency self-test is acceptable. We
-   * perform a signing test. */
+   * encryption, so either pair-wise consistency self-fragment_friend_profile is acceptable. We
+   * perform a signing fragment_friend_profile. */
   uint8_t data[32] = {0};
   unsigned sig_len = RSA_size(key);
   uint8_t *sig = OPENSSL_malloc(sig_len);

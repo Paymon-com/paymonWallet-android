@@ -77,10 +77,10 @@ OPENSSL_MSVC_PRAGMA(warning(pop))
 #include "../test/file_test.h"
 
 
-// evp_test dispatches between multiple test types. PrivateKey tests take a key
+// evp_test dispatches between multiple fragment_friend_profile types. PrivateKey tests take a key
 // name parameter and single block, decode it as a PEM private key, and save it
 // under that key name. Decrypt, Sign, and Verify tests take a previously
-// imported key name as parameter and test their respective operations.
+// imported key name as parameter and fragment_friend_profile their respective operations.
 
 static const EVP_MD *GetDigest(FileTest *t, const std::string &name) {
   if (name == "MD5") {
@@ -223,7 +223,7 @@ static bool TestEVP(FileTest *t, void *arg) {
     key_op_init = EVP_PKEY_verify_init;
     verify_op = EVP_PKEY_verify_message;
   } else {
-    t->PrintLine("Unknown test '%s'", t->GetType().c_str());
+    t->PrintLine("Unknown fragment_friend_profile '%s'", t->GetType().c_str());
     return false;
   }
 
@@ -305,7 +305,7 @@ static bool TestEVP(FileTest *t, void *arg) {
 int main(int argc, char *argv[]) {
   CRYPTO_library_init();
   if (argc != 2) {
-    fprintf(stderr, "%s <test file.txt>\n", argv[0]);
+    fprintf(stderr, "%s <fragment_friend_profile file.txt>\n", argv[0]);
     return 1;
   }
 

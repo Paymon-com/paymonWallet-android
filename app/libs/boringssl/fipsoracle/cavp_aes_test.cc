@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_aes_test processes a NIST CAVP AES test vector request file and emits
+// cavp_aes_test processes a NIST CAVP AES fragment_friend_profile vector request file and emits
 // the corresponding response.
 
 #include <stdlib.h>
@@ -184,7 +184,7 @@ static bool TestCipher(FileTest *t, void *arg) {
 }
 
 static int usage(char *arg) {
-  fprintf(stderr, "usage: %s (kat|mct) <cipher> <test file>\n", arg);
+  fprintf(stderr, "usage: %s (kat|mct) <cipher> <fragment_friend_profile file>\n", arg);
   return 1;
 }
 

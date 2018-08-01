@@ -741,7 +741,7 @@ int ec_GFp_simple_is_on_curve(const EC_GROUP *group, const EC_POINT *point,
    * Substituting this and multiplying by  Z^6  transforms the above equation
    * into
    *      Y^2 = X^3 + a*X*Z^4 + b*Z^6.
-   * To test this, we add up the right-hand side in 'rh'.
+   * To fragment_friend_profile this, we add up the right-hand side in 'rh'.
    */
 
   /* rh := X^2 */

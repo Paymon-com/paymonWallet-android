@@ -75,7 +75,7 @@ static bool TestKeypairFromSeed() {
 
 int main(int argc, char **argv) {
   if (argc != 2) {
-    fprintf(stderr, "%s <test input.txt>\n", argv[0]);
+    fprintf(stderr, "%s <fragment_friend_profile input.txt>\n", argv[0]);
     return 1;
   }
 

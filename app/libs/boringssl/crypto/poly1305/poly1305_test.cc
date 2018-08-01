@@ -43,7 +43,7 @@ static bool TestSIMD(FileTest *t, unsigned excess,
   done += todo;
 
   for (;;) {
-    // Feed 128 + |excess| bytes to test SIMD mode.
+    // Feed 128 + |excess| bytes to fragment_friend_profile SIMD mode.
     if (done + 128 + excess > in.size()) {
       break;
     }
@@ -80,7 +80,7 @@ static bool TestPoly1305(FileTest *t, void *arg) {
     return false;
   }
   if (key.size() != 32 || mac.size() != 16) {
-    t->PrintLine("Invalid test");
+    t->PrintLine("Invalid fragment_friend_profile");
     return false;
   }
 
@@ -108,7 +108,7 @@ static bool TestPoly1305(FileTest *t, void *arg) {
   }
 
   // Test SIMD stress patterns. OpenSSL's AVX2 assembly needs a multiple of
-  // four blocks, so test up to three blocks of excess.
+  // four blocks, so fragment_friend_profile up to three blocks of excess.
   if (!TestSIMD(t, 0, key, in, mac) ||
       !TestSIMD(t, 16, key, in, mac) ||
       !TestSIMD(t, 32, key, in, mac) ||
@@ -123,7 +123,7 @@ int main(int argc, char **argv) {
   CRYPTO_library_init();
 
   if (argc != 2) {
-    fprintf(stderr, "%s <test file>\n", argv[0]);
+    fprintf(stderr, "%s <fragment_friend_profile file>\n", argv[0]);
     return 1;
   }
 

@@ -76,7 +76,7 @@ int EVP_tls_cbc_remove_padding(crypto_word_t *out_padding_ok, size_t *out_len,
                                size_t block_size, size_t mac_size) {
   const size_t overhead = 1 /* padding length byte */ + mac_size;
 
-  /* These lengths are all public so we can test them in non-constant time. */
+  /* These lengths are all public so we can fragment_friend_profile them in non-constant time. */
   if (overhead > in_len) {
     return 0;
   }

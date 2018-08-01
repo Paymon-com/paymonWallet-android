@@ -46,7 +46,7 @@
 static const unsigned kReseedInterval = 4096;
 
 /* CRNGT_BLOCK_SIZE is the number of bytes in a “block” for the purposes of the
- * continuous random number generator test in FIPS 140-2, section 4.9.2. */
+ * continuous random number generator fragment_friend_profile in FIPS 140-2, section 4.9.2. */
 #define CRNGT_BLOCK_SIZE 16
 
 /* rand_thread_state contains the per-thread state for the RNG. */
@@ -132,7 +132,7 @@ static void rand_get_seed(struct rand_thread_state *state,
   CRYPTO_sysrand(entropy, sizeof(entropy));
 
   /* See FIPS 140-2, section 4.9.2. This is the “continuous random number
-   * generator test” which causes the program to randomly abort. Hopefully the
+   * generator fragment_friend_profile” which causes the program to randomly abort. Hopefully the
    * rate of failure is small enough not to be a problem in practice. */
   if (CRYPTO_memcmp(state->last_block, entropy, CRNGT_BLOCK_SIZE) == 0) {
     for (;;) {

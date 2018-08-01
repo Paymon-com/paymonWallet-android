@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_tdes_test processes a NIST TMOVS test vector request file and emits the
+// cavp_tdes_test processes a NIST TMOVS fragment_friend_profile vector request file and emits the
 // corresponding response.
 
 #include <stdlib.h>
@@ -302,7 +302,7 @@ static bool TestMCT(FileTest *t, void *arg) {
 }
 
 static int usage(char *arg) {
-  fprintf(stderr, "usage: %s (kat|mct) <cipher> <test file>\n", arg);
+  fprintf(stderr, "usage: %s (kat|mct) <cipher> <fragment_friend_profile file>\n", arg);
   return 1;
 }
 

@@ -80,7 +80,7 @@ static std::pair<std::string, std::string> ParseKeyValue(const char *str, const 
 }
 
 FileTest::ReadResult FileTest::ReadNext() {
-  // If the previous test had unused attributes or instructions, it is an error.
+  // If the previous fragment_friend_profile had unused attributes or instructions, it is an error.
   if (!unused_attributes_.empty() && !ignore_unused_attributes_) {
     for (const std::string &key : unused_attributes_) {
       PrintLine("Unused attribute: %s", key.c_str());
@@ -106,7 +106,7 @@ FileTest::ReadResult FileTest::ReadNext() {
     // Read the next line.
     if (fgets(buf.get(), kBufLen, file_) == nullptr) {
       if (feof(file_)) {
-        // EOF is a valid terminator for a test.
+        // EOF is a valid terminator for a fragment_friend_profile.
         return start_line_ > 0 ? kReadSuccess : kReadEOF;
       }
       fprintf(stderr, "Error reading from input.\n");
@@ -128,7 +128,7 @@ FileTest::ReadResult FileTest::ReadNext() {
       }
       if (in_instruction_block) {
         in_instruction_block = false;
-        // Delimit instruction block from test with a blank line.
+        // Delimit instruction block from fragment_friend_profile with a blank line.
         current_test_ += "\r\n";
       }
     } else if (buf[0] == '#' ||
@@ -141,7 +141,7 @@ FileTest::ReadResult FileTest::ReadNext() {
       is_at_new_instruction_block_ = true;
       if (start_line_ != 0) {
         // Instructions should be separate blocks.
-        fprintf(stderr, "Line %u is an instruction in a test case.\n", line_);
+        fprintf(stderr, "Line %u is an instruction in a fragment_friend_profile case.\n", line_);
         return kReadError;
       }
       if (!in_instruction_block) {
@@ -172,9 +172,9 @@ FileTest::ReadResult FileTest::ReadNext() {
         kv = kv.substr(idx + 1);
       }
     } else {
-      // Parsing a test case.
+      // Parsing a fragment_friend_profile case.
       if (in_instruction_block) {
-        // Some NIST CAVP test files (TDES) have a test case immediately
+        // Some NIST CAVP fragment_friend_profile files (TDES) have a fragment_friend_profile case immediately
         // following an instruction block, without a separate blank line, some
         // of the time.
         in_instruction_block = false;
@@ -196,7 +196,7 @@ FileTest::ReadResult FileTest::ReadNext() {
       unused_attributes_.insert(mapped_key);
       attributes_[mapped_key] = value;
       if (start_line_ == 0) {
-        // This is the start of a test.
+        // This is the start of a fragment_friend_profile.
         type_ = mapped_key;
         parameter_ = value;
         start_line_ = line_;
@@ -409,7 +409,7 @@ int FileTestMainSilent(FileTestFunc run_test, void *arg, const char *path) {
       }
       ERR_clear_error();
     } else if (!result) {
-      // In case the test itself doesn't print output, print something so the
+      // In case the fragment_friend_profile itself doesn't print output, print something so the
       // line number is reported.
       t.PrintLine("Test failed");
       ERR_print_errors_fp(stderr);

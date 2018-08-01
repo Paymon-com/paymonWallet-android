@@ -21,6 +21,7 @@ import java.util.LinkedList;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
+import ru.paymon.android.User;
 import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
@@ -80,20 +81,20 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
         final int chatID = chatsItem.chatID;
         boolean isGroup = false;
 
-//        if (User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
-//            holder.doNotDisturb.setImageResource(R.drawable.ic_notifications_none_white_24dp);
-//        else
-//            holder.doNotDisturb.setImageResource(R.drawable.ic_notifications_off_black_24dp);
+        if (User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
+            holder.doNotDisturb.setImageResource(R.drawable.ic_bell_slash_o_64);
+        else
+            holder.doNotDisturb.setImageResource(R.drawable.ic_bell_o_64);
 
-//        holder.doNotDisturb.setOnClickListener((view -> {
-//            if (!User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
-//                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.add(chatID);
-//            else
-//                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.remove((Integer) chatID);
-//
-//            onBindViewHolder(holder, position);
-//            User.saveConfig();
-//        }));
+        holder.doNotDisturb.setOnClickListener((view -> {
+            if (!User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
+                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.add(chatID);
+            else
+                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.remove((Integer) chatID);
+
+            onBindViewHolder(holder, position);
+            User.saveConfig();
+        }));
 
 //        holder.remove.setOnClickListener((view) -> {
 //            chatsItemsList.remove(position);
@@ -181,11 +182,17 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
         return chatsItemsList.get(position);
     }
 
+    @Override
+    public void onViewDetachedFromWindow(@NonNull CommonChatsViewHolder holder) {
+        super.onViewDetachedFromWindow(holder);
+        holder.mSampleLayout.dismissHover();
+    }
+
     public static class CommonChatsViewHolder extends RecyclerView.ViewHolder {
         ConstraintLayout mainLayout;
         private BlurLayout mSampleLayout;
 //        ImageView remove;
-//        ImageView doNotDisturb;
+        ImageView doNotDisturb;
 
 
         public CommonChatsViewHolder(View itemView) {
@@ -194,19 +201,18 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
             mainLayout = (ConstraintLayout) itemView.findViewById(R.id.main_layout);
             mSampleLayout = (BlurLayout) itemView.findViewById(R.id.blur_layout);
             View hover = LayoutInflater.from(ApplicationLoader.applicationContext).inflate(R.layout.chats_item_hover, null);
+            doNotDisturb = hover.findViewById(R.id.do_not_disturb);
 
             mSampleLayout.setHoverView(hover);
             mSampleLayout.setBlurDuration(550);
-            mSampleLayout.addChildAppearAnimator(hover, R.id.heart, Techniques.FlipInX, 550, 0);
-            mSampleLayout.addChildAppearAnimator(hover, R.id.share, Techniques.FlipInX, 550, 250);
-            mSampleLayout.addChildAppearAnimator(hover, R.id.more, Techniques.FlipInX, 550, 500);
+            mSampleLayout.addChildAppearAnimator(hover, R.id.trash, Techniques.FlipInX, 550, 0);
+            mSampleLayout.addChildAppearAnimator(hover, R.id.do_not_disturb, Techniques.FlipInX, 550, 250);
 
-            mSampleLayout.addChildDisappearAnimator(hover, R.id.heart, Techniques.FlipOutX, 550, 500);
-            mSampleLayout.addChildDisappearAnimator(hover, R.id.share, Techniques.FlipOutX, 550, 250);
-            mSampleLayout.addChildDisappearAnimator(hover, R.id.more, Techniques.FlipOutX, 550, 0);
+            mSampleLayout.addChildDisappearAnimator(hover, R.id.trash, Techniques.FlipOutX, 550, 500);
+            mSampleLayout.addChildDisappearAnimator(hover, R.id.do_not_disturb, Techniques.FlipOutX, 550, 250);
 
-            mSampleLayout.addChildAppearAnimator(hover, R.id.description, Techniques.FadeInUp);
-            mSampleLayout.addChildDisappearAnimator(hover, R.id.description, Techniques.FadeOutDown);
+//            mSampleLayout.addChildAppearAnimator(hover, R.id.description, Techniques.FadeInUp);
+//            mSampleLayout.addChildDisappearAnimator(hover, R.id.description, Techniques.FadeOutDown);
 
             mainLayout.setOnLongClickListener((view -> {
                 mSampleLayout.toggleHover();

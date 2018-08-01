@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_keywrap_test processes a NIST CAVP AES test vector request file and
+// cavp_keywrap_test processes a NIST CAVP AES fragment_friend_profile vector request file and
 // emits the corresponding response.
 
 #include <stdlib.h>
@@ -93,7 +93,7 @@ static bool TestCipher(FileTest *t, void *arg) {
 static int usage(char *arg) {
   fprintf(
       stderr,
-      "usage: %s (enc|dec) (128|256) <test file>\n",
+      "usage: %s (enc|dec) (128|256) <fragment_friend_profile file>\n",
       arg);
   return 1;
 }

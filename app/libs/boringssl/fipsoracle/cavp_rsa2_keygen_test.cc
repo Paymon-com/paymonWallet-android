@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_rsa2_keygen_test processes NIST CAVP RSA2 KeyGen test vector request
+// cavp_rsa2_keygen_test processes NIST CAVP RSA2 KeyGen fragment_friend_profile vector request
 // files and emits the corresponding response.
 
 #include <vector>
@@ -82,7 +82,7 @@ static bool TestRSA2KeyGen(FileTest *t, void *arg) {
 
 int cavp_rsa2_keygen_test_main(int argc, char **argv) {
   if (argc != 2) {
-    fprintf(stderr, "usage: %s <test file>\n",
+    fprintf(stderr, "usage: %s <fragment_friend_profile file>\n",
             argv[0]);
     return 1;
   }

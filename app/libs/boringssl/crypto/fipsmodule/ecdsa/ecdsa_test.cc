@@ -176,7 +176,7 @@ static bool TestBuiltin(FILE *out) {
     }
     const BIGNUM *order = EC_GROUP_get0_order(group.get());
     if (BN_num_bits(order) < 160) {
-      // Too small to test.
+      // Too small to fragment_friend_profile.
       fprintf(out, " skipped\n");
       continue;
     }
@@ -351,7 +351,7 @@ int main(void) {
       !TestECDSA_SIG_max_len(BitsToBytes(384)) ||
       !TestECDSA_SIG_max_len(BitsToBytes(521)) ||
       !TestECDSA_SIG_max_len(BitsToBytes(10000))) {
-    printf("\nECDSA test failed\n");
+    printf("\nECDSA fragment_friend_profile failed\n");
     ERR_print_errors_fp(stdout);
     return 1;
   }

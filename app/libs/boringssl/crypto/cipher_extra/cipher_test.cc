@@ -151,7 +151,7 @@ static bool TestOperation(FileTest *t,
                            const_cast<uint8_t*>(tag.data()))) {
     return false;
   }
-  // The ciphers are run with no padding. For each of the ciphers we test, the
+  // The ciphers are run with no padding. For each of the ciphers we fragment_friend_profile, the
   // output size matches the input size.
   std::vector<uint8_t> result(in->size());
   if (in->size() != out->size()) {
@@ -291,7 +291,7 @@ int main(int argc, char **argv) {
   CRYPTO_library_init();
 
   if (argc != 2) {
-    fprintf(stderr, "%s <test file>\n", argv[0]);
+    fprintf(stderr, "%s <fragment_friend_profile file>\n", argv[0]);
     return 1;
   }
 

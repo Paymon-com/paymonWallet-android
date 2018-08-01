@@ -13,7 +13,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
 // cavp_ecdsa2_siggen_test processes NIST CAVP ECDSA2 SigGen and
-// SigGenComponent test vector request files and emits the corresponding
+// SigGenComponent fragment_friend_profile vector request files and emits the corresponding
 // response.
 
 #include <vector>
@@ -100,7 +100,7 @@ static bool TestECDSA2SigGenComponent(FileTest *t, void *arg) {
 
 int cavp_ecdsa2_siggen_test_main(int argc, char **argv) {
   if (argc != 3) {
-    fprintf(stderr, "usage: %s (SigGen|SigGenComponent) <test file>\n",
+    fprintf(stderr, "usage: %s (SigGen|SigGenComponent) <fragment_friend_profile file>\n",
             argv[0]);
     return 1;
   }
@@ -111,7 +111,7 @@ int cavp_ecdsa2_siggen_test_main(int argc, char **argv) {
   } else if (strcmp(argv[1], "SigGenComponent") == 0) {
     test_func = TestECDSA2SigGenComponent;
   } else {
-    fprintf(stderr, "Unknown test type: %s\n", argv[1]);
+    fprintf(stderr, "Unknown fragment_friend_profile type: %s\n", argv[1]);
     return 1;
   }
 

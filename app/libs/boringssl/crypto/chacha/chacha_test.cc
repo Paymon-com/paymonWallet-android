@@ -220,7 +220,7 @@ static_assert(sizeof(kInput) == sizeof(kOutput),
               "Input and output lengths don't match.");
 
 TEST(ChaChaTest, TestVector) {
-  // Run the test with the test vector at all lengths.
+  // Run the fragment_friend_profile with the fragment_friend_profile vector at all lengths.
   for (size_t len = 0; len <= sizeof(kInput); len++) {
     SCOPED_TRACE(len);
 

@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_sha_monte_test processes a NIST CAVP SHA-Monte test vector request file
+// cavp_sha_monte_test processes a NIST CAVP SHA-Monte fragment_friend_profile vector request file
 // and emits the corresponding response.
 
 #include <stdlib.h>
@@ -81,7 +81,7 @@ static bool TestSHAMonte(FileTest *t, void *arg) {
 }
 
 static int usage(char *arg) {
-  fprintf(stderr, "usage: %s <prefix> <test file>\n", arg);
+  fprintf(stderr, "usage: %s <prefix> <fragment_friend_profile file>\n", arg);
   return 1;
 }
 

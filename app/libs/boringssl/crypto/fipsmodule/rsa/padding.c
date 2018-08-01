@@ -666,7 +666,7 @@ int RSA_padding_add_PKCS1_PSS_mgf1(RSA *rsa, unsigned char *EM,
   p = EM;
 
   /* Initial PS XORs with all zeroes which is a NOP so just update
-   * pointer. Note from a test above this value is guaranteed to
+   * pointer. Note from a fragment_friend_profile above this value is guaranteed to
    * be non-negative. */
   p += emLen - sLen - hLen - 2;
   *p++ ^= 0x1;

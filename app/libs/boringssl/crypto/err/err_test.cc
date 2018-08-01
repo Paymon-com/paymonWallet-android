@@ -24,7 +24,7 @@
 
 TEST(ErrTest, Overflow) {
   for (unsigned i = 0; i < ERR_NUM_ERRORS*2; i++) {
-    ERR_put_error(1, 0 /* unused */, i+1, "test", 1);
+    ERR_put_error(1, 0 /* unused */, i+1, "fragment_friend_profile", 1);
   }
 
   for (unsigned i = 0; i < ERR_NUM_ERRORS - 1; i++) {
@@ -44,7 +44,7 @@ TEST(ErrTest, PutError) {
   ASSERT_EQ(0u, ERR_get_error())
       << "ERR_get_error returned value before an error was added.";
 
-  ERR_put_error(1, 0 /* unused */, 2, "test", 4);
+  ERR_put_error(1, 0 /* unused */, 2, "fragment_friend_profile", 4);
   ERR_add_error_data(1, "testing");
 
   int peeked_line, line, peeked_flags, flags;
@@ -59,7 +59,7 @@ TEST(ErrTest, PutError) {
   EXPECT_EQ(peeked_data, data);
   EXPECT_EQ(peeked_flags, flags);
 
-  EXPECT_STREQ("test", file);
+  EXPECT_STREQ("fragment_friend_profile", file);
   EXPECT_EQ(4, line);
   EXPECT_TRUE(flags & ERR_FLAG_STRING);
   EXPECT_EQ(1, ERR_GET_LIB(packed_error));
@@ -71,7 +71,7 @@ TEST(ErrTest, ClearError) {
   ASSERT_EQ(0u, ERR_get_error())
       << "ERR_get_error returned value before an error was added.";
 
-  ERR_put_error(1, 0 /* unused */, 2, "test", 4);
+  ERR_put_error(1, 0 /* unused */, 2, "fragment_friend_profile", 4);
   ERR_clear_error();
 
   // The error queue should be cleared.
@@ -79,7 +79,7 @@ TEST(ErrTest, ClearError) {
 }
 
 TEST(ErrTest, Print) {
-  ERR_put_error(1, 0 /* unused */, 2, "test", 4);
+  ERR_put_error(1, 0 /* unused */, 2, "fragment_friend_profile", 4);
   ERR_add_error_data(1, "testing");
   uint32_t packed_error = ERR_get_error();
 
@@ -90,7 +90,7 @@ TEST(ErrTest, Print) {
 }
 
 TEST(ErrTest, Release) {
-  ERR_put_error(1, 0 /* unused */, 2, "test", 4);
+  ERR_put_error(1, 0 /* unused */, 2, "fragment_friend_profile", 4);
   ERR_remove_thread_state(NULL);
 
   // The error queue should be cleared.

@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_sha_test processes a NIST CAVP SHA test vector request file and emits
+// cavp_sha_test processes a NIST CAVP SHA fragment_friend_profile vector request file and emits
 // the corresponding response.
 
 #include <stdlib.h>
@@ -75,7 +75,7 @@ static bool TestSHA(FileTest *t, void *arg) {
 }
 
 static int usage(char *arg) {
-  fprintf(stderr, "usage: %s <prefix> <test file>\n", arg);
+  fprintf(stderr, "usage: %s <prefix> <fragment_friend_profile file>\n", arg);
   return 1;
 }
 

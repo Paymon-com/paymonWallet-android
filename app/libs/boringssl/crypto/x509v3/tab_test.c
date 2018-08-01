@@ -101,7 +101,7 @@ int main(void)
         return 0;
     }
 #else
-    /* TODO(davidben): Fix this test in the shared library build. */
+    /* TODO(davidben): Fix this fragment_friend_profile in the shared library build. */
     printf("PASS\n");
     return 0;
 #endif

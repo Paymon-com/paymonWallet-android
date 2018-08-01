@@ -197,7 +197,7 @@ static bool TestSum(FileTest *t, BN_CTX *ctx) {
   // Test |BN_uadd| and |BN_usub| with the prerequisites they are documented as
   // having. Note that these functions are frequently used when the
   // prerequisites don't hold. In those cases, they are supposed to work as if
-  // the prerequisite hold, but we don't test that yet. TODO: test that.
+  // the prerequisite hold, but we don't fragment_friend_profile that yet. TODO: fragment_friend_profile that.
   if (!BN_is_negative(a.get()) &&
       !BN_is_negative(b.get()) && BN_cmp(a.get(), b.get()) >= 0) {
     if (!BN_uadd(ret.get(), a.get(), b.get()) ||
@@ -279,7 +279,7 @@ static bool TestLShift1(FileTest *t, BN_CTX *ctx) {
     return false;
   }
 
-  // Set the LSB to 1 and test rshift1 again.
+  // Set the LSB to 1 and fragment_friend_profile rshift1 again.
   if (!BN_set_bit(lshift1.get(), 0) ||
       !BN_div(ret.get(), nullptr /* rem */, lshift1.get(), two.get(), ctx) ||
       !ExpectBIGNUMsEqual(t, "(LShift1 | 1) / 2", a.get(), ret.get()) ||
@@ -494,7 +494,7 @@ static bool TestModMul(FileTest *t, BN_CTX *ctx) {
   }
 
   if (BN_is_odd(m.get())) {
-    // Reduce |a| and |b| and test the Montgomery version.
+    // Reduce |a| and |b| and fragment_friend_profile the Montgomery version.
     bssl::UniquePtr<BN_MONT_CTX> mont(BN_MONT_CTX_new());
     bssl::UniquePtr<BIGNUM> a_tmp(BN_new()), b_tmp(BN_new());
     if (!mont || !a_tmp || !b_tmp ||
@@ -537,7 +537,7 @@ static bool TestModSquare(FileTest *t, BN_CTX *ctx) {
   }
 
   if (BN_is_odd(m.get())) {
-    // Reduce |a| and test the Montgomery version.
+    // Reduce |a| and fragment_friend_profile the Montgomery version.
     bssl::UniquePtr<BN_MONT_CTX> mont(BN_MONT_CTX_new());
     bssl::UniquePtr<BIGNUM> a_tmp(BN_new());
     if (!mont || !a_tmp ||
@@ -713,7 +713,7 @@ static bool RunTest(FileTest *t, void *arg) {
     }
     return test.func(t, ctx);
   }
-  t->PrintLine("Unknown test type: %s", t->GetType().c_str());
+  t->PrintLine("Unknown fragment_friend_profile type: %s", t->GetType().c_str());
   return false;
 }
 
@@ -1027,20 +1027,20 @@ static bool TestMPI() {
 
     const size_t mpi_len = BN_bn2mpi(bn.get(), NULL);
     if (mpi_len > sizeof(scratch)) {
-      fprintf(stderr, "MPI test #%u: MPI size is too large to test.\n",
+      fprintf(stderr, "MPI fragment_friend_profile #%u: MPI size is too large to fragment_friend_profile.\n",
               (unsigned)i);
       return false;
     }
 
     const size_t mpi_len2 = BN_bn2mpi(bn.get(), scratch);
     if (mpi_len != mpi_len2) {
-      fprintf(stderr, "MPI test #%u: length changes.\n", (unsigned)i);
+      fprintf(stderr, "MPI fragment_friend_profile #%u: length changes.\n", (unsigned)i);
       return false;
     }
 
     if (mpi_len != test.mpi_len ||
         OPENSSL_memcmp(test.mpi, scratch, mpi_len) != 0) {
-      fprintf(stderr, "MPI test #%u failed:\n", (unsigned)i);
+      fprintf(stderr, "MPI fragment_friend_profile #%u failed:\n", (unsigned)i);
       hexdump(stderr, "Expected: ", test.mpi, test.mpi_len);
       hexdump(stderr, "Got:      ", scratch, mpi_len);
       return false;
@@ -1048,12 +1048,12 @@ static bool TestMPI() {
 
     bssl::UniquePtr<BIGNUM> bn2(BN_mpi2bn(scratch, mpi_len, NULL));
     if (bn2.get() == nullptr) {
-      fprintf(stderr, "MPI test #%u: failed to parse\n", (unsigned)i);
+      fprintf(stderr, "MPI fragment_friend_profile #%u: failed to parse\n", (unsigned)i);
       return false;
     }
 
     if (BN_cmp(bn.get(), bn2.get()) != 0) {
-      fprintf(stderr, "MPI test #%u: wrong result\n", (unsigned)i);
+      fprintf(stderr, "MPI fragment_friend_profile #%u: wrong result\n", (unsigned)i);
       return false;
     }
   }
@@ -1133,7 +1133,7 @@ static bool TestRandRange() {
     seen[word] = true;
   }
 
-  // Test that all numbers were accounted for. Note this test is probabilistic
+  // Test that all numbers were accounted for. Note this fragment_friend_profile is probabilistic
   // and may flakily fail when it should have passed. As an upper-bound on the
   // failure probability, we'll never see any one number with probability
   // (4/5)^1000, so the probability of failure is at most 5*(4/5)^1000. This is
@@ -1330,7 +1330,7 @@ static bool TestNegativeZero(BN_CTX *ctx) {
     return false;
   }
   if (!BN_is_zero(c.get()) || BN_is_negative(c.get())) {
-    fprintf(stderr, "Multiplication test failed.\n");
+    fprintf(stderr, "Multiplication fragment_friend_profile failed.\n");
     return false;
   }
 
@@ -1672,20 +1672,20 @@ static bool TestBNSetGetU64() {
         !BN_set_u64(bn.get(), test.value) ||
         !HexToBIGNUM(&expected, test.hex) ||
         BN_cmp(bn.get(), expected.get()) != 0) {
-      fprintf(stderr, "BN_set_u64 test failed for 0x%s.\n", test.hex);
+      fprintf(stderr, "BN_set_u64 fragment_friend_profile failed for 0x%s.\n", test.hex);
       ERR_print_errors_fp(stderr);
       return false;
     }
 
     uint64_t tmp;
     if (!BN_get_u64(bn.get(), &tmp) || tmp != test.value) {
-      fprintf(stderr, "BN_get_u64 test failed for 0x%s.\n", test.hex);
+      fprintf(stderr, "BN_get_u64 fragment_friend_profile failed for 0x%s.\n", test.hex);
       return false;
     }
 
     BN_set_negative(bn.get(), 1);
     if (!BN_get_u64(bn.get(), &tmp) || tmp != test.value) {
-      fprintf(stderr, "BN_get_u64 test failed for -0x%s.\n", test.hex);
+      fprintf(stderr, "BN_get_u64 fragment_friend_profile failed for -0x%s.\n", test.hex);
       return false;
     }
   }

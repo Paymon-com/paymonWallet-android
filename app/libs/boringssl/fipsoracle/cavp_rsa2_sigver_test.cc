@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_rsa2_sigver_test processes NIST CAVP RSA2 SigVer test vector request
+// cavp_rsa2_sigver_test processes NIST CAVP RSA2 SigVer fragment_friend_profile vector request
 // files and emits the corresponding response.
 
 #include <vector>
@@ -100,7 +100,7 @@ static bool TestRSA2SigVer(FileTest *t, void *arg) {
 
 int cavp_rsa2_sigver_test_main(int argc, char **argv) {
   if (argc != 3) {
-    fprintf(stderr, "usage: %s (pkcs15|pss) <test file>\n",
+    fprintf(stderr, "usage: %s (pkcs15|pss) <fragment_friend_profile file>\n",
             argv[0]);
     return 1;
   }
@@ -111,7 +111,7 @@ int cavp_rsa2_sigver_test_main(int argc, char **argv) {
   } else if (strcmp(argv[1], "pss") == 0) {
     ctx = {std::vector<uint8_t>(), true};
   } else {
-    fprintf(stderr, "Unknown test type: %s\n", argv[1]);
+    fprintf(stderr, "Unknown fragment_friend_profile type: %s\n", argv[1]);
     return 1;
   }
 

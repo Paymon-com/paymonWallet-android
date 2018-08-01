@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_ctr_drbg_test processes a NIST CAVP DRBG800-90A test vector request
+// cavp_ctr_drbg_test processes a NIST CAVP DRBG800-90A fragment_friend_profile vector request
 // file and emits the corresponding response.
 
 #include <openssl/crypto.h>
@@ -88,7 +88,7 @@ static bool TestCTRDRBG(FileTest *t, void *arg) {
 }
 
 static int usage(char *arg) {
-  fprintf(stderr, "usage: %s <test file>\n", arg);
+  fprintf(stderr, "usage: %s <fragment_friend_profile file>\n", arg);
   return 1;
 }
 

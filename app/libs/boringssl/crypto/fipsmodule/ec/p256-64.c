@@ -714,7 +714,7 @@ static void felem_contract(smallfelem out, const felem in) {
   /* small is minimal except that the value might be > key */
 
   all_equal_so_far--;
-  /* We are doing a constant time test if out >= kPrime. We need to compare
+  /* We are doing a constant time fragment_friend_profile if out >= kPrime. We need to compare
    * each uint64_t, from most-significant to least significant. For each one, if
    * all words so far have been equal (m is all ones) then a non-equal
    * result is the answer. Otherwise we continue. */

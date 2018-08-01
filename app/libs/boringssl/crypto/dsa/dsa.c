@@ -78,7 +78,7 @@
 
 #define OPENSSL_DSA_MAX_MODULUS_BITS 10000
 
-/* Primality test according to FIPS PUB 186[-1], Appendix 2.1: 50 rounds of
+/* Primality fragment_friend_profile according to FIPS PUB 186[-1], Appendix 2.1: 50 rounds of
  * Rabin-Miller */
 #define DSS_prime_checks 50
 
@@ -366,7 +366,7 @@ end:
   }
 
   for (;;) {
-    /* g=test^r0%key */
+    /* g=fragment_friend_profile^r0%key */
     if (!BN_mod_exp_mont(g, test, r0, p, ctx, mont)) {
       goto err;
     }

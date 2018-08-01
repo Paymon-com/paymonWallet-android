@@ -12,7 +12,7 @@
  * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */
 
-// cavp_hmac_test processes a NIST CAVP HMAC test vector request file and emits
+// cavp_hmac_test processes a NIST CAVP HMAC fragment_friend_profile vector request file and emits
 // the corresponding response.
 
 #include <stdlib.h>
@@ -85,7 +85,7 @@ static bool TestHMAC(FileTest *t, void *arg) {
 }
 
 static int usage(char *arg) {
-  fprintf(stderr, "usage: %s <test file>\n", arg);
+  fprintf(stderr, "usage: %s <fragment_friend_profile file>\n", arg);
   return 1;
 }
 

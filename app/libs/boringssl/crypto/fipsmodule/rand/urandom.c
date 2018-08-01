@@ -294,7 +294,7 @@ void CRYPTO_sysrand(uint8_t *out, size_t requested) {
   }
 
 #if defined(BORINGSSL_FIPS_BREAK_CRNG)
-  // This breaks the "continuous random number generator test" defined in FIPS
+  // This breaks the "continuous random number generator fragment_friend_profile" defined in FIPS
   // 140-2, section 4.9.2, and implemented in rand_get_seed().
   OPENSSL_memset(out, 0, requested);
 #endif

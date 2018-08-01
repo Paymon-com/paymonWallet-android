@@ -14,34 +14,18 @@
         android:gravity="center"
         android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/heart"
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/trash"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_notification" />
+            app:srcCompat="@drawable/ic_trash_o_64" />
 
-        <ImageView
-            android:id="@+id/share"
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/do_not_disturb"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginEnd="20dp"
-            android:src="@drawable/ic_notification" />
-
-        <ImageView
-            android:id="@+id/more"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:src="@drawable/ic_notification" />
+            app:srcCompat="@drawable/ic_bell_slash_o_64" />
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/description"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="12dp"
-        android:text="ALE MALE TEST NAHOOY"
-        android:textColor="#ffffff" />
 </RelativeLayout>

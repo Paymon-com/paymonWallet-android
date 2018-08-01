@@ -225,7 +225,7 @@ static const char kRSAKey[] =
     "moZWgjHvB2W9Ckn7sDqsPB+U2tyX0joDdQEyuiMECDY8oQ==\n"
     "-----END RSA PRIVATE KEY-----\n";
 
-// kCRLTestRoot is a test root certificate. It has private key:
+// kCRLTestRoot is a fragment_friend_profile root certificate. It has private key:
 //
 //     -----BEGIN RSA PRIVATE KEY-----
 //     MIIEpAIBAAKCAQEAo16WiLWZuaymsD8n5SKPmxV1y6jjgr3BS/dUBpbrzd1aeFzN
@@ -613,7 +613,7 @@ static bool TestVerify() {
     return false;
   }
 
-  /* This is the “altchains” test – we remove the cross-signing CA but include
+  /* This is the “altchains” fragment_friend_profile – we remove the cross-signing CA but include
    * the cross-sign in the intermediates. */
   if (Verify(leaf.get(), {root.get()},
              {intermediate.get(), root_cross_signed.get()},
@@ -627,7 +627,7 @@ static bool TestVerify() {
              {intermediate.get(), root_cross_signed.get()}, empty_crls,
              X509_V_FLAG_NO_ALT_CHAINS) !=
       X509_V_ERR_UNABLE_TO_GET_ISSUER_CERT_LOCALLY) {
-    fprintf(stderr, "Altchains test still passed when disabled.\n");
+    fprintf(stderr, "Altchains fragment_friend_profile still passed when disabled.\n");
     return false;
   }
 
@@ -639,7 +639,7 @@ static bool TestVerify() {
   }
 
   /* Test that one cannot skip Basic Constraints checking with a contorted set
-   * of roots and intermediates. This is a regression test for CVE-2015-1793. */
+   * of roots and intermediates. This is a regression fragment_friend_profile for CVE-2015-1793. */
   if (Verify(forgery.get(),
              {intermediate_self_signed.get(), root_cross_signed.get()},
              {leaf_no_key_usage.get(), intermediate.get()},

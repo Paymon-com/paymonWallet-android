@@ -38,7 +38,7 @@ struct HKDFTestVector {
   const uint8_t out[82];
 };
 
-/* These test vectors are from RFC 5869. */
+/* These fragment_friend_profile vectors are from RFC 5869. */
 static const HKDFTestVector kTests[] = {
   {
     EVP_sha256,
@@ -262,7 +262,7 @@ int main(void) {
     }
     if (prk_len != test->prk_len ||
         OPENSSL_memcmp(prk, test->prk, test->prk_len) != 0) {
-      fprintf(stderr, "%zu: Resulting PRK does not match test vector\n", i);
+      fprintf(stderr, "%zu: Resulting PRK does not match fragment_friend_profile vector\n", i);
       return 1;
     }
     uint8_t buf[82];
@@ -274,7 +274,7 @@ int main(void) {
     }
     if (OPENSSL_memcmp(buf, test->out, test->out_len) != 0) {
       fprintf(stderr,
-              "%zu: Resulting key material does not match test vector\n", i);
+              "%zu: Resulting key material does not match fragment_friend_profile vector\n", i);
       return 1;
     }
 
@@ -286,7 +286,7 @@ int main(void) {
     }
     if (OPENSSL_memcmp(buf, test->out, test->out_len) != 0) {
       fprintf(stderr,
-              "%zu: Resulting key material does not match test vector\n", i);
+              "%zu: Resulting key material does not match fragment_friend_profile vector\n", i);
       return 1;
     }
   }
