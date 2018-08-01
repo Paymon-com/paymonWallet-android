@@ -66,11 +66,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
                 Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentProfile.newInstance(), null));
 
         name.setText(Utils.formatUserName(User.currentUser));
-
-        RPC.PM_photo photo = new RPC.PM_photo();
-        photo.user_id = User.currentUser.id;
-        photo.id = User.currentUser.photoID;
-        avatar.setPhoto(photo);
+        avatar.setPhoto(new RPC.PM_photo(User.currentUser.id, User.currentUser.photoID));
 
         return view;
     }

@@ -74,7 +74,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-//        ApplicationLoader.initStrictMode();
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {

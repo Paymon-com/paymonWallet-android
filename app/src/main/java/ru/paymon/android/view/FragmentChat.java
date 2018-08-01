@@ -22,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.DBHelper;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
@@ -67,8 +68,8 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         final Bundle bundle = getArguments();
         if (bundle != null) {
-            if(bundle.containsKey(CHAT_ID_KEY))
-            chatID = bundle.getInt(CHAT_ID_KEY);
+            if (bundle.containsKey(CHAT_ID_KEY))
+                chatID = bundle.getInt(CHAT_ID_KEY);
             if (bundle.containsKey("users")) {
                 isGroup = true;
                 groupUsers = bundle.getParcelableArrayList("users");
@@ -200,7 +201,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
                         MessagesManager.getInstance().lastMessages.put(messageRequest.to_id.user_id, messageRequest.id);
 
                     messagesAdapter.messageIDs.add(messageRequest.id);
-                    messagesAdapter.notifyDataSetChanged();
+                    ApplicationLoader.applicationHandler.post(() -> messagesAdapter.notifyDataSetChanged());
                     messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
                     //TODO:сделать, чтобы если сообщение не дошло, предлагало переотправить
                     NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, chatID);

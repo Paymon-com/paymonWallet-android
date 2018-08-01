@@ -30,6 +30,8 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 import android.widget.ImageView;
 
+import com.daimajia.androidviewhover.tools.Util;
+
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.MediaManager;
@@ -478,7 +480,7 @@ public class CircleImageView extends AppCompatImageView implements NotificationM
             this.photo = photo;
 
         if (photo != null && photo.id > 0) {
-            tryLoadBitmap();
+            Utils.stageQueue.postRunnable(() -> tryLoadBitmap());
         } else {
             setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
         }
@@ -487,11 +489,11 @@ public class CircleImageView extends AppCompatImageView implements NotificationM
     private void tryLoadBitmap() {
         Bitmap bitmap = MediaManager.getInstance().loadPhotoBitmap(photo.user_id, photo.id);
         if (bitmap != null) {
-            setImageBitmap(bitmap);
+            ApplicationLoader.applicationHandler.post(()->setImageBitmap(bitmap));
         } else {
             Utils.netQueue.postRunnable(() -> MediaManager.getInstance().requestPhoto(photo.user_id, photo.id));
         }
-        invalidate();
+        ApplicationLoader.applicationHandler.post(()->invalidate());
     }
 
     @Override

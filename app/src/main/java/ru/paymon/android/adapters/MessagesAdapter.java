@@ -26,6 +26,7 @@ import java.util.LinkedList;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconTextView;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.MainActivity;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
@@ -341,7 +342,7 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
                 }
             }
 
-            AlertDialog.Builder builder = new AlertDialog.Builder(ApplicationLoader.applicationContext)
+            AlertDialog.Builder builder = new AlertDialog.Builder(activity)
                     .setMessage(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
                     .setCancelable(false)
                     .setNegativeButton(ApplicationLoader.applicationContext.getString(R.string.button_cancel), (dialogInterface, i) -> {

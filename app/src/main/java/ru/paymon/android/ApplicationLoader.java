@@ -36,12 +36,16 @@ public class ApplicationLoader extends Application {
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
-        DBHelper dbHelper = new DBHelper(applicationContext);
-        try{
-            db = dbHelper.getWritableDatabase();
-        }catch (Exception e){
-            db = dbHelper.getReadableDatabase();
-        }
+        Utils.stageQueue.postRunnable(()->{
+            DBHelper dbHelper = new DBHelper(applicationContext);
+            try{
+                db = dbHelper.getWritableDatabase();
+            }catch (Exception e){
+                db = dbHelper.getReadableDatabase();
+            }
+
+            User.loadConfig();
+        });
 
         NetworkStateReceiver networkStateReceiver = new NetworkStateReceiver();
 
@@ -51,7 +55,6 @@ public class ApplicationLoader extends Application {
         Utils.checkDisplaySize(getApplicationContext(), null);
         Utils.maxSize = Utils.displaySize.x - Utils.displaySize.x / 100.0 * 45;
 
-        User.loadConfig();
 
         KeyGenerator.getInstance();
         native_init(Config.HOST, Config.PORT, Config.VERSION);
