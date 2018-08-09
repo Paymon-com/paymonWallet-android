@@ -52,9 +52,9 @@ public class DialogFragmentCreateGroup extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.dialog_fragment_create_group, container);
 
-        title = (EditText) view.findViewById(R.id.fragment_dialog_with_edit_edit_text);
-        buttonCancel = (Button) view.findViewById(R.id.fragment_dialog_with_edit_cancel_button);
-        buttonAgree = (Button) view.findViewById(R.id.fragment_dialog_with_edit_agree_button);
+        title = (EditText) view.findViewById(R.id.dialog_fragment_with_edit_edit_text);
+        buttonCancel = (Button) view.findViewById(R.id.dialog_fragment_with_edit_cancel);
+        buttonAgree = (Button) view.findViewById(R.id.dialog_fragment_with_edit_ok);
 
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);

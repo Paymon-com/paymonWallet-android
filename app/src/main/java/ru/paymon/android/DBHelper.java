@@ -9,12 +9,16 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.LongSparseArray;
 
+import org.web3j.crypto.Hash;
+
 import java.sql.Blob;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.SerializedStream;
 
@@ -26,6 +30,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String TABlE_GROUPS = "groups";
     public static final String TABlE_CHATS = "chats";
     public static final String TABlE_CHANNELS = "channels";
+    public static final String TABlE_EX_RATES = "ex_rates";
 
     public static final String KEY_ID = "id";
     public static final String KEY_FROM_ID = "from_id";
@@ -43,6 +48,11 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_TITLE = "title";
     public static final String KEY_CREATOR_ID = "creator_id";
     public static final String KEY_USERS_COUNT = "users_count";
+
+    public static final String KEY_EX_RATES_CRYPTO_CUR = "crypto_cur";
+    public static final String KEY_EX_RATES_FIAT_CUR = "fiat_cur";
+    public static final String KEY_EX_RATES_VALUE = "value";
+
 
     private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "CacheDB";
@@ -101,6 +111,15 @@ public class DBHelper extends SQLiteOpenHelper {
     3   group_id        int
      */
 
+    /*
+        ExchangeRates
+
+        0   id          int
+        1   crypto_cur  varchar
+        2   fiat_cur    varchar
+        3   value       varchar
+     */
+
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -157,6 +176,12 @@ public class DBHelper extends SQLiteOpenHelper {
                         "%s INTEGER UNSIGNED NULL DEFAULT 0, " +
                         "%s INTEGER UNSIGNED NULL DEFAULT 0 " +
                         " );", TABlE_CHATS, KEY_ID, KEY_USER_ID, KEY_GROUP_ID, KEY_CHANNEL_ID));
+                sqLiteDatabase.execSQL(String.format("CREATE TABLE IF NOT EXISTS %s (" +
+                        "%s INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                        "%s VARCHAR(20), " +
+                        "%s VARCHAR(20), " +
+                        "%s VARCHAR(30) " +
+                        " );", TABlE_EX_RATES, KEY_ID, KEY_EX_RATES_CRYPTO_CUR, KEY_EX_RATES_FIAT_CUR, KEY_EX_RATES_VALUE));
 
                 sqLiteDatabase.setVersion(DATABASE_VERSION);
                 break;
@@ -309,7 +334,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     public static List<RPC.Group> getAllGroups() {
-        List<RPC.Group> groupList = new ArrayList<>();
+        final List<RPC.Group> groupList = new ArrayList<>();
 
         Cursor cursor = ApplicationLoader.db.rawQuery("SELECT * FROM " + TABlE_GROUPS, null);
 
@@ -323,5 +348,42 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return groupList;
+    }
+
+    public static void putExchangeRates(final HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates) {
+        for (final String cryptoCurrency : exchangeRates.keySet()) {
+            final HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
+            for (final String fiatCurrency : exchangeRate.keySet()) {
+                final String value = exchangeRate.get(fiatCurrency).value;
+                final SQLiteStatement sqLiteStatement = ApplicationLoader.db.compileStatement(String.format("INSERT INTO %s (%s, %s, %s) VALUES ('%s', '%s', '%s');",//TODO:use replace
+                        TABlE_EX_RATES,
+                         KEY_EX_RATES_CRYPTO_CUR, KEY_EX_RATES_FIAT_CUR, KEY_EX_RATES_VALUE,
+                        cryptoCurrency, fiatCurrency, value));
+                sqLiteStatement.execute();
+            }
+        }
+    }
+
+    public static HashMap<String, HashMap<String, ExchangeRatesItem>> getExchangeRates() {
+        final HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates = new HashMap<>();
+
+        final Cursor cursor = ApplicationLoader.db.rawQuery("SELECT * FROM " + TABlE_EX_RATES, null);
+
+        while (cursor.moveToNext()) {
+            final String cryptoCurrency = cursor.getString(1);
+            final String fiatCurrency = cursor.getString(2);
+            final String value = cursor.getString(3);
+            HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
+            if (exchangeRate != null) {
+                exchangeRate.put(fiatCurrency, new ExchangeRatesItem(cryptoCurrency, fiatCurrency, value));
+            } else {
+                exchangeRate = new HashMap<>();
+                exchangeRate.put(fiatCurrency, new ExchangeRatesItem(cryptoCurrency, fiatCurrency, value));
+                exchangeRates.put(cryptoCurrency, exchangeRate);
+            }
+        }
+        cursor.close();
+
+        return exchangeRates;
     }
 }

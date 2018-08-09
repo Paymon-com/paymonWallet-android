@@ -640,5 +640,11 @@
 
     <string name="format_time">Формат времени</string>
     <string name="change_theme">Выбор темы</string>
-
+    <string name="money_control_eth">Denomination and accuracy ETH</string>
+    <string name="default_denomination_value_eth">2 decimal places</string>
+    <string name="money_denomination_auto">Autoformat</string>
+    <string name="money_denomination_8">8 decimal places</string>
+    <string name="money_denomination_6">6 decimal places</string>
+    <string name="money_denomination_4">4 decimal places</string>
+    <string name="money_denomination_2">2 decimal places</string>
 </resources>

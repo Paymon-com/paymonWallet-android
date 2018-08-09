@@ -58,5 +58,13 @@ dependencies {
     implementation 'io.requery:sqlite-android:3.24.0'
     implementation 'com.nineoldandroids:library:2.4.0'
     implementation 'com.daimajia.androidanimations:library:1.1.2@aar'
-//    implementation "com.daimajia.swipelayout:library:1.2.0@aar"
+    implementation ('org.web3j:core:3.3.1-android')
+    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
+    implementation 'com.android.volley:volley:1.1.1'
+//    implementation 'org.jsoup:jsoup:1.10.3'
+
+    implementation('com.coinbase.android:coinbase-android-sdk:1.0.1') {
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient'
+        exclude group: 'org.apache.httpcomponents', module: 'httpclient-android'
+    }
 }

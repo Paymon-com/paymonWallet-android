@@ -201,8 +201,11 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
                         MessagesManager.getInstance().lastMessages.put(messageRequest.to_id.user_id, messageRequest.id);
 
                     messagesAdapter.messageIDs.add(messageRequest.id);
-                    ApplicationLoader.applicationHandler.post(() -> messagesAdapter.notifyDataSetChanged());
-                    messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        messagesAdapter.notifyDataSetChanged();
+                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
+                    });
+
                     //TODO:сделать, чтобы если сообщение не дошло, предлагало переотправить
                     NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, chatID);
                 });

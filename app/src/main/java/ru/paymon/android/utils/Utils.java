@@ -1,5 +1,7 @@
 package ru.paymon.android.utils;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Paint;
@@ -21,6 +23,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
@@ -35,6 +38,7 @@ import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.net.RPC;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_IS_24H;
 
 public class Utils {
@@ -154,6 +158,13 @@ public class Utils {
         return userLogin.length() >= 3 && matcher.find();
     }
 
+    public static void copyText(String text, FragmentActivity fragmentActivity) {
+        ClipboardManager clipboard = (ClipboardManager) fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied Text", text);
+        clipboard.setPrimaryClip(clip);
+        Toast.makeText(fragmentActivity, fragmentActivity.getString(R.string.text_is_copied), Toast.LENGTH_SHORT).show();
+    }
+
     public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {
         ApplicationLoader.applicationHandler.post(() -> {
             final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -256,8 +267,6 @@ public class Utils {
             supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
             supportActionBar.setCustomView(customView);
             supportActionBar.setDisplayShowCustomEnabled(true);
-            supportActionBar.setDisplayShowHomeEnabled(true);
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
             supportActionBar.show();
         }
     }
@@ -350,15 +359,15 @@ public class Utils {
         return !key.isEmpty() && matcher.find();
     }
 
-    public static int WTF(String key){
-        if(key.isEmpty()) return 0;
+    public static int WTF(String key) {
+        if (key.isEmpty()) return 0;
 
         Matcher matcher = Pattern.compile("^[13][a-zA-Z0-9]{25,34}$").matcher(key);
-        if(matcher.find())
+        if (matcher.find())
             return 1;
 
-         matcher = Pattern.compile("^0x[a-fA-F0-9]{40,44}$").matcher(key);
-        if(matcher.find())
+        matcher = Pattern.compile("^0x[a-fA-F0-9]{40,44}$").matcher(key);
+        if (matcher.find())
             return 2;
 
         return 0;

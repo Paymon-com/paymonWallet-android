@@ -24,6 +24,8 @@ public class NotificationManager {
         didConnectedToServer,
         didEstablishedSecuredConnection,
         didLoadEthereumWallet,
+        didLoadBitcoinWallet,
+        didLoadPaymonWallet,
         didDisconnectedFromTheServer,
         userInfoDidLoaded,
 

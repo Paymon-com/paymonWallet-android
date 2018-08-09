@@ -39,6 +39,12 @@ public class User {
     public static final String CLIENT_SECURITY_PASSWORD_HINT_KEY = "CLIENT_SECURITY_PASSWORD_HINT";
     public static final String CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY = "CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY";
 
+    public static final String CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY = "CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY";
+    public static final String CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS_KEY = "CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS_KEY";
+    public static final String CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS_KEY = "CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS_KEY";
+    public static final String CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD_KEY = "CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD_KEY";
+    public static final String CLIENT_MONEY_ETHEREUM_WALLET_BALANCE_KEY = "CLIENT_MONEY_ETHEREUM_WALLET_BALANCE_KEY";
+
     public static boolean CLIENT_BASIC_DATE_FORMAT_IS_24H;
     public static boolean CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY;
     public static boolean CLIENT_MESSAGES_NOTIFY_IS_VIBRATION;
@@ -49,6 +55,12 @@ public class User {
     public static String CLIENT_SECURITY_PASSWORD_HINT;
     public static Uri CLIENT_MESSAGES_NOTIFY_SOUND_FILE;
     public static LinkedList<Integer> CLIENT_DO_NOT_DISTURB_CHATS_LIST;
+
+    public static String CLIENT_MONEY_ETHEREUM_DENOMINATION;
+    public static String CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS;
+    public static String CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS;
+    public static String CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD;
+    public static String CLIENT_MONEY_ETHEREUM_WALLET_BALANCE;
     //endregion
 
     private static String objectToString(Serializable object) {
@@ -58,7 +70,7 @@ public class User {
             ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteArrayOutputStream);
             objectOutputStream.writeObject(object);
             objectOutputStream.close();
-            encoded = new String(Base64.encodeToString(byteArrayOutputStream.toByteArray(),0));
+            encoded = new String(Base64.encodeToString(byteArrayOutputStream.toByteArray(), 0));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,12 +78,12 @@ public class User {
     }
 
     @SuppressWarnings("unchecked")
-    private static Serializable stringToObject(String string){
-        byte[] bytes = Base64.decode(string,0);
+    private static Serializable stringToObject(String string) {
+        byte[] bytes = Base64.decode(string, 0);
         Serializable object = null;
         try {
-            ObjectInputStream objectInputStream = new ObjectInputStream( new ByteArrayInputStream(bytes) );
-            object = (Serializable)objectInputStream.readObject();
+            ObjectInputStream objectInputStream = new ObjectInputStream(new ByteArrayInputStream(bytes));
+            object = (Serializable) objectInputStream.readObject();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
@@ -114,6 +126,12 @@ public class User {
         CLIENT_SECURITY_PASSWORD_HINT = clientPreferences.getString(CLIENT_SECURITY_PASSWORD_HINT_KEY, null);
         String doNotDisturbListString = clientPreferences.getString(CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY, null);
         CLIENT_DO_NOT_DISTURB_CHATS_LIST = doNotDisturbListString == null ? new LinkedList<>() : (LinkedList<Integer>) stringToObject(doNotDisturbListString);
+        CLIENT_MONEY_ETHEREUM_DENOMINATION = clientPreferences.getString(CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY, ApplicationLoader.applicationContext.getString(R.string.default_denomination_value_eth));
+        CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = clientPreferences.getString(CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD_KEY, null);
+        CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = clientPreferences.getString(CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS_KEY, null);
+        CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = clientPreferences.getString(CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS_KEY, null);
+        CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = clientPreferences.getString(CLIENT_MONEY_ETHEREUM_WALLET_BALANCE_KEY, "0.00");
+
     }
 
     public static void saveConfig() {
@@ -140,30 +158,34 @@ public class User {
 
         editor.putString(CLIENT_SECURITY_PASSWORD_VALUE_KEY, CLIENT_SECURITY_PASSWORD_VALUE);
         editor.putString(CLIENT_SECURITY_PASSWORD_HINT_KEY, CLIENT_SECURITY_PASSWORD_HINT);
-        if(CLIENT_DO_NOT_DISTURB_CHATS_LIST != null)
-        editor.putString(CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY, objectToString(CLIENT_DO_NOT_DISTURB_CHATS_LIST));
-
+        if (CLIENT_DO_NOT_DISTURB_CHATS_LIST != null)
+            editor.putString(CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY, objectToString(CLIENT_DO_NOT_DISTURB_CHATS_LIST));
+        editor.putString(CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY, CLIENT_MONEY_ETHEREUM_DENOMINATION);
+        editor.putString(CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD_KEY, CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
+        editor.putString(CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS_KEY, CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS);
+        editor.putString(CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS_KEY, CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS);
+        editor.putString(CLIENT_MONEY_ETHEREUM_WALLET_BALANCE_KEY, CLIENT_MONEY_ETHEREUM_WALLET_BALANCE);
         editor.apply();
     }
 
-    public static void clearConfig(){
+    public static void clearConfig() {
         currentUser = null;
         saveConfig();
     }
 
-    public static void setDefaultConfig(){ //TODO:сделать кнопку сброса к дефолтам в настройках
+    public static void setDefaultConfig() { //TODO:сделать кнопку сброса к дефолтам в настройках
         SharedPreferences clientPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationLoader.applicationContext);
         SharedPreferences.Editor editor = clientPreferences.edit();
 
         editor.putString(CLIENT_BASIC_DATE_FORMAT_LIST, ApplicationLoader.applicationContext.getString(R.string.date_format_24h));
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_DONT_WORRY_SWITCH, false);
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_VIBRATION_SWITCH, true);
-        editor.putString(CLIENT_BASIC_DATE_FORMAT_LIST,"");//TODO:default sound file uri
-        editor.putBoolean(CLIENT_MESSAGES_NOTIFY_NOTIFICATIONS_ENABLED_SWITCH,true);
-        editor.putBoolean(CLIENT_MESSAGES_NOTIFY_TRANSACTIONS_SWITCH,true);
-        editor.putBoolean(CLIENT_SECURITY_PASSWORD_ENABLED_CHECK,false);
-        editor.putString(CLIENT_SECURITY_PASSWORD_VALUE_KEY,null);
-        editor.putString(CLIENT_SECURITY_PASSWORD_HINT_KEY,null);
+        editor.putString(CLIENT_BASIC_DATE_FORMAT_LIST, "");//TODO:default sound file uri
+        editor.putBoolean(CLIENT_MESSAGES_NOTIFY_NOTIFICATIONS_ENABLED_SWITCH, true);
+        editor.putBoolean(CLIENT_MESSAGES_NOTIFY_TRANSACTIONS_SWITCH, true);
+        editor.putBoolean(CLIENT_SECURITY_PASSWORD_ENABLED_CHECK, false);
+        editor.putString(CLIENT_SECURITY_PASSWORD_VALUE_KEY, null);
+        editor.putString(CLIENT_SECURITY_PASSWORD_HINT_KEY, null);
         editor.apply();
     }
 }

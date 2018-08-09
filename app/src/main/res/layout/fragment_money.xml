@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -19,7 +20,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frame" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_money_middle_card_view" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/fragment_money_exchange_rates"
@@ -27,9 +28,9 @@
             android:layout_height="wrap_content"
             android:background="@color/blue_dark"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_money_frame" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_money_wallets" />
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/fragment_money_middle_card_view"
@@ -38,29 +39,43 @@
             android:background="@color/blue_dark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_money_wallets">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/fragment_money_spinner"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/exchange_rates"
-                android:textAllCaps="true"
-                android:textColor="@color/white"
-                android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/fragment_money_update"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+            <!--<TextView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--android:layout_marginStart="16dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:fontFamily="sans-serif-light"-->
+                <!--android:text="@string/exchange_rates"-->
+                <!--android:textAllCaps="true"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:textSize="12sp"-->
+                <!--app:layout_constraintBottom_toBottomOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toTopOf="parent" />-->
 
             <TextView
                 android:id="@+id/fragment_money_update"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="16dp"
+                android:layout_marginTop="8dp"
                 android:fontFamily="sans-serif-light"
                 android:gravity="center"
                 android:text="@string/update"
@@ -83,16 +98,6 @@
 
         </FrameLayout>
 
-        <TextSwitcher
-            android:id="@+id/fragment_money_loader"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/white"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_money_frame" />
-
         <FrameLayout
             android:id="@+id/frame"
             android:layout_width="395dp"
@@ -105,6 +110,18 @@
             app:layout_constraintTop_toTopOf="parent">
 
         </FrameLayout>
+
+        <TextSwitcher
+            android:id="@+id/fragment_money_loader"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_money_middle_card_view" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

@@ -11,6 +11,7 @@ import android.os.StrictMode;
 
 //import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
+import ru.paymon.android.gateway.Ethereum;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.utils.KeyGenerator;
