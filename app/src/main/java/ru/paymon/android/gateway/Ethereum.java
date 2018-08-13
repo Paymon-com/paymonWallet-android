@@ -139,10 +139,14 @@ public class Ethereum {
         return (new File(FILE_PATH, FILE_NAME + userID + ".json")).exists();
     }
 
-    public boolean loadWallet(final String password) throws IOException, CipherException {
+    public boolean loadWallet(final String password)  {
         Log.d(Config.TAG, "loadWallet: start load wallet " + " user id: " + User.currentUser.id + " password: " + password);
 
-        walletCredentials = WalletUtils.loadCredentials(password, FILE_PATH + "/" + FILE_NAME + User.currentUser.id + ".json");
+        try {
+            walletCredentials = WalletUtils.loadCredentials(password, FILE_PATH + "/" + FILE_NAME + User.currentUser.id + ".json");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         Log.d(Config.TAG, "loadWallet: " + walletCredentials);
 
         return walletCredentials != null;

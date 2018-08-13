@@ -28,39 +28,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <LinearLayout
-                    android:id="@+id/linearLayout"
+                <include
+                    layout="@layout/fragment_contacts_page1"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content" />
 
-                    <EditText
-                        android:id="@+id/edit_text_contacts_search"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recViewContacts"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/linearLayout2"
+                <include
+                    layout="@layout/fragment_contacts_page2"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content" />
 
-                    <android.support.v7.widget.SearchView
-                        android:id="@+id/edit_text_contacts_search2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recViewContactsGlobal"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent" />
-                </LinearLayout>
             </FrameLayout>
         </LinearLayout>
     </TabHost>

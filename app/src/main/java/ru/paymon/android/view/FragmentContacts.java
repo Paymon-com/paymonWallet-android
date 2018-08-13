@@ -1,7 +1,6 @@
 package ru.paymon.android.view;
 
 import android.os.Bundle;
-import android.os.UserManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,9 +11,7 @@ import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -22,10 +19,8 @@ import android.widget.TabHost;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ContactsAdapter;
@@ -37,13 +32,9 @@ import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
-//import ru.paymon.android.models.ContactsItem;
-
-
 public class FragmentContacts extends Fragment {
     private static FragmentContacts instance;
     private DialogProgress dialogProgress;
-    private String sombody;
 
     public static synchronized FragmentContacts newInstance() {
         instance = new FragmentContacts();
@@ -132,12 +123,7 @@ public class FragmentContacts extends Fragment {
                             RPC.PM_users received = (RPC.PM_users) response;
                             ArrayList<RPC.UserObject> users = received.users;
                             contactsGlobalAdapter.contactsGlobalItems.clear();
-                            for (int i = 0; i < users.size(); i++) {
-                                RPC.UserObject userGlobal = users.get(i);
-                                if (userGlobal.first_name.toLowerCase().contains(searchText) || userGlobal.last_name.toLowerCase().contains(searchText) || userGlobal.login.toLowerCase().contains(searchText)) {
-                                    contactsGlobalAdapter.contactsGlobalItems.add(userGlobal);
-                                }
-                            }
+                            contactsGlobalAdapter.contactsGlobalItems.addAll(users);
                             ApplicationLoader.applicationHandler.post(() -> contactsGlobalAdapter.notifyDataSetChanged());
                         }
 
@@ -171,12 +157,7 @@ public class FragmentContacts extends Fragment {
                                 RPC.PM_users received = (RPC.PM_users) response;
                                 ArrayList<RPC.UserObject> users = received.users;
                                 contactsGlobalAdapter.contactsGlobalItems.clear();
-                                for (int i = 0; i < users.size(); i++) {
-                                    RPC.UserObject userGlobal = users.get(i);
-                                    if (userGlobal.first_name.toLowerCase().contains(searchText) || userGlobal.last_name.toLowerCase().contains(searchText) || userGlobal.login.toLowerCase().contains(searchText)) {
-                                        contactsGlobalAdapter.contactsGlobalItems.add(userGlobal);
-                                    }
-                                }
+                                contactsGlobalAdapter.contactsGlobalItems.addAll(users);
                                 ApplicationLoader.applicationHandler.post(() -> contactsGlobalAdapter.notifyDataSetChanged());
                             }
 
@@ -193,15 +174,15 @@ public class FragmentContacts extends Fragment {
 
         tabHost.setup();
 
-        TabHost.TabSpec tabSpec = tabHost.newTabSpec("Контакты");
+        TabHost.TabSpec tabSpec = tabHost.newTabSpec("contacts");
         tabSpec.setContent(R.id.linearLayout);
-        String contactTab = "Контакты";
+        String contactTab = "Контакты"; //TODO:string
         tabSpec.setIndicator(contactTab);
         tabHost.addTab(tabSpec);
 
-        tabSpec = tabHost.newTabSpec("Глоабльный поиск");
+        tabSpec = tabHost.newTabSpec("global");
         tabSpec.setContent(R.id.linearLayout2);
-        String contactsGlobalTab = "Глоабльный поиск";
+        String contactsGlobalTab = "Глобальный поиск";//TODO:string
         tabSpec.setIndicator(contactsGlobalTab);
         tabHost.addTab(tabSpec);
         tabHost.setCurrentTab(0);
@@ -232,7 +213,6 @@ public class FragmentContacts extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideActionBar(getActivity());
-//        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_contacts));
         Utils.showBottomBar(getActivity());
         setHasOptionsMenu(true);
     }

@@ -64,6 +64,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     private ExchangeRatesAdapter exchangeRatesAdapter;
     private Spinner spinner;
     private LoaderHandler loaderHandler;
+    private HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates;
 
     public static synchronized FragmentMoney newInstance() {
         instance = new FragmentMoney();
@@ -118,8 +119,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                initExchangeRatesAndWallets(false);
-                initExchangeRatesAndWallets();
+                changeFiatCurrency();
             }
 
             @Override
@@ -130,11 +130,8 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
 
         updateButton.setOnClickListener(view1 -> {
-//            initExchangeRatesAndWallets(false);
             initExchangeRatesAndWallets();
         });
-
-//        initExchangeRatesAndWallets(true);
 
         return view;
     }
@@ -142,11 +139,11 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
+        Utils.showBottomBar(getActivity());
         Utils.hideActionBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didLoadEthereumWallet);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didLoadPaymonWallet);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didLoadBitcoinWallet);
-//        initExchangeRatesAndWallets(false);
         initExchangeRatesAndWallets();
     }
 
@@ -160,8 +157,6 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-//        initExchangeRatesAndWallets(true);
-//        initExchangeRatesAndWallets(false);
         initExchangeRatesAndWallets();
     }
 
@@ -177,9 +172,9 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
     private void initExchangeRatesAndWallets() {
         Utils.stageQueue.postRunnable(() -> {
-            ApplicationLoader.applicationHandler.post(() -> startLoaderAnimation());
+            ApplicationLoader.applicationHandler.post(this::startLoaderAnimation);
             final String currentFiatCurrency = spinner.getSelectedItem().toString();
-            final HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates = DBHelper.getExchangeRates();
+            exchangeRates = DBHelper.getExchangeRates();
             ArrayList<ExchangeRatesItem> exchangeRatesItems = new ArrayList<>();
             for (final String cryptoCurrency : exchangeRates.keySet()) {
                 final HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
@@ -191,12 +186,31 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
             final ArrayList<WalletItem> walletItems = new ArrayList<>();
             if (User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD != null) {
-                try {
-                    Ethereum.getInstance().loadWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
-                    walletItems.add(new WalletItem("ETH", currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, Ethereum.getInstance().calculateFiatBalance(exchangeRates.get("ETH").get(currentFiatCurrency).value), false));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                final String cryptoCurrency = "ETH";
+                final String exchangeRate = exchangeRates.get(cryptoCurrency).get(currentFiatCurrency).value;
+
+                boolean isWalletLoaded = Ethereum.getInstance().loadWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
+                if (isWalletLoaded)
+                    walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, Ethereum.getInstance().calculateFiatBalance(exchangeRates.get("ETH").get(currentFiatCurrency).value), false));
+                else
+                    walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, "0.00", "0.00", true));
+                Ethereum.getInstance().getBalance(
+                        (responseBalance) -> {
+                            final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
+                            if (bigInteger != null) {
+                                User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
+                                User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
+                                User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
+                                User.saveConfig();
+                                final String fiatBalance = Ethereum.getInstance().calculateFiatBalance(exchangeRate);
+                                walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false));
+                            }
+                        },
+                        (error) -> {
+                            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Баланс Ethereum кошелька получить не удалось!", Toast.LENGTH_LONG).show());
+                            final String fiatBalance = Ethereum.getInstance().calculateFiatBalance(exchangeRate);
+                            walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false));
+                        });
             } else {
                 walletItems.add(new WalletItem("ETH", currentFiatCurrency, "0.00", "0.00", true));
             }
@@ -211,48 +225,34 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
                 exchangeRatesAdapter = new ExchangeRatesAdapter(exchangeRatesItems);
                 ApplicationLoader.applicationHandler.post(() -> exchangeRatesRecView.setAdapter(exchangeRatesAdapter));
             }
+            ApplicationLoader.applicationHandler.post(this::stopLoaderAnimation);
+        });
+    }
 
-            try {
-                walletItems.clear();
-                if (User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD != null) {
-                    final String cryptoCurrency = "ETH";
-                    final String exchangeRate = exchangeRates.get(cryptoCurrency).get(currentFiatCurrency).value;
-
-                    try {
-                        Ethereum.getInstance().loadWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-
-                    Ethereum.getInstance().getBalance(
-                            (responseBalance) -> {
-                                final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
-                                if (bigInteger != null) {
-                                    User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
-                                    User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
-                                    User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
-                                    User.saveConfig();
-                                    final String fiatBalance = Ethereum.getInstance().calculateFiatBalance(exchangeRate);
-                                    walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false));
-                                    cryptoWalletsAdapter = new CryptoWalletsAdapter(walletItems, getActivity());
-                                    ApplicationLoader.applicationHandler.post(() -> walletsRecView.setAdapter(cryptoWalletsAdapter));
-                                }
-                            },
-                            (error) -> {
-                                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Баланс Ethereum кошелька получить не удалось!", Toast.LENGTH_LONG).show());
-                                final String fiatBalance = Ethereum.getInstance().calculateFiatBalance(exchangeRate);
-                                walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false));
-                            });
-                } else {
-                    walletItems.add(new WalletItem("ETH", currentFiatCurrency, "0.00", "0.00", true));
-                    cryptoWalletsAdapter = new CryptoWalletsAdapter(walletItems, getActivity());
-                    ApplicationLoader.applicationHandler.post(() -> walletsRecView.setAdapter(cryptoWalletsAdapter));
-                }
-            } catch (Exception e) {
-                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Обновить информацию о кошельках не удалось", Toast.LENGTH_LONG).show());
-                e.printStackTrace();
+    private void changeFiatCurrency() {
+        Utils.stageQueue.postRunnable(() -> {
+            final String currentFiatCurrency = spinner.getSelectedItem().toString();
+            ArrayList<ExchangeRatesItem> exchangeRatesItems = new ArrayList<>();
+            for (final String cryptoCurrency : exchangeRates.keySet()) {
+                final HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
+                final String value = exchangeRate.get(currentFiatCurrency).value;
+                exchangeRatesItems.add(new ExchangeRatesItem(cryptoCurrency, currentFiatCurrency, value));
             }
-            ApplicationLoader.applicationHandler.post(() -> stopLoaderAnimation());
+            exchangeRatesAdapter = new ExchangeRatesAdapter(exchangeRatesItems);
+            ApplicationLoader.applicationHandler.post(() -> exchangeRatesRecView.setAdapter(exchangeRatesAdapter));
+
+            final String ethExRate = exchangeRates.get("ETH").get(currentFiatCurrency).value;
+            for (WalletItem wallet : cryptoWalletsAdapter.walletItems) {
+                wallet.fiatCurrency = currentFiatCurrency;
+                if (wallet.cryptoCurrency.equals("ETH")) {
+                    wallet.fiatBalance = Ethereum.getInstance().calculateFiatBalance(ethExRate);
+                } else if (wallet.cryptoCurrency.equals("BTC")) {
+                    //       TODO:
+                } else if (wallet.cryptoCurrency.equals("PMNT")) {
+                    //TODO:
+                }
+            }
+            ApplicationLoader.applicationHandler.post(() -> cryptoWalletsAdapter.notifyDataSetChanged());
         });
     }
 

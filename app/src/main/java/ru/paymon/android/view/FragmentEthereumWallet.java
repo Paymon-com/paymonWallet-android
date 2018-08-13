@@ -21,6 +21,8 @@ import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.androidviewhover.tools.Util;
+
 import java.math.BigInteger;
 
 import ru.paymon.android.ApplicationLoader;
@@ -31,6 +33,7 @@ import ru.paymon.android.utils.Utils;
 
 public class FragmentEthereumWallet extends Fragment {
     private static FragmentEthereumWallet instance;
+    private TextView balance;
 
     public static FragmentEthereumWallet newInstance() {
         instance = new FragmentEthereumWallet();
@@ -52,24 +55,8 @@ public class FragmentEthereumWallet extends Fragment {
         ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_withdraw_button);
         Button privateKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_public_key_button);
-        TextView balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
+        balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
 
-        Ethereum.getInstance().getBalance(
-                (responseBalance) -> {
-                    final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
-                    if (bigInteger != null) {
-                        User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
-                        User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
-                        User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
-                        User.saveConfig();
-                        balance.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE);
-                    }
-                },
-                (error) -> {
-                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Баланс Ethereum кошелька обновить не удалось!", Toast.LENGTH_LONG).show());
-                });
-
-        balance.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE);
 
 //        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));
         transfer.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumWalletTransfer.newInstance(), null));
@@ -88,6 +75,27 @@ public class FragmentEthereumWallet extends Fragment {
         Utils.setActionBarWithTitle(getActivity(), "");
         Utils.setArrowBackInToolbar(getActivity());
         Utils.hideBottomBar(getActivity());
+        getBalance();
+    }
+
+    private void getBalance() {
+        Utils.stageQueue.postRunnable(() -> {
+            Ethereum.getInstance().getBalance(
+                    (responseBalance) -> {
+                        final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
+                        if (bigInteger != null) {
+                            User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
+                            User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
+                            User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
+                            User.saveConfig();
+                        }
+                    },
+                    (error) -> {
+                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Баланс Ethereum кошелька обновить не удалось!", Toast.LENGTH_LONG).show());
+                    });
+
+            ApplicationLoader.applicationHandler.post(() -> balance.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE));
+        });
     }
 
     @Override
