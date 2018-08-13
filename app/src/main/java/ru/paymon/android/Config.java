@@ -30,4 +30,10 @@ public class Config {
     public static final int IMPORTANT_PERMISSIONS = 100;
     public static final int READ_CONTACTS_PERMISSION = 101;
     public static final int CAMERA_PERMISSIONS = 102;
+
+    public static final int GAS_PRICE_DEFAULT = 40;
+    public static final int GAS_LIMIT_DEFAULT = 21000;
+    public static final int GAS_PRICE_MIN = 1;
+    public static final int GAS_LIMIT_MIN = 21000;
+    public static final int GAS_LIMIT_MAX = 300000;
 }

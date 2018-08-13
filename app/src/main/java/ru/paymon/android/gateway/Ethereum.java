@@ -27,7 +27,6 @@ import org.web3j.crypto.Credentials;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
-import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Convert;
 
@@ -42,13 +41,11 @@ import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
-import java.util.concurrent.ExecutionException;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.BuildConfig;
 import ru.paymon.android.Config;
 import ru.paymon.android.MainActivity;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
@@ -262,10 +259,16 @@ public class Ethereum {
         requestQueue.add(request);
     }
 
-    public String calculateFiatBalance(String course){
+    public String calculateFiatBalance(String course) {
         BigDecimal courseBigDecimal = (new BigDecimal(course)).setScale(2, ROUND_HALF_UP);
 //        BigDecimal preOutput = courseBigDecimal.divide(TEN_POW_18, 20, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(CRYPTO_BALANCE));
         BigDecimal preOutput = courseBigDecimal.multiply(new BigDecimal(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE));
+        return preOutput.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+    }
+
+    public String convertEthToFiat(final String ethAmount, final String fiatExRate) {
+        BigDecimal courseBigDecimal = (new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP);
+        BigDecimal preOutput = courseBigDecimal.multiply(new BigDecimal(ethAmount));
         return preOutput.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
     }
 //    private class WeiToFiatStringStruct {
@@ -327,7 +330,7 @@ public class Ethereum {
         File walletFile = new File(FILE_PATH + "/" + FILE_NAME + User.currentUser.id + ".json");
         File walletInDownload = new File(BACKUP_DIR.getAbsolutePath() + "/" + FILE_NAME + User.currentUser.id + ".json");
 
-        if( !copyFile(walletFile, walletInDownload)) {
+        if (!copyFile(walletFile, walletInDownload)) {
             Toast.makeText(ApplicationLoader.applicationContext, "Скопировать файл кошелька не удалось", Toast.LENGTH_LONG).show();
             return;
         }
@@ -337,7 +340,7 @@ public class Ethereum {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.setType("application/json");
 
-            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(ApplicationLoader.applicationContext,  BuildConfig.APPLICATION_ID +".provider", walletInDownload));
+            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(ApplicationLoader.applicationContext, BuildConfig.APPLICATION_ID + ".provider", walletInDownload));
 
             try {
                 ApplicationLoader.applicationContext.startActivity(Intent.createChooser(intent, ""));
@@ -349,7 +352,7 @@ public class Ethereum {
             Toast.makeText(ApplicationLoader.applicationContext, R.string.right_file_system, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean copyFile(File source, File dest)  {
+    private boolean copyFile(File source, File dest) {
         InputStream is = null;
         OutputStream os = null;
         try {
@@ -368,20 +371,21 @@ public class Ethereum {
             try {
                 is.close();
                 os.close();
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
 
-    public BigDecimal getNormalGasPrice() {
-        EthGasPrice ethGasPrice = null;
-        try {
-            ethGasPrice = web3j.ethGasPrice().sendAsync().get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            return new BigDecimal("41");
-        }
-        return Convert.fromWei(new BigDecimal(ethGasPrice.getGasPrice(), 0), Convert.Unit.GWEI);
-    }
+    //    public BigDecimal getNormalGasPrice() {
+//        EthGasPrice ethGasPrice = null;
+//        try {
+//            ethGasPrice = web3j.ethGasPrice().sendAsync().get();
+//        } catch (InterruptedException | ExecutionException e) {
+//            e.printStackTrace();
+//            return new BigDecimal("41");
+//        }
+//        Log.e("AAA", Convert.fromWei(new BigDecimal(ethGasPrice.getGasPrice(), 0), Convert.Unit.GWEI)
+//    }
+
 }
