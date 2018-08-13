@@ -30,7 +30,7 @@ public class DiskLruImageCache {
     private Bitmap.CompressFormat mCompressFormat = Bitmap.CompressFormat.JPEG;
     private int mCompressQuality = 70;
 
-    public static DiskLruImageCache getInstance(){
+    public static DiskLruImageCache getInstance() {
         if (instance == null)
             instance = new DiskLruImageCache();
         return instance;
@@ -125,17 +125,18 @@ public class DiskLruImageCache {
         try {
             snapshot = mDiskCache.get(key);
             if (snapshot == null) {
-                bitmap = BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), ApplicationLoader.applicationContext.getResources().getIdentifier(key, "drawable", ApplicationLoader.applicationContext.getPackageName())); // this
-                put(key, bitmap);
-                Log.d(TAG, "bitmap " + key + " not found in cache!");
+//                bitmap = BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), ApplicationLoader.applicationContext.getResources().getIdentifier(key, "drawable", ApplicationLoader.applicationContext.getPackageName())); // this
+//                put(key, bitmap);
+//                Log.d(TAG, "bitmap " + key + " not found in cache!");
                 return bitmap;
             }
             Log.d(TAG, "bitmap " + key + " found in cache!");
             final InputStream in = snapshot.getInputStream(0);
             if (in != null) {
-                final BufferedInputStream buffIn =
-                        new BufferedInputStream(in, Util.IO_BUFFER_SIZE);
+                final BufferedInputStream buffIn = new BufferedInputStream(in, Util.IO_BUFFER_SIZE);
                 bitmap = BitmapFactory.decodeStream(buffIn);
+                buffIn.close();
+                in.close();
             }
         } catch (IOException e) {
             e.printStackTrace();

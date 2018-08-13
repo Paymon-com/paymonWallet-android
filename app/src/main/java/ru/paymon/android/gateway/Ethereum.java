@@ -48,7 +48,8 @@ import ru.paymon.android.Config;
 import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
+import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
+//import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
 
@@ -203,7 +204,7 @@ public class Ethereum {
     public void ethereumWalletNotification(Context context, String text, String title) {
 
 //            final Ringtone ringtone = RingtoneManager.getRingtone(context, User.notificationRingtone);
-        final Bitmap bitmap = LruRamCache.getInstance().getBitmap(R.drawable.ic_ethereum);
+        final Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.ic_ethereum));
 
         final Intent intent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
 

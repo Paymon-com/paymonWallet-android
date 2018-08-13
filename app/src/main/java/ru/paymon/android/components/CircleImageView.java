@@ -39,7 +39,8 @@ import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
+import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
+//import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
 
 
 public class CircleImageView extends AppCompatImageView implements NotificationManager.IListener {
@@ -482,7 +483,7 @@ public class CircleImageView extends AppCompatImageView implements NotificationM
         if (photo != null && photo.id > 0) {
             Utils.stageQueue.postRunnable(() -> tryLoadBitmap());
         } else {
-            setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
+            setImageBitmap(DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.profile_photo_none)));
         }
     }
 

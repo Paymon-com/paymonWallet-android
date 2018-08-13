@@ -23,9 +23,6 @@ public class NotificationManager {
         dialogsNeedReload,
         didConnectedToServer,
         didEstablishedSecuredConnection,
-        didLoadEthereumWallet,
-        didLoadBitcoinWallet,
-        didLoadPaymonWallet,
         didDisconnectedFromTheServer,
         userInfoDidLoaded,
 

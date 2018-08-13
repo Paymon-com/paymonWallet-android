@@ -18,7 +18,7 @@ import ru.paymon.android.models.Photo;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
+import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
 
 public class ObservableImageView extends AppCompatImageView implements ObservableMediaManager.IPhotoListener, ObservableMediaManager.IStickerListener {
     private long photoID;
@@ -67,7 +67,7 @@ public class ObservableImageView extends AppCompatImageView implements Observabl
             long photoID = photo.id;
             subscribeProfilePhoto(userID, photoID);
         } else {
-            setImageBitmap(LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none));
+            setImageBitmap(DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.profile_photo_none)));
         }
     }
 

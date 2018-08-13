@@ -141,18 +141,12 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         super.onResume();
         Utils.showBottomBar(getActivity());
         Utils.hideActionBar(getActivity());
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didLoadEthereumWallet);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didLoadPaymonWallet);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didLoadBitcoinWallet);
         initExchangeRatesAndWallets();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didLoadEthereumWallet);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didLoadPaymonWallet);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didLoadBitcoinWallet);
     }
 
     @Override

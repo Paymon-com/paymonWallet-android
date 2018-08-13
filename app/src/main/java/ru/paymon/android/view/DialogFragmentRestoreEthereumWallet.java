@@ -104,7 +104,6 @@ public class DialogFragmentRestoreEthereumWallet extends DialogFragment {
                             //CryptoUtils.updateEthereumWalletKeyOnDataBase(Ethereum.getInstance().getAddress());
                             User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = password;
                             User.saveConfig();
-                            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didLoadEthereumWallet);
                             Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.restore_wallet_success), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));
                             break;
                         case NO_USER_ID:

@@ -9,14 +9,12 @@ import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.StrictMode;
 
-//import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
-import ru.paymon.android.gateway.Ethereum;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
+
 
 
 public class ApplicationLoader extends Application {
@@ -34,6 +32,7 @@ public class ApplicationLoader extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
@@ -66,7 +65,7 @@ public class ApplicationLoader extends Application {
     }
 
     public static void finish() {
-        LruRamCache.getInstance().lruCache.evictAll();
+//        LruRamCache.getInstance().lruCache.evictAll();
         MessagesManager.getInstance().dispose();
         MediaManager.getInstance().dispose();
         UsersManager.getInstance().dispose();

@@ -253,10 +253,10 @@ public class BlurLockView extends FrameLayout
     private String hint;
 
     public void showHint() {
-        if (User.CLIENT_SECURITY_PASSWORD_HINT != null)
-            Toast.makeText(ApplicationLoader.applicationContext, "Ваша подсказка : " + User.CLIENT_SECURITY_PASSWORD_HINT, Toast.LENGTH_SHORT).show(); //TODO:string
-        else
-            Toast.makeText(ApplicationLoader.applicationContext, "У вас нет подсказки!", Toast.LENGTH_SHORT).show(); //TODO:string
+//        if (User.CLIENT_SECURITY_PASSWORD_HINT != null)
+//            Toast.makeText(ApplicationLoader.applicationContext, "Ваша подсказка : " + User.CLIENT_SECURITY_PASSWORD_HINT, Toast.LENGTH_SHORT).show(); //TODO:string
+//        else
+//            Toast.makeText(ApplicationLoader.applicationContext, "У вас нет подсказки!", Toast.LENGTH_SHORT).show(); //TODO:string
     }
 
     /**

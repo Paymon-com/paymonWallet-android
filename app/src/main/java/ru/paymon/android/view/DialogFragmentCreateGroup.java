@@ -131,7 +131,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                     Bundle bundle = new Bundle();
                     bundle.putInt("chat_id", group.id);
                     bundle.putParcelableArrayList("users", group.users);
-                    FragmentChat fragmentChat = new FragmentChat();
+                    FragmentChat fragmentChat = FragmentChat.newInstance();
                     fragmentChat.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);

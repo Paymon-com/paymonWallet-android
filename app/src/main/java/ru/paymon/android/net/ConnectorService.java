@@ -36,7 +36,7 @@ import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
+import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
 
 import static ru.paymon.android.MessagesManager.generateMessageID;
 import static ru.paymon.android.net.RPC.ERROR_AUTH;
@@ -129,7 +129,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
         if (!User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) {
             Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), User.CLIENT_MESSAGES_NOTIFY_SOUND_FILE);
-            Bitmap bitmap = LruRamCache.getInstance().getBitmap(R.drawable.profile_photo_none);
+            Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.profile_photo_none));
             RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
             RPC.UserObject fromUser = user;
             if (fromUser != null) {
