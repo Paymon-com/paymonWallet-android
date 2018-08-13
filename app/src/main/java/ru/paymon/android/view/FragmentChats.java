@@ -18,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,6 +38,7 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
+import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentChats extends Fragment implements NotificationManager.IListener {
     private static FragmentChats instance;
@@ -49,17 +49,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     private ChatsAdapter chatsAdapter;
     private ChatsAdapter dialogsAdapter;
     private ChatsAdapter groupsAdapter;
-    private View toolbar;
     private TextView toolbarTitle;
-    private ImageButton toolbarSearch;
-    private ImageButton toolbarCreateGroup;
-//    private View viewToolbar;
-//    private TextView chatsHintView;
-//    private TextView dialogsHintView;
-//    private TextView groupsHintView;
-//    private ProgressBar chatsProgressBar;
-//    private ProgressBar dialogsProgressBar;
-//    private ProgressBar groupsProgressBar;
 
     private boolean isLoading;
     private boolean isForward;
@@ -99,10 +89,10 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         View pageGroups = inflater.inflate(R.layout.fragment_chats_page, container, false);
         ViewPager viewPager = view.findViewById(R.id.fragment_chats_view_pager);
 
-        toolbar = view.findViewById(R.id.toolbar);
+        View toolbar = view.findViewById(R.id.toolbar);
         toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
-        toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
-        toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
+        ImageButton toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
+        ImageButton toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
 
         toolbarCreateGroup.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null));
 
@@ -115,13 +105,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
         chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
         groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
-
-//        chatsProgressBar = pageAll.findViewById(R.id.chats_all_progress_bar);
-//        dialogsProgressBar = pageDialogs.findViewById(R.id.chats_all_progress_bar);
-//        groupsProgressBar = pageGroups.findViewById(R.id.chats_all_progress_bar);
-//        chatsHintView = pageAll.findViewById(R.id.dialogs_hint_text_view);
-//        dialogsHintView = pageDialogs.findViewById(R.id.dialogs_hint_text_view);
-//        groupsHintView = pageGroups.findViewById(R.id.dialogs_hint_text_view);
 
         List<View> pages = new ArrayList<>();
         pages.add(pageDialogs);
@@ -138,13 +121,10 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
             public void onPageSelected(final int position) {
                 if (position == 0) {
                     toolbarTitle.setText("Тет-а-тет");
-//                    //Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
                 } else if (position == 1) {
                     toolbarTitle.setText("Чаты");
-//                    //Utils.setActionBarWithTitle(getActivity(), "Чаты");
                 } else {
                     toolbarTitle.setText("Группы");
-//                    //Utils.setActionBarWithTitle(getActivity(), "Группы");
                 }
                 mCurrentPosition = position;
             }
@@ -190,23 +170,21 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
         initChats();
 
-//        setHasOptionsMenu(true);
-
         return view;
     }
 
     private void initChats() {
-        chatsAdapter = new ChatsAdapter(getActivity(), forwardMessages);
+        chatsAdapter = new ChatsAdapter(iChatsClickListener);
         chatsAllRecyclerView.setHasFixedSize(true);
         chatsAllRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsAllRecyclerView.setAdapter(chatsAdapter);
 
-        dialogsAdapter = new ChatsAdapter(getActivity(), forwardMessages);
+        dialogsAdapter = new ChatsAdapter(iChatsClickListener);
         chatsRecyclerView.setHasFixedSize(true);
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsRecyclerView.setAdapter(dialogsAdapter);
 
-        groupsAdapter = new ChatsAdapter(getActivity(), forwardMessages);
+        groupsAdapter = new ChatsAdapter(iChatsClickListener);
         groupsRecyclerView.setHasFixedSize(true);
         groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         groupsRecyclerView.setAdapter(groupsAdapter);
@@ -222,12 +200,10 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-        if (!isForward) {
+        if (!isForward)
             toolbarTitle.setText("Чаты");
-//            //Utils.setActionBarWithTitle(getActivity(), "Чаты");
-        } else
+        else
             toolbarTitle.setText("Выберите получателя");
-//            //Utils.setActionBarWithTitle(getActivity(), "Выберите получателя"); //TODO:string
         Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
@@ -366,25 +342,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         });
     }
 
-    //    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.fragment_chats_menu, menu);
-//
-//        MenuItem item = menu.findItem(R.id.create_group_item);
-//        item.setOnMenuItemClickListener(menuItem -> {
-//            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null);
-//            return true;
-//        });
-//
-//        MenuItem itemSearch = menu.findItem(R.id.search_chat);
-//        itemSearch.setOnMenuItemClickListener((menuItem) -> {
-//            final FragmentSearch fragmentSearch = new FragmentSearch();
-//            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentSearch, null);
-//            return true;
-//        });
-//    }
-//
     private View createConnectingCustomView() {
         final View customView = getLayoutInflater().inflate(R.layout.toolbar_connecting, null);
         final ConstraintLayout pointLayout = (ConstraintLayout) customView.findViewById(R.id.connecting_anim_layout);
@@ -414,4 +371,19 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
         return customView;
     }
+
+    private ChatsAdapter.IChatsClickListener iChatsClickListener = (chatID, isGroup) -> {
+        final Bundle bundle = new Bundle();
+
+        if (isGroup)
+            bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(chatID));
+
+        if (forwardMessages != null && forwardMessages.size() > 0)
+            bundle.putSerializable(FORWARD_MESSAGES_KEY, forwardMessages);
+
+        bundle.putInt(CHAT_ID_KEY, chatID);
+        final FragmentChat fragmentChat = FragmentChat.newInstance();
+        fragmentChat.setArguments(bundle);
+        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentChat, null);
+    };
 }

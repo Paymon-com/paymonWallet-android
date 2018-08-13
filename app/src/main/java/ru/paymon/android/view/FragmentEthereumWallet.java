@@ -72,8 +72,8 @@ public class FragmentEthereumWallet extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), "");
-        Utils.setArrowBackInToolbar(getActivity());
+//        Utils.setActionBarWithTitle(getActivity(), "");
+//        Utils.setArrowBackInToolbar(getActivity());
         Utils.hideBottomBar(getActivity());
         getBalance();
     }

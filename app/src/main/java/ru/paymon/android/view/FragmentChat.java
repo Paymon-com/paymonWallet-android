@@ -1,11 +1,15 @@
 package ru.paymon.android.view;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -34,9 +39,11 @@ import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.attachments.AttachmentItem;
 import ru.paymon.android.models.attachments.AttachmentMessages;
 import ru.paymon.android.net.NetworkManager;
+import ru.paymon.android.net.Packet;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
+import static android.content.Context.CLIPBOARD_SERVICE;
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
@@ -53,7 +60,6 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private boolean loadingMessages;
     private boolean isForward;
     private LinkedList<Long> forwardMessages;
-    private AttachmentsAdapter attachmentsAdapter;
 
     public static synchronized FragmentChat newInstance() {
         return new FragmentChat();
@@ -90,15 +96,15 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         sendButton = (Button) view.findViewById(R.id.sendButton);
         LinearLayout toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
 
-        View defaultCustomView;
+        View defaultChatToolbarView;
         if (isGroup)
-            defaultCustomView = createChatGroupCustomView();
+            defaultChatToolbarView = createChatGroupCustomView();
         else
-            defaultCustomView = createChatCustomView();
+            defaultChatToolbarView = createChatCustomView();
 
-        toolbarContainer.addView(defaultCustomView);
+        toolbarContainer.addView(defaultChatToolbarView);
 
-        initChat(defaultCustomView, toolbarContainer);
+        initChat(defaultChatToolbarView, toolbarContainer);
 
         if (isForward) {
             RecyclerView recyclerViewAttachments = (RecyclerView) view.findViewById(R.id.recViewAttachments);
@@ -109,24 +115,11 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             AttachmentMessages attachmentMessages = new AttachmentMessages();
             attachmentMessages.messages = forwardMessages;
             attachmentItems.add(attachmentMessages);
-            attachmentsAdapter = new AttachmentsAdapter(attachmentItems);
+            AttachmentsAdapter attachmentsAdapter = new AttachmentsAdapter(attachmentItems);
             recyclerViewAttachments.setAdapter(attachmentsAdapter);
         }
 
         MessagesManager.getInstance().loadMessages(chatID, 15, 0, isGroup);
-
-//        LongSparseArray<RPC.Message> messageLongSparseArray = DBHelper.getAllMessages();
-//        for (int i =0 ; i< messageLongSparseArray.size(); i++) {
-//            RPC.Message message = messageLongSparseArray.get(messageLongSparseArray.keyAt(i));
-//            message.text = "HUI";
-//        }
-//        DBHelper.updateMessages(messageLongSparseArray);
-//        LongSparseArray<RPC.Message> mss = DBHelper.getAllMessages();
-//        for (int i =0 ; i< mss.size(); i++) {
-//            RPC.Message message = mss.get(mss.keyAt(i));
-//            Log.e("AAA", message.text);
-//        }
-//        DBHelper.updateMessages(messageLongSparseArray);
 
         return view;
     }
@@ -154,7 +147,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         linearLayoutManager.setStackFromEnd(true);
         messagesRecyclerView.setLayoutManager(linearLayoutManager);
 
-        messagesAdapter = new MessagesAdapter((AppCompatActivity) getActivity(), isGroup, defaultCustomView, toolbarContainer);
+        messagesAdapter = new MessagesAdapter(iMessageClickListener, isGroup, defaultCustomView, createSelectedCustomView(), toolbarContainer);
         messagesRecyclerView.setAdapter(messagesAdapter);
 
         messagesRecyclerView
@@ -213,6 +206,10 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         });
     }
 
+    private View createSelectedCustomView(){
+        return getActivity().getLayoutInflater().inflate(R.layout.toolbar_selected_messages, null);
+    }
+
     private View createChatCustomView() {
         final View customView = getLayoutInflater().inflate(R.layout.toolbar_chat, null);
         final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.toolbar_title);
@@ -227,7 +224,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             RPC.PM_photo photo = new RPC.PM_photo();
             photo.id = user.photoID;
             photo.user_id = user.id;
-            toolbarAvatar.setPhoto(photo);
+//            toolbarAvatar.setPhoto(photo);
         }
 
         customView.setOnClickListener(v -> {
@@ -254,7 +251,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         final RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
         if (group != null) {
             chatTitleTextView.setText(group.title);
-            toolbarAvatar.setPhoto(group.photo);
+//            toolbarAvatar.setPhoto(group.photo);
             participantsCountTextView.setText(getString(R.string.participants) + ": " + groupUsers.size());
         }
 
@@ -295,4 +292,76 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             loadingMessages = false;
         }
     }
+
+    private MessagesAdapter.IMessageClickListener iMessageClickListener = new MessagesAdapter.IMessageClickListener() {
+        @Override
+        public void longClick() {
+
+        }
+
+        @Override
+        public void forward(LinkedList<Long> checkedMessageIDs) {
+            FragmentChats fragmentChats = new FragmentChats();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(FORWARD_MESSAGES_KEY, checkedMessageIDs);
+            fragmentChats.setArguments(bundle);
+            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentChats);
+        }
+
+        @Override
+        public void delete(LinkedList<Long> checkedMessageIDs) {
+            for (long msgid : checkedMessageIDs) {
+                if (MessagesManager.getInstance().messages.get(msgid).from_id != User.currentUser.id) {
+                    Toast.makeText(getContext(), "Вы не можете удалять чужие сообщения!", Toast.LENGTH_SHORT).show();
+                    messagesAdapter.deselectAll();
+                    return;
+                }
+            }
+
+            final boolean[] checkPermission = {false};
+            final String[] text = {"Удалить для всех?"};
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    .setMultiChoiceItems(text, checkPermission, (dialogInterface, which, isChecked) -> checkPermission[which] = isChecked)
+                    .setTitle(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
+                    .setCancelable(false)
+                    .setNegativeButton(getContext().getString(R.string.button_cancel), (dialogInterface, i) -> {
+                    })
+                    .setPositiveButton(getContext().getString(R.string.button_ok), (dialogInterface, i) -> {
+                        if (checkPermission[0]) {
+                            Packet request;
+                            if (!isGroup) {
+                                request = new RPC.PM_deleteDialogMessages();
+                                ((RPC.PM_deleteDialogMessages) request).messageIDs.addAll(checkedMessageIDs);
+                            } else {
+                                request = new RPC.PM_deleteGroupMessages();
+                                ((RPC.PM_deleteGroupMessages) request).messageIDs.addAll(checkedMessageIDs);
+                            }
+
+                            NetworkManager.getInstance().sendRequest(request, (response, error) -> {
+                                if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), "Не удалось удалить сообщения!", Toast.LENGTH_SHORT).show());
+                                    return;
+                                }
+
+                                if (response instanceof RPC.PM_boolTrue) {
+                                    ApplicationLoader.applicationHandler.post(() -> {
+                                        for (Long msgID : checkedMessageIDs) {
+                                            RPC.Message msg = MessagesManager.getInstance().messages.get(msgID);
+                                            MessagesManager.getInstance().deleteMessage(msg);
+                                            messagesAdapter.messageIDs.remove(msgID);
+                                        }
+                                        messagesAdapter.notifyDataSetChanged();
+                                    });
+                                }
+                            });
+
+                            messagesAdapter.deselectAll();
+                        } else {
+                            //TODO:delete message for user
+                        }
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
+    };
 }

@@ -1,6 +1,7 @@
 package ru.paymon.android.adapters;
 
 import android.app.Activity;
+import android.app.Notification;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -20,6 +21,7 @@ import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
+import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.components.CircleImageView;
@@ -35,17 +37,19 @@ import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsViewHolder> {
     public LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
-    private AppCompatActivity activity;
-    private LinkedList<Long> forwardMessages;
+    private IChatsClickListener iChatsClickListener;
+
+    public interface IChatsClickListener {
+        void openChat(int chatID, boolean isGroup);
+    }
 
     enum ViewTypes {
         ITEM,
         GROUP_ITEM
     }
 
-    public ChatsAdapter(Activity activity, LinkedList<Long> forwardedMessages) {
-        this.activity = (AppCompatActivity) activity;
-        this.forwardMessages = forwardedMessages;
+    public ChatsAdapter(IChatsClickListener iChatsClickListener) {
+        this.iChatsClickListener = iChatsClickListener;
     }
 
     @Override
@@ -79,22 +83,6 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
         final String name = chatsItem.name;
         final String lastMessageText = chatsItem.lastMessageText;
         final int chatID = chatsItem.chatID;
-        boolean isGroup = false;
-
-        if (User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
-            holder.doNotDisturb.setImageResource(R.drawable.ic_bell_slash_o_64);
-        else
-            holder.doNotDisturb.setImageResource(R.drawable.ic_bell_o_64);
-
-        holder.doNotDisturb.setOnClickListener((view -> {
-            if (!User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
-                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.add(chatID);
-            else
-                User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.remove((Integer) chatID);
-
-            onBindViewHolder(holder, position);
-            User.saveConfig();
-        }));
 
 //        holder.remove.setOnClickListener((view) -> {
 //            chatsItemsList.remove(position);
@@ -111,7 +99,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
             case ITEM:
                 final ChatsViewHolder chatsViewHolder = (ChatsViewHolder) holder;
 
-                chatsViewHolder.avatar.setPhoto(photo);
+//                chatsViewHolder.avatar.setPhoto(photo);
 
                 if (name != null && !name.isEmpty())
                     chatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(chatsViewHolder.name.getPaint(), name)));
@@ -124,11 +112,14 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
                     chatsViewHolder.msg.setText("");
 
                 chatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
+
+                chatsViewHolder.mainLayout.setOnClickListener((view -> iChatsClickListener.openChat(chatID, false)));
+
                 break;
             case GROUP_ITEM:
                 final GroupChatsViewHolder groupChatsViewHolder = (GroupChatsViewHolder) holder;
 
-                groupChatsViewHolder.avatar.setPhoto(photo);
+//                groupChatsViewHolder.avatar.setPhoto(photo);
 
                 if (name != null && !name.isEmpty())
                     groupChatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(groupChatsViewHolder.name.getPaint(), name)));
@@ -148,24 +139,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
 
                 groupChatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
-                isGroup= true;
+                groupChatsViewHolder.mainLayout.setOnClickListener((view -> iChatsClickListener.openChat(chatID, true)));
                 break;
         }
-
-        final Bundle bundle = new Bundle();
-
-        if (isGroup)
-            bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(chatID));
-
-        if (forwardMessages != null && forwardMessages.size() > 0)
-            bundle.putSerializable(FORWARD_MESSAGES_KEY, forwardMessages);
-
-        holder.mainLayout.setOnClickListener((view -> {
-            bundle.putInt(CHAT_ID_KEY, chatID);
-            final FragmentChat fragmentChat = FragmentChat.newInstance();
-            fragmentChat.setArguments(bundle);
-            Utils.replaceFragmentWithAnimationSlideFade(activity.getSupportFragmentManager(), fragmentChat, null);
-        }));
     }
 
     @Override
@@ -189,10 +165,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
     }
 
     public static class CommonChatsViewHolder extends RecyclerView.ViewHolder {
-        ConstraintLayout mainLayout;
-        private BlurLayout mSampleLayout;
-//        ImageView remove;
-        ImageView doNotDisturb;
+        public final ConstraintLayout mainLayout;
+        private final BlurLayout mSampleLayout;
+        private final ImageView doNotDisturb;
 
 
         public CommonChatsViewHolder(View itemView) {
@@ -211,16 +186,24 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
             mSampleLayout.addChildDisappearAnimator(hover, R.id.trash, Techniques.FlipOutX, 550, 500);
             mSampleLayout.addChildDisappearAnimator(hover, R.id.do_not_disturb, Techniques.FlipOutX, 550, 250);
 
-//            mSampleLayout.addChildAppearAnimator(hover, R.id.description, Techniques.FadeInUp);
-//            mSampleLayout.addChildDisappearAnimator(hover, R.id.description, Techniques.FadeOutDown);
+//            if (User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
+//                doNotDisturb.setImageResource(R.drawable.ic_bell_slash_o_64);
+//            else
+//                doNotDisturb.setImageResource(R.drawable.ic_bell_o_64);
+//
+//            doNotDisturb.setOnClickListener((view -> {
+//                if (!User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
+//                    User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.add(chatID);
+//                else
+//                    User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.remove((Integer) chatID);
+//
+//                User.saveConfig();
+//            }));
 
             mainLayout.setOnLongClickListener((view -> {
                 mSampleLayout.toggleHover();
                 return true;
             }));
-
-//            remove = (ImageView) swipeView.findViewById(R.id.delete_item);
-//            doNotDisturb = (ImageView) swipeView.findViewById(R.id.disable_notifications);
         }
     }
 
