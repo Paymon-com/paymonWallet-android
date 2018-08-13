@@ -40,9 +40,6 @@ public class FragmentSettingsNotif extends PreferenceFragmentCompat implements S
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), "Уведомления");//TODO:string
-        Utils.setArrowBackInToolbar(getActivity());
-        Utils.hideBottomBar(getActivity());
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 

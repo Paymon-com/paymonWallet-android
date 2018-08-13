@@ -10,13 +10,11 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import ru.paymon.android.ApplicationLoader;
@@ -27,7 +25,6 @@ import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.R.id.next;
 import static ru.paymon.android.utils.Utils.emailCorrect;
 
 public class FragmentRegistrationEmailConfirmation extends Fragment {
@@ -62,7 +59,14 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
         View view = inflater.inflate(R.layout.fragment_registration_email_confirmation, container, false);
         view.setBackgroundResource(R.drawable.background);
 
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_confirmation));
+        ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
+        ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        acceptToolbar.setOnClickListener(view12 -> confirmRegistration());
+
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_confirmation));
 
         email = view.findViewById(R.id.email_confirmation_edit_text);
         hintError = view.findViewById(R.id.email_confirmation_hint_error);
@@ -119,7 +123,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.authorization));
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.authorization));
         setHasOptionsMenu(true);
     }
 
@@ -129,19 +133,19 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
         Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.next_menu, menu);
-    }
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.next_menu, menu);
+//    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case next:
-                confirmRegistration();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case next:
+//                confirmRegistration();
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public void confirmRegistration() {
         if (!emailCorrect(email.getText().toString())) return;

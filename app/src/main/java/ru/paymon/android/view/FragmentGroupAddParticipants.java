@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -68,6 +69,51 @@ public class FragmentGroupAddParticipants extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_add_participants, container, false);
 
+        ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
+        ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        acceptToolbar.setOnClickListener(view12 -> Utils.netQueue.postRunnable(() -> {
+            ApplicationLoader.applicationHandler.post(dialogProgress::show);
+
+            RPC.PM_group_addParticipants addParticipantsRequest = new RPC.PM_group_addParticipants();
+            addParticipantsRequest.id = chatID;
+            for (CreateGroupItem createGroupItem : addGroupList) {
+                if (createGroupItem.checked) {
+                    addParticipantsRequest.userIDs.add(createGroupItem.uid);
+                }
+            }
+
+            final long requestID = NetworkManager.getInstance().sendRequest(addParticipantsRequest, (response, error) -> {
+                if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        if (dialogProgress != null && dialogProgress.isShowing())
+                            dialogProgress.cancel();
+                        Toast toast = Toast.makeText(getContext(),
+                                "Вы никого не выбрали", Toast.LENGTH_SHORT);//TODO sting
+                        toast.show();
+                    });
+                    return;
+                }
+
+                for (Integer uid : addParticipantsRequest.userIDs) {
+                    RPC.UserObject user = UsersManager.getInstance().users.get(uid);
+                    ArrayList<RPC.UserObject> userObjects = GroupsManager.getInstance().groupsUsers.get(chatID);
+                    if (user != null) {
+                        userObjects.add(user);
+                    }
+                }
+
+                ApplicationLoader.applicationHandler.post(() -> {
+                    if (dialogProgress != null && dialogProgress.isShowing())
+                        dialogProgress.dismiss();dialogProgress.dismiss();
+                    getActivity().getSupportFragmentManager().popBackStack();
+                });
+            });
+            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
+        }));
+
         RecyclerView contactsList = (RecyclerView) view.findViewById(R.id.fragment_add_participants_rv);
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
@@ -119,8 +165,8 @@ public class FragmentGroupAddParticipants extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.add_participants));
-        Utils.setArrowBackInToolbar(getActivity());
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.add_participants));
+        //Utils.setArrowBackInToolbar(getActivity());
         Utils.hideBottomBar(getActivity());
 
         addGroupList.clear();

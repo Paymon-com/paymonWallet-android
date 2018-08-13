@@ -5,9 +5,33 @@
     android:id="@+id/chatParent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/light_blue"
+    android:orientation="vertical"
     tools:context="ru.paymon.android.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/toolbar_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--<include-->
+            <!--android:id="@+id/toolbar"-->
+            <!--layout="@layout/toolbar_chat"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone"/>-->
+
+        <!--<include-->
+            <!--android:id="@+id/toolbar_group"-->
+            <!--layout="@layout/toolbar_chat_group"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:visibility="gone"/>-->
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chat_recview"
@@ -19,18 +43,18 @@
         app:layout_constraintBottom_toTopOf="@+id/attachments"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_container" />
 
     <LinearLayout
         android:id="@+id/attachments"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#D9D9D9"
         android:maxHeight="30dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/chat_rl"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:background="#D9D9D9">
+        app:layout_constraintStart_toStartOf="parent">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recViewAttachments"
@@ -54,10 +78,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            app:srcCompat="@drawable/ic_attach_file_black_24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_attach_file_black_24dp" />
 
         <hani.momanii.supernova_emoji_library.helper.EmojiconEditText
             android:id="@+id/input_edit_text"
@@ -124,5 +148,5 @@
         android:layout_height="0dp"
         android:background="@android:color/transparent"
         android:orientation="vertical"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </android.support.constraint.ConstraintLayout>

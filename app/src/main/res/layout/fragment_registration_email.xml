@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     android:overScrollMode="always">
 
+    <include
+        android:id="@+id/include7"
+        layout="@layout/toolbar_registration_email" />
+
     <TextView
         android:id="@+id/registration_email_agreement_text_view"
         android:layout_width="wrap_content"
@@ -90,7 +94,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/include7" />
 
     <TextView
         android:id="@+id/registration_email_hint_error_text_view"

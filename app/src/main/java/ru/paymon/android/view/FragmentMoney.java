@@ -131,7 +131,7 @@ public class FragmentMoney extends Fragment {
         super.onResume();
         Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
         Utils.hideActionBar(getActivity());
-//        Utils.setActionBarWithTitle(getActivity(), "Деньги");
+//        //Utils.setActionBarWithTitle(getActivity(), "Деньги");
     }
 
     @Override

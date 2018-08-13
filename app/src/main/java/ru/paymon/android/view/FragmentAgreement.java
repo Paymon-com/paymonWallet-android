@@ -25,7 +25,7 @@ public class FragmentAgreement extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.agreement_layout, container, false);
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.agreement));
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.agreement));
 
         final Button backToRegistration = view.findViewById(R.id.agreement_back_to_registration_button);
 

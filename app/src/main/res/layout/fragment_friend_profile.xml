@@ -6,13 +6,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
         android:id="@+id/friend_profile_photo"
         layout="@layout/fragment_friend_profile_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
 
     <ImageButton

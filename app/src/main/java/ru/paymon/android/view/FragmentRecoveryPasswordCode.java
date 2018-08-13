@@ -8,13 +8,11 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import ru.paymon.android.ApplicationLoader;
@@ -23,7 +21,6 @@ import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.R.id.next;
 import static ru.paymon.android.view.FragmentRecoveryPasswordEmail.PASSWORD_RECOVERY_LOGIN;
 
 public class FragmentRecoveryPasswordCode extends Fragment {
@@ -63,6 +60,13 @@ public class FragmentRecoveryPasswordCode extends Fragment {
         View view = inflater.inflate(R.layout.fragment_recovery_password_code, container, false);
         view.setBackgroundResource(R.drawable.background);
 
+        ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
+        ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        acceptToolbar.setOnClickListener(view12 -> showFragmentRecoveryPasswordCode());
+
         hintError = view.findViewById(R.id.fragment_password_recovery_code_hint_error_text_view);
         codeEditText = view.findViewById(R.id.fragment_password_recovery_code_edit_text);
 
@@ -101,26 +105,26 @@ public class FragmentRecoveryPasswordCode extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
 
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.next_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case next:
-                showFragmentRecoveryPasswordCode();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.next_menu, menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        switch (item.getItemId()) {
+//            case next:
+//                showFragmentRecoveryPasswordCode();
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public void showFragmentRecoveryPasswordCode() {
         if (codeEditText.getText().toString().isEmpty()) {

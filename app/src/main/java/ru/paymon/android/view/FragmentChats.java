@@ -10,13 +10,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -50,6 +49,11 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     private ChatsAdapter chatsAdapter;
     private ChatsAdapter dialogsAdapter;
     private ChatsAdapter groupsAdapter;
+    private View toolbar;
+    private TextView toolbarTitle;
+    private ImageButton toolbarSearch;
+    private ImageButton toolbarCreateGroup;
+//    private View viewToolbar;
 //    private TextView chatsHintView;
 //    private TextView dialogsHintView;
 //    private TextView groupsHintView;
@@ -88,13 +92,30 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View pageDialogs = inflater.inflate(R.layout.fragment_chats, container, false);
-        View pageAll = inflater.inflate(R.layout.fragment_chats, container, false);
-        View pageGroups = inflater.inflate(R.layout.fragment_chats, container, false);
+        View view = inflater.inflate(R.layout.fragment_chats, container, false);
 
-        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
+        View pageDialogs = inflater.inflate(R.layout.fragment_chats_page, container, false);
+        View pageAll = inflater.inflate(R.layout.fragment_chats_page, container, false);
+        View pageGroups = inflater.inflate(R.layout.fragment_chats_page, container, false);
+        ViewPager viewPager = view.findViewById(R.id.fragment_chats_view_pager);
+
+        toolbar = view.findViewById(R.id.toolbar);
+        toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
+        toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
+
+        toolbarCreateGroup.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null));
+
+        toolbarSearch.setOnClickListener(view12 -> {
+            final FragmentSearch fragmentSearch = new FragmentSearch();
+            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentSearch, null);
+        });
+
         chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
+        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
         groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
+
 //        chatsProgressBar = pageAll.findViewById(R.id.chats_all_progress_bar);
 //        dialogsProgressBar = pageDialogs.findViewById(R.id.chats_all_progress_bar);
 //        groupsProgressBar = pageGroups.findViewById(R.id.chats_all_progress_bar);
@@ -108,7 +129,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         pages.add(pageGroups);
 
         SlidingChatsAdapter pagerAdapter = new SlidingChatsAdapter(pages);
-        ViewPager viewPager = new ViewPager(getContext());
 
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             private int mCurrentPosition;
@@ -116,12 +136,16 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
             @Override
             public void onPageSelected(final int position) {
-                if (position == 0)
-                    Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
-                else if (position == 1)
-                    Utils.setActionBarWithTitle(getActivity(), "Чаты");
-                else
-                    Utils.setActionBarWithTitle(getActivity(), "Группы");
+                if (position == 0) {
+                    toolbarTitle.setText("Тет-а-тет");
+//                    //Utils.setActionBarWithTitle(getActivity(), "Тет-а-тет");
+                } else if (position == 1) {
+                    toolbarTitle.setText("Чаты");
+//                    //Utils.setActionBarWithTitle(getActivity(), "Чаты");
+                } else {
+                    toolbarTitle.setText("Группы");
+//                    //Utils.setActionBarWithTitle(getActivity(), "Группы");
+                }
                 mCurrentPosition = position;
             }
 
@@ -166,9 +190,9 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
         initChats();
 
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
 
-        return viewPager;
+        return view;
     }
 
     private void initChats() {
@@ -198,10 +222,12 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-        if (!isForward)
-            Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_chats));
-        else
-            Utils.setActionBarWithTitle(getActivity(), "Выберите получателя"); //TODO:string
+        if (!isForward) {
+            toolbarTitle.setText("Чаты");
+//            //Utils.setActionBarWithTitle(getActivity(), "Чаты");
+        } else
+            toolbarTitle.setText("Выберите получателя");
+//            //Utils.setActionBarWithTitle(getActivity(), "Выберите получателя"); //TODO:string
         Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
@@ -333,34 +359,34 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                 isLoading = false;
             } else if (id == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
                 View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
-                ApplicationLoader.applicationHandler.post(() -> Utils.setActionBarWithCustomView(getActivity(), connectingView));
+//                ApplicationLoader.applicationHandler.post(() ->  Utils.setActionBarWithCustomView(getActivity(), connectingView)  textToolAll.setText("Connection")  toolbar.setText("Connecting"));
             } else if (id == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-                ApplicationLoader.applicationHandler.post(() -> Utils.setActionBarWithTitle(getActivity(), "Чаты"));
+                ApplicationLoader.applicationHandler.post(() -> toolbarTitle.setText("Чаты"));
             }
         });
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.fragment_chats_menu, menu);
-
-        MenuItem item = menu.findItem(R.id.create_group_item);
-        item.setOnMenuItemClickListener(menuItem -> {
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null);
-            return true;
-        });
-
-        MenuItem itemSearch = menu.findItem(R.id.search_chat);
-        itemSearch.setOnMenuItemClickListener((menuItem) -> {
-            final FragmentSearch fragmentSearch = new FragmentSearch();
-            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentSearch, null);
-            return true;
-        });
-    }
-
+    //    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.fragment_chats_menu, menu);
+//
+//        MenuItem item = menu.findItem(R.id.create_group_item);
+//        item.setOnMenuItemClickListener(menuItem -> {
+//            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null);
+//            return true;
+//        });
+//
+//        MenuItem itemSearch = menu.findItem(R.id.search_chat);
+//        itemSearch.setOnMenuItemClickListener((menuItem) -> {
+//            final FragmentSearch fragmentSearch = new FragmentSearch();
+//            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentSearch, null);
+//            return true;
+//        });
+//    }
+//
     private View createConnectingCustomView() {
-        final View customView = getLayoutInflater().inflate(R.layout.chats_connecting_action_bar, null);
+        final View customView = getLayoutInflater().inflate(R.layout.toolbar_connecting, null);
         final ConstraintLayout pointLayout = (ConstraintLayout) customView.findViewById(R.id.connecting_anim_layout);
 
         Animation rotateAnimation = new RotateAnimation(0, 360, 50f, 50f);

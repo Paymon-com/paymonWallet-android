@@ -44,8 +44,8 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     }
 
     private void init(){
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
 
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);

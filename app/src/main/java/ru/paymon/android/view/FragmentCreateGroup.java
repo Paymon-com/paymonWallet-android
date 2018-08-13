@@ -10,12 +10,11 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import java.util.LinkedList;
 
@@ -33,12 +32,12 @@ public class FragmentCreateGroup extends Fragment {
     private CreateGroupAdapter adapter;
 
 
-    public static synchronized FragmentCreateGroup newInstance(){
+    public static synchronized FragmentCreateGroup newInstance() {
         instance = new FragmentCreateGroup();
         return instance;
     }
 
-    public static synchronized FragmentCreateGroup getInstance(){
+    public static synchronized FragmentCreateGroup getInstance() {
         if (instance == null)
             instance = new FragmentCreateGroup();
         return instance;
@@ -47,9 +46,6 @@ public class FragmentCreateGroup extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.create_group));
-        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -57,12 +53,27 @@ public class FragmentCreateGroup extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_group, container, false);
 
+        ImageButton acceptButton = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+        ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
+        TextView toolbarTitle = (TextView) view.findViewById(R.id.toolbar_title);
+
+        toolbarTitle.setText("Создание группы");
+        backButton.setOnClickListener(view12 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        acceptButton.setOnClickListener(view1 -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("create_group_list", createGroupItemList);
+            DialogFragmentCreateGroup dialogFragmentCreateGroup = DialogFragmentCreateGroup.newInstance();
+            dialogFragmentCreateGroup.setArguments(bundle);
+            dialogFragmentCreateGroup.show(getActivity().getSupportFragmentManager(), null);
+        });
+
         RecyclerView contactsRecView = (RecyclerView) view.findViewById(R.id.fragment_create_group_rv);
         contactsRecView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         contactsRecView.setLayoutManager(llm);
 
-        EditText editText =(EditText) view.findViewById(R.id.edit_text_create_chats);
+        EditText editText = (EditText) view.findViewById(R.id.edit_text_create_chats);
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -80,10 +91,10 @@ public class FragmentCreateGroup extends Fragment {
 
                 String text = editable.toString();
 
-                if(text.trim().isEmpty()) return;
+                if (text.trim().isEmpty()) return;
 
                 for (CreateGroupItem user : createGroupItemList) {
-                    if(user.name.toLowerCase().contains(text.toLowerCase())){
+                    if (user.name.toLowerCase().contains(text.toLowerCase())) {
                         sortedUserList.add(user);
                     }
                 }
@@ -101,7 +112,8 @@ public class FragmentCreateGroup extends Fragment {
             photo.id = user.photoID;
             photo.user_id = user.id;
             CreateGroupItem createGroupItem = new CreateGroupItem(user.id, Utils.formatUserName(user), photo);
-            if (createGroupItemList.contains(createGroupItem) || user.id == User.currentUser.id) continue;
+            if (createGroupItemList.contains(createGroupItem) || user.id == User.currentUser.id)
+                continue;
             createGroupItemList.add(createGroupItem);
         }
 
@@ -114,22 +126,5 @@ public class FragmentCreateGroup extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
-        Utils.setActionBarWithTitle(getActivity(), "Создание группы");//TODO:String
-        Utils.setArrowBackInToolbar(getActivity());
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.create_group_menu, menu);
-
-        MenuItem createGroupButton = menu.findItem(R.id.create_group_done_item);
-        createGroupButton.setOnMenuItemClickListener(menuItem -> {
-            Bundle bundle = new Bundle();
-            bundle.putSerializable("create_group_list", createGroupItemList);
-            DialogFragmentCreateGroup dialogFragmentCreateGroup = DialogFragmentCreateGroup.newInstance();
-            dialogFragmentCreateGroup.setArguments(bundle);
-            dialogFragmentCreateGroup.show(getActivity().getSupportFragmentManager(), null);
-            return true;
-        });
     }
 }

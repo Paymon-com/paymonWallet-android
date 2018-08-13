@@ -77,8 +77,8 @@ public class FragmentGroupAddAdministrators extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), "Добавить администратора");
-        Utils.setArrowBackInToolbar(getActivity());
+        //Utils.setActionBarWithTitle(getActivity(), "Добавить администратора");
+        //Utils.setArrowBackInToolbar(getActivity());
         Utils.hideBottomBar(getActivity());
     }
 

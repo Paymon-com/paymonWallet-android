@@ -1,6 +1,7 @@
 package ru.paymon.android.view;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -47,7 +48,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
     public void onResume() {
         super.onResume();
         Utils.showBottomBar(getActivity());
-        Utils.setActionBarWithTitle(getActivity(), ApplicationLoader.applicationContext.getString(R.string.title_more));
+//        //Utils.setActionBarWithTitle(getActivity(), ApplicationLoader.applicationContext.getString(R.string.title_more));
     }
 
     @Nullable
@@ -93,7 +94,9 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
             case R.id.more_menu_faq:
                 break;
             case R.id.more_menu_settings:
-                Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentSettings.newInstance(), null);
+                Intent intent = new Intent(ApplicationLoader.applicationContext, SettingsActivity.class);
+                startActivity(intent);
+//                Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentSettings.newInstance(), null);
                 break;
         }
 

@@ -232,7 +232,7 @@ public class FragmentContacts extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideActionBar(getActivity());
-//        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_contacts));
+//        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_contacts));
         Utils.showBottomBar(getActivity());
         setHasOptionsMenu(true);
     }

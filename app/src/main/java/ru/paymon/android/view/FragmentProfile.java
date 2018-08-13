@@ -48,6 +48,9 @@ public class FragmentProfile extends Fragment {
         TextView city = (TextView) view.findViewById(R.id.profile_city_text_view);
         TextView birthday = (TextView) view.findViewById(R.id.profile_bday_text_view);
         TextView country = (TextView) view.findViewById(R.id.profile_country_text_view);
+        ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
 
         updateProfile.setOnClickListener(v ->
                 Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentProfileEdit.newInstance(), null));
@@ -74,8 +77,8 @@ public class FragmentProfile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), "Профиль"); //TODO: string
-        Utils.setArrowBackInToolbar(getActivity());
+        //Utils.setActionBarWithTitle(getActivity(), "Профиль"); //TODO: string
+        //Utils.setArrowBackInToolbar(getActivity());
         Utils.hideBottomBar(getActivity());
     }
 }
