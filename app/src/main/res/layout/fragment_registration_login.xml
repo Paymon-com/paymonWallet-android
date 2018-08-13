@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <include
+        android:id="@+id/include5"
+        layout="@layout/toolbar_registration_login" />
+
 
     <TextView
         android:id="@+id/hint_message_text_view"
@@ -44,7 +48,7 @@
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/include5" />
 
     <TextView
         android:id="@+id/registration_login_error_hint"

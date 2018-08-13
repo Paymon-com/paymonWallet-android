@@ -97,8 +97,8 @@ public class FragmentContactsInvite extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_contacts));
-        Utils.setArrowBackInToolbar(getActivity());
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_contacts));
+        //Utils.setArrowBackInToolbar(getActivity());
         setHasOptionsMenu(true);
     }
 

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -76,6 +77,10 @@ public class FragmentGroupSettings extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_settings, container, false);
+
+        ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
 
         titleView = (EditText) view.findViewById(R.id.group_settings_title);
         RecyclerView contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
@@ -174,6 +179,15 @@ public class FragmentGroupSettings extends Fragment {
             builder.show();
         });
 
+        Button leaveGroup = (Button) view.findViewById(R.id.group_settings_leave_group);
+        leaveGroup.setOnClickListener(view13 -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setTitle("Покинуть группу").setMessage("Вы уверены?").setPositiveButton("Да", (dialogInterface, i) -> {
+
+            }).setNegativeButton("Нет", (dialogInterface, i) -> dialogInterface.cancel());
+            builder.create().show();
+        });
+
         GroupSettingsAdapter adapter = new GroupSettingsAdapter(list, group.id, group.creatorID, dialogProgress);
         contactsList.setAdapter(adapter);
 
@@ -185,9 +199,9 @@ public class FragmentGroupSettings extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.group_settings));
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.group_settings));
         Utils.hideBottomBar(getActivity());
-        Utils.setArrowBackInToolbar(getActivity());
+        //Utils.setArrowBackInToolbar(getActivity());
 
         list.clear();
         ArrayList<RPC.UserObject> users = GroupsManager.getInstance().groupsUsers.get(chatID);

@@ -8,6 +8,10 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:orientation="vertical">
 
+    <include layout="@layout/toolbar_create_group">
+
+    </include>
+
     <EditText
         android:id="@+id/edit_text_create_chats"
         android:layout_width="match_parent"

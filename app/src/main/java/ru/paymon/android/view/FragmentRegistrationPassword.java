@@ -9,17 +9,16 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import ru.paymon.android.R;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.R.id.next;
 import static ru.paymon.android.view.FragmentRegistrationLogin.KEY_LOGIN_REGISTRATION;
 
 public class FragmentRegistrationPassword extends Fragment {
@@ -59,12 +58,12 @@ public class FragmentRegistrationPassword extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_registration));
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_registration));
 
         setHasOptionsMenu(true);
         getActivity().invalidateOptionsMenu();
 
-        Utils.setArrowBackInToolbar(getActivity());
+        //Utils.setArrowBackInToolbar(getActivity());
 
     }
 
@@ -74,6 +73,13 @@ public class FragmentRegistrationPassword extends Fragment {
         View view = inflater.inflate(R.layout.fragment_registration_password, container, false);
 
         view.setBackgroundResource(R.drawable.background);
+
+        ImageButton acceptButton = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+        ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
+
+        backButton.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        acceptButton.setOnClickListener(view12 -> showFragmentRegistrationEmail());
 
         passwordEditText = view.findViewById(R.id.registration_password_edit_text);
         repeatPasswordEditText = view.findViewById(R.id.registration_repeat_password_edit_text);
@@ -141,16 +147,16 @@ public class FragmentRegistrationPassword extends Fragment {
         inflater.inflate(R.menu.next_menu, menu);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case next:
-                showFragmentRegistrationEmail();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        switch (item.getItemId()) {
+//            case next:
+//                showFragmentRegistrationEmail();
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public void showFragmentRegistrationEmail() {
         if (passwordEditText.getText().toString().length() < 8 || !repeatPasswordEditText.getText().toString().equals(passwordEditText.getText().toString()))

@@ -7,6 +7,7 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
+import android.widget.TextView;
 
 import ru.paymon.android.R;
 import ru.paymon.android.utils.Utils;
@@ -31,6 +32,7 @@ public class FragmentSettingsBasic extends PreferenceFragmentCompat implements S
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -43,9 +45,6 @@ public class FragmentSettingsBasic extends PreferenceFragmentCompat implements S
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), "Основные");//TODO:string
-        Utils.setArrowBackInToolbar(getActivity());
-        Utils.hideBottomBar(getActivity());
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
     }
 

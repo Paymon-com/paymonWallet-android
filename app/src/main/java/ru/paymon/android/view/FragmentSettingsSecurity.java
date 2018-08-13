@@ -69,9 +69,5 @@ public class FragmentSettingsSecurity extends PreferenceFragmentCompat {
         super.onResume();
         passwordEnabledPreference.setChecked(User.CLIENT_SECURITY_PASSWORD_VALUE != null);
         passwordPreference.setEnabled(User.CLIENT_SECURITY_PASSWORD_VALUE == null && passwordEnabledPreference.isChecked());
-
-        Utils.hideBottomBar(getActivity());
-        Utils.setActionBarWithTitle(getActivity(), "Безопасность");
-        Utils.setArrowBackInToolbar(getActivity());
     }
 }

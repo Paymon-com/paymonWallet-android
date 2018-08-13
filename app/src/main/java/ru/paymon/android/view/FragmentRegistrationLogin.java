@@ -8,20 +8,17 @@ import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import ru.paymon.android.R;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.R.id.next;
 import static ru.paymon.android.utils.Utils.loginCorrect;
 
 public class FragmentRegistrationLogin extends Fragment {
@@ -56,9 +53,6 @@ public class FragmentRegistrationLogin extends Fragment {
 
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setHasOptionsMenu(true);
-
-        Utils.setActionBarWithTitle(activity, getString(R.string.title_registration));
-        Utils.setArrowBackInToolbar(activity);
     }
 
     @Nullable
@@ -66,6 +60,13 @@ public class FragmentRegistrationLogin extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_registration_login, container, false);
         view.setBackgroundResource(R.drawable.background);
+
+        ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
+        ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        acceptToolbar.setOnClickListener(view12 -> showFragmentRegistrationPassword());
 
         loginEditText = view.findViewById(R.id.registration_login_edit_text);
         hintError = view.findViewById(R.id.registration_login_error_hint);
@@ -98,22 +99,6 @@ public class FragmentRegistrationLogin extends Fragment {
         });
 
         return view;
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.next_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case next:
-                showFragmentRegistrationPassword();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void showFragmentRegistrationPassword() {

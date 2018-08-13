@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import ru.paymon.android.ApplicationLoader;
@@ -61,6 +62,10 @@ public class FragmentFriendProfile extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_friend_profile, container, false);
+
+        ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
 
         chatButton = (ImageButton) view.findViewById(R.id.friend_profile_chat_button);
         blockButton = (ImageButton) view.findViewById(R.id.friend_profile_block_button);
@@ -182,8 +187,8 @@ public class FragmentFriendProfile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), "Профиль");
-        Utils.setArrowBackInToolbar(getActivity());
+        //Utils.setActionBarWithTitle(getActivity(), "Профиль");
+        //Utils.setArrowBackInToolbar(getActivity());
         Utils.showBottomBar(getActivity());
         setHasOptionsMenu(true);
     }

@@ -1,18 +1,11 @@
 package ru.paymon.android.view;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -21,27 +14,18 @@ import android.support.v7.app.AlertDialog;
 import android.telephony.PhoneNumberFormattingTextWatcher;
 import android.text.Editable;
 import android.text.Selection;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.i18n.phonenumbers.AsYouTypeFormatter;
-import com.google.i18n.phonenumbers.PhoneNumberUtil;
-
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
@@ -101,6 +85,9 @@ public class FragmentProfileEdit extends Fragment {
         CheckBox male = (CheckBox) view.findViewById(R.id.profile_update_male);
         CheckBox female = (CheckBox) view.findViewById(R.id.profile_update_female);
         Button saveButton = (Button) view.findViewById(R.id.profile_update_save_button);
+        ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
 
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);
@@ -244,8 +231,8 @@ public class FragmentProfileEdit extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_update_profile));
-        Utils.setArrowBackInToolbar(getActivity());
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_update_profile));
+        //Utils.setArrowBackInToolbar(getActivity());
     }
 
     private void setDate(TextInputEditText birthday) {

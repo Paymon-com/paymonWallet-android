@@ -14,7 +14,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 import java.util.LinkedList;
 
@@ -24,10 +26,6 @@ import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ChatsSearchAdapter;
 import ru.paymon.android.adapters.MessagesSearchAdapter;
-import ru.paymon.android.adapters.ChatsAdapter;
-import ru.paymon.android.adapters.ChatsSearchAdapter;
-import ru.paymon.android.adapters.MessagesSearchAdapter;
-import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.models.ChatsSearchItem;
 import ru.paymon.android.models.MessagesSearchItem;
 import ru.paymon.android.net.RPC;
@@ -61,6 +59,11 @@ public class FragmentSearch extends Fragment {
         RecyclerView recyclerViewChats = (RecyclerView) view.findViewById(R.id.recViewReg);
         RecyclerView recyclerViewMessages = (RecyclerView) view.findViewById(R.id.recViewUnreg);
         EditText editText = view.findViewById(R.id.edit_text_search);
+
+        ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
+
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
 
         LinkedList<ChatsSearchItem> listChats = new LinkedList<>();
         SparseArray<RPC.UserObject> users = UsersManager.getInstance().users;

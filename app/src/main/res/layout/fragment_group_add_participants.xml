@@ -8,6 +8,9 @@
     android:orientation="vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+    <include layout="@layout/toolbar_group_add_participant"
+        android:id="@+id/toolbar"/>
+
     <EditText
         android:id="@+id/edit_text_add_participants"
         android:layout_width="match_parent"

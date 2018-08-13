@@ -3,6 +3,7 @@ package ru.paymon.android.adapters;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -13,20 +14,18 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.daimajia.androidviewhover.tools.Util;
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 
 import java.util.LinkedList;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconTextView;
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.MainActivity;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
@@ -39,7 +38,6 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.MultiChoiceHelper;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.view.FragmentChat;
 import ru.paymon.android.view.FragmentChats;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -52,6 +50,7 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
     private boolean isGroup;
     private AppCompatActivity activity;
     private View defaultCustomView;
+    private LinearLayout toolbarContainer;
 
     enum ViewTypes {
         SENT_MESSAGE,
@@ -66,10 +65,11 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
         GROUP_RECEIVED_MESSAGE_WALLET
     }
 
-    public MessagesAdapter(AppCompatActivity activity, boolean isGroup, View defaultCustomView) {
+    public MessagesAdapter(AppCompatActivity activity, boolean isGroup, View defaultCustomView, LinearLayout toolbarContainer) {
         this.isGroup = isGroup;
         this.activity = activity;
         this.defaultCustomView = defaultCustomView;
+        this.toolbarContainer = toolbarContainer;
         messageIDs = new LinkedList<>();
         checkedMessageIDs = new LinkedList<>();
 
@@ -318,12 +318,15 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
     }
 
     private void init() {
-        final View selectedCustomView = activity.getLayoutInflater().inflate(R.layout.selected_messages_action_bar, null);
+        final View selectedCustomView = activity.getLayoutInflater().inflate(R.layout.toolbar_selected_messages, null);
         final TextView textViewSelectedTitle = (TextView) selectedCustomView.findViewById(R.id.selected_title);
         final ImageView imageViewSelectedDelete = (ImageView) selectedCustomView.findViewById(R.id.selected_delete);
         final ImageView imageViewSelectedCopy = (ImageView) selectedCustomView.findViewById(R.id.selected_copy);
         final ImageView imageViewSelectedForward = (ImageView) selectedCustomView.findViewById(R.id.selected_forward);
         final ActionBar.LayoutParams params = new ActionBar.LayoutParams(ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.MATCH_PARENT);
+        final ImageView backToolbar = (ImageView) selectedCustomView.findViewById(R.id.selected_back);
+
+        backToolbar.setOnClickListener(view -> deselectAll());
 
         imageViewSelectedForward.setOnClickListener((view -> {
             FragmentChats fragmentChats = new FragmentChats();
@@ -342,41 +345,48 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
                 }
             }
 
+            final boolean[] checkPermission = {false};
+            final String[] text = {"Удалить для всех?"};
             AlertDialog.Builder builder = new AlertDialog.Builder(activity)
-                    .setMessage(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
+                    .setMultiChoiceItems(text, checkPermission, (dialogInterface, which, isChecked) -> checkPermission[which] = isChecked)
+                    .setTitle(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
                     .setCancelable(false)
                     .setNegativeButton(ApplicationLoader.applicationContext.getString(R.string.button_cancel), (dialogInterface, i) -> {
                     })
                     .setPositiveButton(ApplicationLoader.applicationContext.getString(R.string.button_ok), (dialogInterface, i) -> {
-                        Packet request;
-                        if (isGroup) {
-                            request = new RPC.PM_deleteDialogMessages();
-                            ((RPC.PM_deleteDialogMessages) request).messageIDs.addAll(checkedMessageIDs);
-                        } else {
-                            request = new RPC.PM_deleteGroupMessages();
-                            ((RPC.PM_deleteGroupMessages) request).messageIDs.addAll(checkedMessageIDs);
-                        }
-
-                        NetworkManager.getInstance().sendRequest(request, (response, error) -> {
-                            if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
-                                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Не удалось удалить сообщения!", Toast.LENGTH_SHORT).show());
-                                return;
+                        if (checkPermission[0]) {
+                            Packet request;
+                            if (!isGroup) {
+                                request = new RPC.PM_deleteDialogMessages();
+                                ((RPC.PM_deleteDialogMessages) request).messageIDs.addAll(checkedMessageIDs);
+                            } else {
+                                request = new RPC.PM_deleteGroupMessages();
+                                ((RPC.PM_deleteGroupMessages) request).messageIDs.addAll(checkedMessageIDs);
                             }
 
-                            if (response instanceof RPC.PM_boolTrue) {
-                                ApplicationLoader.applicationHandler.post(() -> {
-                                    for (Long msgID : checkedMessageIDs) {
-                                        RPC.Message msg = MessagesManager.getInstance().messages.get(msgID);
-                                        MessagesManager.getInstance().deleteMessage(msg);
-                                        messageIDs.remove(msgID);
-                                    }
-                                    notifyDataSetChanged();
-                                });
-                            }
-                        });
+                            NetworkManager.getInstance().sendRequest(request, (response, error) -> {
+                                if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Не удалось удалить сообщения!", Toast.LENGTH_SHORT).show());
+                                    return;
+                                }
+
+                                if (response instanceof RPC.PM_boolTrue) {
+                                    ApplicationLoader.applicationHandler.post(() -> {
+                                        for (Long msgID : checkedMessageIDs) {
+                                            RPC.Message msg = MessagesManager.getInstance().messages.get(msgID);
+                                            MessagesManager.getInstance().deleteMessage(msg);
+                                            messageIDs.remove(msgID);
+                                        }
+                                        notifyDataSetChanged();
+                                    });
+                                }
+                            });
 
 //                        NotificationManager.getInstance().postNotificationName(NotificationManager.cancelDialog);
-                        deselectAll();
+                            deselectAll();
+                        } else {
+                            //TODO:delete message for user
+                        }
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
@@ -400,7 +410,8 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
             public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
                 if (itemSelectedCount >= 1) {
                     textViewSelectedTitle.setText(String.format("%s: %s", ApplicationLoader.applicationContext.getString(R.string.selected_messages_count), itemSelectedCount));
-                    activity.getSupportActionBar().setCustomView(selectedCustomView, params);
+                    toolbarContainer.removeAllViews();
+                    toolbarContainer.addView(selectedCustomView);
                 }
                 checkedMessageIDs.add(getItemId(selectedPosition));
             }
@@ -409,10 +420,12 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
             public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
                 checkedMessageIDs.remove(getItemId(deselectedPosition));
                 if (itemSelectedCount < 1) {
-                    activity.getSupportActionBar().setCustomView(defaultCustomView);
+                    toolbarContainer.removeAllViews();
+                    toolbarContainer.addView(defaultCustomView);
                 } else {
                     textViewSelectedTitle.setText(String.format("%s: %s", ApplicationLoader.applicationContext.getString(R.string.selected_messages_count), itemSelectedCount));
-                    activity.getSupportActionBar().setCustomView(selectedCustomView, params);
+                    toolbarContainer.removeAllViews();
+                    toolbarContainer.addView(selectedCustomView);
                 }
             }
 
@@ -424,8 +437,10 @@ public class MessagesAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder>
             @Override
             public void OnDeselectAll(int itemSelectedCount, int allItemCount) {
                 checkedMessageIDs.clear();
-                if (itemSelectedCount < 1)
-                    activity.getSupportActionBar().setCustomView(defaultCustomView);
+                if (itemSelectedCount < 1) {
+                    toolbarContainer.removeAllViews();
+                    toolbarContainer.addView(defaultCustomView);
+                }
             }
         });
     }

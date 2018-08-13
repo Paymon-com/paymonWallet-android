@@ -8,13 +8,11 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import ru.paymon.android.ApplicationLoader;
@@ -22,8 +20,6 @@ import ru.paymon.android.R;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
-
-import static ru.paymon.android.R.id.send;
 
 public class FragmentRecoveryPasswordEmail extends Fragment {
     public static final String PASSWORD_RECOVERY_LOGIN = "login";
@@ -54,6 +50,12 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recovery_password_email, container, false);
         view.setBackgroundResource(R.drawable.background);
+        ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
+        ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        acceptToolbar.setOnClickListener(view12 -> showFragmentRecoveryPasswordCode());
 
         emailEditText = view.findViewById(R.id.fragment_password_recovery_email_edit_text);
         hintError = view.findViewById(R.id.fragment_password_recovery_email_error_hint_text_view);
@@ -94,25 +96,25 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
     public void onResume() {
         super.onResume();
 
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
         setHasOptionsMenu(true);
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.password_recovery_send_email, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-            case send:
-                showFragmentRecoveryPasswordCode();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.password_recovery_send_email, menu);
+//    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//
+//        switch (item.getItemId()) {
+//            case send:
+//                showFragmentRecoveryPasswordCode();
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     public void showFragmentRecoveryPasswordCode() {
         if (emailEditText.getText().toString().isEmpty()) {

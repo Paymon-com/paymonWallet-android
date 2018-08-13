@@ -25,7 +25,7 @@ public class FragmentPrivacyPolicy extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.privacy_polycy_layout, container, false);
 
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.privacy_policy2));
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.privacy_policy2));
 
         final Button backToRegistration = view.findViewById(R.id.privacy_back_to_registration_button);
 

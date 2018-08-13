@@ -473,6 +473,7 @@
     <string name="remove_wallet_dialog_hint">Вы уверены, что хотите удалить этот способ пополнения/вывода?</string>
     <string name="add_participants">Добавить участников</string>
     <string name="administrators">Администраторы</string>
+    <string name="leave_group">Покинуть группу</string>
     <string name="black_list">Черный список</string>
     <string name="group_settings">Настройки Беседы</string>
     <string name="remove_participant_q">Убрать участника?</string>

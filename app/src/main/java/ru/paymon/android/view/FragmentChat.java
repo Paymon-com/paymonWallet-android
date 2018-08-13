@@ -3,27 +3,25 @@ package ru.paymon.android.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.LongSparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.DBHelper;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
@@ -90,6 +88,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         messageInput = (EmojiconEditText) view.findViewById(R.id.input_edit_text);
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (Button) view.findViewById(R.id.sendButton);
+        LinearLayout toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
 
         View defaultCustomView;
         if (isGroup)
@@ -97,9 +96,9 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         else
             defaultCustomView = createChatCustomView();
 
-        Utils.setActionBarWithCustomView(getActivity(), defaultCustomView);
+        toolbarContainer.addView(defaultCustomView);
 
-        initChat(defaultCustomView);
+        initChat(defaultCustomView, toolbarContainer);
 
         if (isForward) {
             RecyclerView recyclerViewAttachments = (RecyclerView) view.findViewById(R.id.recViewAttachments);
@@ -138,7 +137,6 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.chatAddMessages);
         MessagesManager.getInstance().currentChatID = chatID;
         Utils.hideBottomBar(getActivity());
-        Utils.setArrowBackInToolbar(getActivity());
     }
 
     @Override
@@ -148,7 +146,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         MessagesManager.getInstance().currentChatID = 0;
     }
 
-    private void initChat(View defaultCustomView) {
+    private void initChat(View defaultCustomView, LinearLayout toolbarContainer) {
         messagesRecyclerView.setHasFixedSize(true);
         messagesRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
@@ -156,7 +154,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         linearLayoutManager.setStackFromEnd(true);
         messagesRecyclerView.setLayoutManager(linearLayoutManager);
 
-        messagesAdapter = new MessagesAdapter((AppCompatActivity) getActivity(), isGroup, defaultCustomView);
+        messagesAdapter = new MessagesAdapter((AppCompatActivity) getActivity(), isGroup, defaultCustomView, toolbarContainer);
         messagesRecyclerView.setAdapter(messagesAdapter);
 
         messagesRecyclerView
@@ -216,9 +214,12 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     }
 
     private View createChatCustomView() {
-        final View customView = getLayoutInflater().inflate(R.layout.chat_action_bar, null);
-        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.connecting_title);
-        final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.chat_avatar);
+        final View customView = getLayoutInflater().inflate(R.layout.toolbar_chat, null);
+        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.toolbar_title);
+        final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.toolbar_avatar);
+        final ImageView backToolbar = (ImageView) customView.findViewById(R.id.toolbar_back_btn);
+
+        backToolbar.setOnClickListener(view -> getActivity().getSupportFragmentManager().popBackStack());
 
         final RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
         if (user != null) {
@@ -242,10 +243,13 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     }
 
     private View createChatGroupCustomView() {
-        final View customView = getLayoutInflater().inflate(R.layout.chat_group_action_bar, null);
-        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.connecting_title);
+        final View customView = getLayoutInflater().inflate(R.layout.toolbar_chat_group, null);
+        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.toolbar_title);
         final TextView participantsCountTextView = (TextView) customView.findViewById(R.id.participants_count);
         final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.chat_group_avatar);
+        final ImageView backToolbar = (ImageView) customView.findViewById(R.id.toolbar_back_btn);
+
+        backToolbar.setOnClickListener(view -> getActivity().getSupportFragmentManager().popBackStack());
 
         final RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
         if (group != null) {

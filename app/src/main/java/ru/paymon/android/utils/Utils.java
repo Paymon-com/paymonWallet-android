@@ -247,18 +247,18 @@ public class Utils {
         }
     }
 
-    public static void setActionBarWithTitle(FragmentActivity activity, String title) {
-        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(title);
-            supportActionBar.setDisplayShowCustomEnabled(false);
-            supportActionBar.setDisplayShowTitleEnabled(true);
-            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
-            final android.support.v7.widget.Toolbar toolbar = activity.findViewById(R.id.toolbar);
-            toolbar.setNavigationIcon(null);
-            supportActionBar.show();
-        }
-    }
+//    public static void setActionBarWithTitle(FragmentActivity activity, String title) {
+//        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
+//        if (supportActionBar != null) {
+//            supportActionBar.setTitle(title);
+//            supportActionBar.setDisplayShowCustomEnabled(false);
+//            supportActionBar.setDisplayShowTitleEnabled(true);
+//            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
+//            final android.support.v7.widget.Toolbar toolbar = activity.findViewById(R.id.toolbar);
+//            toolbar.setNavigationIcon(null);
+//            supportActionBar.show();
+//        }
+//    }
 
     public static void setActionBarWithCustomView(FragmentActivity activity, View customView) {
         ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
@@ -277,14 +277,14 @@ public class Utils {
             supportActionBar.hide();
     }
 
-    public static void setArrowBackInToolbar(FragmentActivity fragmentActivity) {
-        final android.support.v7.widget.Toolbar toolbar = fragmentActivity.findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-        toolbar.setNavigationOnClickListener(v -> {
-            Utils.hideKeyboard(v);
-            fragmentActivity.getSupportFragmentManager().popBackStack();
-        });
-    }
+//    public static void setArrowBackInToolbar(FragmentActivity fragmentActivity) {
+//        final android.support.v7.widget.Toolbar toolbar = fragmentActivity.findViewById(R.id.toolbar);
+//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+//        toolbar.setNavigationOnClickListener(v -> {
+//            Utils.hideKeyboard(v);
+//            fragmentActivity.getSupportFragmentManager().popBackStack();
+//        });
+//    }
 
     public static void hideBottomBar(FragmentActivity fragmentActivity) {
         final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottom_navigation_view);

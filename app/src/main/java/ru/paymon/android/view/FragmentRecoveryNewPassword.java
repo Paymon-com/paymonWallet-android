@@ -8,13 +8,11 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import ru.paymon.android.ApplicationLoader;
@@ -23,7 +21,6 @@ import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.R.id.next;
 import static ru.paymon.android.view.FragmentRecoveryPasswordCode.PASSWORD_RECOVERY_CODE;
 import static ru.paymon.android.view.FragmentRecoveryPasswordEmail.PASSWORD_RECOVERY_LOGIN;
 
@@ -67,6 +64,13 @@ public class FragmentRecoveryNewPassword extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_recovery_password_new, container, false);
         view.setBackgroundResource(R.drawable.background);
+
+        ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
+        ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        acceptToolbar.setOnClickListener(view12 -> recoveryPassword());
 
         newPassword = view.findViewById(R.id.new_password);
         repeatNewPassword = view.findViewById(R.id.repeat_new_password);
@@ -135,23 +139,8 @@ public class FragmentRecoveryNewPassword extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
+        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
         setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.next_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case next:
-                recoveryPassword();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     public void recoveryPassword() {

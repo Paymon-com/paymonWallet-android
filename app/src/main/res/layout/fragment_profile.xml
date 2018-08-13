@@ -7,13 +7,20 @@
     android:layout_height="match_parent">
 
     <include
+        android:id="@+id/include"
+        layout="@layout/toolbar_profile"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <include
         android:id="@+id/include_profile_photo"
         layout="@layout/fragment_profile_photo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/include" />
 
     <include
         android:id="@+id/include_profile_contact_info"

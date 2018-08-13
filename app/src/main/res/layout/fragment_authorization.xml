@@ -6,6 +6,10 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar_authorization" />
+
     <TextView
         android:id="@+id/forgot_password"
         android:layout_width="wrap_content"
@@ -44,7 +48,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <EditText
         android:id="@+id/password_authorization"
@@ -67,5 +71,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_authorization" />
+
+
+
 
 </android.support.constraint.ConstraintLayout>

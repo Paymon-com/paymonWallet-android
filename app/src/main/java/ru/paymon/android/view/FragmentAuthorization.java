@@ -4,17 +4,16 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,7 +30,6 @@ public class FragmentAuthorization extends Fragment {
     private static FragmentAuthorization instance;
     private EditText loginView;
     private EditText passView;
-    private TextView recoveryPassword;
     private DialogProgress dialog;
 
 
@@ -61,26 +59,43 @@ public class FragmentAuthorization extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_authorization, container, false);
         view.setBackgroundResource(R.drawable.background);
+        View toolbar = view.findViewById(R.id.toolbar);
+        ImageButton backToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_back_btn);
+        ImageButton loginToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_next_btn);
+
+        loginToolbar.setOnClickListener(view12 -> {
+            if (NetworkManager.getInstance().isConnected()) {
+                final String login = loginView.getText().toString().trim();
+                final String password = passView.getText().toString().trim();
+
+                if (login.isEmpty()) {
+                    Toast.makeText(getContext(), getString(R.string.reg_check_login), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (password.isEmpty()) {
+                    Toast.makeText(getContext(), getString(R.string.reg_check_password), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                auth(login, password);
+            } else {
+                Toast.makeText(getActivity().getApplicationContext(), R.string.check_connected_to_server, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
 
         dialog = new DialogProgress(getActivity());
         dialog.setCancelable(true);
 
         loginView = (EditText) view.findViewById(R.id.login_authorization);
         passView = (EditText) view.findViewById(R.id.password_authorization);
-        recoveryPassword = (TextView) view.findViewById(R.id.forgot_password);
-
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.authorization));
-        final Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
+        TextView recoveryPassword = (TextView) view.findViewById(R.id.forgot_password);
 
         getActivity().invalidateOptionsMenu();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         setHasOptionsMenu(true);
-
-        toolbar.setNavigationOnClickListener((v) -> {
-            Utils.hideKeyboard(v);
-            getActivity().getSupportFragmentManager().popBackStack();
-        });
 
         recoveryPassword.setOnClickListener((v) -> {
             final FragmentRecoveryPasswordEmail fragmentRecoveryPasswordEmail = FragmentRecoveryPasswordEmail.newInstance();
@@ -120,7 +135,6 @@ public class FragmentAuthorization extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.setActionBarWithTitle(getActivity(), getString(R.string.authorization));
     }
 
     @Override
@@ -128,40 +142,6 @@ public class FragmentAuthorization extends Fragment {
         super.onPause();
         Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.authorization_menu, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.auth:
-                if (NetworkManager.getInstance().isConnected()) {
-                    final String login = loginView.getText().toString().trim();
-                    final String password = passView.getText().toString().trim();
-
-                    if (login.isEmpty()) {
-                        Toast.makeText(getContext(), getString(R.string.reg_check_login), Toast.LENGTH_SHORT).show();
-                        return super.onOptionsItemSelected(item);
-                    }
-
-                    if (password.isEmpty()) {
-                        Toast.makeText(getContext(), getString(R.string.reg_check_password), Toast.LENGTH_SHORT).show();
-                        return super.onOptionsItemSelected(item);
-                    }
-
-                    auth(login, password);
-                } else {
-                    Toast.makeText(getActivity().getApplicationContext(), R.string.check_connected_to_server, Toast.LENGTH_SHORT).show();
-                    return super.onOptionsItemSelected(item);
-                }
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
 
     private void auth(final String login, final String password) {
         Utils.netQueue.postRunnable(() -> {
