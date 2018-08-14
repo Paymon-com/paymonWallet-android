@@ -16,22 +16,7 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <!--<include-->
-            <!--android:id="@+id/toolbar"-->
-            <!--layout="@layout/toolbar_chat"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:visibility="gone"/>-->
-
-        <!--<include-->
-            <!--android:id="@+id/toolbar_group"-->
-            <!--layout="@layout/toolbar_chat_group"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:visibility="gone"/>-->
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chat_recview"

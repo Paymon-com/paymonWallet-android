@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<com.daimajia.androidviewhover.BlurLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/blur_layout"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<!--<com.daimajia.androidviewhover.BlurLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--android:id="@+id/blur_layout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
 
     <!--<include-->
         <!--android:id="@+id/swipe_view"-->
@@ -89,4 +89,4 @@
             app:srcCompat="@drawable/ic_group_identificator" />
 
     </android.support.constraint.ConstraintLayout>
-</com.daimajia.androidviewhover.BlurLayout>
+<!--</com.daimajia.androidviewhover.BlurLayout>-->
