@@ -70,12 +70,12 @@ public class DialogFragmentRestoreEthereumWallet extends DialogFragment {
         restoreButton.setOnClickListener((view1 -> {
             String password = passwordEditText.getText().toString().trim();
             if (password.isEmpty() || password.length() < 8) {
-                Toast.makeText(getContext(), "Пароль слишком короткий!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.reg_check_password_length, Toast.LENGTH_LONG).show();
                 return;
             }
 
             if (filePath[0] == null) {
-                Toast.makeText(getContext(), "Файл бэкапа кошелька не выбран!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.backup_file_not_selected, Toast.LENGTH_LONG).show();
                 return;
             }
 

@@ -3,14 +3,13 @@ package ru.paymon.android.view;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,7 +17,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.MainActivity;
@@ -82,6 +80,16 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
         final int itemId = item.getItemId();
         switch (itemId) {
             case R.id.more_menu_profit:
+                Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage("com.example.raing.profitbeta");
+                if (launchIntent != null) {
+                    startActivity(launchIntent);
+                } else {
+                    try {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
+                    } catch (android.content.ActivityNotFoundException e) {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
+                    }
+                }
                 break;
             case R.id.more_menu_invite:
                 if (ContextCompat.checkSelfPermission(ApplicationLoader.applicationContext, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {

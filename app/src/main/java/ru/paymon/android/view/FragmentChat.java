@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -95,6 +96,22 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (Button) view.findViewById(R.id.sendButton);
         LinearLayout toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
+
+        ConstraintLayout includeAttachment = (ConstraintLayout) view.findViewById(R.id.fragment_chat_attachment_include);
+
+
+        ImageButton buttonAttachment = (ImageButton) view.findViewById(R.id.attach_button);
+
+        buttonAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (includeAttachment.getVisibility() == View.GONE){
+                includeAttachment.setVisibility(View.VISIBLE);
+                } else {
+                    includeAttachment.setVisibility(View.GONE);
+                }
+            }
+        });
 
         View defaultChatToolbarView;
         if (isGroup)
@@ -312,14 +329,14 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         public void delete(LinkedList<Long> checkedMessageIDs) {
             for (long msgid : checkedMessageIDs) {
                 if (MessagesManager.getInstance().messages.get(msgid).from_id != User.currentUser.id) {
-                    Toast.makeText(getContext(), "Вы не можете удалять чужие сообщения!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.you_can_not_delete_someone_messages, Toast.LENGTH_SHORT).show();
                     messagesAdapter.deselectAll();
                     return;
                 }
             }
 
             final boolean[] checkPermission = {false};
-            final String[] text = {"Удалить для всех?"};
+            final String[] text = {getString(R.string.delete_for_everyone)};
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                     .setMultiChoiceItems(text, checkPermission, (dialogInterface, which, isChecked) -> checkPermission[which] = isChecked)
                     .setTitle(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
@@ -339,7 +356,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
                             NetworkManager.getInstance().sendRequest(request, (response, error) -> {
                                 if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
-                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), "Не удалось удалить сообщения!", Toast.LENGTH_SHORT).show());
+                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.unable_to_delete_messages, Toast.LENGTH_SHORT).show());
                                     return;
                                 }
 

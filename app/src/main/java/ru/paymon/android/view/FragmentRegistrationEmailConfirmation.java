@@ -168,10 +168,10 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
                         });
                         switch (error.code) { //TODO: add text to string file
                             case 1:
-                                ApplicationLoader.applicationHandler.post(() -> hintError.setText("Логин или емейл пустой"));
+                                ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.login_or_email_is_empty));
                                 break;
                             case 2:
-                                ApplicationLoader.applicationHandler.post(() -> hintError.setText("Ошибка в емейле"));
+                                ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.error_in_email));
                                 break;
                             case 3:
                                 ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.registration_email_used));

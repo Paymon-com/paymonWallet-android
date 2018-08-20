@@ -66,7 +66,7 @@ public class FragmentProfile extends Fragment {
         if (User.currentUser.phoneNumber != 0)
             phone.setText(Utils.formatPhone(User.currentUser.phoneNumber));
         else
-            phone.setText("Не указан");//TODO:string
+            phone.setText(R.string.not_specified);//TODO:string
         city.setText(User.currentUser.city);
         birthday.setText(User.currentUser.birthdate);
         country.setText(User.currentUser.country);

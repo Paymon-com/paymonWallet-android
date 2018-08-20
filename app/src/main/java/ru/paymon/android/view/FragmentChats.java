@@ -120,11 +120,11 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
             @Override
             public void onPageSelected(final int position) {
                 if (position == 0) {
-                    toolbarTitle.setText("Тет-а-тет");
+                    toolbarTitle.setText(R.string.twosome);
                 } else if (position == 1) {
-                    toolbarTitle.setText("Чаты");
+                    toolbarTitle.setText(R.string.title_chats);
                 } else {
-                    toolbarTitle.setText("Группы");
+                    toolbarTitle.setText(R.string.groups);
                 }
                 mCurrentPosition = position;
             }
@@ -201,9 +201,9 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     public void onResume() {
         super.onResume();
         if (!isForward)
-            toolbarTitle.setText("Чаты");
+            toolbarTitle.setText(R.string.title_chats);
         else
-            toolbarTitle.setText("Выберите получателя");
+            toolbarTitle.setText(R.string.select_the_recipient);
         Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
@@ -337,7 +337,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                 View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
 //                ApplicationLoader.applicationHandler.post(() ->  Utils.setActionBarWithCustomView(getActivity(), connectingView)  textToolAll.setText("Connection")  toolbar.setText("Connecting"));
             } else if (id == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-                ApplicationLoader.applicationHandler.post(() -> toolbarTitle.setText("Чаты"));
+                ApplicationLoader.applicationHandler.post(() -> toolbarTitle.setText(R.string.title_chats));
             }
         });
     }

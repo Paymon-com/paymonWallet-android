@@ -52,7 +52,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
     @Override
     public void onResume() {
         super.onResume();
-        toolbarTitle.setText("Настройки");
+        toolbarTitle.setText(R.string.title_settings);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
 
         switch (itemId) {
             case R.id.settings_notifications:
-                toolbarTitle.setText("Уведомления");
+                toolbarTitle.setText(R.string.settings_notifications);
                 FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
                 fragmentTransaction.replace(R.id.settings_container, FragmentSettingsNotif.newInstance());
@@ -74,7 +74,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 fragmentTransaction.commit();
                 break;
             case R.id.settings_basic:
-                toolbarTitle.setText("Основные");
+                toolbarTitle.setText(R.string.settings_basic);
                 fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
                 fragmentTransaction.replace(R.id.settings_container, FragmentSettingsBasic.newInstance());
@@ -82,7 +82,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 fragmentTransaction.commit();
                 break;
             case R.id.settings_security:
-                toolbarTitle.setText("Безопасность");
+                toolbarTitle.setText(R.string.settings_security);
                 fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
                 fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
                 fragmentTransaction.replace(R.id.settings_container, FragmentSettingsSecurity.newInstance());
