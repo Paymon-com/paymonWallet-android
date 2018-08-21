@@ -17,7 +17,7 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="CLIENT_MESSAGES_NOTIFY_NOTIFICATIONS_ENABLED_SWITCH"
-            android:title="Уведомления" />
+            android:title="@string/settings_notifications" />
 
         <Preference
             android:defaultValue="@string/default_sound"
@@ -37,16 +37,16 @@
         <SwitchPreference
             android:defaultValue="true"
             android:key="CLIENT_MESSAGES_NOTIFY_FRIENDS_INVITES_SWITCH"
-            android:title="Заявки в друзья" />
+            android:title="@string/friend_requests" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="CLIENT_MESSAGES_NOTIFY_GROUP_INVITES_SWITCH"
-            android:title="Приглашение в группы" />
+            android:title="@string/group_invitations" />
         <SwitchPreference
             android:defaultValue="false"
             android:enabled="false"
             android:key="CLIENT_MESSAGES_NOTIFY_GAMES_SWITCH"
-            android:title="Игры" />
+            android:title="@string/title_games" />
 
     </PreferenceCategory>
 </PreferenceScreen>
