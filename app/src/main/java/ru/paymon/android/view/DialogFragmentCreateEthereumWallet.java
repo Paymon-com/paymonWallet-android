@@ -48,18 +48,18 @@ public class DialogFragmentCreateEthereumWallet extends DialogFragment {
                 Utils.stageQueue.postRunnable(() -> {
                     boolean isCreated = Ethereum.getInstance().createWallet(User.currentUser.id, passwordString);
                     if (!isCreated) {
-                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Создать Ethereum кошелек не удалось", Toast.LENGTH_LONG).show());
+                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.create_ethereum_wallet_failed, Toast.LENGTH_LONG).show());
                     } else {
                         //TODO:отправка кошеля в бд
                         User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = passwordString;
                         User.saveConfig();
                         ApplicationLoader.applicationHandler.post(() -> {
-                            Toast.makeText(ApplicationLoader.applicationContext, "Ethereum кошелек успешно создан", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ApplicationLoader.applicationContext, R.string.ethereum_wallet_created, Toast.LENGTH_LONG).show();
                         });
                     }
                 });
             } else {
-                Toast.makeText(ApplicationLoader.applicationContext, "Пароль слишком короткий!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ApplicationLoader.applicationContext, R.string.reg_check_password_length, Toast.LENGTH_SHORT).show();
             }
         });
 

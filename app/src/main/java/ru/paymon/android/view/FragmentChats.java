@@ -67,6 +67,58 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
         SlidingChatsAdapter pagerAdapter = new SlidingChatsAdapter(pages);
 
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            private int mCurrentPosition;
+            private int mScrollState;
+
+            @Override
+            public void onPageSelected(final int position) {
+                if (position == 0) {
+                    toolbarTitle.setText(R.string.twosome);
+                } else if (position == 1) {
+                    toolbarTitle.setText(R.string.title_chats);
+                } else {
+                    toolbarTitle.setText(R.string.groups);
+                }
+                mCurrentPosition = position;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(final int state) {
+                handleScrollState(state);
+                mScrollState = state;
+            }
+
+            private void handleScrollState(final int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    setNextItemIfNeeded();
+                }
+            }
+
+            private void setNextItemIfNeeded() {
+                if (!isScrollStateSettling()) {
+                    handleSetNextItem();
+                }
+            }
+
+            private boolean isScrollStateSettling() {
+                return mScrollState == ViewPager.SCROLL_STATE_SETTLING;
+            }
+
+            private void handleSetNextItem() {
+                final int lastPosition = viewPager.getAdapter().getCount() - 1;
+                if (mCurrentPosition == 0) {
+                    viewPager.setCurrentItem(lastPosition, false);
+                } else if (mCurrentPosition == lastPosition) {
+                    viewPager.setCurrentItem(0, false);
+                }
+            }
+
+            @Override
+            public void onPageScrolled(final int position, final float positionOffset, final int positionOffsetPixels) {
+            }
+        });
+
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);
 
@@ -98,6 +150,11 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
+        if (!isForward)
+            toolbarTitle.setText(R.string.title_chats);
+        else
+            toolbarTitle.setText(R.string.select_the_recipient);
+        Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
         MessagesManager.getInstance().currentChatID = 0;
@@ -224,14 +281,62 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                     chatsAdapter.chatsItemsList = chatsItems;
                     ApplicationLoader.applicationHandler.post(() -> chatsAdapter.notifyDataSetChanged());
                 } else {
+//                    ApplicationLoader.applicationHandler.post(() -> {
+//                        if (hintView != null) hintView.setVisibility(View.VISIBLE);
+//                    });
                 }
                 isLoading = false;
             } else if (id == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
-//                View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
+                View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
 //                ApplicationLoader.applicationHandler.post(() ->  Utils.setActionBarWithCustomView(getActivity(), connectingView)  textToolAll.setText("Connection")  toolbar.setText("Connecting"));
             } else if (id == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-//                ApplicationLoader.applicationHandler.post(() -> toolbarTitle.setText("Чаты"));
+                ApplicationLoader.applicationHandler.post(() -> toolbarTitle.setText(R.string.title_chats));
             }
         });
     }
+
+    private View createConnectingCustomView() {
+        final View customView = getLayoutInflater().inflate(R.layout.toolbar_connecting, null);
+        final ConstraintLayout pointLayout = (ConstraintLayout) customView.findViewById(R.id.connecting_anim_layout);
+
+        Animation rotateAnimation = new RotateAnimation(0, 360, 50f, 50f);
+        rotateAnimation.setDuration(3000);
+
+        rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                rotateAnimation.reset();
+                pointLayout.startAnimation(rotateAnimation);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+
+        pointLayout.startAnimation(rotateAnimation);
+
+        return customView;
+    }
+
+    private ChatsAdapter.IChatsClickListener iChatsClickListener = (chatID, isGroup) -> {
+        final Bundle bundle = new Bundle();
+
+        if (isGroup)
+            bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(chatID));
+
+        if (forwardMessages != null && forwardMessages.size() > 0)
+            bundle.putSerializable(FORWARD_MESSAGES_KEY, forwardMessages);
+
+        bundle.putInt(CHAT_ID_KEY, chatID);
+        final FragmentChat fragmentChat = FragmentChat.newInstance();
+        fragmentChat.setArguments(bundle);
+        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentChat, null);
+    };
 }

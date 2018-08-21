@@ -55,9 +55,9 @@ public class FragmentCreateGroup extends Fragment {
 
         ImageButton acceptButton = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
-        TextView toolbarTitle = (TextView) view.findViewById(R.id.toolbar_title);
+//        TextView toolbarTitle = (TextView) view.findViewById(R.id.toolbar_title);
 
-        toolbarTitle.setText("Создание группы");
+//        toolbarTitle.setText("Создание группы");
         backButton.setOnClickListener(view12 -> getActivity().getSupportFragmentManager().popBackStack());
 
         acceptButton.setOnClickListener(view1 -> {

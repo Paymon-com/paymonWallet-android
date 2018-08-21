@@ -1,9 +1,11 @@
 package ru.paymon.android.adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
+import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
@@ -70,8 +73,14 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
         groupsSettingsViewHolder.removeButton.setOnClickListener((view) ->
         {
-            //TODO:подтверждение удаления
-            deleteParticipant(createGroupItem);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setTitle("Подтверждение удаления")
+                    .setMessage("Вы хотите удалить участника?")
+                    .setCancelable(true).setPositiveButton("Да", (dialogInterface, i) -> deleteParticipant(createGroupItem)).setNegativeButton("Нет", (dialogInterface, i) -> {
+                    });
+
+            AlertDialog alert = builder.create();
+            alert.show();
         });
     }
 

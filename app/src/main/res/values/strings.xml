@@ -7,11 +7,13 @@
     <string name="reg_phone_correct">Проверьте правильность введенного номера телефона.</string>
     <string name="msg_permissions_required">Пожалуйста, предоставьте разрешения</string>
     <string name="pick_image_intent_text">Выберите</string>
+    <string name="select_the_recipient">Выберите получателя</string>
 
     <string name="ok">ОК</string>
     <string name="app_name">Paymon</string>
     <string name="title_chats">Чаты</string>
     <string name="title_more">Еще</string>
+    <string name="yes">Да</string>
     <string name="title_update_profile">Редактирование профиля</string>
     <string name="title_contacts">Контакты</string>
     <string name="title_request">Заявки</string>
@@ -216,6 +218,7 @@
     <string name="notification_inactivity_message_donate">Если вам не нужны монеты, вы можете пожертвовать их проекту Bitcoin Wallet.</string>
     <string name="notification_inactivity_action_dismiss">Напомнить позже</string>
     <string name="notification_inactivity_action_dismiss_forever">Не напоминать</string>
+    <string name="the_balance_of_the_ethereum_wallet_could_not_be_updated">Баланс Ethereum кошелька обновить не удалось</string>
     <!--generic buttons-->
     <string name="button_ok">OK</string>
     <string name="button_dismiss">Отклонить</string>
@@ -436,6 +439,7 @@
 Любые вопросы по поводу данной политики, сбора, использования и раскрытия персональных данных Блокчейн  или доступ к вашим личным данным, которые требуются по закону и  подлежащая раскрытию информация должна быть направлена на privacy@paymon.ru .
     </string>
     <string name="error_bluetooth">Ошибка Bluetooth</string>
+    <string name="error_in_email">Ошибка в E-mail</string>
     <string name="raise_fee_dialog_cant_raise">Комиссия за этот платеж не может быть повышена.</string>
     <string name="raise_fee_dialog_determining_fee">Определение комиссии…</string>
     <string name="wallet_not_create">Кошелек еще не создан</string>
@@ -455,6 +459,7 @@
     <string name="registration_email_used">Такая электронная почта уже используется</string>
     <string name="restart_application">Пожалуйста, перезапустите приложение</string>
     <string name="upload_photo">Загрузка фотографии</string>
+    <string name="photo_upload_failed">Фотография загрузить не удалось</string>
     <string name="upload_photo_hint">Пожалуйста, подождите…</string>
 
     <string name="default_denomination_value_btc">BTC, 2 десятичных разряда</string>
@@ -471,6 +476,7 @@
     <string name="payeer">Payeer</string>
     <string name="agree">Принять</string>
     <string name="remove_wallet_dialog_hint">Вы уверены, что хотите удалить этот способ пополнения/вывода?</string>
+    <string name="are_you_sure">Вы уверены?</string>
     <string name="add_participants">Добавить участников</string>
     <string name="administrators">Администраторы</string>
     <string name="leave_group">Покинуть группу</string>
@@ -484,6 +490,7 @@
     <string name="payment_succes_back_button">Вернуться в финансы</string>
     <string name="payment_info_service_is_not_working">Сервис временно не работает</string>
     <string name="you_do_not_have_any_messages_yet">У Вас пока нет сообщений</string>
+    <string name="no">Нет</string>
     <string name="backup_wallet_menu_item_title">Создать резервную копию</string>
     <string name="restore_backup_wallet_menu_item_title">Восстановить резервную копию</string>
     <string name="payeer_add_wallet_title">Введите ваш Payeer id.</string>
@@ -493,6 +500,7 @@
     <string name="payeer_add_wallet_its_not_payeer">Это не Payeer id</string>
     <string name="open_in_browser">Открыть в браузере?</string>
     <string name="auth_wrong_login_or_password">Неверный логин или пароль</string>
+    <string name="login_or_email_is_empty">Логин или E-mail пустой</string>
     <string name="error_spamming">Слишком много запросов, попробуйте снова</string>
     <string name="eth">ETH</string>
     <string name="ethereum_wallet_create_title">Придумайте пароль для вашего Ethereum кошелька. Операция может занять несколько минут.</string>
@@ -513,6 +521,8 @@
     <string name="restore_wallet_not_success">Кошелек не был восстановлен</string>
     <string name="restore_wallet_not_success_error_file">Ошбка при создании файла</string>
     <string name="not_create_wallet">Не удалось создать кошелек.</string>
+    <string name="create_ethereum_wallet_failed">Создать Ethereum кошелек не удалось</string>
+    <string name="ethereum_wallet_created">Создать Ethereum кошелек не удалось</string>
     <string name="amount_small">Сумма перевода слишком мала.</string>
     <string name="eth_gaz_limit">GAS LIMIT</string>
     <string name="eth_gaz_price">GAS PRICE</string>
@@ -648,4 +658,13 @@
     <string name="money_denomination_6">6 decimal places</string>
     <string name="money_denomination_4">4 decimal places</string>
     <string name="money_denomination_2">2 decimal places</string>
+    <string name="backup_file_not_selected">Файл бэкапа кошелька не выбран</string>
+    <string name="you_can_not_delete_someone_messages">Вы не можете удалять чужие сообщения</string>
+    <string name="unable_to_delete_messages">Не удалось удалить сообщения</string>
+    <string name="delete_for_everyone">Удалить для всех</string>
+    <string name="twosome">Тет-а-тет</string>
+    <string name="groups">Группы</string>
+    <string name="global_search">Глобальный поиск</string>
+    <string name="you_did_not_choose_anyone">Вы никого не выбрали</string>
+    <string name="not_specified">Не указан</string>
 </resources>

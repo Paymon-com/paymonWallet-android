@@ -117,7 +117,7 @@ public class FragmentContacts extends Fragment {
                     lastTimeSend = System.currentTimeMillis();
                     requestID = NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
                         if (error != null || response == null)
-                            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), "Ошибка", Toast.LENGTH_SHORT).show());//TODO string
+                            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_SHORT).show());//TODO string
 
                         if (response != null && response instanceof RPC.PM_users) {
                             RPC.PM_users received = (RPC.PM_users) response;
@@ -151,7 +151,7 @@ public class FragmentContacts extends Fragment {
                         lastTimeSend = System.currentTimeMillis();
                         requestID = NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
                             if (error != null || response == null)
-                                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), "Ошибка", Toast.LENGTH_SHORT).show());//TODO string
+                                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_SHORT).show());//TODO string
 
                             if (response != null && response instanceof RPC.PM_users) {
                                 RPC.PM_users received = (RPC.PM_users) response;
@@ -176,13 +176,13 @@ public class FragmentContacts extends Fragment {
 
         TabHost.TabSpec tabSpec = tabHost.newTabSpec("contacts");
         tabSpec.setContent(R.id.linearLayout);
-        String contactTab = "Контакты"; //TODO:string
+        String contactTab = getString(R.string.title_contacts);
         tabSpec.setIndicator(contactTab);
         tabHost.addTab(tabSpec);
 
         tabSpec = tabHost.newTabSpec("global");
         tabSpec.setContent(R.id.linearLayout2);
-        String contactsGlobalTab = "Глобальный поиск";//TODO:string
+        String contactsGlobalTab = getString(R.string.global_search);
         tabSpec.setIndicator(contactsGlobalTab);
         tabHost.addTab(tabSpec);
         tabHost.setCurrentTab(0);

@@ -277,7 +277,7 @@ public class FragmentProfileEdit extends Fragment {
                                         dialogProgress.cancel();
 
                                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                            .setMessage("Фотографию загрузить не удалось") //TODO:string
+                                            .setMessage(R.string.photo_upload_failed) //TODO:string
                                             .setCancelable(true);
                                     AlertDialog alertDialog = builder.create();
                                     alertDialog.show();
@@ -325,9 +325,7 @@ public class FragmentProfileEdit extends Fragment {
                             });
                         });
 
-                        ApplicationLoader.applicationHandler.post(() -> {
-                            dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false));
-                        });
+                        ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
                     });
                 }
                 break;

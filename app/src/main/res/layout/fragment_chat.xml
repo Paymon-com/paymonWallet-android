@@ -58,20 +58,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <include
+            android:id="@+id/fragment_chat_attachment_include"
+            layout="@layout/fragment_chat_attachment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/attach_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+
         <ImageButton
             android:id="@+id/attach_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_attach_file_black_24dp" />
 
         <hani.momanii.supernova_emoji_library.helper.EmojiconEditText
             android:id="@+id/input_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_toStartOf="@+id/smilesButton"
@@ -92,21 +104,20 @@
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/smilesButton"
-            app:layout_constraintStart_toEndOf="@+id/attach_button"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/attach_button" />
         <!--emojicon:emojiconSize="28sp"-->
 
         <ImageView
             android:id="@+id/smilesButton"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
             android:layout_toStartOf="@+id/sendButton"
             android:gravity="end"
             android:src="@drawable/ic_smile"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/sendButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/sendButton" />
         <!--android:background="@drawable/ic_smile"-->
 
         <Button
@@ -114,14 +125,14 @@
             android:layout_width="37dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:adjustViewBounds="true"
             android:background="@drawable/ic_sent"
             android:gravity="end"
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent" />
 
 
     </android.support.constraint.ConstraintLayout>

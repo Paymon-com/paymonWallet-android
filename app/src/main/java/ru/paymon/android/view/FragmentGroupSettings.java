@@ -111,7 +111,7 @@ public class FragmentGroupSettings extends Fragment {
                                 if (dialogProgress != null && dialogProgress.isShowing())
                                     dialogProgress.cancel();
                                 Toast toast = Toast.makeText(getContext(),
-                                        "Введите название группы", Toast.LENGTH_SHORT);//TODO string
+                                        getString(R.string.enter_group_title), Toast.LENGTH_SHORT);//TODO string
                                 toast.show();
                             });
                             return;
@@ -146,10 +146,10 @@ public class FragmentGroupSettings extends Fragment {
         Button blackListButton = (Button) view.findViewById(R.id.group_settings_black_list);
         blackListButton.setOnClickListener((view1) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Черный список");//TODO:string
+            builder.setTitle(R.string.black_list);//TODO:string
             view1 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_black_list, null);
             builder.setView(view1);
-            builder.setPositiveButton("Добавить", (dialogInterface, i) -> {
+            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> {
                 final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, new FragmentGroupAddBlackList(), null);
             });
@@ -164,10 +164,10 @@ public class FragmentGroupSettings extends Fragment {
         Button adminListButton = (Button) view.findViewById(R.id.group_settings_administrators);
         adminListButton.setOnClickListener(view12 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Администраторы");//TODO:string
+            builder.setTitle(R.string.administrators);//TODO:string
             view12 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_administrators, null);
             builder.setView(view12);
-            builder.setPositiveButton("Добавить", (dialogInterface, i) -> {
+            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> {
                 final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, new FragmentGroupAddAdministrators(), null);
             });
@@ -182,9 +182,9 @@ public class FragmentGroupSettings extends Fragment {
         Button leaveGroup = (Button) view.findViewById(R.id.group_settings_leave_group);
         leaveGroup.setOnClickListener(view13 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle("Покинуть группу").setMessage("Вы уверены?").setPositiveButton("Да", (dialogInterface, i) -> {
+            builder.setTitle(R.string.leave_group).setMessage(R.string.are_you_sure).setPositiveButton(R.string.yes, (dialogInterface, i) -> {
 
-            }).setNegativeButton("Нет", (dialogInterface, i) -> dialogInterface.cancel());
+            }).setNegativeButton(R.string.no, (dialogInterface, i) -> dialogInterface.cancel());
             builder.create().show();
         });
 

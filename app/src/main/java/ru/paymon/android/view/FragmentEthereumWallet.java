@@ -91,7 +91,7 @@ public class FragmentEthereumWallet extends Fragment {
                         }
                     },
                     (error) -> {
-                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Баланс Ethereum кошелька обновить не удалось!", Toast.LENGTH_LONG).show());
+                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.the_balance_of_the_ethereum_wallet_could_not_be_updated, Toast.LENGTH_LONG).show());
                     });
 
             ApplicationLoader.applicationHandler.post(() -> balance.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE));
