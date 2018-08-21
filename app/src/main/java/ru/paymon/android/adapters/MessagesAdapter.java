@@ -3,6 +3,7 @@ package ru.paymon.android.adapters;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
+import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
 
@@ -34,6 +36,7 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.MultiChoiceHelper;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
 import ru.paymon.android.view.FragmentChats;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -162,7 +165,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 RPC.PM_photo photo = new RPC.PM_photo();
                 photo.user_id = uid;
                 photo.id = pid;
+//                    Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(Integer.toString(photo.user_id) + "_" + Long.toString(photo.id));
+//                    if (bitmap != null)
+//                        groupReceiveMessageViewHolder.avatar.setImageBitmap(bitmap);
 //                groupReceiveMessageViewHolder.avatar.setPhoto(photo);
+                Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(groupReceiveMessageViewHolder.avatar);
+
             }
         } else if (holder instanceof ActionMessageViewHolder) {
             final ActionMessageViewHolder actionMessageViewHolder = (ActionMessageViewHolder) holder;
@@ -448,13 +456,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static class GroupReceiveMessageViewHolder extends BaseViewHolder {
         EmojiconTextView msg;
         TextView time;
-        CircleImageView avatar;
+        ImageView avatar;
 
         GroupReceiveMessageViewHolder(View view) {
             super(view);
             msg = (EmojiconTextView) view.findViewById(R.id.message_text_view);
             time = (TextView) view.findViewById(R.id.timestamp_text_view);
-            avatar = (CircleImageView) view.findViewById(R.id.photo);
+            avatar = (ImageView) view.findViewById(R.id.photo);
         }
     }
 

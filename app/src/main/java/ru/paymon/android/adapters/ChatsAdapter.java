@@ -2,6 +2,8 @@ package ru.paymon.android.adapters;
 
 import android.app.Activity;
 import android.app.Notification;
+import android.graphics.Bitmap;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidviewhover.BlurLayout;
+import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
 
@@ -30,6 +33,7 @@ import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
 import ru.paymon.android.view.FragmentChat;
 
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
@@ -100,6 +104,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
                 final ChatsViewHolder chatsViewHolder = (ChatsViewHolder) holder;
 
 //                chatsViewHolder.avatar.setPhoto(photo);
+                if(photo != null) {
+                    Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(chatsViewHolder.avatar);
+
+//                    Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(Integer.toString(photo.user_id) + "_" + Long.toString(photo.id));
+//                    if (bitmap != null)
+//                        chatsViewHolder.avatar.setImageBitmap(bitmap);
+                }
 
                 if (name != null && !name.isEmpty())
                     chatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(chatsViewHolder.name.getPaint(), name)));
@@ -120,6 +131,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
                 final GroupChatsViewHolder groupChatsViewHolder = (GroupChatsViewHolder) holder;
 
 //                groupChatsViewHolder.avatar.setPhoto(photo);
+                if(photo != null) {
+                    Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(groupChatsViewHolder.avatar);
+
+//                    Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(Integer.toString(photo.user_id) + "_" + Long.toString(photo.id));
+//                    if (bitmap != null)
+//                        groupChatsViewHolder.avatar.setImageBitmap(bitmap);
+                }
 
                 if (name != null && !name.isEmpty())
                     groupChatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(groupChatsViewHolder.name.getPaint(), name)));
@@ -134,7 +152,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
                 if (chatsItem.fileType != FileManager.FileType.ACTION) {
                     RPC.PM_photo lastMsgPhoto = ((ChatsGroupItem) chatsItem).lastMsgPhoto;
 
-                    groupChatsViewHolder.lastMshPhoto.setPhoto(lastMsgPhoto);
+//                    groupChatsViewHolder.lastMshPhoto.setPhoto(lastMsgPhoto);
+                    if(lastMsgPhoto != null) {
+//                        Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(Integer.toString(lastMsgPhoto.user_id) + "_" + Long.toString(lastMsgPhoto.id));
+                        Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(groupChatsViewHolder.lastMshPhoto);
+//                        if (bitmap != null)
+//                            groupChatsViewHolder.lastMshPhoto.setImageBitmap(bitmap);
+                    }
                 }
 
                 groupChatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
@@ -161,30 +185,30 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
     @Override
     public void onViewDetachedFromWindow(@NonNull CommonChatsViewHolder holder) {
         super.onViewDetachedFromWindow(holder);
-        holder.mSampleLayout.dismissHover();
+//        holder.mSampleLayout.dismissHover();
     }
 
     public static class CommonChatsViewHolder extends RecyclerView.ViewHolder {
         public final ConstraintLayout mainLayout;
-        private final BlurLayout mSampleLayout;
-        private final ImageView doNotDisturb;
+//        private final BlurLayout mSampleLayout;
+//        private final ImageView doNotDisturb;
 
 
         public CommonChatsViewHolder(View itemView) {
             super(itemView);
 
             mainLayout = (ConstraintLayout) itemView.findViewById(R.id.main_layout);
-            mSampleLayout = (BlurLayout) itemView.findViewById(R.id.blur_layout);
-            View hover = LayoutInflater.from(ApplicationLoader.applicationContext).inflate(R.layout.chats_item_hover, null);
-            doNotDisturb = hover.findViewById(R.id.do_not_disturb);
+//            mSampleLayout = (BlurLayout) itemView.findViewById(R.id.blur_layout);
+//            View hover = LayoutInflater.from(ApplicationLoader.applicationContext).inflate(R.layout.chats_item_hover, null);
+//            doNotDisturb = hover.findViewById(R.id.do_not_disturb);
 
-            mSampleLayout.setHoverView(hover);
-            mSampleLayout.setBlurDuration(550);
-            mSampleLayout.addChildAppearAnimator(hover, R.id.trash, Techniques.FlipInX, 550, 0);
-            mSampleLayout.addChildAppearAnimator(hover, R.id.do_not_disturb, Techniques.FlipInX, 550, 250);
-
-            mSampleLayout.addChildDisappearAnimator(hover, R.id.trash, Techniques.FlipOutX, 550, 500);
-            mSampleLayout.addChildDisappearAnimator(hover, R.id.do_not_disturb, Techniques.FlipOutX, 550, 250);
+//            mSampleLayout.setHoverView(hover);
+//            mSampleLayout.setBlurDuration(550);
+//            mSampleLayout.addChildAppearAnimator(hover, R.id.trash, Techniques.FlipInX, 550, 0);
+//            mSampleLayout.addChildAppearAnimator(hover, R.id.do_not_disturb, Techniques.FlipInX, 550, 250);
+//
+//            mSampleLayout.addChildDisappearAnimator(hover, R.id.trash, Techniques.FlipOutX, 550, 500);
+//            mSampleLayout.addChildDisappearAnimator(hover, R.id.do_not_disturb, Techniques.FlipOutX, 550, 250);
 
 //            if (User.CLIENT_DO_NOT_DISTURB_CHATS_LIST.contains(chatID))
 //                doNotDisturb.setImageResource(R.drawable.ic_bell_slash_o_64);
@@ -201,21 +225,21 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
 //            }));
 
             mainLayout.setOnLongClickListener((view -> {
-                mSampleLayout.toggleHover();
+//                mSampleLayout.toggleHover();
                 return true;
             }));
         }
     }
 
     public static class ChatsViewHolder extends CommonChatsViewHolder {
-        CircleImageView avatar;
+        ImageView avatar;
         TextView time;
         TextView msg;
         TextView name;
 
         ChatsViewHolder(View itemView) {
             super(itemView);
-            avatar = (CircleImageView) itemView.findViewById(R.id.chats_item_avatar);
+            avatar = (ImageView) itemView.findViewById(R.id.chats_item_avatar);
             time = (TextView) itemView.findViewById(R.id.chats_item_time);
             msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
             name = (TextView) itemView.findViewById(R.id.chats_item_name);
@@ -223,16 +247,16 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
     }
 
     public static class GroupChatsViewHolder extends CommonChatsViewHolder {
-        CircleImageView avatar;
-        CircleImageView lastMshPhoto;
+        ImageView avatar;
+        ImageView lastMshPhoto;
         TextView time;
         TextView msg;
         TextView name;
 
         GroupChatsViewHolder(View itemView) {
             super(itemView);
-            avatar = (CircleImageView) itemView.findViewById(R.id.chats_item_avatar);
-            lastMshPhoto = (CircleImageView) itemView.findViewById(R.id.chats_item_last_msg_avatar);
+            avatar = (ImageView) itemView.findViewById(R.id.chats_item_avatar);
+            lastMshPhoto = (ImageView) itemView.findViewById(R.id.chats_item_last_msg_avatar);
             time = (TextView) itemView.findViewById(R.id.chats_item_time);
             msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
             name = (TextView) itemView.findViewById(R.id.chats_item_name);

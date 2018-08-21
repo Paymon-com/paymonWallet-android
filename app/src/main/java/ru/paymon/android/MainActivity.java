@@ -107,7 +107,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
             if (!User.currentUser.confirmed || User.currentUser.email.isEmpty())
                 Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance());
             else
-                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.newInstance());
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance());
         }
     }
 

@@ -18,17 +18,32 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ru.paymon.android.components.CircleImageView
-            android:id="@+id/chats_item_avatar"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <!--<ru.paymon.android.components.CircleImageView-->
+            <!--android:id="@+id/chats_item_avatar"-->
+            <!--android:layout_width="60dp"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_weight="1"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <ImageView
+        android:id="@+id/chats_item_avatar"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:src="@drawable/profile_photo_none"
+
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:id="@+id/chats_item_time"
@@ -55,14 +70,25 @@
             app:layout_constraintTop_toTopOf="@+id/chats_item_last_msg_avatar" />
 
 
-        <ru.paymon.android.components.CircleImageView
-            android:id="@+id/chats_item_last_msg_avatar"
-            android:layout_width="28dp"
-            android:layout_height="28dp"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            app:layout_constraintBottom_toBottomOf="@+id/chats_item_avatar"
-            app:layout_constraintStart_toEndOf="@+id/chats_item_avatar" />
+        <!--<ru.paymon.android.components.CircleImageView-->
+            <!--android:id="@+id/chats_item_last_msg_avatar"-->
+            <!--android:layout_width="28dp"-->
+            <!--android:layout_height="28dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_weight="1"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/chats_item_avatar"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/chats_item_avatar" />-->
+    <ImageView
+        android:id="@+id/chats_item_last_msg_avatar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:src="@drawable/profile_photo_none"
+
+        app:layout_constraintBottom_toBottomOf="@+id/chats_item_avatar"
+        app:layout_constraintStart_toEndOf="@+id/chats_item_avatar" />
+
 
         <TextView
             android:id="@+id/chats_item_name"

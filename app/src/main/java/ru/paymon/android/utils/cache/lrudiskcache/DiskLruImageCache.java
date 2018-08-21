@@ -125,9 +125,9 @@ public class DiskLruImageCache {
         try {
             snapshot = mDiskCache.get(key);
             if (snapshot == null) {
-//                bitmap = BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), ApplicationLoader.applicationContext.getResources().getIdentifier(key, "drawable", ApplicationLoader.applicationContext.getPackageName())); // this
-//                put(key, bitmap);
-//                Log.d(TAG, "bitmap " + key + " not found in cache!");
+                bitmap = BitmapFactory.decodeResource(ApplicationLoader.applicationContext.getResources(), ApplicationLoader.applicationContext.getResources().getIdentifier(key, "drawable", ApplicationLoader.applicationContext.getPackageName())); // this
+                put(key, bitmap);
+                Log.d(TAG, "bitmap " + key + " not found in cache!");
                 return bitmap;
             }
             Log.d(TAG, "bitmap " + key + " found in cache!");

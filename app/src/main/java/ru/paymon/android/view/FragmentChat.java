@@ -49,6 +49,7 @@ import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 
 public class FragmentChat extends Fragment implements NotificationManager.IListener {
+    private static FragmentChat instance;
     public static final String CHAT_ID_KEY = "CHAT_ID_KEY";
     private int chatID;
     private RecyclerView messagesRecyclerView;
@@ -62,7 +63,9 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private LinkedList<Long> forwardMessages;
 
     public static synchronized FragmentChat newInstance() {
-        return new FragmentChat();
+//        if(instance ==null)
+            instance = new FragmentChat();
+        return instance;
     }
 
 

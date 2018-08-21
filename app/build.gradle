@@ -68,4 +68,5 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient-android'
     }
+    implementation 'com.squareup.picasso:picasso:+'
 }
