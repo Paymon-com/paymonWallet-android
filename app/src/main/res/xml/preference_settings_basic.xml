@@ -16,20 +16,20 @@
 
     <PreferenceCategory
         android:key="MESSAGES_CONF_CATEGORY"
-        android:title="Конфеденциальность">
+        android:title="@string/confidentiality">
         <SwitchPreference
             android:defaultValue="false"
             android:key="CLIENT_CONF_HIDE_EMAIL_SWITCH"
-            android:title="Скрыть E-mail" />
+            android:title="@string/hide_email" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="CLIENT_CONF_HIDE_PHONE_SWITCH"
-            android:title="Скрыть телефон" />
+            android:title="@string/hide_phone" />
 
         <SwitchPreference
             android:defaultValue="false"
             android:key="CLIENT_CONF_HIDE_NAME_SWITCH"
-            android:title="Скрыть имя пользователя" />
+            android:title="@string/hide_username" />
     </PreferenceCategory>
 </PreferenceScreen>

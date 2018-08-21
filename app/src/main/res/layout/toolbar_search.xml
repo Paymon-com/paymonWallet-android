@@ -27,7 +27,7 @@
         android:layout_marginTop="8dp"
         android:textColor="@color/white"
         android:textSize="22sp"
-        android:text="Поиск"
+        android:text="@string/search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/toolbar_back_btn"
         app:layout_constraintTop_toTopOf="parent" />

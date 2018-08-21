@@ -2,9 +2,9 @@
 <resources>
     <!--TODO:add to strings-->
     <string-array name="sort_friends_list">
-        <item>По имени</item>
-        <item>По фамилии</item>
-        <item>По дате добавления</item>
+        <item>@string/default_sort_friends</item>
+        <item>@string/default_sort_surname</item>
+        <item>@string/default_sort_date</item>
     </string-array>
     <string-array name="format_time">
         <item>@string/date_format_12h</item>
