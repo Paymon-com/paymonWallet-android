@@ -15,9 +15,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 
+import java.io.File;
 import java.util.LinkedList;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconTextView;
@@ -34,6 +36,7 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.MultiChoiceHelper;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.view.FragmentChat;
 import ru.paymon.android.view.FragmentChats;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -51,7 +54,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface IMessageClickListener {
         void longClick();
+
         void delete(LinkedList<Long> checkedMessageIDs);
+
         void forward(LinkedList<Long> checkedMessageIDs);
     }
 
@@ -65,7 +70,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ITEM_ACTION_MESSAGE,
         SENT_MESSAGE_WALLET,
         RECEIVED_MESSAGE_WALLET,
-        GROUP_RECEIVED_MESSAGE_WALLET
+        GROUP_RECEIVED_MESSAGE_WALLET,
+        SENT_MESSAGE_PICTURE,
+        RECEIVED_MESSAGE_PICTURE,
+        GROUP_RECEIVED_MESSAGE_PICTURE,
+        SENT_MESSAGE_DOCUMENT,
+        RECEIVED_MESSAGE_DOCUMENT,
+        GROUP_RECEIVED_MESSAGE_DOCUMENT,
+        SENT_MESSAGE_VIDEO,
+        RECEIVED_MESSAGE_VIDEO,
+        GROUP_RECEIVED_MESSAGE_VIDEO
     }
 
     public MessagesAdapter(IMessageClickListener iMessageClickListener, boolean isGroup, View defaultCustomView, View selectedCustomView, LinearLayout toolbarContainer) {
@@ -128,6 +142,42 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 view = LayoutInflater.from(context).inflate(R.layout.view_holder_group_received_message_wallet, viewGroup, false);
                 vh = new GroupReceivedMessageWalletViewHolder(view);
                 break;
+            case SENT_MESSAGE_PICTURE:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_sent_message_picture, viewGroup, false);
+                vh = new SentMessagePictureViewHolder(view);
+                break;
+            case RECEIVED_MESSAGE_PICTURE:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_received_message_picture, viewGroup, false);
+                vh = new ReceivedMessagePictureViewHolder(view);
+                break;
+            case GROUP_RECEIVED_MESSAGE_PICTURE:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_group_received_message_picture, viewGroup, false);
+                vh = new GroupReceivedMessagePictureViewHolder(view);
+                break;
+            case SENT_MESSAGE_DOCUMENT:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_sent_message_document, viewGroup, false);
+                vh = new SentMessageDocumentViewHolder(view);
+                break;
+            case RECEIVED_MESSAGE_DOCUMENT:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_received_message_document, viewGroup, false);
+                vh = new ReceivedMessageDocumentViewHolder(view);
+                break;
+            case GROUP_RECEIVED_MESSAGE_DOCUMENT:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_group_received_message_document, viewGroup, false);
+                vh = new GroupReceivedMessageDocumentViewHolder(view);
+                break;
+            case SENT_MESSAGE_VIDEO:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_sent_message_video, viewGroup, false);
+                vh = new SentMessageVideoViewHolder(view);
+                break;
+            case RECEIVED_MESSAGE_VIDEO:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_received_message_video, viewGroup, false);
+                vh = new ReceivedMessageVideoViewHolder(view);
+                break;
+            case GROUP_RECEIVED_MESSAGE_VIDEO:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_group_received_message_video, viewGroup, false);
+                vh = new GroupReceivedMessageVideoViewHolder(view);
+                break;
         }
         return vh;
     }
@@ -168,6 +218,75 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final ActionMessageViewHolder actionMessageViewHolder = (ActionMessageViewHolder) holder;
             actionMessageViewHolder.msg.setText(actionMessageViewHolder.message.text);
             actionMessageViewHolder.time.setText(Utils.formatDateTime(actionMessageViewHolder.message.date, true));
+        } else if (holder instanceof SentMessagePictureViewHolder) {
+            final SentMessagePictureViewHolder sentMessagePictureViewHolder = (SentMessagePictureViewHolder) holder;
+            sentMessagePictureViewHolder.text.setText(sentMessagePictureViewHolder.message.text);
+            sentMessagePictureViewHolder.time.setText(Utils.formatDateTime(sentMessagePictureViewHolder.message.date, true));
+            //TODO:Прикреп картинки
+        } else if (holder instanceof ReceivedMessagePictureViewHolder) {
+            final ReceivedMessagePictureViewHolder receivedMessagePictureViewHolder = (ReceivedMessagePictureViewHolder) holder;
+            receivedMessagePictureViewHolder.text.setText(receivedMessagePictureViewHolder.message.text);
+            receivedMessagePictureViewHolder.time.setText(receivedMessagePictureViewHolder.message.date);
+            //TODO:Прикреп картинки
+        } else if (holder instanceof GroupReceivedMessagePictureViewHolder) {
+            final GroupReceivedMessagePictureViewHolder groupReceivedMessagePictureViewHolder = (GroupReceivedMessagePictureViewHolder) holder;
+            groupReceivedMessagePictureViewHolder.text.setText(groupReceivedMessagePictureViewHolder.message.text);
+            groupReceivedMessagePictureViewHolder.time.setText(groupReceivedMessagePictureViewHolder.message.date);
+            int uid = groupReceivedMessagePictureViewHolder.message.from_id;
+            Long pid = MediaManager.getInstance().userProfilePhotoIDs.get(uid);
+            if (pid != null) {
+                RPC.PM_photo photo = new RPC.PM_photo();
+                photo.user_id = uid;
+                photo.id = pid;
+//                groupReceivedMessagePictureViewHolder.avatar.setPhoto(photo);
+            }
+            //TODO:Прикреп картинки
+        } else if (holder instanceof SentMessageDocumentViewHolder){
+            final SentMessageDocumentViewHolder sentMessageDocumentViewHolder = (SentMessageDocumentViewHolder) holder;
+            sentMessageDocumentViewHolder.text.setText(sentMessageDocumentViewHolder.message.text);
+            sentMessageDocumentViewHolder.time.setText(sentMessageDocumentViewHolder.message.date);
+            //TODO:Часть с файлом
+        } else if (holder instanceof ReceivedMessageDocumentViewHolder){
+            final ReceivedMessageDocumentViewHolder receivedMessageDocumentViewHolder = (ReceivedMessageDocumentViewHolder) holder;
+            receivedMessageDocumentViewHolder.text.setText(receivedMessageDocumentViewHolder.message.text);
+            receivedMessageDocumentViewHolder.time.setText(receivedMessageDocumentViewHolder.message.date);
+            //TODO:Часть с файлом
+        } else if (holder instanceof GroupReceivedMessageDocumentViewHolder){
+            final GroupReceivedMessageDocumentViewHolder groupReceivedMessageDocumentViewHolder = (GroupReceivedMessageDocumentViewHolder) holder;
+            groupReceivedMessageDocumentViewHolder.text.setText(groupReceivedMessageDocumentViewHolder.message.text);
+            groupReceivedMessageDocumentViewHolder.time.setText(groupReceivedMessageDocumentViewHolder.message.date);
+            int uid = groupReceivedMessageDocumentViewHolder.message.from_id;
+            Long pid = MediaManager.getInstance().userProfilePhotoIDs.get(uid);
+            if (pid != null) {
+                RPC.PM_photo photo = new RPC.PM_photo();
+                photo.user_id = uid;
+                photo.id = pid;
+//                groupReceivedMessageDocumentViewHolder.avatar.setPhoto(photo);
+            }
+            //TODO:Часть с файлом
+        } else if (holder instanceof SentMessageVideoViewHolder) {
+            final SentMessageVideoViewHolder sentMessageVideoViewHolder = (SentMessageVideoViewHolder) holder;
+            sentMessageVideoViewHolder.text.setText(sentMessageVideoViewHolder.message.text);
+            sentMessageVideoViewHolder.time.setText(Utils.formatDateTime(sentMessageVideoViewHolder.message.date, true));
+            //TODO:Прикреп видео
+        } else if (holder instanceof ReceivedMessageVideoViewHolder) {
+            final ReceivedMessageVideoViewHolder receivedMessageVideoViewHolder = (ReceivedMessageVideoViewHolder) holder;
+            receivedMessageVideoViewHolder.text.setText(receivedMessageVideoViewHolder.message.text);
+            receivedMessageVideoViewHolder.time.setText(receivedMessageVideoViewHolder.message.date);
+            //TODO:Прикреп видео
+        } else if (holder instanceof GroupReceivedMessageVideoViewHolder) {
+            final GroupReceivedMessageVideoViewHolder groupReceivedMessageVideoViewHolder = (GroupReceivedMessageVideoViewHolder) holder;
+            groupReceivedMessageVideoViewHolder.text.setText(groupReceivedMessageVideoViewHolder.message.text);
+            groupReceivedMessageVideoViewHolder.time.setText(groupReceivedMessageVideoViewHolder.message.date);
+            int uid = groupReceivedMessageVideoViewHolder.message.from_id;
+            Long pid = MediaManager.getInstance().userProfilePhotoIDs.get(uid);
+            if (pid != null) {
+                RPC.PM_photo photo = new RPC.PM_photo();
+                photo.user_id = uid;
+                photo.id = pid;
+//                groupReceivedMessageVideoViewHolder.avatar.setPhoto(photo);
+            }
+            //TODO:Прикреп видео
         } else if (holder instanceof SentMessageWalletViewHolder) {
             final SentMessageWalletViewHolder sentMessageWalletViewHolder = (SentMessageWalletViewHolder) holder;
             final String publicKey = Utils.getETHorBTCpubKeyFromText(sentMessageWalletViewHolder.message.text);
@@ -290,6 +409,12 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             } else if (msg instanceof RPC.PM_messageItem) {
                 if (((RPC.PM_messageItem) msg).itemType == FileManager.FileType.ACTION)
                     viewType = ViewTypes.ITEM_ACTION_MESSAGE.ordinal();
+                else if (msg.itemType == FileManager.FileType.PHOTO)
+                    viewType = ViewTypes.SENT_MESSAGE_PICTURE.ordinal();
+                else if (msg.itemType == FileManager.FileType.DOCUMENT)
+                    viewType = ViewTypes.SENT_MESSAGE_DOCUMENT.ordinal();
+                else if (msg.itemType == FileManager.FileType.VIDEO)
+                    viewType = ViewTypes.SENT_MESSAGE_VIDEO.ordinal();
                 else if (msg.itemType == FileManager.FileType.WALLET)
                     viewType = ViewTypes.SENT_MESSAGE_WALLET.ordinal();
                 else
@@ -304,6 +429,24 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             } else if (msg instanceof RPC.PM_messageItem) {
                 if (((RPC.PM_messageItem) msg).itemType == FileManager.FileType.ACTION)
                     viewType = ViewTypes.ITEM_ACTION_MESSAGE.ordinal();
+                else if (msg.itemType == FileManager.FileType.PHOTO){
+                    if (!isGroup)
+                        viewType = ViewTypes.RECEIVED_MESSAGE_PICTURE.ordinal();
+                    else
+                        viewType = ViewTypes.GROUP_RECEIVED_MESSAGE_PICTURE.ordinal();
+                }
+                else if (msg.itemType == FileManager.FileType.DOCUMENT){
+                    if (!isGroup)
+                        viewType = ViewTypes.RECEIVED_MESSAGE_DOCUMENT.ordinal();
+                    else
+                        viewType = ViewTypes.GROUP_RECEIVED_MESSAGE_DOCUMENT.ordinal();
+                }
+                else if (msg.itemType == FileManager.FileType.VIDEO){
+                    if (!isGroup)
+                        viewType = ViewTypes.RECEIVED_MESSAGE_VIDEO.ordinal();
+                    else
+                        viewType = ViewTypes.GROUP_RECEIVED_MESSAGE_VIDEO.ordinal();
+                }
                 else if (msg.itemType == FileManager.FileType.WALLET) {
                     if (!isGroup)
                         viewType = ViewTypes.RECEIVED_MESSAGE_WALLET.ordinal();
@@ -476,7 +619,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView imageWallet;
         TextView publicKey;
 
-        public SentMessageWalletViewHolder(View itemView) {
+        SentMessageWalletViewHolder(View itemView) {
             super(itemView);
             text = (EmojiconTextView) itemView.findViewById(R.id.wallet_sent_message_text_view);
             time = (TextView) itemView.findViewById(R.id.wallet_sent_timestamp_text_view);
@@ -493,7 +636,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView imageWallet;
         TextView publicKey;
 
-        public ReceivedMessageWalletViewHolder(View itemView) {
+        ReceivedMessageWalletViewHolder(View itemView) {
             super(itemView);
             text = (EmojiconTextView) itemView.findViewById(R.id.wallet_received_message_text_view);
             time = (TextView) itemView.findViewById(R.id.wallet_received_timestamp_text_view);
@@ -511,7 +654,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         CircleImageView avatar;
         TextView publicKey;
 
-        public GroupReceivedMessageWalletViewHolder(View itemView) {
+        GroupReceivedMessageWalletViewHolder(View itemView) {
             super(itemView);
             text = (EmojiconTextView) itemView.findViewById(R.id.wallet_received_group_message_text_view);
             time = (TextView) itemView.findViewById(R.id.wallet_received_group_timestamp_text_view);
@@ -519,6 +662,141 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             imageWallet = (ImageView) itemView.findViewById(R.id.wallet_received_group_image_view);
             avatar = (CircleImageView) itemView.findViewById(R.id.photo_wallet_received_group);
             publicKey = (TextView) itemView.findViewById(R.id.wallet_received_group_text_view);
+        }
+    }
+
+    public static class SentMessagePictureViewHolder extends BaseViewHolder {
+        EmojiconTextView text;
+        TextView time;
+        ImageView picture;
+
+        SentMessagePictureViewHolder(View itemView) {
+            super(itemView);
+            text = (EmojiconTextView) itemView.findViewById(R.id.message_picture_text_view);
+            time = (TextView) itemView.findViewById(R.id.timestamp_picture_text_view);
+            picture = (ImageView) itemView.findViewById(R.id.message_picture_image_view);
+        }
+    }
+
+    public static class ReceivedMessagePictureViewHolder extends BaseViewHolder {
+        EmojiconTextView text;
+        TextView time;
+        ImageView picture;
+
+        ReceivedMessagePictureViewHolder(View itemView) {
+            super(itemView);
+            text = (EmojiconTextView) itemView.findViewById(R.id.message_received_picture_text_view);
+            time = (TextView) itemView.findViewById(R.id.timestamp_received_picture_text_view);
+            picture = (ImageView) itemView.findViewById(R.id.message_received_picture_image_view);
+        }
+    }
+
+    public static class GroupReceivedMessagePictureViewHolder extends BaseViewHolder {
+        CircleImageView avatar;
+        EmojiconTextView text;
+        TextView time;
+        ImageView picture;
+
+        GroupReceivedMessagePictureViewHolder(View itemView) {
+            super(itemView);
+            avatar = (CircleImageView) itemView.findViewById(R.id.message_group_received_picture_photo);
+            text = (EmojiconTextView) itemView.findViewById(R.id.message_group_received_picture_text_view);
+            time = (TextView) itemView.findViewById(R.id.timestamp_group_received_picture_text_view);
+            picture = (ImageView) itemView.findViewById(R.id.message_group_received_picture_image_view);
+        }
+    }
+
+    public static class SentMessageDocumentViewHolder extends BaseViewHolder {
+        EmojiconTextView text;
+        TextView time;
+        TextView title;
+        TextView expansion;
+        ImageView image;
+
+        SentMessageDocumentViewHolder(View itemView) {
+            super(itemView);
+            text = (EmojiconTextView) itemView.findViewById(R.id.message_document_text_view);
+            time = (TextView) itemView.findViewById(R.id.timestamp_document_text_view);
+            title = (TextView) itemView.findViewById(R.id.message_title_document_text_view);
+            expansion = (TextView) itemView.findViewById(R.id.message_expansion_document_text_view);
+            image = (ImageView) itemView.findViewById(R.id.message_document_image_view);
+        }
+    }
+
+    public static class ReceivedMessageDocumentViewHolder extends BaseViewHolder {
+        EmojiconTextView text;
+        TextView time;
+        TextView title;
+        TextView expansion;
+        ImageView image;
+
+        ReceivedMessageDocumentViewHolder(View itemView) {
+            super(itemView);
+            text = (EmojiconTextView) itemView.findViewById(R.id.message_received_document_text_view);
+            time = (TextView) itemView.findViewById(R.id.timestamp_received_document_text_view);
+            title = (TextView) itemView.findViewById(R.id.title_message_received_document_text_view);
+            expansion = (TextView) itemView.findViewById(R.id.expansion_message_received_document_text_view);
+            image = (ImageView) itemView.findViewById(R.id.message_received_document_image_view);
+        }
+    }
+
+    public static class GroupReceivedMessageDocumentViewHolder extends BaseViewHolder {
+        CircleImageView avatar;
+        EmojiconTextView text;
+        TextView time;
+        TextView title;
+        TextView expansion;
+        ImageView image;
+
+        GroupReceivedMessageDocumentViewHolder(View itemView) {
+            super(itemView);
+            avatar = (CircleImageView) itemView.findViewById(R.id.message_group_received_document_avatar);
+            text = (EmojiconTextView) itemView.findViewById(R.id.message_group_received_document_text_view);
+            time = (TextView) itemView.findViewById(R.id.timestamp_group_received_document_text_view);
+            title = (TextView) itemView.findViewById(R.id.title_group_received_document_text_view);
+            expansion = (TextView) itemView.findViewById(R.id.expansion_group_received_document_text_view);
+            image = (ImageView) itemView.findViewById(R.id.message_group_received_document_image_view);
+        }
+    }
+
+    public static class SentMessageVideoViewHolder extends BaseViewHolder {
+        EmojiconTextView text;
+        TextView time;
+        VideoView video;
+
+        SentMessageVideoViewHolder(View itemView) {
+            super(itemView);
+            text = (EmojiconTextView) itemView.findViewById(R.id.message_video_text_view);
+            time = (TextView) itemView.findViewById(R.id.timestamp_video_text_view);
+            video = (VideoView) itemView.findViewById(R.id.message_video_video_view);
+        }
+    }
+
+    public static class ReceivedMessageVideoViewHolder extends BaseViewHolder {
+        EmojiconTextView text;
+        TextView time;
+        VideoView video;
+
+        ReceivedMessageVideoViewHolder(View itemView) {
+            super(itemView);
+            text = (EmojiconTextView) itemView.findViewById(R.id.message_received_video_text_view);
+            time = (TextView) itemView.findViewById(R.id.timestamp_received_video_text_view);
+            video = (VideoView) itemView.findViewById(R.id.message_received_video_video_view);
+        }
+    }
+
+    public static class GroupReceivedMessageVideoViewHolder extends BaseViewHolder {
+        CircleImageView avatar;
+        EmojiconTextView text;
+        TextView time;
+        VideoView video;
+
+        GroupReceivedMessageVideoViewHolder(View itemView) {
+            super(itemView);
+            avatar = (CircleImageView) itemView.findViewById(R.id.message_group_received_video_photo);
+            text = (EmojiconTextView) itemView.findViewById(R.id.message_group_received_video_text_view);
+            time = (TextView) itemView.findViewById(R.id.timestamp_group_received_video_text_view);
+            video = (VideoView) itemView.findViewById(R.id.message_group_received_video_video_view);
         }
     }
 }

@@ -40,7 +40,8 @@ public class FileManager {
         DOCUMENT,
         STICKER,
         ACTION,
-        WALLET
+        WALLET,
+        VIDEO //TODO:Сделать обработку для видео
     }
 
     public static class DownloadingFile {
