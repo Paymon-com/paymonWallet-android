@@ -155,8 +155,22 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             includeAttachment.setVisibility(View.GONE);
         });
 
-        buttonAttachment.setOnClickListener(view1 -> {
+        buttonAttachment.setOnClickListener((view1) -> {
             if (includeAttachment.getVisibility() == View.GONE) {
+                includeAttachment.setVisibility(View.VISIBLE);
+            } else {
+                includeAttachment.setVisibility(View.GONE);
+            }
+        });
+
+        View defaultChatToolbarView;
+        if (isGroup)
+            defaultChatToolbarView = createChatGroupCustomView();
+        else
+            defaultChatToolbarView = createChatCustomView();
+
+        toolbarContainer.addView(defaultChatToolbarView);
+
         emojIcon = new EmojIconActions(getActivity(), view, messageInput, emoticonsButton);
         emojIcon.showEmojIcon();
         emojIcon.setOnStickerClickListener(new EmojiconsPopup.StickersListener() {
@@ -204,22 +218,6 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             }
         });
 
-        buttonAttachment.setOnClickListener((view1) -> {
-            if (includeAttachment.getVisibility() == View.GONE) {
-                includeAttachment.setVisibility(View.VISIBLE);
-            } else {
-                includeAttachment.setVisibility(View.GONE);
-            }
-        });
-
-        View defaultChatToolbarView;
-        if (isGroup)
-            defaultChatToolbarView = createChatGroupCustomView();
-        else
-            defaultChatToolbarView = createChatCustomView();
-
-        toolbarContainer.addView(defaultChatToolbarView);
-
         initChat(defaultChatToolbarView, toolbarContainer);
 
         if (isForward) {
@@ -239,6 +237,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         return view;
     }
+
 
     @Override
     public void onResume() {
@@ -260,17 +259,17 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case PICK_IMAGE_ID:
-                        Bitmap bitmap = ImagePicker.getImageFromResult(ApplicationLoader.applicationContext, requestCode, resultCode, data);
+                    Bitmap bitmap = ImagePicker.getImageFromResult(ApplicationLoader.applicationContext, requestCode, resultCode, data);
 
-                        //TODO:Работа с картинками
+                    //TODO:Работа с картинками
 
                     break;
                 case PICK_DOCUMENT_ID:
-                        //TODO:Работа с документами
+                    //TODO:Работа с документами
 
                     break;
                 case PICK_VIDEO_ID:
-                        //TODO:Работа с видео
+                    //TODO:Работа с видео
 
                     break;
             }
