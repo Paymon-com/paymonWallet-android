@@ -17,7 +17,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
+//import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
@@ -456,13 +457,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public static class GroupReceiveMessageViewHolder extends BaseViewHolder {
         EmojiconTextView msg;
         TextView time;
-        ImageView avatar;
+        CircularImageView avatar;
 
         GroupReceiveMessageViewHolder(View view) {
             super(view);
             msg = (EmojiconTextView) view.findViewById(R.id.message_text_view);
             time = (TextView) view.findViewById(R.id.timestamp_text_view);
-            avatar = (ImageView) view.findViewById(R.id.photo);
+            avatar = (CircularImageView) view.findViewById(R.id.photo);
         }
     }
 
@@ -516,7 +517,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         TextView time;
         ImageButton buttonWallet;
         ImageView imageWallet;
-        CircleImageView avatar;
+        CircularImageView avatar;
         TextView publicKey;
 
         public GroupReceivedMessageWalletViewHolder(View itemView) {
@@ -525,7 +526,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             time = (TextView) itemView.findViewById(R.id.wallet_received_group_timestamp_text_view);
             buttonWallet = (ImageButton) itemView.findViewById(R.id.wallet_received_group_image_button);
             imageWallet = (ImageView) itemView.findViewById(R.id.wallet_received_group_image_view);
-            avatar = (CircleImageView) itemView.findViewById(R.id.photo_wallet_received_group);
+            avatar = (CircularImageView) itemView.findViewById(R.id.photo_wallet_received_group);
             publicKey = (TextView) itemView.findViewById(R.id.wallet_received_group_text_view);
         }
     }

@@ -1,13 +1,7 @@
 package ru.paymon.android.adapters;
 
-import android.app.Activity;
-import android.app.Notification;
-import android.graphics.Bitmap;
-import android.media.Image;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,28 +10,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
-import com.daimajia.androidanimations.library.Techniques;
-import com.daimajia.androidviewhover.BlurLayout;
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import java.util.LinkedList;
 
-import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.GroupsManager;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
-import ru.paymon.android.view.FragmentChat;
-
-import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
-import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsViewHolder> {
     public LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
@@ -67,11 +50,11 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
         ViewTypes viewTypes = ViewTypes.values()[viewType];
         switch (viewTypes) {
             case ITEM:
-                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.chats_item, viewGroup, false);
+                View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_holder_chats_item, viewGroup, false);
                 vh = new ChatsViewHolder(view);
                 break;
             case GROUP_ITEM:
-                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.chats_group_item, viewGroup, false);
+                view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_holder_chats_group_item, viewGroup, false);
                 vh = new GroupChatsViewHolder(view);
                 break;
         }
@@ -232,14 +215,14 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
     }
 
     public static class ChatsViewHolder extends CommonChatsViewHolder {
-        ImageView avatar;
+        CircularImageView avatar;
         TextView time;
         TextView msg;
         TextView name;
 
         ChatsViewHolder(View itemView) {
             super(itemView);
-            avatar = (ImageView) itemView.findViewById(R.id.chats_item_avatar);
+            avatar = (CircularImageView) itemView.findViewById(R.id.chats_item_avatar);
             time = (TextView) itemView.findViewById(R.id.chats_item_time);
             msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
             name = (TextView) itemView.findViewById(R.id.chats_item_name);
@@ -247,16 +230,16 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
     }
 
     public static class GroupChatsViewHolder extends CommonChatsViewHolder {
-        ImageView avatar;
-        ImageView lastMshPhoto;
+        CircularImageView avatar;
+        CircularImageView lastMshPhoto;
         TextView time;
         TextView msg;
         TextView name;
 
         GroupChatsViewHolder(View itemView) {
             super(itemView);
-            avatar = (ImageView) itemView.findViewById(R.id.chats_item_avatar);
-            lastMshPhoto = (ImageView) itemView.findViewById(R.id.chats_item_last_msg_avatar);
+            avatar = (CircularImageView) itemView.findViewById(R.id.chats_item_avatar);
+            lastMshPhoto = (CircularImageView) itemView.findViewById(R.id.chats_item_last_msg_avatar);
             time = (TextView) itemView.findViewById(R.id.chats_item_time);
             msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
             name = (TextView) itemView.findViewById(R.id.chats_item_name);

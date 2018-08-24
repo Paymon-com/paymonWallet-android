@@ -6,39 +6,54 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator"
+    android:paddingBottom="2dp"
     android:paddingEnd="72dp"
     android:paddingStart="8dp"
-    android:paddingBottom="2dp"
     android:paddingTop="1dp">
 
     <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/photo"-->
-        <!--android:layout_width="48dp"-->
-        <!--android:layout_height="48dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginTop="4dp"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-    <ImageView
+    <!--android:id="@+id/photo"-->
+    <!--android:layout_width="48dp"-->
+    <!--android:layout_height="48dp"-->
+    <!--android:layout_marginStart="8dp"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <!--<ImageView-->
+    <!--android:id="@+id/photo"-->
+    <!--android:layout_width="48dp"-->
+    <!--android:layout_height="48dp"-->
+    <!--android:layout_marginStart="8dp"-->
+    <!--android:layout_marginTop="4dp"-->
+    <!--android:src="@drawable/profile_photo_none"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/photo"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:src="@drawable/profile_photo_none"
+        app:civ_border_color="#EEEEEE"
+        app:civ_border_width="4dp"
+        app:civ_shadow="true"
+        app:civ_shadow_color="#8BC34A"
+        app:civ_shadow_radius="10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
         android:layout_marginBottom="2dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="2dp"
         android:background="@drawable/background_msg_rcv"
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/photo"
         app:layout_constraintTop_toTopOf="parent">
@@ -47,10 +62,10 @@
             android:id="@+id/message_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
             android:textColor="@color/default_message_sent_color"
             android:textSize="@dimen/default_message_text_size"
             app:layout_constraintEnd_toEndOf="parent"

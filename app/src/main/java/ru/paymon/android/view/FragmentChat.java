@@ -23,10 +23,14 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import hani.momanii.supernova_emoji_library.actions.EmojIconActions;
 import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
+import hani.momanii.supernova_emoji_library.helper.EmojiconsPopup;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
@@ -42,6 +46,7 @@ import ru.paymon.android.models.attachments.AttachmentMessages;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.Packet;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
@@ -62,10 +67,11 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private boolean loadingMessages;
     private boolean isForward;
     private LinkedList<Long> forwardMessages;
+    private EmojIconActions emojIcon;
 
     public static synchronized FragmentChat newInstance() {
 //        if(instance ==null)
-            instance = new FragmentChat();
+        instance = new FragmentChat();
         return instance;
     }
 
@@ -90,6 +96,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         MessagesManager.getInstance().currentChatID = chatID;
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -99,20 +106,63 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (Button) view.findViewById(R.id.sendButton);
         LinearLayout toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
-
+        ImageView emoticonsButton = (ImageView) view.findViewById(R.id.smilesButton);
         ConstraintLayout includeAttachment = (ConstraintLayout) view.findViewById(R.id.fragment_chat_attachment_include);
-
 
         ImageButton buttonAttachment = (ImageButton) view.findViewById(R.id.attach_button);
 
-        buttonAttachment.setOnClickListener(new View.OnClickListener() {
+        emojIcon = new EmojIconActions(getActivity(), view, messageInput, emoticonsButton);
+        emojIcon.showEmojIcon();
+        emojIcon.setOnStickerClickListener(new EmojiconsPopup.StickersListener() {
             @Override
-            public void onClick(View view) {
-                if (includeAttachment.getVisibility() == View.GONE){
-                includeAttachment.setVisibility(View.VISIBLE);
+            public void onStickersOpened() {
+            }
+
+            @Override
+            public void onStickerSelected(int stickerPackID, long stickerID) {
+                if (User.currentUser == null) return;
+
+                RPC.PM_messageItem msg = new RPC.PM_messageItem();
+                msg.id = MessagesManager.generateMessageID();
+                msg.flags = MESSAGE_FLAG_FROM_ID;
+                msg.date = (int) (System.currentTimeMillis() / 1000);
+                msg.from_id = User.currentUser.id;
+                RPC.Peer peer;
+                if (!isGroup) {
+                    peer = new RPC.PM_peerUser();
+                    peer.user_id = chatID;
                 } else {
-                    includeAttachment.setVisibility(View.GONE);
+                    peer = new RPC.PM_peerGroup();
+                    peer.group_id = chatID;
                 }
+                msg.to_id = peer;
+                msg.unread = true;
+                msg.itemType = FileManager.FileType.STICKER;
+                msg.itemID = stickerID;
+
+                NetworkManager.getInstance().sendRequest(msg, (response, error) -> {
+                    if (response == null) return;
+
+                    RPC.PM_updateMessageID update = (RPC.PM_updateMessageID) response;
+
+                    msg.id = update.newID;
+                    MessagesManager.getInstance().putMessage(msg);
+                    messagesAdapter.messageIDs.add(msg.id);
+
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        messagesAdapter.notifyDataSetChanged();
+                        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, chatID);
+                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
+                    });
+                });
+            }
+        });
+
+        buttonAttachment.setOnClickListener((view1) -> {
+            if (includeAttachment.getVisibility() == View.GONE) {
+                includeAttachment.setVisibility(View.VISIBLE);
+            } else {
+                includeAttachment.setVisibility(View.GONE);
             }
         });
 
@@ -226,14 +276,14 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         });
     }
 
-    private View createSelectedCustomView(){
+    private View createSelectedCustomView() {
         return getActivity().getLayoutInflater().inflate(R.layout.toolbar_selected_messages, null);
     }
 
     private View createChatCustomView() {
         final View customView = getLayoutInflater().inflate(R.layout.toolbar_chat, null);
         final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.toolbar_title);
-        final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.toolbar_avatar);
+        final CircularImageView toolbarAvatar = (CircularImageView) customView.findViewById(R.id.toolbar_avatar);
         final ImageView backToolbar = (ImageView) customView.findViewById(R.id.toolbar_back_btn);
 
         backToolbar.setOnClickListener(view -> getActivity().getSupportFragmentManager().popBackStack());
@@ -263,7 +313,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         final View customView = getLayoutInflater().inflate(R.layout.toolbar_chat_group, null);
         final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.toolbar_title);
         final TextView participantsCountTextView = (TextView) customView.findViewById(R.id.participants_count);
-        final CircleImageView toolbarAvatar = (CircleImageView) customView.findViewById(R.id.chat_group_avatar);
+        final CircularImageView toolbarAvatar = (CircularImageView) customView.findViewById(R.id.chat_group_avatar);
         final ImageView backToolbar = (ImageView) customView.findViewById(R.id.toolbar_back_btn);
 
         backToolbar.setOnClickListener(view -> getActivity().getSupportFragmentManager().popBackStack());

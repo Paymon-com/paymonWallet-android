@@ -3,6 +3,7 @@ package ru.paymon.android.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,6 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
@@ -33,12 +36,14 @@ import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
+import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentChats extends Fragment implements NotificationManager.IListener{
     private static FragmentChats instance;
     private ChatsAdapter chatsAdapter, dialogsAdapter, groupsAdapter;
     private boolean isLoading;
+    private TextView toolbarTitle;
 
     public static synchronized FragmentChats getInstance() {
         if (instance == null)
@@ -56,12 +61,18 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         View pageAll = inflater.inflate(R.layout.fragment_chats_page, container, false);
         View pageGroups = inflater.inflate(R.layout.fragment_chats_page, container, false);
         View toolbar = view.findViewById(R.id.toolbar);
-        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
+        toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         ImageButton toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
         ImageButton toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
         RecyclerView chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
         RecyclerView chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
         RecyclerView groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
+
+        toolbarCreateGroup.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null));
+
+        toolbarSearch.setOnClickListener(view12 -> {
+            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentSearch.newInstance(), null);
+        });
 
         List<View> pages = Arrays.asList(pageDialogs, pageAll, pageGroups);
 
@@ -150,10 +161,10 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-        if (!isForward)
-            toolbarTitle.setText(R.string.title_chats);
-        else
-            toolbarTitle.setText(R.string.select_the_recipient);
+//        if (!isForward)
+//            toolbarTitle.setText(R.string.title_chats);
+//        else
+//            toolbarTitle.setText(R.string.select_the_recipient);
         Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
@@ -324,19 +335,4 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
         return customView;
     }
-
-    private ChatsAdapter.IChatsClickListener iChatsClickListener = (chatID, isGroup) -> {
-        final Bundle bundle = new Bundle();
-
-        if (isGroup)
-            bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(chatID));
-
-        if (forwardMessages != null && forwardMessages.size() > 0)
-            bundle.putSerializable(FORWARD_MESSAGES_KEY, forwardMessages);
-
-        bundle.putInt(CHAT_ID_KEY, chatID);
-        final FragmentChat fragmentChat = FragmentChat.newInstance();
-        fragmentChat.setArguments(bundle);
-        Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentChat, null);
-    };
 }

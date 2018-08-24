@@ -11,10 +11,7 @@
     <ImageView
         android:id="@+id/toolbar_back_btn"
         android:layout_width="40dp"
-        android:layout_height="38dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="40dp"
         android:src="@drawable/ic_arrow_back"
         local:layout_constraintBottom_toBottomOf="parent"
         local:layout_constraintStart_toStartOf="parent"
@@ -28,15 +25,28 @@
         local:layout_constraintStart_toStartOf="parent"
         local:layout_constraintTop_toTopOf="parent">
 
-        <ru.paymon.android.components.CircleImageView
+        <!--<ru.paymon.android.components.CircleImageView-->
+            <!--android:id="@+id/toolbar_avatar"-->
+            <!--android:layout_width="35dp"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--local:layout_constraintBottom_toBottomOf="parent"-->
+            <!--local:layout_constraintStart_toStartOf="parent"-->
+            <!--local:layout_constraintTop_toTopOf="parent" />-->
+
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/toolbar_avatar"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            local:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/profile_photo_none"
+            local:civ_border_color="#EEEEEE"
+            local:civ_border_width="2dp"
+            local:civ_shadow="true"
+            local:civ_shadow_radius="0"
+            local:layout_constraintBottom_toBottomOf="@+id/textView5"
             local:layout_constraintStart_toStartOf="parent"
-            local:layout_constraintTop_toTopOf="parent" />
+            local:layout_constraintTop_toTopOf="@+id/toolbar_title" />
 
         <TextView
             android:id="@+id/toolbar_title"
@@ -47,17 +57,18 @@
             android:textColor="@color/white"
             android:textStyle="bold"
             local:layout_constraintStart_toEndOf="@+id/toolbar_avatar"
-            local:layout_constraintTop_toTopOf="@+id/toolbar_avatar" />
+            local:layout_constraintTop_toTopOf="parent" />
 
         <TextView
+            android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginStart="8dp"
             android:text="online"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/white"
-            local:layout_constraintEnd_toEndOf="@+id/toolbar_title"
-            local:layout_constraintStart_toStartOf="@+id/toolbar_title"
+            local:layout_constraintEnd_toEndOf="parent"
+            local:layout_constraintStart_toEndOf="@+id/toolbar_avatar"
             local:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
 
     </android.support.constraint.ConstraintLayout>
