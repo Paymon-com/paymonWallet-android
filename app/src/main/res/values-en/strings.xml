@@ -55,7 +55,6 @@
     <string name="msg_permissions_required">Please provide permissions</string>
 
     <string name="ok">ОК</string>
-    <!--<string name="app_name">Paymon</string>-->
     <!--<string name="title_chats">Чаты</string>-->
     <string name="title_more">More</string>
     <!--<string name="title_update_profile">Редактирование профиля</string>-->
@@ -590,7 +589,7 @@
     <string name="invite_unregistered">Unregistered</string>
     <!--<string name="invite_information_invited_list">Список приглашенных пользователей</string>-->
     <!--<string name="menu_clear_messages">Удалить историю сообщений</string>-->
-    <string name="selected_messages_count">Выбрано</string>
+    <string name="selected_messages_count">Selected</string>
     <string name="text_is_copied">Text copied to clipboard</string>
     <!--<string name="could_not_delete_message">Не удалось удалить сообщение</string>-->
     <string name="icons_from">Icons from icons8.com</string>
@@ -660,7 +659,7 @@
     <!--<string name="commission">Комиссия</string>-->
     <!--<string name="copy">Скопировать</string>-->
     <!--<string name="open">Открыть</string>-->
-    <string name="input_login">Введите логин</string>
+    <string name="input_login">Enter login</string>
     <string name="profit_title">Profit</string>
     <!--<string name="first_stage">Первый этап</string>-->
     <!--<string name="second_stage">Второй этап</string>-->

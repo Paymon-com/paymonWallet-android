@@ -175,13 +175,13 @@ public class FragmentSearch extends Fragment {
 
         TabHost.TabSpec tabSpec = tabHost.newTabSpec("Сообщения");
         tabSpec.setContent(R.id.linearLayout2);
-        String messages = "Сообщения";
+        String messages = getString(R.string.notif_messages);
         tabSpec.setIndicator(messages);
         tabHost.addTab(tabSpec);
 
         tabSpec = tabHost.newTabSpec("Чаты");
         tabSpec.setContent(R.id.linearLayout);
-        String chats = "Чаты";
+        String chats = getString(R.string.title_chats);
         tabSpec.setIndicator(chats);
         tabHost.addTab(tabSpec);
         tabHost.setCurrentTab(0);

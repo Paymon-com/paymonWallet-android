@@ -1,8 +1,15 @@
 package ru.paymon.android.view;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.DocumentsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -13,6 +20,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +30,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Document;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -33,6 +43,8 @@ import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
 import hani.momanii.supernova_emoji_library.helper.EmojiconsPopup;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
+import ru.paymon.android.MainActivity;
+import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
@@ -47,14 +59,20 @@ import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.Packet;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
+import ru.paymon.android.utils.ImagePicker;
+import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
+import static ru.paymon.android.Config.CAMERA_PERMISSIONS;
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 
 public class FragmentChat extends Fragment implements NotificationManager.IListener {
+    private static final int PICK_IMAGE_ID = 100;
+    private static final int PICK_VIDEO_ID = 99;
+    private static final int PICK_DOCUMENT_ID = 98;
     private static FragmentChat instance;
     public static final String CHAT_ID_KEY = "CHAT_ID_KEY";
     private int chatID;
@@ -67,6 +85,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private boolean loadingMessages;
     private boolean isForward;
     private LinkedList<Long> forwardMessages;
+    private DialogProgress dialogProgress;
     private EmojIconActions emojIcon;
 
     public static synchronized FragmentChat newInstance() {
@@ -110,7 +129,34 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         ConstraintLayout includeAttachment = (ConstraintLayout) view.findViewById(R.id.fragment_chat_attachment_include);
 
         ImageButton buttonAttachment = (ImageButton) view.findViewById(R.id.attach_button);
+        ImageButton buttonDocumentAttachment = (ImageButton) view.findViewById(R.id.document_chat_attachment);
+        ImageButton buttonImageAttachment = (ImageButton) view.findViewById(R.id.image_chat_attachment);
+        ImageButton buttonVideoAttachment = (ImageButton) view.findViewById(R.id.video_chat_attachment);
 
+        buttonDocumentAttachment.setOnClickListener(view13 -> {
+            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+            Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
+                    + "/myFolder/");
+            intent.setDataAndType(uri, "*/*");
+            startActivityForResult(Intent.createChooser(intent, "Open folder"), PICK_DOCUMENT_ID);
+            includeAttachment.setVisibility(View.GONE);
+        });
+
+        buttonImageAttachment.setOnClickListener(view12 -> {
+            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "Выберите");//TODO:string
+            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+            includeAttachment.setVisibility(View.GONE);
+        });
+
+        buttonVideoAttachment.setOnClickListener(view14 -> {
+            Intent chooseVideoIntent = new Intent(Intent.ACTION_PICK);
+            chooseVideoIntent.setType("video/*");
+            startActivityForResult(chooseVideoIntent, PICK_VIDEO_ID);
+            includeAttachment.setVisibility(View.GONE);
+        });
+
+        buttonAttachment.setOnClickListener(view1 -> {
+            if (includeAttachment.getVisibility() == View.GONE) {
         emojIcon = new EmojIconActions(getActivity(), view, messageInput, emoticonsButton);
         emojIcon.showEmojIcon();
         emojIcon.setOnStickerClickListener(new EmojiconsPopup.StickersListener() {
@@ -207,6 +253,29 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         super.onPause();
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.chatAddMessages);
         MessagesManager.getInstance().currentChatID = 0;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case PICK_IMAGE_ID:
+                        Bitmap bitmap = ImagePicker.getImageFromResult(ApplicationLoader.applicationContext, requestCode, resultCode, data);
+
+                        //TODO:Работа с картинками
+
+                    break;
+                case PICK_DOCUMENT_ID:
+                        //TODO:Работа с документами
+
+                    break;
+                case PICK_VIDEO_ID:
+                        //TODO:Работа с видео
+
+                    break;
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void initChat(View defaultCustomView, LinearLayout toolbarContainer) {
