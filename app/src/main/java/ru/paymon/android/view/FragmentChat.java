@@ -196,24 +196,23 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case PICK_IMAGE_ID:
-                if (resultCode == Activity.RESULT_OK) {
-                    Bitmap bitmap = ImagePicker.getImageFromResult(ApplicationLoader.applicationContext, requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case PICK_IMAGE_ID:
+                        Bitmap bitmap = ImagePicker.getImageFromResult(ApplicationLoader.applicationContext, requestCode, resultCode, data);
 
-                    //TODO:Работа с картинками
-                }
-                break;
-            case PICK_DOCUMENT_ID:
-                if (resultCode == Activity.RESULT_OK) {
-                    //TODO:Работа с документами
-                }
-                break;
-            case PICK_VIDEO_ID:
-                if (resultCode == Activity.RESULT_OK) {
-                    //TODO:Работа с видео
-                }
-                break;
+                        //TODO:Работа с картинками
+
+                    break;
+                case PICK_DOCUMENT_ID:
+                        //TODO:Работа с документами
+
+                    break;
+                case PICK_VIDEO_ID:
+                        //TODO:Работа с видео
+
+                    break;
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
