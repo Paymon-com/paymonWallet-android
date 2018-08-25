@@ -488,7 +488,7 @@
 
     <!--<string name="create_group">Создать Беседу</string>-->
     <!--<string name="done">Готово</string>-->
-    <!--<string name="enter_group_title">Введите название группы</string>-->
+    <string name="enter_group_title">Введите название группы</string>
     <!--<string name="payeer">Payeer</string>-->
     <!--<string name="agree">Принять</string>-->
     <!--<string name="remove_wallet_dialog_hint">Вы уверены, что хотите удалить этот способ пополнения/вывода?</string>-->

@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.daimajia.androidviewhover.tools.Util;
+
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
@@ -60,6 +62,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
         dialogProgress.setCancelable(true);
 
         buttonAgree.setOnClickListener(buttonAgreeClickListener);
+        buttonCancel.setOnClickListener(view1 -> getDialog().dismiss());
 
         return view;
     }
