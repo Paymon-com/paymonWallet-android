@@ -206,6 +206,24 @@ public class FragmentContacts extends Fragment {
             }
         }));
 
+        recyclerViewContactsGlobal.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewContactsGlobal, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                final Bundle bundle = new Bundle();
+                int userID = (int) recyclerViewContactsGlobal.getAdapter().getItemId(position);
+                bundle.putInt(CHAT_ID_KEY, userID);
+                final FragmentFriendProfile fragmentFriendProfile = FragmentFriendProfile.newInstance();
+                fragmentFriendProfile.setArguments(bundle);
+                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
+
         return view;
     }
 
