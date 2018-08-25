@@ -28,8 +28,6 @@ import ru.paymon.android.utils.Utils;
 public class DialogFragmentCreateGroup extends DialogFragment {
     private DialogProgress dialogProgress;
     private EditText title;
-    private Button buttonAgree;
-    private Button buttonCancel;
     private LinkedList<CreateGroupItem> createGroupList = new LinkedList<>();
 
 
@@ -55,8 +53,8 @@ public class DialogFragmentCreateGroup extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_fragment_create_group, container);
 
         title = (EditText) view.findViewById(R.id.dialog_fragment_with_edit_edit_text);
-        buttonCancel = (Button) view.findViewById(R.id.dialog_fragment_with_edit_cancel);
-        buttonAgree = (Button) view.findViewById(R.id.dialog_fragment_with_edit_ok);
+        Button buttonCancel = (Button) view.findViewById(R.id.dialog_fragment_with_edit_cancel);
+        Button buttonAgree = (Button) view.findViewById(R.id.dialog_fragment_with_edit_ok);
 
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);
