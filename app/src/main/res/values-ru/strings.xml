@@ -37,6 +37,8 @@
     <string name="enter_a_code">Введите код</string>
     <string name="confirmation_email">Подтверждение E-mail</string>
     <string name="group_invitations">Приглашения в группы</string>
+    <string name="reset_settings">Сбросить настройки</string>
+    <string name="settings_reset">Настройки сброшены</string>
 
     <!--<string name="update_profile_save">Ваш профиль был обновлен</string>-->
     <string name="update_profile">Редактировать профиль</string>

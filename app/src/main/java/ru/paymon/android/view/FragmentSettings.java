@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
@@ -88,6 +89,11 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 fragmentTransaction.replace(R.id.settings_container, FragmentSettingsSecurity.newInstance());
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
+                break;
+            case R.id.settings_reset_settings:
+                User.setDefaultConfig();
+                Toast toast = Toast.makeText(getContext(), R.string.settings_reset, Toast.LENGTH_SHORT);
+                toast.show();
                 break;
             case R.id.settings_about_programm:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

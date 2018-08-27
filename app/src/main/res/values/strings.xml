@@ -18,6 +18,8 @@
     <string name="hide_phone">Скрыть телефон</string>
     <string name="hide_username">Скрыть имя пользователя</string>
     <string name="group_invitations">Приглашения в группы</string>
+    <string name="reset_settings">Сбросить настройки</string>
+    <string name="settings_reset">Настройки сброшены</string>
 
 
 

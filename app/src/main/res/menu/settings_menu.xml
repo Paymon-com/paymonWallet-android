@@ -21,6 +21,10 @@
     <item android:title="@string/settings_other">
         <menu>
             <item
+                android:id="@+id/settings_reset_settings"
+                android:icon="@drawable/ic_settings_about_program"
+                android:title="@string/reset_settings" />
+            <item
                 android:id="@+id/settings_about_programm"
                 android:icon="@drawable/ic_settings_about_program"
                 android:title="@string/settings_about_programm" />
