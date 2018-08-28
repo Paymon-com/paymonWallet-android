@@ -17,6 +17,7 @@
     <string name="hide_username">Hide username</string>
     <string name="reset_settings">Reset settings</string>
     <string name="settings_reset">Settings reset</string>
+    <string name="double_tap_to_close_the_app">Double tap to close the app</string>
 
 
     <string name="title_chats">Chats</string>

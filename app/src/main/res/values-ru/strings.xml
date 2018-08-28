@@ -39,6 +39,7 @@
     <string name="group_invitations">Приглашения в группы</string>
     <string name="reset_settings">Сбросить настройки</string>
     <string name="settings_reset">Настройки сброшены</string>
+    <string name="double_tap_to_close_the_app">Нажмите дважды чтобы закрыть приложение</string>
 
     <!--<string name="update_profile_save">Ваш профиль был обновлен</string>-->
     <string name="update_profile">Редактировать профиль</string>

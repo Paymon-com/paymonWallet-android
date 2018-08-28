@@ -71,6 +71,12 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         return instance;
     }
 
+    public static synchronized FragmentMoney getInstance(){
+        if (instance == null)
+            instance = new FragmentMoney();
+        return instance;
+    }
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
