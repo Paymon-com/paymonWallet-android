@@ -89,7 +89,8 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if (fragment == FragmentChats.getInstance() || fragment == FragmentContacts.getInstance() || fragment == FragmentMoney.getInstance() || fragment == FragmentMoreMenu.getInstance()) {
+        if (fragment == FragmentChats.getInstance() || fragment == FragmentContacts.getInstance() || fragment == FragmentMoney.getInstance()
+                || fragment == FragmentMoreMenu.getInstance() || fragment == FragmentStart.getInstance()) {
             if (back_pressed + 2000 > System.currentTimeMillis()) {
                 System.exit(0);
             } else {
