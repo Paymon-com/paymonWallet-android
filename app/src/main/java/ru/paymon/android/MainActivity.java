@@ -94,7 +94,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
             if (back_pressed + 2000 > System.currentTimeMillis()) {
                 System.exit(0);
             } else {
-                Toast.makeText(getBaseContext(), R.string.double_tap_to_close_the_app, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getBaseContext(), R.string.double_tap_to_close_the_app, Toast.LENGTH_LONG).show();
             }
             back_pressed = System.currentTimeMillis();
         } else {
