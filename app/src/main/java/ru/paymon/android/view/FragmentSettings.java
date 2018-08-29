@@ -113,7 +113,6 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 ComponentName componentName = intent.getComponent();
                 Intent mainIntent = Intent.makeRestartActivityTask(componentName);
                 ApplicationLoader.applicationContext.startActivity(mainIntent);
-                System.exit(0);
                 break;
         }
 
