@@ -4,6 +4,10 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.widget.Toast;
 
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.utils.AbsRuntimePermission;
@@ -22,6 +26,7 @@ import static ru.paymon.android.Config.IMPORTANT_PERMISSIONS;
 import static ru.paymon.android.Config.READ_CONTACTS_PERMISSION;
 
 public class MainActivity extends AbsRuntimePermission implements NotificationManager.IListener {
+    private static long back_pressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +44,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
         init();
     }
 
-    private void init(){
+    private void init() {
 //        Toolbar toolbar = findViewById(R.id.toolbar);
 //        setSupportActionBar(toolbar);
 
@@ -74,6 +79,25 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
                         Manifest.permission.ACCESS_NETWORK_STATE},
                 R.string.msg_permissions_required, IMPORTANT_PERMISSIONS);
     }
+
+
+    @Override
+    public void onBackPressed() {
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
+        if (fragment == FragmentChats.getInstance() || fragment == FragmentContacts.getInstance() || fragment == FragmentMoney.getInstance()
+                || fragment == FragmentMoreMenu.getInstance() || fragment == FragmentStart.getInstance()) {
+            if (back_pressed + 2000 > System.currentTimeMillis()) {
+                System.exit(0);
+            } else {
+                Toast.makeText(getBaseContext(), R.string.double_tap_to_close_the_app, Toast.LENGTH_LONG).show();
+            }
+            back_pressed = System.currentTimeMillis();
+        } else {
+            getSupportFragmentManager().popBackStack();
+//            super.onBackPressed();
+        }
+    }
+
 
     @Override
     public void onPermissionsGranted(final int requestCode) {
@@ -128,8 +152,8 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
             if (resultCode == RESULT_OK) {
                 init();
             }
-        } else if (requestCode == 20){
-            if(resultCode == RESULT_OK){
+        } else if (requestCode == 20) {
+            if (resultCode == RESULT_OK) {
                 User.CLIENT_SECURITY_PASSWORD_VALUE = null;
                 User.CLIENT_SECURITY_PASSWORD_HINT = null;
                 User.saveConfig();
