@@ -22,18 +22,18 @@
         android:layout_height="wrap_content"
         local:layout_constraintBottom_toBottomOf="parent"
         local:layout_constraintEnd_toEndOf="parent"
-        local:layout_constraintStart_toStartOf="parent"
+        local:layout_constraintStart_toEndOf="@+id/toolbar_back_btn"
         local:layout_constraintTop_toTopOf="parent">
 
         <!--<ru.paymon.android.components.CircleImageView-->
-            <!--android:id="@+id/toolbar_avatar"-->
-            <!--android:layout_width="35dp"-->
-            <!--android:layout_height="35dp"-->
-            <!--android:layout_marginBottom="8dp"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--local:layout_constraintBottom_toBottomOf="parent"-->
-            <!--local:layout_constraintStart_toStartOf="parent"-->
-            <!--local:layout_constraintTop_toTopOf="parent" />-->
+        <!--android:id="@+id/toolbar_avatar"-->
+        <!--android:layout_width="35dp"-->
+        <!--android:layout_height="35dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--local:layout_constraintBottom_toBottomOf="parent"-->
+        <!--local:layout_constraintStart_toStartOf="parent"-->
+        <!--local:layout_constraintTop_toTopOf="parent" />-->
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/toolbar_avatar"

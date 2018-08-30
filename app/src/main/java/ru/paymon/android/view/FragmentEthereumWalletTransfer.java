@@ -52,7 +52,6 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     private TextView titleFrom;
     private TextView idFrom;
     private TextView balance;
-    private TextView balanceFiat;
     private TextView cryptoAmountTitle;
     private TextView fiatEquivalentTitle;
     private TextView gasPriceValue;
@@ -92,7 +91,6 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         titleFrom = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_title_from);
         idFrom = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_id_from);
         balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_balance);
-        balanceFiat = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_balance_fiat);
         FloatingActionButton qr = (FloatingActionButton) view.findViewById(R.id.fragment_ethereum_wallet_transfer_qr);
         gasPriceBar = (CrystalSeekbar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_price_slider);
         gasLimitBar = (CrystalSeekbar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_limit_slider);
@@ -129,9 +127,14 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                     return;
                 }
 
-                final String exchangeRate = exchangeRates.get(cryptoCurrency).get(currentFiatCurrency).value;
-                final String fiatEquivalentStr = Ethereum.getInstance().convertEthToFiat(ethAmount, exchangeRate);
-                fiatEquivalent.setText(fiatEquivalentStr);
+                if (exchangeRates != null) {
+                    final float exchangeRate = exchangeRates.get(cryptoCurrency).get(currentFiatCurrency).value;
+                    final String fiatEquivalentStr = Ethereum.getInstance().convertEthToFiat(ethAmount, exchangeRate);
+                    fiatEquivalent.setText(fiatEquivalentStr);
+                }else{
+                    fiatEquivalent.setText("Курс получить не удалось");
+                }
+
                 updateTotalValue();
             }
         });
@@ -155,71 +158,74 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     }
 
     private void init() {
-        loadWalletBalance();
-        loadGasPrice();
-    }
-
-    private void loadWalletBalance() {
-        dialogProgress.show();
         Utils.stageQueue.postRunnable(() -> {
-            exchangeRates = ExchangeRates.getInstance().parseExchangeRates();
-            final String exchangeRate = exchangeRates.get(cryptoCurrency).get(currentFiatCurrency).value;
-            Ethereum.getInstance().getBalance(
-                    (responseBalance) -> {
-                        final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
-                        if (bigInteger != null) {
-                            User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
-                            User.saveConfig();
-                            final String fiatBalanceStr = Ethereum.getInstance().calculateFiatBalance(exchangeRate);//TODO:
-                            ApplicationLoader.applicationHandler.post(() -> {
-                                balance.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE);
-                                balanceFiat.setText(fiatBalanceStr);
-                            });
-                        }
-                    },
-                    (error) -> {
-                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Баланс Ethereum кошелька получить не удалось!", Toast.LENGTH_LONG).show());
-                    });
+            ApplicationLoader.applicationHandler.post(() -> dialogProgress.show());
+            loadWalletBalance();
+            loadGasPrice();
+            ApplicationLoader.applicationHandler.post(() -> dialogProgress.dismiss());
         });
     }
 
-    private void loadGasPrice() {
-        Utils.stageQueue.postRunnable(() -> {
-            try {
-                final HttpsURLConnection httpsURLConnection = (HttpsURLConnection) ((new URL("https://www.etherchain.org/api/gasPriceOracle").openConnection()));
-                httpsURLConnection.setConnectTimeout(20000);
-                httpsURLConnection.connect();
-                final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
-                final StringBuilder stringBuilder = new StringBuilder();
-                String response;
-                while ((response = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(response);
-                }
-                bufferedReader.close();
-
-                final JSONObject jsonObject = new JSONObject(stringBuilder.toString());
-                final int maxGasPrice = Integer.parseInt(jsonObject.getString("fastest"));
-                final float midGasPrice = Float.parseFloat(jsonObject.getString("standard"));
-
-                ApplicationLoader.applicationHandler.post(() -> {
-                    gasRec.setText(String.format("В данный момент рекомендуемый gas price: %s GWEI", midGasPrice));
-                    gasPriceBar.setMinValue(Config.GAS_PRICE_MIN);
-                    gasPriceBar.setMaxValue(maxGasPrice);
-                    gasLimitBar.setMinValue(Config.GAS_LIMIT_MIN);
-                    gasLimitBar.setMaxValue(Config.GAS_LIMIT_MAX);
-                    gasPriceBar.setOnSeekbarChangeListener((minValue) -> {
-                        gasPriceValue.setText(String.format("%s GWEI", minValue));
-                        updateFeeValue();
-                    });
-                    gasLimitBar.setOnSeekbarChangeListener((minValue) -> {
-                        gasLimitValue.setText(String.format("%s GWEI", minValue));
-                        updateFeeValue();
-                    });
+    private void loadWalletBalance() {
+        exchangeRates = ExchangeRates.getInstance().parseExchangeRates();
+        Ethereum.getInstance().getBalance(
+                (responseBalance) -> {
+                    final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
+                    if (bigInteger != null) {
+                        User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
+                        User.saveConfig();
+                        balance.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE);
+                    }
+                },
+                (error) -> {
+                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, "Баланс Ethereum кошелька получить не удалось!", Toast.LENGTH_LONG).show());
+                    getActivity().onBackPressed();
                 });
-                ApplicationLoader.applicationHandler.post(() -> dialogProgress.dismiss());
-            } catch (Exception e) {
-                e.printStackTrace();
+    }
+
+    private void loadGasPrice() {
+        try {
+            final HttpsURLConnection httpsURLConnection = (HttpsURLConnection) ((new URL("https://www.etherchain.org/api/gasPriceOracle").openConnection()));
+            httpsURLConnection.setConnectTimeout(20000);
+            httpsURLConnection.connect();
+            final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
+            final StringBuilder stringBuilder = new StringBuilder();
+            String response;
+            while ((response = bufferedReader.readLine()) != null) {
+                stringBuilder.append(response);
             }
+            bufferedReader.close();
+
+            final JSONObject jsonObject = new JSONObject(stringBuilder.toString());
+            final int maxGasPrice = (int) Float.parseFloat(jsonObject.getString("fastest"));
+            final int midGasPrice = (int) Float.parseFloat(jsonObject.getString("standard"));
+
+            ApplicationLoader.applicationHandler.post(() -> {
+                gasRec.setText(String.format("В данный момент рекомендуемый gas price: %s GWEI", midGasPrice));
+                gasPriceBar.setMaxValue(maxGasPrice);
+            });
+        } catch (Exception e) {
+            final int maxGasPrice = 100;
+
+            ApplicationLoader.applicationHandler.post(() -> {
+                gasRec.setText("Рекомендуемый GAS price получить не удалось");
+                gasPriceBar.setMaxValue(maxGasPrice);
+            });
+            e.printStackTrace();
+        }
+
+        ApplicationLoader.applicationHandler.post(() -> {
+            gasPriceBar.setMinValue(Config.GAS_PRICE_MIN);
+            gasLimitBar.setMinValue(Config.GAS_LIMIT_MIN);
+            gasLimitBar.setMaxValue(Config.GAS_LIMIT_MAX);
+            gasPriceBar.setOnSeekbarChangeListener((minValue) -> {
+                gasPriceValue.setText(String.format("%s GWEI", minValue));
+                updateFeeValue();
+            });
+            gasLimitBar.setOnSeekbarChangeListener((minValue) -> {
+                gasLimitValue.setText(String.format("%s GWEI", minValue));
+                updateFeeValue();
+            });
         });
     }
 
@@ -231,7 +237,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             networkFeeValue.setText(String.format("%s ETH", bigDecimal));
             updateTotalValue();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
     }
 

@@ -18,6 +18,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
@@ -57,7 +59,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
         final NavigationView moreMenu = (NavigationView) view.findViewById(R.id.fragment_more_menu_navigation_view);
         final View headerView = (View) moreMenu.getHeaderView(0);
         final TextView name = (TextView) headerView.findViewById(R.id.fragment_more_menu_header_profile_name_text_view);
-        final CircleImageView avatar = (CircleImageView) headerView.findViewById(R.id.fragment_more_menu_header_profile_avatar_image_view);
+        final CircularImageView avatar = (CircularImageView) headerView.findViewById(R.id.fragment_more_menu_header_profile_avatar_image_view);
 
         moreMenu.setNavigationItemSelectedListener(this);
 
@@ -65,7 +67,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
                 Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentProfile.newInstance(), null));
 
         name.setText(Utils.formatUserName(User.currentUser));
-        avatar.setPhoto(new RPC.PM_photo(User.currentUser.id, User.currentUser.photoID));
+//        avatar.setPhoto(new RPC.PM_photo(User.currentUser.id, User.currentUser.photoID));
 
         return view;
     }
@@ -105,6 +107,8 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
                 Intent intent = new Intent(ApplicationLoader.applicationContext, SettingsActivity.class);
                 startActivity(intent);
 //                Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentSettings.newInstance(), null);
+                break;
+            case R.id.bottom_menu_games:
                 break;
         }
 

@@ -264,14 +264,14 @@ public class Ethereum {
         requestQueue.add(request);
     }
 
-    public String calculateFiatBalance(String course) {
+    public String calculateFiatBalance(float course) {
         BigDecimal courseBigDecimal = (new BigDecimal(course)).setScale(2, ROUND_HALF_UP);
 //        BigDecimal preOutput = courseBigDecimal.divide(TEN_POW_18, 20, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(CRYPTO_BALANCE));
         BigDecimal preOutput = courseBigDecimal.multiply(new BigDecimal(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE));
         return preOutput.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
     }
 
-    public String convertEthToFiat(final String ethAmount, final String fiatExRate) {
+    public String convertEthToFiat(final String ethAmount, final float fiatExRate) {
         BigDecimal courseBigDecimal = (new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP);
         BigDecimal preOutput = courseBigDecimal.multiply(new BigDecimal(ethAmount));
         return preOutput.setScale(2, BigDecimal.ROUND_HALF_UP).toString();

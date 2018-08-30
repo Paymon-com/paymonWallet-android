@@ -39,11 +39,12 @@ import ru.paymon.android.utils.Utils;
 import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
-public class FragmentChats extends Fragment implements NotificationManager.IListener{
+public class FragmentChats extends Fragment implements NotificationManager.IListener {
     private static FragmentChats instance;
     private ChatsAdapter chatsAdapter, dialogsAdapter, groupsAdapter;
     private boolean isLoading;
     private TextView toolbarTitle;
+    private RecyclerView chatsRecyclerView, chatsAllRecyclerView, groupsRecyclerView;
 
     public static synchronized FragmentChats getInstance() {
         if (instance == null)
@@ -64,9 +65,9 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         ImageButton toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
         ImageButton toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
-        RecyclerView chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
-        RecyclerView chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
-        RecyclerView groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
+         chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
+         chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
+         groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
 
         toolbarCreateGroup.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null));
 
@@ -174,6 +175,9 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onPause() {
         super.onPause();
+        chatsAllRecyclerView.setAdapter(null);
+        chatsRecyclerView.setAdapter(null);
+        groupsRecyclerView.setAdapter(null);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
     }

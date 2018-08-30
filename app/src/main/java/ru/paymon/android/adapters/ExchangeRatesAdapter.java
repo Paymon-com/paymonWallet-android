@@ -33,7 +33,7 @@ public class ExchangeRatesAdapter extends RecyclerView.Adapter<RecyclerView.View
         ExchangeRatesViewHolder exchangeRatesViewHolder = (ExchangeRatesViewHolder) holder;
         exchangeRatesViewHolder.cryptoCurrency.setText(exchangeRatesItem.cryptoCurrency);
         exchangeRatesViewHolder.fiatCurrency.setText(exchangeRatesItem.fiatCurrency);
-        exchangeRatesViewHolder.fiatAmount.setText(exchangeRatesItem.value);
+        exchangeRatesViewHolder.fiatAmount.setText(String.valueOf(exchangeRatesItem.value));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package ru.paymon.android.utils;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -31,7 +32,7 @@ public class ExchangeRates {
     }
 
     private ExchangeRates(){
-        fiatCurrencies.add("USD");
+        fiatCurrencies.add("USD");//TODO: добавить остальные валюты
         fiatCurrencies.add("EUR");
         fiatCurrencies.add(Currency.getInstance(Locale.getDefault()).getCurrencyCode().toUpperCase());
     }
@@ -61,7 +62,7 @@ public class ExchangeRates {
                 final JSONObject cryptoObject = (JSONObject) jsonObject.get(cryptoCurrency);
                 for (String fiatCurrency : fiatCurrencies) {
                     final String fiatCurrencyValue = cryptoObject.getString(fiatCurrency);
-                    exchangeRate.put(fiatCurrency, new ExchangeRatesItem(cryptoCurrency, fiatCurrency, fiatCurrencyValue));
+                    exchangeRate.put(fiatCurrency, new ExchangeRatesItem(cryptoCurrency, fiatCurrency, Float.parseFloat(fiatCurrencyValue)));
                 }
                 exchangeRates.put(cryptoCurrency, exchangeRate);
             }

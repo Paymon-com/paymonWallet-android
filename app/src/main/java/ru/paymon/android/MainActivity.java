@@ -4,12 +4,8 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 
-import ru.paymon.android.components.BottomNavigationViewHelper;
 import ru.paymon.android.net.ConnectorService;
-import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.utils.AbsRuntimePermission;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChats;
@@ -48,7 +44,6 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
 //        setSupportActionBar(toolbar);
 
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-        BottomNavigationViewHelper.disableShiftMode(bottomNavigationView);
 
         bottomNavigationView.setOnNavigationItemSelectedListener((item) -> {
             switch (item.getItemId()) {
@@ -60,8 +55,6 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
                     break;
                 case R.id.ic_menu_money:
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoney.newInstance());
-                    break;
-                case R.id.bottom_menu_games:
                     break;
                 case R.id.bottom_menu_more:
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoreMenu.getInstance());

@@ -354,7 +354,7 @@ public class DBHelper extends SQLiteOpenHelper {
         for (final String cryptoCurrency : exchangeRates.keySet()) {
             final HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
             for (final String fiatCurrency : exchangeRate.keySet()) {
-                final String value = exchangeRate.get(fiatCurrency).value;
+                final float value = exchangeRate.get(fiatCurrency).value;
                 final SQLiteStatement sqLiteStatement = ApplicationLoader.db.compileStatement(String.format("INSERT INTO %s (%s, %s, %s) VALUES ('%s', '%s', '%s');",//TODO:use replace
                         TABlE_EX_RATES,
                          KEY_EX_RATES_CRYPTO_CUR, KEY_EX_RATES_FIAT_CUR, KEY_EX_RATES_VALUE,
@@ -375,10 +375,10 @@ public class DBHelper extends SQLiteOpenHelper {
             final String value = cursor.getString(3);
             HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
             if (exchangeRate != null) {
-                exchangeRate.put(fiatCurrency, new ExchangeRatesItem(cryptoCurrency, fiatCurrency, value));
+                exchangeRate.put(fiatCurrency, new ExchangeRatesItem(cryptoCurrency, fiatCurrency, Float.parseFloat(value)));
             } else {
                 exchangeRate = new HashMap<>();
-                exchangeRate.put(fiatCurrency, new ExchangeRatesItem(cryptoCurrency, fiatCurrency, value));
+                exchangeRate.put(fiatCurrency, new ExchangeRatesItem(cryptoCurrency, fiatCurrency, Float.parseFloat(value)));
                 exchangeRates.put(cryptoCurrency, exchangeRate);
             }
         }

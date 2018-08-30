@@ -89,7 +89,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private EmojIconActions emojIcon;
 
     public static synchronized FragmentChat newInstance() {
-//        if(instance ==null)
+        if(instance ==null)
         instance = new FragmentChat();
         return instance;
     }
@@ -171,52 +171,52 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         toolbarContainer.addView(defaultChatToolbarView);
 
-        emojIcon = new EmojIconActions(getActivity(), view, messageInput, emoticonsButton);
-        emojIcon.showEmojIcon();
-        emojIcon.setOnStickerClickListener(new EmojiconsPopup.StickersListener() {
-            @Override
-            public void onStickersOpened() {
-            }
-
-            @Override
-            public void onStickerSelected(int stickerPackID, long stickerID) {
-                if (User.currentUser == null) return;
-
-                RPC.PM_messageItem msg = new RPC.PM_messageItem();
-                msg.id = MessagesManager.generateMessageID();
-                msg.flags = MESSAGE_FLAG_FROM_ID;
-                msg.date = (int) (System.currentTimeMillis() / 1000);
-                msg.from_id = User.currentUser.id;
-                RPC.Peer peer;
-                if (!isGroup) {
-                    peer = new RPC.PM_peerUser();
-                    peer.user_id = chatID;
-                } else {
-                    peer = new RPC.PM_peerGroup();
-                    peer.group_id = chatID;
-                }
-                msg.to_id = peer;
-                msg.unread = true;
-                msg.itemType = FileManager.FileType.STICKER;
-                msg.itemID = stickerID;
-
-                NetworkManager.getInstance().sendRequest(msg, (response, error) -> {
-                    if (response == null) return;
-
-                    RPC.PM_updateMessageID update = (RPC.PM_updateMessageID) response;
-
-                    msg.id = update.newID;
-                    MessagesManager.getInstance().putMessage(msg);
-                    messagesAdapter.messageIDs.add(msg.id);
-
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        messagesAdapter.notifyDataSetChanged();
-                        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, chatID);
-                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
-                    });
-                });
-            }
-        });
+//        emojIcon = new EmojIconActions(getActivity(), view, messageInput, emoticonsButton);
+//        emojIcon.showEmojIcon();
+//        emojIcon.setOnStickerClickListener(new EmojiconsPopup.StickersListener() { //FIXME:УТЕЧКА ПАМЯТИ
+//            @Override
+//            public void onStickersOpened() {
+//            }
+//
+//            @Override
+//            public void onStickerSelected(int stickerPackID, long stickerID) {
+//                if (User.currentUser == null) return;
+//
+//                RPC.PM_messageItem msg = new RPC.PM_messageItem();
+//                msg.id = MessagesManager.generateMessageID();
+//                msg.flags = MESSAGE_FLAG_FROM_ID;
+//                msg.date = (int) (System.currentTimeMillis() / 1000);
+//                msg.from_id = User.currentUser.id;
+//                RPC.Peer peer;
+//                if (!isGroup) {
+//                    peer = new RPC.PM_peerUser();
+//                    peer.user_id = chatID;
+//                } else {
+//                    peer = new RPC.PM_peerGroup();
+//                    peer.group_id = chatID;
+//                }
+//                msg.to_id = peer;
+//                msg.unread = true;
+//                msg.itemType = FileManager.FileType.STICKER;
+//                msg.itemID = stickerID;
+//
+//                NetworkManager.getInstance().sendRequest(msg, (response, error) -> {
+//                    if (response == null) return;
+//
+//                    RPC.PM_updateMessageID update = (RPC.PM_updateMessageID) response;
+//
+//                    msg.id = update.newID;
+//                    MessagesManager.getInstance().putMessage(msg);
+//                    messagesAdapter.messageIDs.add(msg.id);
+//
+//                    ApplicationLoader.applicationHandler.post(() -> {
+//                        messagesAdapter.notifyDataSetChanged();
+//                        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, chatID);
+//                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
+//                    });
+//                });
+//            }
+//        });
 
         initChat(defaultChatToolbarView, toolbarContainer);
 
@@ -250,6 +250,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     @Override
     public void onPause() {
         super.onPause();
+        messagesRecyclerView.setAdapter(null);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.chatAddMessages);
         MessagesManager.getInstance().currentChatID = 0;
     }

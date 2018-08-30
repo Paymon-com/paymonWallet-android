@@ -446,9 +446,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:textColor="@color/eth_color"
             android:text="@string/title_ethereum_wallet"
-            app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_balance_fiat"
+            android:textColor="@color/eth_color"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_image"
             app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_image" />
 
@@ -485,14 +485,5 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_address_layout"
             app:srcCompat="@drawable/ic_qrcode" />
 
-        <TextView
-            android:id="@+id/fragment_ethereum_wallet_transfer_balance_fiat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="..."
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_title_from"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_title_from" />
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

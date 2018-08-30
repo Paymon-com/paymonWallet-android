@@ -172,7 +172,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
             ArrayList<ExchangeRatesItem> exchangeRatesItems = new ArrayList<>();
             for (final String cryptoCurrency : exchangeRates.keySet()) {
                 final HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
-                final String value = exchangeRate.get(currentFiatCurrency).value;
+                final float value = exchangeRate.get(currentFiatCurrency).value;
                 exchangeRatesItems.add(new ExchangeRatesItem(cryptoCurrency, currentFiatCurrency, value));
             }
             exchangeRatesAdapter = new ExchangeRatesAdapter(exchangeRatesItems);
@@ -181,7 +181,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
             final ArrayList<WalletItem> walletItems = new ArrayList<>();
             if (User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD != null) {
                 final String cryptoCurrency = "ETH";
-                final String exchangeRate = exchangeRates.get(cryptoCurrency).get(currentFiatCurrency).value;
+                final float exchangeRate = exchangeRates.get(cryptoCurrency).get(currentFiatCurrency).value;
 
                 boolean isWalletLoaded = Ethereum.getInstance().loadWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
                 if (isWalletLoaded)
@@ -229,13 +229,13 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
             ArrayList<ExchangeRatesItem> exchangeRatesItems = new ArrayList<>();
             for (final String cryptoCurrency : exchangeRates.keySet()) {
                 final HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
-                final String value = exchangeRate.get(currentFiatCurrency).value;
+                final float value = exchangeRate.get(currentFiatCurrency).value;
                 exchangeRatesItems.add(new ExchangeRatesItem(cryptoCurrency, currentFiatCurrency, value));
             }
             exchangeRatesAdapter = new ExchangeRatesAdapter(exchangeRatesItems);
             ApplicationLoader.applicationHandler.post(() -> exchangeRatesRecView.setAdapter(exchangeRatesAdapter));
 
-            final String ethExRate = exchangeRates.get("ETH").get(currentFiatCurrency).value;
+            final float ethExRate = exchangeRates.get("ETH").get(currentFiatCurrency).value;
             for (WalletItem wallet : cryptoWalletsAdapter.walletItems) {
                 wallet.fiatCurrency = currentFiatCurrency;
                 if (wallet.cryptoCurrency.equals("ETH")) {

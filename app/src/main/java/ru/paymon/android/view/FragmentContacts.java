@@ -35,6 +35,7 @@ import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 public class FragmentContacts extends Fragment {
     private static FragmentContacts instance;
     private DialogProgress dialogProgress;
+    private RecyclerView recyclerViewContacts, recyclerViewContactsGlobal;
 
     public static synchronized FragmentContacts newInstance() {
         instance = new FragmentContacts();
@@ -57,8 +58,8 @@ public class FragmentContacts extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
-        RecyclerView recyclerViewContacts = (RecyclerView) view.findViewById(R.id.recViewContacts);
-        RecyclerView recyclerViewContactsGlobal = (RecyclerView) view.findViewById(R.id.recViewContactsGlobal);
+        recyclerViewContacts = (RecyclerView) view.findViewById(R.id.recViewContacts);
+        recyclerViewContactsGlobal = (RecyclerView) view.findViewById(R.id.recViewContactsGlobal);
         EditText editText = view.findViewById(R.id.edit_text_contacts_search);
         SearchView searchView = view.findViewById(R.id.edit_text_contacts_search2);
 
@@ -109,8 +110,8 @@ public class FragmentContacts extends Fragment {
             @Override
             public boolean onQueryTextSubmit(String searchText) {
                 Utils.netQueue.postRunnable(() -> {
-                    if(requestID != 0)
-                        NetworkManager.getInstance().cancelRequest(requestID,false);
+                    if (requestID != 0)
+                        NetworkManager.getInstance().cancelRequest(requestID, false);
 
                     RPC.PM_searchContact packet = new RPC.PM_searchContact();
                     packet.query = searchText;
@@ -137,14 +138,14 @@ public class FragmentContacts extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String searchText) {
-                if(searchText.isEmpty()){
+                if (searchText.isEmpty()) {
                     contactsGlobalAdapter.contactsGlobalItems.clear();
                     contactsGlobalAdapter.notifyDataSetChanged();
                 }
-                if(System.currentTimeMillis() - lastTimeSend >= 1500){
+                if (System.currentTimeMillis() - lastTimeSend >= 1500) {
                     Utils.netQueue.postRunnable(() -> {
-                        if(requestID != 0)
-                            NetworkManager.getInstance().cancelRequest(requestID,false);
+                        if (requestID != 0)
+                            NetworkManager.getInstance().cancelRequest(requestID, false);
 
                         RPC.PM_searchContact packet = new RPC.PM_searchContact();
                         packet.query = searchText;
@@ -218,4 +219,10 @@ public class FragmentContacts extends Fragment {
         setHasOptionsMenu(true);
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        recyclerViewContacts.setAdapter(null);
+        recyclerViewContactsGlobal.setAdapter(null);
+    }
 }
