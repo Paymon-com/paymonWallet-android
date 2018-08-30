@@ -21,6 +21,7 @@
     <string name="reset_settings">Сбросить настройки</string>
     <string name="settings_reset">Настройки сброшены</string>
     <string name="double_tap_to_close_the_app">Нажмите дважды чтобы закрыть приложение</string>
+    <string name="ethereum_remittance">Ethereum перевод</string>
 
 
 
@@ -464,7 +465,7 @@
     <!--<string name="wallet_not_create">Кошелек еще не создан</string>-->
     <!--<string name="back_to_reg">Назад к регистрации</string>-->
     <!--<string name="registration_login_hint">Логин может содержать только латинские символы и цифры. Длина не менее 3 символов.</string>-->
-    <!--<string name="next">Далее</string>-->
+    <string name="next">Далее</string>
     <!--<string name="registration_password_hint">Длина пароля должна быть не менее 8 символов.</string>-->
     <!--<string name="registration_email">Вы получите подтверждение о регистрации на ваш почтовый ящик.</string>-->
     <!--<string name="reg_check_email">Введите корректную почту</string>-->

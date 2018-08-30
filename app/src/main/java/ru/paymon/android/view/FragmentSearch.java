@@ -40,6 +40,8 @@ public class FragmentSearch extends Fragment {
     private TabHost tabHost;
     private String currentTabTag;
     private EditText editText;
+    private RecyclerView recyclerViewChats;
+    private RecyclerView recyclerViewMessages;
 
     public static synchronized FragmentSearch newInstance() {
         instance = new FragmentSearch();
@@ -61,8 +63,8 @@ public class FragmentSearch extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
-        RecyclerView recyclerViewChats = (RecyclerView) view.findViewById(R.id.recViewReg);
-        RecyclerView recyclerViewMessages = (RecyclerView) view.findViewById(R.id.recViewUnreg);
+        recyclerViewChats = (RecyclerView) view.findViewById(R.id.recViewReg);
+        recyclerViewMessages = (RecyclerView) view.findViewById(R.id.recViewUnreg);
         editText = view.findViewById(R.id.edit_text_search);
 
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
@@ -133,7 +135,10 @@ public class FragmentSearch extends Fragment {
 
                     String text = editable.toString();
 
-                    if (text.trim().isEmpty()) return;
+                    if (text.isEmpty()){
+                        recyclerViewMessages.setAdapter(null);
+                        return;
+                    }
 
                     for (MessagesSearchItem message : listMessages) {
                         if (message.message.toLowerCase().contains(text.toLowerCase())) {
@@ -150,7 +155,10 @@ public class FragmentSearch extends Fragment {
 
                     String text = editable.toString();
 
-                    if (text.trim().isEmpty()) return;
+                    if (text.isEmpty()){
+                        recyclerViewChats.setAdapter(null);
+                        return;
+                    }
 
                     for (ChatsSearchItem chat : listChats) {
                         if (chat.name.toLowerCase().contains(text.toLowerCase())) {
@@ -222,6 +230,8 @@ public class FragmentSearch extends Fragment {
         super.onResume();
         if (!editText.getText().toString().equals("")){
             editText.setText("");
+            recyclerViewChats.setAdapter(null);
+            recyclerViewMessages.setAdapter(null);
         }
     }
 

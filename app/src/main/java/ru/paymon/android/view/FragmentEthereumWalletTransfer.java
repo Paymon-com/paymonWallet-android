@@ -14,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -98,6 +99,14 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         gasLimitValue = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_limit_value);
         networkFeeValue = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_network_fee_value);
         totalValue = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_total_value);
+        ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_back_image_button);
+        TextView nextButton = (TextView) view.findViewById(R.id.toolbar_eth_wallet_transf_next_text_view);
+
+        backButton.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        nextButton.setOnClickListener(view12 -> {
+
+        });
 
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(false);
