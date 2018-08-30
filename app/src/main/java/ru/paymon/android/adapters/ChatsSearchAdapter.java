@@ -42,6 +42,11 @@ public class ChatsSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return chatsSearchItems.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return chatsSearchItems.get(position).id;
+    }
+
     private class ChatsSearchItemViewHolder extends RecyclerView.ViewHolder{
         public CircleImageView photo;
         public TextView name;

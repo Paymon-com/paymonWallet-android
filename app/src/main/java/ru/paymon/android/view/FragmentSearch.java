@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -29,12 +30,16 @@ import ru.paymon.android.adapters.MessagesSearchAdapter;
 import ru.paymon.android.models.ChatsSearchItem;
 import ru.paymon.android.models.MessagesSearchItem;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
+
+import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentSearch extends Fragment {
     private static FragmentSearch instance;
     private TabHost tabHost;
     private String currentTabTag;
+    private EditText editText;
 
     public static synchronized FragmentSearch newInstance() {
         instance = new FragmentSearch();
@@ -58,7 +63,7 @@ public class FragmentSearch extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         RecyclerView recyclerViewChats = (RecyclerView) view.findViewById(R.id.recViewReg);
         RecyclerView recyclerViewMessages = (RecyclerView) view.findViewById(R.id.recViewUnreg);
-        EditText editText = view.findViewById(R.id.edit_text_search);
+        editText = view.findViewById(R.id.edit_text_search);
 
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
@@ -138,6 +143,8 @@ public class FragmentSearch extends Fragment {
 
                     MessagesSearchAdapter messagesSearchAdapter = new MessagesSearchAdapter(sortedMessagesList);
                     recyclerViewMessages.setAdapter(messagesSearchAdapter);
+
+
                 } else if (currentTabTag.equals("Чаты")) {
                     LinkedList<ChatsSearchItem> sortedChatsList = new LinkedList<>();
 
@@ -168,8 +175,29 @@ public class FragmentSearch extends Fragment {
 
         tabHost.setOnTabChangedListener((tag) -> {
             currentTabTag = tag;
-            getActivity().invalidateOptionsMenu();
+//            getActivity().invalidateOptionsMenu();
+            editText.setText("");
+            recyclerViewChats.setAdapter(null);
+            recyclerViewMessages.setAdapter(null);
         });
+
+        recyclerViewChats.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewChats, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                final Bundle bundle = new Bundle();
+                int chatID = (int) recyclerViewChats.getAdapter().getItemId(position);
+                bundle.putInt(CHAT_ID_KEY, chatID);
+                final FragmentChat fragmentChat = FragmentChat.newInstance();
+                fragmentChat.setArguments(bundle);
+                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentChat, null);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position) {
+
+            }
+        }));
 
         tabHost.setup();
 
@@ -192,6 +220,9 @@ public class FragmentSearch extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (!editText.getText().toString().equals("")){
+            editText.setText("");
+        }
     }
 
     @Override
