@@ -28,6 +28,10 @@ public class NotificationManager {
 
         NETWORK_STATE_DISCONNECTED,
         NETWORK_STATE_CONNECTED,
+
+        ETHEREUM_WALLET_CREATED,
+
+        PHOTOS_URL_RECEIVED,
     }
 
     private SparseArray<ArrayList<Object>> observers = new SparseArray<>();

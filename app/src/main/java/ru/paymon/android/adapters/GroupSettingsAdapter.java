@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
@@ -23,7 +25,6 @@ import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.CreateGroupItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -66,7 +67,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
         GroupsSettingsViewHolder groupsSettingsViewHolder = (GroupsSettingsViewHolder) holder;
 
         groupsSettingsViewHolder.name.setText(createGroupItem.name);
-        groupsSettingsViewHolder.photo.setPhoto(createGroupItem.photo);
+//        groupsSettingsViewHolder.photo.setPhoto(createGroupItem.photo);
 
         if (createGroupItem.uid == User.currentUser.id)
             groupsSettingsViewHolder.removeButton.setVisibility(View.GONE);
@@ -129,13 +130,13 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     private class GroupsSettingsViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
-        private CircleImageView photo;
+        private CircularImageView photo;
         private ImageView removeButton;
 
         private GroupsSettingsViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.cell_group_participant_name);
-            photo = (CircleImageView) itemView.findViewById(R.id.cell_group_participant_photo);
+            photo = (CircularImageView) itemView.findViewById(R.id.cell_group_participant_photo);
             removeButton = (ImageView) itemView.findViewById(R.id.cell_group_participant_remove);
 
             removeButton.setImageResource(R.drawable.ic_close);

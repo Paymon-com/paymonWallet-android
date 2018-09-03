@@ -65,9 +65,9 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         ImageButton toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
         ImageButton toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
-         chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
-         chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
-         groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
+        chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
+        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
+        groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
 
         toolbarCreateGroup.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null));
 

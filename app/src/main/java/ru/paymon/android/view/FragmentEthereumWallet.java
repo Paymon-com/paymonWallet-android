@@ -79,23 +79,23 @@ public class FragmentEthereumWallet extends Fragment {
     }
 
     private void getBalance() {
-        Utils.stageQueue.postRunnable(() -> {
-            Ethereum.getInstance().getBalance(
-                    (responseBalance) -> {
-                        final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
-                        if (bigInteger != null) {
-                            User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
-                            User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
-                            User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
-                            User.saveConfig();
-                        }
-                    },
-                    (error) -> {
-                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.the_balance_of_the_ethereum_wallet_could_not_be_updated, Toast.LENGTH_LONG).show());
-                    });
-
-            ApplicationLoader.applicationHandler.post(() -> balance.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE));
-        });
+//        Utils.stageQueue.postRunnable(() -> {
+//            Ethereum.getInstance().getBalance(
+//                    (responseBalance) -> {
+//                        final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
+//                        if (bigInteger != null) {
+//                            User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
+//                            User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
+//                            User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
+//                            User.saveConfig();
+//                        }
+//                    },
+//                    (error) -> {
+//                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.the_balance_of_the_ethereum_wallet_could_not_be_updated, Toast.LENGTH_LONG).show());
+//                    });
+//
+//            ApplicationLoader.applicationHandler.post(() -> balance.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE));
+//        });
     }
 
     @Override

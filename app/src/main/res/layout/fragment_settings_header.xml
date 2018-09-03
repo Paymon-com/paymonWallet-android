@@ -4,17 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ru.paymon.android.components.CircleImageView
+    <!--<ru.paymon.android.components.CircleImageView-->
+        <!--android:id="@+id/fragment_settings_header_profile_avatar_image_view"-->
+        <!--android:layout_width="40dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/frameLayout"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:srcCompat="@android:color/holo_green_dark" />-->
+
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/fragment_settings_header_profile_avatar_image_view"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:src="@drawable/profile_photo_none"
+
         app:layout_constraintBottom_toTopOf="@+id/frameLayout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:color/holo_green_dark" />
+        app:srcCompat="@android:color/holo_green_dark"/>
 
     <TextView
         android:id="@+id/fragment_settings_header_profile_name_text_view"

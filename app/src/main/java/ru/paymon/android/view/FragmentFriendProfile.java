@@ -13,10 +13,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
-import ru.paymon.android.components.CircleImageView;
+
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -82,7 +84,7 @@ public class FragmentFriendProfile extends Fragment {
         TextView friendProfileBday = (TextView) view.findViewById(R.id.friend_profile_bday_text_view);
         TextView friendProfileLogin = (TextView) view.findViewById(R.id.status_friend_profile_text_view);
         TextView friendProfileName = (TextView) view.findViewById(R.id.name_friend_profile_text_view);
-        CircleImageView avatar = (CircleImageView) view.findViewById(R.id.friend_profile_avatar_image_view);
+        CircularImageView avatar = (CircularImageView) view.findViewById(R.id.friend_profile_avatar_image_view);
 
         floatMenu.setOnClickListener(view1 -> {
             if (!isFABOpen) {
@@ -109,7 +111,7 @@ public class FragmentFriendProfile extends Fragment {
                         friendProfileCountry.setText(user.country);
                         friendProfilePhoneNumber.setText(String.valueOf(user.phoneNumber));
                         friendProfileBday.setText(user.birthdate);
-                        avatar.setPhoto(new RPC.PM_photo(user.id, user.photoID));
+//                        avatar.setPhoto(new RPC.PM_photo(user.id, user.photoID));
 
                         chatButton.setOnClickListener(view12 -> {
                             final Bundle bundle = new Bundle();

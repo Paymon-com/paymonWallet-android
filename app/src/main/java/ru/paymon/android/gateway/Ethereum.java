@@ -16,19 +16,30 @@ import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.daimajia.androidviewhover.tools.Util;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.spongycastle.jce.exception.ExtIOException;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.RawTransaction;
+import org.web3j.crypto.TransactionEncoder;
 import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
+import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.methods.response.EthGasPrice;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.TransactionManager;
+import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
+import org.web3j.utils.Numeric;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -38,36 +49,50 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.concurrent.ExecutionException;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.BuildConfig;
 import ru.paymon.android.Config;
 import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.utils.Utils;
 import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
 //import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
+import static ru.paymon.android.gateway.Ethereum.TX_STATUS.DONE;
 
 public class Ethereum {
     private static final String TAG = "Ethereum";
     private static volatile Ethereum instance;
+    private static final String FILE_NAME = "paymon-eth-wallet";
     private static final String FILE_PATH = ApplicationLoader.applicationContext.getFilesDir().getAbsolutePath();
     private static final File BACKUP_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-    private static final String FILE_NAME = "paymon-eth-wallet";
     private static final boolean IS_TEST = true;
     private static final String INFURA_LINK = IS_TEST ? "https://ropsten.infura.io/BAWTZQzsbBDZG6g9D0IP" : "https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP";
-    private static final int NOTIFY_ID = 102;
     private static final BigDecimal TEN_POW_18 = new BigDecimal("1000000000000000000");
     private static final BigDecimal TEN_POW_9 = new BigDecimal("1000000000");
 
     private Web3j web3j;
     private RequestQueue requestQueue;
     private Credentials walletCredentials;
+
+    public enum TX_STATUS {
+        DONE,
+        NOT_HAVE_MONEY,
+        UNEXPECTED_ERROR,
+        CREDENTIALS_NULL,
+        ERROR_GET_NONCE,
+        MB_NOT_HAVE_MONEY
+    }
 
     public enum RestoreStatus {
         NO_USER_ID,
@@ -84,34 +109,24 @@ public class Ethereum {
     public static Ethereum getInstance() {
         if (instance == null) {
             synchronized (Ethereum.class) {
-                if (instance == null) {
+                if (instance == null)
                     instance = new Ethereum();
-                }
             }
         }
         return instance;
     }
 
-//    public boolean createOrLoadWallet(final int userID, final String password) {
-//        if (userID <= 0 && password.isEmpty())
-//            return false;
-//
-//        try {
-//            if (isWalletExist(userID)) {
-//                Log.d(TAG, "createOrLoadWallet: wallet exist");
-//                return loadWallet(userID, password);
-//            } else {
-//                Log.d(TAG, "createOrLoadWallet: start create eth");
-//                createWallet(userID, password);
-//                return loadWallet(userID, password);
-//            }
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
+    public boolean loadWallet(final String password) {
+        try {
+            walletCredentials = WalletUtils.loadCredentials(password, FILE_PATH + "/" + FILE_NAME + User.currentUser.id + ".json");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return walletCredentials != null;
+    }
 
     public boolean createWallet(final int userID, final String password) {
-        Log.d(TAG, "createWallet: start creating new wallet");
         deleteWallet();
         String fileName;
         try {
@@ -121,221 +136,14 @@ public class Ethereum {
             return false;
         }
 
-        Log.d(TAG, "createWallet: temp file create " + fileName);
-        boolean isRenamed = renameFile(FILE_PATH, fileName, FILE_NAME + userID + ".json");
-        if (isRenamed) {
-            Log.d(TAG, "createWallet: success rename to " + FILE_NAME + userID + ".json");
-            return true;
-        } else {
-            Log.d(TAG, "createWallet: error rename file");
-            return false;
-        }
-    }
-
-    public boolean deleteWallet() {
-        return new File(FILE_PATH, FILE_NAME + User.currentUser.id + ".json").delete();
-    }
-
-    public boolean isWalletExist(final int userID) {
-        return (new File(FILE_PATH, FILE_NAME + userID + ".json")).exists();
-    }
-
-    public boolean loadWallet(final String password)  {
-        Log.d(Config.TAG, "loadWallet: start load wallet " + " user id: " + User.currentUser.id + " password: " + password);
-
-        try {
-            walletCredentials = WalletUtils.loadCredentials(password, FILE_PATH + "/" + FILE_NAME + User.currentUser.id + ".json");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        Log.d(Config.TAG, "loadWallet: " + walletCredentials);
-
-        return walletCredentials != null;
-    }
-
-    private boolean renameFile(final File from, final File to) {
-        return from.renameTo(to);
-    }
-
-    private boolean renameFile(final String fromAbsolutePAth, final String toAbsolutePath) {
-        return renameFile(new File(fromAbsolutePAth), new File(toAbsolutePath));
-    }
-
-    private boolean renameFile(final String directory, final String fromFileName, final String toFileName) {
-        return renameFile(directory + "/" + fromFileName, directory + "/" + toFileName);
-    }
-
-    public String getPrivateKey() {
-        return walletCredentials == null ? null : walletCredentials.getEcKeyPair().getPrivateKey().toString(16);
-    }
-
-    public RestoreStatus restoreWallet(final InputStream inputStream, final String password) {
-        Log.d(Config.TAG, "restore start. Password: " + password + "Input stream: " + (inputStream != null));
-
-        deleteWallet();
-        File walletFileForRestore = new File(FILE_PATH, FILE_NAME + User.currentUser.id + ".json");
-
-        Log.d(TAG, "restoreWallet: " + walletFileForRestore.getPath());
-
-        OutputStream outputStream;
-        try {
-            outputStream = new FileOutputStream(walletFileForRestore);
-            IOUtils.copy(inputStream, outputStream);
-            Log.d(Config.TAG, "restoreWallet: wallet successfully copied");
-
-            try {
-                Log.d(Config.TAG, "restoreWallet: trying to load credentials");
-                walletCredentials = null;
-                loadWallet(password);
-                Log.d(Config.TAG, "restoreWallet: restore is success");
-                return RestoreStatus.DONE;
-            } catch (Exception e) {
-                Log.d(Config.TAG, "restoreWallet: trying to load credentials failed");
-                e.printStackTrace();
-                return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
-            }
-        } catch (IOException ioe) {
-            Log.d(Config.TAG, "restoreWallet: trying to copy wallet failed");
-            ioe.printStackTrace();
-            return RestoreStatus.ERROR_CREATE_FILE;
-        }
-    }
-
-    public void ethereumWalletNotification(Context context, String text, String title) {
-
-//            final Ringtone ringtone = RingtoneManager.getRingtone(context, User.notificationRingtone);
-        final Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.ic_ethereum));
-
-        final Intent intent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
-
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        final PendingIntent pendingIntent = PendingIntent.getActivity(ApplicationLoader.applicationContext, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-        Notification.Builder nbuilder = new Notification.Builder(context)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_notification)
-                .setLargeIcon(bitmap)
-                .setTicker(text)
-                .setContentTitle(title)
-                .setContentText(text)
-                /*.setSound(User.notificationRingtone)*/;
-//            if (User.notificationCheckVibration) {
-//                nbuilder.setVibrate(new long[]{100, 200, 100, 300});
-//                if (ringtone != null) {
-//                    ringtone.play();
-//                }
-        Notification notification = nbuilder.build();
-        android.app.NotificationManager notificationManager = (android.app.NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(NOTIFY_ID, notification);
-//            }
-    }
-
-    public String getAddress() {
-        if (walletCredentials == null) return null;
-        else return walletCredentials.getAddress();
-    }
-
-    public void getBalance(final Response.Listener<JSONObject> responseListener, final Response.ErrorListener errorListener) {
-        JSONObject requestObject;
-
-        try {
-            requestObject = new JSONObject("{\"jsonrpc\":\"2.0\",\"method\":\"eth_getBalance\",\"params\":[\"" + getAddress() + "\", \"latest\"],\"id\":1}");
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
-        }
-
-//        final Response.Listener<JSONObject> responseListener = (response) -> {
-//            final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(response);
-//            if (bigInteger != null) {
-//                User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
-//                User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
-//                User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
-//                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didLoadEthereumWallet);
-//            }
-//        };
-//
-//        final Response.ErrorListener errorListener = (error) -> {
-//            Log.d(TAG, "onErrorResponse: " + error.getMessage());
-//        };
-
-        JsonObjectRequest request = new JsonObjectRequest(JsonObjectRequest.Method.POST, INFURA_LINK, requestObject, responseListener, errorListener);
-        requestQueue.add(request);
-    }
-
-    public String calculateFiatBalance(float course) {
-        BigDecimal courseBigDecimal = (new BigDecimal(course)).setScale(2, ROUND_HALF_UP);
-//        BigDecimal preOutput = courseBigDecimal.divide(TEN_POW_18, 20, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(CRYPTO_BALANCE));
-        BigDecimal preOutput = courseBigDecimal.multiply(new BigDecimal(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE));
-        return preOutput.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
-    }
-
-    public String convertEthToFiat(final String ethAmount, final float fiatExRate) {
-        BigDecimal courseBigDecimal = (new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP);
-        BigDecimal preOutput = courseBigDecimal.multiply(new BigDecimal(ethAmount));
-        return preOutput.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
-    }
-//    private class WeiToFiatStringStruct {
-//        public BigInteger wei;
-//        public String coursePrefix;
-//
-//        public WeiToFiatStringStruct(BigInteger wei, String coursePrefix) {
-//            this.wei = wei;
-//            this.coursePrefix = coursePrefix;
-//        }
-//    }
-//
-//    private static class WeiToFiatString extends AsyncTask<WeiToFiatStringStruct, Object, String> {
-//        @Override
-//        protected String doInBackground(WeiToFiatStringStruct... params) {
-//            Double course = parseDouble(getCourseFromSite(params[0].coursePrefix));
-//            if (course == null) return null;
-//            BigDecimal courseBigDecimal = (new BigDecimal(course)).setScale(2, ROUND_HALF_UP);
-//            BigDecimal preOutput = courseBigDecimal.divide(TEN_POW_18, 20, BigDecimal.ROUND_HALF_UP).multiply(new BigDecimal(params[0].wei));
-//            return preOutput.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
-//        }
-//    }
-//
-//    private static Double parseDouble(final String course) {
-//        if (course == null) return null;
-//        return Double.parseDouble(course.replace(".", "").replace(",", "."));
-//    }
-
-    public BigInteger jsonToWei(@NonNull final JSONObject balanceResponse) {
-        try {
-            return new BigInteger(balanceResponse.getString("result").replace("0x", ""), 16);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public String weiToFriendlyString(@NonNull final BigInteger wei) {
-        String result;
-
-        if (User.CLIENT_MONEY_ETHEREUM_DENOMINATION.equals(ApplicationLoader.applicationContext.getString(R.string.money_denomination_auto))) {
-            result = Convert.fromWei(String.valueOf(wei), Convert.Unit.ETHER).setScale(8, ROUND_HALF_UP).toString();
-        } else if (User.CLIENT_MONEY_ETHEREUM_DENOMINATION.equals(ApplicationLoader.applicationContext.getString(R.string.money_denomination_8))) {
-            result = Convert.fromWei(String.valueOf(wei), Convert.Unit.ETHER).setScale(8, ROUND_HALF_UP).toString();
-        } else if (User.CLIENT_MONEY_ETHEREUM_DENOMINATION.equals(ApplicationLoader.applicationContext.getString(R.string.money_denomination_6))) {
-            result = Convert.fromWei(String.valueOf(wei), Convert.Unit.ETHER).setScale(6, ROUND_HALF_UP).toString();
-        } else if (User.CLIENT_MONEY_ETHEREUM_DENOMINATION.equals(ApplicationLoader.applicationContext.getString(R.string.money_denomination_4))) {
-            result = Convert.fromWei(String.valueOf(wei), Convert.Unit.ETHER).setScale(4, ROUND_HALF_UP).toString();
-        } else if (User.CLIENT_MONEY_ETHEREUM_DENOMINATION.equals(ApplicationLoader.applicationContext.getString(R.string.money_denomination_2))) {
-            result = Convert.fromWei(String.valueOf(wei), Convert.Unit.ETHER).setScale(2, ROUND_HALF_UP).toString();
-        } else {
-            result = Convert.fromWei(String.valueOf(wei), Convert.Unit.ETHER).setScale(8, ROUND_HALF_UP).toString();
-        }
-
-        return result;
+        return Utils.renameFile(FILE_PATH, fileName, FILE_NAME + userID + ".json");
     }
 
     public void backupWallet() {
         File walletFile = new File(FILE_PATH + "/" + FILE_NAME + User.currentUser.id + ".json");
         File walletInDownload = new File(BACKUP_DIR.getAbsolutePath() + "/" + FILE_NAME + User.currentUser.id + ".json");
 
-        if (!copyFile(walletFile, walletInDownload)) {
+        if (!Utils.copyFile(walletFile, walletInDownload)) {
             Toast.makeText(ApplicationLoader.applicationContext, "Скопировать файл кошелька не удалось", Toast.LENGTH_LONG).show();
             return;
         }
@@ -357,40 +165,108 @@ public class Ethereum {
             Toast.makeText(ApplicationLoader.applicationContext, R.string.right_file_system, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean copyFile(File source, File dest) {
-        InputStream is = null;
-        OutputStream os = null;
+    public RestoreStatus restoreWallet(final InputStream inputStream, final String password) {
+        deleteWallet();
+        File walletFileForRestore = new File(FILE_PATH, FILE_NAME + User.currentUser.id + ".json");
+
+        OutputStream outputStream;
         try {
-            is = new FileInputStream(source);
-            os = new FileOutputStream(dest);
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = is.read(buffer)) > 0) {
-                os.write(buffer, 0, length);
-            }
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        } finally {
+            outputStream = new FileOutputStream(walletFileForRestore);
+            IOUtils.copy(inputStream, outputStream);
             try {
-                is.close();
-                os.close();
+                walletCredentials = null;
+                loadWallet(password);
+                return RestoreStatus.DONE;
             } catch (Exception e) {
                 e.printStackTrace();
+                return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
             }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return RestoreStatus.ERROR_CREATE_FILE;
         }
     }
 
-    //    public BigDecimal getNormalGasPrice() {
-//        EthGasPrice ethGasPrice = null;
-//        try {
-//            ethGasPrice = web3j.ethGasPrice().sendAsync().get();
-//        } catch (InterruptedException | ExecutionException e) {
-//            e.printStackTrace();
-//            return new BigDecimal("41");
-//        }
-//        Log.e("AAA", Convert.fromWei(new BigDecimal(ethGasPrice.getGasPrice(), 0), Convert.Unit.GWEI)
-//    }
+    public boolean deleteWallet() {
+        return new File(FILE_PATH, FILE_NAME + User.currentUser.id + ".json").delete();
+    }
 
+    public String getAddress() {
+        if (walletCredentials == null) return null;
+        else return walletCredentials.getAddress();
+    }
+
+    public String getPrivateKey() {
+        return walletCredentials == null ? null : walletCredentials.getEcKeyPair().getPrivateKey().toString(16);
+    }
+
+    public BigInteger getBalance() {
+        try {
+            return web3j.ethGetBalance(getAddress(), DefaultBlockParameterName.fromString("latest")).send().getBalance();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public String convertEthToFiat(final String ethAmount, final float fiatExRate) {
+//        BigDecimal courseBigDecimal = (new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP);
+//        BigDecimal preOutput = courseBigDecimal.multiply(new BigDecimal(ethAmount));
+//        return preOutput.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+        return new BigDecimal(ethAmount).multiply(new BigDecimal(fiatExRate)).toString();
+    }
+
+    public BigDecimal getNormalGasPrice() {
+        try {
+            EthGasPrice ethGasPrice = web3j.ethGasPrice().send();
+            return Convert.fromWei(new BigDecimal(ethGasPrice.getGasPrice(), 0), Convert.Unit.GWEI).setScale(0, ROUND_HALF_UP);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public TX_STATUS send_RawTx(@NonNull String recipientAddress, @NonNull BigDecimal ethAmount, @NonNull BigDecimal gasPrise, @NonNull BigInteger gasLimit) {
+        if (walletCredentials == null) return TX_STATUS.CREDENTIALS_NULL;
+        Log.d(TAG, "send_RawTx: " + ethAmount + "->" + ethAmount.multiply(TEN_POW_18).setScale(0, RoundingMode.HALF_UP).toString());
+        final BigInteger ethAmountBigInteger16 = new BigInteger(ethAmount.multiply(TEN_POW_18).setScale(0, RoundingMode.HALF_UP).toString(), 16);
+        final BigInteger gasPriseBigInteger16 = new BigInteger(gasPrise.multiply(TEN_POW_9).setScale(0, RoundingMode.HALF_UP).toString(), 16);
+        final BigInteger gasLimitBigInteger16 = new BigInteger(gasLimit.toString(), 16);
+        Log.d(TAG, "sendETH: start sendETH");
+
+        EthGetTransactionCount ethGetTransactionCount;
+        try {
+            ethGetTransactionCount = web3j.ethGetTransactionCount(getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+            Log.d(TAG, "sendETH: " + TX_STATUS.ERROR_GET_NONCE.name());
+            return TX_STATUS.ERROR_GET_NONCE;
+        }
+        BigInteger nonce = ethGetTransactionCount.getTransactionCount();
+        Log.d(TAG, "sendETH: nonce is get");
+        Log.d(TAG, "send_RawTx: create raw " + nonce + " " + gasPriseBigInteger16 + " " + gasLimitBigInteger16 + " " + recipientAddress + " " + ethAmountBigInteger16);
+        RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPriseBigInteger16, gasLimitBigInteger16, recipientAddress, ethAmountBigInteger16, "0x");
+
+        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, walletCredentials);
+        String hexValue = Numeric.toHexString(signedMessage);
+        Log.d(TAG, "send_RawTx: hex " + hexValue);
+
+        String requestStr = "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"" + hexValue + "\"],\"id\":1}";
+
+        JsonObjectRequest requestObject = null;
+        try {
+            requestObject = new JsonObjectRequest(JsonObjectRequest.Method.POST, INFURA_LINK, new JSONObject(requestStr),
+                    (jsonObject) -> Log.d(TAG, "onResponse: " + jsonObject),
+                    (volleyError) -> Log.d(TAG, "onErrorResponse: " + volleyError.getMessage()));
+        } catch (JSONException ignored) {
+            ignored.printStackTrace();
+            Log.d(TAG, "sendETH: e " + TX_STATUS.MB_NOT_HAVE_MONEY.name());
+            return TX_STATUS.MB_NOT_HAVE_MONEY;
+        }
+
+        assert requestObject != null;
+        requestQueue.add(requestObject);
+
+        return DONE;
+    }
 }

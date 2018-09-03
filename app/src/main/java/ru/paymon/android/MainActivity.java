@@ -12,6 +12,7 @@ import android.widget.Toast;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.utils.AbsRuntimePermission;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.view.FragmentChat;
 import ru.paymon.android.view.FragmentChats;
 import ru.paymon.android.view.FragmentContacts;
 import ru.paymon.android.view.FragmentContactsInvite;
@@ -84,8 +85,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     @Override
     public void onBackPressed() {
         Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-        if (fragment == FragmentChats.getInstance() || fragment == FragmentContacts.getInstance() || fragment == FragmentMoney.getInstance()
-                || fragment == FragmentMoreMenu.getInstance() || fragment == FragmentStart.getInstance()) {
+        if (fragment instanceof FragmentChats || fragment instanceof FragmentContacts || fragment instanceof FragmentMoney || fragment instanceof FragmentMoreMenu) {
             if (back_pressed + 2000 > System.currentTimeMillis()) {
                 System.exit(0);
             } else {

@@ -9,11 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
@@ -39,7 +40,7 @@ public class ContactsGlobalAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RPC.UserObject addFriend = contactsGlobalItems.get(position);
         ContactsGlobalItemViewHolder contactsGlobalItemViewHolder = (ContactsGlobalItemViewHolder) holder;
-        contactsGlobalItemViewHolder.photo.setPhoto(new RPC.PM_photo(addFriend.id, addFriend.photoID));
+//        contactsGlobalItemViewHolder.photo.setPhoto(new RPC.PM_photo(addFriend.id, addFriend.photoID));
         contactsGlobalItemViewHolder.name.setText(Utils.formatUserName(addFriend));
 
     }
@@ -50,12 +51,12 @@ public class ContactsGlobalAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     }
 
     private class ContactsGlobalItemViewHolder extends RecyclerView.ViewHolder {
-        public CircleImageView photo;
+        public CircularImageView photo;
         public TextView name;
 
         public ContactsGlobalItemViewHolder(View itemView) {
             super(itemView);
-            photo = (CircleImageView) itemView.findViewById(R.id.contacts_photo);
+            photo = (CircularImageView) itemView.findViewById(R.id.contacts_photo);
             name = (TextView) itemView.findViewById(R.id.contacts_name);
         }
     }

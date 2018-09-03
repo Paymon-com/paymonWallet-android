@@ -104,16 +104,16 @@ public class DialogFragmentRestoreEthereumWallet extends DialogFragment {
                             //CryptoUtils.updateEthereumWalletKeyOnDataBase(Ethereum.getInstance().getAddress());
                             User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = password;
                             User.saveConfig();
-                            Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.restore_wallet_success), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));
+//                            Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.restore_wallet_success), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));
                             break;
                         case NO_USER_ID:
-                            Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.restore_wallet_not_success_error_file), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));
+//                            Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.restore_wallet_not_success_error_file), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));
                             break;
                         case ERROR_CREATE_FILE:
-                            Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.wrong_password), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));
+//                            Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.wrong_password), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));
                             break;
                         case ERROR_DECRYPTING_WRONG_PASS:
-                            Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.restore_wallet_not_success), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));
+//                            Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.restore_wallet_not_success), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));
                             break;
                     }
                 });

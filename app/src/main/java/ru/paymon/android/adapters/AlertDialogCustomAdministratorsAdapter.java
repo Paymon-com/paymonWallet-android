@@ -12,11 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.AlertDialogCustomAdministratorsItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -56,7 +57,7 @@ public class AlertDialogCustomAdministratorsAdapter extends RecyclerView.Adapter
         AlertDialogAdministratorsViewHolder alertDialogAdministratorsViewHolder = (AlertDialogAdministratorsViewHolder) holder;
 
         alertDialogAdministratorsViewHolder.name.setText(alertDialogCustomAdministratorsItem.name);
-        alertDialogAdministratorsViewHolder.photo.setPhoto(alertDialogCustomAdministratorsItem.photo);
+//        alertDialogAdministratorsViewHolder.photo.setPhoto(alertDialogCustomAdministratorsItem.photo);
 
         if (alertDialogCustomAdministratorsItem.uid == User.currentUser.id)
             alertDialogAdministratorsViewHolder.removeButton.setVisibility(View.GONE);
@@ -73,13 +74,13 @@ public class AlertDialogCustomAdministratorsAdapter extends RecyclerView.Adapter
 
     private class AlertDialogAdministratorsViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
-        private CircleImageView photo;
+        private CircularImageView photo;
         private ImageView removeButton;
 
         private AlertDialogAdministratorsViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.cell_group_participant_name);
-            photo = (CircleImageView) itemView.findViewById(R.id.cell_group_participant_photo);
+            photo = (CircularImageView) itemView.findViewById(R.id.cell_group_participant_photo);
             removeButton = (ImageView) itemView.findViewById(R.id.cell_group_participant_remove);
 
             removeButton.setImageResource(R.drawable.ic_close);
@@ -100,7 +101,7 @@ public class AlertDialogCustomAdministratorsAdapter extends RecyclerView.Adapter
             };
             itemView.setOnClickListener(listener);
             name.setOnClickListener(listener);
-            photo.setOnClickListener(listener);
+//            photo.setOnClickListener(listener);
         }
     }
 }

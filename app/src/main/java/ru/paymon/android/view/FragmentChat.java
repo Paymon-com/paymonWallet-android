@@ -52,7 +52,7 @@ import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.AttachmentsAdapter;
 import ru.paymon.android.adapters.MessagesAdapter;
-import ru.paymon.android.components.CircleImageView;
+
 import ru.paymon.android.models.attachments.AttachmentItem;
 import ru.paymon.android.models.attachments.AttachmentMessages;
 import ru.paymon.android.net.NetworkManager;
@@ -89,8 +89,8 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private EmojIconActions emojIcon;
 
     public static synchronized FragmentChat newInstance() {
-        if(instance ==null)
-        instance = new FragmentChat();
+        if (instance == null)
+            instance = new FragmentChat();
         return instance;
     }
 
@@ -315,7 +315,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
                 messageRequest.flags = MESSAGE_FLAG_FROM_ID;
                 messageRequest.date = (int) (System.currentTimeMillis() / 1000L);
                 messageRequest.from_id = User.currentUser.id;
-                messageRequest.to_id = !isGroup ? new RPC.PM_peerUser(chatID) : new RPC.PM_peerGroup(chatID);
+                messageRequest.to_id = isGroup ? new RPC.PM_peerGroup(chatID) : new RPC.PM_peerUser(chatID);
                 messageRequest.unread = true;
 
                 final long requestID = NetworkManager.getInstance().sendRequest(messageRequest, (response, error) -> {
@@ -325,6 +325,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
                     messageRequest.id = updateMsgID.newID;
                     MessagesManager.getInstance().putMessage(messageRequest);
+
                     if (messageRequest.to_id.user_id == User.currentUser.id)
                         MessagesManager.getInstance().lastMessages.put(messageRequest.from_id, messageRequest.id);
                     else

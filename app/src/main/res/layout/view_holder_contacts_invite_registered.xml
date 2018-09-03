@@ -5,17 +5,31 @@
     android:layout_width="match_parent"
     android:layout_height="130dp">
 
-    <ru.paymon.android.components.CircleImageView
+    <!--<ru.paymon.android.components.CircleImageView-->
+        <!--android:id="@+id/image_contact_invite_registered"-->
+        <!--android:layout_width="100dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_marginBottom="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--app:layout_constraintVertical_bias="1.0" />-->
+
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/image_contact_invite_registered"
         android:layout_width="100dp"
         android:layout_height="0dp"
         android:layout_marginBottom="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:src="@drawable/profile_photo_none"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="1.0"  />
 
     <TextView
         android:id="@+id/name_contact_invite_registered"

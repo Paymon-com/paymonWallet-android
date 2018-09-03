@@ -6,7 +6,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ru.paymon.android.components.CircleImageView
+    <!--<ru.paymon.android.components.CircleImageView-->
+        <!--android:id="@+id/contacts_global_photo"-->
+        <!--android:layout_width="60dp"-->
+        <!--android:layout_height="60dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent" />-->
+
+    <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/contacts_global_photo"
         android:layout_width="60dp"
         android:layout_height="60dp"
@@ -14,6 +26,8 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
+        android:src="@drawable/profile_photo_none"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

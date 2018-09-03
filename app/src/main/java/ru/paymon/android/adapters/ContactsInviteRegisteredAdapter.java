@@ -13,11 +13,12 @@ import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.paymon.android.R;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.Contact;
 import ru.paymon.android.net.RPC;
 
@@ -43,7 +44,7 @@ public class ContactsInviteRegisteredAdapter extends RecyclerView.Adapter<Recycl
         ContactsInviteRegisteredAdapter.ContactsInviteRegisteredViewHolder registeredViewHolder = ( ContactsInviteRegisteredAdapter.ContactsInviteRegisteredViewHolder) holder;
         registeredViewHolder.name.setText(contact.name);
         registeredViewHolder.phoneNumber.setText(contact.phone);
-        registeredViewHolder.avatar.setPhoto(new RPC.PM_photo());
+//        registeredViewHolder.avatar.setPhoto(new RPC.PM_photo());
         registeredViewHolder.checkBox.setOnCheckedChangeListener((cbutton, newValue) -> contact.isChecked = newValue);
     }
 
@@ -56,14 +57,14 @@ public class ContactsInviteRegisteredAdapter extends RecyclerView.Adapter<Recycl
         private TextView name;
         private TextView phoneNumber;
         private CheckBox checkBox;
-        private CircleImageView avatar;
+        private CircularImageView avatar;
 
         private ContactsInviteRegisteredViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.name_contact_invite_registered);
             phoneNumber = (TextView) itemView.findViewById(R.id.phone_contact_invite_registered);
             checkBox = (CheckBox) itemView.findViewById(R.id.checkbox_contact_invite_registered);
-            avatar = (CircleImageView) itemView.findViewById(R.id.image_contact_invite_registered);
+            avatar = (CircularImageView) itemView.findViewById(R.id.image_contact_invite_registered);
         }
     }
 

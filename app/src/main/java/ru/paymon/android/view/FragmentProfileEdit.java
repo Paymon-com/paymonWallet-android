@@ -25,6 +25,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.Calendar;
 
 import ru.paymon.android.ApplicationLoader;
@@ -36,7 +38,7 @@ import ru.paymon.android.ObservableMediaManager;
 
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.components.CircleImageView;
+
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
@@ -50,7 +52,7 @@ public class FragmentProfileEdit extends Fragment {
     private static final int PICK_IMAGE_ID = 100;
     private static FragmentProfileEdit instance;
     private DialogProgress dialogProgress;
-    private CircleImageView avatar;
+    private CircularImageView avatar;
 
     public static synchronized FragmentProfileEdit newInstance() {
         instance = new FragmentProfileEdit();
@@ -73,7 +75,7 @@ public class FragmentProfileEdit extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
-        avatar = (CircleImageView) view.findViewById(R.id.profile_update_photo);
+        avatar = (CircularImageView) view.findViewById(R.id.profile_update_photo);
         TextView changeAvatar = (TextView) view.findViewById(R.id.change_foto);
         TextInputEditText firstName = (TextInputEditText) view.findViewById(R.id.profile_update_name);
         TextInputEditText lastName = (TextInputEditText) view.findViewById(R.id.profile_update_surname);
@@ -95,7 +97,7 @@ public class FragmentProfileEdit extends Fragment {
         RPC.PM_photo photo = new RPC.PM_photo();
         photo.user_id = User.currentUser.id;
         photo.id = User.currentUser.photoID;
-        avatar.setPhoto(photo);
+//        avatar.setPhoto(photo);
 
         firstName.setText(User.currentUser.first_name);
         lastName.setText(User.currentUser.last_name);
@@ -264,7 +266,7 @@ public class FragmentProfileEdit extends Fragment {
                         final RPC.PM_setProfilePhoto setProfilePhotoRequest = new RPC.PM_setProfilePhoto();
                         setProfilePhotoRequest.photo = newPhoto;
 
-                        ApplicationLoader.applicationHandler.post(() -> avatar.setPhoto(newPhoto));
+//                        ApplicationLoader.applicationHandler.post(() -> avatar.setPhoto(newPhoto));
 
 
                         final long oldPhotoID = User.currentUser.photoID;

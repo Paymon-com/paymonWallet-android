@@ -55,6 +55,7 @@ public class DialogFragmentCreateEthereumWallet extends DialogFragment {
                         User.saveConfig();
                         ApplicationLoader.applicationHandler.post(() -> {
                             Toast.makeText(ApplicationLoader.applicationContext, R.string.ethereum_wallet_created, Toast.LENGTH_LONG).show();
+                            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.ETHEREUM_WALLET_CREATED);
                         });
                     }
                 });

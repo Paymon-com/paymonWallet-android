@@ -24,7 +24,7 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.components.CircleImageView;
+
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 

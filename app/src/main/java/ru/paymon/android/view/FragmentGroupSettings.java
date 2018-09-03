@@ -17,6 +17,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -27,7 +29,6 @@ import ru.paymon.android.User;
 import ru.paymon.android.adapters.AlertDialogCustomAdministratorsAdapter;
 import ru.paymon.android.adapters.AlertDialogCustomBlackListAdapter;
 import ru.paymon.android.adapters.GroupSettingsAdapter;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.AlertDialogCustomAdministratorsItem;
 import ru.paymon.android.models.AlertDialogCustomBlackListItem;
 import ru.paymon.android.models.CreateGroupItem;
@@ -84,12 +85,12 @@ public class FragmentGroupSettings extends Fragment {
 
         titleView = (EditText) view.findViewById(R.id.group_settings_title);
         RecyclerView contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
-        CircleImageView photoView = (CircleImageView) view.findViewById(R.id.group_settings_photo);
+        CircularImageView photoView = (CircularImageView) view.findViewById(R.id.group_settings_photo);
 
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);
 
-        photoView.setPhoto(group.photo);
+//        photoView.setPhoto(group.photo);
         titleView.setText(group.title);
         titleView.setOnEditorActionListener((textView, i, keyEvent) -> {
             Utils.netQueue.postRunnable(() -> {

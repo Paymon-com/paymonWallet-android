@@ -29,6 +29,11 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -52,6 +57,42 @@ public class Utils {
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
     public static double maxSize;
 
+    public static boolean copyFile(File source, File dest) {
+        InputStream is = null;
+        OutputStream os = null;
+        try {
+            is = new FileInputStream(source);
+            os = new FileOutputStream(dest);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
+            }
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                is.close();
+                os.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static boolean renameFile(final File from, final File to) {
+        return from.renameTo(to);
+    }
+
+    public static boolean renameFile(final String fromAbsolutePAth, final String toAbsolutePath) {
+        return renameFile(new File(fromAbsolutePAth), new File(toAbsolutePath));
+    }
+
+    public static boolean renameFile(final String directory, final String fromFileName, final String toFileName) {
+        return renameFile(directory + "/" + fromFileName, directory + "/" + toFileName);
+    }
 
     public static String formatUserName(RPC.UserObject user) {
         String username;

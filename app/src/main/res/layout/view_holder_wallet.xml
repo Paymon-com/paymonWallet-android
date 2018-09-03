@@ -2,9 +2,21 @@
 
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator">
+
+    <TextView
+        android:id="@+id/wallet_address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/wallet_icon"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/wallet_fiat_currency"
@@ -32,9 +44,10 @@
         android:id="@+id/wallet_crypto_balance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
 
+        android:layout_marginTop="2dp"
         android:fontFamily="sans-serif-light"
         android:maxLines="1"
         android:textAlignment="textEnd"
@@ -44,13 +57,13 @@
         app:layout_constraintEnd_toStartOf="@+id/wallet_fiat_balance"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/wallet_icon"
-        app:layout_constraintTop_toTopOf="@+id/wallet_icon" />
+        app:layout_constraintTop_toBottomOf="@+id/wallet_address" />
 
     <TextView
         android:id="@+id/wallet_fiat_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:fontFamily="sans-serif-light"
         android:maxLength="16"
         android:maxLines="1"

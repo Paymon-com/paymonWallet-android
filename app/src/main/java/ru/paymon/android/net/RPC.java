@@ -2127,4 +2127,75 @@ public class RPC {
             stream.writeString(phones);
         }
     }
+
+    public static class PM_getPhotosURL extends Packet {
+        public static int svuid = 266172818;
+        public ArrayList<Integer> uids;
+
+        public PM_getPhotosURL(ArrayList<Integer> uids) {
+            this.uids = uids;
+        }
+
+        public void readParams(SerializableData stream, boolean exception) {
+            int magic = stream.readInt32(exception);
+            if (magic != SVUID_ARRAY) {
+                if (exception) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", magic));
+                }
+                return;
+            }
+            int count = stream.readInt32(exception);
+            for (int i = 0; i < count; i++) {
+                Integer uid = stream.readInt32(exception);
+                uids.add(uid);
+            }
+
+            magic = stream.readInt32(exception);
+            if (magic != PM_photo.svuid) {
+                if (exception) {
+                    throw new RuntimeException(String.format("wrong PM_getPhotosURL magic, got %x", magic));
+                }
+            }
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            stream.writeInt32(SVUID_ARRAY);
+            int count = uids.size();
+            stream.writeInt32(count);
+            for (int i = 0; i < count; i++) {
+                stream.writeInt32(uids.get(i));
+            }
+        }
+    }
+
+    public static class PM_photosURL extends Packet {
+        public static int svuid = 472919145;
+        public ArrayList<String> urls = new ArrayList<>();
+
+        public void readParams(SerializableData stream, boolean exception) {
+            int magic = stream.readInt32(exception);
+            if (magic != SVUID_ARRAY) {
+                if (exception) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", magic));
+                }
+                return;
+            }
+            int count = stream.readInt32(exception);
+            for (int i = 0; i < count; i++) {
+                String url = stream.readString(exception);
+                urls.add(url);
+            }
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            stream.writeInt32(SVUID_ARRAY);
+            int count = urls.size();
+            stream.writeInt32(count);
+            for (int i = 0; i < count; i++) {
+                stream.writeString(urls.get(i));
+            }
+        }
+    }
 }

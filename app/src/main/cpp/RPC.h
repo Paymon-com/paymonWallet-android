@@ -825,4 +825,73 @@ public:
     }
 };
 
+
+class PM_getPhotosURL : public Packet {
+public:
+    static const uint svuid = 266172818;
+
+    std::vector<int> userIDs;
+
+    void readParams(SerializedBuffer *stream, bool &error) override {
+        uint magic = stream->readUint32(&error);
+        if (magic != RPC::SVUID_ARRAY) {
+            error = true;
+            DEBUG_E("wrong Vector magic, got %x", magic);
+            return;
+        }
+        uint count = stream->readUint32(&error);
+        for (uint i = 0; i < count; i++) {
+            int64 uid = stream->readInt32(&error);
+            if (error) {
+                return;
+            }
+            userIDs.push_back(uid);
+        }
+    }
+
+    void serializeToStream(SerializedBuffer *stream) override {
+        stream->writeInt32(svuid);
+        stream->writeInt32(RPC::SVUID_ARRAY);
+        auto count = (uint) userIDs.size();
+        stream->writeInt32(count);
+        for (uint i = 0; i < count; i++) {
+            stream->writeInt32(userIDs[i]);
+        }
+    }
+};
+
+class PM_photosURL : public Packet {
+public:
+    static const uint svuid = 472919145;
+
+    std::vector<std::string> urls;
+
+    void readParams(SerializedBuffer *stream, bool &error) override {
+        uint magic = stream->readUint32(&error);
+        if (magic != RPC::SVUID_ARRAY) {
+            error = true;
+            DEBUG_E("wrong Vector magic, got %x", magic);
+            return;
+        }
+        uint count = stream->readUint32(&error);
+        for (uint i = 0; i < count; i++) {
+            auto uid = stream->readString(&error);
+            if (error) {
+                return;
+            }
+            urls.push_back(uid);
+        }
+    }
+
+    void serializeToStream(SerializedBuffer *stream) override {
+        stream->writeInt32(svuid);
+        stream->writeInt32(RPC::SVUID_ARRAY);
+        auto count = (uint) urls.size();
+        stream->writeInt32(count);
+        for (uint i = 0; i < count; i++) {
+            stream->writeString(urls[i]);
+        }
+    }
+};
+
 #endif //PAYMONSERVEREPOLL_RPC_H

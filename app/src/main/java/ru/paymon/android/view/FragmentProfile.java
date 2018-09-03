@@ -10,9 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.components.CircleImageView;
+
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
@@ -41,7 +43,7 @@ public class FragmentProfile extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
         ImageView updateProfile = (ImageView) view.findViewById(R.id.profile_update_button);
-        CircleImageView avatar = (CircleImageView) view.findViewById(R.id.profile_avatar_image_view);
+        CircularImageView avatar = (CircularImageView) view.findViewById(R.id.profile_avatar_image_view);
         TextView name = (TextView) view.findViewById(R.id.name_profile_text_view);
         TextView email = (TextView) view.findViewById(R.id.profile_email_text_view);
         TextView phone = (TextView) view.findViewById(R.id.profile_phone_text_view);
@@ -60,7 +62,7 @@ public class FragmentProfile extends Fragment {
         RPC.PM_photo photo = new RPC.PM_photo();
         photo.user_id = User.currentUser.id;
         photo.id = User.currentUser.photoID;
-        avatar.setPhoto(photo);
+//        avatar.setPhoto(photo);
 
         email.setText(User.currentUser.email);
         if (User.currentUser.phoneNumber != 0)

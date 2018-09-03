@@ -12,11 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.AlertDialogCustomBlackListItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -56,7 +57,7 @@ public class AlertDialogCustomBlackListAdapter extends RecyclerView.Adapter<Recy
         AlertDialogBlackListViewHolder alertDialogBlackListViewHolder = (AlertDialogBlackListViewHolder) holder;
 
         alertDialogBlackListViewHolder.name.setText(alertDialogCustomBlackListItem.name);
-        alertDialogBlackListViewHolder.photo.setPhoto(alertDialogCustomBlackListItem.photo);
+//        alertDialogBlackListViewHolder.photo.setPhoto(alertDialogCustomBlackListItem.photo);
 
         if (alertDialogCustomBlackListItem.uid == User.currentUser.id)
             alertDialogBlackListViewHolder.removeButton.setVisibility(View.GONE);
@@ -74,13 +75,13 @@ public class AlertDialogCustomBlackListAdapter extends RecyclerView.Adapter<Recy
 
     private class AlertDialogBlackListViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
-        private CircleImageView photo;
+        private CircularImageView photo;
         private ImageView removeButton;
 
         private AlertDialogBlackListViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.cell_group_participant_name);
-            photo = (CircleImageView) itemView.findViewById(R.id.cell_group_participant_photo);
+            photo = (CircularImageView) itemView.findViewById(R.id.cell_group_participant_photo);
             removeButton = (ImageView) itemView.findViewById(R.id.cell_group_participant_remove);
 
             removeButton.setImageResource(R.drawable.ic_close);

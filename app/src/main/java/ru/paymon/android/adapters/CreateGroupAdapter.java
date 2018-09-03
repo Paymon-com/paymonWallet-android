@@ -8,10 +8,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.List;
 
 import ru.paymon.android.R;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.CreateGroupItem;
 
 public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.ViewHolder> {
@@ -30,13 +31,13 @@ public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CreateGroupItem createGroup = list.get(position);
         holder.name.setText(createGroup.name);
-        holder.photo.setPhoto(createGroup.photo);
+//        holder.photo.setPhoto(createGroup.photo);
         holder.checkBox.setChecked(createGroup.checked);
 
         View.OnClickListener clickListener = (view) -> createGroup.checked = holder.checkBox.isChecked();
 
         holder.checkBox.setOnClickListener(clickListener);
-        holder.photo.setOnClickListener(clickListener);
+//        holder.photo.setOnClickListener(clickListener);
         holder.name.setOnClickListener(clickListener);
     }
 
@@ -48,13 +49,13 @@ public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
-        private CircleImageView photo;
+        private CircularImageView photo;
         private CheckBox checkBox;
 
         ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.create_user_name);
-            photo = (CircleImageView) itemView.findViewById(R.id.create_user_photo);
+            photo = (CircularImageView) itemView.findViewById(R.id.create_user_photo);
             checkBox = (CheckBox) itemView.findViewById(R.id.cell_create_group_checkbox);
         }
     }

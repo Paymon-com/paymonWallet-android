@@ -7,10 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.ChatsSearchItem;
 import ru.paymon.android.models.Contact;
 
@@ -34,7 +35,7 @@ public class ChatsSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ChatsSearchItem chatsSearchItem = chatsSearchItems.get(position);
         ChatsSearchAdapter.ChatsSearchItemViewHolder chatsSearchItemViewHolder = (ChatsSearchAdapter.ChatsSearchItemViewHolder) holder;
         chatsSearchItemViewHolder.name.setText(chatsSearchItem.name);
-        chatsSearchItemViewHolder.photo.setPhoto(chatsSearchItem.photo);
+//        chatsSearchItemViewHolder.photo.setPhoto(chatsSearchItem.photo);
     }
 
     @Override
@@ -43,12 +44,12 @@ public class ChatsSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     private class ChatsSearchItemViewHolder extends RecyclerView.ViewHolder{
-        public CircleImageView photo;
+        public CircularImageView photo;
         public TextView name;
 
         public ChatsSearchItemViewHolder(View itemView) {
             super(itemView);
-            photo = (CircleImageView) itemView.findViewById(R.id.chats_search_photo);
+            photo = (CircularImageView) itemView.findViewById(R.id.chats_search_photo);
             name = (TextView) itemView.findViewById(R.id.chats_search_name);
         }
     }

@@ -5,7 +5,11 @@ import android.util.LongSparseArray;
 import android.util.SparseArray;
 
 import com.daimajia.androidviewhover.tools.Util;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -131,8 +135,23 @@ public class MessagesManager implements NotificationManager.IListener {
                     for (RPC.Group grp : packet.groups)
                         GroupsManager.getInstance().putGroup(grp);
 
-                    for (RPC.UserObject usr : packet.users)
+
+                    final ArrayList<Integer> uids = new ArrayList<>();
+                    for (RPC.UserObject usr : packet.users) {
                         UsersManager.getInstance().putUser(usr);
+                        uids.add(usr.id);
+                    }
+
+                    RPC.PM_getPhotosURL getPhotosURL = new RPC.PM_getPhotosURL(uids);
+                    NetworkManager.getInstance().sendRequest(getPhotosURL, (response1, error1) -> {
+                        if (response1 != null) {
+                            RPC.PM_photosURL photosURL = (RPC.PM_photosURL) response1;
+                            Log.e("AAA", photosURL.urls.size() +"");
+                            for (String url: photosURL.urls) {
+                                Log.e("AAA", url);
+                            }
+                        }
+                    });
 
                     for (int i = 0; i < dialogsMessages.size(); i++) {
                         LinkedList<RPC.Message> array = dialogsMessages.get(dialogsMessages.keyAt(i));

@@ -31,7 +31,6 @@ import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.components.ItemView;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.Packet;
@@ -699,14 +698,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public static class GroupReceivedMessagePictureViewHolder extends BaseViewHolder {
-        CircleImageView avatar;
+        CircularImageView avatar;
         EmojiconTextView text;
         TextView time;
         ImageView picture;
 
         GroupReceivedMessagePictureViewHolder(View itemView) {
             super(itemView);
-            avatar = (CircleImageView) itemView.findViewById(R.id.message_group_received_picture_photo);
+            avatar = (CircularImageView) itemView.findViewById(R.id.message_group_received_picture_photo);
             text = (EmojiconTextView) itemView.findViewById(R.id.message_group_received_picture_text_view);
             time = (TextView) itemView.findViewById(R.id.timestamp_group_received_picture_text_view);
             picture = (ImageView) itemView.findViewById(R.id.message_group_received_picture_image_view);
@@ -748,7 +747,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public static class GroupReceivedMessageDocumentViewHolder extends BaseViewHolder {
-        CircleImageView avatar;
+        CircularImageView avatar;
         EmojiconTextView text;
         TextView time;
         TextView title;
@@ -757,7 +756,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         GroupReceivedMessageDocumentViewHolder(View itemView) {
             super(itemView);
-            avatar = (CircleImageView) itemView.findViewById(R.id.message_group_received_document_avatar);
+            avatar = (CircularImageView) itemView.findViewById(R.id.message_group_received_document_avatar);
             text = (EmojiconTextView) itemView.findViewById(R.id.message_group_received_document_text_view);
             time = (TextView) itemView.findViewById(R.id.timestamp_group_received_document_text_view);
             title = (TextView) itemView.findViewById(R.id.title_group_received_document_text_view);
@@ -793,14 +792,14 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public static class GroupReceivedMessageVideoViewHolder extends BaseViewHolder {
-        CircleImageView avatar;
+        CircularImageView avatar;
         EmojiconTextView text;
         TextView time;
         VideoView video;
 
         GroupReceivedMessageVideoViewHolder(View itemView) {
             super(itemView);
-            avatar = (CircleImageView) itemView.findViewById(R.id.message_group_received_video_photo);
+            avatar = (CircularImageView) itemView.findViewById(R.id.message_group_received_video_photo);
             text = (EmojiconTextView) itemView.findViewById(R.id.message_group_received_video_text_view);
             time = (TextView) itemView.findViewById(R.id.timestamp_group_received_video_text_view);
             video = (VideoView) itemView.findViewById(R.id.message_group_received_video_video_view);

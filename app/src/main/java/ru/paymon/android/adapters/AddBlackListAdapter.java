@@ -8,10 +8,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.List;
 
 import ru.paymon.android.R;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.AddBlackListItem;
 import ru.paymon.android.models.AlertDialogCustomBlackListItem;
 
@@ -35,13 +36,13 @@ public class AddBlackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         AddBlackListViewHolder addBlackListViewHolder = (AddBlackListViewHolder) holder;
 
         addBlackListViewHolder.name.setText(addBlackListItem.name);
-        addBlackListViewHolder.photo.setPhoto(addBlackListItem.photo);
+//        addBlackListViewHolder.photo.setPhoto(addBlackListItem.photo);
         addBlackListViewHolder.checkBox.setChecked(addBlackListItem.checked);
 
         View.OnClickListener clickListener = (view) -> addBlackListItem.checked = addBlackListViewHolder.checkBox.isChecked();
 
         addBlackListViewHolder.name.setOnClickListener(clickListener);
-        addBlackListViewHolder.photo.setOnClickListener(clickListener);
+//        addBlackListViewHolder.photo.setOnClickListener(clickListener);
         addBlackListViewHolder.checkBox.setOnClickListener(clickListener);
     }
 
@@ -52,13 +53,13 @@ public class AddBlackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private class AddBlackListViewHolder extends RecyclerView.ViewHolder{
         private TextView name;
-        private CircleImageView photo;
+        private CircularImageView photo;
         private CheckBox checkBox;
 
         public AddBlackListViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.create_user_name);
-            photo = (CircleImageView) itemView.findViewById(R.id.create_user_photo);
+            photo = (CircularImageView) itemView.findViewById(R.id.create_user_photo);
             checkBox = (CheckBox) itemView.findViewById(R.id.cell_create_group_checkbox);
         }
     }

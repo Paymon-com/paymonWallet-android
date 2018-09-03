@@ -8,10 +8,11 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
+
 import java.util.List;
 
 import ru.paymon.android.R;
-import ru.paymon.android.components.CircleImageView;
 import ru.paymon.android.models.AddAdministratorsItem;
 
 public class AddAdministratorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -34,13 +35,13 @@ public class AddAdministratorsAdapter extends RecyclerView.Adapter<RecyclerView.
         AddAdministratorsViewHolder addAdministratorsViewHolder = (AddAdministratorsViewHolder) holder;
 
         addAdministratorsViewHolder.name.setText(addAdministratorsItem.name);
-        addAdministratorsViewHolder.photo.setPhoto(addAdministratorsItem.photo);
+//        addAdministratorsViewHolder.photo.setPhoto(addAdministratorsItem.photo);
         addAdministratorsViewHolder.checkBox.setChecked(addAdministratorsItem.checked);
 
         View.OnClickListener clickListener = (view) -> addAdministratorsItem.checked = addAdministratorsViewHolder.checkBox.isChecked();
 
         addAdministratorsViewHolder.name.setOnClickListener(clickListener);
-        addAdministratorsViewHolder.photo.setOnClickListener(clickListener);
+//        addAdministratorsViewHolder.photo.setOnClickListener(clickListener);
         addAdministratorsViewHolder.checkBox.setOnClickListener(clickListener);
     }
 
@@ -51,13 +52,13 @@ public class AddAdministratorsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     private class AddAdministratorsViewHolder extends RecyclerView.ViewHolder{
         private TextView name;
-        private CircleImageView photo;
+        private CircularImageView photo;
         private CheckBox checkBox;
 
         public AddAdministratorsViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.create_user_name);
-            photo = (CircleImageView) itemView.findViewById(R.id.create_user_photo);
+            photo = (CircularImageView) itemView.findViewById(R.id.create_user_photo);
             checkBox = (CheckBox) itemView.findViewById(R.id.cell_create_group_checkbox);
         }
     }
