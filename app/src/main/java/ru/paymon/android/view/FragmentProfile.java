@@ -62,14 +62,26 @@ public class FragmentProfile extends Fragment {
         photo.id = User.currentUser.photoID;
         avatar.setPhoto(photo);
 
-        email.setText(User.currentUser.email);
+        if (!User.currentUser.email.equals(""))
+            email.setText(User.currentUser.email);
+        else
+            email.setText(R.string.not_specified);
         if (User.currentUser.phoneNumber != 0)
             phone.setText(Utils.formatPhone(User.currentUser.phoneNumber));
         else
-            phone.setText(R.string.not_specified);//TODO:string
-        city.setText(User.currentUser.city);
-        birthday.setText(User.currentUser.birthdate);
-        country.setText(User.currentUser.country);
+            phone.setText(R.string.not_specified);
+        if (!User.currentUser.city.equals(""))
+            city.setText(User.currentUser.city);
+        else
+            city.setText(R.string.not_specified);
+        if (!User.currentUser.birthdate.equals(""))
+            birthday.setText(User.currentUser.birthdate);
+        else
+            birthday.setText(R.string.not_specified);
+        if (!User.currentUser.country.equals(""))
+            country.setText(User.currentUser.country);
+        else
+            country.setText(R.string.not_specified);
 
         return view;
     }

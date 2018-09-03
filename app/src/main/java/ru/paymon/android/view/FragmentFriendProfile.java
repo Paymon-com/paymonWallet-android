@@ -105,10 +105,22 @@ public class FragmentFriendProfile extends Fragment {
                             dialogProgress.dismiss();
                         friendProfileName.setText(Utils.formatUserName(user));
                         friendProfileLogin.setText("@" + user.login);
-                        friendProfileCity.setText(user.city);
-                        friendProfileCountry.setText(user.country);
-                        friendProfilePhoneNumber.setText(String.valueOf(user.phoneNumber));
-                        friendProfileBday.setText(user.birthdate);
+                        if (!user.city.equals(""))
+                            friendProfileCity.setText(user.city);
+                        else
+                            friendProfileCity.setText(R.string.not_specified);
+                        if (!user.country.equals(""))
+                            friendProfileCountry.setText(user.country);
+                        else
+                            friendProfileCountry.setText(R.string.not_specified);
+                        if (user.phoneNumber != 0)
+                            friendProfilePhoneNumber.setText(String.valueOf(user.phoneNumber));
+                        else
+                            friendProfilePhoneNumber.setText(R.string.not_specified);
+                        if (!user.birthdate.equals(""))
+                            friendProfileBday.setText(user.birthdate);
+                        else
+                            friendProfileBday.setText(R.string.not_specified);
                         avatar.setPhoto(new RPC.PM_photo(user.id, user.photoID));
 
                         chatButton.setOnClickListener(view12 -> {
