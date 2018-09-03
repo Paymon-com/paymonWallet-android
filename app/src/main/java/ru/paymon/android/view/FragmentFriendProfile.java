@@ -123,7 +123,7 @@ public class FragmentFriendProfile extends Fragment {
                             friendProfileBday.setText(user.birthdate);
                         else
                             friendProfileBday.setText(R.string.not_specified);
-                        avatar.setPhoto(new RPC.PM_photo(user.id, user.photoID));
+//                        avatar.setPhoto(new RPC.PM_photo(user.id, user.photoID));
 
                         chatButton.setOnClickListener(view12 -> {
                             final Bundle bundle = new Bundle();
