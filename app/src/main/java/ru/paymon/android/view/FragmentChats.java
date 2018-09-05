@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +51,20 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         if (instance == null)
             instance = new FragmentChats();
         return instance;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        chatsAdapter = new ChatsAdapter(iChatsClickListener);
+        dialogsAdapter = new ChatsAdapter(iChatsClickListener);
+        groupsAdapter = new ChatsAdapter(iChatsClickListener);
+        if (NetworkManager.getInstance().isAuthorized()) {
+            if (!isLoading) {
+                isLoading = true;
+                MessagesManager.getInstance().loadChats(!NetworkManager.getInstance().isConnected());
+            }
+        }
     }
 
     @Nullable
@@ -134,27 +149,17 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);
 
-        chatsAdapter = new ChatsAdapter(iChatsClickListener);
         chatsAllRecyclerView.setHasFixedSize(true);
         chatsAllRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsAllRecyclerView.setAdapter(chatsAdapter);
 
-        dialogsAdapter = new ChatsAdapter(iChatsClickListener);
         chatsRecyclerView.setHasFixedSize(true);
         chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         chatsRecyclerView.setAdapter(dialogsAdapter);
 
-        groupsAdapter = new ChatsAdapter(iChatsClickListener);
         groupsRecyclerView.setHasFixedSize(true);
         groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         groupsRecyclerView.setAdapter(groupsAdapter);
-
-        if (NetworkManager.getInstance().isAuthorized()) {
-            if (!isLoading) {
-                isLoading = true;
-                MessagesManager.getInstance().loadChats(!NetworkManager.getInstance().isConnected());
-            }
-        }
 
         return view;
     }
@@ -204,6 +209,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                 LinkedList<ChatsItem> dialogsItems = new LinkedList<>();
                 for (int i = 0; i < UsersManager.getInstance().userContacts.size(); i++) {
                     RPC.UserObject user = UsersManager.getInstance().userContacts.get(UsersManager.getInstance().userContacts.keyAt(i));
+
                     String username = Utils.formatUserName(user);
                     String lastMessageText = "";
 
@@ -222,11 +228,10 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                                     break;
                             }
                         }
-
-                        RPC.PM_photo photo = new RPC.PM_photo();
-                        photo.id = user.photoID;
-                        photo.user_id = user.id;
-                        dialogsItems.add(new ChatsItem(user.id, photo, username, lastMessageText, lastMsg.date, lastMsg.itemType));
+//                        RPC.PM_photo photo = new RPC.PM_photo();
+//                        photo.id = user.photoID;
+//                        photo.user_id = user.id;
+                        dialogsItems.add(new ChatsItem(user.id, user.photoURL, username, lastMessageText, lastMsg.date, lastMsg.itemType));
                     }
                 }
 
@@ -263,13 +268,13 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                                 }
                             }
 
-                            RPC.PM_photo photo = group.photo;
-                            if (photo.id == 0)
-                                photo.id = MediaManager.getInstance().generatePhotoID();
-
-                            if (photo.user_id == 0)
-                                photo.user_id = -group.id;
-                            groupItems.add(new ChatsGroupItem(group.id, photo, lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
+//                            RPC.PM_photo photo = group.photo;
+//                            if (photo.id == 0)
+//                                photo.id = MediaManager.getInstance().generatePhotoID();
+//
+//                            if (photo.user_id == 0)
+//                                photo.user_id = -group.id;
+                            groupItems.add(new ChatsGroupItem(group.id, "", lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
                         }
                     }
                 }

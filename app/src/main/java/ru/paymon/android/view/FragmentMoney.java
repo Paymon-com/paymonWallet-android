@@ -68,7 +68,8 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     private HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates;
 
     public static synchronized FragmentMoney newInstance() {
-        instance = new FragmentMoney();
+        if (instance == null)
+            instance = new FragmentMoney();
         return instance;
     }
 
@@ -182,7 +183,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
                 }
                 exchangeRatesAdapter = new ExchangeRatesAdapter(exchangeRatesItems);
                 ApplicationLoader.applicationHandler.post(() -> exchangeRatesRecView.setAdapter(exchangeRatesAdapter));
-            }else{
+            } else {
                 Toast.makeText(ApplicationLoader.applicationContext, "Не удалось получить курсы валют", Toast.LENGTH_LONG).show();
             }
 

@@ -9,6 +9,9 @@ import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.StrictMode;
 
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.google.GoogleEmojiProvider;
+
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.net.NetworkManager;
@@ -33,6 +36,7 @@ public class ApplicationLoader extends Application {
     public void onCreate() {
         super.onCreate();
 
+        EmojiManager.install(new GoogleEmojiProvider());
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
 

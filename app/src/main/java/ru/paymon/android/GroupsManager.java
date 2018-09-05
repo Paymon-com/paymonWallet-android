@@ -38,11 +38,9 @@ public class GroupsManager {
         else
             MediaManager.getInstance().groupPhotoIDs.put(group.id, pid);
 
-
         groups.put(group.id, group);
         groupsUsers.put(group.id, group.users);
-        for (RPC.UserObject user : group.users) {
+        for (RPC.UserObject user : group.users)
             UsersManager.getInstance().putUser(user);
-        }
     }
 }

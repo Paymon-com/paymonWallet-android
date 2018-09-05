@@ -38,10 +38,12 @@ public class ContactsGlobalAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        RPC.UserObject addFriend = contactsGlobalItems.get(position);
+        RPC.UserObject user = contactsGlobalItems.get(position);
         ContactsGlobalItemViewHolder contactsGlobalItemViewHolder = (ContactsGlobalItemViewHolder) holder;
+        if (!user.photoURL.isEmpty())
+            Utils.loadPhoto(user.photoURL, contactsGlobalItemViewHolder.photo);
 //        contactsGlobalItemViewHolder.photo.setPhoto(new RPC.PM_photo(addFriend.id, addFriend.photoID));
-        contactsGlobalItemViewHolder.name.setText(Utils.formatUserName(addFriend));
+        contactsGlobalItemViewHolder.name.setText(Utils.formatUserName(user));
 
     }
 

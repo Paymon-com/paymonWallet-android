@@ -43,6 +43,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RPC.UserObject user = contactsItems.get(position);
         ContactsItemViewHolder contactsItemViewHolder = (ContactsItemViewHolder) holder;
 //        contactsItemViewHolder.photo.setPhoto(new RPC.PM_photo(user.id, user.photoID));
+        if (!user.photoURL.isEmpty())
+            Utils.loadPhoto(user.photoURL, contactsItemViewHolder.photo);
 
         String username = "";
         if (user.first_name != null && user.last_name != null && !user.first_name.equals("") && !user.last_name.equals("")) {

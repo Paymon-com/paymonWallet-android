@@ -27,10 +27,12 @@ import java.util.LinkedList;
 
 import hani.momanii.supernova_emoji_library.helper.EmojiconTextView;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.UsersManager;
 import ru.paymon.android.components.ItemView;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.Packet;
@@ -57,7 +59,9 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public interface IMessageClickListener {
         void longClick();
+
         void delete(LinkedList<Long> checkedMessageIDs);
+
         void forward(LinkedList<Long> checkedMessageIDs);
     }
 
@@ -207,19 +211,22 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final GroupReceiveMessageViewHolder groupReceiveMessageViewHolder = (GroupReceiveMessageViewHolder) holder;
             groupReceiveMessageViewHolder.msg.setText(groupReceiveMessageViewHolder.message.text);
             groupReceiveMessageViewHolder.time.setText(Utils.formatDateTime(groupReceiveMessageViewHolder.message.date, true));
-            int uid = groupReceiveMessageViewHolder.message.from_id;
-            Long pid = MediaManager.getInstance().userProfilePhotoIDs.get(uid);
-            if (pid != null) {
-                RPC.PM_photo photo = new RPC.PM_photo();
-                photo.user_id = uid;
-                photo.id = pid;
+//            int uid = groupReceiveMessageViewHolder.message.from_id;
+//            Long pid = MediaManager.getInstance().userProfilePhotoIDs.get(uid);
+//            if (pid != null) {
+//                RPC.PM_photo photo = new RPC.PM_photo();
+//                photo.user_id = uid;
+//                photo.id = pid;
 //                    Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(Integer.toString(photo.user_id) + "_" + Long.toString(photo.id));
 //                    if (bitmap != null)
 //                        groupReceiveMessageViewHolder.avatar.setImageBitmap(bitmap);
 //                groupReceiveMessageViewHolder.avatar.setPhoto(photo);
-                Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(groupReceiveMessageViewHolder.avatar);
-
-            }
+//                Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(groupReceiveMessageViewHolder.avatar);
+//            }
+            RPC.UserObject user = UsersManager.getInstance().users.get(groupReceiveMessageViewHolder.message.from_id);
+            if (user != null)
+                if (!user.photoURL.isEmpty())
+                    Utils.loadPhoto(user.photoURL, groupReceiveMessageViewHolder.avatar);
         } else if (holder instanceof ActionMessageViewHolder) {
             final ActionMessageViewHolder actionMessageViewHolder = (ActionMessageViewHolder) holder;
             actionMessageViewHolder.msg.setText(actionMessageViewHolder.message.text);
@@ -247,17 +254,17 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //                groupReceivedMessagePictureViewHolder.avatar.setPhoto(photo);
             }
             //TODO:Прикреп картинки
-        } else if (holder instanceof SentMessageDocumentViewHolder){
+        } else if (holder instanceof SentMessageDocumentViewHolder) {
             final SentMessageDocumentViewHolder sentMessageDocumentViewHolder = (SentMessageDocumentViewHolder) holder;
             sentMessageDocumentViewHolder.text.setText(sentMessageDocumentViewHolder.message.text);
             sentMessageDocumentViewHolder.time.setText(sentMessageDocumentViewHolder.message.date);
             //TODO:Часть с файлом
-        } else if (holder instanceof ReceivedMessageDocumentViewHolder){
+        } else if (holder instanceof ReceivedMessageDocumentViewHolder) {
             final ReceivedMessageDocumentViewHolder receivedMessageDocumentViewHolder = (ReceivedMessageDocumentViewHolder) holder;
             receivedMessageDocumentViewHolder.text.setText(receivedMessageDocumentViewHolder.message.text);
             receivedMessageDocumentViewHolder.time.setText(receivedMessageDocumentViewHolder.message.date);
             //TODO:Часть с файлом
-        } else if (holder instanceof GroupReceivedMessageDocumentViewHolder){
+        } else if (holder instanceof GroupReceivedMessageDocumentViewHolder) {
             final GroupReceivedMessageDocumentViewHolder groupReceivedMessageDocumentViewHolder = (GroupReceivedMessageDocumentViewHolder) holder;
             groupReceivedMessageDocumentViewHolder.text.setText(groupReceivedMessageDocumentViewHolder.message.text);
             groupReceivedMessageDocumentViewHolder.time.setText(groupReceivedMessageDocumentViewHolder.message.date);
@@ -435,25 +442,22 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             } else if (msg instanceof RPC.PM_messageItem) {
                 if (((RPC.PM_messageItem) msg).itemType == FileManager.FileType.ACTION)
                     viewType = ViewTypes.ITEM_ACTION_MESSAGE.ordinal();
-                else if (msg.itemType == FileManager.FileType.PHOTO){
+                else if (msg.itemType == FileManager.FileType.PHOTO) {
                     if (!isGroup)
                         viewType = ViewTypes.RECEIVED_MESSAGE_PICTURE.ordinal();
                     else
                         viewType = ViewTypes.GROUP_RECEIVED_MESSAGE_PICTURE.ordinal();
-                }
-                else if (msg.itemType == FileManager.FileType.DOCUMENT){
+                } else if (msg.itemType == FileManager.FileType.DOCUMENT) {
                     if (!isGroup)
                         viewType = ViewTypes.RECEIVED_MESSAGE_DOCUMENT.ordinal();
                     else
                         viewType = ViewTypes.GROUP_RECEIVED_MESSAGE_DOCUMENT.ordinal();
-                }
-                else if (msg.itemType == FileManager.FileType.VIDEO){
+                } else if (msg.itemType == FileManager.FileType.VIDEO) {
                     if (!isGroup)
                         viewType = ViewTypes.RECEIVED_MESSAGE_VIDEO.ordinal();
                     else
                         viewType = ViewTypes.GROUP_RECEIVED_MESSAGE_VIDEO.ordinal();
-                }
-                else if (msg.itemType == FileManager.FileType.WALLET) {
+                } else if (msg.itemType == FileManager.FileType.WALLET) {
                     if (!isGroup)
                         viewType = ViewTypes.RECEIVED_MESSAGE_WALLET.ordinal();
                     else

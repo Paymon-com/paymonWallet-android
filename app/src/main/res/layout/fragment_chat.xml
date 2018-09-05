@@ -79,7 +79,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_attach_file_black_24dp" />
 
-        <hani.momanii.supernova_emoji_library.helper.EmojiconEditText
+        <com.vanniktech.emoji.EmojiEditText
             android:id="@+id/input_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.daimajia.androidviewhover.tools.Util;
@@ -30,16 +31,9 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
 
-public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsViewHolder> /*implements NotificationManager.IListener*/ {
+public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsViewHolder>  {
     public LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
     private IChatsClickListener iChatsClickListener;
-
-//    @Override
-//    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-//        if (event == NotificationManager.NotificationEvent.PHOTOS_URL_RECEIVED){
-//
-//        }
-//    }
 
     public interface IChatsClickListener {
         void openChat(int chatID, boolean isGroup);
@@ -88,7 +82,7 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
     public void onBindViewHolder(@NonNull CommonChatsViewHolder holder, int position) {
         final ChatsItem chatsItem = getItem(position);
 
-        final RPC.PM_photo photo = chatsItem.photo;
+//        final RPC.PM_photo photo = chatsItem.photo;
         final String name = chatsItem.name;
         final String lastMessageText = chatsItem.lastMessageText;
         final int chatID = chatsItem.chatID;
@@ -108,13 +102,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
             case ITEM:
                 final ChatsViewHolder chatsViewHolder = (ChatsViewHolder) holder;
 
-
-
+                if (!chatsItem.photoURL.isEmpty())
+                    Utils.loadPhoto(chatsItem.photoURL, chatsViewHolder.avatar);
 
 //                chatsViewHolder.avatar.setPhoto(photo);
 //                if(photo != null) {
 //                    Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(chatsViewHolder.avatar);
-
+//
 //                    Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(Integer.toString(photo.user_id) + "_" + Long.toString(photo.id));
 //                    if (bitmap != null)
 //                        chatsViewHolder.avatar.setImageBitmap(bitmap);
@@ -139,13 +133,13 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
                 final GroupChatsViewHolder groupChatsViewHolder = (GroupChatsViewHolder) holder;
 
 //                groupChatsViewHolder.avatar.setPhoto(photo);
-                if (photo != null) {
-                    Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(groupChatsViewHolder.avatar);
+//                if (photo != null) {
+//                    Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(groupChatsViewHolder.avatar);
 
 //                    Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(Integer.toString(photo.user_id) + "_" + Long.toString(photo.id));
 //                    if (bitmap != null)
 //                        groupChatsViewHolder.avatar.setImageBitmap(bitmap);
-                }
+//                }
 
                 if (name != null && !name.isEmpty())
                     groupChatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(groupChatsViewHolder.name.getPaint(), name)));
