@@ -64,7 +64,7 @@ public class FragmentProfile extends Fragment {
         photo.id = User.currentUser.photoID;
 //        avatar.setPhoto(photo);
 
-        if (!User.currentUser.email.isEmpty())
+        if (!User.currentUser.email.equals(""))
             email.setText(User.currentUser.email);
         else
             email.setText(R.string.not_specified);
