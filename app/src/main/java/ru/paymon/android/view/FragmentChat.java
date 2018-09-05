@@ -34,6 +34,10 @@ import android.widget.Toast;
 import org.w3c.dom.Document;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.vanniktech.emoji.EmojiEditText;
+import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.emoji.EmojiPopup;
+import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -79,7 +83,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private RecyclerView messagesRecyclerView;
     private MessagesAdapter messagesAdapter;
     private Button sendButton;
-    private EmojiconEditText messageInput;
+    private EmojiEditText messageInput;
     private ArrayList<RPC.UserObject> groupUsers;
     private boolean isGroup;
     private boolean loadingMessages;
@@ -106,6 +110,8 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             if (bundle.containsKey("users")) {
                 isGroup = true;
                 groupUsers = bundle.getParcelableArrayList("users");
+            }else{
+                isGroup = false;
             }
             if (bundle.containsKey(FORWARD_MESSAGES_KEY)) {
                 isForward = true;
@@ -121,7 +127,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        messageInput = (EmojiconEditText) view.findViewById(R.id.input_edit_text);
+        messageInput = (EmojiEditText) view.findViewById(R.id.input_edit_text);
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (Button) view.findViewById(R.id.sendButton);
         LinearLayout toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
@@ -170,6 +176,11 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             defaultChatToolbarView = createChatCustomView();
 
         toolbarContainer.addView(defaultChatToolbarView);
+
+        final EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(emoticonsButton).build(messageInput);
+        emoticonsButton.setOnClickListener((view1)->{
+            emojiPopup.toggle();
+        });
 
 //        emojIcon = new EmojIconActions(getActivity(), view, messageInput, emoticonsButton);
 //        emojIcon.showEmojIcon();
@@ -361,10 +372,12 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         final RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
         if (user != null) {
             chatTitleTextView.setText(Utils.formatUserName(user));
-            RPC.PM_photo photo = new RPC.PM_photo();
-            photo.id = user.photoID;
-            photo.user_id = user.id;
+//            RPC.PM_photo photo = new RPC.PM_photo();
+//            photo.id = user.photoID;
+//            photo.user_id = user.id;
 //            toolbarAvatar.setPhoto(photo);
+            if (!user.photoURL.isEmpty())
+                Utils.loadPhoto(user.photoURL, toolbarAvatar);
         }
 
         customView.setOnClickListener(v -> {
@@ -441,7 +454,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         @Override
         public void forward(LinkedList<Long> checkedMessageIDs) {
-            FragmentChats fragmentChats = new FragmentChats();
+            FragmentChats fragmentChats = FragmentChats.getInstance();
             Bundle bundle = new Bundle();
             bundle.putSerializable(FORWARD_MESSAGES_KEY, checkedMessageIDs);
             fragmentChats.setArguments(bundle);

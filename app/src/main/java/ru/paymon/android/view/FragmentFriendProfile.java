@@ -107,22 +107,27 @@ public class FragmentFriendProfile extends Fragment {
                             dialogProgress.dismiss();
                         friendProfileName.setText(Utils.formatUserName(user));
                         friendProfileLogin.setText("@" + user.login);
+
                         if (!user.city.isEmpty())
                             friendProfileCity.setText(user.city);
                         else
                             friendProfileCity.setText(R.string.not_specified);
+
                         if (!user.country.isEmpty())
                             friendProfileCountry.setText(user.country);
                         else
                             friendProfileCountry.setText(R.string.not_specified);
+
                         if (user.phoneNumber != 0)
                             friendProfilePhoneNumber.setText(String.valueOf(user.phoneNumber));
                         else
                             friendProfilePhoneNumber.setText(R.string.not_specified);
+
                         if (!user.birthdate.isEmpty())
                             friendProfileBday.setText(user.birthdate);
                         else
                             friendProfileBday.setText(R.string.not_specified);
+//                        avatar.setPhoto(new RPC.PM_photo(user.id, user.photoID));
 
                         chatButton.setOnClickListener(view12 -> {
                             final Bundle bundle = new Bundle();

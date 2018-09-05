@@ -2,6 +2,7 @@ package ru.paymon.android.net;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 
 import java.util.ArrayList;
@@ -201,6 +202,7 @@ public class RPC {
         public String walletKey;
         //        public long access_hash;
         public long photoID;
+        public String photoURL;
         public boolean confirmed;
         public String inviteCode;
 
@@ -251,7 +253,7 @@ public class RPC {
             dest.writeLong(this.phoneNumber);
             dest.writeInt(this.gender);
             dest.writeString(this.walletKey);
-            dest.writeLong(this.photoID);
+            dest.writeString(this.photoURL);
             dest.writeByte((byte) (this.confirmed ? 1 : 0));
             dest.writeString(this.inviteCode);
         }
@@ -270,7 +272,7 @@ public class RPC {
             this.phoneNumber = in.readLong();
             this.gender = in.readInt();
             this.walletKey = in.readString();
-            this.photoID = in.readLong();
+            this.photoURL = in.readString();
             this.confirmed = in.readByte() == 1;
             this.inviteCode = in.readString();
         }
@@ -319,7 +321,7 @@ public class RPC {
             first_name = stream.readString(exception);
             last_name = stream.readString(exception);
             token = stream.readByteArray(exception);
-            photoID = stream.readInt64(exception);
+            photoURL = stream.readString(exception);
             walletKey = stream.readString(exception);
         }
 
@@ -330,7 +332,7 @@ public class RPC {
             stream.writeString(first_name);
             stream.writeString(last_name);
             stream.writeByteArray(token);
-            stream.writeInt64(photoID);
+            stream.writeString(photoURL);
             stream.writeString(walletKey);
         }
     }
@@ -364,8 +366,8 @@ public class RPC {
             phoneNumber = stream.readInt64(exception);
             gender = stream.readInt32(exception);
             token = stream.readByteArray(exception);
-            photoID = stream.readInt64(exception);
             walletKey = stream.readString(exception);
+            photoURL = stream.readString(exception);
             confirmed = stream.readBool(exception);
             inviteCode = stream.readString(exception);
         }
@@ -384,8 +386,8 @@ public class RPC {
             stream.writeInt64(phoneNumber);
             stream.writeInt32(gender);
             stream.writeByteArray(token);
-            stream.writeInt64(photoID);
             stream.writeString(walletKey);
+            stream.writeString(photoURL);
             stream.writeBool(confirmed);
             stream.writeString(inviteCode);
         }

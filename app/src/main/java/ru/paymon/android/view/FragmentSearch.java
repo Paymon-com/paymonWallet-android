@@ -77,11 +77,11 @@ public class FragmentSearch extends Fragment {
         SparseArray<RPC.Group> groups = GroupsManager.getInstance().groups;
         for (int i = 0; i < users.size(); i++) {
             RPC.UserObject user = users.get(users.keyAt(i));
-            listChats.add(new ChatsSearchItem(user.id, Utils.formatUserName(user), new RPC.PM_photo(user.id, user.photoID)));
+            listChats.add(new ChatsSearchItem(user.id, Utils.formatUserName(user), user.photoURL, false));
         }
         for (int i = 0; i < groups.size(); i++) {
             RPC.Group group = groups.get(groups.keyAt(i));
-            listChats.add(new ChatsSearchItem(group.id, group.title, group.photo));
+            listChats.add(new ChatsSearchItem(group.id, group.title, "", true));
         }
         recyclerViewChats.setHasFixedSize(true);
         recyclerViewChats.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -98,7 +98,6 @@ public class FragmentSearch extends Fragment {
                 for (int j = 0; j < chat.size(); j++) {
                     RPC.Message message = chat.get(j);
                     listMessages.add(new MessagesSearchItem(message.id, Utils.formatUserName(user), message.text, new RPC.PM_photo(user.id, user.photoID)));
-                    Log.e("AAAAA", message.text + "");
                 }
             }
         }

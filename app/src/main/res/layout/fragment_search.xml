@@ -19,8 +19,8 @@
     <EditText
         android:id="@+id/edit_text_search"
         android:layout_width="match_parent"
-        android:singleLine="true"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:singleLine="true" />
 
     <TabHost xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/tabHost"

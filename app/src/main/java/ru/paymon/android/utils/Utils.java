@@ -23,11 +23,15 @@ import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -412,5 +416,22 @@ public class Utils {
             return 2;
 
         return 0;
+    }
+
+    public static void loadPhoto(String url, ImageView view){
+        Picasso.get().load(url)
+                .networkPolicy(NetworkPolicy.OFFLINE)
+                .into(view, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Picasso.get().load(url)
+                                .error(R.drawable.profile_photo_none)
+                                .into(view);
+                    }
+                });
     }
 }
