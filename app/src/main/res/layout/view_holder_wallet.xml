@@ -61,9 +61,10 @@
 
     <TextView
         android:id="@+id/wallet_fiat_balance"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         android:fontFamily="sans-serif-light"
         android:maxLength="16"
         android:maxLines="1"
@@ -71,6 +72,7 @@
         android:textColor="@color/rub_color"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/wallet_crypto_balance"
         app:layout_constraintTop_toTopOf="@+id/wallet_crypto_balance" />
 
     <TextView

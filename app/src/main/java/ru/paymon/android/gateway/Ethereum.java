@@ -213,7 +213,7 @@ public class Ethereum {
 //        BigDecimal courseBigDecimal = (new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP);
 //        BigDecimal preOutput = courseBigDecimal.multiply(new BigDecimal(ethAmount));
 //        return preOutput.setScale(2, BigDecimal.ROUND_HALF_UP).toString();
-        return new BigDecimal(ethAmount).multiply(new BigDecimal(fiatExRate)).toString();
+        return new BigDecimal(ethAmount).multiply(new BigDecimal(fiatExRate)).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
     }
 
     public BigDecimal getNormalGasPrice() {

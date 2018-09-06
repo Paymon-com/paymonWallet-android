@@ -83,7 +83,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private RecyclerView messagesRecyclerView;
     private MessagesAdapter messagesAdapter;
     private Button sendButton;
-    private EmojiEditText messageInput;
+    private EmojiconEditText messageInput;
     private ArrayList<RPC.UserObject> groupUsers;
     private boolean isGroup;
     private boolean loadingMessages;
@@ -97,7 +97,6 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             instance = new FragmentChat();
         return instance;
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -127,7 +126,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        messageInput = (EmojiEditText) view.findViewById(R.id.input_edit_text);
+        messageInput = (EmojiconEditText) view.findViewById(R.id.input_edit_text);
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (Button) view.findViewById(R.id.sendButton);
         LinearLayout toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
@@ -177,57 +176,58 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         toolbarContainer.addView(defaultChatToolbarView);
 
-        final EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(emoticonsButton).build(messageInput);
-        emoticonsButton.setOnClickListener((view1)->{
-            emojiPopup.toggle();
-        });
-
-//        emojIcon = new EmojIconActions(getActivity(), view, messageInput, emoticonsButton);
-//        emojIcon.showEmojIcon();
-//        emojIcon.setOnStickerClickListener(new EmojiconsPopup.StickersListener() { //FIXME:УТЕЧКА ПАМЯТИ
-//            @Override
-//            public void onStickersOpened() {
-//            }
+//        final EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(emoticonsButton).build(messageInput);
 //
-//            @Override
-//            public void onStickerSelected(int stickerPackID, long stickerID) {
-//                if (User.currentUser == null) return;
-//
-//                RPC.PM_messageItem msg = new RPC.PM_messageItem();
-//                msg.id = MessagesManager.generateMessageID();
-//                msg.flags = MESSAGE_FLAG_FROM_ID;
-//                msg.date = (int) (System.currentTimeMillis() / 1000);
-//                msg.from_id = User.currentUser.id;
-//                RPC.Peer peer;
-//                if (!isGroup) {
-//                    peer = new RPC.PM_peerUser();
-//                    peer.user_id = chatID;
-//                } else {
-//                    peer = new RPC.PM_peerGroup();
-//                    peer.group_id = chatID;
-//                }
-//                msg.to_id = peer;
-//                msg.unread = true;
-//                msg.itemType = FileManager.FileType.STICKER;
-//                msg.itemID = stickerID;
-//
-//                NetworkManager.getInstance().sendRequest(msg, (response, error) -> {
-//                    if (response == null) return;
-//
-//                    RPC.PM_updateMessageID update = (RPC.PM_updateMessageID) response;
-//
-//                    msg.id = update.newID;
-//                    MessagesManager.getInstance().putMessage(msg);
-//                    messagesAdapter.messageIDs.add(msg.id);
-//
-//                    ApplicationLoader.applicationHandler.post(() -> {
-//                        messagesAdapter.notifyDataSetChanged();
-//                        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, chatID);
-//                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
-//                    });
-//                });
-//            }
+//        emoticonsButton.setOnClickListener((view1)->{
+//            emojiPopup.toggle();
 //        });
+
+        emojIcon = new EmojIconActions(getActivity(), view, messageInput, emoticonsButton);
+        emojIcon.showEmojIcon();
+        emojIcon.setOnStickerClickListener(new EmojiconsPopup.StickersListener() { //FIXME:УТЕЧКА ПАМЯТИ
+            @Override
+            public void onStickersOpened() {
+            }
+
+            @Override
+            public void onStickerSelected(int stickerPackID, long stickerID) {
+                if (User.currentUser == null) return;
+
+                RPC.PM_messageItem msg = new RPC.PM_messageItem();
+                msg.id = MessagesManager.generateMessageID();
+                msg.flags = MESSAGE_FLAG_FROM_ID;
+                msg.date = (int) (System.currentTimeMillis() / 1000);
+                msg.from_id = User.currentUser.id;
+                RPC.Peer peer;
+                if (!isGroup) {
+                    peer = new RPC.PM_peerUser();
+                    peer.user_id = chatID;
+                } else {
+                    peer = new RPC.PM_peerGroup();
+                    peer.group_id = chatID;
+                }
+                msg.to_id = peer;
+                msg.unread = true;
+                msg.itemType = FileManager.FileType.STICKER;
+                msg.itemID = stickerID;
+
+                NetworkManager.getInstance().sendRequest(msg, (response, error) -> {
+                    if (response == null) return;
+
+                    RPC.PM_updateMessageID update = (RPC.PM_updateMessageID) response;
+
+                    msg.id = update.newID;
+                    MessagesManager.getInstance().putMessage(msg);
+                    messagesAdapter.messageIDs.add(msg.id);
+
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        messagesAdapter.notifyDataSetChanged();
+                        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, chatID);
+                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
+                    });
+                });
+            }
+        });
 
         initChat(defaultChatToolbarView, toolbarContainer);
 

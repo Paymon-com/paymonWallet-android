@@ -195,27 +195,16 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
                 boolean isWalletLoaded = Ethereum.getInstance().loadWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
                 if (isWalletLoaded) {
                     BigInteger balance = Ethereum.getInstance().getBalance();
-//                    Ethereum.getInstance().getBalance(
-//                            (responseBalance) -> {
-//                                final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
-//                                if (bigInteger != null) {
-//                                    User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = Ethereum.getInstance().weiToFriendlyString(bigInteger);
-//                                    User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
-//                                    User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
-//                                    User.saveConfig();
-//                                    final String fiatBalance = Ethereum.getInstance().calculateFiatBalance(exchangeRate);
-//                                    walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false));
-//                                    cryptoWalletsAdapter = new CryptoWalletsAdapter(walletItems, getActivity());
-//                                    ApplicationLoader.applicationHandler.post(() -> walletsRecView.setAdapter(cryptoWalletsAdapter));
-//                                }
-//                            },
-//                            (error) -> {
-//                                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.the_balance_of_the_ethereum_wallet_could_not_be_updated, Toast.LENGTH_LONG).show());
-//                                final String fiatBalance = Ethereum.getInstance().calculateFiatBalance(exchangeRate);
-//                                walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false));
-//                                cryptoWalletsAdapter = new CryptoWalletsAdapter(walletItems, getActivity());
-//                                ApplicationLoader.applicationHandler.post(() -> walletsRecView.setAdapter(cryptoWalletsAdapter));
-//                            });
+                    if (balance != null) {
+                        User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = balance.toString();
+                        User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
+                        User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
+                        User.saveConfig();
+                        final String fiatBalance = Ethereum.getInstance().convertEthToFiat(balance.toString(),exchangeRate);
+                        walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false));
+                        cryptoWalletsAdapter = new CryptoWalletsAdapter(walletItems, getActivity());
+                        ApplicationLoader.applicationHandler.post(() -> walletsRecView.setAdapter(cryptoWalletsAdapter));
+                    }
                 } else {
                     walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, "0.00", "0.00", true));
                 }
@@ -248,7 +237,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
                 wallet.fiatCurrency = currentFiatCurrency;
                 switch (wallet.cryptoCurrency) {
                     case "ETH":
-                        wallet.fiatBalance = Ethereum.getInstance().convertEthToFiat("1", ethExRate);
+                        wallet.fiatBalance = Ethereum.getInstance().convertEthToFiat(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, ethExRate);
                         break;
                     case "BTC":
                         //       TODO:

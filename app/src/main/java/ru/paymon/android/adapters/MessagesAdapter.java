@@ -211,22 +211,20 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             final GroupReceiveMessageViewHolder groupReceiveMessageViewHolder = (GroupReceiveMessageViewHolder) holder;
             groupReceiveMessageViewHolder.msg.setText(groupReceiveMessageViewHolder.message.text);
             groupReceiveMessageViewHolder.time.setText(Utils.formatDateTime(groupReceiveMessageViewHolder.message.date, true));
-//            int uid = groupReceiveMessageViewHolder.message.from_id;
-//            Long pid = MediaManager.getInstance().userProfilePhotoIDs.get(uid);
-//            if (pid != null) {
-//                RPC.PM_photo photo = new RPC.PM_photo();
-//                photo.user_id = uid;
-//                photo.id = pid;
-//                    Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(Integer.toString(photo.user_id) + "_" + Long.toString(photo.id));
-//                    if (bitmap != null)
-//                        groupReceiveMessageViewHolder.avatar.setImageBitmap(bitmap);
-//                groupReceiveMessageViewHolder.avatar.setPhoto(photo);
-//                Picasso.get().load("http://ewriji.me/grumpy-cat.jpg").into(groupReceiveMessageViewHolder.avatar);
-//            }
             RPC.UserObject user = UsersManager.getInstance().users.get(groupReceiveMessageViewHolder.message.from_id);
             if (user != null)
                 if (!user.photoURL.isEmpty())
                     Utils.loadPhoto(user.photoURL, groupReceiveMessageViewHolder.avatar);
+
+            if(user != null && position != 0 && position < messageIDs.size()){
+                RPC.Message previousMessage = getMessage(position-1);
+                RPC.UserObject previousUser = UsersManager.getInstance().users.get(previousMessage.from_id);
+                if(previousUser != null && user.id == previousUser.id){
+                    groupReceiveMessageViewHolder.avatar.setVisibility(View.INVISIBLE);
+                } else {
+                    groupReceiveMessageViewHolder.avatar.setVisibility(View.VISIBLE);
+                }
+            }
         } else if (holder instanceof ActionMessageViewHolder) {
             final ActionMessageViewHolder actionMessageViewHolder = (ActionMessageViewHolder) holder;
             actionMessageViewHolder.msg.setText(actionMessageViewHolder.message.text);
