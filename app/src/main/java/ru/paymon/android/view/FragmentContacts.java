@@ -188,6 +188,11 @@ public class FragmentContacts extends Fragment {
         tabHost.addTab(tabSpec);
         tabHost.setCurrentTab(0);
 
+        tabHost.setOnTabChangedListener((tag) ->{
+            editText.setText("");
+            searchView.setQuery("", false);
+        });
+
 
         recyclerViewContacts.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewContacts, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
