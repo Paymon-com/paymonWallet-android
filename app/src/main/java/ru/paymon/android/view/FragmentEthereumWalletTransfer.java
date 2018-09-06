@@ -61,6 +61,8 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     private double fee;
     private double total;
     private String toAddress;
+    private int gasPrice;
+    private int gasLimit;
 
     private HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates = new HashMap<>();
     private String currentFiatCurrency = "USD";//TODO:
@@ -100,10 +102,11 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_back_image_button);
         TextView nextButton = (TextView) view.findViewById(R.id.toolbar_eth_wallet_transf_next_text_view);
 
+
         backButton.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
 
         nextButton.setOnClickListener(view12 -> {
-
+            next();
         });
 
         dialogProgress = new DialogProgress(getActivity());
@@ -165,7 +168,8 @@ public class FragmentEthereumWalletTransfer extends Fragment {
 
         cryptoAmountTitle.setText(cryptoCurrency);
         fiatEquivalentTitle.setText(currentFiatCurrency);
-//        idFrom.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS);
+        if(User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS != null)
+            idFrom.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS);
 
         return view;
     }
@@ -184,7 +188,6 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     private void init() {
         Utils.stageQueue.postRunnable(() -> {
             BigDecimal gasprice = Ethereum.getInstance().getNormalGasPrice();
-            Log.e("AAAA", gasprice.toString());
             ApplicationLoader.applicationHandler.post(() -> dialogProgress.show());
             loadWalletBalance();
             loadGasPrice();
@@ -194,6 +197,11 @@ public class FragmentEthereumWalletTransfer extends Fragment {
 
     private void loadWalletBalance() {
         exchangeRates = ExchangeRates.getInstance().parseExchangeRates();
+        BigDecimal walletBalance = Ethereum.getInstance().getBalance();
+        ApplicationLoader.applicationHandler.post(()->{
+            if (walletBalance != null)
+                balance.setText(String.format("%s ETH", walletBalance));
+        });
 //        Ethereum.getInstance().getBalance(
 //                (responseBalance) -> {
 //                    final BigInteger bigInteger = Ethereum.getInstance().jsonToWei(responseBalance);
@@ -274,9 +282,20 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     }
 
     private void next() {
-//        toAddress = receiverAddress.getText().toString().trim();
-//        fee = ;
-//        total =;
-//        amount =;
+        //TODO:маска адреса получателя 0x....
+        //TODO:проверки на заполненность полей
+        //TODO:double поля переписать на BigDecimal
+        toAddress = receiverAddress.getText().toString().trim();
+        amount = Integer.parseInt(cryptoAmount.getText().toString());
+        gasPrice = Integer.parseInt(gasPriceValue.getText().toString().replaceAll("GWEI", "").trim());
+        gasLimit = Integer.parseInt(gasLimitValue.getText().toString());
+        fee = Double.parseDouble(networkFeeValue.getText().toString().replaceAll("ETH", "").trim());
+        total = Double.parseDouble(totalValue.getText().toString().replaceAll("ETH", "").trim());
+        if(total > Double.parseDouble(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE)){
+            Toast.makeText(ApplicationLoader.applicationContext, "BOMJ", Toast.LENGTH_SHORT).show();
+            //TODO:Сема сюда алерт вместо тоста
+        }else{
+            Toast.makeText(ApplicationLoader.applicationContext, "NE BOMJ", Toast.LENGTH_SHORT).show();
+        }
     }
 }

@@ -81,7 +81,7 @@ public class FragmentEthereumWallet extends Fragment {
 
     private void getBalance() {
         Utils.stageQueue.postRunnable(() -> {
-            BigInteger walletBalance = Ethereum.getInstance().getBalance();
+            BigDecimal walletBalance = Ethereum.getInstance().getBalance();
             if (walletBalance != null) {
                 User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = walletBalance.toString();
                 User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();

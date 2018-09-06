@@ -69,6 +69,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
             case BTC:
                 WalletViewHolder walletViewHolder = (WalletViewHolder) holder;
                 walletViewHolder.icon.setImageResource(R.drawable.ic_bitcoin);
+                walletViewHolder.publicAddress.setText(walletItem.publicAddress);
                 walletViewHolder.cryptoCurrency.setText(walletItem.cryptoCurrency);
                 walletViewHolder.cryptoBalance.setText(walletItem.cryptoBalance);
                 walletViewHolder.fiatCurrency.setText(walletItem.fiatCurrency);
@@ -80,6 +81,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
             case ETH:
                 walletViewHolder = (WalletViewHolder) holder;
                 walletViewHolder.icon.setImageResource(R.drawable.ic_ethereum);
+                walletViewHolder.publicAddress.setText(walletItem.publicAddress);
                 walletViewHolder.cryptoCurrency.setText(walletItem.cryptoCurrency);
                 walletViewHolder.cryptoBalance.setText(walletItem.cryptoBalance);
                 walletViewHolder.fiatCurrency.setText(walletItem.fiatCurrency);
@@ -91,6 +93,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
             case PMNT:
                 walletViewHolder = (WalletViewHolder) holder;
                 walletViewHolder.icon.setImageResource(R.drawable.ic_pmnt);
+                walletViewHolder.publicAddress.setText(walletItem.publicAddress);
                 walletViewHolder.cryptoCurrency.setText(walletItem.cryptoCurrency);
                 walletViewHolder.cryptoBalance.setText(walletItem.cryptoBalance);
                 walletViewHolder.fiatCurrency.setText(walletItem.fiatCurrency);
@@ -156,6 +159,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     class WalletViewHolder extends RecyclerView.ViewHolder {
         final ImageView icon;
+        final TextView publicAddress;
         final TextView fiatCurrency;
         final TextView cryptoCurrency;
         final TextView fiatBalance;
@@ -164,6 +168,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
         WalletViewHolder(View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.wallet_icon);
+            publicAddress = itemView.findViewById(R.id.wallet_address);
             fiatCurrency = itemView.findViewById(R.id.wallet_fiat_currency);
             cryptoCurrency = itemView.findViewById(R.id.wallet_crypto_currency);
             fiatBalance = itemView.findViewById(R.id.wallet_fiat_balance);

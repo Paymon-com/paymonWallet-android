@@ -32,6 +32,7 @@ import org.web3j.protocol.core.methods.response.EthGasPrice;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
@@ -194,22 +195,22 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
                 boolean isWalletLoaded = Ethereum.getInstance().loadWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
                 if (isWalletLoaded) {
-                    BigInteger balance = Ethereum.getInstance().getBalance();
+                    BigDecimal balance = Ethereum.getInstance().getBalance();
                     if (balance != null) {
                         User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = balance.toString();
                         User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
                         User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
                         User.saveConfig();
                         final String fiatBalance = Ethereum.getInstance().convertEthToFiat(balance.toString(),exchangeRate);
-                        walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false));
+                        walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false, User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS));
                         cryptoWalletsAdapter = new CryptoWalletsAdapter(walletItems, getActivity());
                         ApplicationLoader.applicationHandler.post(() -> walletsRecView.setAdapter(cryptoWalletsAdapter));
                     }
                 } else {
-                    walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, "0.00", "0.00", true));
+                    walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, "0.00", "0.00", true, User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS));
                 }
             } else {
-                walletItems.add(new WalletItem("ETH", currentFiatCurrency, "0.00", "0.00", true));
+                walletItems.add(new WalletItem("ETH", currentFiatCurrency, "0.00", "0.00", true, User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS));
             }
 
             cryptoWalletsAdapter = new CryptoWalletsAdapter(walletItems, getActivity());

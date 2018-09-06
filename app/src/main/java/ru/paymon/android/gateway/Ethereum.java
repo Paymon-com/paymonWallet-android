@@ -200,9 +200,9 @@ public class Ethereum {
         return walletCredentials == null ? null : walletCredentials.getEcKeyPair().getPrivateKey().toString(16);
     }
 
-    public BigInteger getBalance() {
+    public BigDecimal getBalance() {
         try {
-            return web3j.ethGetBalance(getAddress(), DefaultBlockParameterName.fromString("latest")).send().getBalance();
+            return Convert.fromWei(new BigDecimal(web3j.ethGetBalance(getAddress(), DefaultBlockParameterName.fromString("latest")).send().getBalance()), Convert.Unit.ETHER);
         }catch (Exception e){
             e.printStackTrace();
         }

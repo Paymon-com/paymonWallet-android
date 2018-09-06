@@ -476,8 +476,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:text="..."
             android:textColor="@color/rub_color"
+            android:singleLine="true"
             app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_id_from"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_id_from" />
