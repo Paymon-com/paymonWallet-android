@@ -1,5 +1,7 @@
 package ru.paymon.android.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -292,8 +294,10 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         fee = Double.parseDouble(networkFeeValue.getText().toString().replaceAll("ETH", "").trim());
         total = Double.parseDouble(totalValue.getText().toString().replaceAll("ETH", "").trim());
         if(total > Double.parseDouble(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE)){
-            Toast.makeText(ApplicationLoader.applicationContext, "BOMJ", Toast.LENGTH_SHORT).show();
-            //TODO:Сема сюда алерт вместо тоста
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("У вас недостаточно средств")
+                    .setCancelable(false)
+                    .setNegativeButton(R.string.ok, (dialog, which) -> dialog.cancel());
         }else{
             Toast.makeText(ApplicationLoader.applicationContext, "NE BOMJ", Toast.LENGTH_SHORT).show();
         }
