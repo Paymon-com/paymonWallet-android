@@ -1,87 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator"
+    android:paddingBottom="2dp"
     android:paddingEnd="72dp"
-    android:paddingStart="8dp">
+    android:paddingStart="8dp"
+    android:paddingTop="1dp">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/bubble_wallet_received"
-        android:layout_width="270dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/background_msg_rcv">
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/background_msg_rcv"
+        android:orientation="vertical">
 
         <hani.momanii.supernova_emoji_library.helper.EmojiconTextView
             android:id="@+id/wallet_received_message_text_view"
             android:layout_width="wrap_content"
-            android:maxWidth="285dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/default_message_rcv_color"
-            android:textSize="@dimen/default_message_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="@dimen/default_message_text_size"/>
 
-        <ImageView
-            android:id="@+id/wallet_received_image_view"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/wallet_received_message_text_view" />
-
-        <TextView
-            android:id="@+id/wallet_received_text_view"
-            android:layout_width="165dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/wallet_received_image_view"
-            app:layout_constraintTop_toBottomOf="@+id/wallet_received_message_text_view" />
-
-        <ImageButton
-            android:id="@+id/wallet_received_image_button"
-            android:layout_width="120dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/wallet_received_image_view"
-            app:layout_constraintTop_toBottomOf="@+id/wallet_received_text_view" />
-
-        <TextView
-            android:id="@+id/wallet_received_timestamp_text_view"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="1.0"
-            android:textColor="@color/default_tstamp_color"
-            android:textSize="@dimen/default_timestamp_text_size"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/wallet_received_image_view"
-            tools:text="12:10 am" />
+            android:orientation="horizontal">
 
-    </android.support.constraint.ConstraintLayout>
-</FrameLayout>
+            <ImageView
+                android:id="@+id/wallet_received_image_view"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/wallet_received_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp" />
+
+                <ImageButton
+                    android:id="@+id/wallet_received_image_button"
+                    android:layout_width="120dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/wallet_received_timestamp_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:textColor="@color/default_tstamp_color"
+                    android:textSize="@dimen/default_timestamp_text_size"
+                    android:layout_gravity="end"
+                    tools:text="12:10 am" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

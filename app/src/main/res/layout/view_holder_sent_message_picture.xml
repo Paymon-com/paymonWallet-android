@@ -1,67 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator"
+    android:gravity="end"
+    android:paddingBottom="2dp"
     android:paddingEnd="8dp"
-    android:paddingStart="72dp">
+    android:paddingStart="72dp"
+    android:paddingTop="1dp">
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:layout_marginBottom="4dp"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:minHeight="48dp"
+        android:orientation="vertical"
         android:background="@drawable/background_msg_sent">
 
         <hani.momanii.supernova_emoji_library.helper.EmojiconTextView
             android:id="@+id/message_picture_text_view"
             android:layout_width="wrap_content"
-            android:maxWidth="285dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/default_message_sent_color"
-            android:textSize="@dimen/default_message_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="@dimen/default_message_text_size" />
 
         <ImageView
             android:id="@+id/message_picture_image_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message_picture_text_view" />
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:id="@+id/timestamp_picture_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_marginBottom="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:textColor="@color/default_tstamp_color"
             android:textSize="@dimen/default_timestamp_text_size"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message_picture_image_view"
             tools:text="12:10 am" />
 
-    </android.support.constraint.ConstraintLayout>
-</FrameLayout>
+    </LinearLayout>
+</LinearLayout>
