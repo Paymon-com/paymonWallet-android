@@ -1,10 +1,12 @@
 package ru.paymon.android.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 //import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -17,7 +19,11 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
+//import com.crystal.crystalrangeseekbar.widgets.CrystalSeekbar;
+import com.warkiz.widget.IndicatorSeekBar;
+import com.warkiz.widget.OnSeekChangeListener;
+import com.warkiz.widget.SeekParams;
+import com.warkiz.widget.TickMarkType;
 
 import org.json.JSONObject;
 
@@ -30,6 +36,7 @@ import java.util.HashMap;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import br.com.sapereaude.maskedEditText.MaskedEditText;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
@@ -52,10 +59,10 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     private TextView gasLimitValue;
     private TextView networkFeeValue;
     private TextView totalValue;
-    private CrystalSeekbar gasPriceBar;
-    private CrystalSeekbar gasLimitBar;
+    private IndicatorSeekBar gasPriceBar;
+    private IndicatorSeekBar gasLimitBar;
     private DialogProgress dialogProgress;
-    private EditText receiverAddress;
+    private MaskedEditText receiverAddress;
 
     private double amount;
     private double fee;
@@ -83,7 +90,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ethereum_wallet_transfer, container, false);
 
-        receiverAddress = (EditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_receiver_address);
+        receiverAddress = (MaskedEditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_receiver_address);
         cryptoAmount = (EditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_amount);
         TextView cryptoAmountTitle = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_amount_title);
         fiatEquivalent = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_equivalent);
@@ -93,8 +100,8 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         idFrom = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_id_from);
         balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_balance);
 //        FloatingActionButton qr = (FloatingActionButton) view.findViewById(R.id.fragment_ethereum_wallet_transfer_qr);
-        gasPriceBar = (CrystalSeekbar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_price_slider);
-        gasLimitBar = (CrystalSeekbar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_limit_slider);
+        gasPriceBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_price_slider);
+        gasLimitBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_limit_slider);
         gasPriceValue = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_price_value);
         gasLimitValue = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_limit_value);
         networkFeeValue = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_network_fee_value);
@@ -168,7 +175,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
 
         cryptoAmountTitle.setText(cryptoCurrency);
         fiatEquivalentTitle.setText(currentFiatCurrency);
-        if(User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS != null)
+        if (User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS != null)
             idFrom.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS);
 
         return view;
@@ -198,7 +205,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     private void loadWalletBalance() {
         exchangeRates = ExchangeRates.getInstance().parseExchangeRates();
         BigDecimal walletBalance = Ethereum.getInstance().getBalance();
-        ApplicationLoader.applicationHandler.post(()->{
+        ApplicationLoader.applicationHandler.post(() -> {
             if (walletBalance != null)
                 balance.setText(String.format("%s ETH", walletBalance));
         });
@@ -218,6 +225,44 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     }
 
     private void loadGasPrice() {
+        ApplicationLoader.applicationHandler.post(() -> {
+            gasPriceBar.setOnSeekChangeListener(new OnSeekChangeListener() {
+                @Override
+                public void onSeeking(SeekParams seekParams) {
+                    gasPriceValue.setText(String.format("%s GWEI", seekParams.progress));
+                    updateFeeValue();
+                }
+
+                @Override
+                public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+
+                }
+            });
+
+            gasLimitBar.setOnSeekChangeListener(new OnSeekChangeListener() {
+                @Override
+                public void onSeeking(SeekParams seekParams) {
+                    gasLimitValue.setText(String.format("%s", seekParams.progress));
+                    updateFeeValue();
+                }
+
+                @Override
+                public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
+
+                }
+
+                @Override
+                public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+
+                }
+            });
+        });
+
         try {
             final HttpsURLConnection httpsURLConnection = (HttpsURLConnection) ((new URL("https://www.etherchain.org/api/gasPriceOracle").openConnection()));
             httpsURLConnection.setConnectTimeout(20000);
@@ -236,31 +281,21 @@ public class FragmentEthereumWalletTransfer extends Fragment {
 
             ApplicationLoader.applicationHandler.post(() -> {
                 gasRec.setText(String.format("В данный момент рекомендуемый gas price: %s GWEI", midGasPrice));
-                gasPriceBar.setMaxValue(maxGasPrice);
+                gasPriceBar.setMin(Config.GAS_PRICE_MIN);
+                gasPriceBar.setMax(maxGasPrice);
+                gasPriceBar.setProgress(midGasPrice);
+                gasPriceBar.setTickCount(maxGasPrice);
             });
         } catch (Exception e) {
-            final int maxGasPrice = 100;
-
             ApplicationLoader.applicationHandler.post(() -> {
                 gasRec.setText("Рекомендуемый GAS price получить не удалось");
-                gasPriceBar.setMaxValue(maxGasPrice);
+                gasPriceBar.setMin(Config.GAS_PRICE_MIN);
+                gasPriceBar.setMax(100);
+                gasPriceBar.setProgress(1);
+                gasPriceBar.setTickCount(50);
             });
             e.printStackTrace();
         }
-
-        ApplicationLoader.applicationHandler.post(() -> {
-            gasPriceBar.setMinValue(Config.GAS_PRICE_MIN);
-            gasLimitBar.setMinValue(Config.GAS_LIMIT_MIN);
-            gasLimitBar.setMaxValue(Config.GAS_LIMIT_MAX);
-            gasPriceBar.setOnSeekbarChangeListener((minValue) -> {
-                gasPriceValue.setText(String.format("%s GWEI", minValue));
-                updateFeeValue();
-            });
-            gasLimitBar.setOnSeekbarChangeListener((minValue) -> {
-                gasLimitValue.setText(String.format("%s", minValue));
-                updateFeeValue();
-            });
-        });
     }
 
     private void updateFeeValue() {
@@ -282,19 +317,22 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     }
 
     private void next() {
-        //TODO:маска адреса получателя 0x....
         //TODO:проверки на заполненность полей
         //TODO:double поля переписать на BigDecimal
+        if(cryptoAmount.getText().toString().isEmpty() && receiverAddress.getText().toString().length() < 44){
+            Toast.makeText(ApplicationLoader.applicationContext, "Заполнены не все поля!", Toast.LENGTH_SHORT).show();
+            return;
+        }
         toAddress = receiverAddress.getText().toString().trim();
         amount = Integer.parseInt(cryptoAmount.getText().toString());
-        gasPrice = Integer.parseInt(gasPriceValue.getText().toString().replaceAll("GWEI", "").trim());
-        gasLimit = Integer.parseInt(gasLimitValue.getText().toString());
+        gasPrice = gasPriceBar.getProgress();
+        gasLimit = gasLimitBar.getProgress();
         fee = Double.parseDouble(networkFeeValue.getText().toString().replaceAll("ETH", "").trim());
         total = Double.parseDouble(totalValue.getText().toString().replaceAll("ETH", "").trim());
-        if(total > Double.parseDouble(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE)){
+        if (total > Double.parseDouble(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE)) {
             Toast.makeText(ApplicationLoader.applicationContext, "BOMJ", Toast.LENGTH_SHORT).show();
             //TODO:Сема сюда алерт вместо тоста
-        }else{
+        } else {
             Toast.makeText(ApplicationLoader.applicationContext, "NE BOMJ", Toast.LENGTH_SHORT).show();
         }
     }
