@@ -29,8 +29,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/default_message_rcv_color"
-            android:textSize="@dimen/default_message_text_size"
-            tools:text="1sdasdasdasdaasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdsdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasdasd"/>
+            android:textSize="@dimen/default_message_text_size"/>
 
         <TextView
             android:id="@+id/timestamp_text_view"
