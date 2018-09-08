@@ -1,39 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/colorPrimary"
-    local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-    local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    android:orientation="horizontal"
+    android:weightSum="10">
 
     <ImageView
         android:id="@+id/toolbar_back_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:layout_marginBottom="2dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginEnd="2dp"
         android:src="@drawable/ic_arrow_back"
-        local:layout_constraintBottom_toBottomOf="parent"
-        local:layout_constraintStart_toStartOf="parent"
-        local:layout_constraintTop_toTopOf="parent" />
+        android:layout_weight="0.01"/>
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        local:layout_constraintBottom_toBottomOf="parent"
-        local:layout_constraintEnd_toEndOf="parent"
-        local:layout_constraintStart_toEndOf="@+id/toolbar_back_btn"
-        local:layout_constraintTop_toTopOf="parent">
-
-        <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/toolbar_avatar"-->
-        <!--android:layout_width="35dp"-->
-        <!--android:layout_height="35dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--local:layout_constraintBottom_toBottomOf="parent"-->
-        <!--local:layout_constraintStart_toStartOf="parent"-->
-        <!--local:layout_constraintTop_toTopOf="parent" />-->
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_weight="10"
+        >
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/chat_group_avatar"
@@ -43,34 +34,34 @@
             local:civ_border_color="#EEEEEE"
             local:civ_border_width="2dp"
             local:civ_shadow="true"
-            local:civ_shadow_radius="0"
-            local:layout_constraintBottom_toBottomOf="@+id/participants_count"
-            local:layout_constraintStart_toStartOf="parent"
-            local:layout_constraintTop_toTopOf="@+id/toolbar_title" />
+            local:civ_shadow_radius="0" />
 
-        <TextView
-            android:id="@+id/toolbar_title"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:layout_marginStart="8dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white"
-            android:textStyle="bold"
-            local:layout_constraintStart_toEndOf="@+id/chat_group_avatar"
-            local:layout_constraintTop_toTopOf="parent" />
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/participants_count"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:layout_marginStart="8dp"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/white"
-            local:layout_constraintEnd_toEndOf="parent"
-            local:layout_constraintStart_toEndOf="@+id/chat_group_avatar"
-            local:layout_constraintTop_toBottomOf="@+id/toolbar_title" />
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:text=""/>
 
-    </android.support.constraint.ConstraintLayout>
-</android.support.constraint.ConstraintLayout>
+            <TextView
+                android:id="@+id/participants_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
