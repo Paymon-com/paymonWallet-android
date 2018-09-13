@@ -1,24 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator"
-    android:paddingEnd="0dp"
+    android:paddingEnd="40dp"
     android:paddingStart="8dp"
     android:paddingBottom="2dp"
     android:paddingTop="1dp">
-
-    <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:gid="@+gid/message_group_received_video_photo"-->
-        <!--android:layout_width="48dp"-->
-        <!--android:layout_height="48dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginTop="4dp"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/message_group_received_video_photo"
@@ -26,12 +17,9 @@
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:src="@drawable/profile_photo_none"
+        android:src="@drawable/profile_photo_none"/>
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -40,39 +28,30 @@
         android:layout_marginTop="2dp"
         android:background="@drawable/background_msg_rcv"
         android:minHeight="48dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/message_group_received_video_photo"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        android:orientation="vertical">
 
         <hani.momanii.supernova_emoji_library.helper.EmojiconTextView
             android:id="@+id/message_group_received_video_text_view"
             android:layout_width="wrap_content"
-            android:maxWidth="285dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/default_message_sent_color"
-            android:textSize="@dimen/default_message_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="@dimen/default_message_text_size" />
 
         <VideoView
             android:id="@+id/message_group_received_video_video_view"
+            android:layout_gravity="center"
             android:layout_width="250dp"
             android:layout_height="150dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message_group_received_video_text_view" />
+            android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/timestamp_group_received_video_text_view"
+            android:layout_gravity="end"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
@@ -81,13 +60,8 @@
             android:layout_marginTop="4dp"
             android:textColor="@color/default_tstamp_color"
             android:textSize="@dimen/default_timestamp_text_size"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/message_group_received_video_video_view"
             tools:text="12:10 am" />
 
-    </android.support.constraint.ConstraintLayout>
+    </LinearLayout>
 
-</android.support.constraint.ConstraintLayout>
+</LinearLayout>

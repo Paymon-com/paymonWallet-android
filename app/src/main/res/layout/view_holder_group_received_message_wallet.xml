@@ -1,19 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?android:attr/activatedBackgroundIndicator">
-
-    <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:gid="@+gid/photo_wallet_received_group"-->
-        <!--android:layout_width="48dp"-->
-        <!--android:layout_height="48dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginTop="4dp"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
+    android:background="?android:attr/activatedBackgroundIndicator"
+    android:paddingEnd="72dp"
+    android:paddingStart="8dp"
+    android:paddingBottom="2dp"
+    android:paddingTop="1dp">
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/photo_wallet_received_group"
@@ -21,88 +16,76 @@
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:src="@drawable/profile_photo_none"
+        android:src="@drawable/profile_photo_none"/>
 
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/bubble_wallet_received_group"
-        android:layout_width="270dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:layout_marginBottom="4dp"
+        android:layout_marginBottom="2dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="2dp"
         android:background="@drawable/background_msg_rcv"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/photo_wallet_received_group"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0">
+        android:orientation="vertical">
 
         <hani.momanii.supernova_emoji_library.helper.EmojiconTextView
             android:id="@+id/wallet_received_group_message_text_view"
             android:layout_width="wrap_content"
-            android:maxWidth="285dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:textColor="@color/default_message_sent_color"
-            android:textSize="@dimen/default_message_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="@dimen/default_message_text_size"/>
 
-        <ImageView
-            android:id="@+id/wallet_received_group_image_view"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/wallet_received_group_message_text_view" />
-
-        <TextView
-            android:id="@+id/wallet_received_group_text_view"
-            android:layout_width="165dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/wallet_received_group_image_view"
-            app:layout_constraintTop_toBottomOf="@+id/wallet_received_group_message_text_view" />
-
-        <ImageButton
-            android:id="@+id/wallet_received_group_image_button"
-            android:layout_width="120dp"
-            android:layout_height="35dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/wallet_received_group_image_view"
-            app:layout_constraintTop_toBottomOf="@+id/wallet_received_group_text_view" />
-
-        <TextView
-            android:id="@+id/wallet_received_group_timestamp_text_view"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintHorizontal_bias="1.0"
-            android:textColor="@color/default_tstamp_color"
-            android:textSize="@dimen/default_timestamp_text_size"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/wallet_received_group_image_view"
-            tools:text="12:10 am" />
+            android:orientation="horizontal">
 
-    </android.support.constraint.ConstraintLayout>
-</android.support.constraint.ConstraintLayout>
+            <ImageView
+                android:id="@+id/wallet_received_group_image_view"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/wallet_received_group_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:singleLine="true" />
+
+                <ImageButton
+                    android:id="@+id/wallet_received_group_image_button"
+                    android:layout_gravity="center"
+                    android:layout_width="120dp"
+                    android:layout_height="35dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/wallet_received_group_timestamp_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_gravity="end"
+                    android:textColor="@color/default_tstamp_color"
+                    android:textSize="@dimen/default_timestamp_text_size"
+                    tools:text="12:10 am" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>
