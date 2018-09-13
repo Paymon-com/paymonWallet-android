@@ -2,18 +2,13 @@ package ru.paymon.android.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
@@ -42,15 +37,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RPC.UserObject user = contactsItems.get(position);
         ContactsItemViewHolder contactsItemViewHolder = (ContactsItemViewHolder) holder;
-//        contactsItemViewHolder.photo.setPhoto(new RPC.PM_photo(user.id, user.photoID));
-        if (!user.photoURL.isEmpty())
-            Utils.loadPhoto(user.photoURL, contactsItemViewHolder.photo);
 
-        String username = "";
-        if (user.first_name != null && user.last_name != null && !user.first_name.equals("") && !user.last_name.equals("")) {
-            username = user.first_name + " " + user.last_name;
-        }
-        contactsItemViewHolder.name.setText(username);
+        if (!user.photoURL.url.isEmpty())
+            Utils.loadPhoto(user.photoURL.url, contactsItemViewHolder.photo);
+
+        contactsItemViewHolder.name.setText(Utils.formatUserName(user));
         contactsItemViewHolder.login.setText(String.format("@%s", user.login));
     }
 

@@ -57,7 +57,7 @@ public class AlertDialogCustomAdministratorsAdapter extends RecyclerView.Adapter
         AlertDialogAdministratorsViewHolder alertDialogAdministratorsViewHolder = (AlertDialogAdministratorsViewHolder) holder;
 
         alertDialogAdministratorsViewHolder.name.setText(alertDialogCustomAdministratorsItem.name);
-//        alertDialogAdministratorsViewHolder.photo.setPhoto(alertDialogCustomAdministratorsItem.photo);
+//        alertDialogAdministratorsViewHolder.photoURL.setPhoto(alertDialogCustomAdministratorsItem.photoURL);
 
         if (alertDialogCustomAdministratorsItem.uid == User.currentUser.id)
             alertDialogAdministratorsViewHolder.removeButton.setVisibility(View.GONE);
@@ -101,7 +101,7 @@ public class AlertDialogCustomAdministratorsAdapter extends RecyclerView.Adapter
             };
             itemView.setOnClickListener(listener);
             name.setOnClickListener(listener);
-//            photo.setOnClickListener(listener);
+//            photoURL.setOnClickListener(listener);
         }
     }
 }

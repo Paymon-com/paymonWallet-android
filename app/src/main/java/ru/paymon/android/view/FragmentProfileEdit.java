@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -32,13 +31,8 @@ import java.util.Calendar;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.MainActivity;
-import ru.paymon.android.MediaManager;
-import ru.paymon.android.NotificationManager;
-import ru.paymon.android.ObservableMediaManager;
-
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
@@ -49,7 +43,7 @@ import static ru.paymon.android.Config.CAMERA_PERMISSIONS;
 
 
 public class FragmentProfileEdit extends Fragment {
-    private static final int PICK_IMAGE_ID = 100;
+    public static final int PICK_IMAGE_ID = 100;
     private static FragmentProfileEdit instance;
     private DialogProgress dialogProgress;
     private CircularImageView avatar;
@@ -94,10 +88,7 @@ public class FragmentProfileEdit extends Fragment {
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);
 
-        RPC.PM_photo photo = new RPC.PM_photo();
-        photo.user_id = User.currentUser.id;
-        photo.id = User.currentUser.photoID;
-//        avatar.setPhoto(photo);
+//        avatar.setPhoto(photoURL);
 
         firstName.setText(User.currentUser.first_name);
         lastName.setText(User.currentUser.last_name);
@@ -137,10 +128,10 @@ public class FragmentProfileEdit extends Fragment {
         avatar.setOnClickListener(avatarListener);
         changeAvatar.setOnClickListener(avatarListener);
 
-        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher(){
+        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher() {
             @Override
             public synchronized void afterTextChanged(Editable s) {
-                if(!s.toString().startsWith("+")){
+                if (!s.toString().startsWith("+")) {
                     phone.setText(s.insert(0, "+"));
                     Selection.setSelection(phone.getText(), phone.getText().length());
                 }
@@ -179,7 +170,7 @@ public class FragmentProfileEdit extends Fragment {
                 user.first_name = firstName.getText().toString();
                 user.last_name = lastName.getText().toString();
                 user.birthdate = birthday.getText().toString();
-                user.phoneNumber = phone.getText().toString().isEmpty() ? 0 : Long.parseLong(phone.getText().toString().replace(" ", "").replace("+", "").replace("-", "").replace("(","").replace(")",""));
+                user.phoneNumber = phone.getText().toString().isEmpty() ? 0 : Long.parseLong(phone.getText().toString().replace(" ", "").replace("+", "").replace("-", "").replace("(", "").replace(")", ""));
                 user.city = city.getText().toString();
                 user.country = country.getText().toString();
                 user.email = email.getText().toString();
@@ -254,86 +245,69 @@ public class FragmentProfileEdit extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case PICK_IMAGE_ID:
-                if (resultCode == Activity.RESULT_OK) {
-                    Utils.netQueue.postRunnable(() -> {
-                        Bitmap bitmap = ImagePicker.getImageFromResult(ApplicationLoader.applicationContext, requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            Utils.netQueue.postRunnable(() -> {
+                ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
-                        ApplicationLoader.applicationHandler.post(dialogProgress::show);
+                final String imagePath = ImagePicker.getImagePathFromResult(ApplicationLoader.applicationContext, 234, resultCode, data);
+                final RPC.PM_setProfilePhoto setProfilePhotoRequest = new RPC.PM_setProfilePhoto();
 
-                        final RPC.PM_photo newPhoto = MediaManager.getInstance().savePhoto(bitmap, User.currentUser);
-                        final RPC.PM_setProfilePhoto setProfilePhotoRequest = new RPC.PM_setProfilePhoto();
-                        setProfilePhotoRequest.photo = newPhoto;
+                final long requestID = NetworkManager.getInstance().sendRequest(setProfilePhotoRequest, (response, error) -> {
+                    if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+                        ApplicationLoader.applicationHandler.post(() -> {
+                            if (dialogProgress != null && dialogProgress.isShowing())
+                                dialogProgress.cancel();
 
-//                        ApplicationLoader.applicationHandler.post(() -> avatar.setPhoto(newPhoto));
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                    .setMessage(R.string.photo_upload_failed) //TODO:string
+                                    .setCancelable(true);
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                        });
+                        return;
+                    }
 
-
-                        final long oldPhotoID = User.currentUser.photoID;
-                        final long newPhotoID = newPhoto.id;
-
-                        final long requestID = NetworkManager.getInstance().sendRequest(setProfilePhotoRequest, (response, error) -> {
-                            if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+                    if (response instanceof RPC.PM_boolTrue) {
+                        FileManager.getInstance().startUploading(/*newPhoto,*/ imagePath, new FileManager.IUploadingFile() {
+                            @Override
+                            public void onFinish() {
+                                Log.e(Config.TAG, "Profile photoURL successfully uploaded");
                                 ApplicationLoader.applicationHandler.post(() -> {
                                     if (dialogProgress != null && dialogProgress.isShowing())
-                                        dialogProgress.cancel();
-
-                                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                            .setMessage(R.string.photo_upload_failed) //TODO:string
-                                            .setCancelable(true);
-                                    AlertDialog alertDialog = builder.create();
-                                    alertDialog.show();
-                                });
-                                return;
-                            }
-
-                            if (response instanceof RPC.PM_boolTrue) {
-                                FileManager.getInstance().startUploading(newPhoto, new FileManager.IUploadingFile() {
-                                    @Override
-                                    public void onFinish() {
-                                        Log.d(Config.TAG, "Profile photo successfully uploaded");
-                                        ApplicationLoader.applicationHandler.post(() -> {
-                                            if (dialogProgress != null && dialogProgress.isShowing())
-                                                dialogProgress.dismiss();
-
+                                        dialogProgress.dismiss();
 //                                            avatar.setPhoto(newPhoto);
-//                                            User.currentUser.photoID = newPhoto.id;
-//                                            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.PROFILE_PHOTO_UPDATED, User.currentUser.id, newPhoto, bitmap);
+//                                            User.currentUser.photoID = newPhoto.gid;
+//                                            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.PROFILE_PHOTO_UPDATED, User.currentUser.gid, newPhoto, bitmap);
 //                                            ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(oldPhotoID, newPhotoID);
 //                                            NotificationManager.getInstance().postNotificationName(NotificationManager.didPhotoUpdate, bitmap);
 //                                            avatar.setImageBitmap(bitmap);
-                                        });
-                                    }
-
-                                    @Override
-                                    public void onProgress(int percent) {
-
-                                    }
-
-                                    @Override
-                                    public void onError(int code) {
-                                        Log.d(Config.TAG, "Error while uploading profile photo, error code: " + code);
-                                        ApplicationLoader.applicationHandler.post(() -> {
-                                            if (dialogProgress != null && dialogProgress.isShowing())
-                                                dialogProgress.cancel();
-                                        });
-                                    }
                                 });
                             }
 
-                            ApplicationLoader.applicationHandler.post(() -> {
-                                if (dialogProgress != null && dialogProgress.isShowing())
-                                    dialogProgress.dismiss();
-                            });
-                        });
+                            @Override
+                            public void onProgress(int percent) {
 
-                        ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
+                            }
+
+                            @Override
+                            public void onError(int code) {
+                                Log.e(Config.TAG, "Error while uploading profile photoURL, error code: " + code);
+                                ApplicationLoader.applicationHandler.post(() -> {
+                                    if (dialogProgress != null && dialogProgress.isShowing())
+                                        dialogProgress.cancel();
+                                });
+                            }
+                        });
+                    }
+
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        if (dialogProgress != null && dialogProgress.isShowing())
+                            dialogProgress.dismiss();
                     });
-                }
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-                break;
+                });
+
+                ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
+            });
         }
     }
 }

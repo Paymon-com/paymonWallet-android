@@ -83,12 +83,12 @@
 //        View pageDialogs = inflater.inflate(R.layout.fragment_chats_page, container, false);
 //        View pageAll = inflater.inflate(R.layout.fragment_chats_page, container, false);
 //        View pageGroups = inflater.inflate(R.layout.fragment_chats_page, container, false);
-//        ViewPager viewPager = view.findViewById(R.id.fragment_chats_view_pager);
+//        ViewPager viewPager = view.findViewById(R.gid.fragment_chats_view_pager);
 //
-//        View toolbar = view.findViewById(R.id.toolbar);
-//        toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
-//        ImageButton toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
-//        ImageButton toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
+//        View toolbar = view.findViewById(R.gid.toolbar);
+//        toolbarTitle = toolbar.findViewById(R.gid.toolbar_title);
+//        ImageButton toolbarCreateGroup = toolbar.findViewById(R.gid.toolbar_create_group_btn);
+//        ImageButton toolbarSearch = toolbar.findViewById(R.gid.toolbar_search_btn);
 //
 //        toolbarCreateGroup.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null));
 //
@@ -98,9 +98,9 @@
 //            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentSearch, null);
 //        });
 //
-//        chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
-//        chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
-//        groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
+//        chatsRecyclerView = pageDialogs.findViewById(R.gid.fragment_dialog_recycler_view);
+//        chatsAllRecyclerView = pageAll.findViewById(R.gid.fragment_dialog_recycler_view);
+//        groupsRecyclerView = pageGroups.findViewById(R.gid.fragment_dialog_recycler_view);
 //
 //        List<View> pages = Arrays.asList(pageDialogs, pageAll, pageGroups);
 //
@@ -212,16 +212,16 @@
 //    }
 //
 //    @Override
-//    public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
+//    public void didReceivedNotification(NotificationManager.NotificationEvent gid, Object... args) {
 //        Utils.stageQueue.postRunnable(() -> {
-//            if (id == NotificationManager.NotificationEvent.dialogsNeedReload) {
+//            if (gid == NotificationManager.NotificationEvent.dialogsNeedReload) {
 //                LinkedList<ChatsItem> dialogsItems = new LinkedList<>();
 //                for (int i = 0; i < UsersManager.getInstance().userContacts.size(); i++) {
 //                    RPC.UserObject user = UsersManager.getInstance().userContacts.get(UsersManager.getInstance().userContacts.keyAt(i));
 //                    String username = Utils.formatUserName(user);
 //                    String lastMessageText = "";
 //
-//                    RPC.Message lastMsg = MessagesManager.getInstance().messages.get(MessagesManager.getInstance().lastMessages.get(user.id));
+//                    RPC.Message lastMsg = MessagesManager.getInstance().messages.get(MessagesManager.getInstance().lastMessages.get(user.gid));
 //                    if (lastMsg != null) {
 //                        if (lastMsg instanceof RPC.PM_message) {
 //                            lastMessageText = lastMsg.text;
@@ -238,9 +238,9 @@
 //                        }
 //
 //                        RPC.PM_photo photo = new RPC.PM_photo();
-//                        photo.id = user.photoID;
-//                        photo.user_id = user.id;
-//                        dialogsItems.add(new ChatsItem(user.id, photo, username, lastMessageText, lastMsg.date, lastMsg.itemType));
+//                        photo.gid = user.photoID;
+//                        photo.user_id = user.gid;
+//                        dialogsItems.add(new ChatsItem(user.gid, photo, username, lastMessageText, lastMsg.date, lastMsg.itemType));
 //                    }
 //                }
 //
@@ -251,9 +251,9 @@
 //                    String title = group.title;
 //                    String lastMessageText = "";
 //
-//                    Long lastMsgId = MessagesManager.getInstance().lastGroupMessages.get(group.id);
+//                    Long lastMsgId = MessagesManager.getInstance().lastGroupMessages.get(group.gid);
 //                    if (lastMsgId != null) {
-//                        RPC.PM_photo lastMsgPhoto = null;
+//                        RPC.PM_photo lastMsgPhotoURL = null;
 //                        RPC.Message lastMessage = MessagesManager.getInstance().messages.get(lastMsgId);
 //                        if (lastMessage != null) {
 //                            if (lastMessage instanceof RPC.PM_message) {
@@ -271,19 +271,19 @@
 //
 //                                RPC.UserObject user = UsersManager.getInstance().users.get(lastMessage.from_id);
 //                                if (user != null) {
-//                                    lastMsgPhoto = new RPC.PM_photo();
-//                                    lastMsgPhoto.user_id = user.id;
-//                                    lastMsgPhoto.id = user.photoID;
+//                                    lastMsgPhotoURL = new RPC.PM_photo();
+//                                    lastMsgPhotoURL.user_id = user.gid;
+//                                    lastMsgPhotoURL.gid = user.photoID;
 //                                }
 //                            }
 //
-//                            RPC.PM_photo photo = group.photo;
-//                            if (photo.id == 0)
-//                                photo.id = MediaManager.getInstance().generatePhotoID();
+//                            RPC.PM_photo photoURL = group.photoURL;
+//                            if (photo.gid == 0)
+//                                photo.gid = MediaManager.getInstance().generatePhotoID();
 //
 //                            if (photo.user_id == 0)
-//                                photo.user_id = -group.id;
-//                            groupItems.add(new ChatsGroupItem(group.id, photo, lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
+//                                photo.user_id = -group.gid;
+//                            groupItems.add(new ChatsGroupItem(group.gid, photo, lastMsgPhotoURL, title, lastMessageText, lastMessage.date, lastMessage.itemType));
 //                        }
 //                    }
 //                }
@@ -312,10 +312,10 @@
 //                } else {
 //                }
 //                isLoading = false;
-//            } else if (id == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
+//            } else if (gid == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
 //                View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
 ////                ApplicationLoader.applicationHandler.post(() ->  Utils.setActionBarWithCustomView(getActivity(), connectingView)  textToolAll.setText("Connection")  toolbar.setText("Connecting"));
-//            } else if (id == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
+//            } else if (gid == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
 //                ApplicationLoader.applicationHandler.post(() -> toolbarTitle.setText("Чаты"));
 //            }
 //        });
@@ -323,7 +323,7 @@
 //
 //    private View createConnectingCustomView() {
 //        final View customView = getLayoutInflater().inflate(R.layout.toolbar_connecting, null);
-//        final ConstraintLayout pointLayout = (ConstraintLayout) customView.findViewById(R.id.connecting_anim_layout);
+//        final ConstraintLayout pointLayout = (ConstraintLayout) customView.findViewById(R.gid.connecting_anim_layout);
 //
 //        Animation rotateAnimation = new RotateAnimation(0, 360, 50f, 50f);
 //        rotateAnimation.setDuration(3000);

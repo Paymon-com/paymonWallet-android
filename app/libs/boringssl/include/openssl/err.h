@@ -231,7 +231,7 @@ typedef int (*ERR_print_errors_callback_t)(const char *str, size_t len,
  * The string will have the following format (which differs from
  * |ERR_error_string|):
  *
- *   [thread id]:error:[error code]:[library name]:OPENSSL_internal:
+ *   [thread gid]:error:[error code]:[library name]:OPENSSL_internal:
  *   [reason string]:[file]:[line number]:[optional string data]
  *
  * (All in one line.)

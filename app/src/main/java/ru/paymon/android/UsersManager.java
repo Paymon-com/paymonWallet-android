@@ -1,8 +1,6 @@
 package ru.paymon.android;
 
-import android.util.Log;
 import android.util.SparseArray;
-
 
 import ru.paymon.android.net.RPC;
 
@@ -35,10 +33,10 @@ public class UsersManager {
 
         users.put(user.id, user);
 
-        if (user.photoID == 0)
-            MediaManager.getInstance().userProfilePhotoIDs.put(user.id, MediaManager.getInstance().generatePhotoID());
-        else
-            MediaManager.getInstance().userProfilePhotoIDs.put(user.id, user.photoID);
+//        if (user.photoID == 0)
+//            MediaManager.getInstance().userProfilePhotoIDs.put(user.gid, MediaManager.getInstance().generatePhotoID());
+//        else
+//            MediaManager.getInstance().userProfilePhotoIDs.put(user.gid, user.photoID);
 
         if (MessagesManager.getInstance().dialogsMessages.get(user.id) != null)
             userContacts.put(user.id, user);
@@ -48,9 +46,9 @@ public class UsersManager {
         if (searchUsers.get(user.id) != null) return;
 
         searchUsers.put(user.id, user);
-        if (user.photoID == 0)
-            MediaManager.getInstance().userProfilePhotoIDs.put(user.id, MediaManager.getInstance().generatePhotoID());
-        else
-            MediaManager.getInstance().userProfilePhotoIDs.put(user.id, user.photoID);
+//        if (user.photoID == 0)
+//            MediaManager.getInstance().userProfilePhotoIDs.put(user.gid, MediaManager.getInstance().generatePhotoID());
+//        else
+//            MediaManager.getInstance().userProfilePhotoIDs.put(user.gid, user.photoID);
     }
 }

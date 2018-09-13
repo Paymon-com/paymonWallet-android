@@ -5,13 +5,13 @@
     android:layout_height="wrap_content">
 
     <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/fragment_settings_header_profile_avatar_image_view"-->
+        <!--android:gid="@+gid/fragment_settings_header_profile_avatar_image_view"-->
         <!--android:layout_width="40dp"-->
         <!--android:layout_height="40dp"-->
         <!--android:layout_marginBottom="8dp"-->
         <!--android:layout_marginStart="16dp"-->
         <!--android:layout_marginTop="8dp"-->
-        <!--app:layout_constraintBottom_toTopOf="@+id/frameLayout"-->
+        <!--app:layout_constraintBottom_toTopOf="@+gid/frameLayout"-->
         <!--app:layout_constraintStart_toStartOf="parent"-->
         <!--app:layout_constraintTop_toTopOf="parent"-->
         <!--app:srcCompat="@android:color/holo_green_dark" />-->

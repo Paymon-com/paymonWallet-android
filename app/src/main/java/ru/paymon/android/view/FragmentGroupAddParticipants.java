@@ -175,10 +175,7 @@ public class FragmentGroupAddParticipants extends Fragment {
         for (int i = 0; i < userContacts.size(); i++) {
             RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
             if (group.users.contains(user) || user.id == User.currentUser.id) continue;
-            RPC.PM_photo photo = new RPC.PM_photo();
-            photo.id = user.photoID;
-            photo.user_id = user.id;
-            addGroupList.add(new CreateGroupItem(user.id, Utils.formatUserName(user), photo));
+            addGroupList.add(new CreateGroupItem(user.id, Utils.formatUserName(user), user.photoURL));
         }
     }
 

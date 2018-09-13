@@ -14,8 +14,6 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-
-import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentProfile extends Fragment {
@@ -59,10 +57,7 @@ public class FragmentProfile extends Fragment {
 
         name.setText(Utils.formatUserName(User.currentUser));
 
-        RPC.PM_photo photo = new RPC.PM_photo();
-        photo.user_id = User.currentUser.id;
-        photo.id = User.currentUser.photoID;
-//        avatar.setPhoto(photo);
+//        avatar.setPhoto(photoURL);
 
         if (!User.currentUser.email.equals(""))
             email.setText(User.currentUser.email);

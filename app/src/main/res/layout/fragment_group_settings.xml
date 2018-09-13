@@ -48,7 +48,7 @@
             app:layout_constraintTop_toBottomOf="@+id/group_settings_photo" />
 
         <!--<ru.paymon.android.components.CircleImageView-->
-            <!--android:id="@+id/group_settings_photo"-->
+            <!--android:gid="@+gid/group_settings_photo"-->
             <!--android:layout_width="80dp"-->
             <!--android:layout_height="80dp"-->
             <!--android:layout_gravity="end"-->

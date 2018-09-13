@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.util.Log;
 
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -63,7 +62,7 @@ public class DiskLruImageCache {
             out = new BufferedOutputStream(editor.newOutputStream(0), Util.IO_BUFFER_SIZE);
             return bitmap.compress(mCompressFormat, mCompressQuality, out);
         } catch (Exception e) {
-            Log.d(TAG, "writeBitmapToFile error");
+            Log.d(TAG, "writeBitmapToFile error " + e.getMessage());
             return false;
         } finally {
             if (out != null) {

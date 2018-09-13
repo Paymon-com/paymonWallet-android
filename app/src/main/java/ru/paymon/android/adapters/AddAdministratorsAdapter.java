@@ -35,13 +35,13 @@ public class AddAdministratorsAdapter extends RecyclerView.Adapter<RecyclerView.
         AddAdministratorsViewHolder addAdministratorsViewHolder = (AddAdministratorsViewHolder) holder;
 
         addAdministratorsViewHolder.name.setText(addAdministratorsItem.name);
-//        addAdministratorsViewHolder.photo.setPhoto(addAdministratorsItem.photo);
+//        addAdministratorsViewHolder.photoURL.setPhoto(addAdministratorsItem.photoURL);
         addAdministratorsViewHolder.checkBox.setChecked(addAdministratorsItem.checked);
 
         View.OnClickListener clickListener = (view) -> addAdministratorsItem.checked = addAdministratorsViewHolder.checkBox.isChecked();
 
         addAdministratorsViewHolder.name.setOnClickListener(clickListener);
-//        addAdministratorsViewHolder.photo.setOnClickListener(clickListener);
+//        addAdministratorsViewHolder.photoURL.setOnClickListener(clickListener);
         addAdministratorsViewHolder.checkBox.setOnClickListener(clickListener);
     }
 

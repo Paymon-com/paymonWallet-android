@@ -2,7 +2,6 @@ package ru.paymon.android;
 
 import android.util.SparseArray;
 
-
 import java.util.ArrayList;
 
 import ru.paymon.android.net.RPC;
@@ -32,11 +31,11 @@ public class GroupsManager {
     public void putGroup(RPC.Group group) {
         if (groups.get(group.id) != null) return;
 
-        long pid = group.photo.id;
-        if (pid == 0)
-            MediaManager.getInstance().groupPhotoIDs.put(group.id, MediaManager.getInstance().generatePhotoID());
-        else
-            MediaManager.getInstance().groupPhotoIDs.put(group.id, pid);
+//        long pid = group.photoURL.gid;
+//        if (pid == 0)
+//            MediaManager.getInstance().groupPhotoIDs.put(group.gid, MediaManager.getInstance().generatePhotoID());
+//        else
+//            MediaManager.getInstance().groupPhotoIDs.put(group.gid, pid);
 
         groups.put(group.id, group);
         groupsUsers.put(group.id, group.users);

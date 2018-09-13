@@ -44,7 +44,7 @@ static int run_thread(thread_t *out_thread, void (*thread_func)(void)) {
 
   *out_thread = CreateThread(NULL /* security attributes */,
                              0 /* default stack size */, thread_run, arg,
-                             0 /* run immediately */, NULL /* ignore id */);
+                             0 /* run immediately */, NULL /* ignore gid */);
   return *out_thread != NULL;
 }
 

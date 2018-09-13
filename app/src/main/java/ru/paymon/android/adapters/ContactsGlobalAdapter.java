@@ -2,8 +2,6 @@ package ru.paymon.android.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,11 +38,11 @@ public class ContactsGlobalAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         RPC.UserObject user = contactsGlobalItems.get(position);
         ContactsGlobalItemViewHolder contactsGlobalItemViewHolder = (ContactsGlobalItemViewHolder) holder;
-        if (!user.photoURL.isEmpty())
-            Utils.loadPhoto(user.photoURL, contactsGlobalItemViewHolder.photo);
-//        contactsGlobalItemViewHolder.photo.setPhoto(new RPC.PM_photo(addFriend.id, addFriend.photoID));
-        contactsGlobalItemViewHolder.name.setText(Utils.formatUserName(user));
 
+        if (!user.photoURL.url.isEmpty())
+            Utils.loadPhoto(user.photoURL.url, contactsGlobalItemViewHolder.photo);
+
+        contactsGlobalItemViewHolder.name.setText(Utils.formatUserName(user));
     }
 
     @Override

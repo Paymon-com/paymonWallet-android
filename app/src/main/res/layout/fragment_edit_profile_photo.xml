@@ -9,7 +9,7 @@
     tools:layout_editor_absoluteY="0dp">
 
     <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/profile_update_photo"-->
+        <!--android:gid="@+gid/profile_update_photo"-->
         <!--android:layout_width="60dp"-->
         <!--android:layout_height="60dp"-->
         <!--android:layout_marginBottom="16dp"-->

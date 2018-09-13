@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <!--<include-->
-    <!--android:id="@+id/swipe_view"-->
+    <!--android:gid="@+gid/swipe_view"-->
     <!--layout="@layout/chats_item_swipe"-->
     <!--android:layout_width="160dp"-->
     <!--android:layout_height="match_parent" />-->
@@ -22,7 +22,7 @@
 
 
         <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/chats_item_avatar"-->
+        <!--android:gid="@+gid/chats_item_avatar"-->
         <!--android:layout_width="60dp"-->
         <!--android:layout_height="60dp"-->
         <!--android:layout_marginBottom="8dp"-->
@@ -34,7 +34,7 @@
         <!--app:layout_constraintTop_toTopOf="parent" />-->
 
         <!--<ImageView-->
-        <!--android:id="@+id/chats_item_avatar"-->
+        <!--android:gid="@+gid/chats_item_avatar"-->
         <!--android:layout_width="60dp"-->
         <!--android:layout_height="60dp"-->
         <!--android:layout_marginBottom="8dp"-->

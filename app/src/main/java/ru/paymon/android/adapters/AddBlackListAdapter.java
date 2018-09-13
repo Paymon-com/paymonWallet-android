@@ -14,7 +14,6 @@ import java.util.List;
 
 import ru.paymon.android.R;
 import ru.paymon.android.models.AddBlackListItem;
-import ru.paymon.android.models.AlertDialogCustomBlackListItem;
 
 public class AddBlackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public List<AddBlackListItem> list;
@@ -36,13 +35,13 @@ public class AddBlackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         AddBlackListViewHolder addBlackListViewHolder = (AddBlackListViewHolder) holder;
 
         addBlackListViewHolder.name.setText(addBlackListItem.name);
-//        addBlackListViewHolder.photo.setPhoto(addBlackListItem.photo);
+//        addBlackListViewHolder.photoURL.setPhoto(addBlackListItem.photoURL);
         addBlackListViewHolder.checkBox.setChecked(addBlackListItem.checked);
 
         View.OnClickListener clickListener = (view) -> addBlackListItem.checked = addBlackListViewHolder.checkBox.isChecked();
 
         addBlackListViewHolder.name.setOnClickListener(clickListener);
-//        addBlackListViewHolder.photo.setOnClickListener(clickListener);
+//        addBlackListViewHolder.photoURL.setOnClickListener(clickListener);
         addBlackListViewHolder.checkBox.setOnClickListener(clickListener);
     }
 

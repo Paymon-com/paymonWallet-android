@@ -9,13 +9,11 @@ import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import org.w3c.dom.Text;
-
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
-
 import ru.paymon.android.models.MessagesSearchItem;
+import ru.paymon.android.utils.Utils;
 
 public class MessagesSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private LinkedList<MessagesSearchItem> messagesSearchItems;
@@ -36,7 +34,8 @@ public class MessagesSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         MessagesSearchItem messagesSearchItem = messagesSearchItems.get(position);
         MessagesSearchAdapter.MessagesSearchItemViewHolder messagesSearchItemViewHolder = (MessagesSearchAdapter.MessagesSearchItemViewHolder) holder;
-//        messagesSearchItemViewHolder.photo.setPhoto(messagesSearchItem.photo);
+        if (!messagesSearchItem.photo.url.isEmpty())
+            Utils.loadPhoto(messagesSearchItem.photo.url, messagesSearchItemViewHolder.photo);
         messagesSearchItemViewHolder.name.setText(messagesSearchItem.name);
         messagesSearchItemViewHolder.message.setText(messagesSearchItem.message);
 

@@ -57,7 +57,7 @@ public class AlertDialogCustomBlackListAdapter extends RecyclerView.Adapter<Recy
         AlertDialogBlackListViewHolder alertDialogBlackListViewHolder = (AlertDialogBlackListViewHolder) holder;
 
         alertDialogBlackListViewHolder.name.setText(alertDialogCustomBlackListItem.name);
-//        alertDialogBlackListViewHolder.photo.setPhoto(alertDialogCustomBlackListItem.photo);
+//        alertDialogBlackListViewHolder.photoURL.setPhoto(alertDialogCustomBlackListItem.photoURL);
 
         if (alertDialogCustomBlackListItem.uid == User.currentUser.id)
             alertDialogBlackListViewHolder.removeButton.setVisibility(View.GONE);

@@ -493,11 +493,11 @@
     <string name="you_do_not_have_any_messages_yet">У Вас пока нет сообщений</string>
     <string name="backup_wallet_menu_item_title">Создать резервную копию</string>
     <string name="restore_backup_wallet_menu_item_title">Восстановить резервную копию</string>
-    <!--<string name="payeer_add_wallet_title">Введите ваш Payeer id.</string>-->
+    <!--<string name="payeer_add_wallet_title">Введите ваш Payeer gid.</string>-->
     <!--<string name="payeer_http">www.payeer.com</string>-->
-    <!--<string name="payeer_id_input_text_hint">Payeer id</string>-->
+    <!--<string name="payeer_id_input_text_hint">Payeer gid</string>-->
     <!--<string name="payeer_add_wallet_have_not_hint">Если у вас нет аккаунта Payeer, зарегистрируйтесь по ссылке ниже.</string>-->
-    <!--<string name="payeer_add_wallet_its_not_payeer">Это не Payeer id</string>-->
+    <!--<string name="payeer_add_wallet_its_not_payeer">Это не Payeer gid</string>-->
     <!--<string name="open_in_browser">Открыть в браузере?</string>-->
     <string name="auth_wrong_login_or_password">Неверный логин или пароль</string>
     <string name="error_spamming">Слишком много запросов, попробуйте снова</string>

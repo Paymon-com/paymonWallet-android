@@ -478,9 +478,9 @@
 //
 //    public void setPhoto(RPC.PM_photo photo) {
 //        if (photo != null)
-//            this.photo = photo;
+//            this.photoURL = photoURL;
 //
-//        if (photo != null && photo.id > 0) {
+//        if (photoURL != null && photoURL.gid > 0) {
 //            Utils.stageQueue.postRunnable(() -> tryLoadBitmap());
 //        } else {
 //            setImageBitmap(DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.profile_photo_none)));
@@ -488,11 +488,11 @@
 //    }
 //
 //    private void tryLoadBitmap() {
-//        Bitmap bitmap = MediaManager.getInstance().loadPhotoBitmap(photo.user_id, photo.id);
+//        Bitmap bitmap = MediaManager.getInstance().loadPhotoBitmap(photoURL.user_id, photoURL.gid);
 //        if (bitmap != null) {
 //            ApplicationLoader.applicationHandler.post(()->setImageBitmap(bitmap));
 //        } else {
-//            Utils.netQueue.postRunnable(() -> MediaManager.getInstance().requestPhoto(photo.user_id, photo.id));
+//            Utils.netQueue.postRunnable(() -> MediaManager.getInstance().requestPhoto(photoURL.user_id, photoURL.gid));
 //        }
 //        ApplicationLoader.applicationHandler.post(()->invalidate());
 //    }
@@ -502,20 +502,20 @@
 //        if (event == NotificationManager.NotificationEvent.PROFILE_PHOTO_UPDATED) {
 //            long oldID = (long) args[0];
 //
-//            if (oldID == this.photo.id) {
+//            if (oldID == this.photo.gid) {
 //                Log.d(Config.TAG, "OLDID == PHOTO_ID");
-//                this.photo.id = (long) args[1];
+//                this.photo.gid = (long) args[1];
 //                setPhoto(this.photo);
 //            }
 //        } else if (event == NotificationManager.NotificationEvent.PHOTO_ID_CHANGED){
 //            if (photo == null) return;
 //
-//            Log.e(Config.TAG, (long) args[0] + " " + this.photo.id);
+//            Log.e(Config.TAG, (long) args[0] + " " + this.photo.gid);
 //
 //            long oldID = (long) args[0];
 //
-//            if(oldID == photo.id){
-//                photo.id = (long) args[1];
+//            if(oldID == photo.gid){
+//                photo.gid = (long) args[1];
 //                setPhoto(photo);
 //            }
 //        }

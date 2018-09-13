@@ -78,7 +78,7 @@ static const struct argument kArguments[] = {
         "Advertise support for signed certificate timestamps",
     },
     {
-        "-channel-id-key", kOptionalArgument,
+        "-channel-gid-key", kOptionalArgument,
         "The key to use for signing a channel ID",
     },
     {
@@ -378,9 +378,9 @@ bool Client(const std::vector<std::string> &args) {
     SSL_CTX_enable_signed_cert_timestamps(ctx.get());
   }
 
-  if (args_map.count("-channel-id-key") != 0) {
+  if (args_map.count("-channel-gid-key") != 0) {
     bssl::UniquePtr<EVP_PKEY> pkey =
-        LoadPrivateKey(args_map["-channel-id-key"]);
+        LoadPrivateKey(args_map["-channel-gid-key"]);
     if (!pkey || !SSL_CTX_set1_tls_channel_id(ctx.get(), pkey.get())) {
       return false;
     }

@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TabHost;
-import android.widget.TextView;
 
 import java.util.LinkedList;
 
@@ -81,7 +79,7 @@ public class FragmentSearch extends Fragment {
         }
         for (int i = 0; i < groups.size(); i++) {
             RPC.Group group = groups.get(groups.keyAt(i));
-            listChats.add(new ChatsSearchItem(group.id, group.title, "", true));
+            listChats.add(new ChatsSearchItem(group.id, group.title, group.photoURL, true));
         }
         recyclerViewChats.setHasFixedSize(true);
         recyclerViewChats.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -97,7 +95,7 @@ public class FragmentSearch extends Fragment {
             if(user != null) {
                 for (int j = 0; j < chat.size(); j++) {
                     RPC.Message message = chat.get(j);
-                    listMessages.add(new MessagesSearchItem(message.id, Utils.formatUserName(user), message.text, new RPC.PM_photo(user.id, user.photoID)));
+                    listMessages.add(new MessagesSearchItem(message.id, Utils.formatUserName(user), message.text, user.photoURL));
                 }
             }
         }
@@ -108,7 +106,7 @@ public class FragmentSearch extends Fragment {
 //            RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
 //            for (int j = 0; j < groupChat.size(); j++) {
 //                RPC.Message message = groupChat.get(j);
-//                listMessages.add(new MessagesSearchItem(message.id, group.title, message.text, group.photo));
+//                listMessages.add(new MessagesSearchItem(message.gid, group.title, message.text, group.photoURL));
 //            }
 //        }
 

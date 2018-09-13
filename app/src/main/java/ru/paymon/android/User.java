@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Base64;
-import android.util.Log;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,7 +12,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.LinkedList;
 
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.SerializedStream;
@@ -42,7 +40,6 @@ public class User {
     public static final String CLIENT_SECURITY_PASSWORD_PREFERENCE = "CLIENT_SECURITY_PASSWORD_PREFERENCE";
     public static final String CLIENT_SECURITY_PASSWORD_VALUE_KEY = "CLIENT_SECURITY_PASSWORD_VALUE";
     public static final String CLIENT_SECURITY_PASSWORD_HINT_KEY = "CLIENT_SECURITY_PASSWORD_HINT";
-    public static final String CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY = "CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY";
 
     public static final String CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY = "CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY";
     public static final String CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS_KEY = "CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS_KEY";
@@ -64,7 +61,6 @@ public class User {
     public static String CLIENT_SECURITY_PASSWORD_VALUE;
     public static String CLIENT_SECURITY_PASSWORD_HINT;
     public static Uri CLIENT_MESSAGES_NOTIFY_SOUND_FILE;
-    public static LinkedList<Integer> CLIENT_DO_NOT_DISTURB_CHATS_LIST;
 
     public static String CLIENT_MONEY_ETHEREUM_DENOMINATION;
     public static String CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS;
@@ -139,8 +135,6 @@ public class User {
         CLIENT_SECURITY_PASSWORD_IS_ENABLED = clientPreferences.getBoolean(CLIENT_SECURITY_PASSWORD_ENABLED_CHECK, false);
         CLIENT_SECURITY_PASSWORD_VALUE = clientPreferences.getString(CLIENT_SECURITY_PASSWORD_VALUE_KEY, null);
         CLIENT_SECURITY_PASSWORD_HINT = clientPreferences.getString(CLIENT_SECURITY_PASSWORD_HINT_KEY, null);
-        String doNotDisturbListString = clientPreferences.getString(CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY, null);
-        CLIENT_DO_NOT_DISTURB_CHATS_LIST = doNotDisturbListString == null ? new LinkedList<>() : (LinkedList<Integer>) stringToObject(doNotDisturbListString);
         CLIENT_MONEY_ETHEREUM_DENOMINATION = clientPreferences.getString(CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY, ApplicationLoader.applicationContext.getString(R.string.default_denomination_value_eth));
         CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = clientPreferences.getString(CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD_KEY, null);
         CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = clientPreferences.getString(CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS_KEY, null);
@@ -173,8 +167,6 @@ public class User {
 
         editor.putString(CLIENT_SECURITY_PASSWORD_VALUE_KEY, CLIENT_SECURITY_PASSWORD_VALUE);
         editor.putString(CLIENT_SECURITY_PASSWORD_HINT_KEY, CLIENT_SECURITY_PASSWORD_HINT);
-        if (CLIENT_DO_NOT_DISTURB_CHATS_LIST != null)
-            editor.putString(CLIENT_DO_NOT_DISTURB_CHATS_LIST_KEY, objectToString(CLIENT_DO_NOT_DISTURB_CHATS_LIST));
         editor.putString(CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY, CLIENT_MONEY_ETHEREUM_DENOMINATION);
         editor.putString(CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD_KEY, CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
         editor.putString(CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS_KEY, CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS);

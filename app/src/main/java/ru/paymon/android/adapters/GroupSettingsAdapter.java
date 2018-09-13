@@ -1,7 +1,6 @@
 package ru.paymon.android.adapters;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
@@ -21,7 +20,6 @@ import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
-import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
@@ -31,7 +29,6 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.DialogProgress;
 import ru.paymon.android.view.FragmentFriendProfile;
-import ru.paymon.android.view.FragmentGroupSettings;
 
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
@@ -67,7 +64,9 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
         GroupsSettingsViewHolder groupsSettingsViewHolder = (GroupsSettingsViewHolder) holder;
 
         groupsSettingsViewHolder.name.setText(createGroupItem.name);
-//        groupsSettingsViewHolder.photo.setPhoto(createGroupItem.photo);
+
+        if (!createGroupItem.photo.url.isEmpty())
+            Utils.loadPhoto(createGroupItem.photo.url, groupsSettingsViewHolder.photo);
 
         if (createGroupItem.uid == User.currentUser.id)
             groupsSettingsViewHolder.removeButton.setVisibility(View.GONE);

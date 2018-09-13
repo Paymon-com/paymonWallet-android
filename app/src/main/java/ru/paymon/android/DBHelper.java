@@ -5,15 +5,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
-import android.util.Base64;
-import android.util.Log;
 import android.util.LongSparseArray;
 
-import org.web3j.crypto.Hash;
-
-import java.sql.Blob;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,8 +14,6 @@ import java.util.List;
 import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.SerializedStream;
-
-import static ru.paymon.android.ApplicationLoader.db;
 
 public class DBHelper extends SQLiteOpenHelper {
     public static final String TABlE_MESSAGES = "messages";
@@ -61,7 +52,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
         MESSAGES
 
-    0   id              int
+    0   gid              int
     1   from_id         int
     2   channel_id      int
     3   user_id         int
@@ -77,7 +68,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
         Users
 
-    0   id             int
+    0   gid             int
     1   f_name         varchar
     2   l_name         varchar
     3  data            blob
@@ -86,7 +77,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
         Groups
 
-    0   id             int
+    0   gid             int
     1   title          varchar
     2   creator_id     int
     3   user_count     int
@@ -96,7 +87,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
         Channels
 
-    0   id             int
+    0   gid             int
     1   title          varchar
     2   user_count     int
     3   data           blob
@@ -105,7 +96,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
         Chats
 
-    0   id              int
+    0   gid              int
     1   channel_id      int
     2   user_id         int
     3   group_id        int
@@ -114,7 +105,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /*
         ExchangeRates
 
-        0   id          int
+        0   gid          int
         1   crypto_cur  varchar
         2   fiat_cur    varchar
         3   value       varchar

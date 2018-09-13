@@ -1,6 +1,5 @@
 package ru.paymon.android.view;
 
-import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,8 +16,6 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
-import ru.paymon.android.UsersManager;
-
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -127,7 +124,7 @@ public class FragmentFriendProfile extends Fragment {
                             friendProfileBday.setText(user.birthdate);
                         else
                             friendProfileBday.setText(R.string.not_specified);
-//                        avatar.setPhoto(new RPC.PM_photo(user.id, user.photoID));
+//                        avatar.setPhoto(new RPC.PM_photo(user.gid, user.photoID));
 
                         chatButton.setOnClickListener(view12 -> {
                             final Bundle bundle = new Bundle();

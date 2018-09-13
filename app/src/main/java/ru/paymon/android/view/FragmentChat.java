@@ -1,26 +1,19 @@
 package ru.paymon.android.view;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,45 +24,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Document;
-
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.vanniktech.emoji.EmojiEditText;
-import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.emoji.EmojiPopup;
-import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import hani.momanii.supernova_emoji_library.actions.EmojIconActions;
-import hani.momanii.supernova_emoji_library.helper.EmojiconEditText;
-import hani.momanii.supernova_emoji_library.helper.EmojiconsPopup;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
-import ru.paymon.android.MainActivity;
-import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
-import ru.paymon.android.adapters.AttachmentsAdapter;
 import ru.paymon.android.adapters.MessagesAdapter;
-
-import ru.paymon.android.models.attachments.AttachmentItem;
-import ru.paymon.android.models.attachments.AttachmentMessages;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.Packet;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.ImagePicker;
-import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
 
-import static android.content.Context.CLIPBOARD_SERVICE;
-import static ru.paymon.android.Config.CAMERA_PERMISSIONS;
-import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 
@@ -83,14 +58,12 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     private RecyclerView messagesRecyclerView;
     private MessagesAdapter messagesAdapter;
     private Button sendButton;
-    private EmojiconEditText messageInput;
+    private EmojiEditText messageInput;
     private ArrayList<RPC.UserObject> groupUsers;
     private boolean isGroup;
     private boolean loadingMessages;
-    private boolean isForward;
-    private LinkedList<Long> forwardMessages;
-    private DialogProgress dialogProgress;
-    private EmojIconActions emojIcon;
+//    private DialogProgress dialogProgress;
+//    private EmojIconActions emojIcon;
 
     public static synchronized FragmentChat newInstance() {
         if (instance == null)
@@ -112,10 +85,6 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             }else{
                 isGroup = false;
             }
-            if (bundle.containsKey(FORWARD_MESSAGES_KEY)) {
-                isForward = true;
-                forwardMessages = (LinkedList<Long>) bundle.getSerializable(FORWARD_MESSAGES_KEY);
-            }
         }
         MessagesManager.getInstance().currentChatID = chatID;
     }
@@ -126,7 +95,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
-        messageInput = (EmojiconEditText) view.findViewById(R.id.input_edit_text);
+        messageInput = (EmojiEditText) view.findViewById(R.id.input_edit_text);
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (Button) view.findViewById(R.id.sendButton);
         LinearLayout toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
@@ -140,8 +109,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         buttonDocumentAttachment.setOnClickListener(view13 -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
-                    + "/myFolder/");
+            Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/myFolder/");
             intent.setDataAndType(uri, "*/*");
             startActivityForResult(Intent.createChooser(intent, "Open folder"), PICK_DOCUMENT_ID);
             includeAttachment.setVisibility(View.GONE);
@@ -176,73 +144,13 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         toolbarContainer.addView(defaultChatToolbarView);
 
-//        final EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(emoticonsButton).build(messageInput);
-//
-//        emoticonsButton.setOnClickListener((view1)->{
-//            emojiPopup.toggle();
-//        });
+        final EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(emoticonsButton).build(messageInput);
 
-        emojIcon = new EmojIconActions(getActivity(), view, messageInput, emoticonsButton);
-        emojIcon.showEmojIcon();
-        emojIcon.setOnStickerClickListener(new EmojiconsPopup.StickersListener() { //FIXME:УТЕЧКА ПАМЯТИ
-            @Override
-            public void onStickersOpened() {
-            }
-
-            @Override
-            public void onStickerSelected(int stickerPackID, long stickerID) {
-                if (User.currentUser == null) return;
-
-                RPC.PM_messageItem msg = new RPC.PM_messageItem();
-                msg.id = MessagesManager.generateMessageID();
-                msg.flags = MESSAGE_FLAG_FROM_ID;
-                msg.date = (int) (System.currentTimeMillis() / 1000);
-                msg.from_id = User.currentUser.id;
-                RPC.Peer peer;
-                if (!isGroup) {
-                    peer = new RPC.PM_peerUser();
-                    peer.user_id = chatID;
-                } else {
-                    peer = new RPC.PM_peerGroup();
-                    peer.group_id = chatID;
-                }
-                msg.to_id = peer;
-                msg.unread = true;
-                msg.itemType = FileManager.FileType.STICKER;
-                msg.itemID = stickerID;
-
-                NetworkManager.getInstance().sendRequest(msg, (response, error) -> {
-                    if (response == null) return;
-
-                    RPC.PM_updateMessageID update = (RPC.PM_updateMessageID) response;
-
-                    msg.id = update.newID;
-                    MessagesManager.getInstance().putMessage(msg);
-                    messagesAdapter.messageIDs.add(msg.id);
-
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        messagesAdapter.notifyDataSetChanged();
-                        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, chatID);
-                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
-                    });
-                });
-            }
+        emoticonsButton.setOnClickListener((view1)->{
+            emojiPopup.toggle();
         });
 
         initChat(defaultChatToolbarView, toolbarContainer);
-
-        if (isForward) {
-            RecyclerView recyclerViewAttachments = (RecyclerView) view.findViewById(R.id.recViewAttachments);
-            recyclerViewAttachments.setHasFixedSize(true);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
-            recyclerViewAttachments.setLayoutManager(layoutManager);
-            LinkedList<AttachmentItem> attachmentItems = new LinkedList<>();
-            AttachmentMessages attachmentMessages = new AttachmentMessages();
-            attachmentMessages.messages = forwardMessages;
-            attachmentItems.add(attachmentMessages);
-            AttachmentsAdapter attachmentsAdapter = new AttachmentsAdapter(attachmentItems);
-            recyclerViewAttachments.setAdapter(attachmentsAdapter);
-        }
 
         MessagesManager.getInstance().loadMessages(chatID, 15, 0, isGroup);
 
@@ -272,17 +180,13 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             switch (requestCode) {
                 case PICK_IMAGE_ID:
                     Bitmap bitmap = ImagePicker.getImageFromResult(ApplicationLoader.applicationContext, requestCode, resultCode, data);
-
                     //TODO:Работа с картинками
-
                     break;
                 case PICK_DOCUMENT_ID:
                     //TODO:Работа с документами
-
                     break;
                 case PICK_VIDEO_ID:
                     //TODO:Работа с видео
-
                     break;
             }
         }
@@ -297,7 +201,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         linearLayoutManager.setStackFromEnd(true);
         messagesRecyclerView.setLayoutManager(linearLayoutManager);
 
-        messagesAdapter = new MessagesAdapter(iMessageClickListener, isGroup, defaultCustomView, createSelectedCustomView(), toolbarContainer);
+        messagesAdapter = new MessagesAdapter(iMessageClickListener, isGroup, createSelectedCustomView());
         messagesRecyclerView.setAdapter(messagesAdapter);
 
         messagesRecyclerView
@@ -372,12 +276,8 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         final RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
         if (user != null) {
             chatTitleTextView.setText(Utils.formatUserName(user));
-//            RPC.PM_photo photo = new RPC.PM_photo();
-//            photo.id = user.photoID;
-//            photo.user_id = user.id;
-//            toolbarAvatar.setPhoto(photo);
-            if (!user.photoURL.isEmpty())
-                Utils.loadPhoto(user.photoURL, toolbarAvatar);
+            if (!user.photoURL.url.isEmpty())
+                Utils.loadPhoto(user.photoURL.url, toolbarAvatar);
         }
 
         customView.setOnClickListener(v -> {
@@ -404,7 +304,6 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         final RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
         if (group != null) {
             chatTitleTextView.setText(group.title);
-//            toolbarAvatar.setPhoto(group.photo);
             participantsCountTextView.setText(getString(R.string.participants) + ": " + groupUsers.size());
         }
 
@@ -454,11 +353,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         @Override
         public void forward(LinkedList<Long> checkedMessageIDs) {
-            FragmentChats fragmentChats = FragmentChats.getInstance();
-            Bundle bundle = new Bundle();
-            bundle.putSerializable(FORWARD_MESSAGES_KEY, checkedMessageIDs);
-            fragmentChats.setArguments(bundle);
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentChats);
+
         }
 
         @Override

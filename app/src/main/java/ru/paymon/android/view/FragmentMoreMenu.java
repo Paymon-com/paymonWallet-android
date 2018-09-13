@@ -24,8 +24,6 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-
-import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.Config.READ_CONTACTS_PERMISSION;
@@ -67,7 +65,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
                 Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentProfile.newInstance(), null));
 
         name.setText(Utils.formatUserName(User.currentUser));
-//        avatar.setPhoto(new RPC.PM_photo(User.currentUser.id, User.currentUser.photoID));
+//        avatar.setPhoto(new RPC.PM_photo(User.currentUser.gid, User.currentUser.photoID));
 
         return view;
     }
@@ -87,9 +85,9 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
                     startActivity(launchIntent);
                 } else {
                     try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?gid=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
                     } catch (android.content.ActivityNotFoundException e) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?gid=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
                     }
                 }
                 break;

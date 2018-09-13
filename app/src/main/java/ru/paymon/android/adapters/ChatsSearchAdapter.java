@@ -13,7 +13,6 @@ import java.util.LinkedList;
 
 import ru.paymon.android.R;
 import ru.paymon.android.models.ChatsSearchItem;
-import ru.paymon.android.models.Contact;
 import ru.paymon.android.utils.Utils;
 
 public class ChatsSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -36,9 +35,8 @@ public class ChatsSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         ChatsSearchItem chatsSearchItem = chatsSearchItems.get(position);
         ChatsSearchAdapter.ChatsSearchItemViewHolder chatsSearchItemViewHolder = (ChatsSearchAdapter.ChatsSearchItemViewHolder) holder;
         chatsSearchItemViewHolder.name.setText(chatsSearchItem.name);
-        if (!chatsSearchItem.photo.isEmpty())
-            Utils.loadPhoto(chatsSearchItem.photo, chatsSearchItemViewHolder.photo);
-//        chatsSearchItemViewHolder.photo.setPhoto(chatsSearchItem.photo);
+        if (!chatsSearchItem.photo.url.isEmpty())
+            Utils.loadPhoto(chatsSearchItem.photo.url, chatsSearchItemViewHolder.photo);
     }
 
     @Override

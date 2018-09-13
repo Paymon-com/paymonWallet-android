@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +23,6 @@ import java.util.List;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
-import ru.paymon.android.MediaManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
@@ -37,7 +35,6 @@ import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.adapters.MessagesAdapter.FORWARD_MESSAGES_KEY;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentChats extends Fragment implements NotificationManager.IListener {
@@ -167,10 +164,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-//        if (!isForward)
-//            toolbarTitle.setText(R.string.title_chats);
-//        else
-//            toolbarTitle.setText(R.string.select_the_recipient);
         Utils.showBottomBar(getActivity());
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
@@ -192,9 +185,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
         if (isGroup)
             bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(chatID));
-
-//        if (forwardMessages != null && forwardMessages.size() > 0)
-//            bundle.putSerializable(FORWARD_MESSAGES_KEY, forwardMessages);
 
         bundle.putInt(CHAT_ID_KEY, chatID);
         final FragmentChat fragmentChat = FragmentChat.newInstance();
@@ -228,9 +218,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                                     break;
                             }
                         }
-//                        RPC.PM_photo photo = new RPC.PM_photo();
-//                        photo.id = user.photoID;
-//                        photo.user_id = user.id;
                         dialogsItems.add(new ChatsItem(user.id, user.photoURL, username, lastMessageText, lastMsg.date, lastMsg.itemType));
                     }
                 }
@@ -244,7 +231,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
                     Long lastMsgId = MessagesManager.getInstance().lastGroupMessages.get(group.id);
                     if (lastMsgId != null) {
-                        RPC.PM_photo lastMsgPhoto = null;
+                        RPC.PM_photoURL lastMsgPhoto = null;
                         RPC.Message lastMessage = MessagesManager.getInstance().messages.get(lastMsgId);
                         if (lastMessage != null) {
                             if (lastMessage instanceof RPC.PM_message) {
@@ -261,20 +248,10 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                                 }
 
                                 RPC.UserObject user = UsersManager.getInstance().users.get(lastMessage.from_id);
-                                if (user != null) {
-                                    lastMsgPhoto = new RPC.PM_photo();
-                                    lastMsgPhoto.user_id = user.id;
-                                    lastMsgPhoto.id = user.photoID;
-                                }
+                                lastMsgPhoto = user.photoURL;
                             }
 
-//                            RPC.PM_photo photo = group.photo;
-//                            if (photo.id == 0)
-//                                photo.id = MediaManager.getInstance().generatePhotoID();
-//
-//                            if (photo.user_id == 0)
-//                                photo.user_id = -group.id;
-                            groupItems.add(new ChatsGroupItem(group.id, "", lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
+                            groupItems.add(new ChatsGroupItem(group.id, group.photoURL, lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
                         }
                     }
                 }

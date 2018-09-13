@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 
 import java.util.LinkedList;
 
@@ -106,10 +105,7 @@ public class FragmentCreateGroup extends Fragment {
 
         for (int i = 0; i < userContacts.size(); i++) {
             RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
-            RPC.PM_photo photo = new RPC.PM_photo();
-            photo.id = user.photoID;
-            photo.user_id = user.id;
-            CreateGroupItem createGroupItem = new CreateGroupItem(user.id, Utils.formatUserName(user), photo);
+            CreateGroupItem createGroupItem = new CreateGroupItem(user.id, Utils.formatUserName(user), user.photoURL);
             if (createGroupItemList.contains(createGroupItem) || user.id == User.currentUser.id)
                 continue;
             createGroupItemList.add(createGroupItem);

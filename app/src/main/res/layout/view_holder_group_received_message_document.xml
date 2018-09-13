@@ -12,7 +12,7 @@
     android:paddingTop="1dp">
 
     <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/message_group_received_document_avatar"-->
+        <!--android:gid="@+gid/message_group_received_document_avatar"-->
         <!--android:layout_width="48dp"-->
         <!--android:layout_height="48dp"-->
         <!--android:layout_marginStart="8dp"-->

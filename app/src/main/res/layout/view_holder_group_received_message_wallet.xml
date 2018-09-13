@@ -7,7 +7,7 @@
     android:background="?android:attr/activatedBackgroundIndicator">
 
     <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/photo_wallet_received_group"-->
+        <!--android:gid="@+gid/photo_wallet_received_group"-->
         <!--android:layout_width="48dp"-->
         <!--android:layout_height="48dp"-->
         <!--android:layout_marginStart="8dp"-->

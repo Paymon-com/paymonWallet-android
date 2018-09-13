@@ -234,7 +234,7 @@ int ssl_create_cipher_list(
     struct ssl_cipher_preference_list_st **out_cipher_list,
     const char *rule_str, int strict);
 
-/* ssl_cipher_get_value returns the cipher suite id of |cipher|. */
+/* ssl_cipher_get_value returns the cipher suite gid of |cipher|. */
 uint16_t ssl_cipher_get_value(const SSL_CIPHER *cipher);
 
 /* ssl_cipher_auth_mask_for_key returns the mask of cipher |algorithm_auth|

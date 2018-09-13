@@ -8,13 +8,13 @@ public class Contact {
     public String name;
     public String phone;
     public boolean isChecked;
-    public RPC.PM_photo photo;
+    public RPC.PM_photoURL photo;
 
     public Contact(RPC.UserObject user) {
         this.id = user.id;
         this.name = Utils.formatUserName(user);
         this.phone = Utils.formatPhone(user.phoneNumber);
-        this.photo = new RPC.PM_photo(user.id, user.photoID);
+        this.photo = user.photoURL;
     }
 
     public Contact(int id, String name, String phone) {

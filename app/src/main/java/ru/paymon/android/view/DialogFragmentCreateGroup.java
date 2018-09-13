@@ -12,8 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.daimajia.androidviewhover.tools.Util;
-
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
@@ -103,13 +101,13 @@ public class DialogFragmentCreateGroup extends DialogFragment {
 
                     //region MSG_ITEM //TODO:на сервак перенос
 //                    RPC.PM_messageItem msg = new RPC.PM_messageItem();
-//                    msg.id = MessagesManager.generateMessageID();
+//                    msg.gid = MessagesManager.generateMessageID();
 //                    msg.flags = MESSAGE_FLAG_FROM_ID;
 //                    msg.date = (int) (System.currentTimeMillis() / 1000);
-//                    msg.from_id = User.currentUser.id;
+//                    msg.from_id = User.currentUser.gid;
 //                    RPC.Peer peer;
 //                    peer = new RPC.PM_peerGroup();
-//                    peer.group_id = ((RPC.Group) response).id;
+//                    peer.group_id = ((RPC.Group) response).gid;
 //                    msg.to_id = peer;
 //                    msg.unread = true;
 //                    msg.itemType = FileManager.FileType.ACTION;
@@ -125,7 +123,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
 //
 //                            RPC.PM_updateMessageID update = (RPC.PM_updateMessageID) response2;
 //
-//                            msg.id = update.newID;
+//                            msg.gid = update.newID;
 //                            MessagesManager.getInstance().putMessage(msg);
                     NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
                     getDialog().dismiss();

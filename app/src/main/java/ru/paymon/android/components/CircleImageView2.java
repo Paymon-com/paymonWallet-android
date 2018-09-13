@@ -28,9 +28,9 @@
 //
 //    public void setPhoto(RPC.PM_photo photo) {
 //        if (photo != null)
-//            this.photo = photo;
+//            this.photoURL = photoURL;
 //
-//        if (photo != null && photo.id > 0) {
+//        if (photoURL != null && photoURL.gid > 0) {
 //            Utils.stageQueue.postRunnable(() -> tryLoadBitmap());
 //        } else {
 //            setImageBitmap(DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.profile_photo_none)));
@@ -38,11 +38,11 @@
 //    }
 //
 //    private void tryLoadBitmap() {
-//        Bitmap bitmap = MediaManager.getInstance().loadPhotoBitmap(photo.user_id, photo.id);
+//        Bitmap bitmap = MediaManager.getInstance().loadPhotoBitmap(photoURL.user_id, photoURL.gid);
 //        if (bitmap != null) {
 //            ApplicationLoader.applicationHandler.post(()->setImageBitmap(bitmap));
 //        } else {
-//            Utils.netQueue.postRunnable(() -> MediaManager.getInstance().requestPhoto(photo.user_id, photo.id));
+//            Utils.netQueue.postRunnable(() -> MediaManager.getInstance().requestPhoto(photoURL.user_id, photoURL.gid));
 //        }
 //        ApplicationLoader.applicationHandler.post(()->invalidate());
 //    }

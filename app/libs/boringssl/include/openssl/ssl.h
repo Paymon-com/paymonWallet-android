@@ -1177,7 +1177,7 @@ DECLARE_STACK_OF(SSL_CIPHER)
  * https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4. */
 OPENSSL_EXPORT const SSL_CIPHER *SSL_get_cipher_by_value(uint16_t value);
 
-/* SSL_CIPHER_get_id returns |cipher|'s id. It may be cast to a |uint16_t| to
+/* SSL_CIPHER_get_id returns |cipher|'s gid. It may be cast to a |uint16_t| to
  * get the cipher suite value. */
 OPENSSL_EXPORT uint32_t SSL_CIPHER_get_id(const SSL_CIPHER *cipher);
 
@@ -1932,7 +1932,7 @@ OPENSSL_EXPORT void (*SSL_CTX_sess_get_remove_cb(SSL_CTX *ctx))(
  * If the internal session cache is enabled, the callback is only consulted if
  * the internal cache does not return a match.
  *
- * The callback's |id| parameter is not const for historical reasons, but the
+ * The callback's |gid| parameter is not const for historical reasons, but the
  * contents may not be modified. */
 OPENSSL_EXPORT void SSL_CTX_sess_set_get_cb(
     SSL_CTX *ctx,
@@ -2121,7 +2121,7 @@ OPENSSL_EXPORT int SSL_set1_curves_list(SSL *ssl, const char *curves);
 OPENSSL_EXPORT uint16_t SSL_get_curve_id(const SSL *ssl);
 
 /* SSL_get_curve_name returns a human-readable name for the curve specified by
- * the given TLS curve id, or NULL if the curve is unknown. */
+ * the given TLS curve gid, or NULL if the curve is unknown. */
 OPENSSL_EXPORT const char *SSL_get_curve_name(uint16_t curve_id);
 
 
@@ -3847,7 +3847,7 @@ typedef struct ssl_x509_method_st SSL_X509_METHOD;
 struct ssl_cipher_st {
   /* name is the OpenSSL name for the cipher. */
   const char *name;
-  /* id is the cipher suite value bitwise OR-d with 0x03000000. */
+  /* gid is the cipher suite value bitwise OR-d with 0x03000000. */
   uint32_t id;
 
   /* algorithm_* are internal fields. See ssl/internal.h for their values. */
@@ -4071,11 +4071,11 @@ struct ssl_ctx_st {
    * 1.3, in seconds. */
   uint32_t session_psk_dhe_timeout;
 
-  /* If this callback is not null, it will be called each time a session id is
+  /* If this callback is not null, it will be called each time a session gid is
    * added to the cache.  If this function returns 1, it means that the
    * callback will do a SSL_SESSION_free() when it has finished using it.
    * Otherwise, on 0, it means the callback has finished with it. If
-   * remove_session_cb is not null, it will be called when a session-id is
+   * remove_session_cb is not null, it will be called when a session-gid is
    * removed from the cache.  After the call, OpenSSL will SSL_SESSION_free()
    * it. */
   int (*new_session_cb)(SSL *ssl, SSL_SESSION *sess);
@@ -4098,7 +4098,7 @@ struct ssl_ctx_st {
   /* get client cert callback */
   int (*client_cert_cb)(SSL *ssl, X509 **out_x509, EVP_PKEY **out_pkey);
 
-  /* get channel id callback */
+  /* get channel gid callback */
   void (*channel_id_cb)(SSL *ssl, EVP_PKEY **out_pkey);
 
   CRYPTO_EX_DATA ex_data;

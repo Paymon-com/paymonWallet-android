@@ -21,7 +21,7 @@
 
 
     <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/cell_group_participant_photo"-->
+        <!--android:gid="@+gid/cell_group_participant_photo"-->
         <!--android:layout_width="60dp"-->
         <!--android:layout_height="60dp"-->
         <!--android:layout_gravity="center"-->

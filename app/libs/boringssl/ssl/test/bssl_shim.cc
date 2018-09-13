@@ -1441,13 +1441,13 @@ static bool CheckHandshakeProperties(SSL *ssl, bool is_resume) {
   if (!config->expected_channel_id.empty()) {
     uint8_t channel_id[64];
     if (!SSL_get_tls_channel_id(ssl, channel_id, sizeof(channel_id))) {
-      fprintf(stderr, "no channel id negotiated\n");
+      fprintf(stderr, "no channel gid negotiated\n");
       return false;
     }
     if (config->expected_channel_id.size() != 64 ||
         OPENSSL_memcmp(config->expected_channel_id.data(), channel_id, 64) !=
             0) {
-      fprintf(stderr, "channel id mismatch\n");
+      fprintf(stderr, "channel gid mismatch\n");
       return false;
     }
   }

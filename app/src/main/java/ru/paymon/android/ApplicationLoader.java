@@ -10,9 +10,9 @@ import android.os.Handler;
 import android.os.StrictMode;
 
 import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.emoji.google.GoogleEmojiProvider;
 
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
+import ru.paymon.android.emoji.CustomEmojiProvider;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.utils.KeyGenerator;
@@ -36,17 +36,17 @@ public class ApplicationLoader extends Application {
     public void onCreate() {
         super.onCreate();
 
-        EmojiManager.install(new GoogleEmojiProvider());
+        EmojiManager.install(new CustomEmojiProvider());
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
         Utils.stageQueue.postRunnable(()->{
-            DBHelper dbHelper = new DBHelper(applicationContext);
-            try{
-                db = dbHelper.getWritableDatabase();
-            }catch (Exception e){
-                db = dbHelper.getReadableDatabase();
-            }
+//            DBHelper dbHelper = new DBHelper(applicationContext);
+//            try{
+//                db = dbHelper.getWritableDatabase();
+//            }catch (Exception e){
+//                db = dbHelper.getReadableDatabase();
+//            }
 
             User.loadConfig();
         });
@@ -59,7 +59,6 @@ public class ApplicationLoader extends Application {
         Utils.checkDisplaySize(getApplicationContext(), null);
         Utils.maxSize = Utils.displaySize.x - Utils.displaySize.x / 100.0 * 45;
 
-
         KeyGenerator.getInstance();
         native_init(Config.HOST, Config.PORT, Config.VERSION);
 
@@ -69,9 +68,8 @@ public class ApplicationLoader extends Application {
     }
 
     public static void finish() {
-//        LruRamCache.getInstance().lruCache.evictAll();
         MessagesManager.getInstance().dispose();
-        MediaManager.getInstance().dispose();
+//        MediaManager.getInstance().dispose();
         UsersManager.getInstance().dispose();
         GroupsManager.getInstance().dispose();
     }

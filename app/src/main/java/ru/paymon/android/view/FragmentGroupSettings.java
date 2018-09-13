@@ -1,7 +1,9 @@
 package ru.paymon.android.view;
 
+import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +26,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.Config;
 import ru.paymon.android.GroupsManager;
+import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.adapters.AlertDialogCustomAdministratorsAdapter;
@@ -34,9 +39,13 @@ import ru.paymon.android.models.AlertDialogCustomBlackListItem;
 import ru.paymon.android.models.CreateGroupItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.FileManager;
+import ru.paymon.android.utils.ImagePicker;
 import ru.paymon.android.utils.Utils;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
+import static ru.paymon.android.Config.CAMERA_PERMISSIONS;
+import static ru.paymon.android.view.FragmentProfileEdit.PICK_IMAGE_ID;
 
 public class FragmentGroupSettings extends Fragment {
     private int chatID;
@@ -90,7 +99,17 @@ public class FragmentGroupSettings extends Fragment {
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);
 
-//        photoView.setPhoto(group.photo);
+        photoView.setOnClickListener((v -> {
+            ((MainActivity) getActivity()).requestAppPermissions(new String[]{
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.CAMERA},
+                    R.string.msg_permissions_required, CAMERA_PERMISSIONS);
+            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "выберите");//TODO:string
+            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+        }));
+
+//        photoView.setPhoto(group.photoURL);
         titleView.setText(group.title);
         titleView.setOnEditorActionListener((textView, i, keyEvent) -> {
             Utils.netQueue.postRunnable(() -> {
@@ -207,12 +226,75 @@ public class FragmentGroupSettings extends Fragment {
         list.clear();
         ArrayList<RPC.UserObject> users = GroupsManager.getInstance().groupsUsers.get(chatID);
         for (RPC.UserObject user : users) {
-            RPC.PM_photo photo = new RPC.PM_photo();
-            photo.id = user.photoID;
-            photo.user_id = user.id;
-            list.add(new CreateGroupItem(user.id, Utils.formatUserName(user), photo));
+            list.add(new CreateGroupItem(user.id, Utils.formatUserName(user), user.photoURL));
         }
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            Utils.netQueue.postRunnable(() -> {
+                ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
+                final String imagePath = ImagePicker.getImagePathFromResult(ApplicationLoader.applicationContext, 234, resultCode, data);
+                RPC.PM_group_setPhoto group_setPhoto = new RPC.PM_group_setPhoto(group.id);
+
+                final long requestID = NetworkManager.getInstance().sendRequest(group_setPhoto, (response, error) -> {
+                    if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+                        ApplicationLoader.applicationHandler.post(() -> {
+                            if (dialogProgress != null && dialogProgress.isShowing())
+                                dialogProgress.cancel();
+
+                            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext())
+                                    .setMessage(R.string.photo_upload_failed) //TODO:string
+                                    .setCancelable(true);
+                            android.support.v7.app.AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                        });
+                        return;
+                    }
+
+                    if (response instanceof RPC.PM_boolTrue) {
+                        FileManager.getInstance().startUploading(/*newPhoto,*/ imagePath, new FileManager.IUploadingFile() {
+                            @Override
+                            public void onFinish() {
+                                Log.e(Config.TAG, "Group photoURL successfully uploaded");
+                                ApplicationLoader.applicationHandler.post(() -> {
+                                    if (dialogProgress != null && dialogProgress.isShowing())
+                                        dialogProgress.dismiss();
+//                                            avatar.setPhoto(newPhoto);
+//                                            User.currentUser.photoID = newPhoto.gid;
+//                                            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.PROFILE_PHOTO_UPDATED, User.currentUser.gid, newPhoto, bitmap);
+//                                            ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(oldPhotoID, newPhotoID);
+//                                            NotificationManager.getInstance().postNotificationName(NotificationManager.didPhotoUpdate, bitmap);
+//                                            avatar.setImageBitmap(bitmap);
+                                });
+                            }
+
+                            @Override
+                            public void onProgress(int percent) {
+
+                            }
+
+                            @Override
+                            public void onError(int code) {
+                                Log.e(Config.TAG, "Error while uploading group photoURL, error code: " + code);
+                                ApplicationLoader.applicationHandler.post(() -> {
+                                    if (dialogProgress != null && dialogProgress.isShowing())
+                                        dialogProgress.cancel();
+                                });
+                            }
+                        });
+                    }
+
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        if (dialogProgress != null && dialogProgress.isShowing())
+                            dialogProgress.dismiss();
+                    });
+                });
+
+                ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
+            });
+        }
+    }
 }

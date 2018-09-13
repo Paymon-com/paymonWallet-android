@@ -6,9 +6,9 @@ public class MessagesSearchItem {
     public long id;
     public String name;
     public String message;
-    public RPC.PM_photo photo;
+    public RPC.PM_photoURL photo;
 
-    public MessagesSearchItem(long id, String name, String message, RPC.PM_photo photo){
+    public MessagesSearchItem(long id, String name, String message, RPC.PM_photoURL photo){
         this.id = id;
         this.name = name;
         this.message = message;

@@ -152,7 +152,7 @@ static SXNET *sxnet_v2i(X509V3_EXT_METHOD *method, X509V3_CTX *ctx,
 
 /* Strong Extranet utility functions */
 
-/* Add an id given the zone as an ASCII number */
+/* Add an gid given the zone as an ASCII number */
 
 int SXNET_add_id_asc(SXNET **psx, char *zone, char *user, int userlen)
 {
@@ -164,7 +164,7 @@ int SXNET_add_id_asc(SXNET **psx, char *zone, char *user, int userlen)
     return SXNET_add_id_INTEGER(psx, izone, user, userlen);
 }
 
-/* Add an id given the zone as an unsigned long */
+/* Add an gid given the zone as an unsigned long */
 
 int SXNET_add_id_ulong(SXNET **psx, unsigned long lzone, char *user,
                        int userlen)
@@ -180,7 +180,7 @@ int SXNET_add_id_ulong(SXNET **psx, unsigned long lzone, char *user,
 }
 
 /*
- * Add an id given the zone as an ASN1_INTEGER. Note this version uses the
+ * Add an gid given the zone as an ASN1_INTEGER. Note this version uses the
  * passed integer and doesn't make a copy so don't free it up afterwards.
  */
 

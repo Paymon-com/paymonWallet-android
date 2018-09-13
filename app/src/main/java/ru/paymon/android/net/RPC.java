@@ -2,8 +2,6 @@ package ru.paymon.android.net;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
-
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -53,32 +51,6 @@ public class RPC {
      * (при написании svuid будет автоматически вызываться этот шаблон)
      */
 
-    public static class PM_json extends Packet {
-        public static int svuid = 1363708171;
-        public String text;
-
-        public static PM_json PMdeserialize(SerializableData stream, int constructor, boolean exception) {
-            if (PM_json.svuid != constructor) {
-                if (exception) {
-                    throw new RuntimeException(String.format("can't parse magic %x in PM_json", constructor));
-                } else {
-                    return null;
-                }
-            }
-            PM_json result = new PM_json();
-            result.readParams(stream, exception);
-            return result;
-        }
-
-        public void readParams(SerializableData stream, boolean exception) {
-            text = stream.readString(exception);
-        }
-
-        public void serializeToStream(SerializableData stream) {
-            stream.writeInt32(svuid);
-            stream.writeString(text);
-        }
-    }
 
     public static class PM_error extends Packet {
         public static int svuid = 384728714;
@@ -107,33 +79,6 @@ public class RPC {
             stream.writeInt32(svuid);
             stream.writeInt32(code);
             stream.writeString(text);
-        }
-    }
-
-    public static class PM_test extends Packet {
-        public static int svuid = 0x55555555;
-        public int val;
-
-        public static PM_test PMdeserialize(SerializableData stream, int constructor, boolean exception) {
-            if (PM_test.svuid != constructor) {
-                if (exception) {
-                    throw new RuntimeException(String.format("can't parse magic %x in PM_test", constructor));
-                } else {
-                    return null;
-                }
-            }
-            PM_test result = new PM_test();
-            result.readParams(stream, exception);
-            return result;
-        }
-
-        public void readParams(SerializableData stream, boolean exception) {
-            val = stream.readInt32(exception);
-        }
-
-        public void serializeToStream(SerializableData stream) {
-            stream.writeInt32(svuid);
-            stream.writeInt32(val);
         }
     }
 
@@ -200,9 +145,7 @@ public class RPC {
         public long phoneNumber;
         public int gender;
         public String walletKey;
-        //        public long access_hash;
-        public long photoID;
-        public String photoURL;
+        public PM_photoURL photoURL;
         public boolean confirmed;
         public String inviteCode;
 
@@ -232,6 +175,14 @@ public class RPC {
             return result;
         }
 
+        @Override
+        public boolean equals(Object obj) {
+            if (obj instanceof UserObject) {
+                UserObject user = (UserObject) obj;
+                return id == user.id;
+            }
+            return false;
+        }
 
         @Override
         public int describeContents() {
@@ -253,8 +204,8 @@ public class RPC {
             dest.writeLong(this.phoneNumber);
             dest.writeInt(this.gender);
             dest.writeString(this.walletKey);
-            dest.writeString(this.photoURL);
-            dest.writeByte((byte) (this.confirmed ? 1 : 0));
+            dest.writeParcelable(this.photoURL, flags);
+            dest.writeByte(this.confirmed ? (byte) 1 : (byte) 0);
             dest.writeString(this.inviteCode);
         }
 
@@ -272,8 +223,8 @@ public class RPC {
             this.phoneNumber = in.readLong();
             this.gender = in.readInt();
             this.walletKey = in.readString();
-            this.photoURL = in.readString();
-            this.confirmed = in.readByte() == 1;
+            this.photoURL = in.readParcelable(PM_photoURL.class.getClassLoader());
+            this.confirmed = in.readByte() != 0;
             this.inviteCode = in.readString();
         }
 
@@ -288,15 +239,6 @@ public class RPC {
                 return new UserObject[size];
             }
         };
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj instanceof UserObject) {
-                UserObject user = (UserObject) obj;
-                return id == user.id;
-            }
-            return false;
-        }
     }
 
     public static class PM_user extends UserObject {
@@ -321,7 +263,15 @@ public class RPC {
             first_name = stream.readString(exception);
             last_name = stream.readString(exception);
             token = stream.readByteArray(exception);
-            photoURL = stream.readString(exception);
+            int magic = stream.readInt32(exception);
+            if (magic != PM_photoURL.svuid) {
+                if (exception) {
+                    throw new RuntimeException(String.format("wrong PM_photoURL magic, got %x", magic));
+                }
+                return;
+            }
+            photoURL = new RPC.PM_photoURL();
+            photoURL.readParams(stream, exception);
             walletKey = stream.readString(exception);
         }
 
@@ -332,7 +282,7 @@ public class RPC {
             stream.writeString(first_name);
             stream.writeString(last_name);
             stream.writeByteArray(token);
-            stream.writeString(photoURL);
+            photoURL.serializeToStream(stream);
             stream.writeString(walletKey);
         }
     }
@@ -366,8 +316,16 @@ public class RPC {
             phoneNumber = stream.readInt64(exception);
             gender = stream.readInt32(exception);
             token = stream.readByteArray(exception);
+            int magic = stream.readInt32(exception);
+            if (magic != PM_photoURL.svuid) {
+                if (exception) {
+                    throw new RuntimeException(String.format("wrong PM_photoURL magic, got %x", magic));
+                }
+                return;
+            }
+            photoURL = new RPC.PM_photoURL();
+            photoURL.readParams(stream, exception);
             walletKey = stream.readString(exception);
-            photoURL = stream.readString(exception);
             confirmed = stream.readBool(exception);
             inviteCode = stream.readString(exception);
         }
@@ -386,8 +344,8 @@ public class RPC {
             stream.writeInt64(phoneNumber);
             stream.writeInt32(gender);
             stream.writeByteArray(token);
+            photoURL.serializeToStream(stream);
             stream.writeString(walletKey);
-            stream.writeString(photoURL);
             stream.writeBool(confirmed);
             stream.writeString(inviteCode);
         }
@@ -395,7 +353,6 @@ public class RPC {
 
     public static class PM_requestPhoto extends Packet {
         public static int svuid = 1129923073;
-
         public int userID;
         public long id;
 
@@ -411,10 +368,11 @@ public class RPC {
         }
     }
 
-    public static class Peer extends Packet {
+    public static class Peer extends Packet implements Parcelable {
         public int channel_id;
         public int user_id;
         public int group_id;
+
 
         public static Peer PMdeserialize(SerializableData stream, int constructor, boolean exception) {
             Peer result = null;
@@ -449,6 +407,39 @@ public class RPC {
         public int hashCode() {
             return super.hashCode();
         }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeInt(this.channel_id);
+            dest.writeInt(this.user_id);
+            dest.writeInt(this.group_id);
+        }
+
+        public Peer() {
+        }
+
+        protected Peer(Parcel in) {
+            this.channel_id = in.readInt();
+            this.user_id = in.readInt();
+            this.group_id = in.readInt();
+        }
+
+        public static final Creator<Peer> CREATOR = new Creator<Peer>() {
+            @Override
+            public Peer createFromParcel(Parcel source) {
+                return new Peer(source);
+            }
+
+            @Override
+            public Peer[] newArray(int size) {
+                return new Peer[size];
+            }
+        };
     }
 
     public static class PM_peerChannel extends Peer {
@@ -675,24 +666,6 @@ public class RPC {
         }
     }
 
-    public static class PM_updatePhotoID extends Update {
-        public static int svuid = 1917996696;
-
-        public long oldID;
-        public long newID;
-
-        public void readParams(SerializableData stream, boolean exception) {
-            oldID = stream.readInt64(exception);
-            newID = stream.readInt64(exception);
-        }
-
-        public void serializeToStream(SerializableData stream) {
-            stream.writeInt32(svuid);
-            stream.writeInt64(oldID);
-            stream.writeInt64(newID);
-        }
-    }
-
     public static class Group extends Packet {
         public static int svuid = 1150008731;
 
@@ -702,7 +675,7 @@ public class RPC {
         public String title;
         //        public int date;
         public ArrayList<UserObject> users = new ArrayList<>();
-        public PM_photo photo;
+        public PM_photoURL photoURL;
 
         public static Group PMdeserialize(SerializableData stream, int constructor, boolean exception) {
             if (Group.svuid != constructor) {
@@ -740,13 +713,14 @@ public class RPC {
             }
 
             magic = stream.readInt32(exception);
-            if (magic != PM_photo.svuid) {
+            if (magic != PM_photoURL.svuid) {
                 if (exception) {
-                    throw new RuntimeException(String.format("wrong PM_photo magic, got %x", magic));
+                    throw new RuntimeException(String.format("wrong PM_photoURL magic, got %x", magic));
                 }
                 return;
             }
-            photo = (PM_photo) MessageMedia.deserialize(stream, magic, exception);
+            photoURL = new RPC.PM_photoURL();
+            photoURL.readParams(stream, exception);
         }
 
         public void serializeToStream(SerializableData stream) {
@@ -756,7 +730,7 @@ public class RPC {
             stream.writeInt32(creatorID);
             stream.writeString(title);
             writeArray(stream, users);
-            photo.serializeToStream(stream);
+            photoURL.serializeToStream(stream);
         }
     }
 
@@ -836,25 +810,19 @@ public class RPC {
     public static class PM_group_setPhoto extends Packet {
         public static int svuid = 446580011;
 
-        public int id;
-        public PM_photo photo;
+        public int gid;
+
+        public PM_group_setPhoto(int gid) {
+            this.gid = gid;
+        }
 
         public void readParams(SerializableData stream, boolean exception) {
-            id = stream.readInt32(exception);
-            int magic = stream.readInt32(exception);
-            if (magic != PM_photo.svuid) {
-                if (exception) {
-                    throw new RuntimeException(String.format("wrong PM_photo magic, got %x", magic));
-                }
-                return;
-            }
-            photo = (PM_photo) MessageMedia.deserialize(stream, magic, exception);
+            gid = stream.readInt32(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            stream.writeInt32(id);
-            photo.serializeToStream(stream);
+            stream.writeInt32(gid);
         }
     }
 
@@ -1000,23 +968,17 @@ public class RPC {
     public static class PM_setProfilePhoto extends Packet {
         public static int svuid = 477263581;
 
-        public PM_photo photo;
-
         public void readParams(SerializableData stream, boolean exception) {
             int magic = stream.readInt32(exception);
             if (magic != PM_photo.svuid) {
                 if (exception) {
                     throw new RuntimeException(String.format("wrong PM_photo magic, got %x", magic));
                 }
-                return;
             }
-            photo = (PM_photo) MessageMedia.deserialize(stream, magic, exception);
-
         }
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            photo.serializeToStream(stream);
         }
     }
 
@@ -1375,7 +1337,6 @@ public class RPC {
     public static class PM_file extends Packet {
         public static int svuid = 673680214;
 
-        public long id;
         public int partsCount;
         public int totalSize;
         public FileManager.FileType type;
@@ -1383,7 +1344,6 @@ public class RPC {
 //        public String md5_checksum;
 
         public void readParams(SerializableData stream, boolean exception) {
-            id = stream.readInt64(exception);
             partsCount = stream.readInt32(exception);
             totalSize = stream.readInt32(exception);
             type = FileManager.FileType.values()[stream.readInt32(exception)];
@@ -1392,7 +1352,6 @@ public class RPC {
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            stream.writeInt64(id);
             stream.writeInt32(partsCount);
             stream.writeInt32(totalSize);
             stream.writeInt32(type.ordinal());
@@ -1403,7 +1362,6 @@ public class RPC {
     public static class PM_filePart extends Packet {
         public static int svuid = 22502919;
 
-        public long fileID;
         public int part;
         //        public SerializedBuffer bytes;
         public byte[] bytes;
@@ -1413,14 +1371,12 @@ public class RPC {
         }
 
         public void readParams(SerializableData stream, boolean exception) {
-            fileID = stream.readInt64(exception);
             part = stream.readInt32(exception);
             bytes = stream.readByteArray(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            stream.writeInt64(fileID);
             stream.writeInt32(part);
             stream.writeByteArray(bytes);
         }
@@ -1509,6 +1465,66 @@ public class RPC {
         public String toString() {
             return "{PHOTO " + user_id + "_" + id + "}";
         }
+    }
+
+    public static class PM_photoURL extends Packet implements Parcelable {
+        public static final int svuid = 1917996696;
+
+        public Peer peer;
+        public String url;
+
+        public PM_photoURL() {
+        }
+
+        public PM_photoURL(Peer peer, String url) {
+            this.peer = peer;
+            this.url = url;
+        }
+
+        public void readParams(SerializableData stream, boolean exception) {
+            peer = Peer.PMdeserialize(stream,stream.readInt32(exception),exception);
+            url = stream.readString(exception);
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            peer.serializeToStream(stream);
+            stream.writeString(url);
+        }
+
+        @Override
+        public String toString() {
+            return "{PHOTO_URL " + url + "}";
+        }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeParcelable(this.peer, flags);
+            dest.writeString(this.url);
+        }
+
+        protected PM_photoURL(Parcel in) {
+            this.peer = in.readParcelable(Peer.class.getClassLoader());
+            this.url = in.readString();
+        }
+
+        public static final Creator<PM_photoURL> CREATOR = new Creator<PM_photoURL>() {
+            @Override
+            public PM_photoURL createFromParcel(Parcel source) {
+                return new PM_photoURL(source);
+            }
+
+            @Override
+            public PM_photoURL[] newArray(int size) {
+                return new PM_photoURL[size];
+            }
+        };
     }
 
     public static class PM_getStickerPack extends Packet {
@@ -1600,7 +1616,7 @@ public class RPC {
         //        public byte[] bytes;
         public PM_file file;
 //        public Audio audio_unused;
-//        public PM_photo photo;
+//        public PM_photo photoURL;
 //        public String title;
 //        public String caption;
 
@@ -1610,6 +1626,9 @@ public class RPC {
                 case PM_photo.svuid:
                     result = new PM_photo();
                     break;
+//                case PM_photoURL.svuid:
+//                    result = new PM_photoURL();
+//                    break;
             }
             if (result == null && exception) {
                 throw new RuntimeException(String.format("can't parse magic %x in MessageMedia", constructor));

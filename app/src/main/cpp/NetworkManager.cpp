@@ -336,7 +336,7 @@ void NetworkManager::loadConfig() {
 //                    registeredForInternalPush = buffer->readBool(nullptr);
 //                }
 //
-//                DEBUG_D("current dc id = %u, time difference = %d, registered for push = %d", currentDatacenterId, timeDifference, (int32_t) registeredForInternalPush);
+//                DEBUG_D("current dc gid = %u, time difference = %d, registered for push = %d", currentDatacenterId, timeDifference, (int32_t) registeredForInternalPush);
 //
 //                uint32_t count = buffer->readUint32(nullptr);
 //                for (uint32_t a = 0; a < count; a++) {
@@ -720,7 +720,7 @@ void NetworkManager::onConnectionDataReceived(Connection *connection, Serialized
 //        int64_t messageSessionId = data->readInt64(&error);
 //
 //        if (messageSessionId != connection->getSissionId()) {
-//            DEBUG_E("connection(%p) received invalid message session id (0x%llx instead of 0x%llx)", connection, (uint64_t) messageSessionId, (uint64_t) connection->getSissionId());
+//            DEBUG_E("connection(%p) received invalid message session gid (0x%llx instead of 0x%llx)", connection, (uint64_t) messageSessionId, (uint64_t) connection->getSissionId());
 //            return;
 //        }
 //
@@ -822,7 +822,7 @@ void NetworkManager::processServerResponse(Packet *message, int64_t messageId, i
 //        TL_new_session_created *response = (TL_new_session_created *) message;
 //
 //        if (!connection->isSessionProcessed(response->unique_id)) {
-//            DEBUG_D("connection(%p, dc%u, type %d) new session created (first message id: 0x%llx, server salt: 0x%llx, unique id: 0x%llx)", connection, datacenter->getDatacenterId(), connection->getConnectionType(), (uint64_t) response->first_msg_id, (uint64_t) response->server_salt, (uint64_t) response->unique_id);
+//            DEBUG_D("connection(%p, dc%u, type %d) new session created (first message gid: 0x%llx, server salt: 0x%llx, unique gid: 0x%llx)", connection, datacenter->getDatacenterId(), connection->getConnectionType(), (uint64_t) response->first_msg_id, (uint64_t) response->server_salt, (uint64_t) response->unique_id);
 //
 //            std::unique_ptr<TL_future_salt> salt = std::unique_ptr<TL_future_salt>(new TL_future_salt());
 //            salt->valid_until = salt->valid_since = getCurrentTime();
@@ -2181,8 +2181,8 @@ void NetworkManager::cancelRequest(int32_t token, bool notifyServer) {
 //        count = unauthorizedDatacenters.size();
 //        for (uint32_t a = 0; a < count; a++) {
 //            Datacenter *datacenter = unauthorizedDatacenters[a];
-//            uint32_t id = datacenter->getDatacenterId();
-//            if (id != currentDatacenterId && id != movingToDatacenterId && !datacenter->isExportingAuthorization()) {
+//            uint32_t gid = datacenter->getDatacenterId();
+//            if (gid != currentDatacenterId && gid != movingToDatacenterId && !datacenter->isExportingAuthorization()) {
 //                datacenter->exportAuthorization();
 //            }
 //        }
@@ -2288,10 +2288,10 @@ void NetworkManager::updateDcSettings(uint32_t dcNum) {
 //            size_t count = config->dc_options.size();
 //            for (uint32_t a = 0; a < count; a++) {
 //                TL_dcOption *dcOption = config->dc_options[a].get();
-//                std::map<uint32_t, std::unique_ptr<DatacenterInfo>>::iterator iter = map.find((uint32_t) dcOption->id);
+//                std::map<uint32_t, std::unique_ptr<DatacenterInfo>>::iterator iter = map.find((uint32_t) dcOption->gid);
 //                DatacenterInfo *info;
 //                if (iter == map.end()) {
-//                    map[dcOption->id] = std::unique_ptr<DatacenterInfo>(info = new DatacenterInfo);
+//                    map[dcOption->gid] = std::unique_ptr<DatacenterInfo>(info = new DatacenterInfo);
 //                } else {
 //                    info = iter->second.get();
 //                }
@@ -2367,7 +2367,7 @@ void NetworkManager::authorizeOnMovingDatacenter() {
 //
 //    if (movingAuthorization != nullptr) {
 //        TL_auth_importAuthorization *request = new TL_auth_importAuthorization();
-//        request->id = currentUserId;
+//        request->gid = currentUserId;
 //        request->bytes = std::move(movingAuthorization);
 //        sendRequest(request, [&](Packet *response, TL_error *error) {
 //            if (error == nullptr) {

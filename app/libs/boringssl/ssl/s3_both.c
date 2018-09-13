@@ -634,7 +634,7 @@ static int read_v2_client_hello(SSL *ssl) {
       !CBB_add_u24_length_prefixed(&client_hello, &hello_body) ||
       !CBB_add_u16(&hello_body, version) ||
       !CBB_add_bytes(&hello_body, random, SSL3_RANDOM_SIZE) ||
-      /* No session id. */
+      /* No session gid. */
       !CBB_add_u8(&hello_body, 0) ||
       !CBB_add_u16_length_prefixed(&hello_body, &cipher_suites)) {
     CBB_cleanup(&client_hello);

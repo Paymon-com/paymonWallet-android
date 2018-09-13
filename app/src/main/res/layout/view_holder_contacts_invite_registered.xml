@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="130dp">
 
     <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/image_contact_invite_registered"-->
+        <!--android:gid="@+gid/image_contact_invite_registered"-->
         <!--android:layout_width="100dp"-->
         <!--android:layout_height="0dp"-->
         <!--android:layout_marginBottom="16dp"-->

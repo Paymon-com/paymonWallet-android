@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?attr/colorPrimary"
@@ -26,7 +25,7 @@
         local:layout_constraintTop_toTopOf="parent">
 
         <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:id="@+id/toolbar_avatar"-->
+        <!--android:gid="@+gid/toolbar_avatar"-->
         <!--android:layout_width="35dp"-->
         <!--android:layout_height="35dp"-->
         <!--android:layout_marginBottom="8dp"-->

@@ -5,21 +5,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.Toast;
+
+import java.util.List;
 
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.utils.AbsRuntimePermission;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.view.FragmentChat;
 import ru.paymon.android.view.FragmentChats;
 import ru.paymon.android.view.FragmentContacts;
 import ru.paymon.android.view.FragmentContactsInvite;
+import ru.paymon.android.view.FragmentGroupSettings;
 import ru.paymon.android.view.FragmentLoader;
 import ru.paymon.android.view.FragmentMoney;
 import ru.paymon.android.view.FragmentMoreMenu;
 import ru.paymon.android.view.FragmentPermissions;
+import ru.paymon.android.view.FragmentProfileEdit;
 import ru.paymon.android.view.FragmentRegistrationEmailConfirmation;
 import ru.paymon.android.view.FragmentStart;
 
@@ -46,7 +47,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     }
 
     private void init() {
-//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        Toolbar toolbar = findViewById(R.gid.toolbar);
 //        setSupportActionBar(toolbar);
 
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
@@ -157,6 +158,18 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
                 User.CLIENT_SECURITY_PASSWORD_VALUE = null;
                 User.CLIENT_SECURITY_PASSWORD_HINT = null;
                 User.saveConfig();
+            }
+        } else {
+            List<Fragment> fragments = getSupportFragmentManager().getFragments();
+            for (Fragment fragment : fragments) {
+                if (fragment instanceof FragmentProfileEdit) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                    break;
+                }
+                if (fragment instanceof FragmentGroupSettings) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                    break;
+                }
             }
         }
     }

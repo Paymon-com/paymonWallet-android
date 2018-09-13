@@ -3,7 +3,6 @@ package ru.paymon.android.net;
 import android.util.Log;
 import android.util.SparseArray;
 
-
 import ru.paymon.android.Config;
 import ru.paymon.android.utils.SerializedBuffer;
 
@@ -25,7 +24,6 @@ public class ClassStore {
         classStore.put(RPC.PM_keepAlive.svuid, RPC.PM_keepAlive.class);
         classStore.put(RPC.PM_message.svuid, RPC.PM_message.class);
         classStore.put(RPC.PM_messageItem.svuid, RPC.PM_messageItem.class);
-        classStore.put(RPC.PM_test.svuid, RPC.PM_test.class);
         classStore.put(RPC.PM_error.svuid, RPC.PM_error.class);
         classStore.put(RPC.PM_user.svuid, RPC.PM_user.class);
         classStore.put(RPC.PM_userFull.svuid, RPC.PM_userFull.class);
@@ -37,7 +35,7 @@ public class ClassStore {
         classStore.put(RPC.PM_users.svuid, RPC.PM_users.class);
         classStore.put(RPC.PM_addFriend.svuid, RPC.PM_addFriend.class);
         classStore.put(RPC.PM_updateMessageID.svuid, RPC.PM_updateMessageID.class);
-        classStore.put(RPC.PM_updatePhotoID.svuid, RPC.PM_updatePhotoID.class);
+        classStore.put(RPC.PM_photoURL.svuid, RPC.PM_photoURL.class);
         classStore.put(RPC.PM_requestPhoto.svuid, RPC.PM_requestPhoto.class);
         classStore.put(RPC.PM_photo.svuid, RPC.PM_photo.class);
         classStore.put(RPC.PM_file.svuid, RPC.PM_file.class);

@@ -188,7 +188,7 @@
                 app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_amount" />
 
             <!--<EditText-->
-            <!--android:id="@+id/fragment_ethereum_wallet_transfer_gas"-->
+            <!--android:gid="@+gid/fragment_ethereum_wallet_transfer_gas"-->
             <!--android:layout_width="0dp"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:layout_marginBottom="4dp"-->
@@ -207,12 +207,12 @@
             <!--android:textSize="24sp"-->
             <!--android:textStyle="bold"-->
             <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_gas_title"-->
+            <!--app:layout_constraintEnd_toStartOf="@+gid/fragment_ethereum_wallet_transfer_gas_title"-->
             <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/textView44" />-->
+            <!--app:layout_constraintTop_toBottomOf="@+gid/textView44" />-->
 
             <!--<TextView-->
-            <!--android:id="@+id/fragment_ethereum_wallet_transfer_gas_title"-->
+            <!--android:gid="@+gid/fragment_ethereum_wallet_transfer_gas_title"-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:background="@color/black_light"-->
@@ -229,10 +229,10 @@
             <!--android:textSize="24sp"-->
             <!--android:textStyle="bold"-->
             <!--android:text="GWEI"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_gas"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+gid/fragment_ethereum_wallet_transfer_gas"-->
             <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_gas"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_gas" />-->
+            <!--app:layout_constraintStart_toEndOf="@+gid/fragment_ethereum_wallet_transfer_gas"-->
+            <!--app:layout_constraintTop_toTopOf="@+gid/fragment_ethereum_wallet_transfer_gas" />-->
 
             <TextView
                 android:id="@+id/textView28"
@@ -263,7 +263,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_amount" />
 
             <!--<TextView-->
-            <!--android:id="@+id/textView44"-->
+            <!--android:gid="@+gid/textView44"-->
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:layout_marginTop="8dp"-->
@@ -274,7 +274,7 @@
             <!--android:textSize="16sp"-->
             <!--app:layout_constraintEnd_toEndOf="parent"-->
             <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_fiat_equivalent" />-->
+            <!--app:layout_constraintTop_toBottomOf="@+gid/fragment_ethereum_wallet_transfer_fiat_equivalent" />-->
 
 
             <LinearLayout
@@ -335,7 +335,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
                     <!--<com.crystal.crystalrangeseekbar.widgets.BubbleThumbSeekbar-->
-                    <!--android:id="@+id/fragment_ethereum_wallet_transfer_gas_price_slider"-->
+                    <!--android:gid="@+gid/fragment_ethereum_wallet_transfer_gas_price_slider"-->
                     <!--android:layout_width="match_parent"-->
                     <!--android:layout_height="wrap_content"-->
                     <!--app:bar_color="#C69E89"-->
@@ -343,7 +343,7 @@
                     <!--app:data_type="_integer"-->
                     <!--app:layout_constraintEnd_toEndOf="parent"-->
                     <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--app:layout_constraintTop_toBottomOf="@+id/textView3"-->
+                    <!--app:layout_constraintTop_toBottomOf="@+gid/textView3"-->
                     <!--app:left_thumb_color="#775E4F"-->
                     <!--app:left_thumb_color_pressed="#4C2D1A" />-->
 
@@ -381,7 +381,7 @@
                      />
 
                 <!--<com.crystal.crystalrangeseekbar.widgets.BubbleThumbSeekbar-->
-                <!--android:id="@+id/fragment_ethereum_wallet_transfer_gas_limit_slider"-->
+                <!--android:gid="@+gid/fragment_ethereum_wallet_transfer_gas_limit_slider"-->
                 <!--android:layout_width="match_parent"-->
                 <!--android:layout_height="wrap_content"-->
                 <!--android:layout_marginBottom="2dp"-->

@@ -1,12 +1,8 @@
 package ru.paymon.android.gateway;
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -15,16 +11,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.daimajia.androidviewhover.tools.Util;
 
 import org.apache.commons.io.IOUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.spongycastle.jce.exception.ExtIOException;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
@@ -35,14 +27,12 @@ import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.TransactionManager;
-import org.web3j.tx.Transfer;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -55,20 +45,16 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.concurrent.ExecutionException;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.BuildConfig;
-import ru.paymon.android.Config;
-import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
-//import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
 import static ru.paymon.android.gateway.Ethereum.TX_STATUS.DONE;
+
+//import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
 
 public class Ethereum {
     private static final String TAG = "Ethereum";
@@ -251,7 +237,7 @@ public class Ethereum {
         String hexValue = Numeric.toHexString(signedMessage);
         Log.d(TAG, "send_RawTx: hex " + hexValue);
 
-        String requestStr = "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"" + hexValue + "\"],\"id\":1}";
+        String requestStr = "{\"jsonrpc\":\"2.0\",\"method\":\"eth_sendRawTransaction\",\"params\":[\"" + hexValue + "\"],\"gid\":1}";
 
         JsonObjectRequest requestObject = null;
         try {
@@ -268,5 +254,19 @@ public class Ethereum {
         requestQueue.add(requestObject);
 
         return DONE;
+    }
+
+    public EthSendTransaction send(BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger amount){
+        EthSendTransaction ethSendTransaction = null;
+        try {
+            BigInteger nonce = web3j.ethGetTransactionCount(getAddress(), DefaultBlockParameterName.LATEST).send().getTransactionCount();
+            RawTransaction rawTransaction = RawTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, to, amount);
+            byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, walletCredentials);
+            String hexValue = Numeric.toHexString(signedMessage);
+             ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return ethSendTransaction;
     }
 }

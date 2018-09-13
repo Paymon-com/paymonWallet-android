@@ -170,7 +170,7 @@ struct X509_VERIFY_PARAM_st
 	int trust;		/* trust setting to check */
 	int depth;		/* Verify depth */
 	STACK_OF(ASN1_OBJECT) *policies;	/* Permissible policies */
-	X509_VERIFY_PARAM_ID *id;	/* opaque ID data */
+	X509_VERIFY_PARAM_ID *gid;	/* opaque ID data */
 	};
 
 DECLARE_STACK_OF(X509_VERIFY_PARAM)
@@ -586,7 +586,7 @@ OPENSSL_EXPORT const char *X509_VERIFY_PARAM_get0_name(const X509_VERIFY_PARAM *
 
 OPENSSL_EXPORT int X509_VERIFY_PARAM_add0_table(X509_VERIFY_PARAM *param);
 OPENSSL_EXPORT int X509_VERIFY_PARAM_get_count(void);
-OPENSSL_EXPORT const X509_VERIFY_PARAM *X509_VERIFY_PARAM_get0(int id);
+OPENSSL_EXPORT const X509_VERIFY_PARAM *X509_VERIFY_PARAM_get0(int gid);
 OPENSSL_EXPORT const X509_VERIFY_PARAM *X509_VERIFY_PARAM_lookup(const char *name);
 OPENSSL_EXPORT void X509_VERIFY_PARAM_table_cleanup(void);
 

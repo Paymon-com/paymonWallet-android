@@ -375,7 +375,7 @@ static int tree_add_unmatched(X509_POLICY_LEVEL *curr,
     if (id == NULL)
         id = node->data->valid_policy;
     /*
-     * Create a new node with qualifiers from anyPolicy and id from unmatched
+     * Create a new node with qualifiers from anyPolicy and gid from unmatched
      * node.
      */
     data = policy_data_new(NULL, id, node_critical(node));
@@ -456,7 +456,7 @@ static int tree_link_any(X509_POLICY_LEVEL *curr,
             continue;
 
         /*
-         * Create a new node with qualifiers from anyPolicy and id from
+         * Create a new node with qualifiers from anyPolicy and gid from
          * unmatched node.
          */
         data = policy_data_new(NULL, node->data->valid_policy,

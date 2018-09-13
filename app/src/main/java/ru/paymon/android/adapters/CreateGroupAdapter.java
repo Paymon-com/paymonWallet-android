@@ -14,6 +14,7 @@ import java.util.List;
 
 import ru.paymon.android.R;
 import ru.paymon.android.models.CreateGroupItem;
+import ru.paymon.android.utils.Utils;
 
 public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.ViewHolder> {
     public List<CreateGroupItem> list;
@@ -31,13 +32,15 @@ public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CreateGroupItem createGroup = list.get(position);
         holder.name.setText(createGroup.name);
-//        holder.photo.setPhoto(createGroup.photo);
         holder.checkBox.setChecked(createGroup.checked);
+
+        if (!createGroup.photo.url.isEmpty())
+            Utils.loadPhoto(createGroup.photo.url, holder.photo);
 
         View.OnClickListener clickListener = (view) -> createGroup.checked = holder.checkBox.isChecked();
 
         holder.checkBox.setOnClickListener(clickListener);
-//        holder.photo.setOnClickListener(clickListener);
+        holder.photo.setOnClickListener(clickListener);
         holder.name.setOnClickListener(clickListener);
     }
 

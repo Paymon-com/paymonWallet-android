@@ -77,7 +77,7 @@ int pkcs8_pbe_decrypt(uint8_t **out, size_t *out_len, CBS *algorithm,
 
 /* pkcs12_key_gen runs the PKCS#12 key derivation function as specified in
  * RFC 7292, appendix B. On success, it writes the resulting |out_len| bytes of
- * key material to |out| and returns one. Otherwise, it returns zero. |id|
+ * key material to |out| and returns one. Otherwise, it returns zero. |gid|
  * should be one of the |PKCS12_*_ID| values. */
 int pkcs12_key_gen(const char *pass, size_t pass_len, const uint8_t *salt,
                    size_t salt_len, uint8_t id, unsigned iterations,

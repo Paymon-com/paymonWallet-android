@@ -21,18 +21,12 @@ import java.util.Locale;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
-import ru.paymon.android.MediaManager;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
-import ru.paymon.android.net.ClassStore;
-import ru.paymon.android.net.ConnectorService;
-import ru.paymon.android.net.NetworkManager;
-import ru.paymon.android.net.Packet;
-import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
 import ru.paymon.android.utils.Utils;
@@ -134,7 +128,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             RPC.UserObject fromUser = user;
             if (fromUser != null) {
                 // TODO: make ObservableImage
-                bitmap = MediaManager.getInstance().loadPhotoBitmap(fromUser.id, fromUser.photoID);
+//                bitmap = MediaManager.getInstance().loadPhotoBitmap(fromUser.gid, fromUser.photoID);
             }
             String text = "";
             if (msg instanceof RPC.PM_message) {
@@ -287,16 +281,24 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 }
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
             });
-        } else if (packet instanceof RPC.PM_updatePhotoID) {
+        } else if (packet instanceof RPC.PM_photoURL) {
             Log.e(Config.TAG, "UPDATE PHOTO ID");
-            final RPC.PM_updatePhotoID update = (RPC.PM_updatePhotoID) packet;
-            MediaManager.getInstance().updatePhotoID(update.oldID, update.newID); //TODO:proverit'
+            final RPC.PM_photoURL update = (RPC.PM_photoURL) packet;
+            if(update.peer instanceof RPC.PM_peerUser){
+                RPC.PM_peerUser peerUser = (RPC.PM_peerUser) ((RPC.PM_photoURL) packet).peer;
+                UsersManager.getInstance().users.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
+                UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
+            }else if (update.peer instanceof  RPC.PM_peerGroup){
+                RPC.PM_peerGroup peerGroup = (RPC.PM_peerGroup) ((RPC.PM_photoURL) packet).peer;
+                GroupsManager.getInstance().groups.get(peerGroup.group_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
+            }
+//            MediaManager.getInstance().updatePhotoID(update.oldID, update.newID); //TODO:proverit'
 //            User.currentUser.photoID = update.newID;
 
 //            ApplicationLoader.applicationHandler.post(() -> ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(update.oldID, update.newID));
         } else if (packet instanceof RPC.PM_photo) {
-//            RPC.PM_photo photo = (RPC.PM_photo) packet;
-//            MediaManager.getInstance().updatePhoto(photo);
+//            RPC.PM_photo photoURL = (RPC.PM_photo) packet;
+//            MediaManager.getInstance().updatePhoto(photoURL);
         } else if (packet instanceof RPC.PM_error) {
             Log.e(Config.TAG, "ERROR");
 
@@ -332,15 +334,15 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 //            requestsMap.remove(messageID);
             RPC.PM_file file = (RPC.PM_file) packet;
 //            requestsMap.get(3);
-//            file.id;
-            if (file.type == FileManager.FileType.PHOTO) {
-                FileManager.getInstance().acceptFileDownload(file, messageID);
-            } else if (file.type == FileManager.FileType.STICKER) {
-                FileManager.getInstance().acceptStickerDownload(file, messageID);
-            }
+//            file.gid;
+//            if (file.type == FileManager.FileType.PHOTO) {
+//                FileManager.getInstance().acceptFileDownload(file, messageID);
+//            } else if (file.type == FileManager.FileType.STICKER) {
+//                FileManager.getInstance().acceptStickerDownload(file, messageID);
+//            }
         } else if (packet instanceof RPC.PM_filePart) {
 //            requestsMap.remove(messageID);
-            FileManager.getInstance().continueFileDownload((RPC.PM_filePart) packet, messageID);
+//            FileManager.getInstance().continueFileDownload((RPC.PM_filePart) packet, messageID);
         }
 
         if (listener != null) {
