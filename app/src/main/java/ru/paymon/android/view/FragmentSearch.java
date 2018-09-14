@@ -26,7 +26,7 @@ import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ChatsSearchAdapter;
 import ru.paymon.android.adapters.MessagesSearchAdapter;
 import ru.paymon.android.models.ChatsSearchItem;
-import ru.paymon.android.models.MessagesSearchItem;
+import ru.paymon.android.models.MessageItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
@@ -84,7 +84,7 @@ public class FragmentSearch extends Fragment {
         recyclerViewChats.setHasFixedSize(true);
         recyclerViewChats.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        LinkedList<MessagesSearchItem> listMessages = new LinkedList<>();
+        LinkedList<MessageItem> listMessages = new LinkedList<>();
         SparseArray<LinkedList<RPC.Message>> chatsDialog = MessagesManager.getInstance().dialogsMessages;
         SparseArray<LinkedList<RPC.Message>> groupChats = MessagesManager.getInstance().groupsMessages;
 
@@ -95,7 +95,7 @@ public class FragmentSearch extends Fragment {
             if(user != null) {
                 for (int j = 0; j < chat.size(); j++) {
                     RPC.Message message = chat.get(j);
-                    listMessages.add(new MessagesSearchItem(message.id, Utils.formatUserName(user), message.text, user.photoURL));
+                    listMessages.add(new MessageItem(message.id, Utils.formatUserName(user), message.text, user.photoURL));
                 }
             }
         }
@@ -128,7 +128,7 @@ public class FragmentSearch extends Fragment {
             public void afterTextChanged(Editable editable) {
 
                 if (currentTabTag.equals("Сообщения")) {
-                    LinkedList<MessagesSearchItem> sortedMessagesList = new LinkedList<>();
+                    LinkedList<MessageItem> sortedMessagesList = new LinkedList<>();
 
                     String text = editable.toString();
 
@@ -137,7 +137,7 @@ public class FragmentSearch extends Fragment {
                         return;
                     }
 
-                    for (MessagesSearchItem message : listMessages) {
+                    for (MessageItem message : listMessages) {
                         if (message.message.toLowerCase().contains(text.toLowerCase())) {
                             sortedMessagesList.add(message);
                         }

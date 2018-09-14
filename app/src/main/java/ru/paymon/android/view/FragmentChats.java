@@ -246,10 +246,11 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                                         lastMessageText = lastMessage.text;
                                         break;
                                 }
-
-                                RPC.UserObject user = UsersManager.getInstance().users.get(lastMessage.from_id);
-                                lastMsgPhoto = user.photoURL;
                             }
+
+                            RPC.UserObject user = UsersManager.getInstance().users.get(lastMessage.from_id);
+                            if (user != null)
+                                lastMsgPhoto = user.photoURL;
 
                             groupItems.add(new ChatsGroupItem(group.id, group.photoURL, lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
                         }

@@ -21,12 +21,12 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.CreateGroupAdapter;
-import ru.paymon.android.models.CreateGroupItem;
+import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentCreateGroup extends Fragment {
-    public LinkedList<CreateGroupItem> createGroupItemList = new LinkedList<>();
+    public LinkedList<UserItem> createGroupItemList = new LinkedList<>();
     private static FragmentCreateGroup instance;
     private CreateGroupAdapter adapter;
 
@@ -84,13 +84,13 @@ public class FragmentCreateGroup extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                LinkedList<CreateGroupItem> sortedUserList = new LinkedList<>();
+                LinkedList<UserItem> sortedUserList = new LinkedList<>();
 
                 String text = editable.toString();
 
                 if (text.trim().isEmpty()) return;
 
-                for (CreateGroupItem user : createGroupItemList) {
+                for (UserItem user : createGroupItemList) {
                     if (user.name.toLowerCase().contains(text.toLowerCase())) {
                         sortedUserList.add(user);
                     }
@@ -105,7 +105,7 @@ public class FragmentCreateGroup extends Fragment {
 
         for (int i = 0; i < userContacts.size(); i++) {
             RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
-            CreateGroupItem createGroupItem = new CreateGroupItem(user.id, Utils.formatUserName(user), user.photoURL);
+            UserItem createGroupItem = new UserItem(user.id, Utils.formatUserName(user), user.photoURL);
             if (createGroupItemList.contains(createGroupItem) || user.id == User.currentUser.id)
                 continue;
             createGroupItemList.add(createGroupItem);

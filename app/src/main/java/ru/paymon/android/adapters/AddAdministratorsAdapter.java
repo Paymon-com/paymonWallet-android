@@ -13,12 +13,13 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.util.List;
 
 import ru.paymon.android.R;
-import ru.paymon.android.models.AddAdministratorsItem;
+import ru.paymon.android.models.UserItem;
+import ru.paymon.android.utils.Utils;
 
 public class AddAdministratorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public List<AddAdministratorsItem> list;
+    public List<UserItem> list;
 
-    public AddAdministratorsAdapter(List<AddAdministratorsItem> list){
+    public AddAdministratorsAdapter(List<UserItem> list){
         this.list = list;
     }
 
@@ -31,17 +32,20 @@ public class AddAdministratorsAdapter extends RecyclerView.Adapter<RecyclerView.
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        AddAdministratorsItem addAdministratorsItem = list.get(position);
+        UserItem userItem = list.get(position);
         AddAdministratorsViewHolder addAdministratorsViewHolder = (AddAdministratorsViewHolder) holder;
 
-        addAdministratorsViewHolder.name.setText(addAdministratorsItem.name);
-//        addAdministratorsViewHolder.photoURL.setPhoto(addAdministratorsItem.photoURL);
-        addAdministratorsViewHolder.checkBox.setChecked(addAdministratorsItem.checked);
+        addAdministratorsViewHolder.name.setText(userItem.name);
 
-        View.OnClickListener clickListener = (view) -> addAdministratorsItem.checked = addAdministratorsViewHolder.checkBox.isChecked();
+        if (!userItem.photo.url.isEmpty())
+            Utils.loadPhoto(userItem.photo.url, addAdministratorsViewHolder.photo);
+
+        addAdministratorsViewHolder.checkBox.setChecked(userItem.checked);
+
+        View.OnClickListener clickListener = (view) -> userItem.checked = addAdministratorsViewHolder.checkBox.isChecked();
 
         addAdministratorsViewHolder.name.setOnClickListener(clickListener);
-//        addAdministratorsViewHolder.photoURL.setOnClickListener(clickListener);
+        addAdministratorsViewHolder.photo.setOnClickListener(clickListener);
         addAdministratorsViewHolder.checkBox.setOnClickListener(clickListener);
     }
 

@@ -3,24 +3,18 @@ package ru.paymon.android.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import ru.paymon.android.R;
 import ru.paymon.android.models.Contact;
-import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.Utils;
 
 public class ContactsInviteRegisteredAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public ArrayList<Contact> registeredContacts;
@@ -41,10 +35,11 @@ public class ContactsInviteRegisteredAdapter extends RecyclerView.Adapter<Recycl
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Contact contact = registeredContacts.get(position);
-        ContactsInviteRegisteredAdapter.ContactsInviteRegisteredViewHolder registeredViewHolder = ( ContactsInviteRegisteredAdapter.ContactsInviteRegisteredViewHolder) holder;
+        ContactsInviteRegisteredViewHolder registeredViewHolder = ( ContactsInviteRegisteredAdapter.ContactsInviteRegisteredViewHolder) holder;
         registeredViewHolder.name.setText(contact.name);
         registeredViewHolder.phoneNumber.setText(contact.phone);
-//        registeredViewHolder.avatar.setPhoto(new RPC.PM_photo());
+        if (!contact.photo.url.isEmpty())
+            Utils.loadPhoto(contact.photo.url, registeredViewHolder.avatar);
         registeredViewHolder.checkBox.setOnCheckedChangeListener((cbutton, newValue) -> contact.isChecked = newValue);
     }
 

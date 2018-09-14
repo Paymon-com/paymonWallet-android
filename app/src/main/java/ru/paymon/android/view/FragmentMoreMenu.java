@@ -46,7 +46,6 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
     public void onResume() {
         super.onResume();
         Utils.showBottomBar(getActivity());
-//        //Utils.setActionBarWithTitle(getActivity(), ApplicationLoader.applicationContext.getString(R.string.title_more));
     }
 
     @Nullable
@@ -65,7 +64,9 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
                 Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentProfile.newInstance(), null));
 
         name.setText(Utils.formatUserName(User.currentUser));
-//        avatar.setPhoto(new RPC.PM_photo(User.currentUser.gid, User.currentUser.photoID));
+
+        if (!User.currentUser.photoURL.url.isEmpty())
+            Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
 
         return view;
     }

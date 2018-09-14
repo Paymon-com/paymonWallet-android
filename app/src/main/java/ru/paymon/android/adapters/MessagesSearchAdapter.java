@@ -12,13 +12,13 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
-import ru.paymon.android.models.MessagesSearchItem;
+import ru.paymon.android.models.MessageItem;
 import ru.paymon.android.utils.Utils;
 
 public class MessagesSearchAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private LinkedList<MessagesSearchItem> messagesSearchItems;
+    private LinkedList<MessageItem> messagesSearchItems;
 
-    public MessagesSearchAdapter(LinkedList<MessagesSearchItem> messagesSearchItems){
+    public MessagesSearchAdapter(LinkedList<MessageItem> messagesSearchItems){
         this.messagesSearchItems = messagesSearchItems;
     }
 
@@ -32,12 +32,12 @@ public class MessagesSearchAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        MessagesSearchItem messagesSearchItem = messagesSearchItems.get(position);
+        MessageItem messageItem = messagesSearchItems.get(position);
         MessagesSearchAdapter.MessagesSearchItemViewHolder messagesSearchItemViewHolder = (MessagesSearchAdapter.MessagesSearchItemViewHolder) holder;
-        if (!messagesSearchItem.photo.url.isEmpty())
-            Utils.loadPhoto(messagesSearchItem.photo.url, messagesSearchItemViewHolder.photo);
-        messagesSearchItemViewHolder.name.setText(messagesSearchItem.name);
-        messagesSearchItemViewHolder.message.setText(messagesSearchItem.message);
+        if (!messageItem.photo.url.isEmpty())
+            Utils.loadPhoto(messageItem.photo.url, messagesSearchItemViewHolder.photo);
+        messagesSearchItemViewHolder.name.setText(messageItem.name);
+        messagesSearchItemViewHolder.message.setText(messageItem.message);
 
     }
 

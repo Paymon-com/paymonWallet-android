@@ -31,12 +31,10 @@ import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MainActivity;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.adapters.AlertDialogCustomAdministratorsAdapter;
-import ru.paymon.android.adapters.AlertDialogCustomBlackListAdapter;
+import ru.paymon.android.adapters.AdministratorsAdapter;
+import ru.paymon.android.adapters.BlackListAdapter;
 import ru.paymon.android.adapters.GroupSettingsAdapter;
-import ru.paymon.android.models.AlertDialogCustomAdministratorsItem;
-import ru.paymon.android.models.AlertDialogCustomBlackListItem;
-import ru.paymon.android.models.CreateGroupItem;
+import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
@@ -53,10 +51,11 @@ public class FragmentGroupSettings extends Fragment {
     boolean isCreator;
     private EditText titleView;
     private RPC.Group group;
-    private LinkedList<CreateGroupItem> list = new LinkedList<>();
-    private LinkedList<AlertDialogCustomBlackListItem> listAlertDialogBlackList = new LinkedList<>();
-    private LinkedList<AlertDialogCustomAdministratorsItem> listAlertDialogAdministrators = new LinkedList<>();
+    private LinkedList<UserItem> list = new LinkedList<>();
+    private LinkedList<UserItem> listAlertDialogBlackList = new LinkedList<>();
+    private LinkedList<UserItem> listAlertDialogAdministrators = new LinkedList<>();
     private static FragmentGroupSettings instance;
+    private CircularImageView photoView;
 
     public static synchronized FragmentGroupSettings newInstance() {
         instance = new FragmentGroupSettings();
@@ -94,7 +93,7 @@ public class FragmentGroupSettings extends Fragment {
 
         titleView = (EditText) view.findViewById(R.id.group_settings_title);
         RecyclerView contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
-        CircularImageView photoView = (CircularImageView) view.findViewById(R.id.group_settings_photo);
+        photoView = (CircularImageView) view.findViewById(R.id.group_settings_photo);
 
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);
@@ -109,7 +108,9 @@ public class FragmentGroupSettings extends Fragment {
             startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
         }));
 
-//        photoView.setPhoto(group.photoURL);
+        if (!group.photoURL.url.isEmpty())
+            Utils.loadPhoto(group.photoURL.url, photoView);
+
         titleView.setText(group.title);
         titleView.setOnEditorActionListener((textView, i, keyEvent) -> {
             Utils.netQueue.postRunnable(() -> {
@@ -174,7 +175,7 @@ public class FragmentGroupSettings extends Fragment {
                 Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, new FragmentGroupAddBlackList(), null);
             });
             RecyclerView blackList = (RecyclerView) view1.findViewById(R.id.alert_dialog_custom_black_list_rv);
-            AlertDialogCustomBlackListAdapter adapter = new AlertDialogCustomBlackListAdapter(listAlertDialogBlackList, group.id, group.creatorID, dialogProgress);
+            BlackListAdapter adapter = new BlackListAdapter(listAlertDialogBlackList, group.id, group.creatorID, dialogProgress);
             blackList.setLayoutManager(new LinearLayoutManager(getContext()));
             blackList.setAdapter(adapter);
             builder.setCancelable(true);
@@ -192,7 +193,7 @@ public class FragmentGroupSettings extends Fragment {
                 Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, new FragmentGroupAddAdministrators(), null);
             });
             RecyclerView adminsList = (RecyclerView) view12.findViewById(R.id.alert_dialog_custom_administrators_rv);
-            AlertDialogCustomAdministratorsAdapter adapter = new AlertDialogCustomAdministratorsAdapter(listAlertDialogAdministrators, group.id, group.creatorID, dialogProgress);
+            AdministratorsAdapter adapter = new AdministratorsAdapter(listAlertDialogAdministrators, group.id, group.creatorID, dialogProgress);
             adminsList.setLayoutManager(new LinearLayoutManager(getContext()));
             adminsList.setAdapter(adapter);
             builder.setCancelable(true);
@@ -219,14 +220,12 @@ public class FragmentGroupSettings extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.group_settings));
         Utils.hideBottomBar(getActivity());
-        //Utils.setArrowBackInToolbar(getActivity());
 
         list.clear();
         ArrayList<RPC.UserObject> users = GroupsManager.getInstance().groupsUsers.get(chatID);
         for (RPC.UserObject user : users) {
-            list.add(new CreateGroupItem(user.id, Utils.formatUserName(user), user.photoURL));
+            list.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
         }
     }
 
@@ -255,19 +254,15 @@ public class FragmentGroupSettings extends Fragment {
                     }
 
                     if (response instanceof RPC.PM_boolTrue) {
-                        FileManager.getInstance().startUploading(/*newPhoto,*/ imagePath, new FileManager.IUploadingFile() {
+                        FileManager.getInstance().startUploading(imagePath, new FileManager.IUploadingFile() {
                             @Override
                             public void onFinish() {
                                 Log.e(Config.TAG, "Group photoURL successfully uploaded");
                                 ApplicationLoader.applicationHandler.post(() -> {
                                     if (dialogProgress != null && dialogProgress.isShowing())
                                         dialogProgress.dismiss();
-//                                            avatar.setPhoto(newPhoto);
-//                                            User.currentUser.photoID = newPhoto.gid;
-//                                            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.PROFILE_PHOTO_UPDATED, User.currentUser.gid, newPhoto, bitmap);
-//                                            ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(oldPhotoID, newPhotoID);
-//                                            NotificationManager.getInstance().postNotificationName(NotificationManager.didPhotoUpdate, bitmap);
-//                                            avatar.setImageBitmap(bitmap);
+                                    if(!group.photoURL.url.isEmpty())
+                                        Utils.loadPhoto(group.photoURL.url, photoView);
                                 });
                             }
 

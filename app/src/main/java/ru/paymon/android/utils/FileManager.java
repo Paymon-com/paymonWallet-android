@@ -1,5 +1,7 @@
 package ru.paymon.android.utils;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.util.LongSparseArray;
 
@@ -7,9 +9,11 @@ import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.concurrent.atomic.AtomicLong;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -91,10 +95,20 @@ public class FileManager {
     private FileManager() {
     }
 
-    public void startUploading(/*RPC.PM_photo photoURL,*/ String filePath, IUploadingFile listener) {
-//        if (uploadingFiles.get(photoURL.gid) != null) return;
+    public void startUploading(String filePath, IUploadingFile listener) {
+        Bitmap b= BitmapFactory.decodeFile(filePath);
+        Bitmap out = Bitmap.createScaledBitmap(b, 300, 300, false);
 
-        File photoFile = new File(filePath);
+        File photoFile = new File(ApplicationLoader.applicationContext.getCacheDir(), "resize.jpg");
+        FileOutputStream fOut;
+        try {
+            fOut = new FileOutputStream(photoFile);
+            out.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            fOut.flush();
+            fOut.close();
+            b.recycle();
+            out.recycle();
+        } catch (Exception e) {}
 
         byte bytes[] = new byte[(int) photoFile.length()];
         try {

@@ -18,7 +18,7 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
-import ru.paymon.android.models.CreateGroupItem;
+import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -26,7 +26,7 @@ import ru.paymon.android.utils.Utils;
 public class DialogFragmentCreateGroup extends DialogFragment {
     private DialogProgress dialogProgress;
     private EditText title;
-    private LinkedList<CreateGroupItem> createGroupList = new LinkedList<>();
+    private LinkedList<UserItem> createGroupList = new LinkedList<>();
 
 
     public static synchronized DialogFragmentCreateGroup newInstance() {
@@ -40,7 +40,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             if (bundle.containsKey("create_group_list")) {
-                createGroupList = (LinkedList<CreateGroupItem>) bundle.getSerializable("create_group_list");
+                createGroupList = (LinkedList<UserItem>) bundle.getSerializable("create_group_list");
             }
         }
     }
@@ -74,7 +74,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
 
             RPC.PM_createGroup createGroupRequest = new RPC.PM_createGroup();
             createGroupRequest.title = title.getText().toString().trim();
-            for (CreateGroupItem createGroupItem : createGroupList) {
+            for (UserItem createGroupItem : createGroupList) {
                 if (createGroupItem.checked) {
                     createGroupRequest.userIDs.add(createGroupItem.uid);
                 }

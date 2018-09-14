@@ -88,7 +88,8 @@ public class FragmentProfileEdit extends Fragment {
         dialogProgress = new DialogProgress(getActivity());
         dialogProgress.setCancelable(true);
 
-//        avatar.setPhoto(photoURL);
+        if (!User.currentUser.photoURL.url.isEmpty())
+            Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
 
         firstName.setText(User.currentUser.first_name);
         lastName.setText(User.currentUser.last_name);
@@ -268,19 +269,15 @@ public class FragmentProfileEdit extends Fragment {
                     }
 
                     if (response instanceof RPC.PM_boolTrue) {
-                        FileManager.getInstance().startUploading(/*newPhoto,*/ imagePath, new FileManager.IUploadingFile() {
+                        FileManager.getInstance().startUploading(imagePath, new FileManager.IUploadingFile() {
                             @Override
                             public void onFinish() {
                                 Log.e(Config.TAG, "Profile photoURL successfully uploaded");
                                 ApplicationLoader.applicationHandler.post(() -> {
                                     if (dialogProgress != null && dialogProgress.isShowing())
                                         dialogProgress.dismiss();
-//                                            avatar.setPhoto(newPhoto);
-//                                            User.currentUser.photoID = newPhoto.gid;
-//                                            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.PROFILE_PHOTO_UPDATED, User.currentUser.gid, newPhoto, bitmap);
-//                                            ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(oldPhotoID, newPhotoID);
-//                                            NotificationManager.getInstance().postNotificationName(NotificationManager.didPhotoUpdate, bitmap);
-//                                            avatar.setImageBitmap(bitmap);
+                                    if(!User.currentUser.photoURL.url.isEmpty())
+                                        Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
                                 });
                             }
 

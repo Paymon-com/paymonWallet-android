@@ -24,7 +24,7 @@ public final class CustomEmojiProvider implements EmojiProvider {
                 new ObjectsCategory(),
                 new SymbolsCategory(),
                 new FlagsCategory(),
-                new StickersCategory() // TODO:заполнить категорию стикерами
+//                new StickersCategory() // TODO:заполнить категорию стикерами
         };
     }
 }

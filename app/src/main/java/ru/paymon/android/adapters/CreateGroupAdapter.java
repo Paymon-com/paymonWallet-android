@@ -13,13 +13,13 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.util.List;
 
 import ru.paymon.android.R;
-import ru.paymon.android.models.CreateGroupItem;
+import ru.paymon.android.models.UserItem;
 import ru.paymon.android.utils.Utils;
 
 public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.ViewHolder> {
-    public List<CreateGroupItem> list;
+    public List<UserItem> list;
 
-    public CreateGroupAdapter(List<CreateGroupItem> list){this.list = list;}
+    public CreateGroupAdapter(List<UserItem> list){this.list = list;}
 
     @NonNull
     @Override
@@ -30,14 +30,14 @@ public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        CreateGroupItem createGroup = list.get(position);
-        holder.name.setText(createGroup.name);
-        holder.checkBox.setChecked(createGroup.checked);
+        UserItem userItem = list.get(position);
+        holder.name.setText(userItem.name);
+        holder.checkBox.setChecked(userItem.checked);
 
-        if (!createGroup.photo.url.isEmpty())
-            Utils.loadPhoto(createGroup.photo.url, holder.photo);
+        if (!userItem.photo.url.isEmpty())
+            Utils.loadPhoto(userItem.photo.url, holder.photo);
 
-        View.OnClickListener clickListener = (view) -> createGroup.checked = holder.checkBox.isChecked();
+        View.OnClickListener clickListener = (view) -> userItem.checked = holder.checkBox.isChecked();
 
         holder.checkBox.setOnClickListener(clickListener);
         holder.photo.setOnClickListener(clickListener);

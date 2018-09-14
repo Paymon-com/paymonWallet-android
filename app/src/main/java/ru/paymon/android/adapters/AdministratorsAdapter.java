@@ -18,7 +18,7 @@ import java.util.LinkedList;
 
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.models.AlertDialogCustomBlackListItem;
+import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.DialogProgress;
@@ -27,15 +27,15 @@ import ru.paymon.android.view.FragmentFriendProfile;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 
-public class AlertDialogCustomBlackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AdministratorsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private LinkedList<AlertDialogCustomBlackListItem> list;
+    private LinkedList<UserItem> list;
     private boolean isCreator;
     private int chatID;
     private RPC.Group group;
     private DialogProgress dialogProgress;
 
-    public AlertDialogCustomBlackListAdapter(LinkedList<AlertDialogCustomBlackListItem> list, int chatID, int creatorID, DialogProgress dialogProgress) {
+    public AdministratorsAdapter(LinkedList<UserItem> list, int chatID, int creatorID, DialogProgress dialogProgress){
         this.list = list;
         this.chatID = chatID;
         this.dialogProgress = dialogProgress;
@@ -46,24 +46,25 @@ public class AlertDialogCustomBlackListAdapter extends RecyclerView.Adapter<Recy
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_group_settings, parent, false);
-        AlertDialogBlackListViewHolder holder = new AlertDialogBlackListViewHolder(view);
+        AlertDialogAdministratorsViewHolder holder = new AlertDialogAdministratorsViewHolder(view);
         context = holder.itemView.getContext();
-        return new AlertDialogBlackListViewHolder(view);
+        return new AlertDialogAdministratorsViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        AlertDialogCustomBlackListItem alertDialogCustomBlackListItem = list.get(position);
-        AlertDialogBlackListViewHolder alertDialogBlackListViewHolder = (AlertDialogBlackListViewHolder) holder;
+        UserItem userItem = list.get(position);
+        AlertDialogAdministratorsViewHolder alertDialogAdministratorsViewHolder = (AlertDialogAdministratorsViewHolder) holder;
 
-        alertDialogBlackListViewHolder.name.setText(alertDialogCustomBlackListItem.name);
-//        alertDialogBlackListViewHolder.photoURL.setPhoto(alertDialogCustomBlackListItem.photoURL);
+        alertDialogAdministratorsViewHolder.name.setText(userItem.name);
 
-        if (alertDialogCustomBlackListItem.uid == User.currentUser.id)
-            alertDialogBlackListViewHolder.removeButton.setVisibility(View.GONE);
+        if (!userItem.photo.url.isEmpty())
+            Utils.loadPhoto(userItem.photo.url, alertDialogAdministratorsViewHolder.photo);
 
-        alertDialogBlackListViewHolder.removeButton.setOnClickListener((view) ->
-        {
+        if (userItem.uid == User.currentUser.id)
+            alertDialogAdministratorsViewHolder.removeButton.setVisibility(View.GONE);
+
+        alertDialogAdministratorsViewHolder.removeButton.setOnClickListener(view -> {
             //TODO:удаление
         });
     }
@@ -73,12 +74,12 @@ public class AlertDialogCustomBlackListAdapter extends RecyclerView.Adapter<Recy
         return list.size();
     }
 
-    private class AlertDialogBlackListViewHolder extends RecyclerView.ViewHolder {
+    private class AlertDialogAdministratorsViewHolder extends RecyclerView.ViewHolder {
         private TextView name;
         private CircularImageView photo;
         private ImageView removeButton;
 
-        private AlertDialogBlackListViewHolder(View itemView) {
+        private AlertDialogAdministratorsViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.cell_group_participant_name);
             photo = (CircularImageView) itemView.findViewById(R.id.cell_group_participant_photo);

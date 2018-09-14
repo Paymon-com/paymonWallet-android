@@ -30,6 +30,7 @@ import com.google.i18n.phonenumbers.NumberParseException;
 import com.google.i18n.phonenumbers.PhoneNumberUtil;
 import com.google.i18n.phonenumbers.Phonenumber;
 import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -420,6 +421,8 @@ public class Utils {
 
     public static void loadPhoto(String url, ImageView view){
         Picasso.get().load(url)
+                .resize(300,300)
+                .centerCrop()
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(view, new Callback() {
                     @Override
@@ -429,6 +432,7 @@ public class Utils {
                     @Override
                     public void onError(Exception e) {
                         Picasso.get().load(url)
+                                .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
                                 .error(R.drawable.profile_photo_none)
                                 .into(view);
                     }

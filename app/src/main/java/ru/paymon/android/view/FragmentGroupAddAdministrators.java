@@ -6,8 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -16,23 +14,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.AddAdministratorsAdapter;
-import ru.paymon.android.models.AddAdministratorsItem;
+import ru.paymon.android.models.UserItem;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentGroupAddAdministrators extends Fragment {
     private static FragmentGroupAddAdministrators instance;
     private AddAdministratorsAdapter adapter;
-    private LinkedList<AddAdministratorsItem> list = new LinkedList<>();
+    private LinkedList<UserItem> list = new LinkedList<>();
     private TextView hintError;
 
     public static synchronized FragmentGroupAddAdministrators newInstance(){

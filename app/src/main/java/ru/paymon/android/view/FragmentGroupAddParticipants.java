@@ -28,7 +28,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.CreateGroupAdapter;
-import ru.paymon.android.models.CreateGroupItem;
+import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -37,7 +37,7 @@ public class FragmentGroupAddParticipants extends Fragment {
     private static FragmentGroupAddParticipants instance;
     private int chatID;
     private RPC.Group group;
-    private LinkedList<CreateGroupItem> addGroupList = new LinkedList<>();
+    private LinkedList<UserItem> addGroupList = new LinkedList<>();
     private CreateGroupAdapter adapter;
     private DialogProgress dialogProgress;
 
@@ -79,7 +79,7 @@ public class FragmentGroupAddParticipants extends Fragment {
 
             RPC.PM_group_addParticipants addParticipantsRequest = new RPC.PM_group_addParticipants();
             addParticipantsRequest.id = chatID;
-            for (CreateGroupItem createGroupItem : addGroupList) {
+            for (UserItem createGroupItem : addGroupList) {
                 if (createGroupItem.checked) {
                     addParticipantsRequest.userIDs.add(createGroupItem.uid);
                 }
@@ -136,13 +136,13 @@ public class FragmentGroupAddParticipants extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                LinkedList<CreateGroupItem> sortedUserList = new LinkedList<>();
+                LinkedList<UserItem> sortedUserList = new LinkedList<>();
 
                 String text = editable.toString();
 
                 if(text.trim().isEmpty()) return;
 
-                for (CreateGroupItem user : addGroupList) {
+                for (UserItem user : addGroupList) {
                     if(user.name.toLowerCase().contains(text.toLowerCase())){
                         sortedUserList.add(user);
                     }
@@ -175,7 +175,7 @@ public class FragmentGroupAddParticipants extends Fragment {
         for (int i = 0; i < userContacts.size(); i++) {
             RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
             if (group.users.contains(user) || user.id == User.currentUser.id) continue;
-            addGroupList.add(new CreateGroupItem(user.id, Utils.formatUserName(user), user.photoURL));
+            addGroupList.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
         }
     }
 
@@ -191,7 +191,7 @@ public class FragmentGroupAddParticipants extends Fragment {
 
                 RPC.PM_group_addParticipants addParticipantsRequest = new RPC.PM_group_addParticipants();
                 addParticipantsRequest.id = chatID;
-                for (CreateGroupItem createGroupItem : addGroupList) {
+                for (UserItem createGroupItem : addGroupList) {
                     if (createGroupItem.checked) {
                         addParticipantsRequest.userIDs.add(createGroupItem.uid);
                     }

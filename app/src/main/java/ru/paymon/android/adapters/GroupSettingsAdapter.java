@@ -23,7 +23,7 @@ import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
-import ru.paymon.android.models.CreateGroupItem;
+import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -35,13 +35,13 @@ import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private LinkedList<CreateGroupItem> list;
+    private LinkedList<UserItem> list;
     private boolean isCreator;
     private int chatID;
     private RPC.Group group;
     private DialogProgress dialogProgress;
 
-    public GroupSettingsAdapter(LinkedList<CreateGroupItem> list, int chatID, int creatorID, DialogProgress dialogProgress) {
+    public GroupSettingsAdapter(LinkedList<UserItem> list, int chatID, int creatorID, DialogProgress dialogProgress) {
         this.list = list;
         this.chatID = chatID;
         this.dialogProgress = dialogProgress;
@@ -60,15 +60,15 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        CreateGroupItem createGroupItem = list.get(position);
+        UserItem userItem = list.get(position);
         GroupsSettingsViewHolder groupsSettingsViewHolder = (GroupsSettingsViewHolder) holder;
 
-        groupsSettingsViewHolder.name.setText(createGroupItem.name);
+        groupsSettingsViewHolder.name.setText(userItem.name);
 
-        if (!createGroupItem.photo.url.isEmpty())
-            Utils.loadPhoto(createGroupItem.photo.url, groupsSettingsViewHolder.photo);
+        if (!userItem.photo.url.isEmpty())
+            Utils.loadPhoto(userItem.photo.url, groupsSettingsViewHolder.photo);
 
-        if (createGroupItem.uid == User.currentUser.id)
+        if (userItem.uid == User.currentUser.id)
             groupsSettingsViewHolder.removeButton.setVisibility(View.GONE);
 
         groupsSettingsViewHolder.removeButton.setOnClickListener((view) ->
@@ -76,15 +76,15 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Подтверждение удаления")
                     .setMessage("Вы хотите удалить участника?")
-                    .setCancelable(true).setPositiveButton("Да", (dialogInterface, i) -> deleteParticipant(createGroupItem)).setNegativeButton("Нет", (dialogInterface, i) -> {
-                    });
+                    .setCancelable(true).setPositiveButton("Да", (dialogInterface, i) -> deleteParticipant(userItem)).setNegativeButton("Нет", (dialogInterface, i) -> {
+            });
 
             AlertDialog alert = builder.create();
             alert.show();
         });
     }
 
-    private void deleteParticipant(CreateGroupItem createGroupItem) {
+    private void deleteParticipant(UserItem createGroupItem) {
         Utils.netQueue.postRunnable(() -> {
             ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
@@ -106,7 +106,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
                     RPC.UserObject userToRemove = UsersManager.getInstance().users.get(removeParticipant.userID);
                     group.users.remove(userToRemove);
 
-                    for (CreateGroupItem item : list) {
+                    for (UserItem item : list) {
                         if (item.uid == userToRemove.id)
                             list.remove(item);
                     }
@@ -151,7 +151,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 final FragmentFriendProfile fragmentFriendProfile = new FragmentFriendProfile();
                 fragmentFriendProfile.setArguments(bundle);
 
-                final FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
+                final FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                 Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);
             };
             itemView.setOnClickListener(listener);

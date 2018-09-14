@@ -57,7 +57,8 @@ public class FragmentProfile extends Fragment {
 
         name.setText(Utils.formatUserName(User.currentUser));
 
-//        avatar.setPhoto(photoURL);
+        if (!User.currentUser.photoURL.url.isEmpty())
+            Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
 
         if (!User.currentUser.email.equals(""))
             email.setText(User.currentUser.email);

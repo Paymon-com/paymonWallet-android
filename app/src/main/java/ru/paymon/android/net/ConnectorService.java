@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.os.Binder;
@@ -30,7 +29,6 @@ import ru.paymon.android.UsersManager;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.utils.cache.lrudiskcache.DiskLruImageCache;
 
 import static ru.paymon.android.MessagesManager.generateMessageID;
 import static ru.paymon.android.net.RPC.ERROR_AUTH;
@@ -123,7 +121,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
         if (!User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) {
             Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), User.CLIENT_MESSAGES_NOTIFY_SOUND_FILE);
-            Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.profile_photo_none));
+//            Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.profile_photo_none));
             RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
             RPC.UserObject fromUser = user;
             if (fromUser != null) {
@@ -164,7 +162,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                         .setAutoCancel(true)
                         .setWhen(System.currentTimeMillis())
                         .setSmallIcon(R.drawable.ic_notification)
-                        .setLargeIcon(bitmap)
+//                        .setLargeIcon(bitmap)
                         .setTicker(getString(R.string.message))
                         .setContentTitle(Utils.formatUserName(user))
                         .setContentText(text)
@@ -287,6 +285,10 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 RPC.PM_peerUser peerUser = (RPC.PM_peerUser) ((RPC.PM_photoURL) packet).peer;
                 UsersManager.getInstance().users.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
                 UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
+                if(User.currentUser.id == peerUser.user_id) {
+                    User.currentUser.photoURL.url = update.url;
+                    User.saveConfig();
+                }
                 Log.e(Config.TAG, "UPDATE PHOTO URL USER");
             } else if (update.peer instanceof RPC.PM_peerGroup) {
                 RPC.PM_peerGroup peerGroup = (RPC.PM_peerGroup) ((RPC.PM_photoURL) packet).peer;

@@ -1,5 +1,6 @@
 package ru.paymon.android.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -150,7 +151,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             emojiPopup.toggle();
         });
 
-        initChat(defaultChatToolbarView, toolbarContainer);
+        initChat();
 
         MessagesManager.getInstance().loadMessages(chatID, 15, 0, isGroup);
 
@@ -193,7 +194,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void initChat(View defaultCustomView, LinearLayout toolbarContainer) {
+    private void initChat() {
         messagesRecyclerView.setHasFixedSize(true);
         messagesRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
@@ -292,6 +293,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         return customView;
     }
 
+    @SuppressLint("DefaultLocale")
     private View createChatGroupCustomView() {
         final View customView = getLayoutInflater().inflate(R.layout.toolbar_chat_group, null);
         final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.toolbar_title);
@@ -304,7 +306,9 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         final RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
         if (group != null) {
             chatTitleTextView.setText(group.title);
-            participantsCountTextView.setText(getString(R.string.participants) + ": " + groupUsers.size());
+            participantsCountTextView.setText(String.format("%s: %d", getString(R.string.participants), groupUsers.size()));
+            if (!group.photoURL.url.isEmpty())
+                Utils.loadPhoto(group.photoURL.url, toolbarAvatar);
         }
 
         customView.setOnClickListener(v -> {

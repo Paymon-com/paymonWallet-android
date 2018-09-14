@@ -13,12 +13,12 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.util.List;
 
 import ru.paymon.android.R;
-import ru.paymon.android.models.AddBlackListItem;
+import ru.paymon.android.models.UserItem;
+import ru.paymon.android.utils.Utils;
 
 public class AddBlackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public List<AddBlackListItem> list;
-
-    public AddBlackListAdapter(List<AddBlackListItem> list){
+    public List<UserItem> list;
+    public AddBlackListAdapter(List<UserItem> list){
         this.list = list;
     }
 
@@ -31,17 +31,20 @@ public class AddBlackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        AddBlackListItem addBlackListItem = list.get(position);
+        UserItem userItem = list.get(position);
         AddBlackListViewHolder addBlackListViewHolder = (AddBlackListViewHolder) holder;
 
-        addBlackListViewHolder.name.setText(addBlackListItem.name);
-//        addBlackListViewHolder.photoURL.setPhoto(addBlackListItem.photoURL);
-        addBlackListViewHolder.checkBox.setChecked(addBlackListItem.checked);
+        addBlackListViewHolder.name.setText(userItem.name);
 
-        View.OnClickListener clickListener = (view) -> addBlackListItem.checked = addBlackListViewHolder.checkBox.isChecked();
+        if (!userItem.photo.url.isEmpty())
+            Utils.loadPhoto(userItem.photo.url, addBlackListViewHolder.photo);
+
+        addBlackListViewHolder.checkBox.setChecked(userItem.checked);
+
+        View.OnClickListener clickListener = (view) -> userItem.checked = addBlackListViewHolder.checkBox.isChecked();
 
         addBlackListViewHolder.name.setOnClickListener(clickListener);
-//        addBlackListViewHolder.photoURL.setOnClickListener(clickListener);
+        addBlackListViewHolder.photo.setOnClickListener(clickListener);
         addBlackListViewHolder.checkBox.setOnClickListener(clickListener);
     }
 
