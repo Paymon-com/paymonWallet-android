@@ -189,7 +189,7 @@ public class Ethereum {
     public BigDecimal getBalance() {
         try {
             return Convert.fromWei(new BigDecimal(web3j.ethGetBalance(getAddress(), DefaultBlockParameterName.fromString("latest")).send().getBalance()), Convert.Unit.ETHER);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -256,17 +256,19 @@ public class Ethereum {
         return DONE;
     }
 
-    public EthSendTransaction send(BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger amount){
-        EthSendTransaction ethSendTransaction = null;
-        try {
-            BigInteger nonce = web3j.ethGetTransactionCount(getAddress(), DefaultBlockParameterName.LATEST).send().getTransactionCount();
-            RawTransaction rawTransaction = RawTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, to, amount);
-            byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, walletCredentials);
-            String hexValue = Numeric.toHexString(signedMessage);
-             ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+    private EthSendTransaction ethSendTransaction;
+
+    public EthSendTransaction send(BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger amount) {
+            try {
+                BigInteger nonce = web3j.ethGetTransactionCount(getAddress(), DefaultBlockParameterName.LATEST).send().getTransactionCount();
+                RawTransaction rawTransaction = RawTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, to, amount);
+                byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, walletCredentials);
+                String hexValue = Numeric.toHexString(signedMessage);
+                ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         return ethSendTransaction;
     }
 }

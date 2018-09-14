@@ -38,7 +38,7 @@ import static ru.paymon.android.net.RPC.ERROR_AUTH_TOKEN;
 import static ru.paymon.android.net.RPC.ERROR_KEY;
 import static ru.paymon.android.net.RPC.ERROR_SPAMMING;
 
-public class ConnectorService extends Service implements NotificationManager.IListener{
+public class ConnectorService extends Service implements NotificationManager.IListener {
     public HashMap<Long, Packet.OnResponseListener> requestsMap = new HashMap<>(2);
     public long lastKeepAlive;
     public String ACTION = "ACTION_NOTIFY_BUTTON";
@@ -106,9 +106,9 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             NetworkManager.getInstance().handshake();
         } else if (event == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
             NetworkManager.getInstance().authByToken();
-        } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED){
+        } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED) {
             NetworkManager.getInstance().connect();
-        } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED){
+        } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED) {
 
         }
     }
@@ -282,21 +282,18 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
             });
         } else if (packet instanceof RPC.PM_photoURL) {
-            Log.e(Config.TAG, "UPDATE PHOTO ID");
             final RPC.PM_photoURL update = (RPC.PM_photoURL) packet;
-            if(update.peer instanceof RPC.PM_peerUser){
+            if (update.peer instanceof RPC.PM_peerUser) {
                 RPC.PM_peerUser peerUser = (RPC.PM_peerUser) ((RPC.PM_photoURL) packet).peer;
                 UsersManager.getInstance().users.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
                 UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
-            }else if (update.peer instanceof  RPC.PM_peerGroup){
+                Log.e(Config.TAG, "UPDATE PHOTO URL USER");
+            } else if (update.peer instanceof RPC.PM_peerGroup) {
                 RPC.PM_peerGroup peerGroup = (RPC.PM_peerGroup) ((RPC.PM_photoURL) packet).peer;
                 GroupsManager.getInstance().groups.get(peerGroup.group_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
+                Log.e(Config.TAG, "UPDATE PHOTO URL GROUP");
             }
-//            MediaManager.getInstance().updatePhotoID(update.oldID, update.newID); //TODO:proverit'
-//            User.currentUser.photoID = update.newID;
-
-//            ApplicationLoader.applicationHandler.post(() -> ObservableMediaManager.getInstance().postPhotoUpdateIDNotification(update.oldID, update.newID));
-        } else if (packet instanceof RPC.PM_photo) {
+//        } else if (packet instanceof RPC.PM_photo) {
 //            RPC.PM_photo photoURL = (RPC.PM_photo) packet;
 //            MediaManager.getInstance().updatePhoto(photoURL);
         } else if (packet instanceof RPC.PM_error) {
