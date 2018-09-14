@@ -20,7 +20,7 @@
         android:orientation="vertical"
         android:background="@drawable/background_msg_sent">
 
-        <hani.momanii.supernova_emoji_library.helper.EmojiconTextView
+        <com.vanniktech.emoji.EmojiTextView
             android:id="@+id/wallet_sent_message_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

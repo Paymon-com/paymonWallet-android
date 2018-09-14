@@ -24,7 +24,7 @@
         android:layout_marginStart="8dp"
         android:background="@drawable/background_msg_rcv">
 
-        <hani.momanii.supernova_emoji_library.helper.EmojiconTextView
+        <com.vanniktech.emoji.EmojiTextView
             android:id="@+id/message_group_received_document_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
