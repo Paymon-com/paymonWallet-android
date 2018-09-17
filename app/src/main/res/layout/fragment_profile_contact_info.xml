@@ -39,50 +39,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/profile_city_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_profile_city"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_city_text_view"
-        app:layout_constraintEnd_toStartOf="@+id/profile_city_text_view"
-        app:layout_constraintTop_toTopOf="@+id/profile_city_text_view" />
-
-    <ImageView
-        android:id="@+id/profile_phone_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_profile_phone"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_phone_text_view"
-        app:layout_constraintEnd_toStartOf="@+id/profile_phone_text_view"
-        app:layout_constraintTop_toTopOf="@+id/profile_phone_text_view" />
-
-    <TextView
-        android:id="@+id/profile_city_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/city"
-        android:textColor="@color/very_dark_gray"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_phone_text_view" />
-
-    <TextView
-        android:id="@+id/profile_phone_text_view"
-        android:layout_width="111dp"
-        android:layout_height="22dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/phone_number"
-        android:textColor="@color/very_dark_gray"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_email_text_view" />
-
     <FrameLayout
         android:id="@+id/fragment_money_frame"
         android:layout_width="0dp"

@@ -73,13 +73,7 @@ public class FragmentProfileEdit extends Fragment {
         TextView changeAvatar = (TextView) view.findViewById(R.id.change_foto);
         TextInputEditText firstName = (TextInputEditText) view.findViewById(R.id.profile_update_name);
         TextInputEditText lastName = (TextInputEditText) view.findViewById(R.id.profile_update_surname);
-        TextInputEditText birthday = (TextInputEditText) view.findViewById(R.id.profile_update_bday);
-        TextInputEditText phone = (TextInputEditText) view.findViewById(R.id.profile_update_phone_edit_text);
-        TextInputEditText city = (TextInputEditText) view.findViewById(R.id.profile_update_city);
-        TextInputEditText country = (TextInputEditText) view.findViewById(R.id.profile_update_country);
         TextInputEditText email = (TextInputEditText) view.findViewById(R.id.profile_update_email);
-        CheckBox male = (CheckBox) view.findViewById(R.id.profile_update_male);
-        CheckBox female = (CheckBox) view.findViewById(R.id.profile_update_female);
         Button saveButton = (Button) view.findViewById(R.id.profile_update_save_button);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
@@ -94,27 +88,6 @@ public class FragmentProfileEdit extends Fragment {
         firstName.setText(User.currentUser.first_name);
         lastName.setText(User.currentUser.last_name);
         email.setText(User.currentUser.email);
-        phone.setText(Utils.formatPhone(User.currentUser.phoneNumber));
-        city.setText(User.currentUser.city);
-        birthday.setText(User.currentUser.birthdate);
-        country.setText(User.currentUser.country);
-
-        switch (User.currentUser.gender) {
-            case 0:
-                female.setChecked(false);
-                male.setChecked(false);
-                break;
-            case 1:
-                female.setChecked(false);
-                male.setChecked(true);
-                break;
-            case 2:
-                female.setChecked(true);
-                male.setChecked(false);
-                break;
-        }
-
-        birthday.setOnClickListener((view1) -> setDate(birthday));
 
         View.OnClickListener avatarListener = (view1) -> {
             ((MainActivity) getActivity()).requestAppPermissions(new String[]{
@@ -129,17 +102,6 @@ public class FragmentProfileEdit extends Fragment {
         avatar.setOnClickListener(avatarListener);
         changeAvatar.setOnClickListener(avatarListener);
 
-        phone.addTextChangedListener(new PhoneNumberFormattingTextWatcher() {
-            @Override
-            public synchronized void afterTextChanged(Editable s) {
-                if (!s.toString().startsWith("+")) {
-                    phone.setText(s.insert(0, "+"));
-                    Selection.setSelection(phone.getText(), phone.getText().length());
-                }
-                super.afterTextChanged(s);
-            }
-        });
-
         saveButton.setOnClickListener((view1) -> {
             if (!Utils.nameCorrect(firstName.getText().toString())) {
                 Toast.makeText(getActivity(), getString(R.string.reg_name_correct), Toast.LENGTH_SHORT).show();
@@ -153,12 +115,6 @@ public class FragmentProfileEdit extends Fragment {
                 return;
             }
 
-            if (!Utils.phoneCorrect(phone.getText().toString())) {
-                Toast.makeText(getActivity(), getString(R.string.reg_phone_correct), Toast.LENGTH_SHORT).show();
-                phone.requestFocus();
-                return;
-            }
-
             if (!Utils.emailCorrect(email.getText().toString())) {
                 Toast.makeText(getActivity(), getString(R.string.reg_check_email), Toast.LENGTH_SHORT).show();
                 email.requestFocus();
@@ -167,13 +123,8 @@ public class FragmentProfileEdit extends Fragment {
 
             Utils.netQueue.postRunnable(() -> {
                 RPC.PM_userFull user = User.currentUser;
-                user.gender = (!male.isChecked() && !female.isChecked()) ? 0 : male.isChecked() ? 1 : 2;
                 user.first_name = firstName.getText().toString();
                 user.last_name = lastName.getText().toString();
-                user.birthdate = birthday.getText().toString();
-                user.phoneNumber = phone.getText().toString().isEmpty() ? 0 : Long.parseLong(phone.getText().toString().replace(" ", "").replace("+", "").replace("-", "").replace("(", "").replace(")", ""));
-                user.city = city.getText().toString();
-                user.country = country.getText().toString();
                 user.email = email.getText().toString();
 
                 ApplicationLoader.applicationHandler.post(dialogProgress::show);

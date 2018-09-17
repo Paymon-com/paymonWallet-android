@@ -21,15 +21,5 @@
             android:defaultValue="false"
             android:key="CLIENT_CONF_HIDE_EMAIL_SWITCH"
             android:title="@string/hide_email" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="CLIENT_CONF_HIDE_PHONE_SWITCH"
-            android:title="@string/hide_phone" />
-
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="CLIENT_CONF_HIDE_NAME_SWITCH"
-            android:title="@string/hide_username" />
     </PreferenceCategory>
 </PreferenceScreen>

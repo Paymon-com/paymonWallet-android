@@ -76,9 +76,6 @@ public class FragmentFriendProfile extends Fragment {
 
         floatMenu = (ImageButton) view.findViewById(R.id.friend_profile_menu_button);
         TextView friendProfileCity = (TextView) view.findViewById(R.id.friend_profile_city_text_view);
-        TextView friendProfileCountry = (TextView) view.findViewById(R.id.friend_profile_country_text_view);
-        TextView friendProfilePhoneNumber = (TextView) view.findViewById(R.id.friend_profile_phone_text_view);
-        TextView friendProfileBday = (TextView) view.findViewById(R.id.friend_profile_bday_text_view);
         TextView friendProfileLogin = (TextView) view.findViewById(R.id.status_friend_profile_text_view);
         TextView friendProfileName = (TextView) view.findViewById(R.id.name_friend_profile_text_view);
         CircularImageView avatar = (CircularImageView) view.findViewById(R.id.friend_profile_avatar_image_view);
@@ -105,25 +102,10 @@ public class FragmentFriendProfile extends Fragment {
                         friendProfileName.setText(Utils.formatUserName(user));
                         friendProfileLogin.setText("@" + user.login);
 
-                        if (!user.city.isEmpty())
-                            friendProfileCity.setText(user.city);
+                        if (!user.email.isEmpty())
+                            friendProfileCity.setText(user.email);
                         else
                             friendProfileCity.setText(R.string.not_specified);
-
-                        if (!user.country.isEmpty())
-                            friendProfileCountry.setText(user.country);
-                        else
-                            friendProfileCountry.setText(R.string.not_specified);
-
-                        if (user.phoneNumber != 0)
-                            friendProfilePhoneNumber.setText(String.valueOf(user.phoneNumber));
-                        else
-                            friendProfilePhoneNumber.setText(R.string.not_specified);
-
-                        if (!user.birthdate.isEmpty())
-                            friendProfileBday.setText(user.birthdate);
-                        else
-                            friendProfileBday.setText(R.string.not_specified);
 
                         if (!user.photoURL.url.isEmpty())
                             Utils.loadPhoto(user.photoURL.url, avatar);

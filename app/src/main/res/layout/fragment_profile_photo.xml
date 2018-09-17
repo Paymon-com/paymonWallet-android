@@ -49,11 +49,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
-
         android:text="@string/status"
         android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_avatar_image_view"
+        app:layout_constraintStart_toEndOf="@+id/profile_avatar_image_view" />
+
+    <TextView
+        android:id="@+id/login_profile_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Логин"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/status_profile_text_view"
         app:layout_constraintStart_toEndOf="@+id/profile_avatar_image_view"
         app:layout_constraintTop_toBottomOf="@+id/name_profile_text_view" />
 
@@ -62,7 +73,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
         android:maxLines="1"
         android:maxWidth="190dp"
         android:text="ник нейм"
@@ -80,22 +90,5 @@
         android:src="@drawable/profile_photo_none"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-    <!--<ru.paymon.android.components.CircleImageView-->
-    <!--android:gid="@+gid/profile_avatar_image_view"-->
-    <!--android:layout_width="70dp"-->
-    <!--android:layout_height="70dp"-->
-    <!--android:layout_marginStart="16dp"-->
-    <!--android:layout_marginTop="16dp"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent" />-->
-    <!--<FrameLayout-->
-    <!--android:gid="@+gid/frameLayout5"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="1px"-->
-    <!--android:layout_marginEnd="8dp"-->
-    <!--android:layout_marginStart="8dp"-->
-    <!--android:layout_marginTop="8dp"-->
-    <!--android:background="@color/gray_white"-->
-    <!--/>-->
 
 </android.support.constraint.ConstraintLayout>
