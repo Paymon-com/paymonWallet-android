@@ -1,6 +1,5 @@
 package ru.paymon.android;
 
-import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 
@@ -126,15 +125,12 @@ public class MessagesManager implements NotificationManager.IListener {
                     for (RPC.Message msg : packet.messages)
                         putMessage(msg);
 
-                    for (RPC.Group grp : packet.groups) {
-                        GroupsManager.getInstance().putGroup(grp);
-                        Log.e("GROUP " + grp.title + " " + grp.id, grp.photoURL.url);
-                    }
 
-                    for (RPC.UserObject usr : packet.users) {
+                    for (RPC.UserObject usr : packet.users)
                         UsersManager.getInstance().putUser(usr);
-                        Log.e("USER " + usr.id, usr.photoURL.url);
-                    }
+
+                    for (RPC.Group grp : packet.groups)
+                        GroupsManager.getInstance().putGroup(grp);
 
                     for (int i = 0; i < dialogsMessages.size(); i++) {
                         LinkedList<RPC.Message> array = dialogsMessages.get(dialogsMessages.keyAt(i));
