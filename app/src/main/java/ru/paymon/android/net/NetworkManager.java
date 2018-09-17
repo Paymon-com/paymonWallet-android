@@ -7,16 +7,11 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
-import ru.paymon.android.net.ConnectorService;
-import ru.paymon.android.net.NetworkManager;
-import ru.paymon.android.net.Packet;
-import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
 import ru.paymon.android.utils.Utils;
@@ -24,7 +19,7 @@ import ru.paymon.android.utils.Utils;
 import static ru.paymon.android.Config.TAG;
 
 public class NetworkManager {
-    private ConnectionState connectionState;
+    public ConnectionState connectionState;
     public NetworkState networkState;
     private boolean handshaked;
     private boolean authorized;
@@ -149,7 +144,7 @@ public class NetworkManager {
     }
 
     public void reconnect() {
-        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
+//        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
         reset();
         native_reconnect();
     }

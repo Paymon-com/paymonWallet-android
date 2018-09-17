@@ -271,4 +271,10 @@ public class Ethereum {
 
         return ethSendTransaction;
     }
+
+    public void getTransactionsHistory(){
+//        web3j.transactionObservable() // TODO: JUST DO IT
+
+    }
+
 }

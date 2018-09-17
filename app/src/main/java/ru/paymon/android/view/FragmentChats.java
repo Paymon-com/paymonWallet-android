@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -37,12 +38,13 @@ import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
-public class FragmentChats extends Fragment implements NotificationManager.IListener {
+public class FragmentChats extends Fragment implements NotificationManager.IListener, SwipeRefreshLayout.OnRefreshListener {
     private static FragmentChats instance;
     private ChatsAdapter chatsAdapter, dialogsAdapter, groupsAdapter;
     private boolean isLoading;
     private TextView toolbarTitle;
     private RecyclerView chatsRecyclerView, chatsAllRecyclerView, groupsRecyclerView;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public static synchronized FragmentChats getInstance() {
         if (instance == null)
@@ -56,12 +58,6 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         chatsAdapter = new ChatsAdapter(iChatsClickListener);
         dialogsAdapter = new ChatsAdapter(iChatsClickListener);
         groupsAdapter = new ChatsAdapter(iChatsClickListener);
-        if (NetworkManager.getInstance().isAuthorized()) {
-            if (!isLoading) {
-                isLoading = true;
-                MessagesManager.getInstance().loadChats(!NetworkManager.getInstance().isConnected());
-            }
-        }
     }
 
     @Nullable
@@ -80,6 +76,9 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
         chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
         groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
+        swipeRefreshLayout = view.findViewById(R.id.fragment_chats_swipe_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         toolbarCreateGroup.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentCreateGroup.newInstance(), null));
 
@@ -168,14 +167,20 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
         MessagesManager.getInstance().currentChatID = 0;
+        if (NetworkManager.getInstance().isAuthorized()) {
+            if (!isLoading) {
+                isLoading = true;
+                MessagesManager.getInstance().loadChats(!NetworkManager.getInstance().isConnected());
+            }
+        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        chatsAllRecyclerView.setAdapter(null);
-        chatsRecyclerView.setAdapter(null);
-        groupsRecyclerView.setAdapter(null);
+//        chatsAllRecyclerView.setAdapter(null);
+//        chatsRecyclerView.setAdapter(null);
+//        groupsRecyclerView.setAdapter(null);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.dialogsNeedReload);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
     }
@@ -284,6 +289,8 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 //                    });
                 }
                 isLoading = false;
+
+                ApplicationLoader.applicationHandler.post(()->swipeRefreshLayout.setRefreshing(false));
             } else if (id == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
                 View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
 //                ApplicationLoader.applicationHandler.post(() ->  Utils.setActionBarWithCustomView(getActivity(), connectingView)  textToolAll.setText("Connection")  toolbar.setText("Connecting"));
@@ -321,5 +328,15 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
         pointLayout.startAnimation(rotateAnimation);
 
         return customView;
+    }
+
+    @Override
+    public void onRefresh() {
+        if (NetworkManager.getInstance().isAuthorized()) {
+            if (!isLoading) {
+                isLoading = true;
+                MessagesManager.getInstance().loadChats(!NetworkManager.getInstance().isConnected());
+            }
+        }
     }
 }

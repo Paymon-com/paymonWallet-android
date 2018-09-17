@@ -64,6 +64,7 @@ public class FragmentEthereumWalletTransferInfo extends Fragment {
                     EthSendTransaction ethSendTransaction = Ethereum.getInstance().send(gasPrice, gasLimit, toAddr, Convert.toWei(amountValue, Convert.Unit.ETHER).toBigInteger());
                     if(ethSendTransaction != null) {
                         Log.e("AAA", ethSendTransaction.getTransactionHash());
+                        Log.e("AAA", ethSendTransaction.getResult());
                     }else{
                         Log.e("AAA", "null");
                     }
