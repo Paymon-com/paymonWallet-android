@@ -19,7 +19,6 @@ import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.Utils;
 
 
-
 public class ApplicationLoader extends Application {
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
@@ -40,7 +39,7 @@ public class ApplicationLoader extends Application {
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
-        Utils.stageQueue.postRunnable(()->{
+        Utils.stageQueue.postRunnable(() -> {
 //            DBHelper dbHelper = new DBHelper(applicationContext);
 //            try{
 //                db = dbHelper.getWritableDatabase();
@@ -52,9 +51,8 @@ public class ApplicationLoader extends Application {
         });
 
         NetworkStateReceiver networkStateReceiver = new NetworkStateReceiver();
-
-        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        ApplicationLoader.applicationContext.registerReceiver(networkStateReceiver, filter);
+        IntentFilter networkIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        ApplicationLoader.applicationContext.registerReceiver(networkStateReceiver, networkIntentFilter);
 
         Utils.checkDisplaySize(getApplicationContext(), null);
         Utils.maxSize = Utils.displaySize.x - Utils.displaySize.x / 100.0 * 45;
@@ -75,7 +73,8 @@ public class ApplicationLoader extends Application {
     }
 
     private static StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
-    public static void initStrictMode(){
+
+    public static void initStrictMode() {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
                 .detectDiskReads()
                 .detectDiskReads()
@@ -89,7 +88,7 @@ public class ApplicationLoader extends Application {
 //                .dete);
     }
 
-    public static void setOldStrictMode(){
+    public static void setOldStrictMode() {
         StrictMode.setThreadPolicy(old);
     }
 }

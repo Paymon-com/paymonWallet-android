@@ -1482,7 +1482,7 @@ public class RPC {
         }
 
         public void readParams(SerializableData stream, boolean exception) {
-            peer = Peer.PMdeserialize(stream,stream.readInt32(exception),exception);
+            peer = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
             url = stream.readString(exception);
         }
 
@@ -2216,6 +2216,62 @@ public class RPC {
             stream.writeInt32(count);
             for (int i = 0; i < count; i++) {
                 stream.writeString(urls.get(i));
+            }
+        }
+    }
+
+    public static class MessageAction extends Packet {
+        public String message;
+        public List<UserObject> users;
+
+        public static MessageAction deserialize(SerializableData stream, int constructor, boolean exception) {
+            MessageAction result = null;
+            switch (constructor) {
+                case PM_user.svuid:
+                    result = new PM_messageActionGroupCreate();
+                    break;
+            }
+            if (result == null && exception) {
+                throw new RuntimeException(String.format("can't parse magic %x in MessageAction", constructor));
+            }
+            if (result != null) {
+                try {
+                    result.readParams(stream, exception);
+                } catch (Exception e) {
+                    return null;
+                }
+            }
+            return result;
+        }
+    }
+
+    public static class PM_messageActionGroupCreate extends MessageAction {
+        public static int svuid = 42618952;
+
+        public void readParams(SerializableData stream, boolean exception) {
+            int magic = stream.readInt32(exception);
+            if (magic != SVUID_ARRAY) {
+                if (exception) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", magic));
+                }
+                return;
+            }
+
+            int count = stream.readInt32(exception);
+            for (int i = 0; i < count; i++) {
+                UserObject user = UserObject.deserialize(stream, stream.readInt32(exception), exception);
+                users.add(user);
+            }
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            stream.writeString(message);
+            stream.writeInt32(SVUID_ARRAY);
+            int count = users.size();
+            stream.writeInt32(count);
+            for (int i = 0; i < count; i++) {
+                users.get(i).serializeToStream(stream);
             }
         }
     }

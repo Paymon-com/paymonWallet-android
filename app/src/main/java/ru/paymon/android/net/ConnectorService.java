@@ -6,13 +6,19 @@ import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Ringtone;
+import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Binder;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -35,6 +41,7 @@ import static ru.paymon.android.net.RPC.ERROR_AUTH;
 import static ru.paymon.android.net.RPC.ERROR_AUTH_TOKEN;
 import static ru.paymon.android.net.RPC.ERROR_KEY;
 import static ru.paymon.android.net.RPC.ERROR_SPAMMING;
+import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class ConnectorService extends Service implements NotificationManager.IListener {
     public HashMap<Long, Packet.OnResponseListener> requestsMap = new HashMap<>(2);
@@ -45,9 +52,41 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     private static final int NOTIFY_ID = 101;
     private final IBinder binder = new LocalBinder();
     private BroadcastReceiver broadcastReceiver;
-    private android.app.NotificationManager notificationManager;
     private RPC.Message msg;
     private boolean receiverRegistered;
+    private android.app.NotificationManager notificationManager;
+
+    private void registerReceiver() {
+        broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                Log.e(Config.TAG, "Notify accepted action: " + intent.getAction());
+                String code = intent.getAction();
+
+                if (code != null && code.equals(ACTION)) {
+                    final boolean isGroup = intent.getBooleanExtra("IS_GROUP", false);
+                    final int cid = intent.getIntExtra("CHAT_ID", 0);
+                    Intent actIntent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
+                    actIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(CHAT_ID_KEY, cid);
+                    if (isGroup)
+                        bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(cid));
+                    actIntent.putExtra("OPEN_CHAT_BUNDLE", bundle);
+                    notificationManager.cancel(NOTIFY_ID);
+                    startActivity(actIntent);
+                }
+            }
+        };
+        IntentFilter filter = new IntentFilter(ACTION);
+        registerReceiver(broadcastReceiver, filter);
+        receiverRegistered = true;
+    }
+
+    private void unregisterReceiver() {
+        unregisterReceiver(broadcastReceiver);
+        receiverRegistered = false;
+    }
 
     //region binding
     public class LocalBinder extends Binder {
@@ -75,6 +114,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
+        registerReceiver();
         super.onCreate();
     }
 
@@ -86,6 +126,8 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
+        if (receiverRegistered)
+            unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -94,6 +136,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
+        unregisterReceiver();
         super.onDestroy();
     }
     //endregion
@@ -120,14 +163,9 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                     return;
 
         if (!User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) {
-            Ringtone ringtone = RingtoneManager.getRingtone(getApplicationContext(), User.CLIENT_MESSAGES_NOTIFY_SOUND_FILE);
-//            Bitmap bitmap = DiskLruImageCache.getInstance().getBitmap(String.valueOf(R.drawable.profile_photo_none));
+            Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
-            RPC.UserObject fromUser = user;
-            if (fromUser != null) {
-                // TODO: make ObservableImage
-//                bitmap = MediaManager.getInstance().loadPhotoBitmap(fromUser.gid, fromUser.photoID);
-            }
+
             String text = "";
             if (msg instanceof RPC.PM_message) {
                 text = msg.text;
@@ -149,41 +187,42 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
             Context context = getApplicationContext();
 
-            Intent notificationIntent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-            PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
-
             if (user != null) {
-                Intent intentBtnReply = new Intent(ConnectorService.BROADCAST_ACTION);
-                intentBtnReply.putExtra(ACTION, "close");
+                final boolean isGroup = msg.to_id instanceof RPC.PM_peerGroup;
+                final int cid = isGroup ? msg.to_id.group_id : msg.from_id;
+                Intent intentBtnReply = new Intent(ACTION);
+                intentBtnReply.setAction(ACTION);
+                intentBtnReply.putExtra("IS_GROUP", isGroup);
+                intentBtnReply.putExtra("CHAT_ID", cid);
                 PendingIntent pIntentBtnReply = PendingIntent.getBroadcast(this, 2, intentBtnReply, 0);
 
+                Bitmap bmp = null;
+                try {
+                    Picasso.get().load(user.photoURL.url).get();
+                } catch (Exception e) {
+                    bmp = BitmapFactory.decodeResource(getResources(), R.drawable.profile_photo_none);
+                }
+
                 Notification.Builder builder = new Notification.Builder(context);
-                builder.setContentIntent(contentIntent)
+                builder.setContentIntent(pIntentBtnReply)
                         .setAutoCancel(true)
                         .setWhen(System.currentTimeMillis())
                         .setSmallIcon(R.drawable.ic_notification)
-//                        .setLargeIcon(bitmap)
+                        .setLargeIcon(bmp)
+                        .setSound(ringtoneUri)
                         .setTicker(getString(R.string.message))
                         .setContentTitle(Utils.formatUserName(user))
                         .setContentText(text)
                         .addAction(R.drawable.ic_answer_message, getString(R.string.replay_button), pIntentBtnReply);
 
-                if (User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION) {
-                    builder.setVibrate(new long[]{100, 200, 100, 300});
-                }
+                builder.setVibrate(new long[]{100, 200, 100, 300});
 
-                Notification notification;
+                Notification notification = builder.build();
 
-                if (android.os.Build.VERSION.SDK_INT <= 15) {
-                    notification = builder.getNotification(); // API-15 and lower
-                } else {
-                    notification = builder.build();
-                }
+                notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-                notificationManager.notify(NOTIFY_ID, notification);
-
-                ringtone.play();
-                Log.d(Config.TAG, "Notify with ID " + NOTIFY_ID + " showed");
+                if (notificationManager != null)
+                    notificationManager.notify(NOTIFY_ID, notification);
             }
         }
 
@@ -277,7 +316,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                     MessagesManager.getInstance().lastGroupMessages.put(msg.to_id.group_id, msg.id);
                 }
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
-                //            showNotify(msg);
+                showNotify(msg);
             });
         } else if (packet instanceof RPC.PM_photoURL) {
             final RPC.PM_photoURL update = (RPC.PM_photoURL) packet;
@@ -285,7 +324,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 RPC.PM_peerUser peerUser = (RPC.PM_peerUser) ((RPC.PM_photoURL) packet).peer;
                 UsersManager.getInstance().users.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
                 UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
-                if(User.currentUser.id == peerUser.user_id) {
+                if (User.currentUser.id == peerUser.user_id) {
                     User.currentUser.photoURL.url = update.url;
                     User.saveConfig();
                 }

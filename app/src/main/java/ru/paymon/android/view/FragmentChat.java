@@ -333,7 +333,10 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
             if (messagesAdapter == null || messagesAdapter.messageIDs == null) return;
 
-            messagesAdapter.messageIDs.addAll(messages);
+            if (!onScroll)
+                messagesAdapter.messageIDs.addAll(messages);
+            else
+                messagesAdapter.messageIDs.addAll(0, messages);
 
             ApplicationLoader.applicationHandler.post(() -> {
                 messagesAdapter.notifyDataSetChanged();

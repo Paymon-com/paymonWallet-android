@@ -11,18 +11,30 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
-import android.view.View;
 
 import ru.paymon.android.R;
+import ru.paymon.android.view.FragmentChat;
 
 public abstract class AbsRuntimePermission extends AppCompatActivity {
     private SparseIntArray mErrorString;
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null) {
+            if (intent.getBundleExtra("OPEN_CHAT_BUNDLE") != null) {
+                final FragmentChat fragmentChat = FragmentChat.newInstance();
+                Bundle bundle = intent.getBundleExtra("OPEN_CHAT_BUNDLE");
+                fragmentChat.setArguments(bundle);
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), fragmentChat, null);
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mErrorString = new SparseIntArray();
-
     }
 
     public abstract void onPermissionsGranted(final int requestCode);
