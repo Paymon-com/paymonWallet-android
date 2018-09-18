@@ -29,21 +29,11 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/friend_profile_city_image_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="32dp"
-                android:src="@drawable/ic_profile_phone"
-                app:layout_constraintBottom_toBottomOf="@+id/friend_profile_phone_text_view"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/friend_profile_phone_text_view" />
-
-            <ImageView
                 android:id="@+id/friend_profile_phone_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:src="@drawable/ic_profile_city"
+                android:src="@drawable/ic_email"
                 app:layout_constraintBottom_toBottomOf="@+id/friend_profile_city_text_view"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/friend_profile_city_text_view" />
@@ -54,35 +44,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/city"
+                android:text="@string/email"
                 android:textColor="@color/very_dark_gray"
                 app:layout_constraintStart_toEndOf="@+id/friend_profile_phone_image_view"
                 app:layout_constraintTop_toBottomOf="@+id/personal_inf_text_view" />
-
-            <TextView
-                android:id="@+id/friend_profile_phone_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:text="@string/phone_number"
-                android:textColor="@color/very_dark_gray"
-                app:layout_constraintStart_toEndOf="@+id/friend_profile_city_image_view"
-                app:layout_constraintTop_toBottomOf="@+id/friend_profile_city_text_view" />
-
-            <FrameLayout
-                android:id="@+id/fragment_money_frame"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="16dp"
-                android:background="@color/colorPrimary"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/friend_profile_phone_text_view">
-
-            </FrameLayout>
 
         </android.support.constraint.ConstraintLayout>
     </LinearLayout>

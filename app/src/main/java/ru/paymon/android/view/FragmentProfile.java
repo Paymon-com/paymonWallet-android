@@ -44,10 +44,7 @@ public class FragmentProfile extends Fragment {
         CircularImageView avatar = (CircularImageView) view.findViewById(R.id.profile_avatar_image_view);
         TextView name = (TextView) view.findViewById(R.id.name_profile_text_view);
         TextView email = (TextView) view.findViewById(R.id.profile_email_text_view);
-        TextView phone = (TextView) view.findViewById(R.id.profile_phone_text_view);
-        TextView city = (TextView) view.findViewById(R.id.profile_city_text_view);
-        TextView birthday = (TextView) view.findViewById(R.id.profile_bday_text_view);
-        TextView country = (TextView) view.findViewById(R.id.profile_country_text_view);
+        TextView login = (TextView) view.findViewById(R.id.login_profile_text_view);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
         backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
@@ -56,6 +53,7 @@ public class FragmentProfile extends Fragment {
                 Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentProfileEdit.newInstance(), null));
 
         name.setText(Utils.formatUserName(User.currentUser));
+        login.setText(String.format("@%s", User.currentUser.login));
 
         if (!User.currentUser.photoURL.url.isEmpty())
             Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
@@ -64,26 +62,6 @@ public class FragmentProfile extends Fragment {
             email.setText(User.currentUser.email);
         else
             email.setText(R.string.not_specified);
-
-        if (User.currentUser.phoneNumber != 0)
-            phone.setText(Utils.formatPhone(User.currentUser.phoneNumber));
-        else
-            phone.setText(R.string.not_specified);
-
-        if (!User.currentUser.city.isEmpty())
-            city.setText(User.currentUser.city);
-        else
-            city.setText(R.string.not_specified);
-
-        if (!User.currentUser.birthdate.isEmpty())
-            birthday.setText(User.currentUser.birthdate);
-        else
-            birthday.setText(R.string.not_specified);
-
-        if (!User.currentUser.country.isEmpty())
-            country.setText(User.currentUser.country);
-        else
-            country.setText(R.string.not_specified);
 
         return view;
     }
