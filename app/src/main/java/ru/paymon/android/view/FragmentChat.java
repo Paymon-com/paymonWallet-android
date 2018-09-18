@@ -83,7 +83,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
             if (bundle.containsKey("users")) {
                 isGroup = true;
                 groupUsers = bundle.getParcelableArrayList("users");
-            }else{
+            } else {
                 isGroup = false;
             }
         }
@@ -147,7 +147,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         final EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(emoticonsButton).build(messageInput);
 
-        emoticonsButton.setOnClickListener((view1)->{
+        emoticonsButton.setOnClickListener((view1) -> {
             emojiPopup.toggle();
         });
 
@@ -333,19 +333,21 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
             if (messagesAdapter == null || messagesAdapter.messageIDs == null) return;
 
-            messagesAdapter.messageIDs.addAll( messages);
+            messagesAdapter.messageIDs.addAll(messages);
 
-            messagesAdapter.notifyDataSetChanged();
-            if (!onScroll) {
-                if (((LinearLayoutManager) messagesRecyclerView.getLayoutManager()).findLastVisibleItemPosition() >= messagesRecyclerView.getAdapter().getItemCount() - 2)
-                    messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
-            } else {
-                if (messagesAdapter.getItemCount() > 0) {
-                    int scrolledCount = (int) args[2];
-                    messagesRecyclerView.scrollToPosition(scrolledCount + ((LinearLayoutManager) messagesRecyclerView.getLayoutManager()).findLastVisibleItemPosition());
+            ApplicationLoader.applicationHandler.post(() -> {
+                messagesAdapter.notifyDataSetChanged();
+                if (!onScroll) {
+                    if (((LinearLayoutManager) messagesRecyclerView.getLayoutManager()).findLastVisibleItemPosition() >= messagesRecyclerView.getAdapter().getItemCount() - 2)
+                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
+                } else {
+                    if (messagesAdapter.getItemCount() > 0) {
+                        int scrolledCount = (int) args[2];
+                        messagesRecyclerView.scrollToPosition(scrolledCount + ((LinearLayoutManager) messagesRecyclerView.getLayoutManager()).findLastVisibleItemPosition());
+                    }
                 }
-            }
-            loadingMessages = false;
+                loadingMessages = false;
+            });
         }
     }
 
