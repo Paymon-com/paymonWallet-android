@@ -125,7 +125,6 @@ public class MessagesManager implements NotificationManager.IListener {
                     for (RPC.Message msg : packet.messages)
                         putMessage(msg);
 
-
                     for (RPC.UserObject usr : packet.users)
                         UsersManager.getInstance().putUser(usr);
 
@@ -216,6 +215,7 @@ public class MessagesManager implements NotificationManager.IListener {
             if (messagesToShow.size() > 0) {
                 Collections.sort(messagesToShow, Long::compareTo);
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.chatAddMessages, messagesToShow, false);
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
             }
         }
     }

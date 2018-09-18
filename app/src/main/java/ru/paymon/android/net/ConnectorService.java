@@ -245,10 +245,9 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
         if (packet instanceof RPC.Message) {
             msg = (RPC.Message) packet;
-            showNotify(msg);
             final LinkedList<RPC.Message> messages = new LinkedList<>();
             messages.add(msg);
-            ApplicationLoader.applicationHandler.post(() -> {
+            Utils.netQueue.postRunnable(() -> {
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES, messages);
                 RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
                 if (user == null) {
@@ -278,6 +277,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                     MessagesManager.getInstance().lastGroupMessages.put(msg.to_id.group_id, msg.id);
                 }
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
+                //            showNotify(msg);
             });
         } else if (packet instanceof RPC.PM_photoURL) {
             final RPC.PM_photoURL update = (RPC.PM_photoURL) packet;

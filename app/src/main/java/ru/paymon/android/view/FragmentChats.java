@@ -264,14 +264,16 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
 
                 if (!dialogsItems.isEmpty()) {
                     Collections.sort(dialogsItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
-                    dialogsAdapter.chatsItemsList = dialogsItems;
+                    dialogsAdapter.chatsItemsList.clear();
+                    dialogsAdapter.chatsItemsList.addAll(dialogsItems);
                     ApplicationLoader.applicationHandler.post(() -> dialogsAdapter.notifyDataSetChanged());
                 } else {
                 }
 
                 if (!groupItems.isEmpty()) {
                     Collections.sort(groupItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
-                    groupsAdapter.chatsItemsList = groupItems;
+                    groupsAdapter.chatsItemsList.clear();
+                    groupsAdapter.chatsItemsList.addAll(groupItems);
                     ApplicationLoader.applicationHandler.post(() -> groupsAdapter.notifyDataSetChanged());
                 } else {
                 }
@@ -281,7 +283,8 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                     chatsItems.addAll(dialogsItems);
                     chatsItems.addAll(groupItems);
                     Collections.sort(chatsItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
-                    chatsAdapter.chatsItemsList = chatsItems;
+                    chatsAdapter.chatsItemsList.clear();
+                    chatsAdapter.chatsItemsList.addAll(chatsItems);
                     ApplicationLoader.applicationHandler.post(() -> chatsAdapter.notifyDataSetChanged());
                 } else {
 //                    ApplicationLoader.applicationHandler.post(() -> {
@@ -290,7 +293,7 @@ public class FragmentChats extends Fragment implements NotificationManager.IList
                 }
                 isLoading = false;
 
-                ApplicationLoader.applicationHandler.post(()->swipeRefreshLayout.setRefreshing(false));
+                ApplicationLoader.applicationHandler.post(() -> swipeRefreshLayout.setRefreshing(false));
             } else if (id == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
                 View connectingView = createConnectingCustomView();//TODO:выключение такого тулбара, когда сного появиться связь с сервером
 //                ApplicationLoader.applicationHandler.post(() ->  Utils.setActionBarWithCustomView(getActivity(), connectingView)  textToolAll.setText("Connection")  toolbar.setText("Connecting"));

@@ -153,7 +153,6 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
         initChat();
 
-        MessagesManager.getInstance().loadMessages(chatID, 15, 0, isGroup);
 
         return view;
     }
@@ -165,12 +164,13 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.chatAddMessages);
         MessagesManager.getInstance().currentChatID = chatID;
         Utils.hideBottomBar(getActivity());
+        MessagesManager.getInstance().loadMessages(chatID, 15, 0, isGroup);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        messagesRecyclerView.setAdapter(null);
+//        messagesRecyclerView.setAdapter(null);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.chatAddMessages);
         MessagesManager.getInstance().currentChatID = 0;
     }
@@ -333,7 +333,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 
             if (messagesAdapter == null || messagesAdapter.messageIDs == null) return;
 
-            messagesAdapter.messageIDs.addAll(0, messages);
+            messagesAdapter.messageIDs.addAll( messages);
 
             messagesAdapter.notifyDataSetChanged();
             if (!onScroll) {
