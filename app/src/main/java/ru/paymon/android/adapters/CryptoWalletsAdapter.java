@@ -1,8 +1,6 @@
 package ru.paymon.android.adapters;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,14 +12,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import ru.paymon.android.R;
+import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
-import ru.paymon.android.utils.Utils;
-import ru.paymon.android.view.DialogFragmentCreateRestoreEthereumWallet;
-import ru.paymon.android.view.FragmentEthereumWallet;
 
 public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public ArrayList<WalletItem> walletItems;
-    private AppCompatActivity activity;
+    private IOnItemClickListener iOnItemClickListener;
+
+    public interface IOnItemClickListener{
+        void onClick(String cryptoCurrency);
+        void onCreateClick(String cryptoCurrency);
+    }
 
     public enum WalletTypes {
         BTC,
@@ -32,9 +33,9 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
         EMPTY_PMNT
     }
 
-    public CryptoWalletsAdapter(ArrayList<WalletItem> walletItems, Activity activity) {
+    public CryptoWalletsAdapter(ArrayList<WalletItem> walletItems, IOnItemClickListener iOnItemClickListener) {
         this.walletItems = walletItems;
-        this.activity = (AppCompatActivity) activity;
+        this.iOnItemClickListener=iOnItemClickListener;
     }
 
     @NonNull
@@ -67,61 +68,46 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
         WalletTypes viewTypes = WalletTypes.values()[holder.getItemViewType()];
         switch (viewTypes) {
             case BTC:
+                NonEmptyWalletItem btcWalletItem = (NonEmptyWalletItem) walletItem;
                 WalletViewHolder walletViewHolder = (WalletViewHolder) holder;
                 walletViewHolder.icon.setImageResource(R.drawable.ic_bitcoin);
-                walletViewHolder.publicAddress.setText(walletItem.publicAddress);
-                walletViewHolder.cryptoCurrency.setText(walletItem.cryptoCurrency);
-                walletViewHolder.cryptoBalance.setText(walletItem.cryptoBalance);
-                walletViewHolder.fiatCurrency.setText(walletItem.fiatCurrency);
-                walletViewHolder.fiatBalance.setText(walletItem.fiatBalance);
-                walletViewHolder.itemView.setOnClickListener((view -> {
-//                    Utils.replaceFragmentWithAnimationSlideFade(activity.getSupportFragmentManager(), FragmentBitcoinWallet.newInstance(), null);
-                }));
+                walletViewHolder.publicAddress.setText(btcWalletItem.publicAddress);
+                walletViewHolder.cryptoCurrency.setText(btcWalletItem.cryptoCurrency);
+                walletViewHolder.cryptoBalance.setText(btcWalletItem.cryptoBalance);
+                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick("BTC"));
                 break;
             case ETH:
+                NonEmptyWalletItem ethWalletItem = (NonEmptyWalletItem) walletItem;
                 walletViewHolder = (WalletViewHolder) holder;
                 walletViewHolder.icon.setImageResource(R.drawable.ic_ethereum);
-                walletViewHolder.publicAddress.setText(walletItem.publicAddress);
-                walletViewHolder.cryptoCurrency.setText(walletItem.cryptoCurrency);
-                walletViewHolder.cryptoBalance.setText(walletItem.cryptoBalance);
-                walletViewHolder.fiatCurrency.setText(walletItem.fiatCurrency);
-                walletViewHolder.fiatBalance.setText(walletItem.fiatBalance);
-                walletViewHolder.itemView.setOnClickListener((view -> {
-                    Utils.replaceFragmentWithAnimationSlideFade(activity.getSupportFragmentManager(), FragmentEthereumWallet.newInstance(), null);
-                }));
+                walletViewHolder.publicAddress.setText(ethWalletItem.publicAddress);
+                walletViewHolder.cryptoCurrency.setText(ethWalletItem.cryptoCurrency);
+                walletViewHolder.cryptoBalance.setText(ethWalletItem.cryptoBalance);
+                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick("ETH"));
                 break;
             case PMNT:
+                NonEmptyWalletItem pmntWalletItem = (NonEmptyWalletItem) walletItem;
                 walletViewHolder = (WalletViewHolder) holder;
                 walletViewHolder.icon.setImageResource(R.drawable.ic_pmnt);
-                walletViewHolder.publicAddress.setText(walletItem.publicAddress);
-                walletViewHolder.cryptoCurrency.setText(walletItem.cryptoCurrency);
-                walletViewHolder.cryptoBalance.setText(walletItem.cryptoBalance);
-                walletViewHolder.fiatCurrency.setText(walletItem.fiatCurrency);
-                walletViewHolder.fiatBalance.setText(walletItem.fiatBalance);
-                walletViewHolder.itemView.setOnClickListener((view -> {
-//                    Utils.replaceFragmentWithAnimationSlideFade(activity.getSupportFragmentManager(), FragmentPaymonWallet.newInstance(), null);
-                }));
+                walletViewHolder.publicAddress.setText(pmntWalletItem.publicAddress);
+                walletViewHolder.cryptoCurrency.setText(pmntWalletItem.cryptoCurrency);
+                walletViewHolder.cryptoBalance.setText(pmntWalletItem.cryptoBalance);
+                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick("PMNT"));
                 break;
             case EMPTY_BTC:
                 EmptyWalletViewHolder emptyWallet = (EmptyWalletViewHolder) holder;
                 emptyWallet.icon.setImageResource(R.drawable.ic_bitcoin);
-                emptyWallet.create.setOnClickListener(view -> {
-//                    DialogFragmentCreateRestoreBitcoinWallet.newInstance().show(activity.getSupportFragmentManager(), null);
-                });
+                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick("BTC"));
                 break;
             case EMPTY_ETH:
                 emptyWallet = (EmptyWalletViewHolder) holder;
                 emptyWallet.icon.setImageResource(R.drawable.ic_ethereum);
-                emptyWallet.create.setOnClickListener(view -> {
-                    DialogFragmentCreateRestoreEthereumWallet.newInstance().show(activity.getSupportFragmentManager(), null);
-                });
+                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick("ETH"));
                 break;
             case EMPTY_PMNT:
                 emptyWallet = (EmptyWalletViewHolder) holder;
                 emptyWallet.icon.setImageResource(R.drawable.ic_pmnt);
-                emptyWallet.create.setOnClickListener(view -> {
-//                    DialogFragmentCreateRestorePaymonWallet.newInstance().show(activity.getSupportFragmentManager(), null);
-                });
+                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick("PMNT"));
                 break;
         }
     }
@@ -129,7 +115,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public int getItemViewType(int position) {
         String crpytoCurrency = walletItems.get(position).cryptoCurrency;
-        boolean isEmpty = walletItems.get(position).isEmpty;
+        boolean isEmpty = !(walletItems.get(position) instanceof NonEmptyWalletItem);
         if (!isEmpty) {
             switch (crpytoCurrency) {
                 case "BTC":
@@ -160,18 +146,14 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
     class WalletViewHolder extends RecyclerView.ViewHolder {
         final ImageView icon;
         final TextView publicAddress;
-        final TextView fiatCurrency;
         final TextView cryptoCurrency;
-        final TextView fiatBalance;
         final TextView cryptoBalance;
 
         WalletViewHolder(View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.wallet_icon);
             publicAddress = itemView.findViewById(R.id.wallet_address);
-            fiatCurrency = itemView.findViewById(R.id.wallet_fiat_currency);
             cryptoCurrency = itemView.findViewById(R.id.wallet_crypto_currency);
-            fiatBalance = itemView.findViewById(R.id.wallet_fiat_balance);
             cryptoBalance = itemView.findViewById(R.id.wallet_crypto_balance);
         }
     }

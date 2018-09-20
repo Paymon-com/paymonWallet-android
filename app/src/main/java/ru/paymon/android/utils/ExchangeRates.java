@@ -1,14 +1,10 @@
 package ru.paymon.android.utils;
 
-import android.util.Log;
-import android.widget.Toast;
-
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,9 +12,7 @@ import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.DBHelper;
-import ru.paymon.android.adapters.ExchangeRatesAdapter;
 import ru.paymon.android.models.ExchangeRatesItem;
 
 public class ExchangeRates {
@@ -40,7 +34,7 @@ public class ExchangeRates {
     public HashMap<String, HashMap<String, ExchangeRatesItem>> parseExchangeRates(){
         final HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates = new HashMap<>();
         final String[] cryptoCurrencies = new String[]{"BTC", "ETH", "PMNT"};
-        final String link = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=" + Arrays.toString(cryptoCurrencies).replace("[", "").replace("]", "").replace(" ", "") + "&tsyms=" + fiatCurrencies.toString().replace("[", "").replace("]", "").replace(" ", "");
+        final String link = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,PMNT&tsyms=USD,EUR," + Currency.getInstance(Locale.getDefault()).getCurrencyCode().toUpperCase();
 
         try {
             final HttpsURLConnection httpsURLConnection = (HttpsURLConnection) ((new URL(link.toString()).openConnection()));
@@ -69,7 +63,6 @@ public class ExchangeRates {
 
             DBHelper.putExchangeRates(exchangeRates);
         } catch (Exception e) {
-            Toast.makeText(ApplicationLoader.applicationContext, "Обновить курсы валют не удалось", Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
 

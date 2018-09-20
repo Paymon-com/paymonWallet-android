@@ -61,7 +61,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentContacts.getInstance());
                     break;
                 case R.id.ic_menu_money:
-                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoney.newInstance());
+                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoney.getInstance());
                     break;
                 case R.id.bottom_menu_more:
                     Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoreMenu.getInstance());

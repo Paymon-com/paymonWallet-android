@@ -1,74 +1,47 @@
 package ru.paymon.android.view;
 
-import android.graphics.Typeface;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.FrameLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.daimajia.androidviewhover.tools.Util;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.web3j.protocol.core.methods.response.EthGasPrice;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Currency;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Locale;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.DBHelper;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
-import ru.paymon.android.gateway.Ethereum;
 import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.models.WalletItem;
-import ru.paymon.android.utils.ExchangeRates;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.viewmodels.MoneyViewModel;
 
-public class FragmentMoney extends Fragment implements NotificationManager.IListener {
+public class FragmentMoney extends Fragment {
     private static FragmentMoney instance;
-    private RecyclerView walletsRecView;
+    private ProgressBar progressBar;
+    private Spinner fiatCurrencySpinner;
     private RecyclerView exchangeRatesRecView;
-    private TextSwitcher loader;
-    private CryptoWalletsAdapter cryptoWalletsAdapter;
+    private MoneyViewModel moneyViewModel;
     private ExchangeRatesAdapter exchangeRatesAdapter;
-    private Spinner spinner;
-    private LoaderHandler loaderHandler;
-    private HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates;
+    private CryptoWalletsAdapter cryptoWalletsAdapter;
+    private LiveData<ArrayList<ExchangeRatesItem>> exchangeRatesData;
+    private LiveData<ArrayList<WalletItem>> walletsData;
+    private LiveData<Boolean> showProgress;
+    private ArrayList<ExchangeRatesItem> exchangeRatesItems;
+    boolean isProgressShowed;
 
-    public static synchronized FragmentMoney newInstance() {
+    public static FragmentMoney getInstance() {
         if (instance == null)
             instance = new FragmentMoney();
         return instance;
@@ -77,6 +50,10 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        moneyViewModel = ViewModelProviders.of(getActivity()).get(MoneyViewModel.class);
+        showProgress = moneyViewModel.getProgressState();
+        walletsData = moneyViewModel.getWalletsData();
+        exchangeRatesData = moneyViewModel.getExchangeRatesData();
     }
 
     @Nullable
@@ -84,44 +61,87 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_money, container, false);
 
-        walletsRecView = (RecyclerView) view.findViewById(R.id.fragment_money_wallets);
         exchangeRatesRecView = (RecyclerView) view.findViewById(R.id.fragment_money_exchange_rates);
-        loader = (TextSwitcher) view.findViewById(R.id.fragment_money_loader);
-        spinner = (Spinner) view.findViewById(R.id.fragment_money_spinner);
+        RecyclerView walletsRecView = (RecyclerView) view.findViewById(R.id.fragment_money_wallets);
+        fiatCurrencySpinner = (Spinner) view.findViewById(R.id.fragment_money_spinner);
         TextView updateButton = (TextView) view.findViewById(R.id.fragment_money_update);
-
-        walletsRecView.setHasFixedSize(true);
-        walletsRecView.setLayoutManager(new LinearLayoutManager(getContext()));
+        progressBar = (ProgressBar) view.findViewById(R.id.fragment_money_progressbar);
 
         exchangeRatesRecView.setHasFixedSize(true);
         exchangeRatesRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        final Animation slideInLeftAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_in);
-        final Animation slideOutRightAnimation = AnimationUtils.loadAnimation(getActivity(), android.R.anim.fade_out);
+        walletsRecView.setHasFixedSize(true);
+        walletsRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        loader.setInAnimation(slideInLeftAnimation);
-        loader.setOutAnimation(slideOutRightAnimation);
-
-        loader.setFactory(() -> {
-            final TextView textView = new TextView(getActivity());
-            textView.setTextSize(24);
-            textView.setGravity(Gravity.CENTER);
-            textView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
-            textView.setTextColor(ContextCompat.getColor(getActivity(), R.color.blue_dark));
-            textView.setTypeface(Typeface.create("sans-serif-light", Typeface.NORMAL));
-            return textView;
-        });
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, ExchangeRates.getInstance().fiatCurrencies.toArray(new String[ExchangeRates.getInstance().fiatCurrencies.size()]));
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, new String[]{"USD", "EUR"});
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinner.setAdapter(adapter);
-        spinner.setSelection(0);
+        fiatCurrencySpinner.setAdapter(adapter);
+        fiatCurrencySpinner.setSelection(0);
 
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        exchangeRatesData.observe(this, (exchangeRatesItems) -> {
+            this.exchangeRatesItems = exchangeRatesItems;
+            changeCurrency();
+        });
+
+        walletsData.observe(this, (walletsData) -> {
+            cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, new CryptoWalletsAdapter.IOnItemClickListener() {
+                @Override
+                public void onClick(String cryptoCurrency) {
+                    Fragment fragment = null;
+                    switch (cryptoCurrency) {
+                        case "BTC":
+//                            fragment = FragmentBitcoinWallet.newInstance();
+                            break;
+                        case "ETH":
+                            fragment = FragmentEthereumWallet.newInstance();
+                            break;
+                        case "PMNT":
+//                            fragment = FragmentPaymonWallet.newInstance();
+                            break;
+                    }
+
+                    if (fragment != null)
+                        Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragment, null);
+                }
+
+                @Override
+                public void onCreateClick(String cryptoCurrency) {
+                    switch (cryptoCurrency) {
+                        case "BTC":
+//                            DialogFragmentCreateRestoreBitcoinWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
+                            break;
+                        case "ETH":
+                            DialogFragmentCreateRestoreEthereumWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
+                            break;
+                        case "PMNT":
+//                            DialogFragmentCreateRestorePaymonWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
+                            break;
+                    }
+                }
+            });
+            walletsRecView.setAdapter(cryptoWalletsAdapter);
+        });
+
+        showProgress.observe(getActivity(), (flag) -> {
+            isProgressShowed = flag;
+            if (flag)
+                showProgress();
+            else
+                hideProgress();
+        });
+
+        updateButton.setOnClickListener(view1 -> {
+            if (!isProgressShowed) {
+                moneyViewModel.getWalletsData();
+                moneyViewModel.getExchangeRatesData();
+            }
+        });
+
+        fiatCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                changeFiatCurrency();
+                changeCurrency();
             }
 
             @Override
@@ -130,162 +150,38 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
             }
         });
 
-
-        updateButton.setOnClickListener(view1 -> {
-            initExchangeRatesAndWallets();
-        });
-
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.ETHEREUM_WALLET_CREATED);
-        Utils.showBottomBar(getActivity());
-        Utils.hideActionBar(getActivity());
-        initExchangeRatesAndWallets();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.ETHEREUM_WALLET_CREATED);
     }
 
-    @Override
-    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-        if (event == NotificationManager.NotificationEvent.ETHEREUM_WALLET_CREATED)
-            initExchangeRatesAndWallets();
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
     }
 
-    private void startLoaderAnimation() {
-        loaderHandler = new LoaderHandler();
-        loaderHandler.start();
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
     }
 
-    private void stopLoaderAnimation() {
-        loader.setVisibility(View.GONE);
-        loaderHandler.halt();
-    }
-
-    private void initExchangeRatesAndWallets() {
-        Utils.stageQueue.postRunnable(() -> {
-            ApplicationLoader.applicationHandler.post(this::startLoaderAnimation);
-
-            final ArrayList<ExchangeRatesItem> exchangeRatesItems = new ArrayList<>();
-            final String currentFiatCurrency = spinner.getSelectedItem().toString();
-            exchangeRates = ExchangeRates.getInstance().parseExchangeRates();
-            if (exchangeRates.size() > 0) {
-                for (final String cryptoCurrency : exchangeRates.keySet()) {
-                    final HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
-                    final float value = exchangeRate.get(currentFiatCurrency).value;
-                    exchangeRatesItems.add(new ExchangeRatesItem(cryptoCurrency, currentFiatCurrency, value));
-                }
-                exchangeRatesAdapter = new ExchangeRatesAdapter(exchangeRatesItems);
-                ApplicationLoader.applicationHandler.post(() -> exchangeRatesRecView.setAdapter(exchangeRatesAdapter));
-            } else {
-                Toast.makeText(ApplicationLoader.applicationContext, "Не удалось получить курсы валют", Toast.LENGTH_LONG).show();
-            }
-
-            final ArrayList<WalletItem> walletItems = new ArrayList<>();
-            if (User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD != null) {
-                final String cryptoCurrency = "ETH";
-                final float exchangeRate = exchangeRates.get(cryptoCurrency).get(currentFiatCurrency).value;
-
-                boolean isWalletLoaded = Ethereum.getInstance().loadWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
-                if (isWalletLoaded) {
-                    BigDecimal balance = Ethereum.getInstance().getBalance();
-                    if (balance != null) {
-                        User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = balance.toString();
-                        User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
-                        User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
-                        User.saveConfig();
-                        final String fiatBalance = Ethereum.getInstance().convertEthToFiat(balance.toString(),exchangeRate);
-                        walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, fiatBalance, false, User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS));
-                        cryptoWalletsAdapter = new CryptoWalletsAdapter(walletItems, getActivity());
-                        ApplicationLoader.applicationHandler.post(() -> walletsRecView.setAdapter(cryptoWalletsAdapter));
-                    }
-                } else {
-                    walletItems.add(new WalletItem(cryptoCurrency, currentFiatCurrency, "0.00", "0.00", true, User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS));
-                }
-            } else {
-                walletItems.add(new WalletItem("ETH", currentFiatCurrency, "0.00", "0.00", true, User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS));
-            }
-
-            cryptoWalletsAdapter = new CryptoWalletsAdapter(walletItems, getActivity());
-            ApplicationLoader.applicationHandler.post(() -> walletsRecView.setAdapter(cryptoWalletsAdapter));
-
-
-            ApplicationLoader.applicationHandler.post(this::stopLoaderAnimation);
-        });
-    }
-
-    private void changeFiatCurrency() {
-        Utils.stageQueue.postRunnable(() -> {
-            final String currentFiatCurrency = spinner.getSelectedItem().toString();
-            ArrayList<ExchangeRatesItem> exchangeRatesItems = new ArrayList<>();
-            for (final String cryptoCurrency : exchangeRates.keySet()) {
-                final HashMap<String, ExchangeRatesItem> exchangeRate = exchangeRates.get(cryptoCurrency);
-                final float value = exchangeRate.get(currentFiatCurrency).value;
-                exchangeRatesItems.add(new ExchangeRatesItem(cryptoCurrency, currentFiatCurrency, value));
-            }
-            exchangeRatesAdapter = new ExchangeRatesAdapter(exchangeRatesItems);
-            ApplicationLoader.applicationHandler.post(() -> exchangeRatesRecView.setAdapter(exchangeRatesAdapter));
-
-            final float ethExRate = exchangeRates.get("ETH").get(currentFiatCurrency).value;
-            for (WalletItem wallet : cryptoWalletsAdapter.walletItems) {
-                wallet.fiatCurrency = currentFiatCurrency;
-                switch (wallet.cryptoCurrency) {
-                    case "ETH":
-                        wallet.fiatBalance = Ethereum.getInstance().convertEthToFiat(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE, ethExRate);
-                        break;
-                    case "BTC":
-                        //       TODO:
-                        break;
-                    case "PMNT":
-                        //       TODO:
-                        break;
-                }
-            }
-            ApplicationLoader.applicationHandler.post(() -> cryptoWalletsAdapter.notifyDataSetChanged());
-        });
-    }
-
-    private class LoaderHandler extends Thread implements Runnable {
-        boolean running = true;
-
-        @Override
-        public void run() {
-            int loaderIndex = 0;
-            String[] loaderValues = new String[]{getActivity().getString(R.string.loading_one), getActivity().getString(R.string.loading_two), getActivity().getString(R.string.loading_three)};
-            ApplicationLoader.applicationHandler.post(() -> loader.setVisibility(View.VISIBLE));
-            while (running) {
-                switch (loaderIndex) {
-                    case 0:
-                        loaderIndex = 1;
-                        ApplicationLoader.applicationHandler.post(() -> loader.setText(loaderValues[0]));
-                        break;
-                    case 1:
-                        loaderIndex = 2;
-                        ApplicationLoader.applicationHandler.post(() -> loader.setText(loaderValues[1]));
-                        break;
-                    case 2:
-                        ApplicationLoader.applicationHandler.post(() -> loader.setText(loaderValues[2]));
-                        loaderIndex = 0;
-                        break;
-                }
-
-                try {
-                    Thread.sleep(450);
-                } catch (InterruptedException e) {
-
-                }
+    private void changeCurrency() {
+        if (exchangeRatesItems == null || exchangeRatesItems.size() <= 0)
+            return;
+        String currentCurrency = fiatCurrencySpinner.getSelectedItem().toString();
+        ArrayList<ExchangeRatesItem> exRatesItems = new ArrayList<>();
+        for (ExchangeRatesItem exchangeRateItem : exchangeRatesItems) {
+            if (exchangeRateItem.fiatCurrency.equals(currentCurrency)) {
+                exRatesItems.add(exchangeRateItem);
             }
         }
-
-        public void halt() {
-            running = false;
-        }
+        exchangeRatesAdapter = new ExchangeRatesAdapter(exRatesItems);
+        exchangeRatesRecView.setAdapter(exchangeRatesAdapter);
     }
 }
