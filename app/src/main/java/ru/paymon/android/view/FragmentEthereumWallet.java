@@ -64,10 +64,28 @@ public class FragmentEthereumWallet extends Fragment {
         ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_deposit_button);
         ImageButton transfer = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_transfer_button);
         ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_withdraw_button);
+        ImageButton backBtn = (ImageButton) view.findViewById(R.id.toolbar_ethereum_wallet_back_btn);
+        ImageButton restoreBtn = (ImageButton) view.findViewById(R.id.toolbar_ethereum_wallet_restore_btn);
+        ImageButton backupBtn = (ImageButton) view.findViewById(R.id.toolbar_ethereum_wallet_backup_btn);
+        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_ethereum_wallet_delete_btn);
         Button privateKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_public_key_button);
         TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
         balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
+
+        backBtn.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
+
+        restoreBtn.setOnClickListener(v -> {
+
+        });
+
+        backupBtn.setOnClickListener(v -> {
+
+        });
+
+        deleteBtn.setOnClickListener(v -> {
+
+        });
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
 
