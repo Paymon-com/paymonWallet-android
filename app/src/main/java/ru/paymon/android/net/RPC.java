@@ -616,6 +616,7 @@ public class RPC {
         public static int MESSAGE_FLAG_REPLY = 0b100;
         public static int MESSAGE_FLAG_VIEWS = 0b1000;
         public static int MESSAGE_FLAG_EDITED = 0b10000;
+        public static int MESSAGE_FLAG_ACTION =  0b100000;
 
         public long id;
         public int from_id;
@@ -1121,12 +1122,15 @@ public class RPC {
             if ((flags & MESSAGE_FLAG_EDITED) != 0) {
                 edit_date = stream.readInt32(exception);
             }
-            action = MessageAction.deserialize(stream, stream.readInt32(exception), exception);
+            if ((flags & MESSAGE_FLAG_ACTION) != 0) {
+                action = MessageAction.deserialize(stream, stream.readInt32(exception), exception);
+            }
         }
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags & ~MESSAGE_FLAG_UNREAD);
+            flags = (action != null) ? (flags | MESSAGE_FLAG_ACTION) : (flags &~ MESSAGE_FLAG_ACTION);
             stream.writeInt32(flags);
             stream.writeInt64(id);
 
@@ -1152,9 +1156,6 @@ public class RPC {
             }
             if (action != null) {
                 action.serializeToStream(stream);
-            } else {
-                stream.writeInt32(PM_messageActionGroupCreate.svuid);
-                stream.writeInt32(0);
             }
         }
     }

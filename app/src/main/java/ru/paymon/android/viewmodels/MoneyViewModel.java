@@ -162,7 +162,7 @@ public class MoneyViewModel extends ViewModel {
         Utils.stageQueue.postRunnable(() -> {
             showProgress.postValue(true);
             final String address = Ethereum.getInstance().getAddress();
-            final String link = "http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=asc&apikey=YourApiKeyToken";
+            final String link = "http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=desc&apikey=YourApiKeyToken";
             final ArrayList<TransactionItem> transactionItems = new ArrayList<>();
 
             try {
@@ -191,7 +191,7 @@ public class MoneyViewModel extends ViewModel {
                     String gasLimit = transcationObj.getString("gas");
                     String gasPrice = transcationObj.getString("gasPrice");
                     String gasUsed = transcationObj.getString("gasUsed");
-                    String status = transcationObj.getInt("txreceipt_status") == 1 ? "success" : "fail";
+                    String status = transcationObj.getInt("txreceipt_status") == 1 ? "success" : "fail"; //TODO:String
                     transactionItems.add(new TransactionItem(hash, status, timestamp, value, to, from, gasLimit, gasUsed, gasPrice));
                 }
 
