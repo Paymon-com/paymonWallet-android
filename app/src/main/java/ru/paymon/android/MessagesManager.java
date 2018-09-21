@@ -1,5 +1,6 @@
 package ru.paymon.android;
 
+import android.util.Log;
 import android.util.LongSparseArray;
 import android.util.SparseArray;
 
@@ -184,6 +185,8 @@ public class MessagesManager implements NotificationManager.IListener {
             for (RPC.Message msg : receivedMessages.messages) {
                 putMessage(msg);
                 messagesToAdd.add(msg.id);
+                Log.e("AAA", msg.text);
+                Log.e("AAA", (msg.action instanceof RPC.PM_messageActionGroupCreate) + " qq");
             }
 
             ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.chatAddMessages, messagesToAdd, true, receivedMessages.messages.size()));

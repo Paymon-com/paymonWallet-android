@@ -23,6 +23,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
 import ru.paymon.android.models.ExchangeRatesItem;
+import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.MoneyViewModel;
@@ -39,7 +40,9 @@ public class FragmentMoney extends Fragment {
     private LiveData<ArrayList<WalletItem>> walletsData;
     private LiveData<Boolean> showProgress;
     private ArrayList<ExchangeRatesItem> exchangeRatesItems;
+    private LiveData<String> ethereumBalanceData;
     boolean isProgressShowed;
+
 
     public static FragmentMoney getInstance() {
         if (instance == null)
@@ -54,6 +57,7 @@ public class FragmentMoney extends Fragment {
         showProgress = moneyViewModel.getProgressState();
         walletsData = moneyViewModel.getWalletsData();
         exchangeRatesData = moneyViewModel.getExchangeRatesData();
+        ethereumBalanceData = moneyViewModel.getEthereumBalanceData();
     }
 
     @Nullable
@@ -121,6 +125,20 @@ public class FragmentMoney extends Fragment {
                 }
             });
             walletsRecView.setAdapter(cryptoWalletsAdapter);
+        });
+
+        ethereumBalanceData.observe(getActivity(), (balanceData) ->{
+            ArrayList<WalletItem> walletItems = walletsData.getValue();
+            if(walletItems == null)
+                return;
+            for (WalletItem walletItem:walletItems) {
+                if(walletItem instanceof  NonEmptyWalletItem) {
+                    NonEmptyWalletItem wi = (NonEmptyWalletItem) walletItem;
+                    if (wi.cryptoCurrency.equals("ETH")){
+                        wi.cryptoBalance = balanceData;
+                    }
+                }
+            }
         });
 
         showProgress.observe(getActivity(), (flag) -> {

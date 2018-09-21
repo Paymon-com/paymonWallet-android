@@ -67,8 +67,7 @@ public class FragmentChat extends Fragment implements NotificationManager.IListe
 //    private EmojIconActions emojIcon;
 
     public static synchronized FragmentChat newInstance() {
-        if (instance == null)
-            instance = new FragmentChat();
+        instance = new FragmentChat();
         return instance;
     }
 

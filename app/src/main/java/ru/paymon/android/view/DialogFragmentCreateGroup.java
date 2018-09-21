@@ -64,11 +64,6 @@ public class DialogFragmentCreateGroup extends DialogFragment {
     }
 
     private View.OnClickListener buttonAgreeClickListener = (view) -> {
-//        if (!Utils.nameCorrect(title.getText().toString())) {
-//            Toast.makeText(ApplicationLoader.applicationContext, "Название хуйня", Toast.LENGTH_LONG).show();//TODO:string
-//            return;
-//        }
-
         Utils.netQueue.postRunnable(() -> {
             ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
@@ -80,7 +75,6 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                 }
             }
 
-            //TODO:проверить что происходит на серваке при разных пришедших результатах
             final long requestID = NetworkManager.getInstance().sendRequest(createGroupRequest, (response, error) -> {
                 if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
                     ApplicationLoader.applicationHandler.post(() -> {
@@ -96,35 +90,6 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                 if (response instanceof RPC.Group) {
                     RPC.Group group = (RPC.Group) response;
                     GroupsManager.getInstance().putGroup(group);
-
-//                    if (User.currentUser == null) return;
-
-                    //region MSG_ITEM //TODO:на сервак перенос
-//                    RPC.PM_messageItem msg = new RPC.PM_messageItem();
-//                    msg.gid = MessagesManager.generateMessageID();
-//                    msg.flags = MESSAGE_FLAG_FROM_ID;
-//                    msg.date = (int) (System.currentTimeMillis() / 1000);
-//                    msg.from_id = User.currentUser.gid;
-//                    RPC.Peer peer;
-//                    peer = new RPC.PM_peerGroup();
-//                    peer.group_id = ((RPC.Group) response).gid;
-//                    msg.to_id = peer;
-//                    msg.unread = true;
-//                    msg.itemType = FileManager.FileType.ACTION;
-//
-//                    String text = String.format("%s %s \"%s\"", Utils.formatUserName(User.currentUser), getActivity().getString(R.string.sys_group_msg), group.title);
-//
-//                    msg.text = text;
-//
-//
-//                    NetworkManager.getInstance().sendRequest(msg, (response2, error2) -> {//TODO:перенос в UI поток
-//                        ApplicationLoader.applicationHandler.post(() -> {
-//                            if (response2 == null || error2 != null) return;
-//
-//                            RPC.PM_updateMessageID update = (RPC.PM_updateMessageID) response2;
-//
-//                            msg.gid = update.newID;
-//                            MessagesManager.getInstance().putMessage(msg);
                     NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
                     getDialog().dismiss();
                     Bundle bundle = new Bundle();
@@ -136,9 +101,6 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                     fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                     fragmentTransaction.replace(R.id.container, fragmentChat);
                     fragmentTransaction.commit();
-//                        });
-//                    });
-                    //endregion
                 }
 
                 ApplicationLoader.applicationHandler.post(() -> {

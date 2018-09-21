@@ -94,7 +94,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
                 break;
             case R.id.more_menu_invite:
                 if (ContextCompat.checkSelfPermission(ApplicationLoader.applicationContext, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
+//                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
                 } else {
                     ((MainActivity) getActivity()).requestAppPermissions(new String[]{Manifest.permission.READ_CONTACTS},
                             R.string.msg_permissions_required, READ_CONTACTS_PERMISSION);

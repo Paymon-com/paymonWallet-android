@@ -22,7 +22,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.gateway.Ethereum;
@@ -100,8 +99,6 @@ public class DialogFragmentRestoreEthereumWallet extends DialogFragment {
                 ApplicationLoader.applicationHandler.post(() -> {
                     switch (restoreStatus) {
                         case DONE:
-                            //TODO:отправка кошеля в бд
-                            //CryptoUtils.updateEthereumWalletKeyOnDataBase(Ethereum.getInstance().getAddress());
                             User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = password;
                             User.saveConfig();
 //                            Ethereum.getInstance().ethereumWalletNotification(getContext(), ApplicationLoader.applicationContext.getString(R.string.restore_wallet_success), ApplicationLoader.applicationContext.getString(R.string.title_ethereum_wallet));

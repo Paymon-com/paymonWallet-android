@@ -7,11 +7,11 @@ public class TransactionItem {
     public String value;
     public String to;
     public String from;
-    public int gasLimit;
-    public int gasUsed;
+    public String gasLimit;
+    public String gasUsed;
     public String gasPrice;
 
-    public TransactionItem (String hash, String status, String time, String value, String to, String from, int gasLimit, int gasUsed, String gasPrice){
+    public TransactionItem (String hash, String status, String time, String value, String to, String from, String gasLimit, String gasUsed, String gasPrice){
         this.hash = hash;
         this.status = status;
         this.time = time;

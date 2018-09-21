@@ -14,7 +14,6 @@ import ru.paymon.android.utils.AbsRuntimePermission;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChats;
 import ru.paymon.android.view.FragmentContacts;
-import ru.paymon.android.view.FragmentContactsInvite;
 import ru.paymon.android.view.FragmentGroupSettings;
 import ru.paymon.android.view.FragmentLoader;
 import ru.paymon.android.view.FragmentMoney;
@@ -114,7 +113,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
                 ApplicationLoader.applicationContext.startService(connectorIntent);
                 break;
             case READ_CONTACTS_PERMISSION:
-                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
+//                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
                 break;
         }
     }
@@ -122,7 +121,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
         if (event == NotificationManager.NotificationEvent.userAuthorized) {
-            if (!User.currentUser.confirmed || User.currentUser.email.isEmpty())
+            if (!User.currentUser.confirmed || (User.currentUser.email != null && User.currentUser.email.isEmpty()))
                 Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance());
             else
                 Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance());

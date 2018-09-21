@@ -187,53 +187,6 @@
                 app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_amount"
                 app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_amount" />
 
-            <!--<EditText-->
-            <!--android:gid="@+gid/fragment_ethereum_wallet_transfer_gas"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginBottom="4dp"-->
-            <!--android:layout_marginTop="4dp"-->
-            <!--android:background="@color/black_light"-->
-            <!--android:fontFamily="sans-serif-light"-->
-            <!--android:gravity="center"-->
-            <!--android:inputType="numberDecimal"-->
-            <!--android:maxLength="16"-->
-            <!--android:maxLines="1"-->
-            <!--android:paddingBottom="8dp"-->
-            <!--android:paddingTop="8dp"-->
-            <!--android:singleLine="true"-->
-            <!--android:textAllCaps="true"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="24sp"-->
-            <!--android:textStyle="bold"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toStartOf="@+gid/fragment_ethereum_wallet_transfer_gas_title"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@+gid/textView44" />-->
-
-            <!--<TextView-->
-            <!--android:gid="@+gid/fragment_ethereum_wallet_transfer_gas_title"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:background="@color/black_light"-->
-            <!--android:fontFamily="sans-serif-light"-->
-            <!--android:gravity="center"-->
-            <!--android:maxLength="16"-->
-            <!--android:maxLines="1"-->
-            <!--android:paddingBottom="8dp"-->
-            <!--android:paddingTop="8dp"-->
-            <!--android:singleLine="true"-->
-            <!--android:textAlignment="center"-->
-            <!--android:textAllCaps="true"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="24sp"-->
-            <!--android:textStyle="bold"-->
-            <!--android:text="GWEI"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+gid/fragment_ethereum_wallet_transfer_gas"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toEndOf="@+gid/fragment_ethereum_wallet_transfer_gas"-->
-            <!--app:layout_constraintTop_toTopOf="@+gid/fragment_ethereum_wallet_transfer_gas" />-->
-
             <TextView
                 android:id="@+id/textView28"
                 android:layout_width="wrap_content"
@@ -262,21 +215,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_amount" />
 
-            <!--<TextView-->
-            <!--android:gid="@+gid/textView44"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginTop="8dp"-->
-            <!--android:fontFamily="sans-serif-light"-->
-            <!--android:text="@string/eth_gaz_price"-->
-            <!--android:textAllCaps="true"-->
-            <!--android:textColor="@color/white"-->
-            <!--android:textSize="16sp"-->
-            <!--app:layout_constraintEnd_toEndOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--app:layout_constraintTop_toBottomOf="@+gid/fragment_ethereum_wallet_transfer_fiat_equivalent" />-->
-
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -293,104 +231,35 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="gas price"
-                        android:textAppearance="?android:textAppearanceListItem"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/fragment_ethereum_wallet_transfer_gas_price_rec"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="4dp"
-                        android:text="--"
-                        android:textAlignment="center"
-                        android:textAppearance="?android:textAppearanceListItem"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_gas_price_slider" />
-
-                    <TextView
-                        android:id="@+id/fragment_ethereum_wallet_transfer_gas_price_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="--"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        tools:text="30 (Gwei)" />
-
-                    <com.warkiz.widget.IndicatorSeekBar
-                        android:id="@+id/fragment_ethereum_wallet_transfer_gas_price_slider"
+                    <com.warkiz.widget.IndicatorStayLayout
+                        android:id="@+id/indilayout1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
+                        android:layout_marginTop="8dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+                        app:layout_constraintTop_toTopOf="parent">
 
-                    <!--<com.crystal.crystalrangeseekbar.widgets.BubbleThumbSeekbar-->
-                    <!--android:gid="@+gid/fragment_ethereum_wallet_transfer_gas_price_slider"-->
-                    <!--android:layout_width="match_parent"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--app:bar_color="#C69E89"-->
-                    <!--app:bar_highlight_color="#A54B17"-->
-                    <!--app:data_type="_integer"-->
-                    <!--app:layout_constraintEnd_toEndOf="parent"-->
-                    <!--app:layout_constraintStart_toStartOf="parent"-->
-                    <!--app:layout_constraintTop_toBottomOf="@+gid/textView3"-->
-                    <!--app:left_thumb_color="#775E4F"-->
-                    <!--app:left_thumb_color_pressed="#4C2D1A" />-->
-
+                        <com.warkiz.widget.IndicatorSeekBar
+                            android:id="@+id/fragment_ethereum_wallet_transfer_gas_price_slider"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content" />
+                    </com.warkiz.widget.IndicatorStayLayout>
                 </android.support.constraint.ConstraintLayout>
 
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="2dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:text="gas limit"
-                        android:textAppearance="?android:textAppearanceListItem" />
-
-                    <TextView
-                        android:id="@+id/fragment_ethereum_wallet_transfer_gas_limit_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="21000" />
-                </RelativeLayout>
-
-                <com.warkiz.widget.IndicatorSeekBar
-                    android:id="@+id/fragment_ethereum_wallet_transfer_gas_limit_slider"
+                <com.warkiz.widget.IndicatorStayLayout
+                    android:id="@+id/indilayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    app:isb_max="300000"
-                    app:isb_min="21000"
-                     />
+                    android:layout_marginTop="4dp">
 
-                <!--<com.crystal.crystalrangeseekbar.widgets.BubbleThumbSeekbar-->
-                <!--android:gid="@+gid/fragment_ethereum_wallet_transfer_gas_limit_slider"-->
-                <!--android:layout_width="match_parent"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginBottom="2dp"-->
-                <!--android:layout_marginTop="2dp"-->
-                <!--app:bar_color="#C69E89"-->
-                <!--app:bar_highlight_color="#A54B17"-->
-                <!--app:data_type="_integer"-->
-                <!--app:left_thumb_color="#775E4F"-->
-                <!--app:left_thumb_color_pressed="#4C2D1A" />-->
+                    <com.warkiz.widget.IndicatorSeekBar
+                        android:id="@+id/fragment_ethereum_wallet_transfer_gas_limit_slider"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                </com.warkiz.widget.IndicatorStayLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -423,7 +292,6 @@
                         android:id="@+id/label_network_fee1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:text="total"
                         android:textAppearance="?android:textAppearanceListItem" />
@@ -433,7 +301,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentRight="true"
                         android:text="--"
                         tools:text="0.0027 ETH" />
                 </RelativeLayout>

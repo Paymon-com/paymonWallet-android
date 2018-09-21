@@ -7,17 +7,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import ru.paymon.android.R;
 import ru.paymon.android.models.TransactionItem;
 
 public class EthereumTransactionAdapter extends RecyclerView.Adapter<EthereumTransactionAdapter.ViewHolder> {
-    public LinkedList<TransactionItem> list;
+    public ArrayList<TransactionItem> transactionItems;
 
-    public EthereumTransactionAdapter(LinkedList<TransactionItem> list){
-        this.list = list;
+    public EthereumTransactionAdapter(ArrayList<TransactionItem> transactionItems){
+        this.transactionItems = transactionItems;
     }
+
 
     @NonNull
     @Override
@@ -28,7 +29,7 @@ public class EthereumTransactionAdapter extends RecyclerView.Adapter<EthereumTra
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
-        TransactionItem transactionItem = list.get(position);
+        TransactionItem transactionItem = transactionItems.get(position);
         viewHolder.hash.setText(transactionItem.hash);
         viewHolder.status.setText(transactionItem.status);
         viewHolder.time.setText(transactionItem.time);
@@ -38,7 +39,7 @@ public class EthereumTransactionAdapter extends RecyclerView.Adapter<EthereumTra
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return transactionItems.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,7 +1,7 @@
 package ru.paymon.android.view;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,50 +10,46 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.TextSwitcher;
+import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.daimajia.androidviewhover.tools.Util;
+import java.util.ArrayList;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.LinkedList;
-
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.adapters.EthereumTransactionAdapter;
 import ru.paymon.android.gateway.Ethereum;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.viewmodels.MoneyViewModel;
 
 public class FragmentEthereumWallet extends Fragment {
-    public LinkedList<TransactionItem> list = new LinkedList<>();
     private static FragmentEthereumWallet instance;
-    private TextView balance;
+    private MoneyViewModel moneyViewModel;
+    private LiveData<String> ethereumBalanceData;
+    private LiveData<ArrayList<TransactionItem>> transactionsData;
+    private LiveData<Boolean> showProgress;
+    private EthereumTransactionAdapter ethereumTransactionAdapter;
+    private ProgressBar progressBar;
 
     public static FragmentEthereumWallet newInstance() {
-        instance = new FragmentEthereumWallet();
+        if (instance == null)
+            instance = new FragmentEthereumWallet();
         return instance;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        moneyViewModel = ViewModelProviders.of(getActivity()).get(MoneyViewModel.class);
+        ethereumBalanceData = moneyViewModel.getEthereumBalanceData();
+        transactionsData = moneyViewModel.getTranscationsData();
+        showProgress = moneyViewModel.getProgressState();
     }
 
     @Nullable
@@ -71,33 +67,33 @@ public class FragmentEthereumWallet extends Fragment {
         Button privateKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_public_key_button);
         TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
-        balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
+        TextView balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
+        RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
+        progressBar = (ProgressBar) view.findViewById(R.id.fragment_ethereum_wallet_progressbar);
+
 
         backBtn.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
 
         restoreBtn.setOnClickListener(v -> {
-
+            DialogFragmentRestoreEthereumWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
         });
 
         backupBtn.setOnClickListener(v -> {
-
+            Ethereum.getInstance().backupWallet();
         });
 
         deleteBtn.setOnClickListener(v -> {
-
+            DialogFragmentDeleteWallet.newInstance("ETH").show(getActivity().getSupportFragmentManager(), null);
         });
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        EthereumTransactionAdapter ethereumTransactionAdapter = new EthereumTransactionAdapter(list);
-        recyclerView.setAdapter(ethereumTransactionAdapter);
+        transactionsRecView.setLayoutManager(linearLayoutManager);
 
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        transactionsRecView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), transactionsRecView, new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                TransactionItem transactionItem = list.get(position);
+                TransactionItem transactionItem = ethereumTransactionAdapter.transactionItems.get(position);
 
                 AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
 
@@ -119,8 +115,8 @@ public class FragmentEthereumWallet extends Fragment {
                 value.setText(transactionItem.value);
                 to.setText(transactionItem.to);
                 from.setText(transactionItem.from);
-                gasLimit.setText(String.valueOf(transactionItem.gasLimit));
-                gasUsed.setText(String.valueOf(transactionItem.gasUsed));
+                gasLimit.setText(transactionItem.gasLimit);
+                gasUsed.setText(transactionItem.gasUsed);
                 gasPrice.setText(transactionItem.gasPrice);
 
                 adb.setView(view).create().show();
@@ -132,9 +128,23 @@ public class FragmentEthereumWallet extends Fragment {
             }
         }));
 
-        if (ethereumTransactionAdapter.list.size() >0) {
-            historyText.setVisibility(View.INVISIBLE);
-        }
+        showProgress.observe(getActivity(), (flag) -> {
+            if (flag)
+                showProgress();
+            else
+                hideProgress();
+        });
+
+        ethereumBalanceData.observe(getActivity(), (balanceData) -> balance.setText(balanceData));
+
+        transactionsData.observe(getActivity(), (transactionItems) -> {
+            ethereumTransactionAdapter = new EthereumTransactionAdapter(transactionItems);
+            transactionsRecView.setAdapter(ethereumTransactionAdapter);
+            if (ethereumTransactionAdapter.transactionItems.size() > 0) {
+                historyText.setVisibility(View.INVISIBLE);
+            }
+        });
+
 
 //        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));
         transfer.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumWalletTransfer.newInstance(), null));
@@ -150,25 +160,7 @@ public class FragmentEthereumWallet extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        Utils.setActionBarWithTitle(getActivity(), "");
-//        Utils.setArrowBackInToolbar(getActivity());
         Utils.hideBottomBar(getActivity());
-        getBalance();
-    }
-
-    private void getBalance() {
-        Utils.stageQueue.postRunnable(() -> {
-            BigDecimal walletBalance = Ethereum.getInstance().getBalance();
-            if (walletBalance != null) {
-                User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE = walletBalance.toString();
-                User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
-                User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
-                User.saveConfig();
-            } else {
-                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.the_balance_of_the_ethereum_wallet_could_not_be_updated, Toast.LENGTH_LONG).show());
-            }
-            ApplicationLoader.applicationHandler.post(() -> balance.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_BALANCE));
-        });
     }
 
     @Override
@@ -176,27 +168,11 @@ public class FragmentEthereumWallet extends Fragment {
         super.onPause();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.wallet_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
+    private void showProgress() {
+        progressBar.setVisibility(View.VISIBLE);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.restore_backup_wallet:
-                DialogFragmentRestoreEthereumWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
-                break;
-            case R.id.save_backup_wallet:
-                Ethereum.getInstance().backupWallet();
-                break;
-            case R.id.delete_wallet:
-                DialogFragmentDeleteWallet.newInstance("ETH").show(getActivity().getSupportFragmentManager(), null);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+    private void hideProgress() {
+        progressBar.setVisibility(View.GONE);
     }
-
-
 }
