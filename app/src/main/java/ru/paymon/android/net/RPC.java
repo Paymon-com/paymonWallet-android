@@ -350,7 +350,7 @@ public class RPC {
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            stream.writeInt32(flags);
+            stream.writeInt32(isEmailHidden ? (flags | USER_FLAG_HIDDEN_EMAIL) : (flags &~ USER_FLAG_HIDDEN_EMAIL));
             stream.writeInt32(id);
             stream.writeString(login);
             stream.writeString(first_name);
