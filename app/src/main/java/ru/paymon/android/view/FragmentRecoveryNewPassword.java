@@ -76,7 +76,7 @@ public class FragmentRecoveryNewPassword extends Fragment {
         repeatNewPassword = view.findViewById(R.id.repeat_new_password);
         hintError = view.findViewById(R.id.fragment_new_password_error_hint);
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
         repeatNewPassword.setOnEditorActionListener((textView, i, keyEvent) -> {

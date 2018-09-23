@@ -27,7 +27,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_amount_layout">
 
-            <br.com.sapereaude.maskedEditText.MaskedEditText
+            <EditText
                 android:id="@+id/fragment_ethereum_wallet_transfer_receiver_address"
                 android:layout_width="0dp"
                 android:layout_height="50dp"
@@ -48,8 +48,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView1"
-                app:mask="0x############################################" /><!--TODO:ETH PUB ADDRES LENGTH (# COUNT)-->
+                app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
 
             <TextView
@@ -257,8 +256,7 @@
                     <com.warkiz.widget.IndicatorSeekBar
                         android:id="@+id/fragment_ethereum_wallet_transfer_gas_limit_slider"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
+                        android:layout_height="wrap_content" />
                 </com.warkiz.widget.IndicatorStayLayout>
 
                 <RelativeLayout

@@ -97,7 +97,7 @@ public class MoneyViewModel extends ViewModel {
                         User.saveConfig();
                         walletItems.add(new NonEmptyWalletItem(cryptoCurrency, balance.toString(), User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS));
                     }
-                } /*else {
+                } /*else { //TODO: обрабатывать ситуацию когда кошелек не получилось загрузить
                     walletItems.add(new WalletItem(cryptoCurrency));
                 }*/
             } else {

@@ -95,7 +95,7 @@ public class FragmentGroupSettings extends Fragment {
         RecyclerView contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
         photoView = (CircularImageView) view.findViewById(R.id.group_settings_photo);
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
         photoView.setOnClickListener((v -> {

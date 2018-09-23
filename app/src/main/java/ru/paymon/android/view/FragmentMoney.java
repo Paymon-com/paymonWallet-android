@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,7 +29,7 @@ import ru.paymon.android.viewmodels.MoneyViewModel;
 
 public class FragmentMoney extends Fragment {
     private static FragmentMoney instance;
-    private ProgressBar progressBar;
+    private DialogProgress dialogProgress;
     private Spinner fiatCurrencySpinner;
     private RecyclerView exchangeRatesRecView;
     private MoneyViewModel moneyViewModel;
@@ -41,7 +40,6 @@ public class FragmentMoney extends Fragment {
     private LiveData<Boolean> showProgress;
     private ArrayList<ExchangeRatesItem> exchangeRatesItems;
     private LiveData<String> ethereumBalanceData;
-    boolean isProgressShowed;
 
 
     public static FragmentMoney getInstance() {
@@ -69,7 +67,9 @@ public class FragmentMoney extends Fragment {
         RecyclerView walletsRecView = (RecyclerView) view.findViewById(R.id.fragment_money_wallets);
         fiatCurrencySpinner = (Spinner) view.findViewById(R.id.fragment_money_spinner);
         TextView updateButton = (TextView) view.findViewById(R.id.fragment_money_update);
-        progressBar = (ProgressBar) view.findViewById(R.id.fragment_money_progressbar);
+
+        dialogProgress = new DialogProgress(getContext());
+        dialogProgress.setCancelable(false);
 
         exchangeRatesRecView.setHasFixedSize(true);
         exchangeRatesRecView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -89,52 +89,18 @@ public class FragmentMoney extends Fragment {
         });
 
         walletsData.observe(this, (walletsData) -> {
-            cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, new CryptoWalletsAdapter.IOnItemClickListener() {
-                @Override
-                public void onClick(String cryptoCurrency) {
-                    Fragment fragment = null;
-                    switch (cryptoCurrency) {
-                        case "BTC":
-//                            fragment = FragmentBitcoinWallet.newInstance();
-                            break;
-                        case "ETH":
-                            fragment = FragmentEthereumWallet.newInstance();
-                            break;
-                        case "PMNT":
-//                            fragment = FragmentPaymonWallet.newInstance();
-                            break;
-                    }
-
-                    if (fragment != null)
-                        Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragment, null);
-                }
-
-                @Override
-                public void onCreateClick(String cryptoCurrency) {
-                    switch (cryptoCurrency) {
-                        case "BTC":
-//                            DialogFragmentCreateRestoreBitcoinWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
-                            break;
-                        case "ETH":
-                            DialogFragmentCreateRestoreEthereumWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
-                            break;
-                        case "PMNT":
-//                            DialogFragmentCreateRestorePaymonWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
-                            break;
-                    }
-                }
-            });
+            cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, cryptoWalletsListener);
             walletsRecView.setAdapter(cryptoWalletsAdapter);
         });
 
-        ethereumBalanceData.observe(getActivity(), (balanceData) ->{
+        ethereumBalanceData.observe(getActivity(), (balanceData) -> {
             ArrayList<WalletItem> walletItems = walletsData.getValue();
-            if(walletItems == null)
+            if (walletItems == null)
                 return;
-            for (WalletItem walletItem:walletItems) {
-                if(walletItem instanceof  NonEmptyWalletItem) {
+            for (WalletItem walletItem : walletItems) {
+                if (walletItem instanceof NonEmptyWalletItem) {
                     NonEmptyWalletItem wi = (NonEmptyWalletItem) walletItem;
-                    if (wi.cryptoCurrency.equals("ETH")){
+                    if (wi.cryptoCurrency.equals("ETH")) {
                         wi.cryptoBalance = balanceData;
                     }
                 }
@@ -142,7 +108,7 @@ public class FragmentMoney extends Fragment {
         });
 
         showProgress.observe(getActivity(), (flag) -> {
-            isProgressShowed = flag;
+            if (flag == null) return;
             if (flag)
                 showProgress();
             else
@@ -150,23 +116,13 @@ public class FragmentMoney extends Fragment {
         });
 
         updateButton.setOnClickListener(view1 -> {
-            if (!isProgressShowed) {
+            if (showProgress.getValue() != null && !showProgress.getValue()) {
                 moneyViewModel.getWalletsData();
                 moneyViewModel.getExchangeRatesData();
             }
         });
 
-        fiatCurrencySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                changeCurrency();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
+        fiatCurrencySpinner.setOnItemSelectedListener(fiatCurrencyListener);
 
         return view;
     }
@@ -182,11 +138,11 @@ public class FragmentMoney extends Fragment {
     }
 
     private void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
+        dialogProgress.show();
     }
 
     private void hideProgress() {
-        progressBar.setVisibility(View.GONE);
+        dialogProgress.dismiss();
     }
 
     private void changeCurrency() {
@@ -202,4 +158,52 @@ public class FragmentMoney extends Fragment {
         exchangeRatesAdapter = new ExchangeRatesAdapter(exRatesItems);
         exchangeRatesRecView.setAdapter(exchangeRatesAdapter);
     }
+
+    private CryptoWalletsAdapter.IOnItemClickListener cryptoWalletsListener = new CryptoWalletsAdapter.IOnItemClickListener() {
+        @Override
+        public void onClick(String cryptoCurrency) {
+            Fragment fragment = null;
+            switch (cryptoCurrency) {
+                case "BTC":
+//                            fragment = FragmentBitcoinWallet.newInstance();
+                    break;
+                case "ETH":
+                    fragment = FragmentEthereumWallet.newInstance();
+                    break;
+                case "PMNT":
+//                            fragment = FragmentPaymonWallet.newInstance();
+                    break;
+            }
+
+            if (fragment != null)
+                Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragment, null);
+        }
+
+        @Override
+        public void onCreateClick(String cryptoCurrency) {
+            switch (cryptoCurrency) {
+                case "BTC":
+//                            DialogFragmentCreateRestoreBitcoinWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
+                    break;
+                case "ETH":
+                    DialogFragmentCreateRestoreEthereumWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
+                    break;
+                case "PMNT":
+//                            DialogFragmentCreateRestorePaymonWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
+                    break;
+            }
+        }
+    };
+
+    AdapterView.OnItemSelectedListener fiatCurrencyListener = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            changeCurrency();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {
+
+        }
+    };
 }

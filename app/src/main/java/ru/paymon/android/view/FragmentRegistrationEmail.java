@@ -78,7 +78,7 @@ public class FragmentRegistrationEmail extends Fragment {
 
         acceptToolbar.setOnClickListener(view12 -> registration());
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
         emailEditText = view.findViewById(R.id.registration_email_edit_text);

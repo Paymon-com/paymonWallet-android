@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,7 +74,7 @@ public class FragmentContacts extends Fragment {
         ContactsGlobalAdapter contactsGlobalAdapter = new ContactsGlobalAdapter();
         recyclerViewContactsGlobal.setAdapter(contactsGlobalAdapter);
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
         editText.addTextChangedListener(new TextWatcher() {

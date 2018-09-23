@@ -56,7 +56,7 @@
 //        RecyclerView recyclerViewReg = (RecyclerView) view.findViewById(R.id.recViewReg);
 //        RecyclerView recyclerViewUnreg = (RecyclerView) view.findViewById(R.id.recViewUnreg);
 //
-//        dialogProgress = new DialogProgress(getActivity());
+//        dialogProgress = new DialogProgress(getContext());
 //        dialogProgress.setCancelable(true);
 //
 //        recyclerViewReg.setHasFixedSize(true);

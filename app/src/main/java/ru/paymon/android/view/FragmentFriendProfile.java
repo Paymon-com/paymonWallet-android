@@ -53,7 +53,7 @@ public class FragmentFriendProfile extends Fragment {
             if (bundle.containsKey(CHAT_ID_KEY))
                 userId = bundle.getInt(CHAT_ID_KEY);
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
     }
 

@@ -60,7 +60,7 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
         emailEditText = view.findViewById(R.id.fragment_password_recovery_email_edit_text);
         hintError = view.findViewById(R.id.fragment_password_recovery_email_error_hint_text_view);
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
         emailEditText.setOnEditorActionListener((textView, i, keyEvent) -> {

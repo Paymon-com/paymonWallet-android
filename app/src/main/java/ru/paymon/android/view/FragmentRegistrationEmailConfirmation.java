@@ -72,7 +72,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
         hintError = view.findViewById(R.id.email_confirmation_hint_error);
         time = view.findViewById(R.id.email_confirmation_timer);
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
         email.setOnEditorActionListener((textView, i, keyEvent) -> {

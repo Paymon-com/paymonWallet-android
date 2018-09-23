@@ -2,6 +2,7 @@ package ru.paymon.android.net;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -132,7 +133,7 @@ public class RPC {
     }
 
     public static class UserObject extends Packet implements Parcelable {
-        static final int USER_FLAG_HIDDEN_EMAIL = 0b1;
+        public static final int USER_FLAG_HIDDEN_EMAIL = 0b1;
 
         public int flags;
         public int id;
@@ -267,8 +268,6 @@ public class RPC {
         }
 
         public void readParams(SerializableData stream, boolean exception) {
-            flags = stream.readInt32(exception);
-            isEmailHidden = (flags & USER_FLAG_HIDDEN_EMAIL) != 0;
             id = stream.readInt32(exception);
             login = stream.readString(exception);
             first_name = stream.readString(exception);
@@ -283,21 +282,16 @@ public class RPC {
             }
             photoURL = new RPC.PM_photoURL();
             photoURL.readParams(stream, exception);
-            confirmed = stream.readBool(exception);
-//            walletKey = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            stream.writeInt32(flags);
             stream.writeInt32(id);
             stream.writeString(login);
             stream.writeString(first_name);
             stream.writeString(last_name);
             stream.writeByteArray(token);
             photoURL.serializeToStream(stream);
-            stream.writeBool(confirmed);
-//            stream.writeString(walletKey);
         }
     }
 
@@ -320,6 +314,7 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             flags = stream.readInt32(exception);
             isEmailHidden = (flags & USER_FLAG_HIDDEN_EMAIL) != 0;
+
             id = stream.readInt32(exception);
             login = stream.readString(exception);
             first_name = stream.readString(exception);
@@ -350,7 +345,8 @@ public class RPC {
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            stream.writeInt32(isEmailHidden ? (flags | USER_FLAG_HIDDEN_EMAIL) : (flags &~ USER_FLAG_HIDDEN_EMAIL));
+            flags = isEmailHidden ? (flags | USER_FLAG_HIDDEN_EMAIL) : (flags &~ USER_FLAG_HIDDEN_EMAIL);
+            stream.writeInt32(flags);
             stream.writeInt32(id);
             stream.writeString(login);
             stream.writeString(first_name);
@@ -730,6 +726,7 @@ public class RPC {
             for (int i = 0; i < count; i++) {
                 UserObject object = UserObject.deserialize(stream, stream.readInt32(exception), exception);
                 if (object == null) {
+                    Log.e("RPC", "USER IS NULL");
                     return;
                 }
                 users.add(object);
@@ -1014,10 +1011,12 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             flags = stream.readInt32(exception);
             unread = (flags & MESSAGE_FLAG_UNREAD) != 0;
+
             id = stream.readInt64(exception);
             if ((flags & MESSAGE_FLAG_FROM_ID) != 0) {
                 from_id = stream.readInt32(exception);
             }
+
             to_id = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
             if (from_id == 0) {
                 if (to_id.user_id != 0) {
@@ -1031,23 +1030,6 @@ public class RPC {
             }
             date = stream.readInt32(exception);
             text = stream.readString(exception);
-//            if ((flags & 128) != 0) {
-//                int magic = stream.readInt32(exception);
-//                if (magic != 0x1cb5c415) {
-//                    if (exception) {
-//                        throw new RuntimeException(String.format("wrong Vector magic, got %x", magic));
-//                    }
-//                    return;
-//                }
-//                int count = stream.readInt32(exception);
-//                for (int a = 0; a < count; a++) {
-//                    MessageEntity object = MessageEntity.deserialize(stream, stream.readInt32(exception), exception);
-//                    if (object == null) {
-//                        return;
-//                    }
-//                    entities.add(object);
-//                }
-//            }
             if ((flags & MESSAGE_FLAG_VIEWS) != 0) {
                 views = stream.readInt32(exception);
             }
@@ -1059,30 +1041,28 @@ public class RPC {
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags & ~MESSAGE_FLAG_UNREAD);
+
             stream.writeInt32(flags);
             stream.writeInt64(id);
 
             if ((flags & MESSAGE_FLAG_FROM_ID) != 0) {
                 stream.writeInt32(from_id);
             }
-            to_id.serializeToStream(stream);
+
+            if(to_id != null) {
+                to_id.serializeToStream(stream);
+            }
 
             if ((flags & MESSAGE_FLAG_REPLY) != 0) {
                 stream.writeInt32(reply_to_msg_id);
             }
             stream.writeInt32(date);
             stream.writeString(text);
-//            if ((flags & 128) != 0) {
-//                stream.writeInt32(0x1cb5c415);
-//                int count = entities.size();
-//                stream.writeInt32(count);
-//                for (int a = 0; a < count; a++) {
-//                    entities.get(a).serializeToStream(stream);
-//                }
-//            }
+
             if ((flags & MESSAGE_FLAG_VIEWS) != 0) {
                 stream.writeInt32(views);
             }
+
             if ((flags & MESSAGE_FLAG_EDITED) != 0) {
                 stream.writeInt32(edit_date);
             }
@@ -1095,10 +1075,12 @@ public class RPC {
         public void readParams(SerializableData stream, boolean exception) {
             flags = stream.readInt32(exception);
             unread = (flags & MESSAGE_FLAG_UNREAD) != 0;
+
             id = stream.readInt64(exception);
             if ((flags & MESSAGE_FLAG_FROM_ID) != 0) {
                 from_id = stream.readInt32(exception);
             }
+
             to_id = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
             if (from_id == 0) {
                 if (to_id.user_id != 0) {
@@ -1129,15 +1111,19 @@ public class RPC {
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags & ~MESSAGE_FLAG_UNREAD);
+            flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags &~ MESSAGE_FLAG_UNREAD);
             flags = (action != null) ? (flags | MESSAGE_FLAG_ACTION) : (flags &~ MESSAGE_FLAG_ACTION);
+
             stream.writeInt32(flags);
             stream.writeInt64(id);
 
             if ((flags & MESSAGE_FLAG_FROM_ID) != 0) {
                 stream.writeInt32(from_id);
             }
-            to_id.serializeToStream(stream);
+
+            if(to_id != null) {
+                to_id.serializeToStream(stream);
+            }
 
             if ((flags & MESSAGE_FLAG_REPLY) != 0) {
                 stream.writeInt32(reply_to_msg_id);
@@ -1151,9 +1137,11 @@ public class RPC {
             if ((flags & MESSAGE_FLAG_VIEWS) != 0) {
                 stream.writeInt32(views);
             }
+
             if ((flags & MESSAGE_FLAG_EDITED) != 0) {
                 stream.writeInt32(edit_date);
             }
+
             if (action != null) {
                 action.serializeToStream(stream);
             }
@@ -2278,31 +2266,11 @@ public class RPC {
     public static class PM_messageActionGroupCreate extends MessageAction {
         public static int svuid = 42618952;
 
-        public void readParams(SerializableData stream, boolean exception) {
-            int magic = stream.readInt32(exception);
-            if (magic != SVUID_ARRAY) {
-                if (exception) {
-                    throw new RuntimeException(String.format("wrong Vector magic, got %x", magic));
-                }
-                return;
-            }
-
-            int count = stream.readInt32(exception);
-            for (int i = 0; i < count; i++) {
-                UserObject user = UserObject.deserialize(stream, stream.readInt32(exception), exception);
-                users.add(user);
-            }
-        }
-
+//        public void readParams(SerializableData stream, boolean exception) {
+//        }
+//
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            stream.writeString(message);
-            stream.writeInt32(SVUID_ARRAY);
-            int count = users.size();
-            stream.writeInt32(count);
-            for (int i = 0; i < count; i++) {
-                users.get(i).serializeToStream(stream);
-            }
         }
     }
 }

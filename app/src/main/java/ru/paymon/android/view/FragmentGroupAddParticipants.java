@@ -154,7 +154,7 @@ public class FragmentGroupAddParticipants extends Fragment {
         });
 
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
         setHasOptionsMenu(true);
@@ -165,8 +165,6 @@ public class FragmentGroupAddParticipants extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.add_participants));
-        //Utils.setArrowBackInToolbar(getActivity());
         Utils.hideBottomBar(getActivity());
 
         addGroupList.clear();

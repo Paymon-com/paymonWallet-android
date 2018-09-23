@@ -70,7 +70,7 @@ public class FragmentRecoveryPasswordCode extends Fragment {
         hintError = view.findViewById(R.id.fragment_password_recovery_code_hint_error_text_view);
         codeEditText = view.findViewById(R.id.fragment_password_recovery_code_edit_text);
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
         codeEditText.requestFocus();

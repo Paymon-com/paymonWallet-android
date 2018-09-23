@@ -54,7 +54,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
         Button buttonCancel = (Button) view.findViewById(R.id.dialog_fragment_with_edit_cancel);
         Button buttonAgree = (Button) view.findViewById(R.id.dialog_fragment_with_edit_ok);
 
-        dialogProgress = new DialogProgress(getActivity());
+        dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
         buttonAgree.setOnClickListener(buttonAgreeClickListener);

@@ -72,6 +72,7 @@ public class FragmentSettingsBasic extends PreferenceFragmentCompat implements S
         if(preference instanceof SwitchPreferenceCompat){
             Utils.netQueue.postRunnable(() -> {
                 RPC.PM_userFull user = User.currentUser;
+                User.currentUser.flags = RPC.UserObject.USER_FLAG_HIDDEN_EMAIL;
 
 //                ApplicationLoader.applicationHandler.post(dialogProgress::show);
 

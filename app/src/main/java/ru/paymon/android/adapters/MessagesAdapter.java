@@ -167,7 +167,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        } else if (holder instanceof SentMessageWalletViewHolder) {
 //            final SentMessageWalletViewHolder sentMessageWalletViewHolder = (SentMessageWalletViewHolder) holder;
 //            final String publicKey = Utils.getETHorBTCpubKeyFromText(sentMessageWalletViewHolder.message.text);
-//            final int keyType = Utils.WTF(publicKey);
+//            final int keyType = Utils.identifyTypeOfPubKey(publicKey);
 //
 //            sentMessageWalletViewHolder.publicKey.setText(publicKey);
 //
@@ -191,7 +191,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        } else if (holder instanceof GroupReceivedMessageWalletViewHolder) {
 //            final GroupReceivedMessageWalletViewHolder groupReceivedMessageWalletViewHolder = (GroupReceivedMessageWalletViewHolder) holder;
 //            final String publicKey = Utils.getETHorBTCpubKeyFromText(groupReceivedMessageWalletViewHolder.message.text);
-//            final int keyType = Utils.WTF(publicKey);
+//            final int keyType = Utils.identifyTypeOfPubKey(publicKey);
 //
 //            groupReceivedMessageWalletViewHolder.publicKey.setText(publicKey);
 //
@@ -224,7 +224,7 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 //        } else if (holder instanceof ReceivedMessageWalletViewHolder) {
 //            final ReceivedMessageWalletViewHolder receivedMessageWalletViewHolder = (ReceivedMessageWalletViewHolder) holder;
 //            final String publicKey = Utils.getETHorBTCpubKeyFromText(receivedMessageWalletViewHolder.message.text);
-//            final int keyType = Utils.WTF(publicKey);
+//            final int keyType = Utils.identifyTypeOfPubKey(publicKey);
 //
 //            receivedMessageWalletViewHolder.publicKey.setText(publicKey);
 //

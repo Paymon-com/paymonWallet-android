@@ -52,20 +52,22 @@ public class FragmentEthereumWalletTransferInfo extends Fragment {
             final BigDecimal amountValue = new BigDecimal(bundle.getString("AMOUNT"));
             final BigInteger gasPrice = new BigInteger(bundle.getString("GAS_PRICE"));
             final BigInteger gasLimit = new BigInteger(bundle.getString("GAS_LIMIT"));
+            final BigDecimal feeVal = new BigDecimal(bundle.getString("FEE"));
+            final BigDecimal totalVal = new BigDecimal(bundle.getString("TOTAL"));
 
             fromAddress.setText(Ethereum.getInstance().getAddress());
             toAddress.setText(toAddr);
-            fee.setText(String.valueOf(new BigDecimal(bundle.getString("FEE"))));
+            fee.setText(String.valueOf(feeVal));
             amount.setText(String.valueOf(amountValue));
-            total.setText(String.valueOf(new BigDecimal(bundle.getString("TOTAL"))));
+            total.setText(String.valueOf(totalVal));
 
             pay.setOnClickListener((view1) -> {
                 Utils.netQueue.postRunnable(() -> {
                     EthSendTransaction ethSendTransaction = Ethereum.getInstance().send(gasPrice, gasLimit, toAddr, Convert.toWei(amountValue, Convert.Unit.ETHER).toBigInteger());
-                    if(ethSendTransaction != null) {
+                    if (ethSendTransaction != null) {
                         Log.e("AAA", ethSendTransaction.getTransactionHash());
                         Log.e("AAA", ethSendTransaction.getResult());
-                    }else{
+                    } else {
                         Log.e("AAA", "null");
                     }
                 });

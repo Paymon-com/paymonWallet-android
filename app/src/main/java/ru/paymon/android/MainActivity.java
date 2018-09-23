@@ -3,8 +3,10 @@ package ru.paymon.android;
 import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import java.util.List;
@@ -26,7 +28,7 @@ import ru.paymon.android.view.FragmentStart;
 import static ru.paymon.android.Config.IMPORTANT_PERMISSIONS;
 import static ru.paymon.android.Config.READ_CONTACTS_PERMISSION;
 
-public class MainActivity extends AbsRuntimePermission implements NotificationManager.IListener {
+public class MainActivity extends AbsRuntimePermission implements NotificationManager.IListener, BottomNavigationView.OnNavigationItemSelectedListener {
     private static long back_pressed;
 
     @Override
@@ -42,34 +44,11 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
             return;
         }
 
-        init();
+        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
+        bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
 
-    private void init() {
-//        Toolbar toolbar = findViewById(R.gid.toolbar);
-//        setSupportActionBar(toolbar);
-
-        final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
-
-        bottomNavigationView.setOnNavigationItemSelectedListener((item) -> {
-            switch (item.getItemId()) {
-                case R.id.bottom_menu_chats:
-                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance());
-                    break;
-                case R.id.bottom_menu_contacts:
-                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentContacts.getInstance());
-                    break;
-                case R.id.ic_menu_money:
-                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoney.getInstance());
-                    break;
-                case R.id.bottom_menu_more:
-                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoreMenu.getInstance());
-                    break;
-            }
-
-            return true;
-        });
-
+    private void init(){
         Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentPermissions.newInstance());
 
         requestAppPermissions(new String[]{
@@ -81,6 +60,25 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
                 R.string.msg_permissions_required, IMPORTANT_PERMISSIONS);
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.bottom_menu_chats:
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance());
+                break;
+            case R.id.bottom_menu_contacts:
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentContacts.getInstance());
+                break;
+            case R.id.ic_menu_money:
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoney.getInstance());
+                break;
+            case R.id.bottom_menu_more:
+                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentMoreMenu.getInstance());
+                break;
+        }
+
+        return true;
+    }
 
     @Override
     public void onBackPressed() {
@@ -94,7 +92,6 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
             back_pressed = System.currentTimeMillis();
         } else {
             getSupportFragmentManager().popBackStack();
-//            super.onBackPressed();
         }
     }
 
@@ -172,6 +169,7 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
             }
         }
     }
+
 
 
 }

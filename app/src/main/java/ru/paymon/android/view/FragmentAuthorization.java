@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -86,7 +84,7 @@ public class FragmentAuthorization extends Fragment {
 
         backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
 
-        dialog = new DialogProgress(getActivity());
+        dialog = new DialogProgress(getContext());
         dialog.setCancelable(true);
 
         loginView = (EditText) view.findViewById(R.id.login_authorization);

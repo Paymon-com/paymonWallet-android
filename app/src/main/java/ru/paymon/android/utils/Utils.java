@@ -394,17 +394,21 @@ public class Utils {
         return matcher.group(1);
     }
 
-    public static boolean veriftBTCpubKey(String key) {
+    public static boolean verifyBTCpubKey(String key) {
         Matcher matcher = Pattern.compile("^[13][a-zA-Z0-9]{25,34}$").matcher(key);
         return !key.isEmpty() && matcher.find();
     }
 
-    public static boolean veriftETHpubKey(String key) {
+    public static boolean verifyETHpubKey(String key) {
         Matcher matcher = Pattern.compile("^0x[a-fA-F0-9]{40,44}$").matcher(key);
         return !key.isEmpty() && matcher.find();
     }
 
-    public static int WTF(String key) {
+
+    // BTC return 1
+    // ETH return 2
+    // matches not found return 0
+    public static int identifyTypeOfPubKey(String key) {
         if (key.isEmpty()) return 0;
 
         Matcher matcher = Pattern.compile("^[13][a-zA-Z0-9]{25,34}$").matcher(key);

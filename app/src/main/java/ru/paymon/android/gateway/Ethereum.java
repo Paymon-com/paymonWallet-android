@@ -54,7 +54,6 @@ import ru.paymon.android.utils.Utils;
 import static java.math.BigDecimal.ROUND_HALF_UP;
 import static ru.paymon.android.gateway.Ethereum.TX_STATUS.DONE;
 
-//import ru.paymon.android.utils.cache.lruramcache.LruRamCache;
 
 public class Ethereum {
     private static final String TAG = "Ethereum";
@@ -188,6 +187,7 @@ public class Ethereum {
 
     public BigDecimal getBalance() {
         try {
+            Log.e("AAA", getAddress());
             return Convert.fromWei(new BigDecimal(web3j.ethGetBalance(getAddress(), DefaultBlockParameterName.fromString("latest")).send().getBalance()), Convert.Unit.ETHER);
         } catch (Exception e) {
             e.printStackTrace();

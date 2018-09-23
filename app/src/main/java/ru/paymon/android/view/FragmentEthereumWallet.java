@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -33,9 +32,7 @@ public class FragmentEthereumWallet extends Fragment {
     private MoneyViewModel moneyViewModel;
     private LiveData<String> ethereumBalanceData;
     private LiveData<ArrayList<TransactionItem>> transactionsData;
-    private LiveData<Boolean> showProgress;
     private EthereumTransactionAdapter ethereumTransactionAdapter;
-    private ProgressBar progressBar;
 
     public static FragmentEthereumWallet newInstance() {
         if (instance == null)
@@ -49,7 +46,6 @@ public class FragmentEthereumWallet extends Fragment {
         moneyViewModel = ViewModelProviders.of(getActivity()).get(MoneyViewModel.class);
         ethereumBalanceData = moneyViewModel.getEthereumBalanceData();
         transactionsData = moneyViewModel.getTranscationsData();
-        showProgress = moneyViewModel.getProgressState();
     }
 
     @Nullable
@@ -69,7 +65,6 @@ public class FragmentEthereumWallet extends Fragment {
         TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
         TextView balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
         RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
-        progressBar = (ProgressBar) view.findViewById(R.id.fragment_ethereum_wallet_progressbar);
 
 
         backBtn.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
@@ -128,13 +123,6 @@ public class FragmentEthereumWallet extends Fragment {
             }
         }));
 
-        showProgress.observe(getActivity(), (flag) -> {
-            if (flag)
-                showProgress();
-            else
-                hideProgress();
-        });
-
         ethereumBalanceData.observe(getActivity(), (balanceData) -> balance.setText(balanceData));
 
         transactionsData.observe(getActivity(), (transactionItems) -> {
@@ -166,13 +154,5 @@ public class FragmentEthereumWallet extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    private void showProgress() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    private void hideProgress() {
-        progressBar.setVisibility(View.GONE);
     }
 }
