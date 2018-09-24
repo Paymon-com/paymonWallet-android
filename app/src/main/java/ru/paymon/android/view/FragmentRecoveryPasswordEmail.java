@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.net.NetworkManager;
@@ -24,15 +25,9 @@ import ru.paymon.android.utils.Utils;
 public class FragmentRecoveryPasswordEmail extends Fragment {
     public static final String PASSWORD_RECOVERY_LOGIN = "login";
     private static FragmentRecoveryPasswordEmail instance;
-
     private EditText emailEditText;
     private TextView hintError;
     private DialogProgress dialogProgress;
-
-    public static synchronized FragmentRecoveryPasswordEmail newInstance() {
-        instance = new FragmentRecoveryPasswordEmail();
-        return instance;
-    }
 
     public static synchronized FragmentRecoveryPasswordEmail getInstance() {
         if (instance == null)
@@ -97,7 +92,7 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
         super.onResume();
 
         //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
     }
 
 //    @Override
@@ -130,7 +125,7 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
             ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
             final long requestID = NetworkManager.getInstance().sendRequest(passwordRecoveryCodeRequest, (response, error) -> {
-                if (error != null || (response != null && response instanceof RPC.PM_boolFalse)) {
+                if (error != null || response instanceof RPC.PM_boolFalse) {
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
@@ -147,11 +142,9 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
                             .setMessage(getString(R.string.confirmation_code_was_sent))
                             .setCancelable(false)
                             .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
-                                Fragment fragment = FragmentRecoveryPasswordCode.newInstance();
                                 Bundle bundle = new Bundle();
                                 bundle.putString(PASSWORD_RECOVERY_LOGIN, emailEditText.getText().toString());
-                                fragment.setArguments(bundle);
-                                Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragment, null);
+                                Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.fragmentRecoveryPasswordCode, bundle);
                             });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();

@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.net.NetworkManager;
@@ -26,7 +27,6 @@ import static ru.paymon.android.view.FragmentRecoveryPasswordEmail.PASSWORD_RECO
 public class FragmentRecoveryPasswordCode extends Fragment {
     public static final String PASSWORD_RECOVERY_CODE = "code";
     private static FragmentRecoveryPasswordCode instance;
-
     private EditText codeEditText;
     private TextView hintError;
     private String login;
@@ -34,12 +34,6 @@ public class FragmentRecoveryPasswordCode extends Fragment {
 
     public static synchronized FragmentRecoveryPasswordCode newInstance() {
         instance = new FragmentRecoveryPasswordCode();
-        return instance;
-    }
-
-    public static synchronized FragmentRecoveryPasswordCode getInstance() {
-        if (instance == null)
-            instance = new FragmentRecoveryPasswordCode();
         return instance;
     }
 
@@ -63,8 +57,7 @@ public class FragmentRecoveryPasswordCode extends Fragment {
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
-
+        backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         acceptToolbar.setOnClickListener(view12 -> showFragmentRecoveryPasswordCode());
 
         hintError = view.findViewById(R.id.fragment_password_recovery_code_hint_error_text_view);
@@ -158,12 +151,10 @@ public class FragmentRecoveryPasswordCode extends Fragment {
                             .setMessage(getString(R.string.confirmation_code_verified))
                             .setCancelable(false)
                             .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
-                                Fragment fragment = FragmentRecoveryNewPassword.newInstance();
                                 Bundle bundle = new Bundle();
                                 bundle.putString(PASSWORD_RECOVERY_LOGIN, login);
                                 bundle.putString(PASSWORD_RECOVERY_CODE, codeEditText.getText().toString());
-                                fragment.setArguments(bundle);
-                                Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragment, null);
+                                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentRecoveryNewPassword, bundle);
                             });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();

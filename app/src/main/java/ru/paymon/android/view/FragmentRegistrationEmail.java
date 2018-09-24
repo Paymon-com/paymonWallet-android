@@ -13,9 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -34,11 +34,6 @@ public class FragmentRegistrationEmail extends Fragment {
     private TextView hintError;
     private DialogProgress dialogProgress;
 
-    public static synchronized FragmentRegistrationEmail newInstance() {
-        instance = new FragmentRegistrationEmail();
-        return instance;
-    }
-
     public static synchronized FragmentRegistrationEmail getInstance() {
         if (instance == null)
             instance = new FragmentRegistrationEmail();
@@ -48,8 +43,7 @@ public class FragmentRegistrationEmail extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
     }
 
     @Override
@@ -73,28 +67,26 @@ public class FragmentRegistrationEmail extends Fragment {
 
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
-
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
-
-        acceptToolbar.setOnClickListener(view12 -> registration());
-
-        dialogProgress = new DialogProgress(getContext());
-        dialogProgress.setCancelable(true);
-
         emailEditText = view.findViewById(R.id.registration_email_edit_text);
         promocodeEditText = view.findViewById(R.id.registration_promocode_edit_text);
         TextView agreementTextView = view.findViewById(R.id.registration_email_agreement_text_view);
         TextView privacyPolicyTextView = view.findViewById(R.id.registration_email_privacy_policy_text_view);
         hintError = view.findViewById(R.id.registration_email_hint_error_text_view);
 
+        backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        acceptToolbar.setOnClickListener(view12 -> registration());
+
+        dialogProgress = new DialogProgress(getContext());
+        dialogProgress.setCancelable(true);
+
         agreementTextView.setOnClickListener(v -> {
             Utils.hideKeyboard(v);
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentAgreement.newInstance(), null);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentAgreement);
         });
 
         privacyPolicyTextView.setOnClickListener(v -> {
             Utils.hideKeyboard(v);
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentPrivacyPolicy.newInstance(), null);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentPrivacyPolicy);
         });
 
         emailEditText.addTextChangedListener(new TextWatcher() {
@@ -147,18 +139,12 @@ public class FragmentRegistrationEmail extends Fragment {
 
                 if (response == null) return;
 
-                User.currentUser = (RPC.PM_userFull) response;
-                User.saveConfig();
+                Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.fragmentAuthorization, getArguments());
 
                 ApplicationLoader.applicationHandler.post(() -> {
                     if (dialogProgress != null && dialogProgress.isShowing())
                         dialogProgress.dismiss();
                 });
-//            NotificationManager.getInstance().postNotificationName(NotificationManager.userRegistered);
-//            Intent mainActivityIntent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
-//            mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//            mainActivityIntent.putExtra(REGISTRATION_FLAG, true);
-//            startActivity(mainActivityIntent);
             });
 
             ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(registration, false)));

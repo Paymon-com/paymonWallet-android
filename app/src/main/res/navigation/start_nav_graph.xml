@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/fragmentStart">
+
+    <fragment
+        android:id="@+id/fragmentAuthorization"
+        android:name="ru.paymon.android.view.FragmentAuthorization"
+        android:label="fragment_authorization"
+        tools:layout="@layout/fragment_authorization" >
+        <action
+            android:id="@+id/action_fragmentAuthorization_to_mainActivity"
+            app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_fragmentAuthorization_to_fragmentRecoveryPasswordEmail"
+            app:destination="@id/fragmentRecoveryPasswordEmail" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentRegistrationLogin"
+        android:name="ru.paymon.android.view.FragmentRegistrationLogin"
+        android:label="fragment_registration_login"
+        tools:layout="@layout/fragment_registration_login" >
+        <action
+            android:id="@+id/action_fragmentRegistrationLogin_to_fragmentRegistrationPassword"
+            app:destination="@id/fragmentRegistrationPassword" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentRegistrationPassword"
+        android:name="ru.paymon.android.view.FragmentRegistrationPassword"
+        android:label="fragment_registration_password"
+        tools:layout="@layout/fragment_registration_password" >
+        <action
+            android:id="@+id/action_fragmentRegistrationPassword_to_fragmentRegistrationEmail"
+            app:destination="@id/fragmentRegistrationEmail" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentRegistrationEmail"
+        android:name="ru.paymon.android.view.FragmentRegistrationEmail"
+        android:label="fragment_registration_email"
+        tools:layout="@layout/fragment_registration_email" >
+        <action
+            android:id="@+id/action_fragmentRegistrationEmail_to_fragmentAgreement"
+            app:destination="@id/fragmentAgreement" />
+        <action
+            android:id="@+id/action_fragmentRegistrationEmail_to_fragmentPrivacyPolicy"
+            app:destination="@id/fragmentPrivacyPolicy" />
+        <action
+            android:id="@+id/action_fragmentRegistrationEmail_to_fragmentAgreement2"
+            app:destination="@id/fragmentAgreement" />
+        <action
+            android:id="@+id/action_fragmentRegistrationEmail_to_fragmentAuthorization"
+            app:destination="@id/fragmentAuthorization" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentAgreement"
+        android:name="ru.paymon.android.view.FragmentAgreement"
+        android:label="agreement_layout"
+        tools:layout="@layout/agreement_layout" />
+    <fragment
+        android:id="@+id/fragmentPrivacyPolicy"
+        android:name="ru.paymon.android.view.FragmentPrivacyPolicy"
+        android:label="privacy_polycy_layout"
+        tools:layout="@layout/privacy_polycy_layout" />
+    <fragment
+        android:id="@+id/fragmentStart"
+        android:name="ru.paymon.android.view.FragmentStart"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" >
+        <action
+            android:id="@+id/action_fragmentStart_to_fragmentAuthorization"
+            app:destination="@id/fragmentAuthorization" />
+        <action
+            android:id="@+id/action_fragmentStart_to_fragmentRegistrationLogin"
+            app:destination="@id/fragmentRegistrationLogin" />
+    </fragment>
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="ru.paymon.android.activities.MainActivity"
+        android:label="mainActivity"
+        tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/fragmentRecoveryPasswordEmail"
+        android:name="ru.paymon.android.view.FragmentRecoveryPasswordEmail"
+        android:label="fragment_recovery_password_email"
+        tools:layout="@layout/fragment_recovery_password_email" >
+        <action
+            android:id="@+id/action_fragmentRecoveryPasswordEmail_to_fragmentRecoveryPasswordCode"
+            app:destination="@id/fragmentRecoveryPasswordCode" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentRecoveryPasswordCode"
+        android:name="ru.paymon.android.view.FragmentRecoveryPasswordCode"
+        android:label="fragment_recovery_password_code"
+        tools:layout="@layout/fragment_recovery_password_code" >
+        <action
+            android:id="@+id/action_fragmentRecoveryPasswordCode_to_fragmentRecoveryNewPassword"
+            app:destination="@id/fragmentRecoveryNewPassword" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentRecoveryNewPassword"
+        android:name="ru.paymon.android.view.FragmentRecoveryNewPassword"
+        android:label="fragment_recovery_password_new"
+        tools:layout="@layout/fragment_recovery_password_new" >
+        <action
+            android:id="@+id/action_fragmentRecoveryNewPassword_to_fragmentStart"
+            app:destination="@id/fragmentStart" />
+    </fragment>
+</navigation>

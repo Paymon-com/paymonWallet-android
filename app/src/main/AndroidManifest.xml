@@ -25,24 +25,19 @@
         android:installLocation="internalOnly"
         tools:replace="android:icon">
 
+
+
         <activity
-            android:name=".MainActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:noHistory="false"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:name=".activities.SplashActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-
         <activity
-            android:name=".StartActivity"
+            android:name=".activities.StartActivity"
             android:configChanges="keyboardHidden|orientation"
             android:label="@string/app_name"
             android:launchMode="singleTop"
@@ -53,7 +48,18 @@
         </activity>
 
         <activity
-            android:name=".KeyGuardActivity" />
+            android:name=".activities.MainActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:noHistory="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="adjustResize|stateHidden">
+        </activity>
+
+        <activity
+            android:name=".activities.KeyGuardActivity" />
 
         <activity
             android:name=".view.SettingsActivity" />

@@ -1,4 +1,4 @@
-package ru.paymon.android;
+package ru.paymon.android.activities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -15,6 +15,10 @@ import com.nightonke.blurlockview.Directions.HideType;
 import com.nightonke.blurlockview.Directions.ShowType;
 import com.nightonke.blurlockview.Eases.EaseType;
 import com.nightonke.blurlockview.Password;
+
+import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.R;
+import ru.paymon.android.User;
 
 public class KeyGuardActivity extends AppCompatActivity implements View.OnClickListener, BlurLockView.OnPasswordInputListener {
     public static long LAST_TIME_KEY_GUARD_SHOWED;

@@ -4,24 +4,25 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
+
+import static ru.paymon.android.view.FragmentRegistrationLogin.KEY_LOGIN_REGISTRATION;
+import static ru.paymon.android.view.FragmentRegistrationPassword.KEY_PASSWORD_REGISTRATION;
 
 
 public class FragmentAuthorization extends Fragment {
@@ -29,12 +30,8 @@ public class FragmentAuthorization extends Fragment {
     private EditText loginView;
     private EditText passView;
     private DialogProgress dialog;
-
-
-    public static synchronized FragmentAuthorization newInstance() {
-        instance = new FragmentAuthorization();
-        return instance;
-    }
+    private String login;
+    private String password;
 
     public static synchronized FragmentAuthorization getInstance() {
         if (instance == null)
@@ -46,9 +43,13 @@ public class FragmentAuthorization extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        Utils.stageQueue.postRunnable(() ->
-//                NetworkManager.getInstance().reconnect()
-//        );
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            if (bundle.containsKey(KEY_LOGIN_REGISTRATION))
+                login = bundle.getString(KEY_LOGIN_REGISTRATION);
+            if (bundle.containsKey(KEY_PASSWORD_REGISTRATION))
+                password = bundle.getString(KEY_PASSWORD_REGISTRATION);
+        }
     }
 
 
@@ -60,6 +61,13 @@ public class FragmentAuthorization extends Fragment {
         View toolbar = view.findViewById(R.id.toolbar);
         ImageButton backToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_back_btn);
         ImageButton loginToolbar = (ImageButton) toolbar.findViewById(R.id.toolbar_next_btn);
+        loginView = (EditText) view.findViewById(R.id.login_authorization);
+        passView = (EditText) view.findViewById(R.id.password_authorization);
+        TextView recoveryPassword = (TextView) view.findViewById(R.id.forgot_password);
+
+
+        loginView.setText(login);
+        passView.setText(password);
 
         loginToolbar.setOnClickListener(view12 -> {
             if (NetworkManager.getInstance().isConnected()) {
@@ -78,27 +86,21 @@ public class FragmentAuthorization extends Fragment {
 
                 auth(login, password);
             } else {
-                Toast.makeText(getActivity().getApplicationContext(), R.string.check_connected_to_server, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.check_connected_to_server, Toast.LENGTH_SHORT).show();
             }
         });
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+
+        backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         dialog = new DialogProgress(getContext());
         dialog.setCancelable(true);
 
-        loginView = (EditText) view.findViewById(R.id.login_authorization);
-        passView = (EditText) view.findViewById(R.id.password_authorization);
-        TextView recoveryPassword = (TextView) view.findViewById(R.id.forgot_password);
+//        getActivity().invalidateOptionsMenu();
+//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        setHasOptionsMenu(true);
 
-        getActivity().invalidateOptionsMenu();
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        setHasOptionsMenu(true);
-
-        recoveryPassword.setOnClickListener((v) -> {
-            final FragmentRecoveryPasswordEmail fragmentRecoveryPasswordEmail = FragmentRecoveryPasswordEmail.newInstance();
-            Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), fragmentRecoveryPasswordEmail, null);
-        });
+        recoveryPassword.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentRecoveryPasswordEmail));
 
         passView.setOnKeyListener((v, keyCode, event) -> {
             if (event.getAction() == KeyEvent.ACTION_DOWN) {
@@ -138,7 +140,6 @@ public class FragmentAuthorization extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 
     private void auth(final String login, final String password) {
@@ -156,16 +157,14 @@ public class FragmentAuthorization extends Fragment {
                 });
 
                 if (response == null) return;
-                RPC.PM_userFull user = (RPC.PM_userFull) response;
-                User.currentUser = user;
+                User.currentUser = (RPC.PM_userFull) response;
                 User.saveConfig();
                 User.loadConfig();
-                Log.d(Config.TAG, "Login successful: " + user.login + " TOKEN:" + Utils.bytesToHexString(User.currentUser.token));
                 NetworkManager.getInstance().setAuthorized(true);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.mainActivity);
             });
 
-            ApplicationLoader.applicationHandler.post(() ->
-                    dialog.setOnDismissListener((dialogInterface) -> NetworkManager.getInstance().cancelRequest(msgID, false)));
+            ApplicationLoader.applicationHandler.post(() -> dialog.setOnDismissListener((dialogInterface) -> NetworkManager.getInstance().cancelRequest(msgID, false)));
         });
     }
 

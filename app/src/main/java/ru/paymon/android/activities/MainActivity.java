@@ -1,4 +1,4 @@
-package ru.paymon.android;
+package ru.paymon.android.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -11,19 +11,20 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.NotificationManager;
+import ru.paymon.android.R;
+import ru.paymon.android.User;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.utils.AbsRuntimePermission;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.FragmentChats;
 import ru.paymon.android.view.FragmentContacts;
 import ru.paymon.android.view.FragmentGroupSettings;
-import ru.paymon.android.view.FragmentLoader;
 import ru.paymon.android.view.FragmentMoney;
 import ru.paymon.android.view.FragmentMoreMenu;
 import ru.paymon.android.view.FragmentPermissions;
 import ru.paymon.android.view.FragmentProfileEdit;
-import ru.paymon.android.view.FragmentRegistrationEmailConfirmation;
-import ru.paymon.android.view.FragmentStart;
 
 import static ru.paymon.android.Config.IMPORTANT_PERMISSIONS;
 import static ru.paymon.android.Config.READ_CONTACTS_PERMISSION;
@@ -100,10 +101,10 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
     public void onPermissionsGranted(final int requestCode) {
         switch (requestCode) {
             case IMPORTANT_PERMISSIONS:
-                if (User.currentUser == null)
-                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentStart.newInstance());
-                else
-                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentLoader.newInstance());
+//                if (User.currentUser == null)
+//                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentStart.newInstance());
+//                else
+//                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentLoader.newInstance());
 
 //                NetworkManager.getInstance().connect();
                 final Intent connectorIntent = new Intent(ApplicationLoader.applicationContext, ConnectorService.class);
@@ -117,11 +118,11 @@ public class MainActivity extends AbsRuntimePermission implements NotificationMa
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-        if (event == NotificationManager.NotificationEvent.userAuthorized) {
-            if (!User.currentUser.confirmed || (User.currentUser.email != null && User.currentUser.email.isEmpty()))
-                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance());
-            else
-                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance());
+        if (event == NotificationManager.NotificationEvent.userAuthorized) {//TODO:
+//            if (!User.currentUser.confirmed || (User.currentUser.email != null && User.currentUser.email.isEmpty()))
+//                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentRegistrationEmailConfirmation.newInstance());
+//            else
+//                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentChats.getInstance());
         }
     }
 

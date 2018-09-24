@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.net.NetworkManager;
@@ -26,7 +27,6 @@ import static ru.paymon.android.view.FragmentRecoveryPasswordEmail.PASSWORD_RECO
 
 public class FragmentRecoveryNewPassword extends Fragment {
     private static FragmentRecoveryNewPassword instance;
-
     private EditText newPassword;
     private EditText repeatNewPassword;
     private DialogProgress dialogProgress;
@@ -37,12 +37,6 @@ public class FragmentRecoveryNewPassword extends Fragment {
 
     public static synchronized FragmentRecoveryNewPassword newInstance() {
         instance = new FragmentRecoveryNewPassword();
-        return instance;
-    }
-
-    public static synchronized FragmentRecoveryNewPassword getInstance() {
-        if (instance == null)
-            instance = new FragmentRecoveryNewPassword();
         return instance;
     }
 
@@ -140,7 +134,7 @@ public class FragmentRecoveryNewPassword extends Fragment {
     public void onResume() {
         super.onResume();
         //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
     }
 
     public void recoveryPassword() {
@@ -173,7 +167,7 @@ public class FragmentRecoveryNewPassword extends Fragment {
                             .setMessage(getString(R.string.password_was_changed))
                             .setCancelable(false)
                             .setPositiveButton(getString(R.string.ok), (dialogInterface, i) ->
-                                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentStart.newInstance(), null)
+                                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentStart)
                             );
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();

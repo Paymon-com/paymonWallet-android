@@ -4,20 +4,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.R;
-import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.utils.Utils.loginCorrect;
 
@@ -27,13 +25,7 @@ public class FragmentRegistrationLogin extends Fragment {
     private static FragmentRegistrationLogin instance;
     private EditText loginEditText;
     private TextView hintError;
-    private FragmentActivity activity;
 
-
-    public static synchronized FragmentRegistrationLogin newInstance() {
-        instance = new FragmentRegistrationLogin();
-        return instance;
-    }
 
     public static synchronized FragmentRegistrationLogin getInstance() {
         if (instance == null)
@@ -44,15 +36,14 @@ public class FragmentRegistrationLogin extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.activity = getActivity();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        setHasOptionsMenu(true);
+//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+//        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -64,8 +55,7 @@ public class FragmentRegistrationLogin extends Fragment {
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
-
+        backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         acceptToolbar.setOnClickListener(view12 -> showFragmentRegistrationPassword());
 
         loginEditText = view.findViewById(R.id.registration_login_edit_text);
@@ -106,14 +96,12 @@ public class FragmentRegistrationLogin extends Fragment {
 
         final Bundle loginBundle = new Bundle();
         loginBundle.putString(KEY_LOGIN_REGISTRATION, loginEditText.getText().toString());
-        final FragmentRegistrationPassword fragmentRegistrationPassword = FragmentRegistrationPassword.newInstance();
-        fragmentRegistrationPassword.setArguments(loginBundle);
-        Utils.replaceFragmentWithAnimationFade(activity.getSupportFragmentManager(), fragmentRegistrationPassword, null);
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentRegistrationPassword, loginBundle);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
+//        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 }

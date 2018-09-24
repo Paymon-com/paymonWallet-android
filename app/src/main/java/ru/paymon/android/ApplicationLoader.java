@@ -9,6 +9,8 @@ import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.StrictMode;
 
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiManager;
 
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
@@ -34,6 +36,9 @@ public class ApplicationLoader extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000)).build());
+
 
         EmojiManager.install(new CustomEmojiProvider());
         applicationContext = getApplicationContext();

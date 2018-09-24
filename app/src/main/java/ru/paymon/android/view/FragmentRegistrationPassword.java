@@ -16,25 +16,19 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.R;
-import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.view.FragmentRegistrationLogin.KEY_LOGIN_REGISTRATION;
 
 public class FragmentRegistrationPassword extends Fragment {
     public static final String KEY_PASSWORD_REGISTRATION = "password_registration";
-
     private static FragmentRegistrationPassword instance;
     private String login;
     private TextView hintError;
     private EditText passwordEditText;
     private EditText repeatPasswordEditText;
 
-
-    public static synchronized FragmentRegistrationPassword newInstance() {
-        instance = new FragmentRegistrationPassword();
-        return instance;
-    }
 
     public static synchronized FragmentRegistrationPassword getInstance() {
         if (instance == null)
@@ -58,13 +52,8 @@ public class FragmentRegistrationPassword extends Fragment {
     public void onResume() {
         super.onResume();
 
-        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_registration));
-
-        setHasOptionsMenu(true);
-        getActivity().invalidateOptionsMenu();
-
-        //Utils.setArrowBackInToolbar(getActivity());
-
+//        setHasOptionsMenu(true);
+//        getActivity().invalidateOptionsMenu();
     }
 
     @Nullable
@@ -76,14 +65,12 @@ public class FragmentRegistrationPassword extends Fragment {
 
         ImageButton acceptButton = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
-
-        backButton.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
-
-        acceptButton.setOnClickListener(view12 -> showFragmentRegistrationEmail());
-
         passwordEditText = view.findViewById(R.id.registration_password_edit_text);
         repeatPasswordEditText = view.findViewById(R.id.registration_repeat_password_edit_text);
         hintError = view.findViewById(R.id.password_hint_error_text_view);
+
+        backButton.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        acceptButton.setOnClickListener(view12 -> showFragmentRegistrationEmail());
 
         passwordEditText.requestFocus();
 
@@ -165,15 +152,12 @@ public class FragmentRegistrationPassword extends Fragment {
         final Bundle passwordBundle = new Bundle();
         passwordBundle.putString(KEY_LOGIN_REGISTRATION, login);
         passwordBundle.putString(KEY_PASSWORD_REGISTRATION, passwordEditText.getText().toString());
-
-        final FragmentRegistrationEmail fragmentRegistrationEmail = FragmentRegistrationEmail.newInstance();
-        fragmentRegistrationEmail.setArguments(passwordBundle);
-        Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragmentRegistrationEmail, null);
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentRegistrationEmail);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
+//        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 }

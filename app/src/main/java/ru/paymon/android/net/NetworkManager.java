@@ -233,12 +233,7 @@ public class NetworkManager {
                     User.currentUser = (RPC.PM_userFull) response;
                     User.saveConfig();
 
-//                        MainActivity.walletApplication.createWallet();
-//                        if (!BlockchainServiceImpl.isStarted)
-//                            blockchainService.init();
-
                     Log.d(TAG, "login successful, new token=" + Utils.bytesToHexString(User.currentUser.token));
-                    ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.userInfoDidLoaded));
                     setAuthorized(true);
                 });
             }

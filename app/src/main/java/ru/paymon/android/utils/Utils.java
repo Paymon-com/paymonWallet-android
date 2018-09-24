@@ -424,7 +424,7 @@ public class Utils {
 
     public static void loadPhoto(String url, ImageView view){
         Picasso.get().load(url)
-                .resize(300,300)
+                .resize(300, 300)
                 .centerCrop()
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(view, new Callback() {
@@ -434,6 +434,7 @@ public class Utils {
 
                     @Override
                     public void onError(Exception e) {
+                        Log.e("UTILS loadPhoto() ", "URL : " + url + " " + e.getMessage());
                         Picasso.get().load(url)
                                 .error(R.drawable.profile_photo_none)
                                 .into(view);

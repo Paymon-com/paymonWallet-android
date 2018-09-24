@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav_graph"
+    app:startDestination="@id/fragmentChats">
+
+    <fragment
+        android:id="@+id/fragmentChats"
+        android:name="ru.paymon.android.view.FragmentChats"
+        android:label="fragment_chats_page"
+        tools:layout="@layout/fragment_chats" >
+        <action
+            android:id="@+id/action_fragmentChats_to_fragmentMoney"
+            app:destination="@id/fragmentMoney" />
+        <action
+            android:id="@+id/action_fragmentChats_to_fragmentContacts"
+            app:destination="@id/fragmentContacts" />
+        <action
+            android:id="@+id/action_fragmentChats_to_fragmentMoreMenu"
+            app:destination="@id/fragmentMoreMenu" />
+        <action
+            android:id="@+id/action_fragmentChats_to_fragmentChat"
+            app:destination="@id/fragmentChat" />
+        <action
+            android:id="@+id/action_fragmentChats_to_fragmentCreateGroup"
+            app:destination="@id/fragmentCreateGroup" />
+        <action
+            android:id="@+id/action_fragmentChats_to_fragmentSearch"
+            app:destination="@id/fragmentSearch" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentMoney"
+        android:name="ru.paymon.android.view.FragmentMoney"
+        android:label="fragment_money"
+        tools:layout="@layout/fragment_money" >
+        <action
+            android:id="@+id/action_fragmentMoney_to_fragmentEthereumWallet"
+            app:destination="@id/fragmentEthereumWallet" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentContacts"
+        android:name="ru.paymon.android.view.FragmentContacts"
+        android:label="fragment_contacts"
+        tools:layout="@layout/fragment_contacts" >
+        <action
+            android:id="@+id/action_fragmentContacts_to_fragmentProfile"
+            app:destination="@id/fragmentFriendProfile" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentMoreMenu"
+        android:name="ru.paymon.android.view.FragmentMoreMenu"
+        android:label="fragment_more_menu"
+        tools:layout="@layout/fragment_more_menu" >
+        <action
+            android:id="@+id/action_fragmentMoreMenu_to_fragmentProfile"
+            app:destination="@id/fragmentProfile" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentCreateGroup"
+        android:name="ru.paymon.android.view.FragmentCreateGroup"
+        android:label="fragment_create_group"
+        tools:layout="@layout/fragment_create_group" >
+        <action
+            android:id="@+id/action_fragmentCreateGroup_to_fragmentChat"
+            app:destination="@id/fragmentChat" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentChat"
+        android:name="ru.paymon.android.view.FragmentChat"
+        android:label="fragment_chat"
+        tools:layout="@layout/toolbar_chat" >
+        <action
+            android:id="@+id/action_fragmentChat_to_fragmentProfile"
+            app:destination="@id/fragmentFriendProfile" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentFriendProfile"
+        android:name="ru.paymon.android.view.FragmentFriendProfile"
+        android:label="fragment_friend_profile"
+        tools:layout="@layout/fragment_friend_profile">
+        <action
+            android:id="@+id/action_fragmentProfile_to_fragmentChat"
+            app:destination="@id/fragmentChat" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentProfile"
+        android:name="ru.paymon.android.view.FragmentProfile"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_fragmentProfile_to_fragmentProfileEdit"
+            app:destination="@id/fragmentProfileEdit" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentProfileEdit"
+        android:name="ru.paymon.android.view.FragmentProfileEdit"
+        android:label="fragment_edit_profile"
+        tools:layout="@layout/fragment_edit_profile" />
+    <fragment
+        android:id="@+id/fragmentEthereumWallet"
+        android:name="ru.paymon.android.view.FragmentEthereumWallet"
+        android:label="fragment_ethereum_wallet"
+        tools:layout="@layout/fragment_ethereum_wallet" >
+        <action
+            android:id="@+id/action_fragmentEthereumWallet_to_fragmentEthereumWalletTransfer"
+            app:destination="@id/fragmentEthereumWalletTransfer" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentEthereumWalletTransfer"
+        android:name="ru.paymon.android.view.FragmentEthereumWalletTransfer"
+        android:label="fragment_ethereum_wallet_transfer"
+        tools:layout="@layout/fragment_ethereum_wallet_transfer" />
+    <fragment
+        android:id="@+id/fragmentSearch"
+        android:name="ru.paymon.android.view.FragmentSearch"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
+</navigation>
