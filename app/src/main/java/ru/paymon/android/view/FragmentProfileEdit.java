@@ -1,6 +1,5 @@
 package ru.paymon.android.view;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -28,14 +27,11 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.activities.MainActivity;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.ImagePicker;
 import ru.paymon.android.utils.Utils;
-
-import static ru.paymon.android.Config.CAMERA_PERMISSIONS;
 
 
 public class FragmentProfileEdit extends Fragment {
@@ -86,13 +82,13 @@ public class FragmentProfileEdit extends Fragment {
         email.setText(User.currentUser.email);
 
         View.OnClickListener avatarListener = (view1) -> {
-            ((MainActivity) getActivity()).requestAppPermissions(new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.CAMERA},
-                    R.string.msg_permissions_required, CAMERA_PERMISSIONS);
-            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "выберите");//TODO:string
-            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+//            ((MainActivity) getActivity()).requestAppPermissions(new String[]{
+//                            Manifest.permission.READ_EXTERNAL_STORAGE,
+//                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                            Manifest.permission.CAMERA},
+//                    R.string.msg_permissions_required, CAMERA_PERMISSIONS);
+//            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "выберите");//TODO:string
+//            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
         };
 
         avatar.setOnClickListener(avatarListener);

@@ -37,7 +37,7 @@ public class ApplicationLoader extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000)).build());
+        Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000))/*.indicatorsEnabled(true)*/.build());
 
 
         EmojiManager.install(new CustomEmojiProvider());

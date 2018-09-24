@@ -16,7 +16,7 @@
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
-        android:src="@drawable/profile_photo_none"
+        android:visibility="invisible"
         app:civ_border_color="#EEEEEE"
         app:civ_border_width="4dp"
         app:civ_shadow="true"

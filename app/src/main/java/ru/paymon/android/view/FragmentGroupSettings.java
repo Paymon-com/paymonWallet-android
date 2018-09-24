@@ -1,6 +1,5 @@
 package ru.paymon.android.view;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -30,7 +29,6 @@ import ru.paymon.android.Config;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.activities.MainActivity;
 import ru.paymon.android.adapters.AdministratorsAdapter;
 import ru.paymon.android.adapters.BlackListAdapter;
 import ru.paymon.android.adapters.GroupSettingsAdapter;
@@ -42,8 +40,6 @@ import ru.paymon.android.utils.ImagePicker;
 import ru.paymon.android.utils.Utils;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
-import static ru.paymon.android.Config.CAMERA_PERMISSIONS;
-import static ru.paymon.android.view.FragmentProfileEdit.PICK_IMAGE_ID;
 
 public class FragmentGroupSettings extends Fragment {
     private int chatID;
@@ -99,13 +95,13 @@ public class FragmentGroupSettings extends Fragment {
         dialogProgress.setCancelable(true);
 
         photoView.setOnClickListener((v -> {
-            ((MainActivity) getActivity()).requestAppPermissions(new String[]{
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.CAMERA},
-                    R.string.msg_permissions_required, CAMERA_PERMISSIONS);
-            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "выберите");//TODO:string
-            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+//            ((MainActivity) getActivity()).requestAppPermissions(new String[]{
+//                            Manifest.permission.READ_EXTERNAL_STORAGE,
+//                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+//                            Manifest.permission.CAMERA},
+//                    R.string.msg_permissions_required, CAMERA_PERMISSIONS);
+//            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "выберите");//TODO:string
+//            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
         }));
 
         if (!group.photoURL.url.isEmpty())

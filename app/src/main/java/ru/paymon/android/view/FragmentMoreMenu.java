@@ -23,10 +23,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.activities.MainActivity;
 import ru.paymon.android.utils.Utils;
-
-import static ru.paymon.android.Config.READ_CONTACTS_PERMISSION;
 
 public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -96,8 +93,8 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
                 if (ContextCompat.checkSelfPermission(ApplicationLoader.applicationContext, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
 //                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
                 } else {
-                    ((MainActivity) getActivity()).requestAppPermissions(new String[]{Manifest.permission.READ_CONTACTS},
-                            R.string.msg_permissions_required, READ_CONTACTS_PERMISSION);
+//                    ((MainActivity) getActivity()).requestAppPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+//                            R.string.msg_permissions_required, READ_CONTACTS_PERMISSION);
                 }
                 break;
             case R.id.more_menu_faq:

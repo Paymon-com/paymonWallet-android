@@ -1501,6 +1501,7 @@ public class RPC {
 
         public void readParams(SerializableData stream, boolean exception) {
             peer = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
+//            url = stream.readString(exception).split("\\.jpg")[0] + ".jpg";
             url = stream.readString(exception);
         }
 

@@ -31,6 +31,7 @@ import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.ChatsViewModel;
 import ru.paymon.android.viewmodels.MainViewModel;
 
+import static ru.paymon.android.view.AbsFragmentChat.CHAT_GROUP_USERS;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -43,9 +44,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     private LiveData<LinkedList<ChatsItem>> groupItemsData;
     private LiveData<LinkedList<ChatsItem>> dialogsItemsData;
     private LiveData<Boolean> isAuthorized;
-    private LiveData<Boolean> isNetworkConnected;
-    private LiveData<Boolean> isServerConnected;
-
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     public static synchronized FragmentChats getInstance() {
         if (instance == null)
@@ -61,14 +60,12 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         groupsAdapter = new ChatsAdapter(iChatsClickListener);
         chatsViewModel = ViewModelProviders.of(getActivity()).get(ChatsViewModel.class);
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        showProgress = chatsViewModel.getProgressState();
         chatsViewModel.updateChatsData();
+        showProgress = chatsViewModel.getProgressState();
         chatsItemsData = chatsViewModel.getChatsData();
         dialogsItemsData = chatsViewModel.getDialogsData();
         groupItemsData = chatsViewModel.getGroupsData();
         isAuthorized = mainViewModel.getAuthorizationState();
-        isNetworkConnected = mainViewModel.getNetworkConnectionState();
-        isServerConnected = mainViewModel.getServerConnectionState();
     }
 
     @Nullable
@@ -81,13 +78,12 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         View pageAll = inflater.inflate(R.layout.fragment_chats_page, container, false);
         View pageGroups = inflater.inflate(R.layout.fragment_chats_page, container, false);
         View toolbar = view.findViewById(R.id.toolbar);
-//        TextView toolbarTitle = toolbar.findViewById(R.id.toolbar_title);
         ImageButton toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
         ImageButton toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
         RecyclerView chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
         RecyclerView chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
         RecyclerView groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
-        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.fragment_chats_swipe_layout);
+        swipeRefreshLayout = view.findViewById(R.id.fragment_chats_swipe_layout);
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
@@ -97,16 +93,11 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         });
 
         Observer<Boolean> stateObserver = (state) -> {
-            if (isAuthorized.getValue() != null && isAuthorized.getValue()
-                    && isNetworkConnected.getValue() != null && isNetworkConnected.getValue()
-                    && isServerConnected.getValue() != null && isServerConnected.getValue()) {
+            if (!swipeRefreshLayout.isRefreshing() && state)
                 chatsViewModel.updateChatsData();
-            }
         };
 
         isAuthorized.observe(getActivity(), stateObserver);
-        isNetworkConnected.observe(getActivity(), stateObserver);
-        isServerConnected.observe(getActivity(), stateObserver);
 
         chatsItemsData.observe(getActivity(), data -> {
             if (data == null) return;
@@ -167,10 +158,13 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
 
     private ChatsAdapter.IChatsClickListener iChatsClickListener = (chatID, isGroup) -> {
         final Bundle bundle = new Bundle();
-        if (isGroup)
-            bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(chatID));
         bundle.putInt(CHAT_ID_KEY, chatID);
-        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
+        if (isGroup) {
+            bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().groupsUsers.get(chatID));
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
+        }else {
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
+        }
     };
 
     @Override

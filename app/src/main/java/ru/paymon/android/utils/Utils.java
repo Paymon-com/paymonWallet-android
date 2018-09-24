@@ -51,8 +51,8 @@ import static android.content.Context.CLIPBOARD_SERVICE;
 import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_IS_24H;
 
 public class Utils {
-    public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
     public static volatile DispatchQueue netQueue = new DispatchQueue("netQueue");
+    public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
     public static boolean usingHardwareInput;
@@ -426,6 +426,8 @@ public class Utils {
         Picasso.get().load(url)
                 .resize(300, 300)
                 .centerCrop()
+                .placeholder(R.drawable.profile_photo_none)
+                .error(R.drawable.profile_photo_none)
                 .networkPolicy(NetworkPolicy.OFFLINE)
                 .into(view, new Callback() {
                     @Override

@@ -15,6 +15,7 @@ import android.widget.ImageView;
 
 import com.vanniktech.emoji.EmojiEditText;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
@@ -22,6 +23,7 @@ import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.adapters.GroupMessagesAdapter;
 import ru.paymon.android.adapters.MessagesAdapter;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -30,26 +32,21 @@ import ru.paymon.android.utils.Utils;
 import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 
-public class FragmentChat extends AbsFragmentChat implements NotificationManager.IListener {
-    private static FragmentChat instance;
-    private MessagesAdapter messagesAdapter;
-
-    public static synchronized FragmentChat newInstance() {
-        instance = new FragmentChat();
-        return instance;
-    }
+public class FragmentGroupChat extends AbsFragmentChat implements NotificationManager.IListener {
+    private ArrayList<RPC.UserObject> groupUsers;
+    private GroupMessagesAdapter messagesAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         final Bundle bundle = getArguments();
         if (bundle != null) {
-            if (bundle.containsKey(CHAT_ID_KEY))
+            if (bundle.containsKey(CHAT_ID_KEY) && bundle.containsKey(CHAT_GROUP_USERS)) {
                 chatID = bundle.getInt(CHAT_ID_KEY);
+                groupUsers = bundle.getParcelableArrayList(CHAT_GROUP_USERS);
+            }
         }
     }
-
 
     @Nullable
     @Override
@@ -68,8 +65,22 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
 
         super.onCreateView(inflater, container, savedInstanceState);
 
-        messagesAdapter = new MessagesAdapter(iMessageClickListener);
+        messagesAdapter = new GroupMessagesAdapter(iMessageClickListener);
         messagesRecyclerView.setAdapter(messagesAdapter);
+
+        //        messagesRecyclerView
+//                .addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                    @Override
+//                    public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                        super.onScrolled(recyclerView, dx, dy);
+//
+//                        if (!loadingMessages && (linearLayoutManager.findFirstCompletelyVisibleItemPosition() == 0) && messagesAdapter.getItemCount() != 0) {
+//                            loadingMessages = true;
+//                            //TODO:прогресс бар загрузки сообщений
+//                            Utils.netQueue.postRunnable(() -> MessagesManager.getInstance().loadMessages(chatID, 15, messagesAdapter.messageIDs.size(), isGroup));
+//                        }
+//                    }
+//                });
 
         sendButton.setOnClickListener((view1) -> {
             Utils.netQueue.postRunnable(() -> {
@@ -83,7 +94,7 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
                 messageRequest.flags = MESSAGE_FLAG_FROM_ID;
                 messageRequest.date = (int) (System.currentTimeMillis() / 1000L);
                 messageRequest.from_id = User.currentUser.id;
-                messageRequest.to_id = new RPC.PM_peerUser(chatID);
+                messageRequest.to_id = new RPC.PM_peerGroup(chatID);
                 messageRequest.unread = true;
 
                 NetworkManager.getInstance().sendRequest(messageRequest, (response, error) -> {
@@ -120,7 +131,7 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
     @Override
     public void onResume() {
         super.onResume();
-        MessagesManager.getInstance().loadMessages(chatID, 15, 0, false);
+        MessagesManager.getInstance().loadMessages(chatID, 15, 0, true);
     }
 
     @Override
@@ -219,7 +230,7 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
             });
         }
     }
-//
+    //
     private MessagesAdapter.IMessageClickListener iMessageClickListener = new MessagesAdapter.IMessageClickListener() {
         @Override
         public void longClick() {
