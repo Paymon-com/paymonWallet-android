@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
@@ -108,8 +109,8 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         fiatEquivalentTitle.setText(currentFiatCurrency);
         if (User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS != null)
             idFrom.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS);
-        backButton.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
-        nextButton.setOnClickListener(view12 -> openNextFragment());
+        backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        nextButton.setOnClickListener(v -> openNextFragment());
         cryptoAmount.addTextChangedListener(cryptoAmountTextWatcher);
         gasPriceBar.setOnSeekChangeListener(gasPriceListener);
         gasLimitBar.setOnSeekChangeListener(gasLimitListener);
@@ -165,7 +166,6 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         } else {
             if(networkFeeValue.getValue() == null || cryptoAmountValue.getValue() == null
                     || gasLimitValue.getValue() == null || gasPriceValue.getValue() == null) return;
-            FragmentEthereumWalletTransferInfo fragmentEthereumWalletTransferInfo = FragmentEthereumWalletTransferInfo.newInstance();
             Bundle bundle = new Bundle();
             bundle.putString("TO_ADDRESS", receiverAddress.getText().toString().trim());
             bundle.putString("AMOUNT", cryptoAmountValue.getValue().toString());
@@ -173,8 +173,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             bundle.putString("TOTAL", totalAmountValue.getValue().toString());
             bundle.putString("GAS_PRICE", gasPriceValue.getValue().toString());
             bundle.putString("GAS_LIMIT", gasLimitValue.getValue().toString());
-            fragmentEthereumWalletTransferInfo.setArguments(bundle);
-            Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragmentEthereumWalletTransferInfo, null);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWalletTransferInfo, bundle);
         }
     }
 

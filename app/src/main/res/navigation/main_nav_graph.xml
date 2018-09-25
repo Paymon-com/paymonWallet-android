@@ -113,7 +113,11 @@
         android:id="@+id/fragmentEthereumWalletTransfer"
         android:name="ru.paymon.android.view.FragmentEthereumWalletTransfer"
         android:label="fragment_ethereum_wallet_transfer"
-        tools:layout="@layout/fragment_ethereum_wallet_transfer" />
+        tools:layout="@layout/fragment_ethereum_wallet_transfer" >
+        <action
+            android:id="@+id/action_fragmentEthereumWalletTransfer_to_fragmentEthereumWalletTransferInfo"
+            app:destination="@id/fragmentEthereumWalletTransferInfo" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentSearch"
         android:name="ru.paymon.android.view.FragmentSearch"
@@ -131,5 +135,35 @@
         android:id="@+id/fragmentGroupSettings"
         android:name="ru.paymon.android.view.FragmentGroupSettings"
         android:label="fragment_group_settings"
-        tools:layout="@layout/fragment_group_settings" />
+        tools:layout="@layout/fragment_group_settings" >
+        <action
+            android:id="@+id/action_fragmentGroupSettings_to_FragmentGroupAddParticipants"
+            app:destination="@id/FragmentGroupAddParticipants" />
+        <action
+            android:id="@+id/action_fragmentGroupSettings_to_fragmentGroupAddAdministrators"
+            app:destination="@id/fragmentGroupAddAdministrators" />
+        <action
+            android:id="@+id/action_fragmentGroupSettings_to_fragmentGroupAddBlackList"
+            app:destination="@id/fragmentGroupAddBlackList" />
+    </fragment>
+    <fragment
+        android:id="@+id/FragmentGroupAddParticipants"
+        android:name="ru.paymon.android.view.FragmentGroupAddParticipants"
+        android:label="FragmentGroupAddParticipants"
+        tools:layout="@layout/fragment_group_add_participants" />
+    <fragment
+        android:id="@+id/fragmentGroupAddBlackList"
+        android:name="ru.paymon.android.view.FragmentGroupAddBlackList"
+        android:label="fragmentGroupAddBlackList"
+        tools:layout="@layout/fragment_group_add_black_list" />
+    <fragment
+        android:id="@+id/fragmentGroupAddAdministrators"
+        android:name="ru.paymon.android.view.FragmentGroupAddAdministrators"
+        android:label="fragmentGroupAddAdministrators"
+        tools:layout="@layout/fragment_group_add_administrators" />
+    <fragment
+        android:id="@+id/fragmentEthereumWalletTransferInfo"
+        android:name="ru.paymon.android.view.FragmentEthereumWalletTransferInfo"
+        android:label="fragment_ethereum_wallet_transfer_info"
+        tools:layout="@layout/fragment_ethereum_wallet_transfer_info" />
 </navigation>

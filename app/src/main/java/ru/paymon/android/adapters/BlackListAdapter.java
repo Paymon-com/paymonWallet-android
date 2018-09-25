@@ -100,7 +100,7 @@ public class BlackListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 fragmentFriendProfile.setArguments(bundle);
 
                 final FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);
+                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null); //TODO:NAV FIX
             };
             itemView.setOnClickListener(listener);
             name.setOnClickListener(listener);

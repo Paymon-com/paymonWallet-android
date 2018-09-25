@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -19,6 +18,7 @@ import android.widget.TabHost;
 
 import java.util.LinkedList;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
@@ -67,8 +67,7 @@ public class FragmentSearch extends Fragment {
 
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
-
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         LinkedList<ChatsSearchItem> listChats = new LinkedList<>();
         SparseArray<RPC.UserObject> users = UsersManager.getInstance().users;
@@ -192,10 +191,7 @@ public class FragmentSearch extends Fragment {
                 final Bundle bundle = new Bundle();
                 int chatID = (int) recyclerViewChats.getAdapter().getItemId(position);
                 bundle.putInt(CHAT_ID_KEY, chatID);
-                final FragmentChat fragmentChat = FragmentChat.newInstance();
-                fragmentChat.setArguments(bundle);
-                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentChat, null);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentSearch, bundle);
             }
 
             @Override

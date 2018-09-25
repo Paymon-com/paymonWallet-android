@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
@@ -72,7 +73,7 @@ public class FragmentGroupAddParticipants extends Fragment {
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+        backToolbar.setOnClickListener(v-> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         acceptToolbar.setOnClickListener(view12 -> Utils.netQueue.postRunnable(() -> {
             ApplicationLoader.applicationHandler.post(dialogProgress::show);
@@ -108,7 +109,7 @@ public class FragmentGroupAddParticipants extends Fragment {
                 ApplicationLoader.applicationHandler.post(() -> {
                     if (dialogProgress != null && dialogProgress.isShowing())
                         dialogProgress.dismiss();dialogProgress.dismiss();
-                    getActivity().getSupportFragmentManager().popBackStack();
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack();
                 });
             });
             ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
@@ -200,8 +201,7 @@ public class FragmentGroupAddParticipants extends Fragment {
                         ApplicationLoader.applicationHandler.post(() -> {
                             if (dialogProgress != null && dialogProgress.isShowing())
                                 dialogProgress.cancel();
-                            Toast toast = Toast.makeText(getContext(),
-                                    getString(R.string.you_did_not_choose_anyone), Toast.LENGTH_SHORT);//TODO sting
+                            Toast toast = Toast.makeText(getContext(), getString(R.string.you_did_not_choose_anyone), Toast.LENGTH_SHORT);//TODO sting
                             toast.show();
                         });
                         return;
@@ -218,7 +218,7 @@ public class FragmentGroupAddParticipants extends Fragment {
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.dismiss();dialogProgress.dismiss();
-                        getActivity().getSupportFragmentManager().popBackStack();
+                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack();
                     });
                 });
                 ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));

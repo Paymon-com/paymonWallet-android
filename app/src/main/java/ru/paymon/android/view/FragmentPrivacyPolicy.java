@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.R;
-import ru.paymon.android.utils.Utils;
 
 public class FragmentPrivacyPolicy extends Fragment {
     private static FragmentPrivacyPolicy instance;
@@ -29,7 +29,7 @@ public class FragmentPrivacyPolicy extends Fragment {
 
         final Button backToRegistration = view.findViewById(R.id.privacy_back_to_registration_button);
 
-        backToRegistration.setOnClickListener(v -> getActivity().getSupportFragmentManager().popBackStack());
+        backToRegistration.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         setHasOptionsMenu(true);
 

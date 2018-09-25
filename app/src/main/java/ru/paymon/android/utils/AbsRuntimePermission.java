@@ -12,8 +12,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.SparseIntArray;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.R;
-import ru.paymon.android.view.FragmentChat;
 
 public abstract class AbsRuntimePermission extends AppCompatActivity {
     private SparseIntArray mErrorString;
@@ -23,10 +23,8 @@ public abstract class AbsRuntimePermission extends AppCompatActivity {
         super.onNewIntent(intent);
         if (intent != null) {
             if (intent.getBundleExtra("OPEN_CHAT_BUNDLE") != null) {
-                final FragmentChat fragmentChat = FragmentChat.newInstance();
                 Bundle bundle = intent.getBundleExtra("OPEN_CHAT_BUNDLE");
-                fragmentChat.setArguments(bundle);
-                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), fragmentChat, null);
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
             }
         }
     }

@@ -99,7 +99,8 @@ public class AdministratorsAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 fragmentFriendProfile.setArguments(bundle);
 
                 final FragmentManager fragmentManager = ((AppCompatActivity)context).getSupportFragmentManager();
-                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);
+                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null); //TODO: NAV FIX
+
             };
             itemView.setOnClickListener(listener);
             name.setOnClickListener(listener);

@@ -18,13 +18,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.mikhaellopez.circularimageview.CircularImageView;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
+import ru.paymon.android.R;
+import ru.paymon.android.UsersManager;
+import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.ImagePicker;
 import ru.paymon.android.utils.Utils;
 
@@ -44,6 +52,12 @@ public abstract class AbsFragmentChat extends Fragment {
     public ImageButton buttonDocumentAttachment;
     public ImageButton buttonImageAttachment;
     public ImageButton buttonVideoAttachment;
+    public LinearLayout toolbarContainer;
+    public View toolbarView;
+    public TextView chatTitleTextView;
+    public CircularImageView toolbarAvatar;
+    public ImageView backToolbar;
+    public TextView participantsCountTextView;
 
     public int chatID;
 
@@ -56,6 +70,52 @@ public abstract class AbsFragmentChat extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_chat, container, false);
+
+        messageInput = (EmojiEditText) view.findViewById(R.id.input_edit_text);
+        messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
+        sendButton = (Button) view.findViewById(R.id.sendButton);
+        emoticonsButton = (ImageView) view.findViewById(R.id.smilesButton);
+        includeAttachment = (ConstraintLayout) view.findViewById(R.id.fragment_chat_attachment_include);
+        buttonAttachment = (ImageButton) view.findViewById(R.id.attach_button);
+        buttonDocumentAttachment = (ImageButton) view.findViewById(R.id.document_chat_attachment);
+        buttonImageAttachment = (ImageButton) view.findViewById(R.id.image_chat_attachment);
+        buttonVideoAttachment = (ImageButton) view.findViewById(R.id.video_chat_attachment);
+        toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
+
+        final Bundle bundle = new Bundle();
+        bundle.putInt(CHAT_ID_KEY, chatID);
+        if (this instanceof FragmentChat) {
+            toolbarView = getLayoutInflater().inflate(R.layout.toolbar_chat, null);
+            chatTitleTextView = (TextView) toolbarView.findViewById(R.id.toolbar_title);
+            toolbarAvatar = (CircularImageView) toolbarView.findViewById(R.id.toolbar_avatar);
+            backToolbar = (ImageView) toolbarView.findViewById(R.id.toolbar_back_btn);
+            final RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
+            if (user != null) {
+                chatTitleTextView.setText(Utils.formatUserName(user));
+                if (!user.photoURL.url.isEmpty())
+                    Utils.loadPhoto(user.photoURL.url, toolbarAvatar);
+            }
+            toolbarView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentFriendProfile,bundle));
+        } else if (this instanceof FragmentGroupChat) {
+            toolbarView = getLayoutInflater().inflate(R.layout.toolbar_chat_group, null);
+            participantsCountTextView = (TextView) toolbarView.findViewById(R.id.participants_count);
+            chatTitleTextView = (TextView) toolbarView.findViewById(R.id.toolbar_title);
+            toolbarAvatar = (CircularImageView) toolbarView.findViewById(R.id.chat_group_avatar);
+            backToolbar = (ImageView) toolbarView.findViewById(R.id.toolbar_back_btn);
+            final RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
+            if (group != null) {
+                chatTitleTextView.setText(group.title);
+                participantsCountTextView.setText(String.format("%s: %d", getString(R.string.participants), ((FragmentGroupChat) this).groupUsers.size()));
+                if (!group.photoURL.url.isEmpty())
+                    Utils.loadPhoto(group.photoURL.url, toolbarAvatar);
+            }
+            toolbarView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentGroupSettings,bundle));
+        }
+
+        toolbarContainer.addView(toolbarView);
+        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+
         buttonDocumentAttachment.setOnClickListener(view13 -> {
             Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
             Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/myFolder/");
@@ -95,7 +155,7 @@ public abstract class AbsFragmentChat extends Fragment {
         linearLayoutManager.setStackFromEnd(true);
         messagesRecyclerView.setLayoutManager(linearLayoutManager);
 
-        return new View(getContext());
+        return view;
     }
 
     @Override

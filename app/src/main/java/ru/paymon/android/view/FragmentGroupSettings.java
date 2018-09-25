@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -24,6 +23,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.GroupsManager;
@@ -40,6 +40,7 @@ import ru.paymon.android.utils.ImagePicker;
 import ru.paymon.android.utils.Utils;
 
 import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
+import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
 
 public class FragmentGroupSettings extends Fragment {
     private int chatID;
@@ -69,8 +70,8 @@ public class FragmentGroupSettings extends Fragment {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey("chat_id")) {
-            chatID = bundle.getInt("chat_id");
+        if (bundle != null && bundle.containsKey(CHAT_ID_KEY)) {
+            chatID = bundle.getInt(CHAT_ID_KEY);
 
             group = GroupsManager.getInstance().groups.get(chatID);
             int creatorID = group.creatorID;
@@ -85,7 +86,7 @@ public class FragmentGroupSettings extends Fragment {
 
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         titleView = (EditText) view.findViewById(R.id.group_settings_title);
         RecyclerView contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
@@ -153,11 +154,8 @@ public class FragmentGroupSettings extends Fragment {
         Button addParticipants = (Button) view.findViewById(R.id.group_settings_add);
         addParticipants.setOnClickListener(view1 -> {
             final Bundle bundle = new Bundle();
-            bundle.putInt("chat_id", chatID);
-            final FragmentGroupAddParticipants fragmentGroupAddParticipants = new FragmentGroupAddParticipants();
-            fragmentGroupAddParticipants.setArguments(bundle);
-            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentGroupAddParticipants, null);
+            bundle.putInt(CHAT_ID_KEY, chatID);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.FragmentGroupAddParticipants, bundle);
         });
 
         Button blackListButton = (Button) view.findViewById(R.id.group_settings_black_list);
@@ -166,10 +164,7 @@ public class FragmentGroupSettings extends Fragment {
             builder.setTitle(R.string.black_list);//TODO:string
             view1 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_black_list, null);
             builder.setView(view1);
-            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> {
-                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, new FragmentGroupAddBlackList(), null);
-            });
+            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupAddBlackList));
             RecyclerView blackList = (RecyclerView) view1.findViewById(R.id.alert_dialog_custom_black_list_rv);
             BlackListAdapter adapter = new BlackListAdapter(listAlertDialogBlackList, group.id, group.creatorID, dialogProgress);
             blackList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -184,10 +179,7 @@ public class FragmentGroupSettings extends Fragment {
             builder.setTitle(R.string.administrators);//TODO:string
             view12 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_administrators, null);
             builder.setView(view12);
-            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> {
-                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, new FragmentGroupAddAdministrators(), null);
-            });
+            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupAddAdministrators));
             RecyclerView adminsList = (RecyclerView) view12.findViewById(R.id.alert_dialog_custom_administrators_rv);
             AdministratorsAdapter adapter = new AdministratorsAdapter(listAlertDialogAdministrators, group.id, group.creatorID, dialogProgress);
             adminsList.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -257,7 +249,7 @@ public class FragmentGroupSettings extends Fragment {
                                 ApplicationLoader.applicationHandler.post(() -> {
                                     if (dialogProgress != null && dialogProgress.isShowing())
                                         dialogProgress.dismiss();
-                                    if(!group.photoURL.url.isEmpty())
+                                    if (!group.photoURL.url.isEmpty())
                                         Utils.loadPhoto(group.photoURL.url, photoView);
                                 });
                             }

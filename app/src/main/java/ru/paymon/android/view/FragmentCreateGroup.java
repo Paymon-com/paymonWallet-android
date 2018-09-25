@@ -17,6 +17,7 @@ import android.widget.ImageButton;
 
 import java.util.LinkedList;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
@@ -55,9 +56,9 @@ public class FragmentCreateGroup extends Fragment {
         ImageButton acceptButton = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
 
-        backButton.setOnClickListener(view12 -> getActivity().getSupportFragmentManager().popBackStack());
+        backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
-        acceptButton.setOnClickListener(view1 -> {
+        acceptButton.setOnClickListener(v -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable("create_group_list", createGroupItemList);
             DialogFragmentCreateGroup dialogFragmentCreateGroup = DialogFragmentCreateGroup.newInstance();

@@ -48,9 +48,8 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
-
-        acceptToolbar.setOnClickListener(view12 -> showFragmentRecoveryPasswordCode());
+        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        acceptToolbar.setOnClickListener(v -> showFragmentRecoveryPasswordCode());
 
         emailEditText = view.findViewById(R.id.fragment_password_recovery_email_edit_text);
         hintError = view.findViewById(R.id.fragment_password_recovery_email_error_hint_text_view);

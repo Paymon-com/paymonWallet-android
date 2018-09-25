@@ -23,6 +23,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.Calendar;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
@@ -69,7 +70,7 @@ public class FragmentProfileEdit extends Fragment {
         Button saveButton = (Button) view.findViewById(R.id.profile_update_save_button);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);

@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
@@ -57,8 +58,7 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
 
         moreMenu.setNavigationItemSelectedListener(this);
 
-        headerView.setOnClickListener(view1 ->
-                Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentProfile.newInstance(), null));
+        headerView.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentProfile));
 
         name.setText(Utils.formatUserName(User.currentUser));
 

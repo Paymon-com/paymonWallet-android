@@ -210,40 +210,12 @@ public class Utils {
         Toast.makeText(fragmentActivity, fragmentActivity.getString(R.string.text_is_copied), Toast.LENGTH_SHORT).show();
     }
 
-    public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment, final String tag) {
-        ApplicationLoader.applicationHandler.post(() -> {
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
-            fragmentTransaction.replace(R.id.container, fragment);
-            fragmentTransaction.addToBackStack(tag);
-            fragmentTransaction.commit();
-        });
-    }
-
     public static void replaceFragmentWithAnimationFade(FragmentManager fragmentManager, Fragment fragment, String tag) {
-
         final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(R.animator.fade_to_up, R.animator.fade_to_back);
         fragmentTransaction.replace(R.id.container, fragment);
         fragmentTransaction.addToBackStack(tag);
         fragmentTransaction.commit();
-    }
-
-    public static void replaceFragmentWithAnimationSlideFade(final FragmentManager fragmentManager, final Fragment fragment) {
-        ApplicationLoader.applicationHandler.post(() -> {
-            final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
-            fragmentTransaction.replace(R.id.container, fragment);
-            fragmentTransaction.commit();
-        });
-    }
-
-    public static void clearStack(final FragmentManager fragmentManager) {
-        int count = fragmentManager.getBackStackEntryCount();
-        while (count > 0) {
-            fragmentManager.popBackStack();
-            count--;
-        }
     }
 
     public static byte[] hexStringToBytes(String s) {

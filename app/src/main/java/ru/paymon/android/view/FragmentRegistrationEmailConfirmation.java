@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
@@ -62,9 +63,8 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
-
-        acceptToolbar.setOnClickListener(view12 -> confirmRegistration());
+        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        acceptToolbar.setOnClickListener(v -> confirmRegistration());
 
         //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_confirmation));
 

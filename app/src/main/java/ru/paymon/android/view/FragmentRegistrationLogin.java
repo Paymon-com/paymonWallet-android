@@ -55,8 +55,8 @@ public class FragmentRegistrationLogin extends Fragment {
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
-        backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
-        acceptToolbar.setOnClickListener(view12 -> showFragmentRegistrationPassword());
+        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        acceptToolbar.setOnClickListener(v -> showFragmentRegistrationPassword());
 
         loginEditText = view.findViewById(R.id.registration_login_edit_text);
         hintError = view.findViewById(R.id.registration_login_error_hint);

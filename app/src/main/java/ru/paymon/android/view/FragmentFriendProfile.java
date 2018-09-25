@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.net.NetworkManager;
@@ -64,7 +64,7 @@ public class FragmentFriendProfile extends Fragment {
 
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
+        backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         chatButton = (ImageButton) view.findViewById(R.id.friend_profile_chat_button);
         blockButton = (ImageButton) view.findViewById(R.id.friend_profile_block_button);
@@ -113,10 +113,7 @@ public class FragmentFriendProfile extends Fragment {
                         chatButton.setOnClickListener(view12 -> {
                             final Bundle bundle = new Bundle();
                             bundle.putInt(CHAT_ID_KEY, userId);
-                            final FragmentChat fragmentChat = FragmentChat.newInstance();
-                            fragmentChat.setArguments(bundle);
-                            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentChat, null);
+                            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat);
                         });
 
                         blockButton.setOnClickListener(view15 -> {

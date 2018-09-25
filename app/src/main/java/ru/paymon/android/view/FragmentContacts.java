@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -19,6 +18,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
@@ -187,7 +187,7 @@ public class FragmentContacts extends Fragment {
         tabHost.addTab(tabSpec);
         tabHost.setCurrentTab(0);
 
-        tabHost.setOnTabChangedListener((tag) ->{
+        tabHost.setOnTabChangedListener((tag) -> {
             editText.setText("");
             searchView.setQuery("", false);
         });
@@ -199,10 +199,7 @@ public class FragmentContacts extends Fragment {
                 final Bundle bundle = new Bundle();
                 int userID = (int) recyclerViewContacts.getAdapter().getItemId(position);
                 bundle.putInt(CHAT_ID_KEY, userID);
-                final FragmentFriendProfile fragmentFriendProfile = FragmentFriendProfile.newInstance();
-                fragmentFriendProfile.setArguments(bundle);
-                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentFriendProfile, bundle);
             }
 
             @Override
@@ -217,10 +214,7 @@ public class FragmentContacts extends Fragment {
                 final Bundle bundle = new Bundle();
                 int userID = (int) recyclerViewContactsGlobal.getAdapter().getItemId(position);
                 bundle.putInt(CHAT_ID_KEY, userID);
-                final FragmentFriendProfile fragmentFriendProfile = FragmentFriendProfile.newInstance();
-                fragmentFriendProfile.setArguments(bundle);
-                final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentFriendProfile, bundle);
             }
 
             @Override

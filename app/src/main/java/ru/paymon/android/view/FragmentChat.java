@@ -3,24 +3,16 @@ package ru.paymon.android.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-
-import com.vanniktech.emoji.EmojiEditText;
 
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
-import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.adapters.MessagesAdapter;
 import ru.paymon.android.net.NetworkManager;
@@ -54,19 +46,7 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_chat, container, false);
-
-        messageInput = (EmojiEditText) view.findViewById(R.id.input_edit_text);
-        messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
-        sendButton = (Button) view.findViewById(R.id.sendButton);
-        emoticonsButton = (ImageView) view.findViewById(R.id.smilesButton);
-        includeAttachment = (ConstraintLayout) view.findViewById(R.id.fragment_chat_attachment_include);
-        buttonAttachment = (ImageButton) view.findViewById(R.id.attach_button);
-        buttonDocumentAttachment = (ImageButton) view.findViewById(R.id.document_chat_attachment);
-        buttonImageAttachment = (ImageButton) view.findViewById(R.id.image_chat_attachment);
-        buttonVideoAttachment = (ImageButton) view.findViewById(R.id.video_chat_attachment);
-
-        super.onCreateView(inflater, container, savedInstanceState);
+        View view = super.onCreateView(inflater, container, savedInstanceState);
 
         messagesAdapter = new MessagesAdapter(iMessageClickListener);
         messagesRecyclerView.setAdapter(messagesAdapter);
@@ -105,11 +85,8 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
                         messagesAdapter.notifyDataSetChanged();
                         messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
                     });
-
-//                    NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, chatID);
                 });
             });
-
             messageInput.setText("");
         });
 
@@ -219,7 +196,8 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
             });
         }
     }
-//
+
+    //
     private MessagesAdapter.IMessageClickListener iMessageClickListener = new MessagesAdapter.IMessageClickListener() {
         @Override
         public void longClick() {

@@ -69,8 +69,8 @@ public class FragmentRegistrationPassword extends Fragment {
         repeatPasswordEditText = view.findViewById(R.id.registration_repeat_password_edit_text);
         hintError = view.findViewById(R.id.password_hint_error_text_view);
 
-        backButton.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
-        acceptButton.setOnClickListener(view12 -> showFragmentRegistrationEmail());
+        backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        acceptButton.setOnClickListener(v -> showFragmentRegistrationEmail());
 
         passwordEditText.requestFocus();
 

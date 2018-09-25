@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.utils.Utils;
@@ -47,10 +48,8 @@ public class FragmentProfile extends Fragment {
         TextView login = (TextView) view.findViewById(R.id.login_profile_text_view);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
-
-        updateProfile.setOnClickListener(v ->
-                Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), FragmentProfileEdit.newInstance(), null));
+        backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        updateProfile.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentProfileEdit));
 
         name.setText(Utils.formatUserName(User.currentUser));
         login.setText(String.format("@%s", User.currentUser.login));

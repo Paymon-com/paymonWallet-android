@@ -18,13 +18,13 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
 import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
-import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
 public class FragmentMoney extends Fragment {
@@ -162,21 +162,17 @@ public class FragmentMoney extends Fragment {
     private CryptoWalletsAdapter.IOnItemClickListener cryptoWalletsListener = new CryptoWalletsAdapter.IOnItemClickListener() {
         @Override
         public void onClick(String cryptoCurrency) {
-            Fragment fragment = null;
             switch (cryptoCurrency) {
                 case "BTC":
 //                            fragment = FragmentBitcoinWallet.newInstance();
                     break;
                 case "ETH":
-                    fragment = FragmentEthereumWallet.newInstance();
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWallet);
                     break;
                 case "PMNT":
 //                            fragment = FragmentPaymonWallet.newInstance();
                     break;
             }
-
-            if (fragment != null)
-                Utils.replaceFragmentWithAnimationFade(getActivity().getSupportFragmentManager(), fragment, null);
         }
 
         @Override

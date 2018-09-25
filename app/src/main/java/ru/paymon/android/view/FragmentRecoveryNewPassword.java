@@ -62,9 +62,8 @@ public class FragmentRecoveryNewPassword extends Fragment {
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
-        backToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().popBackStack());
-
-        acceptToolbar.setOnClickListener(view12 -> recoveryPassword());
+        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        acceptToolbar.setOnClickListener(v -> recoveryPassword());
 
         newPassword = view.findViewById(R.id.new_password);
         repeatNewPassword = view.findViewById(R.id.repeat_new_password);
