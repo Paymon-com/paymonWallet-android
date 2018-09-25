@@ -1,7 +1,6 @@
 package ru.paymon.android.view;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -92,12 +91,11 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
             swipeRefreshLayout.setRefreshing(show);
         });
 
-        Observer<Boolean> stateObserver = (state) -> {
+        isAuthorized.observe(getActivity(), (state) -> {
+            if(state == null) return;
             if (!swipeRefreshLayout.isRefreshing() && state)
                 chatsViewModel.updateChatsData();
-        };
-
-        isAuthorized.observe(getActivity(), stateObserver);
+        });
 
         chatsItemsData.observe(getActivity(), data -> {
             if (data == null) return;
