@@ -1,7 +1,6 @@
 package ru.paymon.android.view;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,19 +8,17 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
-
-import java.util.Calendar;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
@@ -66,7 +63,7 @@ public class FragmentProfileEdit extends Fragment {
         TextView changeAvatar = (TextView) view.findViewById(R.id.change_foto);
         TextInputEditText firstName = (TextInputEditText) view.findViewById(R.id.profile_update_name);
         TextInputEditText lastName = (TextInputEditText) view.findViewById(R.id.profile_update_surname);
-        TextInputEditText email = (TextInputEditText) view.findViewById(R.id.profile_update_email);
+        EditText email = (EditText) view.findViewById(R.id.profile_update_email);
         Button saveButton = (Button) view.findViewById(R.id.profile_update_save_button);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
@@ -80,9 +77,9 @@ public class FragmentProfileEdit extends Fragment {
 
         firstName.setText(User.currentUser.first_name);
         lastName.setText(User.currentUser.last_name);
-        email.setText(User.currentUser.email);
+        email.setText(User.currentUser.email != null ? User.currentUser.email : "");
 
-        View.OnClickListener avatarListener = (view1) -> {
+        View.OnClickListener avatarListener = (v) -> {
 //            ((MainActivity) getActivity()).requestAppPermissions(new String[]{
 //                            Manifest.permission.READ_EXTERNAL_STORAGE,
 //                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
@@ -95,7 +92,7 @@ public class FragmentProfileEdit extends Fragment {
         avatar.setOnClickListener(avatarListener);
         changeAvatar.setOnClickListener(avatarListener);
 
-        saveButton.setOnClickListener((view1) -> {
+        saveButton.setOnClickListener((v) -> {
             if (!Utils.nameCorrect(firstName.getText().toString())) {
                 Toast.makeText(getActivity(), getString(R.string.reg_name_correct), Toast.LENGTH_SHORT).show();
                 firstName.requestFocus();
@@ -123,7 +120,7 @@ public class FragmentProfileEdit extends Fragment {
                 ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
                 final long requestID = NetworkManager.getInstance().sendRequest(user, (response, error) -> {
-                    if (error != null || (response != null && response instanceof RPC.PM_boolFalse)) {
+                    if (error != null || response instanceof RPC.PM_boolFalse) {
                         ApplicationLoader.applicationHandler.post(() -> {
                             if (dialogProgress != null && dialogProgress.isShowing())
                                 dialogProgress.cancel();
@@ -169,24 +166,8 @@ public class FragmentProfileEdit extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
-        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_update_profile));
-        //Utils.setArrowBackInToolbar(getActivity());
     }
 
-    private void setDate(TextInputEditText birthday) {
-        Calendar date = Calendar.getInstance();
-        new DatePickerDialog(getActivity(),
-                (view, year, monthOfYear, dayOfMonth) -> {
-                    date.set(Calendar.YEAR, year);
-                    date.set(Calendar.MONTH, monthOfYear);
-                    date.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                    birthday.setText((String) DateFormat.format("yyyy-MM-dd", date));
-                },
-                date.get(Calendar.YEAR),
-                date.get(Calendar.MONTH),
-                date.get(Calendar.DAY_OF_MONTH))
-                .show();
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -23,6 +23,9 @@ import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
+import static ru.paymon.android.view.AbsFragmentChat.CHAT_GROUP_USERS;
+import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
+
 public class DialogFragmentCreateGroup extends DialogFragment {
     private DialogProgress dialogProgress;
     private EditText title;
@@ -93,8 +96,8 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                     NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
                     getDialog().dismiss();
                     Bundle bundle = new Bundle();
-                    bundle.putInt("chat_id", group.id);
-                    bundle.putParcelableArrayList("users", group.users);
+                    bundle.putInt(CHAT_ID_KEY, group.id);
+                    bundle.putParcelableArrayList(CHAT_GROUP_USERS, group.users);
                     FragmentChat fragmentChat = FragmentChat.newInstance();
                     fragmentChat.setArguments(bundle);
                     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

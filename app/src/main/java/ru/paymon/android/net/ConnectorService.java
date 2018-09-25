@@ -41,6 +41,7 @@ import static ru.paymon.android.net.RPC.ERROR_AUTH;
 import static ru.paymon.android.net.RPC.ERROR_AUTH_TOKEN;
 import static ru.paymon.android.net.RPC.ERROR_KEY;
 import static ru.paymon.android.net.RPC.ERROR_SPAMMING;
+import static ru.paymon.android.view.AbsFragmentChat.CHAT_GROUP_USERS;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class ConnectorService extends Service implements NotificationManager.IListener {
@@ -65,13 +66,13 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
                 if (code != null && code.equals(ACTION)) {
                     final boolean isGroup = intent.getBooleanExtra("IS_GROUP", false);
-                    final int cid = intent.getIntExtra("CHAT_ID", 0);
+                    final int cid = intent.getIntExtra(CHAT_ID_KEY, 0);
                     Intent actIntent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
                     actIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     Bundle bundle = new Bundle();
                     bundle.putInt(CHAT_ID_KEY, cid);
                     if (isGroup)
-                        bundle.putParcelableArrayList("users", GroupsManager.getInstance().groupsUsers.get(cid));
+                        bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().groupsUsers.get(cid));
                     actIntent.putExtra("OPEN_CHAT_BUNDLE", bundle);
                     notificationManager.cancel(NOTIFY_ID);
                     startActivity(actIntent);
@@ -193,7 +194,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 Intent intentBtnReply = new Intent(ACTION);
                 intentBtnReply.setAction(ACTION);
                 intentBtnReply.putExtra("IS_GROUP", isGroup);
-                intentBtnReply.putExtra("CHAT_ID", cid);
+                intentBtnReply.putExtra(CHAT_ID_KEY, cid);
                 PendingIntent pIntentBtnReply = PendingIntent.getBroadcast(this, 2, intentBtnReply, 0);
 
                 Bitmap bmp = null;

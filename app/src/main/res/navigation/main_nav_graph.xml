@@ -40,6 +40,9 @@
         <action
             android:id="@+id/action_fragmentMoney_to_fragmentEthereumWallet"
             app:destination="@id/fragmentEthereumWallet" />
+        <action
+            android:id="@+id/action_fragmentMoney_to_dialogFragmentCreateRestoreEthereumWallet"
+            app:destination="@id/dialogFragmentCreateRestoreEthereumWallet" />
     </fragment>
     <fragment
         android:id="@+id/fragmentContacts"
@@ -58,6 +61,9 @@
         <action
             android:id="@+id/action_fragmentMoreMenu_to_fragmentProfile"
             app:destination="@id/fragmentProfile" />
+        <action
+            android:id="@+id/action_fragmentMoreMenu_to_settingsActivity"
+            app:destination="@id/settingsActivity" />
     </fragment>
     <fragment
         android:id="@+id/fragmentCreateGroup"
@@ -166,4 +172,31 @@
         android:name="ru.paymon.android.view.FragmentEthereumWalletTransferInfo"
         android:label="fragment_ethereum_wallet_transfer_info"
         tools:layout="@layout/fragment_ethereum_wallet_transfer_info" />
+    <activity
+        android:id="@+id/settingsActivity"
+        android:name="ru.paymon.android.view.SettingsActivity"
+        android:label="activity_settings"
+        tools:layout="@layout/activity_settings" />
+    <fragment
+        android:id="@+id/DialogFragmentCreateEthereumWallet"
+        android:name="ru.paymon.android.view.DialogFragmentCreateGroup"
+        android:label="dialog_fragment_create_group"
+        tools:layout="@layout/dialog_fragment_create_group" />
+    <fragment
+        android:id="@+id/dialogFragmentCreateRestoreEthereumWallet"
+        android:name="ru.paymon.android.view.DialogFragmentCreateRestoreEthereumWallet"
+        android:label="dialog_fragment_create_restore_eth_wallet"
+        tools:layout="@layout/dialog_fragment_create_restore_eth_wallet" >
+        <action
+            android:id="@+id/action_dialogFragmentCreateRestoreEthereumWallet_to_dialogFragmentCreateGroup"
+            app:destination="@id/DialogFragmentCreateEthereumWallet" />
+        <action
+            android:id="@+id/action_dialogFragmentCreateRestoreEthereumWallet_to_dialogFragmentCreateEthereumWallet"
+            app:destination="@id/DialogFragmentRestoreEthereumWallet" />
+    </fragment>
+    <fragment
+        android:id="@+id/DialogFragmentRestoreEthereumWallet"
+        android:name="ru.paymon.android.view.DialogFragmentCreateEthereumWallet"
+        android:label="DialogFragmentRestoreEthereumWallet"
+        tools:layout="@layout/dialog_fragment_create_eth_wallet" />
 </navigation>

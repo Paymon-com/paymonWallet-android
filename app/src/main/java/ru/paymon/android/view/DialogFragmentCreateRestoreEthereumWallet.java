@@ -8,16 +8,13 @@ import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
 import ru.paymon.android.R;
 
 public class DialogFragmentCreateRestoreEthereumWallet extends DialogFragment {
-    private static DialogFragmentCreateRestoreEthereumWallet instance;
 
-    public static DialogFragmentCreateRestoreEthereumWallet newInstance(){
-        instance = new DialogFragmentCreateRestoreEthereumWallet();
-        return instance;
+    public static DialogFragmentCreateRestoreEthereumWallet newInstance() {
+        return new DialogFragmentCreateRestoreEthereumWallet();
     }
 
     @Nullable
@@ -28,12 +25,12 @@ public class DialogFragmentCreateRestoreEthereumWallet extends DialogFragment {
         ConstraintLayout constraintLayoutCreate = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_create_restore_eth_wallet_clCreate);
         ConstraintLayout constraintLayoutRestore = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_create_restore_eth_wallet_clRestore);
 
-        constraintLayoutCreate.setOnClickListener((view1 -> {
+        constraintLayoutCreate.setOnClickListener((v -> {
             DialogFragmentCreateEthereumWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
             getDialog().cancel();
         }));
 
-        constraintLayoutRestore.setOnClickListener((view1 -> {
+        constraintLayoutRestore.setOnClickListener((v -> {
             DialogFragmentRestoreEthereumWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
             getDialog().cancel();
         }));

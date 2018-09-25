@@ -57,7 +57,7 @@ public class FragmentProfile extends Fragment {
         if (!User.currentUser.photoURL.url.isEmpty())
             Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
 
-        if (!User.currentUser.email.equals(""))
+        if (User.currentUser.email != null && !User.currentUser.email.equals(""))
             email.setText(User.currentUser.email);
         else
             email.setText(R.string.not_specified);

@@ -34,6 +34,8 @@ import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
+import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
+
 public class FragmentGroupAddParticipants extends Fragment {
     private static FragmentGroupAddParticipants instance;
     private int chatID;
@@ -58,8 +60,8 @@ public class FragmentGroupAddParticipants extends Fragment {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey("chat_id")) {
-            chatID = bundle.getInt("chat_id");
+        if (bundle != null && bundle.containsKey(CHAT_ID_KEY)) {
+            chatID = bundle.getInt(CHAT_ID_KEY);
         }
 
         group = GroupsManager.getInstance().groups.get(chatID);

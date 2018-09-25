@@ -102,7 +102,7 @@ public class FragmentFriendProfile extends Fragment {
                         friendProfileName.setText(Utils.formatUserName(user));
                         friendProfileLogin.setText("@" + user.login);
 
-                        if (!user.email.isEmpty())
+                        if (user.email != null && !user.email.isEmpty())
                             friendProfileCity.setText(user.email);
                         else
                             friendProfileCity.setText(R.string.not_specified);
@@ -113,7 +113,7 @@ public class FragmentFriendProfile extends Fragment {
                         chatButton.setOnClickListener(view12 -> {
                             final Bundle bundle = new Bundle();
                             bundle.putInt(CHAT_ID_KEY, userId);
-                            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat);
+                            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
                         });
 
                         blockButton.setOnClickListener(view15 -> {
@@ -127,10 +127,10 @@ public class FragmentFriendProfile extends Fragment {
             RPC.PM_BTC_getWalletKey getWalletKeyBtc = new RPC.PM_BTC_getWalletKey();
             getWalletKeyBtc.uid = userId;
             final long requestIDBtc = NetworkManager.getInstance().sendRequest(getWalletKeyBtc, (response, error) -> {
-                if (response != null){
+                if (response != null) {
                     final RPC.PM_BTC_setWalletKey walletKeyBtc = (RPC.PM_BTC_setWalletKey) response;
                     ApplicationLoader.applicationHandler.post(() -> {
-                        if (walletKeyBtc.walletKey != null && !walletKeyBtc.walletKey.isEmpty()){
+                        if (walletKeyBtc.walletKey != null && !walletKeyBtc.walletKey.isEmpty()) {
                             showBitcoin.setVisibility(View.VISIBLE);
                             showBitcoin.setOnClickListener(view13 -> {
                                 //TODO:сделать часть с переходом на его биток
@@ -144,10 +144,10 @@ public class FragmentFriendProfile extends Fragment {
             RPC.PM_ETH_getWalletKey getWalletKeyEth = new RPC.PM_ETH_getWalletKey();
             getWalletKeyEth.uid = userId;
             final long requestIDEth = NetworkManager.getInstance().sendRequest(getWalletKeyEth, (response, error) -> {
-                if (response != null){
+                if (response != null) {
                     final RPC.PM_ETH_setWalletKey walletKeyEth = (RPC.PM_ETH_setWalletKey) response;
-                    ApplicationLoader.applicationHandler.post(()->{
-                        if (walletKeyEth.walletKey != null && !walletKeyEth.walletKey.isEmpty()){
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        if (walletKeyEth.walletKey != null && !walletKeyEth.walletKey.isEmpty()) {
                             showEthereum.setVisibility(View.VISIBLE);
                             showEthereum.setOnClickListener(view14 -> {
                                 //TODO:сделать часть перехода на его эфир

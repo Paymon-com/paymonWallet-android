@@ -28,11 +28,9 @@ import ru.paymon.android.gateway.Ethereum;
 import ru.paymon.android.utils.Utils;
 
 public class DialogFragmentRestoreEthereumWallet extends DialogFragment {
-    private static DialogFragmentRestoreEthereumWallet instance;
 
     public static DialogFragmentRestoreEthereumWallet newInstance() {
-        instance = new DialogFragmentRestoreEthereumWallet();
-        return instance;
+        return new DialogFragmentRestoreEthereumWallet();
     }
 
     @Nullable
