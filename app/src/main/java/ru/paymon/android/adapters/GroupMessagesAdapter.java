@@ -74,11 +74,18 @@ public class GroupMessagesAdapter extends RecyclerView.Adapter<RecyclerView.View
             groupReceiveMessageViewHolder.msg.setText(message.text);
             groupReceiveMessageViewHolder.time.setText(Utils.formatDateTime(message.date, true));
             RPC.UserObject user = UsersManager.getInstance().users.get(message.from_id);
-            if (user != null && position != 0 && position < messageIDs.size()) {
-                RPC.Message previousMessage = getMessage(position - 1);
-                RPC.UserObject previousUser = UsersManager.getInstance().users.get(previousMessage.from_id);
-                if (previousUser != null && user.id == previousUser.id) {
-                    groupReceiveMessageViewHolder.avatar.setVisibility(View.INVISIBLE);
+            if(user != null) {
+                if (position != 0) {
+                    RPC.Message previousMessage = getMessage(position - 1);
+                    RPC.UserObject previousUser = UsersManager.getInstance().users.get(previousMessage.from_id);
+                    if (previousUser != null && user.id == previousUser.id) {
+                        groupReceiveMessageViewHolder.avatar.setVisibility(View.INVISIBLE);
+                    } else {
+                        groupReceiveMessageViewHolder.avatar.setVisibility(View.VISIBLE);
+                        if (!user.photoURL.url.isEmpty()) {
+                            Utils.loadPhoto(user.photoURL.url, groupReceiveMessageViewHolder.avatar);
+                        }
+                    }
                 } else {
                     groupReceiveMessageViewHolder.avatar.setVisibility(View.VISIBLE);
                     if (!user.photoURL.url.isEmpty()) {
