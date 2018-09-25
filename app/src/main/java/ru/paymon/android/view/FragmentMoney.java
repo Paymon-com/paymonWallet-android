@@ -25,6 +25,7 @@ import ru.paymon.android.adapters.ExchangeRatesAdapter;
 import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
+import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
 public class FragmentMoney extends Fragment {
@@ -130,6 +131,7 @@ public class FragmentMoney extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Utils.showBottomBar(getActivity());
     }
 
     @Override

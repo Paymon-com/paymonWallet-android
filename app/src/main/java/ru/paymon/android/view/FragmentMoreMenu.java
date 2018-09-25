@@ -75,4 +75,10 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
 
         return true;
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Utils.showBottomBar(getActivity());
+    }
 }
