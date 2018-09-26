@@ -25,7 +25,7 @@ public class NetworkManager {
     private boolean authorized;
     private TimeHandler timeThread;
     private long lastOutgoingMessageId = 0;
-    private LinkedList<WaitingRequest> waitingRequests = new LinkedList<>();
+    public LinkedList<WaitingRequest> waitingRequests = new LinkedList<>();
     private LinkedList<FutureRequest> futureRequests = new LinkedList<>();
     private static volatile NetworkManager Instance = null;
 
@@ -112,7 +112,7 @@ public class NetworkManager {
     //endregion
 
     //region connect func
-    private void reset(){
+    private void reset() {
         handshaked = false;
         setAuthorized(false);
         KeyGenerator.getInstance().reset();
@@ -312,6 +312,7 @@ public class NetworkManager {
             request.messageID = generateMessageID();
         else
             request.messageID = messageID;
+
         waitingRequests.offer(request);
         if (connectorService != null && connectorService.requestsMap != null)
             processRequest();

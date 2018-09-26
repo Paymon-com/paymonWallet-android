@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -67,7 +68,6 @@ public class ChatsViewModel extends AndroidViewModel {
                 NetworkManager.getInstance().sendRequest(new RPC.PM_chatsAndMessages(), (response, error) -> {
                     if (response == null && error != null) {
                         showProgress.postValue(false);
-//                            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload));
                         return;
                     }
 
@@ -78,8 +78,10 @@ public class ChatsViewModel extends AndroidViewModel {
                     for (RPC.Message msg : packet.messages)
                         MessagesManager.getInstance().putMessage(msg);
 
-                    for (RPC.UserObject usr : packet.users)
+                    for (RPC.UserObject usr : packet.users) {
                         UsersManager.getInstance().putUser(usr);
+                        Log.e("AAA", (usr.email == null ? "null" : usr.email) + " qqq" ); //TODO: delete this shitty log
+                    }
 
                     for (RPC.Group grp : packet.groups)
                         GroupsManager.getInstance().putGroup(grp);

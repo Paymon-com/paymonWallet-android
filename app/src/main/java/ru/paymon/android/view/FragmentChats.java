@@ -59,12 +59,6 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         groupsAdapter = new ChatsAdapter(iChatsClickListener);
         chatsViewModel = ViewModelProviders.of(getActivity()).get(ChatsViewModel.class);
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        chatsViewModel.updateChatsData();
-        showProgress = chatsViewModel.getProgressState();
-        chatsItemsData = chatsViewModel.getChatsData();
-        dialogsItemsData = chatsViewModel.getDialogsData();
-        groupItemsData = chatsViewModel.getGroupsData();
-        isAuthorized = mainViewModel.getAuthorizationState();
     }
 
     @Nullable
@@ -85,38 +79,6 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         swipeRefreshLayout = view.findViewById(R.id.fragment_chats_swipe_layout);
 
         swipeRefreshLayout.setOnRefreshListener(this);
-
-        showProgress.observe(getActivity(), show -> {
-            if (show == null) return;
-            swipeRefreshLayout.setRefreshing(show);
-        });
-
-        isAuthorized.observe(getActivity(), (state) -> {
-            if(state == null) return;
-            if (!swipeRefreshLayout.isRefreshing() && state)
-                chatsViewModel.updateChatsData();
-        });
-
-        chatsItemsData.observe(getActivity(), data -> {
-            if (data == null) return;
-            chatsAdapter.chatsItemsList.clear();
-            chatsAdapter.chatsItemsList.addAll(data);
-            chatsAdapter.notifyDataSetChanged();
-        });
-
-        groupItemsData.observe(getActivity(), data -> {
-            if (data == null) return;
-            groupsAdapter.chatsItemsList.clear();
-            groupsAdapter.chatsItemsList.addAll(data);
-            groupsAdapter.notifyDataSetChanged();
-        });
-
-        dialogsItemsData.observe(getActivity(), data -> {
-            if (data == null) return;
-            dialogsAdapter.chatsItemsList.clear();
-            dialogsAdapter.chatsItemsList.addAll(data);
-            dialogsAdapter.notifyDataSetChanged();
-        });
 
         toolbarCreateGroup.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentCreateGroup));
         toolbarSearch.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentSearch));
@@ -143,6 +105,48 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        showProgress = chatsViewModel.getProgressState();
+        chatsItemsData = chatsViewModel.getChatsData();
+        dialogsItemsData = chatsViewModel.getDialogsData();
+        groupItemsData = chatsViewModel.getGroupsData();
+        isAuthorized = mainViewModel.getAuthorizationState();
+
+        showProgress.observe(getActivity(), show -> {
+            if (show == null) return;
+            swipeRefreshLayout.setRefreshing(show);
+        });
+
+        isAuthorized.observe(getActivity(), (state) -> {
+            if (state == null) return;
+            if (!swipeRefreshLayout.isRefreshing() && state)
+                chatsViewModel.updateChatsData();
+        });
+
+        chatsItemsData.observe(getActivity(), data -> {
+            if (data == null) return;
+            chatsAdapter.chatsItemsList.clear();
+            chatsAdapter.chatsItemsList.addAll(data);
+            chatsAdapter.notifyDataSetChanged();
+        });
+
+        groupItemsData.observe(getActivity(), data -> {
+            if (data == null) return;
+            groupsAdapter.chatsItemsList.clear();
+            groupsAdapter.chatsItemsList.addAll(data);
+            groupsAdapter.notifyDataSetChanged();
+        });
+
+        dialogsItemsData.observe(getActivity(), data -> {
+            if (data == null) return;
+            dialogsAdapter.chatsItemsList.clear();
+            dialogsAdapter.chatsItemsList.addAll(data);
+            dialogsAdapter.notifyDataSetChanged();
+        });
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         Utils.showBottomBar(getActivity());
@@ -160,7 +164,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         if (isGroup) {
             bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().groupsUsers.get(chatID));
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
-        }else {
+        } else {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
         }
     };

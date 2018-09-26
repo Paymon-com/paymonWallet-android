@@ -3,12 +3,12 @@ package ru.paymon.android.view;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v14.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
-import android.support.v7.preference.SwitchPreferenceCompat;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
@@ -69,10 +69,10 @@ public class FragmentSettingsBasic extends PreferenceFragmentCompat implements S
                 preference.setSummary(listPreference.getEntries()[prefIndex]);
             }
         }
-        if(preference instanceof SwitchPreferenceCompat){
+        if (preference instanceof SwitchPreference) {
             Utils.netQueue.postRunnable(() -> {
                 RPC.PM_userFull user = User.currentUser;
-                User.currentUser.flags = RPC.UserObject.USER_FLAG_HIDDEN_EMAIL;
+                User.currentUser.isEmailHidden = ((SwitchPreference) preference).isChecked();
 
 //                ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
