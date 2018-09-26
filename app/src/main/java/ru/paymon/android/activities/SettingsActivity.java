@@ -1,4 +1,4 @@
-package ru.paymon.android.view;
+package ru.paymon.android.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageButton;
 
 import ru.paymon.android.R;
+import ru.paymon.android.view.FragmentSettings;
 
 public class SettingsActivity extends AppCompatActivity {
 

@@ -174,7 +174,7 @@
         tools:layout="@layout/fragment_ethereum_wallet_transfer_info" />
     <activity
         android:id="@+id/settingsActivity"
-        android:name="ru.paymon.android.view.SettingsActivity"
+        android:name="ru.paymon.android.activities.SettingsActivity"
         android:label="activity_settings"
         tools:layout="@layout/activity_settings" />
     <fragment
