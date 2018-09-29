@@ -7,7 +7,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 
 public class MessagesManager implements NotificationManager.IListener {
@@ -56,9 +55,9 @@ public class MessagesManager implements NotificationManager.IListener {
         SparseArray<LinkedList<RPC.Message>> chatsMessages;
         int chatID;
 
-        int to_id = msg.to_id.user_id;
+        int to_id = msg.to_peer.user_id;
         if (to_id == 0) {
-            to_id = msg.to_id.group_id;
+            to_id = msg.to_peer.group_id;
             chatID = to_id;
             chatsMessages = groupsMessages;
         } else {
@@ -83,7 +82,7 @@ public class MessagesManager implements NotificationManager.IListener {
 
         int chatID;
 
-        int to_id = msg.to_id.user_id;
+        int to_id = msg.to_peer.user_id;
         if (to_id == 0) {
             chatID = to_id;
         } else {
@@ -95,7 +94,7 @@ public class MessagesManager implements NotificationManager.IListener {
 
         messages.remove(msg.id);
 
-        if (msg.to_id.user_id != 0) {
+        if (msg.to_peer.user_id != 0) {
             dialogsMessages.get(chatID).remove(msg);
             lastMessages.remove(msg.id);
         } else {
@@ -136,20 +135,20 @@ public class MessagesManager implements NotificationManager.IListener {
 //                        LinkedList<RPC.Message> array = dialogsMessages.get(dialogsMessages.keyAt(i));
 //                        Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.date, chatItem2.date) * -1);
 //                        RPC.Message msg = array.getFirst();
-//                        if (msg.to_id.user_id == User.currentUser.id)
+//                        if (msg.to_peer.user_id == User.currentUser.id)
 //                            lastMessages.put(msg.from_id, msg.id);
 //                        else
-//                            lastMessages.put(msg.to_id.user_id, msg.id);
+//                            lastMessages.put(msg.to_peer.user_id, msg.id);
 //                    }
 //
 //                    for (int i = 0; i < groupsMessages.size(); i++) {
 //                        LinkedList<RPC.Message> array = groupsMessages.get(groupsMessages.keyAt(i));
 //                        Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.date, chatItem2.date) * -1);
 //                        RPC.Message msg = array.getFirst();
-//                        if (msg.to_id.group_id == User.currentUser.id)
+//                        if (msg.to_peer.group_id == User.currentUser.id)
 //                            lastGroupMessages.put(msg.from_id, msg.id);
 //                        else
-//                            lastGroupMessages.put(msg.to_id.group_id, msg.id);
+//                            lastGroupMessages.put(msg.to_peer.group_id, msg.id);
 //                    }
 //
 //                    ApplicationLoader.applicationHandler.post(() ->
@@ -160,36 +159,36 @@ public class MessagesManager implements NotificationManager.IListener {
 //        }
 //    }
 
-    public void loadMessages(int chatID, int count, int offset, boolean isGroup) {
-        if (User.currentUser == null || chatID == 0) return;
-
-        RPC.PM_getChatMessages packet = new RPC.PM_getChatMessages();
-
-        if (!isGroup) {
-            packet.chatID = new RPC.PM_peerUser();
-            packet.chatID.user_id = chatID;
-        } else {
-            packet.chatID = new RPC.PM_peerGroup();
-            packet.chatID.group_id = chatID;
-        }
-
-        packet.count = count;
-        packet.offset = offset;
-
-        NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
-            if (response == null) return;
-            final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
-            if (receivedMessages.messages.size() == 0) return;
-
-            final LinkedList<Long> messagesToAdd = new LinkedList<>();
-            for (RPC.Message msg : receivedMessages.messages) {
-                putMessage(msg);
-                messagesToAdd.add(msg.id);
-            }
-
-            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.chatAddMessages, messagesToAdd, true, receivedMessages.messages.size()));
-        });
-    }
+//    public void loadMessages(int chatID, int count, int offset, boolean isGroup) {
+//        if (User.currentUser == null || chatID == 0) return;
+//
+//        RPC.PM_getChatMessages packet = new RPC.PM_getChatMessages();
+//
+//        if (!isGroup) {
+//            packet.chatID = new RPC.PM_peerUser();
+//            packet.chatID.user_id = chatID;
+//        } else {
+//            packet.chatID = new RPC.PM_peerGroup();
+//            packet.chatID.group_id = chatID;
+//        }
+//
+//        packet.count = count;
+//        packet.offset = offset;
+//
+//        NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
+//            if (response == null) return;
+//            final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
+//            if (receivedMessages.messages.size() == 0) return;
+//
+//            final LinkedList<Long> messagesToAdd = new LinkedList<>();
+//            for (RPC.Message msg : receivedMessages.messages) {
+//                putMessage(msg);
+//                messagesToAdd.add(msg.id);
+//            }
+//
+//            ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.chatAddMessages, messagesToAdd, true, receivedMessages.messages.size()));
+//        });
+//    }
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
@@ -199,11 +198,11 @@ public class MessagesManager implements NotificationManager.IListener {
 
             for (RPC.Message msg : messages) {
                 putMessage(msg);
-                int to_id = msg.to_id.user_id;
+                int to_id = msg.to_peer.user_id;
                 boolean isGroup = false;
                 if (to_id == 0) {
                     isGroup = true;
-                    to_id = msg.to_id.group_id;
+                    to_id = msg.to_peer.group_id;
                 }
                 if (!isGroup)
                     if ((to_id == currentChatID && msg.from_id == User.currentUser.id) || (to_id == User.currentUser.id && msg.from_id == currentChatID)) {

@@ -90,20 +90,20 @@ public class ChatsViewModel extends AndroidViewModel {
                         LinkedList<RPC.Message> array = MessagesManager.getInstance().dialogsMessages.get(MessagesManager.getInstance().dialogsMessages.keyAt(i));
                         Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.date, chatItem2.date) * -1);
                         RPC.Message msg = array.getFirst();
-                        if (msg.to_id.user_id == User.currentUser.id)
+                        if (msg.to_peer.user_id == User.currentUser.id)
                             MessagesManager.getInstance().lastMessages.put(msg.from_id, msg.id);
                         else
-                            MessagesManager.getInstance().lastMessages.put(msg.to_id.user_id, msg.id);
+                            MessagesManager.getInstance().lastMessages.put(msg.to_peer.user_id, msg.id);
                     }
 
                     for (int i = 0; i < MessagesManager.getInstance().groupsMessages.size(); i++) {
                         LinkedList<RPC.Message> array = MessagesManager.getInstance().groupsMessages.get(MessagesManager.getInstance().groupsMessages.keyAt(i));
                         Collections.sort(array, (chatItem1, chatItem2) -> Long.compare(chatItem1.date, chatItem2.date) * -1);
                         RPC.Message msg = array.getFirst();
-                        if (msg.to_id.group_id == User.currentUser.id)
+                        if (msg.to_peer.group_id == User.currentUser.id)
                             MessagesManager.getInstance().lastGroupMessages.put(msg.from_id, msg.id);
                         else
-                            MessagesManager.getInstance().lastGroupMessages.put(msg.to_id.group_id, msg.id);
+                            MessagesManager.getInstance().lastGroupMessages.put(msg.to_peer.group_id, msg.id);
                     }
 
                     LinkedList<ChatsItem> dialogsItems = new LinkedList<>();

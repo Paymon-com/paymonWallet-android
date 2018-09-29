@@ -1,5 +1,8 @@
 package ru.paymon.android.net;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
@@ -8,6 +11,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import ru.paymon.android.test.FileTypeConverter;
+import ru.paymon.android.test.MessageActionConverter;
+import ru.paymon.android.test.PeerConverter;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.SerializableData;
 
@@ -144,7 +150,6 @@ public class RPC {
         public String email;
         public PM_photoURL photoURL;
         public boolean confirmed;
-
         public boolean isEmailHidden;
 //        public String patronymic;
 //        public String country;
@@ -153,7 +158,6 @@ public class RPC {
 //        public long phoneNumber;
 //        public int gender;
 //        public String walletKey;
-
 //        public String inviteCode;
 
         public UserObject() {
@@ -466,6 +470,14 @@ public class RPC {
             channel_id = stream.readInt32(exception);
         }
 
+        public PM_peerChannel(){
+
+        }
+
+        public PM_peerChannel(int chid){
+            channel_id = chid;
+        }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeInt32(channel_id);
@@ -603,6 +615,7 @@ public class RPC {
         }
     }
 
+    @Entity
     public static class Message extends Packet {
         public Message() {
         }
@@ -614,9 +627,12 @@ public class RPC {
         public static int MESSAGE_FLAG_EDITED = 0b10000;
         public static int MESSAGE_FLAG_ACTION =  0b100000;
 
+        @PrimaryKey
         public long id;
         public int from_id;
-        public Peer to_id;
+        public int to_id;
+        @TypeConverters(PeerConverter.class)
+        public Peer to_peer;
         public int date;
         public int reply_to_msg_id;
         public String text;
@@ -625,8 +641,10 @@ public class RPC {
         //        public ArrayList<MessageEntity> entities = new ArrayList<>();
         public int views;
         public int edit_date;
+        @TypeConverters(FileTypeConverter.class)
         public FileManager.FileType itemType;
         public long itemID;
+        @TypeConverters(MessageActionConverter.class)
         public MessageAction action;
 
         public static Message deserialize(SerializableData stream, int constructor, boolean exception) {
@@ -1017,12 +1035,13 @@ public class RPC {
                 from_id = stream.readInt32(exception);
             }
 
-            to_id = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
+            to_peer = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
+            to_id = to_peer instanceof PM_peerUser ? to_peer.user_id : to_peer.group_id;
             if (from_id == 0) {
-                if (to_id.user_id != 0) {
-                    from_id = to_id.user_id;
+                if (to_peer.user_id != 0) {
+                    from_id = to_peer.user_id;
                 } else {
-                    from_id = -to_id.channel_id;
+                    from_id = -to_peer.channel_id;
                 }
             }
             if ((flags & MESSAGE_FLAG_REPLY) != 0) {
@@ -1049,8 +1068,8 @@ public class RPC {
                 stream.writeInt32(from_id);
             }
 
-            if(to_id != null) {
-                to_id.serializeToStream(stream);
+            if(to_peer != null) {
+                to_peer.serializeToStream(stream);
             }
 
             if ((flags & MESSAGE_FLAG_REPLY) != 0) {
@@ -1081,12 +1100,13 @@ public class RPC {
                 from_id = stream.readInt32(exception);
             }
 
-            to_id = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
+            to_peer = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
+            to_id = to_peer instanceof PM_peerUser ? to_peer.user_id : to_peer.group_id;
             if (from_id == 0) {
-                if (to_id.user_id != 0) {
-                    from_id = to_id.user_id;
+                if (to_peer.user_id != 0) {
+                    from_id = to_peer.user_id;
                 } else {
-                    from_id = -to_id.channel_id;
+                    from_id = -to_peer.channel_id;
                 }
             }
             if ((flags & MESSAGE_FLAG_REPLY) != 0) {
@@ -1121,8 +1141,8 @@ public class RPC {
                 stream.writeInt32(from_id);
             }
 
-            if(to_id != null) {
-                to_id.serializeToStream(stream);
+            if(to_peer != null) {
+                to_peer.serializeToStream(stream);
             }
 
             if ((flags & MESSAGE_FLAG_REPLY) != 0) {
@@ -2240,8 +2260,8 @@ public class RPC {
     }
 
     public static class MessageAction extends Packet {
-        public String message;
-        public List<UserObject> users;
+//        public String message;
+//        public List<UserObject> users;
 
         public static MessageAction deserialize(SerializableData stream, int constructor, boolean exception) {
             MessageAction result = null;

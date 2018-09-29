@@ -1,7 +1,6 @@
 package ru.paymon.android.net;
 
 
-
 import ru.paymon.android.utils.SerializableData;
 import ru.paymon.android.utils.SerializedBuffer;
 
@@ -10,7 +9,7 @@ public class Packet {
         void onResponse(Packet response, RPC.PM_error error);
     }
 
-    boolean disableFree = false;
+    public boolean disableFree = false;
 
     private static final ThreadLocal<SerializedBuffer> sizeCalculator = new ThreadLocal<SerializedBuffer>() {
         @Override

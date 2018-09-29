@@ -1,4 +1,4 @@
-<resources>
+<resources  tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Paymon</string>
     <string name="msg_permissions_required">Пожалуйста, предоставьте разрешения</string>
 
@@ -256,6 +256,46 @@
     <!--<string name="not_chosen">Не выбрано</string>-->
     <!--<string name="contacts_hint">Здесь Вы можете искать и добавлять контакты. Если вы хотите поговорить с разработчиками, вы можете найти учетную запись с ником \'paymon\' и именем Paymon Inc.</string>-->
 
+    <string name="the_balance_of_the_ethereum_wallet_could_not_be_updated">The balance of the Ethereum wallet could not be updated</string>
+
+    <string name="error_in_email">Error in E-mail</string>
+    <string name="photo_upload_failed">Photo failed to upload</string>
+
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="administrators">Administrators</string>
+    <string name="leave_group">Leave group</string>
+    <string name="black_list">Black list</string>
+    <string name="no">No</string>
+    <string name="login_or_email_is_empty">Login or E-mail is empty</string>
+    <string name="create_ethereum_wallet_failed">Create an Ethereum wallet failed</string>
+    <string name="ethereum_wallet_created">Ethereum wallet created</string>
+
+    <string name="default_denomination_value_eth">2 decimal places</string>
+    <string name="money_denomination_auto">Autoformat</string>
+    <string name="money_denomination_8">8 decimal places</string>
+    <string name="money_denomination_6">6 decimal places</string>
+    <string name="money_denomination_4">4 decimal places</string>
+    <string name="money_denomination_2">2 decimal places</string>
+    <string name="backup_file_not_selected">The file of the purse backup was not selected</string>
+    <string name="you_can_not_delete_someone_messages">you can not delete someone messages</string>
+    <string name="unable_to_delete_messages">Could not delete messages</string>
+    <string name="delete_for_everyone">Delete for all</string>
+    <string name="twosome">Twosome</string>
+    <string name="groups">Groups</string>
+    <string name="global_search">Global search</string>
+    <string name="you_did_not_choose_anyone">You did not choose anyone</string>
+    <string name="not_specified">Not specified</string>
+    <string name="yes">Yes</string>
+    <string name="action_settings">Settings</string>
+    <string name="default_sound">Notice</string>
+    <string name="date_format_24h">24 Hour</string>
+    <string name="date_format_12h">12 Hour AM/PM</string>
+
+    <string name="profile_edit_failed">Changes were not saved</string>
+    <string name="profile_edit_success">Profile successfully changed</string>
+    <string name="reg_phone_correct">Check if the entered phone number is correct</string>
+    <string name="pick_image_intent_text">Please Select</string>
+    <string name="select_the_recipient">Select a recipient</string>
     <string name="agreement_txt">
 \n
 1. Общие положения \n

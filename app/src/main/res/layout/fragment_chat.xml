@@ -9,6 +9,7 @@
     android:orientation="vertical"
     tools:context="ru.paymon.android.activities.MainActivity">
 
+
     <LinearLayout
         android:id="@+id/toolbar_container"
         android:layout_width="match_parent"
@@ -16,7 +17,8 @@
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/chat_recview"
@@ -73,8 +75,8 @@
             android:id="@+id/attach_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
             android:layout_marginStart="8dp"
+            android:layout_marginBottom="2dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/ic_attach_file_black_24dp" />
@@ -83,9 +85,9 @@
             android:id="@+id/input_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:layout_toStartOf="@+id/smilesButton"
             android:background="@android:color/transparent"
             android:hint="@string/default_input_hint"
@@ -93,10 +95,10 @@
             android:inputType="textCapSentences|textMultiLine"
             android:maxLines="3"
             android:minHeight="10dp"
-            android:paddingBottom="6dp"
             android:paddingLeft="8dp"
-            android:paddingRight="8dp"
             android:paddingTop="6dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="6dp"
             android:scrollHorizontally="false"
             android:singleLine="true"
             android:textColor="@color/colorPrimary"
@@ -111,8 +113,8 @@
             android:id="@+id/smilesButton"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_toStartOf="@+id/sendButton"
             android:gravity="end"
             android:src="@drawable/ic_smile"
@@ -125,8 +127,8 @@
             android:layout_width="37dp"
             android:layout_height="40dp"
             android:layout_margin="4dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:adjustViewBounds="true"
             android:background="@drawable/ic_sent"
             android:gravity="end"

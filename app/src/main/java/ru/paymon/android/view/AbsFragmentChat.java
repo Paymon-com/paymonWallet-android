@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -25,16 +27,20 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 
+import java.util.concurrent.Executor;
+
 import androidx.navigation.Navigation;
+import androidx.recyclerview.selection.SelectionTracker;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.test.ChatMessageDao;
 import ru.paymon.android.utils.ImagePicker;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.viewmodels.ChatViewModel;
 
 public abstract class AbsFragmentChat extends Fragment {
     public static final String CHAT_ID_KEY = "CHAT_ID_KEY";
@@ -54,13 +60,29 @@ public abstract class AbsFragmentChat extends Fragment {
     public ImageButton buttonVideoAttachment;
     public LinearLayout toolbarContainer;
     public View toolbarView;
+    public View toolbarViewSelected;
     public TextView chatTitleTextView;
     public CircularImageView toolbarAvatar;
     public ImageView backToolbar;
     public TextView participantsCountTextView;
+    public TextView selectedItemCount;
+    public TextView delete;
+    public TextView copy;
+    public SelectionTracker selectionTracker;
+    public ChatViewModel chatViewModel;
+    public ChatMessageDao dao = ApplicationLoader.db.chatMessageDao();
 
     public int chatID;
 
+    public class MainThreadExecutor implements Executor {
+
+        private final Handler handler = new Handler(Looper.getMainLooper());
+
+        @Override
+        public void execute(Runnable runnable) {
+            handler.post(runnable);
+        }
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,7 +118,7 @@ public abstract class AbsFragmentChat extends Fragment {
                 if (!user.photoURL.url.isEmpty())
                     Utils.loadPhoto(user.photoURL.url, toolbarAvatar);
             }
-            toolbarView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentFriendProfile,bundle));
+            toolbarView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentFriendProfile, bundle));
         } else if (this instanceof FragmentGroupChat) {
             toolbarView = getLayoutInflater().inflate(R.layout.toolbar_chat_group, null);
             participantsCountTextView = (TextView) toolbarView.findViewById(R.id.participants_count);
@@ -110,10 +132,17 @@ public abstract class AbsFragmentChat extends Fragment {
                 if (!group.photoURL.url.isEmpty())
                     Utils.loadPhoto(group.photoURL.url, toolbarAvatar);
             }
-            toolbarView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentGroupSettings,bundle));
+            toolbarView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentGroupSettings, bundle));
         }
 
+        toolbarViewSelected = getLayoutInflater().inflate(R.layout.toolbar_chat_selected, null);
+        selectedItemCount = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_count);
+        delete = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_delete);
+        delete = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_copy);
+        toolbarViewSelected.setVisibility(View.GONE);
+
         toolbarContainer.addView(toolbarView);
+        toolbarContainer.addView(toolbarViewSelected);
         backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         buttonDocumentAttachment.setOnClickListener(view13 -> {
@@ -153,6 +182,7 @@ public abstract class AbsFragmentChat extends Fragment {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         linearLayoutManager.setStackFromEnd(true);
+        linearLayoutManager.setReverseLayout(true);
         messagesRecyclerView.setLayoutManager(linearLayoutManager);
 
         return view;
@@ -161,7 +191,6 @@ public abstract class AbsFragmentChat extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.chatAddMessages);
         Utils.hideBottomBar(getActivity());
         MessagesManager.getInstance().currentChatID = chatID;
     }
@@ -169,7 +198,6 @@ public abstract class AbsFragmentChat extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.chatAddMessages);
         MessagesManager.getInstance().currentChatID = 0;
     }
 

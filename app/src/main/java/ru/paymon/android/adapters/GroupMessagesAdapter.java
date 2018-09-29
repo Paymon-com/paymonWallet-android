@@ -1,7 +1,9 @@
 package ru.paymon.android.adapters;
 
+import android.arch.paging.PagedListAdapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,25 +13,21 @@ import android.widget.TextView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 import com.vanniktech.emoji.EmojiTextView;
 
-import java.util.LinkedList;
-
-import ru.paymon.android.MessagesManager;
+import androidx.recyclerview.selection.SelectionTracker;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.test2.MessageItemDetail;
+import ru.paymon.android.test2.MessageItemLookup;
+import ru.paymon.android.test2.ViewHolderWithDetails;
 import ru.paymon.android.utils.Utils;
 
-public class GroupMessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public LinkedList<Long> messageIDs = new LinkedList<>();
-    private MessagesAdapter.IMessageClickListener iMessageClickListener;
+public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMessagesAdapter.BaseMessageViewHolder> {
+    private SelectionTracker selectionTracker;
 
-    public interface IMessageClickListener {
-        void longClick();
-
-        void delete(LinkedList<Long> checkedMessageIDs);
-
-        void forward(LinkedList<Long> checkedMessageIDs);
+    public GroupMessagesAdapter(@NonNull DiffUtil.ItemCallback<RPC.Message> diffCallback) {
+        super(diffCallback);
     }
 
     enum ViewTypes {
@@ -37,14 +35,18 @@ public class GroupMessagesAdapter extends RecyclerView.Adapter<RecyclerView.View
         RECEIVED_MESSAGE,
     }
 
-    public GroupMessagesAdapter(MessagesAdapter.IMessageClickListener iMessageClickListener) {
-        this.iMessageClickListener = iMessageClickListener;
+    public SelectionTracker getSelectionTracker() {
+        return selectionTracker;
+    }
+
+    public void setSelectionTracker(SelectionTracker selectionTracker) {
+        this.selectionTracker = selectionTracker;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        RecyclerView.ViewHolder vh = null;
+    public BaseMessageViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        BaseMessageViewHolder vh = null;
 
         Context context = viewGroup.getContext();
         MessagesAdapter.ViewTypes viewTypes = MessagesAdapter.ViewTypes.values()[viewType];
@@ -62,21 +64,21 @@ public class GroupMessagesAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        RPC.Message message = getMessage(position);
+    public void onBindViewHolder(BaseMessageViewHolder holder, int position) {
+        RPC.Message message = getItem(position);
 
-        if (holder instanceof GroupSentMessageViewHolder) {
-            final GroupSentMessageViewHolder sentMessageViewHolder = (GroupSentMessageViewHolder) holder;
-            sentMessageViewHolder.msg.setText(message.text);
-            sentMessageViewHolder.time.setText(Utils.formatDateTime(message.date, true));
-        } else if (holder instanceof GroupReceiveMessageViewHolder) {
+        if (message == null)
+            return;
+
+        holder.bind(message);
+
+        if (holder instanceof GroupReceiveMessageViewHolder) {
             final GroupReceiveMessageViewHolder groupReceiveMessageViewHolder = (GroupReceiveMessageViewHolder) holder;
-            groupReceiveMessageViewHolder.msg.setText(message.text);
-            groupReceiveMessageViewHolder.time.setText(Utils.formatDateTime(message.date, true));
             RPC.UserObject user = UsersManager.getInstance().users.get(message.from_id);
-            if(user != null) {
+            if (user != null) {
                 if (position != 0) {
-                    RPC.Message previousMessage = getMessage(position - 1);
+                    RPC.Message previousMessage = getItem(position - 1);
+                    if (previousMessage == null) return;
                     RPC.UserObject previousUser = UsersManager.getInstance().users.get(previousMessage.from_id);
                     if (previousUser != null && user.id == previousUser.id) {
                         groupReceiveMessageViewHolder.avatar.setVisibility(View.INVISIBLE);
@@ -96,23 +98,12 @@ public class GroupMessagesAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     }
 
-    @Override
-    public int getItemCount() {
-        return messageIDs.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return messageIDs.get(position);
-    }
-
-    private RPC.Message getMessage(int position) {
-        return MessagesManager.getInstance().messages.get(getItemId(position));
-    }
 
     @Override
     public int getItemViewType(int position) {
-        RPC.Message msg = getMessage(position);
+        RPC.Message msg = getItem(position);
+
+        if (msg == null) return 0;
 
         boolean isSent = msg.from_id == User.currentUser.id;
 
@@ -122,44 +113,21 @@ public class GroupMessagesAdapter extends RecyclerView.Adapter<RecyclerView.View
             return ViewTypes.RECEIVED_MESSAGE.ordinal();
     }
 
-//    public void deselectAll() {
-//        checkedMessageIDs.clear();
-//        notifyDataSetChanged();
-//    }
+    public abstract class BaseMessageViewHolder extends RecyclerView.ViewHolder implements ViewHolderWithDetails {
 
-//    private void init() {
-//        final TextView textViewSelectedTitle = (TextView) selectedCustomView.findViewById(R.id.selected_title);
-//        final ImageView imageViewSelectedDelete = (ImageView) selectedCustomView.findViewById(R.id.selected_delete);
-//        final ImageView imageViewSelectedCopy = (ImageView) selectedCustomView.findViewById(R.id.selected_copy);
-//        final ImageView imageViewSelectedForward = (ImageView) selectedCustomView.findViewById(R.id.selected_forward);
-//        final ImageView backToolbar = (ImageView) selectedCustomView.findViewById(R.id.selected_back);
-//
-//        backToolbar.setOnClickListener(view -> deselectAll());
-//
-//        imageViewSelectedForward.setOnClickListener((view -> {
-//            iMessageClickListener.forward(checkedMessageIDs);
-//        }));
-//
-//        imageViewSelectedDelete.setOnClickListener((view) -> {
-//            iMessageClickListener.delete(checkedMessageIDs);
-//        });
-//
-//        imageViewSelectedCopy.setOnClickListener((view) -> {
-//            StringBuilder copiedMessages = new StringBuilder();
-//            for (int i = 0; i < checkedMessageIDs.size(); i++) {
-//                String text = i < checkedMessageIDs.size() - 1 ? MessagesManager.getInstance().messages.get(checkedMessageIDs.get(i)).text : MessagesManager.getInstance().messages.get(checkedMessageIDs.get(i)).text + "\n";
-//                copiedMessages.append(text);
-//            }
-//
-//            ClipboardManager clipboard = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService(CLIPBOARD_SERVICE);
-//            ClipData clip = ClipData.newPlainText("Copied messages", copiedMessages.toString());
-//            clipboard.setPrimaryClip(clip);
-//            deselectAll();
-//        });
-//    }
+        private BaseMessageViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
 
+        @Override
+        public MessageItemLookup.ItemDetails getItemDetails() {
+            return new MessageItemDetail(getAdapterPosition(), getCurrentList().get(getAdapterPosition()));
+        }
 
-    public static class GroupSentMessageViewHolder extends RecyclerView.ViewHolder {
+        abstract void bind(RPC.Message message);
+    }
+
+    public class GroupSentMessageViewHolder extends BaseMessageViewHolder {
         public final EmojiTextView msg;
         public final TextView time;
 
@@ -168,9 +136,15 @@ public class GroupMessagesAdapter extends RecyclerView.Adapter<RecyclerView.View
             msg = (EmojiTextView) itemView.findViewById(R.id.message_text_view);
             time = (TextView) itemView.findViewById(R.id.timestamp_text_view);
         }
+
+        @Override
+        void bind(RPC.Message message) {
+            msg.setText(message.text);
+            time.setText(Utils.formatDateTime(message.date, true));
+        }
     }
 
-    public static class GroupReceiveMessageViewHolder extends RecyclerView.ViewHolder {
+    public class GroupReceiveMessageViewHolder extends BaseMessageViewHolder {
         public final EmojiTextView msg;
         public final TextView time;
         public final CircularImageView avatar;
@@ -180,6 +154,12 @@ public class GroupMessagesAdapter extends RecyclerView.Adapter<RecyclerView.View
             msg = (EmojiTextView) view.findViewById(R.id.message_text_view);
             time = (TextView) view.findViewById(R.id.timestamp_text_view);
             avatar = (CircularImageView) view.findViewById(R.id.photo);
+        }
+
+        @Override
+        void bind(RPC.Message message) {
+            msg.setText(message.text);
+            time.setText(Utils.formatDateTime(message.date, true));
         }
     }
 }

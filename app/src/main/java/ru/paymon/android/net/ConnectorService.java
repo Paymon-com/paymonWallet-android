@@ -156,11 +156,11 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     }
 
     private void showNotify(RPC.Message msg) {
-        if (msg.to_id.user_id != 0)
+        if (msg.to_peer.user_id != 0)
             if (msg.from_id == MessagesManager.getInstance().currentChatID)
                 return;
-            else if (msg.to_id.group_id != 0)
-                if (msg.to_id.group_id == MessagesManager.getInstance().currentChatID)
+            else if (msg.to_peer.group_id != 0)
+                if (msg.to_peer.group_id == MessagesManager.getInstance().currentChatID)
                     return;
 
         if (!User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) {
@@ -189,8 +189,8 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             Context context = getApplicationContext();
 
             if (user != null) {
-                final boolean isGroup = msg.to_id instanceof RPC.PM_peerGroup;
-                final int cid = isGroup ? msg.to_id.group_id : msg.from_id;
+                final boolean isGroup = msg.to_peer instanceof RPC.PM_peerGroup;
+                final int cid = isGroup ? msg.to_peer.group_id : msg.from_id;
                 Intent intentBtnReply = new Intent(ACTION);
                 intentBtnReply.setAction(ACTION);
                 intentBtnReply.putExtra("IS_GROUP", isGroup);
@@ -307,14 +307,14 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                         UsersManager.getInstance().userContacts.put(user.id, user);
                 }
                 MessagesManager.getInstance().putMessage(msg);
-                if (msg.to_id.user_id != 0) {
-                    if (msg.to_id.user_id == User.currentUser.id) {
+                if (msg.to_peer.user_id != 0) {
+                    if (msg.to_peer.user_id == User.currentUser.id) {
                         MessagesManager.getInstance().lastMessages.put(msg.from_id, msg.id);
                     } else {
-                        MessagesManager.getInstance().lastMessages.put(msg.to_id.user_id, msg.id);
+                        MessagesManager.getInstance().lastMessages.put(msg.to_peer.user_id, msg.id);
                     }
                 } else {
-                    MessagesManager.getInstance().lastGroupMessages.put(msg.to_id.group_id, msg.id);
+                    MessagesManager.getInstance().lastGroupMessages.put(msg.to_peer.group_id, msg.id);
                 }
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
                 showNotify(msg);

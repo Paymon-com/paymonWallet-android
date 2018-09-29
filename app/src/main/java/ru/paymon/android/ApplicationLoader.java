@@ -1,10 +1,10 @@
 package ru.paymon.android;
 
 import android.app.Application;
+import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.StrictMode;
@@ -17,6 +17,7 @@ import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.emoji.CustomEmojiProvider;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.net.NetworkManager;
+import ru.paymon.android.test.AppDatabase;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.Utils;
 
@@ -24,7 +25,8 @@ import ru.paymon.android.utils.Utils;
 public class ApplicationLoader extends Application {
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
-    public static volatile SQLiteDatabase db;
+//    public static volatile SQLiteDatabase db;
+    public static volatile AppDatabase db;
 
     @SuppressWarnings("JniMissingFunction")
     private static native int native_init(String host, short port, int version);
@@ -45,6 +47,7 @@ public class ApplicationLoader extends Application {
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
         Utils.stageQueue.postRunnable(() -> {
+             db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database").allowMainThreadQueries().build();
 //            DBHelper dbHelper = new DBHelper(applicationContext);
 //            try{
 //                db = dbHelper.getWritableDatabase();

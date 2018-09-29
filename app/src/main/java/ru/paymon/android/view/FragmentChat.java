@@ -1,28 +1,30 @@
 package ru.paymon.android.view;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.LinkedList;
-
-import ru.paymon.android.ApplicationLoader;
+import androidx.recyclerview.selection.SelectionTracker;
+import androidx.recyclerview.selection.StorageStrategy;
 import ru.paymon.android.MessagesManager;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
 import ru.paymon.android.adapters.MessagesAdapter;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.test.DiffUtilCallback;
+import ru.paymon.android.test2.MessageItemKeyProvider;
+import ru.paymon.android.test2.MessageItemLookup;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.viewmodels.ChatViewModel;
 
 import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 
-public class FragmentChat extends AbsFragmentChat implements NotificationManager.IListener {
+public class FragmentChat extends AbsFragmentChat {
     private static FragmentChat instance;
     private MessagesAdapter messagesAdapter;
 
@@ -42,14 +44,96 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
         }
     }
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        messagesAdapter = new MessagesAdapter(iMessageClickListener);
+        chatViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
+
+        messagesAdapter = new MessagesAdapter(new DiffUtilCallback());
+        chatViewModel.getMessages(chatID).observe(this, pagedList -> {
+            messagesAdapter.submitList(pagedList);
+            selectionTracker = new SelectionTracker.Builder<>(
+                    "my-selection-id",
+                    messagesRecyclerView,
+                    new MessageItemKeyProvider(1, messagesAdapter.getCurrentList()),
+                    new MessageItemLookup(messagesRecyclerView),
+                    StorageStrategy.createLongStorage()
+            ).build();
+            messagesAdapter.setSelectionTracker(selectionTracker);
+            selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
+                @Override
+                public void onItemStateChanged(@NonNull Object key, boolean selected) {
+                    super.onItemStateChanged(key, selected);
+                }
+
+                @Override
+                public void onSelectionRefresh() {
+                    super.onSelectionRefresh();
+                }
+
+                @Override
+                public void onSelectionChanged() {
+                    super.onSelectionChanged();
+                    if (selectionTracker.hasSelection()) {
+                        toolbarView.setVisibility(View.GONE);
+                        toolbarViewSelected.setVisibility(View.VISIBLE);
+                        selectedItemCount.setText("Selected item count: " + selectionTracker.getSelection().size());//TODO:String
+                    } else if (!selectionTracker.hasSelection()) {
+                        toolbarView.setVisibility(View.VISIBLE);
+                        toolbarViewSelected.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onSelectionRestored() {
+                    super.onSelectionRestored();
+                }
+            });
+        });
+
         messagesRecyclerView.setAdapter(messagesAdapter);
+
+
+//        final PagedList.Config config = new PagedList.Config.Builder()
+//                .setInitialLoadSizeHint(100)
+//                .setPageSize(100)
+//                .setEnablePlaceholders(false)
+//                .build();
+
+
+//        ChatDataSource chatDataSource = new ChatDataSource(chatID, false);
+//
+//        final PagedList<RPC.Message> pagedList = new PagedList.Builder<>(chatDataSource, config)
+//                .setFetchExecutor(Executors.newSingleThreadExecutor())
+//                .setNotifyExecutor(new MainThreadExecutor())
+//                .build();
+
+//        MessagesFactoryDataSource factory = new MessagesFactoryDataSource(chatID, false);
+//        DataSource.Factory factory = dao.messagesByChatID(chatID);
+
+//        final LiveData<PagedList<RPC.Message>> messages = new LivePagedListBuilder(factory, config)
+//                .setFetchExecutor(Executors.newSingleThreadExecutor())
+//                .build();
+
+//        messagesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+//            @Override
+//            public void onItemRangeInserted(int positionStart, int itemCount) {
+//                super.onItemRangeInserted(positionStart, itemCount);
+//                if (positionStart == 0)
+//                    messagesRecyclerView.getLayoutManager().scrollToPosition(0);
+//            }
+//        });
+
+//        messagesAdapter.submitList(pagedList);
+//        messages.observe(getActivity(), pagedList ->{
+//            messagesAdapter.submitList(pagedList);
+//            messagesAdapter.notifyDataSetChanged();
+//
+//        });
+
+//        messagesRecyclerView.setAdapter(messagesAdapter);
 
         sendButton.setOnClickListener((view1) -> {
             Utils.netQueue.postRunnable(() -> {
@@ -63,7 +147,8 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
                 messageRequest.flags = MESSAGE_FLAG_FROM_ID;
                 messageRequest.date = (int) (System.currentTimeMillis() / 1000L);
                 messageRequest.from_id = User.currentUser.id;
-                messageRequest.to_id = new RPC.PM_peerUser(chatID);
+                messageRequest.to_peer = new RPC.PM_peerUser(chatID);
+                messageRequest.to_id = chatID;
                 messageRequest.unread = true;
 
                 NetworkManager.getInstance().sendRequest(messageRequest, (response, error) -> {
@@ -75,29 +160,24 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
                     messageRequest.id = updateMsgID.newID;
                     MessagesManager.getInstance().putMessage(messageRequest);
 
-                    if (messageRequest.to_id.user_id == User.currentUser.id)
+                    if (messageRequest.to_peer.user_id == User.currentUser.id)
                         MessagesManager.getInstance().lastMessages.put(messageRequest.from_id, messageRequest.id);
                     else
-                        MessagesManager.getInstance().lastMessages.put(messageRequest.to_id.user_id, messageRequest.id);
+                        MessagesManager.getInstance().lastMessages.put(messageRequest.to_peer.user_id, messageRequest.id);
 
-                    messagesAdapter.messageIDs.add(messageRequest.id);
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        messagesAdapter.notifyDataSetChanged();
-                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
-                    });
+                    chatViewModel.insert(messageRequest);
                 });
             });
             messageInput.setText("");
         });
 
+
         return view;
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
-        MessagesManager.getInstance().loadMessages(chatID, 15, 0, false);
     }
 
     @Override
@@ -105,164 +185,71 @@ public class FragmentChat extends AbsFragmentChat implements NotificationManager
         super.onPause();
     }
 
-//    private View createSelectedCustomView() {
-//        return getActivity().getLayoutInflater().inflate(R.layout.toolbar_selected_messages, null);
-//    }
+//    private MessagesAdapter.IMessageClickListener iMessageClickListener = new MessagesAdapter.IMessageClickListener() {
+//        @Override
+//        public void longClick() {
 //
-//    private View createChatCustomView() {
-//        final View customView = getLayoutInflater().inflate(R.layout.toolbar_chat, null);
-//        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.toolbar_title);
-//        final CircularImageView toolbarAvatar = (CircularImageView) customView.findViewById(R.id.toolbar_avatar);
-//        final ImageView backToolbar = (ImageView) customView.findViewById(R.id.toolbar_back_btn);
-//
-//        backToolbar.setOnClickListener(view -> getActivity().getSupportFragmentManager().popBackStack());
-//
-//        final RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
-//        if (user != null) {
-//            chatTitleTextView.setText(Utils.formatUserName(user));
-//            if (!user.photoURL.url.isEmpty())
-//                Utils.loadPhoto(user.photoURL.url, toolbarAvatar);
 //        }
 //
-//        customView.setOnClickListener(v -> {
-//            final Bundle bundle = new Bundle();
-//            bundle.putInt(CHAT_ID_KEY, chatID);
-//            final FragmentFriendProfile fragmentFriendProfile = FragmentFriendProfile.newInstance();
-//            fragmentFriendProfile.setArguments(bundle);
-//            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//            Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);
-//        });
+//        @Override
+//        public void forward(LinkedList<Long> checkedMessageIDs) {
 //
-//        return customView;
-//    }
-//
-//    @SuppressLint("DefaultLocale")
-//    private View createChatGroupCustomView() {
-//        final View customView = getLayoutInflater().inflate(R.layout.toolbar_chat_group, null);
-//        final TextView chatTitleTextView = (TextView) customView.findViewById(R.id.toolbar_title);
-//        final TextView participantsCountTextView = (TextView) customView.findViewById(R.id.participants_count);
-//        final CircularImageView toolbarAvatar = (CircularImageView) customView.findViewById(R.id.chat_group_avatar);
-//        final ImageView backToolbar = (ImageView) customView.findViewById(R.id.toolbar_back_btn);
-//
-//        backToolbar.setOnClickListener(view -> getActivity().getSupportFragmentManager().popBackStack());
-//
-//        final RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
-//        if (group != null) {
-//            chatTitleTextView.setText(group.title);
-//            participantsCountTextView.setText(String.format("%s: %d", getString(R.string.participants), groupUsers.size()));
-//            if (!group.photoURL.url.isEmpty())
-//                Utils.loadPhoto(group.photoURL.url, toolbarAvatar);
 //        }
 //
-//        customView.setOnClickListener(v -> {
-//            final Bundle bundle = new Bundle();
-//            bundle.putInt("chat_id", chatID);
-//            final FragmentGroupSettings fragmentGroupSettings = FragmentGroupSettings.newInstance();
-//            fragmentGroupSettings.setArguments(bundle);
-//            final FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//            Utils.replaceFragmentWithAnimationSlideFade(fragmentManager, fragmentGroupSettings, null);
-//        });
-//
-//        return customView;
-//    }
-
-    @Override
-    public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
-        if (id == NotificationManager.NotificationEvent.chatAddMessages) {
-            if (args.length < 1) return;
-
-            LinkedList<Long> messages = (LinkedList<Long>) args[0];
-            Boolean onScroll = (Boolean) args[1];
-
-            if (messagesAdapter == null || messagesAdapter.messageIDs == null) return;
-
-            if (!onScroll)
-                messagesAdapter.messageIDs.addAll(messages);
-            else
-                messagesAdapter.messageIDs.addAll(0, messages);
-
-            ApplicationLoader.applicationHandler.post(() -> {
-                messagesAdapter.notifyDataSetChanged();
-                if (!onScroll) {
-                    if (((LinearLayoutManager) messagesRecyclerView.getLayoutManager()).findLastVisibleItemPosition() >= messagesRecyclerView.getAdapter().getItemCount() - 2)
-                        messagesRecyclerView.smoothScrollToPosition(messagesRecyclerView.getAdapter().getItemCount() - 1);
-                } else {
-                    if (messagesAdapter.getItemCount() > 0) {
-                        int scrolledCount = (int) args[2];
-                        messagesRecyclerView.scrollToPosition(scrolledCount + ((LinearLayoutManager) messagesRecyclerView.getLayoutManager()).findLastVisibleItemPosition());
-                    }
-                }
-//                loadingMessages = false;
-            });
-        }
-    }
-
-    //
-    private MessagesAdapter.IMessageClickListener iMessageClickListener = new MessagesAdapter.IMessageClickListener() {
-        @Override
-        public void longClick() {
-
-        }
-
-        @Override
-        public void forward(LinkedList<Long> checkedMessageIDs) {
-
-        }
-
-        @Override
-        public void delete(LinkedList<Long> checkedMessageIDs) {
-//            for (long msgid : checkedMessageIDs) {
-//                if (MessagesManager.getInstance().messages.get(msgid).from_id != User.currentUser.id) {
-//                    Toast.makeText(getContext(), R.string.you_can_not_delete_someone_messages, Toast.LENGTH_SHORT).show();
-//                    messagesAdapter.deselectAll();
-//                    return;
-//                }
-//            }
-//
-//            final boolean[] checkPermission = {false};
-//            final String[] text = {getString(R.string.delete_for_everyone)};
-//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-//                    .setMultiChoiceItems(text, checkPermission, (dialogInterface, which, isChecked) -> checkPermission[which] = isChecked)
-//                    .setTitle(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
-//                    .setCancelable(false)
-//                    .setNegativeButton(getContext().getString(R.string.button_cancel), (dialogInterface, i) -> {
-//                    })
-//                    .setPositiveButton(getContext().getString(R.string.button_ok), (dialogInterface, i) -> {
-//                        if (checkPermission[0]) {
-//                            Packet request;
-//                            if (!isGroup) {
-//                                request = new RPC.PM_deleteDialogMessages();
-//                                ((RPC.PM_deleteDialogMessages) request).messageIDs.addAll(checkedMessageIDs);
-//                            } else {
-//                                request = new RPC.PM_deleteGroupMessages();
-//                                ((RPC.PM_deleteGroupMessages) request).messageIDs.addAll(checkedMessageIDs);
-//                            }
-//
-//                            NetworkManager.getInstance().sendRequest(request, (response, error) -> {
-//                                if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
-//                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.unable_to_delete_messages, Toast.LENGTH_SHORT).show());
-//                                    return;
-//                                }
-//
-//                                if (response instanceof RPC.PM_boolTrue) {
-//                                    ApplicationLoader.applicationHandler.post(() -> {
-//                                        for (Long msgID : checkedMessageIDs) {
-//                                            RPC.Message msg = MessagesManager.getInstance().messages.get(msgID);
-//                                            MessagesManager.getInstance().deleteMessage(msg);
-//                                            messagesAdapter.messageIDs.remove(msgID);
-//                                        }
-//                                        messagesAdapter.notifyDataSetChanged();
-//                                    });
-//                                }
-//                            });
-//
-//                            messagesAdapter.deselectAll();
-//                        } else {
-//                            //TODO:delete message for user
-//                        }
-//                    });
-//            AlertDialog alertDialog = builder.create();
-//            alertDialog.show();
-        }
-    };
+//        @Override
+//        public void delete(LinkedList<Long> checkedMessageIDs) {
+////            for (long msgid : checkedMessageIDs) {
+////                if (MessagesManager.getInstance().messages.get(msgid).from_id != User.currentUser.id) {
+////                    Toast.makeText(getContext(), R.string.you_can_not_delete_someone_messages, Toast.LENGTH_SHORT).show();
+////                    messagesAdapter.deselectAll();
+////                    return;
+////                }
+////            }
+////
+////            final boolean[] checkPermission = {false};
+////            final String[] text = {getString(R.string.delete_for_everyone)};
+////            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+////                    .setMultiChoiceItems(text, checkPermission, (dialogInterface, which, isChecked) -> checkPermission[which] = isChecked)
+////                    .setTitle(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
+////                    .setCancelable(false)
+////                    .setNegativeButton(getContext().getString(R.string.button_cancel), (dialogInterface, i) -> {
+////                    })
+////                    .setPositiveButton(getContext().getString(R.string.button_ok), (dialogInterface, i) -> {
+////                        if (checkPermission[0]) {
+////                            Packet request;
+////                            if (!isGroup) {
+////                                request = new RPC.PM_deleteDialogMessages();
+////                                ((RPC.PM_deleteDialogMessages) request).messageIDs.addAll(checkedMessageIDs);
+////                            } else {
+////                                request = new RPC.PM_deleteGroupMessages();
+////                                ((RPC.PM_deleteGroupMessages) request).messageIDs.addAll(checkedMessageIDs);
+////                            }
+////
+////                            NetworkManager.getInstance().sendRequest(request, (response, error) -> {
+////                                if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+////                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.unable_to_delete_messages, Toast.LENGTH_SHORT).show());
+////                                    return;
+////                                }
+////
+////                                if (response instanceof RPC.PM_boolTrue) {
+////                                    ApplicationLoader.applicationHandler.post(() -> {
+////                                        for (Long msgID : checkedMessageIDs) {
+////                                            RPC.Message msg = MessagesManager.getInstance().messages.get(msgID);
+////                                            MessagesManager.getInstance().deleteMessage(msg);
+////                                            messagesAdapter.messageIDs.remove(msgID);
+////                                        }
+////                                        messagesAdapter.notifyDataSetChanged();
+////                                    });
+////                                }
+////                            });
+////
+////                            messagesAdapter.deselectAll();
+////                        } else {
+////                            //TODO:delete message for user
+////                        }
+////                    });
+////            AlertDialog alertDialog = builder.create();
+////            alertDialog.show();
+//        }
+//    };
 }

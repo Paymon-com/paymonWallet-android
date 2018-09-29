@@ -1,7 +1,9 @@
 package ru.paymon.android.adapters;
 
+import android.arch.paging.PagedListAdapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,25 +12,21 @@ import android.widget.TextView;
 
 import com.vanniktech.emoji.EmojiTextView;
 
-import java.util.LinkedList;
-
-import ru.paymon.android.MessagesManager;
+import androidx.recyclerview.selection.SelectionTracker;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.test2.MessageItemDetail;
+import ru.paymon.android.test2.MessageItemLookup;
+import ru.paymon.android.test2.ViewHolderWithDetails;
 import ru.paymon.android.utils.Utils;
 
 
-public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public LinkedList<Long> messageIDs = new LinkedList<>();
-    private IMessageClickListener iMessageClickListener;
+public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapter.BaseMessageViewHolder> {
+    private SelectionTracker selectionTracker;
 
-    public interface IMessageClickListener {
-        void longClick();
-
-        void delete(LinkedList<Long> checkedMessageIDs);
-
-        void forward(LinkedList<Long> checkedMessageIDs);
+    public MessagesAdapter(@NonNull DiffUtil.ItemCallback<RPC.Message> diffCallback) {
+        super(diffCallback);
     }
 
     enum ViewTypes {
@@ -36,14 +34,18 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         RECEIVED_MESSAGE,
     }
 
-    public MessagesAdapter(IMessageClickListener iMessageClickListener) {
-        this.iMessageClickListener = iMessageClickListener;
+    public SelectionTracker getSelectionTracker() {
+        return selectionTracker;
+    }
+
+    public void setSelectionTracker(SelectionTracker selectionTracker) {
+        this.selectionTracker = selectionTracker;
     }
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
-        RecyclerView.ViewHolder vh = null;
+    public BaseMessageViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
+        BaseMessageViewHolder vh = null;
 
         Context context = viewGroup.getContext();
         ViewTypes viewTypes = ViewTypes.values()[viewType];
@@ -61,84 +63,45 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        RPC.Message message = getMessage(position);
+    public void onBindViewHolder(BaseMessageViewHolder holder, int position) {
+        RPC.Message message = getItem(position);
 
-        if (holder instanceof SentMessageViewHolder) {
-            final SentMessageViewHolder sentMessageViewHolder = (SentMessageViewHolder) holder;
-            sentMessageViewHolder.msg.setText(message.text);
-            sentMessageViewHolder.time.setText(Utils.formatDateTime(message.date, true));
-        } else if (holder instanceof ReceiveMessageViewHolder) {
-            final ReceiveMessageViewHolder receiveMessageViewHolder = (ReceiveMessageViewHolder) holder;
-            receiveMessageViewHolder.msg.setText(message.text);
-            receiveMessageViewHolder.time.setText(Utils.formatDateTime(message.date, true));
-        }
-    }
+        if (message == null)
+            return;
 
-    @Override
-    public int getItemCount() {
-        return messageIDs.size();
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return messageIDs.get(position);
-    }
-
-    private RPC.Message getMessage(int position) {
-        return MessagesManager.getInstance().messages.get(getItemId(position));
+        holder.bind(message);
     }
 
     @Override
     public int getItemViewType(int position) {
-        RPC.Message msg = getMessage(position);
+        RPC.Message msg = getItem(position);
+
+        if (msg == null) return 0;
 
         boolean isSent = msg.from_id == User.currentUser.id;
 
-        if(isSent)
+        if (isSent)
             return ViewTypes.SENT_MESSAGE.ordinal();
         else
             return ViewTypes.RECEIVED_MESSAGE.ordinal();
+
     }
 
-//    public void deselectAll() {
-//        checkedMessageIDs.clear();
-//        notifyDataSetChanged();
-//    }
-//
-//    private void init() {
-//        final TextView textViewSelectedTitle = (TextView) selectedCustomView.findViewById(R.id.selected_title);
-//        final ImageView imageViewSelectedDelete = (ImageView) selectedCustomView.findViewById(R.id.selected_delete);
-//        final ImageView imageViewSelectedCopy = (ImageView) selectedCustomView.findViewById(R.id.selected_copy);
-//        final ImageView imageViewSelectedForward = (ImageView) selectedCustomView.findViewById(R.id.selected_forward);
-//        final ImageView backToolbar = (ImageView) selectedCustomView.findViewById(R.id.selected_back);
-//
-//        backToolbar.setOnClickListener(view -> deselectAll());
-//
-//        imageViewSelectedForward.setOnClickListener((view -> {
-//            iMessageClickListener.forward(checkedMessageIDs);
-//        }));
-//
-//        imageViewSelectedDelete.setOnClickListener((view) -> {
-//            iMessageClickListener.delete(checkedMessageIDs);
-//        });
-//
-//        imageViewSelectedCopy.setOnClickListener((view) -> {
-//            StringBuilder copiedMessages = new StringBuilder();
-//            for (int i = 0; i < checkedMessageIDs.size(); i++) {
-//                String text = i < checkedMessageIDs.size() - 1 ? MessagesManager.getInstance().messages.get(checkedMessageIDs.get(i)).text : MessagesManager.getInstance().messages.get(checkedMessageIDs.get(i)).text + "\n";
-//                copiedMessages.append(text);
-//            }
-//
-//            ClipboardManager clipboard = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService(CLIPBOARD_SERVICE);
-//            ClipData clip = ClipData.newPlainText("Copied messages", copiedMessages.toString());
-//            clipboard.setPrimaryClip(clip);
-//            deselectAll();
-//        });
-//    }
+    public abstract class BaseMessageViewHolder extends RecyclerView.ViewHolder implements ViewHolderWithDetails {
 
+        private BaseMessageViewHolder(@NonNull View itemView) {
+            super(itemView);
+        }
 
-    public static class SentMessageViewHolder extends RecyclerView.ViewHolder {
+        @Override
+        public MessageItemLookup.ItemDetails getItemDetails() {
+            return new MessageItemDetail(getAdapterPosition(), getCurrentList().get(getAdapterPosition()));
+        }
+
+        abstract void bind(RPC.Message message);
+    }
+
+    public class SentMessageViewHolder extends BaseMessageViewHolder {
         public final EmojiTextView msg;
         public final TextView time;
 
@@ -147,9 +110,16 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             msg = (EmojiTextView) itemView.findViewById(R.id.message_text_view);
             time = (TextView) itemView.findViewById(R.id.timestamp_text_view);
         }
+
+        @Override
+        void bind(RPC.Message message) {
+            itemView.setActivated(selectionTracker.isSelected(message));
+            msg.setText(message.text);
+            time.setText(Utils.formatDateTime(message.date, true));
+        }
     }
 
-    public static class ReceiveMessageViewHolder extends RecyclerView.ViewHolder {
+    public class ReceiveMessageViewHolder extends BaseMessageViewHolder {
         public final EmojiTextView msg;
         public final TextView time;
 
@@ -157,6 +127,13 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(view);
             msg = (EmojiTextView) view.findViewById(R.id.message_text_view);
             time = (TextView) view.findViewById(R.id.timestamp_text_view);
+        }
+
+        @Override
+        void bind(RPC.Message message) {
+            itemView.setActivated(selectionTracker.isSelected(message));
+            msg.setText(message.text);
+            time.setText(Utils.formatDateTime(message.date, true));
         }
     }
 }
