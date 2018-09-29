@@ -4,13 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar_chats"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"/>
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/fragment_chats_swipe_layout"
         android:layout_width="match_parent"

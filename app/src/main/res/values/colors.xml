@@ -5,6 +5,7 @@
     <color name="chat_background">#efefef</color>
     <color name="nav_clicker">#00ffffff</color>
     <color name="holo_blue_dark">#007aff</color>
+    <color name="blue_bright">#33b5e5</color>
     <color name="blue_dark">#0099cc</color>
     <color name="blue_dark_light">#a0e7ff</color>
 
@@ -16,6 +17,7 @@
     <color name="black_light">#0d000000</color>
     <color name="blue_light">#280099cc</color>
     <color name="white_light">#28ffffff</color>
+    <color name="gray_dim">#c2c2c2</color>
     <color name="gray">#1e7d7d7d</color>
     <color name="gray_white">#1ebfbfbf</color>
     <color name="dark_gray">#dab3b3b3</color>

@@ -5,6 +5,16 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <TextView
+        android:id="@+id/connecting_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="Connecting"
+        android:textColor="@color/white"
+        android:visibility="gone" />
+
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -22,14 +32,20 @@
             app:navGraph="@navigation/main_nav_graph" />
     </FrameLayout>
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/transparent_gradient" />
+
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/white"
+        android:background="@color/colorPrimary"
         app:itemIconTint="@drawable/bottom_main_bar_item_icon_tint"
-        app:itemTextColor="@drawable/bottom_main_bar_item_icon_tint"
-        app:labelVisibilityMode="labeled"
+        app:labelVisibilityMode="auto"
         app:menu="@menu/main_bottom_bar_menu" />
 </LinearLayout>

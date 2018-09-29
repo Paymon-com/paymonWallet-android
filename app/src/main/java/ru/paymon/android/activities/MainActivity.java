@@ -5,14 +5,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.navigation.Navigation;
+import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
+import ru.paymon.android.net.NetworkManager;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NotificationManager.IListener {
     private static long back_pressed;
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             startActivityForResult(intent, 10);
             return;
         }
+
+        textView = findViewById(R.id.connecting_activity);
 
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -102,16 +111,29 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onResume() {
         super.onResume();
         KeyGuardActivity.showCD();
+        NotificationManager.getInstance().addObserver(this,NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
+        NotificationManager.getInstance().addObserver(this,NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
+        NotificationManager.getInstance().removeObserver(this,NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
+        NotificationManager.getInstance().removeObserver(this,NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+    }
+
+    @Override
+    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
+        if(event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED){
+            textView.setVisibility(View.GONE);
+        }else if(event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED){
+            textView.setVisibility(View.VISIBLE);
+        }
     }
 
 //    @Override

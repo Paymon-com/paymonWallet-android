@@ -20,7 +20,7 @@ public class ContactsGlobalAdapter extends RecyclerView.Adapter<RecyclerView.Vie
     public LinkedList<RPC.UserObject> contactsGlobalItems = new LinkedList<>();
 
     public ContactsGlobalAdapter() {
-        for (int i = 0; i < UsersManager.getInstance().searchUsers.size(); i++){
+        for (int i = 0; i < UsersManager.getInstance().searchUsers.size(); i++) {
             RPC.UserObject userGlobal = UsersManager.getInstance().searchUsers.get(UsersManager.getInstance().searchUsers.keyAt(i));
             contactsGlobalItems.add(userGlobal);
         }
@@ -36,13 +36,13 @@ public class ContactsGlobalAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        RPC.UserObject user = contactsGlobalItems.get(position);
+        RPC.UserObject userGlobal = contactsGlobalItems.get(position);
         ContactsGlobalItemViewHolder contactsGlobalItemViewHolder = (ContactsGlobalItemViewHolder) holder;
 
-        if (!user.photoURL.url.isEmpty())
-            Utils.loadPhoto(user.photoURL.url, contactsGlobalItemViewHolder.photo);
+        if (!userGlobal.photoURL.url.isEmpty())
+            Utils.loadPhoto(userGlobal.photoURL.url, contactsGlobalItemViewHolder.photo);
 
-        contactsGlobalItemViewHolder.name.setText(Utils.formatUserName(user));
+        contactsGlobalItemViewHolder.name.setText(Utils.formatUserName(userGlobal));
     }
 
     @Override

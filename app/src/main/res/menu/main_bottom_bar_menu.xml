@@ -2,18 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/fragmentChats"
-        android:icon="@drawable/ic_menu_dialogs"
-        android:title="@string/title_chats" />
+        android:icon="@drawable/chats_white"
+        android:title="" />
     <item
         android:id="@+id/fragmentContacts"
-        android:icon="@drawable/ic_menu_contacts"
-        android:title="@string/title_contacts" />
+        android:icon="@drawable/contacts_white"
+        android:title="" />
     <item
         android:id="@+id/fragmentMoney"
-        android:icon="@drawable/ic_menu_money"
-        android:title="@string/title_money" />
+        android:icon="@drawable/money_white"
+        android:title="" />
     <item
         android:id="@+id/fragmentMoreMenu"
-        android:icon="@drawable/ic_burger"
-        android:title="@string/title_more" />
+        android:icon="@drawable/more_white"
+        android:title="" />
 </menu>

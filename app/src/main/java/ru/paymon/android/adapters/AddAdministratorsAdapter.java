@@ -26,7 +26,7 @@ public class AddAdministratorsAdapter extends RecyclerView.Adapter<RecyclerView.
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.create_group_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_create_group_item, parent, false);
         return new AddAdministratorsViewHolder(view);
     }
 

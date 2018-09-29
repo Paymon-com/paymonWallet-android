@@ -1,25 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
-    <include layout="@layout/toolbar_create_group">
+    <include
+        android:id="@+id/include3"
+        layout="@layout/toolbar_create_group" />
 
-    </include>
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/transparent_gradient_rev" />
 
     <EditText
         android:id="@+id/edit_text_create_chats"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_thin"
+        android:gravity="center"
+        android:hint="Search your friend"
+        android:selectAllOnFocus="false"
+        android:textColor="@color/white"
+        android:textColorHint="@color/gray_dim" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/transparent_gradient_rev" />
+
 
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/fragment_create_group_rv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/fragment_create_group_rv"/>
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/transparent_gradient" />
+
+    <Button
+        android:id="@+id/toolbar_next_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:text="Create group"
+        android:textAllCaps="false"
+        android:textColor="@color/blue_bright"
+        android:textSize="18sp" />
 
 </LinearLayout>
