@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -12,6 +13,7 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 
@@ -53,7 +55,7 @@ public class FragmentCreateGroup extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_create_group, container, false);
 
-        ImageButton acceptButton = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+        Button acceptButton = (Button) view.findViewById(R.id.toolbar_next_btn);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
 
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
@@ -69,6 +71,8 @@ public class FragmentCreateGroup extends Fragment {
         RecyclerView contactsRecView = (RecyclerView) view.findViewById(R.id.fragment_create_group_rv);
         contactsRecView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(contactsRecView.getContext(), llm.getOrientation());
+        contactsRecView.addItemDecoration(dividerItemDecoration);
         contactsRecView.setLayoutManager(llm);
 
         EditText editText = (EditText) view.findViewById(R.id.edit_text_create_chats);

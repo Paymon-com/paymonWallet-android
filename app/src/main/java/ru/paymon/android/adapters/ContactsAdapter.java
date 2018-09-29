@@ -59,7 +59,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             super(itemView);
             photo = (CircularImageView) itemView.findViewById(R.id.contacts_photo);
             name = (TextView) itemView.findViewById(R.id.contacts_name);
-            login = (TextView) itemView.findViewById(R.id.contacts_login);
+//            login = (TextView) itemView.findViewById(R.id.contacts_login);
         }
     }
 

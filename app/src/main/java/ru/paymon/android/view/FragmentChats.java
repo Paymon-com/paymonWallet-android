@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -70,9 +71,9 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         View pageDialogs = inflater.inflate(R.layout.fragment_chats_page, container, false);
         View pageAll = inflater.inflate(R.layout.fragment_chats_page, container, false);
         View pageGroups = inflater.inflate(R.layout.fragment_chats_page, container, false);
-        View toolbar = view.findViewById(R.id.toolbar);
-        ImageButton toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
-        ImageButton toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
+        ImageButton createGroupButton = pageAll.findViewById(R.id.create_group_image_button);
+//        ImageButton toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
+//        ImageButton toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
         RecyclerView chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
         RecyclerView chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
         RecyclerView groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
@@ -80,8 +81,8 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
-        toolbarCreateGroup.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentCreateGroup));
-        toolbarSearch.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentSearch));
+        createGroupButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentCreateGroup));
+//        toolbarSearch.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentSearch));
 
         List<View> pages = Arrays.asList(pageDialogs, pageAll, pageGroups);
         SlidingChatsAdapter pagerAdapter = new SlidingChatsAdapter(pages);
@@ -89,8 +90,11 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         viewPager.setAdapter(pagerAdapter);
         viewPager.setCurrentItem(1);
 
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(chatsAllRecyclerView.getContext(), (new LinearLayoutManager(getContext())).getOrientation());
+
         chatsAllRecyclerView.setHasFixedSize(true);
         chatsAllRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        chatsAllRecyclerView.addItemDecoration(dividerItemDecoration);
         chatsAllRecyclerView.setAdapter(chatsAdapter);
 
         chatsRecyclerView.setHasFixedSize(true);
