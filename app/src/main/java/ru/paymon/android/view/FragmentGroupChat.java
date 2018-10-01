@@ -17,9 +17,9 @@ import ru.paymon.android.User;
 import ru.paymon.android.adapters.GroupMessagesAdapter;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.test.DiffUtilCallback;
-import ru.paymon.android.test2.MessageItemKeyProvider;
-import ru.paymon.android.test2.MessageItemLookup;
+import ru.paymon.android.pagedlib.MessageDiffUtilCallback;
+import ru.paymon.android.selection.MessageItemKeyProvider;
+import ru.paymon.android.selection.MessageItemLookup;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.ChatViewModel;
 
@@ -49,7 +49,7 @@ public class FragmentGroupChat extends AbsFragmentChat {
 
         chatViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
 
-        messagesAdapter = new GroupMessagesAdapter(new DiffUtilCallback());
+        messagesAdapter = new GroupMessagesAdapter(new MessageDiffUtilCallback());
         chatViewModel.getMessages(chatID).observe(this, pagedList -> {
             messagesAdapter.submitList(pagedList);
             selectionTracker = new SelectionTracker.Builder<>(
@@ -93,7 +93,7 @@ public class FragmentGroupChat extends AbsFragmentChat {
 
         messagesRecyclerView.setAdapter(messagesAdapter);
 
-//        messagesAdapter = new GroupMessagesAdapter(new DiffUtilCallback());
+//        messagesAdapter = new GroupMessagesAdapter(new MessageDiffUtilCallback());
 //
 //        PagedList.Config config = new PagedList.Config.Builder()
 //                .setInitialLoadSizeHint(100)

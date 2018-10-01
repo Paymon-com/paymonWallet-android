@@ -1,4 +1,4 @@
-package ru.paymon.android.test2;
+package ru.paymon.android.selection;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;

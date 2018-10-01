@@ -4,28 +4,36 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
+import android.arch.paging.DataSource;
+import android.arch.paging.LivePagedListBuilder;
+import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.util.Collections;
 import java.util.LinkedList;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
-import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.pagedlib.ChatsBoundaryCallback;
 import ru.paymon.android.utils.Utils;
 
 public class ChatsViewModel extends AndroidViewModel {
-    private MutableLiveData<LinkedList<ChatsItem>> chatsItemsData;
-    private MutableLiveData<LinkedList<ChatsItem>> dialogsItemsData;
-    private MutableLiveData<LinkedList<ChatsItem>> groupsItemsData;
+    //    private MutableLiveData<LinkedList<ChatsItem>> chatsItemsData;
+//    private MutableLiveData<LinkedList<ChatsItem>> dialogsItemsData;
+//    private MutableLiveData<LinkedList<ChatsItem>> groupsItemsData;
     private MutableLiveData<Boolean> showProgress = new MutableLiveData<>();
+    private DataSource.Factory<Integer, ChatsItem> factory;
+    private LiveData<PagedList<ChatsItem>> allChats;
+    private LiveData<PagedList<ChatsItem>> dialogsChats;
+    private LiveData<PagedList<ChatsItem>> groupsChats;
 
     public ChatsViewModel(@NonNull Application application) {
         super(application);
@@ -35,30 +43,72 @@ public class ChatsViewModel extends AndroidViewModel {
         loadChatsData();
     }
 
-    public LiveData<LinkedList<ChatsItem>> getChatsData() {
-        if (chatsItemsData == null)
-            chatsItemsData = new MutableLiveData<>();
-        return chatsItemsData;
+//    public LiveData<LinkedList<ChatsItem>> getChatsData() {
+//        if (chatsItemsData == null)
+//            chatsItemsData = new MutableLiveData<>();
+//        return chatsItemsData;
+//    }
+
+    public LiveData<PagedList<ChatsItem>> getChats() {
+        if (allChats == null) {
+            factory = ApplicationLoader.db.chatsDao().chats();
+            final PagedList.Config config = new PagedList.Config.Builder()
+                    .setInitialLoadSizeHint(10)
+                    .setPageSize(10)
+                    .setEnablePlaceholders(false)
+                    .build();
+            allChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
+        }
+        return allChats;
     }
 
-    public LiveData<LinkedList<ChatsItem>> getDialogsData() {
-        if (dialogsItemsData == null)
-            dialogsItemsData = new MutableLiveData<>();
-        return dialogsItemsData;
+    public LiveData<PagedList<ChatsItem>> getGroupChats() {
+        if (groupsChats == null) {
+            factory = ApplicationLoader.db.chatsDao().chatsByChatType(true);
+            final PagedList.Config config = new PagedList.Config.Builder()
+                    .setInitialLoadSizeHint(10)
+                    .setPageSize(10)
+                    .setEnablePlaceholders(false)
+                    .build();
+            groupsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
+        }
+
+        return groupsChats;
     }
 
-    public LiveData<LinkedList<ChatsItem>> getGroupsData() {
-        if (groupsItemsData == null)
-            groupsItemsData = new MutableLiveData<>();
-        return groupsItemsData;
+    public LiveData<PagedList<ChatsItem>> getDialogsChats() {
+        if (dialogsChats == null) {
+            factory = ApplicationLoader.db.chatsDao().chatsByChatType(false);
+            final PagedList.Config config = new PagedList.Config.Builder()
+                    .setInitialLoadSizeHint(10)
+                    .setPageSize(10)
+                    .setEnablePlaceholders(false)
+                    .build();
+            dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
+        }
+
+        return dialogsChats;
     }
+
+
+//    public LiveData<LinkedList<ChatsItem>> getDialogsData() {
+//        if (dialogsItemsData == null)
+//            dialogsItemsData = new MutableLiveData<>();
+//        return dialogsItemsData;
+//    }
+//
+//    public LiveData<LinkedList<ChatsItem>> getGroupsData() {
+//        if (groupsItemsData == null)
+//            groupsItemsData = new MutableLiveData<>();
+//        return groupsItemsData;
+//    }
 
     public LiveData<Boolean> getProgressState() {
         return showProgress;
     }
 
     private void loadChatsData() {
-        if(showProgress.getValue() != null && showProgress.getValue())
+        if (showProgress.getValue() != null && showProgress.getValue())
             return;
 
         Utils.netQueue.postRunnable(() -> {
@@ -80,7 +130,7 @@ public class ChatsViewModel extends AndroidViewModel {
 
                     for (RPC.UserObject usr : packet.users) {
                         UsersManager.getInstance().putUser(usr);
-                        Log.e("AAA", (usr.email == null ? "null" : usr.email) + " qqq" ); //TODO: delete this shitty log
+                        Log.e("AAA", (usr.email == null ? "null" : usr.email) + " qqq"); //TODO: delete this shitty log
                     }
 
                     for (RPC.Group grp : packet.groups)
@@ -162,27 +212,27 @@ public class ChatsViewModel extends AndroidViewModel {
                                 if (user != null)
                                     lastMsgPhoto = user.photoURL;
 
-                                groupItems.add(new ChatsGroupItem(group.id, group.photoURL, lastMsgPhoto, title, lastMessageText, lastMessage.date, lastMessage.itemType));
+                                groupItems.add(new ChatsItem(group.id, group.photoURL, title, lastMessageText, lastMessage.date, lastMessage.itemType, lastMsgPhoto));
                             }
                         }
                     }
 
-                    if (!dialogsItems.isEmpty()) {
-                        Collections.sort(dialogsItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
-                        dialogsItemsData.postValue(dialogsItems);
-                    }
+//                    if (!dialogsItems.isEmpty()) {
+//                        Collections.sort(dialogsItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
+//                        dialogsItemsData.postValue(dialogsItems);
+//                    }
 
-                    if (!groupItems.isEmpty()) {
-                        Collections.sort(groupItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
-                        groupsItemsData.postValue(groupItems);
-                    }
+//                    if (!groupItems.isEmpty()) {
+//                        Collections.sort(groupItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
+//                        groupsItemsData.postValue(groupItems);
+//                    }
 
                     if (!dialogsItems.isEmpty() || !groupItems.isEmpty()) {
                         LinkedList<ChatsItem> chatsItems = new LinkedList<>();
                         chatsItems.addAll(dialogsItems);
                         chatsItems.addAll(groupItems);
-                        Collections.sort(chatsItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
-                        chatsItemsData.postValue(chatsItems);
+                        ApplicationLoader.db.chatsDao().insertList(chatsItems);
+//                        chatsItemsData.postValue(chatsItems);
                     }
 
                     showProgress.postValue(false);

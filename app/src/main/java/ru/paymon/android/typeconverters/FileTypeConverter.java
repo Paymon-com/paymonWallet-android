@@ -1,4 +1,4 @@
-package ru.paymon.android.test;
+package ru.paymon.android.typeconverters;
 
 import android.arch.persistence.room.TypeConverter;
 

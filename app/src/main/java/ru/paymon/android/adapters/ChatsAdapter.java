@@ -1,7 +1,8 @@
 package ru.paymon.android.adapters;
 
+import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
+import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,19 +11,14 @@ import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import java.util.LinkedList;
-
 import ru.paymon.android.R;
-import ru.paymon.android.models.ChatsGroupItem;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.utils.Utils;
 
-public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsViewHolder> {
-    public LinkedList<ChatsItem> chatsItemsList = new LinkedList<>();
-    private IChatsClickListener iChatsClickListener;
+public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseChatsViewHolder> {
 
-    public interface IChatsClickListener {
-        void openChat(int chatID, boolean isGroup);
+    public ChatsAdapter(@NonNull DiffUtil.ItemCallback<ChatsItem> diffCallback) {
+        super(diffCallback);
     }
 
     enum ViewTypes {
@@ -30,13 +26,9 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
         GROUP_ITEM
     }
 
-    public ChatsAdapter(IChatsClickListener iChatsClickListener) {
-        this.iChatsClickListener = iChatsClickListener;
-    }
-
     @Override
-    public CommonChatsViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-        CommonChatsViewHolder vh = null;
+    public BaseChatsViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        BaseChatsViewHolder vh = null;
         ViewTypes viewTypes = ViewTypes.values()[viewType];
         switch (viewTypes) {
             case ITEM:
@@ -53,97 +45,36 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CommonChatsViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseChatsViewHolder holder, int position) {
         final ChatsItem chatsItem = getItem(position);
 
-        final String name = chatsItem.name;
-        final String lastMessageText = chatsItem.lastMessageText;
-        final int chatID = chatsItem.chatID;
-        final String avatarPhotoURL = chatsItem.photoURL.url;
+        if (chatsItem == null)
+            return;
 
-        ViewTypes viewTypes = ViewTypes.values()[this.getItemViewType(position)];
-        switch (viewTypes) {
-            case ITEM:
-                final ChatsViewHolder chatsViewHolder = (ChatsViewHolder) holder;
-
-                if (!avatarPhotoURL.isEmpty())
-                    Utils.loadPhoto(avatarPhotoURL, chatsViewHolder.avatar);
-
-                if (name != null && !name.isEmpty())
-                    chatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(chatsViewHolder.name.getPaint(), name)));
-                else
-                    chatsViewHolder.name.setText("");
-
-                if (lastMessageText != null && !lastMessageText.isEmpty())
-                    chatsViewHolder.msg.setText(lastMessageText.substring(0, Utils.getAvailableTextLength(chatsViewHolder.msg.getPaint(), lastMessageText)));
-                else
-                    chatsViewHolder.msg.setText("");
-
-                chatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
-
-                chatsViewHolder.mainLayout.setOnClickListener((view -> iChatsClickListener.openChat(chatID, false)));
-
-                break;
-            case GROUP_ITEM:
-                final GroupChatsViewHolder groupChatsViewHolder = (GroupChatsViewHolder) holder;
-                final String lastMessagePhotoURL = ((ChatsGroupItem) chatsItem).lastMsgPhotoURL == null ? "" : ((ChatsGroupItem) chatsItem).lastMsgPhotoURL.url;
-
-                if (!avatarPhotoURL.isEmpty())
-                    Utils.loadPhoto(avatarPhotoURL, groupChatsViewHolder.avatar);
-
-                if (!lastMessagePhotoURL.isEmpty())
-                    Utils.loadPhoto(lastMessagePhotoURL, groupChatsViewHolder.lastMshPhoto);
-
-                if (name != null && !name.isEmpty())
-                    groupChatsViewHolder.name.setText(name.substring(0, Utils.getAvailableTextLength(groupChatsViewHolder.name.getPaint(), name)));
-                else
-                    groupChatsViewHolder.name.setText("");
-
-                if (lastMessageText != null && !lastMessageText.isEmpty())
-                    groupChatsViewHolder.msg.setText(lastMessageText.substring(0, Utils.getAvailableTextLength(groupChatsViewHolder.msg.getPaint(), lastMessageText)));
-                else
-                    groupChatsViewHolder.msg.setText("");
-
-                groupChatsViewHolder.time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
-
-                groupChatsViewHolder.mainLayout.setOnClickListener((view -> iChatsClickListener.openChat(chatID, true)));
-                break;
-        }
+        holder.bind(chatsItem);
     }
 
     @Override
     public int getItemViewType(int position) {
-        return chatsItemsList.get(position) instanceof ChatsGroupItem ? ViewTypes.GROUP_ITEM.ordinal() : ViewTypes.ITEM.ordinal();
+        return getCurrentList().get(position).isGroup ? ViewTypes.GROUP_ITEM.ordinal() : ViewTypes.ITEM.ordinal();
     }
 
-    @Override
-    public int getItemCount() {
-        return chatsItemsList.size();
-    }
+    public abstract static class BaseChatsViewHolder extends RecyclerView.ViewHolder {
+//        private final  ConstraintLayout mainLayout;
 
-    private ChatsItem getItem(int position) {
-        return chatsItemsList.get(position);
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(@NonNull CommonChatsViewHolder holder) {
-        super.onViewDetachedFromWindow(holder);
-    }
-
-    public static class CommonChatsViewHolder extends RecyclerView.ViewHolder {
-        public final ConstraintLayout mainLayout;
-
-        public CommonChatsViewHolder(View itemView) {
+        private BaseChatsViewHolder(View itemView) {
             super(itemView);
-            mainLayout = (ConstraintLayout) itemView.findViewById(R.id.main_layout);
+//            mainLayout = (ConstraintLayout) itemView.findViewById(R.id.main_layout);
         }
+
+        abstract void bind(ChatsItem chatsItem);
     }
 
-    public static class ChatsViewHolder extends CommonChatsViewHolder {
-        CircularImageView avatar;
-        TextView time;
-        TextView msg;
-        TextView name;
+    public class ChatsViewHolder extends BaseChatsViewHolder {
+        private final CircularImageView avatar;
+        private final TextView time;
+        private final TextView msg;
+        private final TextView name;
 
         ChatsViewHolder(View itemView) {
             super(itemView);
@@ -152,14 +83,36 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
             msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
             name = (TextView) itemView.findViewById(R.id.chats_item_name);
         }
+
+        @Override
+        void bind(ChatsItem chatsItem) {
+            final String nameString = chatsItem.name;
+            final String lastMessageText = chatsItem.lastMessageText;
+            final String avatarPhotoURL = chatsItem.photoURL.url;
+
+            if (!avatarPhotoURL.isEmpty())
+                Utils.loadPhoto(avatarPhotoURL, avatar);
+
+            if (nameString != null && !nameString.isEmpty())
+                name.setText(nameString);
+            else
+                name.setText("");
+
+            if (lastMessageText != null && !lastMessageText.isEmpty())
+                msg.setText(lastMessageText);
+            else
+                msg.setText("");
+
+            time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
+        }
     }
 
-    public static class GroupChatsViewHolder extends CommonChatsViewHolder {
-        CircularImageView avatar;
-        CircularImageView lastMshPhoto;
-        TextView time;
-        TextView msg;
-        TextView name;
+    public class GroupChatsViewHolder extends BaseChatsViewHolder {
+        private final CircularImageView avatar;
+        private final CircularImageView lastMshPhoto;
+        private final TextView time;
+        private final TextView msg;
+        private final TextView name;
 
         GroupChatsViewHolder(View itemView) {
             super(itemView);
@@ -168,6 +121,33 @@ public class ChatsAdapter extends RecyclerView.Adapter<ChatsAdapter.CommonChatsV
             time = (TextView) itemView.findViewById(R.id.chats_item_time);
             msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
             name = (TextView) itemView.findViewById(R.id.chats_item_name);
+        }
+
+        @Override
+        void bind(ChatsItem chatsItem) {
+            final String nameString = chatsItem.name;
+            final String lastMessageText = chatsItem.lastMessageText;
+            final String avatarPhotoURL = chatsItem.photoURL.url;
+
+            final String lastMessagePhotoURL = chatsItem.lastMsgPhotoURL == null ? "" : chatsItem.lastMsgPhotoURL.url;
+
+            if (!avatarPhotoURL.isEmpty())
+                Utils.loadPhoto(avatarPhotoURL, avatar);
+
+            if (!lastMessagePhotoURL.isEmpty())
+                Utils.loadPhoto(lastMessagePhotoURL, lastMshPhoto);
+
+            if (nameString != null && !nameString.isEmpty())
+                name.setText(nameString);
+            else
+                name.setText("");
+
+            if (lastMessageText != null && !lastMessageText.isEmpty())
+                msg.setText(lastMessageText);
+            else
+                msg.setText("");
+
+            time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
         }
     }
 }

@@ -8,7 +8,7 @@ import android.arch.paging.PagedList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.test.ChatBoundaryCallback;
+import ru.paymon.android.pagedlib.MessagesBoundaryCallback;
 
 public class ChatViewModel extends ViewModel {
     private DataSource.Factory<Integer,RPC.Message>  factory;
@@ -26,7 +26,7 @@ public class ChatViewModel extends ViewModel {
                     .setPageSize(100)
                     .setEnablePlaceholders(false)
                     .build();
-            messages = new LivePagedListBuilder<Integer,RPC.Message>(factory, config).setBoundaryCallback(new ChatBoundaryCallback()).build();
+            messages = new LivePagedListBuilder<Integer,RPC.Message>(factory, config).setBoundaryCallback(new MessagesBoundaryCallback()).build();
         }
         return messages;
     }

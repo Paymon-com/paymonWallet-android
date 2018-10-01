@@ -1,26 +1,10 @@
-package ru.paymon.android.test;
+package ru.paymon.android.typeconverters;
 
 import android.arch.persistence.room.TypeConverter;
 
 import ru.paymon.android.net.RPC;
 
 public class PeerConverter {
-//    @TypeConverter
-//    public static RPC.Peer toPeer(SerializableData stream) {
-//        return RPC.Peer.PMdeserialize(stream, stream.readInt32(true), true);
-//    }
-//
-//    @TypeConverter
-//    public static SerializableData toStream(RPC.Peer peer) {
-//        SerializedBuffer data = null;
-//        try {
-//            data = new SerializedBuffer(peer.getSize());
-//            peer.serializeToStream(data);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return data;
-//    }
 
     @TypeConverter
     public static RPC.Peer toPeer(String string) {

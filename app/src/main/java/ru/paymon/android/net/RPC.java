@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import ru.paymon.android.test.FileTypeConverter;
-import ru.paymon.android.test.MessageActionConverter;
-import ru.paymon.android.test.PeerConverter;
+import ru.paymon.android.typeconverters.FileTypeConverter;
+import ru.paymon.android.typeconverters.MessageActionConverter;
+import ru.paymon.android.typeconverters.PeerConverter;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.SerializableData;
 

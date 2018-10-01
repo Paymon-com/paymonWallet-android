@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -14,8 +13,6 @@ import androidx.navigation.Navigation;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
-import ru.paymon.android.net.NetworkManager;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NotificationManager.IListener {
     private static long back_pressed;
@@ -72,7 +69,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         return true;
     }
 
-//    @Override
+
+    //    @Override
 //    public void onBackPressed() {
 //        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
 //        if (fragment instanceof FragmentChats || fragment instanceof FragmentContacts || fragment instanceof FragmentMoney || fragment instanceof FragmentMoreMenu) {

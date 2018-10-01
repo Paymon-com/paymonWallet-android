@@ -37,7 +37,7 @@ import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.test.ChatMessageDao;
+import ru.paymon.android.room.ChatMessageDao;
 import ru.paymon.android.utils.ImagePicker;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.ChatViewModel;

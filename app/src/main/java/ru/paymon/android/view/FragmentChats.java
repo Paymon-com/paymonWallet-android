@@ -2,6 +2,7 @@ package ru.paymon.android.view;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.arch.paging.PagedList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,23 +11,22 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
-
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import android.widget.ImageView;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.ChatsAdapter;
-import ru.paymon.android.adapters.SlidingChatsAdapter;
-import ru.paymon.android.components.ChatsViewPager;
 import ru.paymon.android.models.ChatsItem;
+import ru.paymon.android.pagedlib.ChatDiffUtilCallback;
+import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.ChatsViewModel;
 import ru.paymon.android.viewmodels.MainViewModel;
@@ -36,15 +36,21 @@ import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private static FragmentChats instance;
-    private ChatsAdapter chatsAdapter, dialogsAdapter, groupsAdapter;
+    private ChatsAdapter chatsAdapter;
     private ChatsViewModel chatsViewModel;
     private MainViewModel mainViewModel;
     private LiveData<Boolean> showProgress;
-    private LiveData<LinkedList<ChatsItem>> chatsItemsData;
-    private LiveData<LinkedList<ChatsItem>> groupItemsData;
-    private LiveData<LinkedList<ChatsItem>> dialogsItemsData;
+    //    private LiveData<LinkedList<ChatsItem>> chatsItemsData;
     private LiveData<Boolean> isAuthorized;
-    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView chatsAllRecyclerView;
+    private LiveData<PagedList<ChatsItem>> allChatsItemLiveData;
+    //    private LiveData<PagedList<ChatsItem>> dialogsChatsItemLiveData;
+//    private LiveData<PagedList<ChatsItem>> groupsChatsItemLiveData;
+    //    private SwipeRefreshLayout swipeRefreshLayout;
+    private ImageView dialogsIndicator;
+    private ImageView chatsIndicator;
+    private ImageView groupsIndicator;
+    private int sortedBy;
 
     public static synchronized FragmentChats getInstance() {
         if (instance == null)
@@ -55,11 +61,12 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        chatsAdapter = new ChatsAdapter(iChatsClickListener);
-        dialogsAdapter = new ChatsAdapter(iChatsClickListener);
-        groupsAdapter = new ChatsAdapter(iChatsClickListener);
-        chatsViewModel = ViewModelProviders.of(getActivity()).get(ChatsViewModel.class);
+        chatsViewModel = ViewModelProviders.of(this).get(ChatsViewModel.class);
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+//        chatsItemLiveData = chatsViewModel.getChats();
+//        dialogsChatsItemLiveData = chatsViewModel.getDialogsChats();
+//        groupsChatsItemLiveData = chatsViewModel.getGroupChats();
+//        allChatsItemLiveData = chatsViewModel.getChats();
     }
 
     @Nullable
@@ -67,43 +74,46 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
 
-        ChatsViewPager viewPager = view.findViewById(R.id.fragment_chats_view_pager);
-        View pageDialogs = inflater.inflate(R.layout.fragment_chats_page, container, false);
-        View pageAll = inflater.inflate(R.layout.fragment_chats_page, container, false);
-        View pageGroups = inflater.inflate(R.layout.fragment_chats_page, container, false);
-        ImageButton createGroupButton = pageAll.findViewById(R.id.create_group_image_button);
-//        ImageButton toolbarCreateGroup = toolbar.findViewById(R.id.toolbar_create_group_btn);
-//        ImageButton toolbarSearch = toolbar.findViewById(R.id.toolbar_search_btn);
-        RecyclerView chatsRecyclerView = pageDialogs.findViewById(R.id.fragment_dialog_recycler_view);
-        RecyclerView chatsAllRecyclerView = pageAll.findViewById(R.id.fragment_dialog_recycler_view);
-        RecyclerView groupsRecyclerView = pageGroups.findViewById(R.id.fragment_dialog_recycler_view);
-        swipeRefreshLayout = view.findViewById(R.id.fragment_chats_swipe_layout);
-
-        swipeRefreshLayout.setOnRefreshListener(this);
+        ImageButton createGroupButton = view.findViewById(R.id.create_group_image_button);
+        chatsAllRecyclerView = view.findViewById(R.id.fragment_dialog_recycler_view);
+        Button dialogsButton = view.findViewById(R.id.dialogs_button);
+        Button chatsButton = view.findViewById(R.id.chats_button);
+        Button groupsButton = view.findViewById(R.id.groups_button);
+        dialogsIndicator = view.findViewById(R.id.dialogs_image);
+        chatsIndicator = view.findViewById(R.id.chats_image);
+        groupsIndicator = view.findViewById(R.id.groups_image);
+        //        swipeRefreshLayout = view.findViewById(R.id.fragment_chats_swipe_layout);
 
         createGroupButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentCreateGroup));
 //        toolbarSearch.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentSearch));
-
-        List<View> pages = Arrays.asList(pageDialogs, pageAll, pageGroups);
-        SlidingChatsAdapter pagerAdapter = new SlidingChatsAdapter(pages);
-
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setCurrentItem(1);
-
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(chatsAllRecyclerView.getContext(), (new LinearLayoutManager(getContext())).getOrientation());
+//        swipeRefreshLayout.setOnRefreshListener(this);
 
         chatsAllRecyclerView.setHasFixedSize(true);
-        chatsAllRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        chatsAllRecyclerView.addItemDecoration(dividerItemDecoration);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+//        ViewCompat.setNestedScrollingEnabled(chatsAllRecyclerView, true);//FIXME:если скроллинг будет хуевым внутри nested scoll view
+        chatsAllRecyclerView.setLayoutManager(linearLayoutManager);
+        chatsAllRecyclerView.addItemDecoration(new DividerItemDecoration(chatsAllRecyclerView.getContext(), linearLayoutManager.getOrientation()));
+
+        ItemClickSupport.addTo(chatsAllRecyclerView).setOnItemClickListener((recyclerView, position, v) -> {
+            if (chatsAdapter.getCurrentList() == null) return;
+            ChatsItem chatsItem = chatsAdapter.getCurrentList().get(position);
+            if (chatsItem == null) return;
+            final Bundle bundle = new Bundle();
+            bundle.putInt(CHAT_ID_KEY, chatsItem.chatID);
+            if (chatsItem.isGroup) {
+                bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().groupsUsers.get(chatsItem.chatID));
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
+            } else {
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
+            }
+        });
+
+        chatsAdapter = new ChatsAdapter(new ChatDiffUtilCallback());
         chatsAllRecyclerView.setAdapter(chatsAdapter);
 
-        chatsRecyclerView.setHasFixedSize(true);
-        chatsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        chatsRecyclerView.setAdapter(dialogsAdapter);
-
-        groupsRecyclerView.setHasFixedSize(true);
-        groupsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        groupsRecyclerView.setAdapter(groupsAdapter);
+        chatsButton.setOnClickListener(v -> sortChats(2));
+        groupsButton.setOnClickListener(v -> sortChats(1));
+        dialogsButton.setOnClickListener(v -> sortChats(0));
 
         return view;
     }
@@ -111,44 +121,42 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        showProgress = chatsViewModel.getProgressState();
-        chatsItemsData = chatsViewModel.getChatsData();
-        dialogsItemsData = chatsViewModel.getDialogsData();
-        groupItemsData = chatsViewModel.getGroupsData();
-        isAuthorized = mainViewModel.getAuthorizationState();
+//        showProgress = chatsViewModel.getProgressState();
+//        chatsItemsData = chatsViewModel.getChatsData();
+//        dialogsItemsData = chatsViewModel.getDialogsData();
+//        groupItemsData = chatsViewModel.getGroupsData();
+//        isAuthorized = mainViewModel.getAuthorizationState();
 
-        showProgress.observe(getActivity(), show -> {
-            if (show == null) return;
-            swipeRefreshLayout.setRefreshing(show);
+        sortChats(2);
+
+//        Observer observer = o -> {
+//            if (!(o instanceof PagedList)) return;
+//            chatsAdapter.submitList((PagedList<ChatsItem>) o);
+//        };
+
+//        allChatsItemLiveData.observe(this, observer);
+//        dialogsChatsItemLiveData.observe(this, observer);
+//        groupsChatsItemLiveData.observe(this, observer);
+
+        chatsViewModel.getProgressState().observe(getActivity(), show -> {
+//            if (show == null) return;
+//            swipeRefreshLayout.setRefreshing(show);
         });
 
-        isAuthorized.observe(getActivity(), (state) -> {
-            if (state == null) return;
-            if (!swipeRefreshLayout.isRefreshing() && state)
-                chatsViewModel.updateChatsData();
+        mainViewModel.getAuthorizationState().observe(getActivity(), (state) -> {
+//            if (state == null) return;
+//            if (!swipeRefreshLayout.isRefreshing() && state)
+            chatsViewModel.updateChatsData();
         });
 
-        chatsItemsData.observe(getActivity(), data -> {
-            if (data == null) return;
-            chatsAdapter.chatsItemsList.clear();
-            chatsAdapter.chatsItemsList.addAll(data);
-            chatsAdapter.notifyDataSetChanged();
-        });
-
-        groupItemsData.observe(getActivity(), data -> {
-            if (data == null) return;
-            groupsAdapter.chatsItemsList.clear();
-            groupsAdapter.chatsItemsList.addAll(data);
-            groupsAdapter.notifyDataSetChanged();
-        });
-
-        dialogsItemsData.observe(getActivity(), data -> {
-            if (data == null) return;
-            dialogsAdapter.chatsItemsList.clear();
-            dialogsAdapter.chatsItemsList.addAll(data);
-            dialogsAdapter.notifyDataSetChanged();
-        });
+//        chatsViewModel.getChatsData().observe(getActivity(), data -> {
+//            if (data == null) return;
+//            chatsAdapter.chatsItemsList.clear();
+//            chatsAdapter.chatsItemsList.addAll(data);
+//            chatsAdapter.notifyDataSetChanged();
+//        });
     }
+
 
     @Override
     public void onResume() {
@@ -162,50 +170,43 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         super.onPause();
     }
 
-    private ChatsAdapter.IChatsClickListener iChatsClickListener = (chatID, isGroup) -> {
-        final Bundle bundle = new Bundle();
-        bundle.putInt(CHAT_ID_KEY, chatID);
-        if (isGroup) {
-            bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().groupsUsers.get(chatID));
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
-        } else {
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
-        }
-    };
-
     @Override
     public void onRefresh() {
         chatsViewModel.updateChatsData();
     }
 
+    private void sortChats(int sortBy) {
+        if (sortedBy == sortBy) return;
 
-//    private View createConnectingCustomView() {
-//        final View customView = getLayoutInflater().inflate(R.layout.toolbar_connecting, null);
-//        final ConstraintLayout pointLayout = (ConstraintLayout) customView.findViewById(R.id.connecting_anim_layout);
-//
-//        Animation rotateAnimation = new RotateAnimation(0, 360, 50f, 50f);
-//        rotateAnimation.setDuration(3000);
-//
-//        rotateAnimation.setAnimationListener(new Animation.AnimationListener() {
-//            @Override
-//            public void onAnimationStart(Animation animation) {
-//
-//            }
-//
-//            @Override
-//            public void onAnimationEnd(Animation animation) {
-//                rotateAnimation.reset();
-//                pointLayout.startAnimation(rotateAnimation);
-//            }
-//
-//            @Override
-//            public void onAnimationRepeat(Animation animation) {
-//
-//            }
-//        });
-//
-//        pointLayout.startAnimation(rotateAnimation);
-//
-//        return customView;
-//    }
+        switch (sortBy) {
+            case 0:
+                chatsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                groupsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                dialogsIndicator.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+                allChatsItemLiveData = chatsViewModel.getDialogsChats();
+                break;
+            case 1:
+                allChatsItemLiveData = chatsViewModel.getGroupChats();
+                chatsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                groupsIndicator.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+                dialogsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                break;
+            default:
+                allChatsItemLiveData = chatsViewModel.getChats();
+                chatsIndicator.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+                groupsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                dialogsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                break;
+        }
+
+        allChatsItemLiveData.removeObservers(this);
+        allChatsItemLiveData.observe(this, pagedList -> {
+            Log.e("AAA", pagedList.size() + "");
+            chatsAdapter.submitList(pagedList);
+            chatsAdapter.notifyDataSetChanged();
+//            chatsAllRecyclerView.setAdapter(chatsAdapter);
+        });
+
+        sortedBy = sortBy;
+    }
 }

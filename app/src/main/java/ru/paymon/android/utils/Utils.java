@@ -3,10 +3,7 @@ package ru.paymon.android.utils;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.res.Configuration;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.design.widget.BottomNavigationView;
@@ -19,9 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Display;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -59,7 +54,7 @@ public class Utils {
     public static float density = 1;
     public static Point displaySize = new Point();
     public static DisplayMetrics displayMetrics = new DisplayMetrics();
-    public static double maxSize;
+//    public static double maxSize;
 
     public static boolean copyFile(File source, File dest) {
         InputStream is = null;
@@ -108,56 +103,56 @@ public class Utils {
         return username;
     }
 
-    public static void checkDisplaySize(Context context, Configuration newConfiguration) {
-        try {
-            density = context.getResources().getDisplayMetrics().density;
-            Configuration configuration = newConfiguration;
-            if (configuration == null) {
-                configuration = context.getResources().getConfiguration();
-            }
-            usingHardwareInput = configuration.keyboard != Configuration.KEYBOARD_NOKEYS && configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO;
-            WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            if (manager != null) {
-                Display display = manager.getDefaultDisplay();
-                if (display != null) {
-                    display.getMetrics(displayMetrics);
-                    display.getSize(displaySize);
-                }
-            }
-            if (configuration.screenWidthDp != Configuration.SCREEN_WIDTH_DP_UNDEFINED) {
-                int newSize = (int) Math.ceil(configuration.screenWidthDp * density);
-                if (Math.abs(displaySize.x - newSize) > 3) {
-                    displaySize.x = newSize;
-                }
-            }
-            if (configuration.screenHeightDp != Configuration.SCREEN_HEIGHT_DP_UNDEFINED) {
-                int newSize = (int) Math.ceil(configuration.screenHeightDp * density);
-                if (Math.abs(displaySize.y - newSize) > 3) {
-                    displaySize.y = newSize;
-                }
-            }
-            Log.d("payon-dbg", "display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);
-        } catch (Exception e) {
-            Log.e("payon-dbg", e.getMessage());
-        }
-    }
+//    public static void checkDisplaySize(Context context, Configuration newConfiguration) {
+//        try {
+//            density = context.getResources().getDisplayMetrics().density;
+//            Configuration configuration = newConfiguration;
+//            if (configuration == null) {
+//                configuration = context.getResources().getConfiguration();
+//            }
+//            usingHardwareInput = configuration.keyboard != Configuration.KEYBOARD_NOKEYS && configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO;
+//            WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+//            if (manager != null) {
+//                Display display = manager.getDefaultDisplay();
+//                if (display != null) {
+//                    display.getMetrics(displayMetrics);
+//                    display.getSize(displaySize);
+//                }
+//            }
+//            if (configuration.screenWidthDp != Configuration.SCREEN_WIDTH_DP_UNDEFINED) {
+//                int newSize = (int) Math.ceil(configuration.screenWidthDp * density);
+//                if (Math.abs(displaySize.x - newSize) > 3) {
+//                    displaySize.x = newSize;
+//                }
+//            }
+//            if (configuration.screenHeightDp != Configuration.SCREEN_HEIGHT_DP_UNDEFINED) {
+//                int newSize = (int) Math.ceil(configuration.screenHeightDp * density);
+//                if (Math.abs(displaySize.y - newSize) > 3) {
+//                    displaySize.y = newSize;
+//                }
+//            }
+//            Log.d("payon-dbg", "display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);
+//        } catch (Exception e) {
+//            Log.e("payon-dbg", e.getMessage());
+//        }
+//    }
 
-    public static int getAvailableTextLength(Paint textPaint, String text) {
-        Rect bounds = new Rect();
-        textPaint.getTextBounds(text, 0, text.length(), bounds);
-        int width = bounds.width();
-        int availableLength = 0;
-        if (width > maxSize) {
-            width = 0;
-            while (width < maxSize) {
-                availableLength++;
-                textPaint.getTextBounds(text, 0, availableLength, bounds);
-                width = bounds.width();
-            }
-            return availableLength;
-        }
-        return text.length();
-    }
+//    public static int getAvailableTextLength(Paint textPaint, String text) {
+//        Rect bounds = new Rect();
+//        textPaint.getTextBounds(text, 0, text.length(), bounds);
+//        int width = bounds.width();
+//        int availableLength = 0;
+//        if (width > maxSize) {
+//            width = 0;
+//            while (width < maxSize) {
+//                availableLength++;
+//                textPaint.getTextBounds(text, 0, availableLength, bounds);
+//                width = bounds.width();
+//            }
+//            return availableLength;
+//        }
+//        return text.length();
+//    }
 
     public static String formatDateTime(long timestamp, boolean inChat) {
         final Date now = new Date(System.currentTimeMillis());

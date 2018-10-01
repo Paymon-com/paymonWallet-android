@@ -1,4 +1,4 @@
-package ru.paymon.android.test;
+package ru.paymon.android.room;
 
 import android.arch.paging.DataSource;
 import android.arch.persistence.room.Dao;
@@ -14,10 +14,8 @@ import ru.paymon.android.net.RPC;
 @Dao
 public interface ChatMessageDao {
 
-//    @Query("SELECT * FROM message WHERE to_id = :cid ORDER BY date DESC")
     @Query("SELECT * FROM message WHERE to_id = :cid ORDER BY date DESC")
     DataSource.Factory<Integer,RPC.Message> messagesByChatID(int cid);
-//    List<RPC.Message> messagesByChatID(int cid);
 
     @Query("SELECT * FROM message WHERE id = :id")
     RPC.Message messageByChatID(int id);
@@ -32,7 +30,5 @@ public interface ChatMessageDao {
     void delete(RPC.Message message);
 
     @Query("SELECT * FROM message ORDER BY date DESC")
-    List<RPC.Message> messagesByChatID();
-    //    @Query("DELETE FROM message WHERE to_id = :cid AND id = :mid")
-//    void delete(int cid, long mid);
+    List<RPC.Message> messages();
 }

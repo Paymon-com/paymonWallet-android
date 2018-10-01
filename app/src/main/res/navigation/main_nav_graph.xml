@@ -9,7 +9,7 @@
         android:id="@+id/fragmentChats"
         android:name="ru.paymon.android.view.FragmentChats"
         android:label="fragment_chats_page"
-        tools:layout="@layout/fragment_chats" >
+        tools:layout="@layout/fragment_chats">
         <action
             android:id="@+id/action_fragmentChats_to_fragmentMoney"
             app:destination="@id/fragmentMoney" />

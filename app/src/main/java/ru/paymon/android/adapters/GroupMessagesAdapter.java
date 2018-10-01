@@ -18,9 +18,9 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.test2.MessageItemDetail;
-import ru.paymon.android.test2.MessageItemLookup;
-import ru.paymon.android.test2.ViewHolderWithDetails;
+import ru.paymon.android.selection.MessageItemDetail;
+import ru.paymon.android.selection.MessageItemLookup;
+import ru.paymon.android.selection.ViewHolderWithDetails;
 import ru.paymon.android.utils.Utils;
 
 public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMessagesAdapter.BaseMessageViewHolder> {

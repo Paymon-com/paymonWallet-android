@@ -17,15 +17,14 @@ import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.emoji.CustomEmojiProvider;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.net.NetworkManager;
-import ru.paymon.android.test.AppDatabase;
+import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.KeyGenerator;
-import ru.paymon.android.utils.Utils;
 
 
 public class ApplicationLoader extends Application {
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
-//    public static volatile SQLiteDatabase db;
+    //    public static volatile SQLiteDatabase db;
     public static volatile AppDatabase db;
 
     @SuppressWarnings("JniMissingFunction")
@@ -39,38 +38,24 @@ public class ApplicationLoader extends Application {
     public void onCreate() {
         super.onCreate();
 
-        Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000))/*.indicatorsEnabled(true)*/.build());
-
-
-        EmojiManager.install(new CustomEmojiProvider());
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
 
-        Utils.stageQueue.postRunnable(() -> {
-             db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database").allowMainThreadQueries().build();
-//            DBHelper dbHelper = new DBHelper(applicationContext);
-//            try{
-//                db = dbHelper.getWritableDatabase();
-//            }catch (Exception e){
-//                db = dbHelper.getReadableDatabase();
-//            }
+        User.loadConfig();
+        Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000))/*.indicatorsEnabled(true)*/.build());
+        EmojiManager.install(new CustomEmojiProvider());
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database").allowMainThreadQueries().build();
 
-            User.loadConfig();
-        });
-
-        NetworkStateReceiver networkStateReceiver = new NetworkStateReceiver();
         IntentFilter networkIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        ApplicationLoader.applicationContext.registerReceiver(networkStateReceiver, networkIntentFilter);
-
-        Utils.checkDisplaySize(getApplicationContext(), null);
-        Utils.maxSize = Utils.displaySize.x - Utils.displaySize.x / 100.0 * 45;
+        ApplicationLoader.applicationContext.registerReceiver(new NetworkStateReceiver(), networkIntentFilter);
 
         KeyGenerator.getInstance();
         native_init(Config.HOST, Config.PORT, Config.VERSION);
 
-        Intent connectorIntent = new Intent(applicationContext, ConnectorService.class);
-        startService(connectorIntent);
+        startService(new Intent(applicationContext, ConnectorService.class));
         NetworkManager.getInstance().bindServices();
+
+        initStrictMode();
     }
 
     public static void finish() {
@@ -92,8 +77,6 @@ public class ApplicationLoader extends Application {
                 .penaltyDeath()
                 .build();
         StrictMode.setThreadPolicy(policy);
-//        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy().Builder()
-//                .dete);
     }
 
     public static void setOldStrictMode() {
