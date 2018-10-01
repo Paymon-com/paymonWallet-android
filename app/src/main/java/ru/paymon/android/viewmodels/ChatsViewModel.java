@@ -26,14 +26,12 @@ import ru.paymon.android.pagedlib.ChatsBoundaryCallback;
 import ru.paymon.android.utils.Utils;
 
 public class ChatsViewModel extends AndroidViewModel {
-    //    private MutableLiveData<LinkedList<ChatsItem>> chatsItemsData;
-//    private MutableLiveData<LinkedList<ChatsItem>> dialogsItemsData;
-//    private MutableLiveData<LinkedList<ChatsItem>> groupsItemsData;
     private MutableLiveData<Boolean> showProgress = new MutableLiveData<>();
     private DataSource.Factory<Integer, ChatsItem> factory;
     private LiveData<PagedList<ChatsItem>> allChats;
     private LiveData<PagedList<ChatsItem>> dialogsChats;
     private LiveData<PagedList<ChatsItem>> groupsChats;
+    public boolean isChatsLoaded;
 
     public ChatsViewModel(@NonNull Application application) {
         super(application);
@@ -42,12 +40,6 @@ public class ChatsViewModel extends AndroidViewModel {
     public void updateChatsData() {
         loadChatsData();
     }
-
-//    public LiveData<LinkedList<ChatsItem>> getChatsData() {
-//        if (chatsItemsData == null)
-//            chatsItemsData = new MutableLiveData<>();
-//        return chatsItemsData;
-//    }
 
     public LiveData<PagedList<ChatsItem>> getChats() {
         if (allChats == null) {
@@ -91,27 +83,15 @@ public class ChatsViewModel extends AndroidViewModel {
     }
 
 
-//    public LiveData<LinkedList<ChatsItem>> getDialogsData() {
-//        if (dialogsItemsData == null)
-//            dialogsItemsData = new MutableLiveData<>();
-//        return dialogsItemsData;
-//    }
-//
-//    public LiveData<LinkedList<ChatsItem>> getGroupsData() {
-//        if (groupsItemsData == null)
-//            groupsItemsData = new MutableLiveData<>();
-//        return groupsItemsData;
-//    }
-
     public LiveData<Boolean> getProgressState() {
         return showProgress;
     }
 
     private void loadChatsData() {
-        if (showProgress.getValue() != null && showProgress.getValue())
-            return;
-
         Utils.netQueue.postRunnable(() -> {
+            if (showProgress.getValue() != null && showProgress.getValue())
+                return;
+
             if (NetworkManager.getInstance().isAuthorized() && User.currentUser != null) {
                 showProgress.postValue(true);
 
@@ -122,8 +102,6 @@ public class ChatsViewModel extends AndroidViewModel {
                     }
 
                     RPC.PM_chatsAndMessages packet = (RPC.PM_chatsAndMessages) response;
-
-                    if (packet == null) return;
 
                     for (RPC.Message msg : packet.messages)
                         MessagesManager.getInstance().putMessage(msg);
@@ -232,6 +210,7 @@ public class ChatsViewModel extends AndroidViewModel {
                         chatsItems.addAll(dialogsItems);
                         chatsItems.addAll(groupItems);
                         ApplicationLoader.db.chatsDao().insertList(chatsItems);
+                        isChatsLoaded = true;
 //                        chatsItemsData.postValue(chatsItems);
                     }
 
@@ -239,6 +218,7 @@ public class ChatsViewModel extends AndroidViewModel {
                 });
             }
         });
+
     }
 
 }

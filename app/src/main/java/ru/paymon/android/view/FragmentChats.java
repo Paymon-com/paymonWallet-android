@@ -11,7 +11,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,8 +60,9 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        chatsViewModel = ViewModelProviders.of(this).get(ChatsViewModel.class);
+        chatsViewModel = ViewModelProviders.of(getActivity()).get(ChatsViewModel.class);
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+        showProgress = chatsViewModel.getProgressState();
 //        chatsItemLiveData = chatsViewModel.getChats();
 //        dialogsChatsItemLiveData = chatsViewModel.getDialogsChats();
 //        groupsChatsItemLiveData = chatsViewModel.getGroupChats();
@@ -138,15 +138,16 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
 //        dialogsChatsItemLiveData.observe(this, observer);
 //        groupsChatsItemLiveData.observe(this, observer);
 
-        chatsViewModel.getProgressState().observe(getActivity(), show -> {
-//            if (show == null) return;
-//            swipeRefreshLayout.setRefreshing(show);
-        });
+//        chatsViewModel.getProgressState().observe(getActivity(), show -> {
+////            if (show == null) return;
+////            swipeRefreshLayout.setRefreshing(show);
+//        });
 
         mainViewModel.getAuthorizationState().observe(getActivity(), (state) -> {
 //            if (state == null) return;
 //            if (!swipeRefreshLayout.isRefreshing() && state)
-            chatsViewModel.updateChatsData();
+            if (!chatsViewModel.isChatsLoaded)
+                chatsViewModel.updateChatsData();
         });
 
 //        chatsViewModel.getChatsData().observe(getActivity(), data -> {
@@ -186,22 +187,21 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
                 allChatsItemLiveData = chatsViewModel.getDialogsChats();
                 break;
             case 1:
-                allChatsItemLiveData = chatsViewModel.getGroupChats();
                 chatsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 groupsIndicator.setBackgroundColor(getResources().getColor(R.color.blue_bright));
                 dialogsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                allChatsItemLiveData = chatsViewModel.getGroupChats();
                 break;
             default:
-                allChatsItemLiveData = chatsViewModel.getChats();
                 chatsIndicator.setBackgroundColor(getResources().getColor(R.color.blue_bright));
                 groupsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 dialogsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                allChatsItemLiveData = chatsViewModel.getChats();
                 break;
         }
 
-        allChatsItemLiveData.removeObservers(this);
-        allChatsItemLiveData.observe(this, pagedList -> {
-            Log.e("AAA", pagedList.size() + "");
+        allChatsItemLiveData.removeObservers(getActivity());
+        allChatsItemLiveData.observe(getActivity(), pagedList -> {
             chatsAdapter.submitList(pagedList);
             chatsAdapter.notifyDataSetChanged();
 //            chatsAllRecyclerView.setAdapter(chatsAdapter);
