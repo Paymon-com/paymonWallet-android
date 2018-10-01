@@ -1,5 +1,6 @@
 package ru.paymon.android.view;
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -65,6 +66,9 @@ public class FragmentContacts extends Fragment {
         recyclerViewContactsGlobal = (RecyclerView) view.findViewById(R.id.recViewContactsGlobal);
 //        EditText editText = view.findViewById(R.id.edit_text_contacts_search);
         SearchView searchView = view.findViewById(R.id.edit_text_contacts_search2);
+
+//        searchView.setBackgroundColor(Color.parseColor("#323232"));
+
 
 //        recyclerViewContacts.setHasFixedSize(true);
 //        recyclerViewContacts.setLayoutManager(new LinearLayoutManager(getContext()));

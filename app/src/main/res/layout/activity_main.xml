@@ -46,6 +46,6 @@
         android:layout_gravity="bottom"
         android:background="@color/colorPrimary"
         app:itemIconTint="@drawable/bottom_main_bar_item_icon_tint"
-        app:labelVisibilityMode="auto"
+        app:labelVisibilityMode="unlabeled"
         app:menu="@menu/main_bottom_bar_menu" />
 </LinearLayout>
