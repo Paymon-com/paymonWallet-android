@@ -32,13 +32,6 @@
             app:navGraph="@navigation/main_nav_graph" />
     </FrameLayout>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:layout_gravity="bottom"
-        android:background="@color/colorPrimary"
-        android:src="@drawable/transparent_gradient" />
-
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_navigation_view"
         android:layout_width="match_parent"

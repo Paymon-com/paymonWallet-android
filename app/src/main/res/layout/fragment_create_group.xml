@@ -14,17 +14,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:background="@drawable/transparent_gradient_rev"
-        android:translationZ="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fragment_create_group_rv" />
-
     <EditText
         android:id="@+id/edit_text_create_chats"
         android:layout_width="match_parent"
@@ -33,10 +22,10 @@
         android:layout_marginBottom="10dp"
         android:background="@color/bg_dialog_title"
         android:fontFamily="@font/roboto_thin"
-        android:singleLine="true"
         android:gravity="center"
         android:hint="Search your friend"
         android:selectAllOnFocus="false"
+        android:singleLine="true"
         android:textColor="@color/white"
         android:textColorHint="@color/gray_dim"
         android:textSize="16sp"
@@ -44,18 +33,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include3" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="match_parent"
-        android:layout_height="8dp"
-        android:background="@drawable/transparent_gradient_rev"
-        android:translationZ="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include3" />
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_create_group_rv"
@@ -67,13 +44,32 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_text_create_chats" />
 
     <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/transparent_gradient_rev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include3" />
+
+    <ImageView
         android:layout_width="match_parent"
         android:layout_height="8dp"
         android:background="@drawable/transparent_gradient"
-        android:translationZ="1dp"
         app:layout_constraintBottom_toTopOf="@+id/toolbar_next_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:background="@drawable/transparent_gradient_rev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_create_group_rv" />
 
     <Button
         android:id="@+id/toolbar_next_btn"
