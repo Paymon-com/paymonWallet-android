@@ -11,11 +11,13 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
@@ -59,16 +61,17 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         View view = inflater.inflate(R.layout.fragment_chats, container, false);
 
         ImageButton createGroupButton = view.findViewById(R.id.create_group_image_button);
-        chatsAllRecyclerView = view.findViewById(R.id.fragment_dialog_recycler_view);
         Button dialogsButton = view.findViewById(R.id.dialogs_button);
         Button chatsButton = view.findViewById(R.id.chats_button);
         Button groupsButton = view.findViewById(R.id.groups_button);
+        EditText search = view.findViewById(R.id.editText);
+        chatsAllRecyclerView = view.findViewById(R.id.fragment_dialog_recycler_view);
         dialogsIndicator = view.findViewById(R.id.dialogs_image);
         chatsIndicator = view.findViewById(R.id.chats_image);
         groupsIndicator = view.findViewById(R.id.groups_image);
         swipeRefreshLayout = view.findViewById(R.id.fragment_chats_swipe_layout);
+
         createGroupButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentCreateGroup));
-//        toolbarSearch.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentSearch));
         swipeRefreshLayout.setOnRefreshListener(this);
 
         chatsAllRecyclerView.setHasFixedSize(true);
@@ -93,9 +96,28 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         chatsAdapter = new ChatsAdapter(new ChatDiffUtilCallback());
         chatsAllRecyclerView.setAdapter(chatsAdapter);
 
-        chatsButton.setOnClickListener(v -> sortChats(2));
-        groupsButton.setOnClickListener(v -> sortChats(1));
-        dialogsButton.setOnClickListener(v -> sortChats(0));
+        chatsButton.setOnClickListener(v -> sortChats(2,false));
+        groupsButton.setOnClickListener(v -> sortChats(1,false));
+        dialogsButton.setOnClickListener(v -> sortChats(0,false));
+
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable search) {
+                chatsViewModel.searchText = "%" + search.toString() + "%";
+                chatsViewModel.isSearchActivated = !search.toString().isEmpty();
+                sortChats(chatsViewModel.sortedBy,true);
+            }
+        });
 
         return view;
     }
@@ -104,7 +126,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        sortChats(chatsViewModel.sortedBy);
+        sortChats(chatsViewModel.sortedBy,false);
 
         chatsViewModel.getProgressState().observe(getActivity(), show -> {
             if (show == null) return;
@@ -139,9 +161,8 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         chatsViewModel.updateChatsData();
     }
 
-    private void sortChats(int sortBy) {
-        Log.e("AAA", sortBy + " " + chatsViewModel.sortedBy + " " +sortedBy);
-        if (sortedBy == sortBy) return;
+    private void sortChats(int sortBy, boolean isSearch) {
+        if (!isSearch && sortedBy == sortBy) return;
 
         if (allChatsItemLiveData != null)
             allChatsItemLiveData.removeObservers(getActivity());
@@ -151,19 +172,28 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
                 chatsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 groupsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 dialogsIndicator.setBackgroundColor(getResources().getColor(R.color.blue_bright));
-                allChatsItemLiveData = chatsViewModel.getDialogsChats();
+                if (!chatsViewModel.isSearchActivated)
+                    allChatsItemLiveData = chatsViewModel.getDialogsChats();
+                else
+                    allChatsItemLiveData = chatsViewModel.getDialogsChatsBySearch(chatsViewModel.searchText);
                 break;
             case 1:
                 chatsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 groupsIndicator.setBackgroundColor(getResources().getColor(R.color.blue_bright));
                 dialogsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                allChatsItemLiveData = chatsViewModel.getGroupChats();
+                if (!chatsViewModel.isSearchActivated)
+                    allChatsItemLiveData = chatsViewModel.getGroupChats();
+                else
+                    allChatsItemLiveData = chatsViewModel.getGroupsChatsBySearch(chatsViewModel.searchText);
                 break;
             default:
                 chatsIndicator.setBackgroundColor(getResources().getColor(R.color.blue_bright));
                 groupsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                 dialogsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-                allChatsItemLiveData = chatsViewModel.getChats();
+                if (!chatsViewModel.isSearchActivated)
+                    allChatsItemLiveData = chatsViewModel.getChats();
+                else
+                    allChatsItemLiveData = chatsViewModel.getChatsBySearch(chatsViewModel.searchText);
                 break;
         }
 
