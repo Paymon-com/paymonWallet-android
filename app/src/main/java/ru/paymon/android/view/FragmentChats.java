@@ -114,7 +114,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
 
             @Override
             public void afterTextChanged(Editable search) {
-                chatsViewModel.searchText = "%" + search.toString() + "%";
+                chatsViewModel.searchText = search.toString();
                 chatsViewModel.isSearchActivated = !search.toString().isEmpty();
                 sortChats(chatsViewModel.sortedBy,true);
             }

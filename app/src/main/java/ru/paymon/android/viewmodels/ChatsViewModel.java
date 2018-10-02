@@ -46,84 +46,73 @@ public class ChatsViewModel extends AndroidViewModel {
     }
 
     public LiveData<PagedList<ChatsItem>> getChats() {
-//        if (allChats == null) {
-            factory = ApplicationLoader.db.chatsDao().chats();
-            final PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(10)
-                    .setPageSize(10)
-                    .setEnablePlaceholders(false)
-                    .build();
-            allChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-//        }
+        factory = ApplicationLoader.db.chatsDao().chats();
+        final PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10)
+                .setEnablePlaceholders(false)
+                .build();
+        allChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
+
         return allChats;
     }
 
     public LiveData<PagedList<ChatsItem>> getGroupChats() {
-//        if (groupsChats == null) {
-            factory = ApplicationLoader.db.chatsDao().chatsByChatType(true);
-            final PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(10)
-                    .setPageSize(10)
-                    .setEnablePlaceholders(false)
-                    .build();
-            groupsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-//        }
+        factory = ApplicationLoader.db.chatsDao().chatsByChatType(true);
+        final PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10)
+                .setEnablePlaceholders(false)
+                .build();
+        groupsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
 
         return groupsChats;
     }
 
     public LiveData<PagedList<ChatsItem>> getDialogsChats() {
-//        if (dialogsChats == null) {
-            factory = ApplicationLoader.db.chatsDao().chatsByChatType(false);
-            final PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(10)
-                    .setPageSize(10)
-                    .setEnablePlaceholders(false)
-                    .build();
-            dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-//        }
+        factory = ApplicationLoader.db.chatsDao().chatsByChatType(false);
+        final PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10)
+                .setEnablePlaceholders(false)
+                .build();
+        dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
 
         return dialogsChats;
     }
 
     public LiveData<PagedList<ChatsItem>> getDialogsChatsBySearch(String searchQuery) {
-//        if (dialogsChats == null) {
-            factory = ApplicationLoader.db.chatsDao().chatsBySearch(searchQuery, false);
-            final PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(10)
-                    .setPageSize(10)
-                    .setEnablePlaceholders(false)
-                    .build();
-            dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-//        }
+        factory = ApplicationLoader.db.chatsDao().chatsBySearch("%" + searchQuery + "%", false);
+        final PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10)
+                .setEnablePlaceholders(false)
+                .build();
+        dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
 
         return dialogsChats;
     }
 
     public LiveData<PagedList<ChatsItem>> getGroupsChatsBySearch(String searchQuery) {
-//        if (dialogsChats == null) {
-            factory = ApplicationLoader.db.chatsDao().chatsBySearch(searchQuery, true);
-            final PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(10)
-                    .setPageSize(10)
-                    .setEnablePlaceholders(false)
-                    .build();
-            dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-//        }
+        factory = ApplicationLoader.db.chatsDao().chatsBySearch("%" + searchQuery + "%", true);
+        final PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10)
+                .setEnablePlaceholders(false)
+                .build();
+        dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
 
         return dialogsChats;
     }
 
     public LiveData<PagedList<ChatsItem>> getChatsBySearch(String searchQuery) {
-//        if (dialogsChats == null) {
-            factory = ApplicationLoader.db.chatsDao().chatsBySearch(searchQuery);
-            final PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(10)
-                    .setPageSize(10)
-                    .setEnablePlaceholders(false)
-                    .build();
-            dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-//        }
+        factory = ApplicationLoader.db.chatsDao().chatsBySearch("%" + searchQuery + "%");
+        final PagedList.Config config = new PagedList.Config.Builder()
+                .setInitialLoadSizeHint(10)
+                .setPageSize(10)
+                .setEnablePlaceholders(false)
+                .build();
+        dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
 
         return dialogsChats;
     }
