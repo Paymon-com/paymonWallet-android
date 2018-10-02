@@ -14,6 +14,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.vanniktech.emoji.EmojiTextView;
 
 import androidx.recyclerview.selection.SelectionTracker;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
@@ -21,6 +22,7 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.selection.MessageItemDetail;
 import ru.paymon.android.selection.MessageItemLookup;
 import ru.paymon.android.selection.ViewHolderWithDetails;
+import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
 
 public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMessagesAdapter.BaseMessageViewHolder> {
@@ -33,6 +35,7 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
     enum ViewTypes {
         SENT_MESSAGE,
         RECEIVED_MESSAGE,
+        ACTION,
     }
 
     public SelectionTracker getSelectionTracker() {
@@ -59,12 +62,16 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
                 view = LayoutInflater.from(context).inflate(R.layout.view_holder_group_received_message, viewGroup, false);
                 vh = new GroupReceiveMessageViewHolder(view);
                 break;
+            case ACTION:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_action, viewGroup, false);
+                vh = new ActionMessageViewHolder(view);
+                break;
         }
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(BaseMessageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseMessageViewHolder holder, int position) {
         RPC.Message message = getItem(position);
 
         if (message == null)
@@ -106,6 +113,10 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
         if (msg == null) return 0;
 
         boolean isSent = msg.from_id == User.currentUser.id;
+        boolean isAction = msg.itemType == FileManager.FileType.ACTION;
+
+        if (isAction)
+            return ViewTypes.ACTION.ordinal();
 
         if (isSent)
             return ViewTypes.SENT_MESSAGE.ordinal();
@@ -160,6 +171,27 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
         void bind(RPC.Message message) {
             msg.setText(message.text);
             time.setText(Utils.formatDateTime(message.date, true));
+        }
+    }
+
+    public class ActionMessageViewHolder extends BaseMessageViewHolder {
+        public final TextView msg;
+
+        public ActionMessageViewHolder(View view) {
+            super(view);
+            msg = (TextView) view.findViewById(R.id.message);
+        }
+
+        @Override
+        void bind(RPC.Message message) {
+            if (message.action instanceof RPC.PM_messageActionGroupCreate) {
+//                final RPC.PM_messageActionGroupCreate actionGroupCreate = (RPC.PM_messageActionGroupCreate) message.action;
+                final int groupID = message.to_peer.group_id;
+                final RPC.Group group = GroupsManager.getInstance().groups.get(groupID);
+                final RPC.UserObject creator = UsersManager.getInstance().users.get(group.creatorID);
+                String createGroupString = String.format("%s создал беседу \"%s\"", Utils.formatUserName(creator), group.title); //TODO:String
+                msg.setText(createGroupString);
+            }
         }
     }
 }

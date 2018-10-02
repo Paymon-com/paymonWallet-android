@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.NotificationManager;
@@ -42,8 +42,8 @@ public class DialogFragmentCreateGroup extends DialogFragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            if (bundle.containsKey("create_group_list")) {
-                createGroupList = (ArrayList<UserItem>) bundle.getSerializable("create_group_list");
+            if (bundle.containsKey(CHAT_GROUP_USERS)) {
+                createGroupList = (ArrayList<UserItem>) bundle.getSerializable(CHAT_GROUP_USERS);
             }
         }
     }
@@ -83,8 +83,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
-                        Toast toast = Toast.makeText(getContext(),
-                                "Ошибка", Toast.LENGTH_SHORT);//TODO string
+                        Toast toast = Toast.makeText(getContext(),"Ошибка", Toast.LENGTH_SHORT);//TODO string
                         toast.show();
                     });
                     return;
@@ -98,12 +97,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                     Bundle bundle = new Bundle();
                     bundle.putInt(CHAT_ID_KEY, group.id);
                     bundle.putParcelableArrayList(CHAT_GROUP_USERS, group.users);
-                    FragmentChat fragmentChat = FragmentChat.newInstance();
-                    fragmentChat.setArguments(bundle);
-                    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-                    fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                    fragmentTransaction.replace(R.id.container, fragmentChat);
-                    fragmentTransaction.commit();
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
                 }
 
                 ApplicationLoader.applicationHandler.post(() -> {

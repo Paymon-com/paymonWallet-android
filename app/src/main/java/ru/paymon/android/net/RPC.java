@@ -2260,13 +2260,13 @@ public class RPC {
     }
 
     public static class MessageAction extends Packet {
-//        public String message;
-//        public List<UserObject> users;
+        public String message;
+        public List<UserObject> users;
 
         public static MessageAction deserialize(SerializableData stream, int constructor, boolean exception) {
             MessageAction result = null;
             switch (constructor) {
-                case PM_user.svuid:
+                case PM_messageActionGroupCreate.svuid:
                     result = new PM_messageActionGroupCreate();
                     break;
             }
@@ -2285,11 +2285,11 @@ public class RPC {
     }
 
     public static class PM_messageActionGroupCreate extends MessageAction {
-        public static int svuid = 42618952;
+        public final static int svuid = 42618952;
 
-//        public void readParams(SerializableData stream, boolean exception) {
-//        }
-//
+        public void readParams(SerializableData stream, boolean exception) {
+        }
+
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
         }

@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.selection.StorageStrategy;
 import ru.paymon.android.MessagesManager;
@@ -27,19 +25,11 @@ import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 
 public class FragmentGroupChat extends AbsFragmentChat {
-    public ArrayList<RPC.UserObject> groupUsers;
     private GroupMessagesAdapter messagesAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final Bundle bundle = getArguments();
-        if (bundle != null) {
-            if (bundle.containsKey(CHAT_ID_KEY) && bundle.containsKey(CHAT_GROUP_USERS)) {
-                chatID = bundle.getInt(CHAT_ID_KEY);
-                groupUsers = bundle.getParcelableArrayList(CHAT_GROUP_USERS);
-            }
-        }
     }
 
     @Nullable

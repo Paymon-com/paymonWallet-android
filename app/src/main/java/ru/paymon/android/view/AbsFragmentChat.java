@@ -27,6 +27,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import androidx.navigation.Navigation;
@@ -35,7 +36,9 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
+import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.room.ChatMessageDao;
 import ru.paymon.android.utils.ImagePicker;
@@ -71,6 +74,7 @@ public abstract class AbsFragmentChat extends Fragment {
     public SelectionTracker selectionTracker;
     public ChatViewModel chatViewModel;
     public ChatMessageDao dao = ApplicationLoader.db.chatMessageDao();
+    public ArrayList<RPC.UserObject> groupUsers;
 
     public int chatID;
 
@@ -87,6 +91,30 @@ public abstract class AbsFragmentChat extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments();
+
+        if (bundle != null) {
+            if (bundle.containsKey(CHAT_ID_KEY))
+                chatID = bundle.getInt(CHAT_ID_KEY);
+            if (bundle.containsKey(CHAT_GROUP_USERS))
+                groupUsers = bundle.getParcelableArrayList(CHAT_GROUP_USERS);
+        }
+
+        if (User.currentUser == null || chatID == 0) return;
+
+        RPC.PM_getChatMessages packet = new RPC.PM_getChatMessages();
+
+        packet.chatID = this instanceof FragmentChat ? new RPC.PM_peerUser(chatID) : new RPC.PM_peerGroup(chatID);
+        packet.offset = 0;
+        packet.count = 15;
+
+        NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
+            if (response == null) return;
+            final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
+            if (receivedMessages.messages.size() == 0) return;
+            ApplicationLoader.db.chatMessageDao().insertList(receivedMessages.messages);
+        });
     }
 
     @Nullable

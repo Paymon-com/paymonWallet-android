@@ -14,6 +14,7 @@ public class ChatViewModel extends ViewModel {
     private DataSource.Factory<Integer,RPC.Message>  factory;
     private LiveData<PagedList<RPC.Message>> messages;
 
+
     public ChatViewModel(){
         super();
     }

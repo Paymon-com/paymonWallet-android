@@ -29,6 +29,8 @@ import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
+import static ru.paymon.android.view.AbsFragmentChat.CHAT_GROUP_USERS;
+
 public class FragmentCreateGroup extends Fragment {
     public ArrayList<UserItem> createGroupItemList = new ArrayList<>();
     private CreateGroupAdapter adapter;
@@ -56,7 +58,7 @@ public class FragmentCreateGroup extends Fragment {
                 return;
             }
             Bundle bundle = new Bundle();
-            bundle.putSerializable("create_group_list", arrayList);
+            bundle.putSerializable(CHAT_GROUP_USERS, arrayList);
             DialogFragmentCreateGroup dialogFragmentCreateGroup = DialogFragmentCreateGroup.newInstance();
             dialogFragmentCreateGroup.setArguments(bundle);
             dialogFragmentCreateGroup.show(getActivity().getSupportFragmentManager(), null);

@@ -23,25 +23,12 @@ import ru.paymon.android.viewmodels.ChatViewModel;
 
 import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
-
 public class FragmentChat extends AbsFragmentChat {
-    private static FragmentChat instance;
     private MessagesAdapter messagesAdapter;
-
-    public static synchronized FragmentChat newInstance() {
-        instance = new FragmentChat();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        final Bundle bundle = getArguments();
-        if (bundle != null) {
-            if (bundle.containsKey(CHAT_ID_KEY))
-                chatID = bundle.getInt(CHAT_ID_KEY);
-        }
     }
 
     @Nullable
@@ -94,46 +81,6 @@ public class FragmentChat extends AbsFragmentChat {
         });
 
         messagesRecyclerView.setAdapter(messagesAdapter);
-
-
-//        final PagedList.Config config = new PagedList.Config.Builder()
-//                .setInitialLoadSizeHint(100)
-//                .setPageSize(100)
-//                .setEnablePlaceholders(false)
-//                .build();
-
-
-//        ChatDataSource chatDataSource = new ChatDataSource(chatID, false);
-//
-//        final PagedList<RPC.Message> pagedList = new PagedList.Builder<>(chatDataSource, config)
-//                .setFetchExecutor(Executors.newSingleThreadExecutor())
-//                .setNotifyExecutor(new MainThreadExecutor())
-//                .build();
-
-//        MessagesFactoryDataSource factory = new MessagesFactoryDataSource(chatID, false);
-//        DataSource.Factory factory = dao.messagesByChatID(chatID);
-
-//        final LiveData<PagedList<RPC.Message>> messages = new LivePagedListBuilder(factory, config)
-//                .setFetchExecutor(Executors.newSingleThreadExecutor())
-//                .build();
-
-//        messagesAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
-//            @Override
-//            public void onItemRangeInserted(int positionStart, int itemCount) {
-//                super.onItemRangeInserted(positionStart, itemCount);
-//                if (positionStart == 0)
-//                    messagesRecyclerView.getLayoutManager().scrollToPosition(0);
-//            }
-//        });
-
-//        messagesAdapter.submitList(pagedList);
-//        messages.observe(getActivity(), pagedList ->{
-//            messagesAdapter.submitList(pagedList);
-//            messagesAdapter.notifyDataSetChanged();
-//
-//        });
-
-//        messagesRecyclerView.setAdapter(messagesAdapter);
 
         sendButton.setOnClickListener((view1) -> {
             Utils.netQueue.postRunnable(() -> {

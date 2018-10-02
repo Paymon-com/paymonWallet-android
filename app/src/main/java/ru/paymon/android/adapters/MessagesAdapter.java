@@ -19,6 +19,7 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.selection.MessageItemDetail;
 import ru.paymon.android.selection.MessageItemLookup;
 import ru.paymon.android.selection.ViewHolderWithDetails;
+import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
 
 
@@ -32,6 +33,7 @@ public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapt
     enum ViewTypes {
         SENT_MESSAGE,
         RECEIVED_MESSAGE,
+        ACTION,
     }
 
     public SelectionTracker getSelectionTracker() {
@@ -58,12 +60,16 @@ public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapt
                 view = LayoutInflater.from(context).inflate(R.layout.view_holder_received_message, viewGroup, false);
                 vh = new ReceiveMessageViewHolder(view);
                 break;
+            case ACTION:
+                view = LayoutInflater.from(context).inflate(R.layout.view_holder_action, viewGroup, false);
+                vh = new ActionMessageViewHolder(view);
+                break;
         }
         return vh;
     }
 
     @Override
-    public void onBindViewHolder(BaseMessageViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull BaseMessageViewHolder holder, int position) {
         RPC.Message message = getItem(position);
 
         if (message == null)
@@ -79,6 +85,10 @@ public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapt
         if (msg == null) return 0;
 
         boolean isSent = msg.from_id == User.currentUser.id;
+        boolean isAction = msg.itemType == FileManager.FileType.ACTION;
+
+        if (isAction)
+            return ViewTypes.ACTION.ordinal();
 
         if (isSent)
             return ViewTypes.SENT_MESSAGE.ordinal();
@@ -134,6 +144,20 @@ public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapt
             itemView.setActivated(selectionTracker.isSelected(message));
             msg.setText(message.text);
             time.setText(Utils.formatDateTime(message.date, true));
+        }
+    }
+
+    public class ActionMessageViewHolder extends BaseMessageViewHolder {
+        public final TextView msg;
+
+        public ActionMessageViewHolder(View view) {
+            super(view);
+            msg = (TextView) view.findViewById(R.id.message_text_view);
+        }
+
+        @Override
+        void bind(RPC.Message message) {
+
         }
     }
 }
