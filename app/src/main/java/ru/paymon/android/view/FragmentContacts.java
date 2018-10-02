@@ -28,6 +28,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.ContactsAdapter;
 import ru.paymon.android.adapters.ContactsGlobalAdapter;
+import ru.paymon.android.components.CustomSearchView;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.RecyclerItemClickListener;
@@ -38,7 +39,7 @@ import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 public class FragmentContacts extends Fragment {
     private static FragmentContacts instance;
     private DialogProgress dialogProgress;
-//    private RecyclerView recyclerViewContacts;
+    //    private RecyclerView recyclerViewContacts;
     private RecyclerView recyclerViewContactsGlobal;
 
     public static synchronized FragmentContacts newInstance() {
@@ -65,14 +66,10 @@ public class FragmentContacts extends Fragment {
 //        recyclerViewContacts = (RecyclerView) view.findViewById(R.id.recViewContacts);
         recyclerViewContactsGlobal = (RecyclerView) view.findViewById(R.id.recViewContactsGlobal);
 //        EditText editText = view.findViewById(R.id.edit_text_contacts_search);
-        SearchView searchView = view.findViewById(R.id.edit_text_contacts_search2);
-
-//        searchView.setBackgroundColor(Color.parseColor("#323232"));
-
+        CustomSearchView searchView = view.findViewById(R.id.edit_text_contacts_search2);
 
 //        recyclerViewContacts.setHasFixedSize(true);
 //        recyclerViewContacts.setLayoutManager(new LinearLayoutManager(getContext()));
-
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewContactsGlobal.getContext(), (new LinearLayoutManager(getContext())).getOrientation());
         recyclerViewContactsGlobal.addItemDecoration(dividerItemDecoration);
