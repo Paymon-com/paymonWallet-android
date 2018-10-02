@@ -46,6 +46,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     private ImageView dialogsIndicator;
     private ImageView chatsIndicator;
     private ImageView groupsIndicator;
+    private EditText search;
     private int sortedBy = -1;
 
     @Override
@@ -64,7 +65,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         Button dialogsButton = view.findViewById(R.id.dialogs_button);
         Button chatsButton = view.findViewById(R.id.chats_button);
         Button groupsButton = view.findViewById(R.id.groups_button);
-        EditText search = view.findViewById(R.id.editText);
+        search = view.findViewById(R.id.editText);
         chatsAllRecyclerView = view.findViewById(R.id.fragment_dialog_recycler_view);
         dialogsIndicator = view.findViewById(R.id.dialogs_image);
         chatsIndicator = view.findViewById(R.id.chats_image);
@@ -137,6 +138,8 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
             if (!chatsViewModel.isChatsLoaded)
                 chatsViewModel.updateChatsData();
         });
+
+        search.setText(chatsViewModel.searchText);
 
         ((LinearLayoutManager) chatsAllRecyclerView.getLayoutManager()).scrollToPosition(chatsViewModel.chatsScrollY);
     }
