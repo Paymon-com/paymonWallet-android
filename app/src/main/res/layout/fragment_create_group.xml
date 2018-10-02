@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -7,43 +9,71 @@
 
     <include
         android:id="@+id/include3"
-        layout="@layout/toolbar_create_group" />
+        layout="@layout/toolbar_create_group"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/imageView5"
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:background="@drawable/transparent_gradient_rev" />
+        android:background="@drawable/transparent_gradient_rev"
+        android:translationZ="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fragment_create_group_rv" />
 
     <EditText
         android:id="@+id/edit_text_create_chats"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto_thin"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         android:background="@color/bg_dialog_title"
+        android:fontFamily="@font/roboto_thin"
+        android:singleLine="true"
+        android:gravity="center"
         android:hint="Search your friend"
         android:selectAllOnFocus="false"
         android:textColor="@color/white"
-        android:textColorHint="@color/gray_dim" />
+        android:textColorHint="@color/gray_dim"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_create_group_rv"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include3" />
 
     <ImageView
+        android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:background="@drawable/transparent_gradient_rev" />
+        android:background="@drawable/transparent_gradient_rev"
+        android:translationZ="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include3" />
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/fragment_create_group_rv"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        app:layout_constraintBottom_toTopOf="@+id/toolbar_next_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_text_create_chats" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="8dp"
-        android:background="@drawable/transparent_gradient" />
+        android:background="@drawable/transparent_gradient"
+        android:translationZ="1dp"
+        app:layout_constraintBottom_toTopOf="@+id/toolbar_next_btn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/toolbar_next_btn"
@@ -53,6 +83,9 @@
         android:text="Create group"
         android:textAllCaps="false"
         android:textColor="@color/blue_bright"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-</LinearLayout>
+</android.support.constraint.ConstraintLayout>
