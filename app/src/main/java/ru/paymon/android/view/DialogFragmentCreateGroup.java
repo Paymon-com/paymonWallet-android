@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.GroupsManager;
@@ -29,7 +29,7 @@ import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
 public class DialogFragmentCreateGroup extends DialogFragment {
     private DialogProgress dialogProgress;
     private EditText title;
-    private LinkedList<UserItem> createGroupList = new LinkedList<>();
+    private ArrayList<UserItem> createGroupList = new ArrayList<>();
 
 
     public static synchronized DialogFragmentCreateGroup newInstance() {
@@ -43,7 +43,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             if (bundle.containsKey("create_group_list")) {
-                createGroupList = (LinkedList<UserItem>) bundle.getSerializable("create_group_list");
+                createGroupList = (ArrayList<UserItem>) bundle.getSerializable("create_group_list");
             }
         }
     }

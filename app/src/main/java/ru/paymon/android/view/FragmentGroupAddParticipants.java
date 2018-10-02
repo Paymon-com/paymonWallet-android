@@ -20,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
@@ -40,7 +39,7 @@ public class FragmentGroupAddParticipants extends Fragment {
     private static FragmentGroupAddParticipants instance;
     private int chatID;
     private RPC.Group group;
-    private LinkedList<UserItem> addGroupList = new LinkedList<>();
+    private ArrayList<UserItem> addGroupList = new ArrayList<>();
     private CreateGroupAdapter adapter;
     private DialogProgress dialogProgress;
 
@@ -139,7 +138,7 @@ public class FragmentGroupAddParticipants extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                LinkedList<UserItem> sortedUserList = new LinkedList<>();
+                ArrayList<UserItem> sortedUserList = new ArrayList<>();
 
                 String text = editable.toString();
 

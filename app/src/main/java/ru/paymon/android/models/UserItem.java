@@ -7,6 +7,7 @@ public class UserItem {
     public String name;
     public RPC.PM_photoURL photo;
     public boolean checked;
+    public boolean isHidden;
 
     public UserItem(int uid, String name, RPC.PM_photoURL photo){
         this.uid = uid;

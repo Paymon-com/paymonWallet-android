@@ -10,16 +10,18 @@ import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import ru.paymon.android.R;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.utils.Utils;
 
 public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.ViewHolder> {
-    public List<UserItem> list;
+    public ArrayList<UserItem> list;
 
-    public CreateGroupAdapter(List<UserItem> list){this.list = list;}
+    public CreateGroupAdapter(ArrayList<UserItem> list) {
+        this.list = list;
+    }
 
     @NonNull
     @Override
@@ -31,17 +33,9 @@ public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         UserItem userItem = list.get(position);
-        holder.name.setText(userItem.name);
-        holder.checkBox.setChecked(userItem.checked);
 
-        if (!userItem.photo.url.isEmpty())
-            Utils.loadPhoto(userItem.photo.url, holder.photo);
-
-        View.OnClickListener clickListener = (view) -> userItem.checked = holder.checkBox.isChecked();
-
-        holder.checkBox.setOnClickListener(clickListener);
-        holder.photo.setOnClickListener(clickListener);
-        holder.name.setOnClickListener(clickListener);
+        if (userItem != null)
+            holder.bind(userItem);
     }
 
     @Override
@@ -60,6 +54,35 @@ public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.
             name = (TextView) itemView.findViewById(R.id.create_user_name);
             photo = (CircularImageView) itemView.findViewById(R.id.create_user_photo);
             checkBox = (CheckBox) itemView.findViewById(R.id.cell_create_group_checkbox);
+        }
+
+        public void bind(UserItem userItem) {
+            if (userItem.isHidden) {
+                itemView.setVisibility(View.GONE);
+                final ViewGroup.LayoutParams params = itemView.getLayoutParams();
+                params.height = 0;
+                itemView.setLayoutParams(params);
+                return;
+            } else {
+                itemView.setVisibility(View.VISIBLE);
+                final ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                itemView.setLayoutParams(params);
+            }
+
+            name.setText(userItem.name);
+            checkBox.setChecked(userItem.checked);
+
+            if (!userItem.photo.url.isEmpty())
+                Utils.loadPhoto(userItem.photo.url, photo);
+
+            View.OnClickListener clickListener = (view) -> {
+                checkBox.setChecked(!checkBox.isChecked());
+                userItem.checked = checkBox.isChecked();
+            };
+
+            checkBox.setOnCheckedChangeListener((v, isChecked) -> userItem.checked = checkBox.isChecked());
+            photo.setOnClickListener(clickListener);
+            name.setOnClickListener(clickListener);
         }
     }
 }
