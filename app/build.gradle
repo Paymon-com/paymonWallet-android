@@ -93,6 +93,8 @@ dependencies {
     implementation "android.arch.persistence.room:runtime:+"
     annotationProcessor "android.arch.persistence.room:compiler:+"
 
+    implementation "com.daimajia.swipelayout:library:+"
+
     implementation('com.coinbase.android:coinbase-android-sdk:1.0.1') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient-android'

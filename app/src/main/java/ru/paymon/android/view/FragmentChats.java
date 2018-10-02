@@ -34,7 +34,6 @@ import static ru.paymon.android.view.AbsFragmentChat.CHAT_GROUP_USERS;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
-    private static FragmentChats instance;
     private ChatsAdapter chatsAdapter;
     private ChatsViewModel chatsViewModel;
     private MainViewModel mainViewModel;
@@ -45,17 +44,11 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     private LiveData<PagedList<ChatsItem>> allChatsItemLiveData;
     //    private LiveData<PagedList<ChatsItem>> dialogsChatsItemLiveData;
 //    private LiveData<PagedList<ChatsItem>> groupsChatsItemLiveData;
-    //    private SwipeRefreshLayout swipeRefreshLayout;
+        private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView dialogsIndicator;
     private ImageView chatsIndicator;
     private ImageView groupsIndicator;
     private int sortedBy;
-
-    public static synchronized FragmentChats getInstance() {
-        if (instance == null)
-            instance = new FragmentChats();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,15 +75,13 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         dialogsIndicator = view.findViewById(R.id.dialogs_image);
         chatsIndicator = view.findViewById(R.id.chats_image);
         groupsIndicator = view.findViewById(R.id.groups_image);
-        //        swipeRefreshLayout = view.findViewById(R.id.fragment_chats_swipe_layout);
-
+        swipeRefreshLayout = view.findViewById(R.id.fragment_chats_swipe_layout);
         createGroupButton.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentCreateGroup));
 //        toolbarSearch.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentSearch));
-//        swipeRefreshLayout.setOnRefreshListener(this);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
         chatsAllRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-//        ViewCompat.setNestedScrollingEnabled(chatsAllRecyclerView, true);//FIXME:если скроллинг будет хуевым внутри nested scoll view
         chatsAllRecyclerView.setLayoutManager(linearLayoutManager);
         chatsAllRecyclerView.addItemDecoration(new DividerItemDecoration(chatsAllRecyclerView.getContext(), linearLayoutManager.getOrientation()));
 
@@ -127,7 +118,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
 //        groupItemsData = chatsViewModel.getGroupsData();
 //        isAuthorized = mainViewModel.getAuthorizationState();
 
-        sortChats(2);
+        sortChats(chatsViewModel.sortedBy);
 
 //        Observer observer = o -> {
 //            if (!(o instanceof PagedList)) return;
@@ -138,10 +129,10 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
 //        dialogsChatsItemLiveData.observe(this, observer);
 //        groupsChatsItemLiveData.observe(this, observer);
 
-//        chatsViewModel.getProgressState().observe(getActivity(), show -> {
-////            if (show == null) return;
-////            swipeRefreshLayout.setRefreshing(show);
-//        });
+        chatsViewModel.getProgressState().observe(getActivity(), show -> {
+            if (show == null) return;
+            swipeRefreshLayout.setRefreshing(show);
+        });
 
         mainViewModel.getAuthorizationState().observe(getActivity(), (state) -> {
 //            if (state == null) return;
@@ -149,6 +140,9 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
             if (!chatsViewModel.isChatsLoaded)
                 chatsViewModel.updateChatsData();
         });
+
+
+        ((LinearLayoutManager) chatsAllRecyclerView.getLayoutManager()).scrollToPosition(chatsViewModel.chatsScrollY);
 
 //        chatsViewModel.getChatsData().observe(getActivity(), data -> {
 //            if (data == null) return;
@@ -168,6 +162,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
 
     @Override
     public void onPause() {
+        chatsViewModel.chatsScrollY = ((LinearLayoutManager) chatsAllRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
         super.onPause();
     }
 
@@ -208,5 +203,6 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         });
 
         sortedBy = sortBy;
+        chatsViewModel.sortedBy = sortBy;
     }
 }

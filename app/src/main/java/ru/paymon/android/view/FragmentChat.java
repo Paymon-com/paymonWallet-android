@@ -185,6 +185,7 @@ public class FragmentChat extends AbsFragmentChat {
         super.onPause();
     }
 
+
 //    private MessagesAdapter.IMessageClickListener iMessageClickListener = new MessagesAdapter.IMessageClickListener() {
 //        @Override
 //        public void longClick() {

@@ -7,10 +7,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.utils.Utils;
@@ -60,11 +62,11 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
     }
 
     public abstract static class BaseChatsViewHolder extends RecyclerView.ViewHolder {
-//        private final  ConstraintLayout mainLayout;
+        public final Button delete;
 
         private BaseChatsViewHolder(View itemView) {
             super(itemView);
-//            mainLayout = (ConstraintLayout) itemView.findViewById(R.id.main_layout);
+            delete = (Button) itemView.findViewById(R.id.delete);
         }
 
         abstract void bind(ChatsItem chatsItem);
@@ -104,6 +106,10 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
                 msg.setText("");
 
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
+
+            delete.setOnClickListener(v -> {
+                ApplicationLoader.db.chatsDao().delete(chatsItem);
+            });
         }
     }
 
@@ -148,6 +154,10 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
                 msg.setText("");
 
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
+
+            delete.setOnClickListener(v -> {
+                ApplicationLoader.db.chatsDao().delete(chatsItem);
+            });
         }
     }
 }

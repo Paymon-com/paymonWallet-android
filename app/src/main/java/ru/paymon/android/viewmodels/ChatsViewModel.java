@@ -31,6 +31,8 @@ public class ChatsViewModel extends AndroidViewModel {
     private LiveData<PagedList<ChatsItem>> allChats;
     private LiveData<PagedList<ChatsItem>> dialogsChats;
     private LiveData<PagedList<ChatsItem>> groupsChats;
+    public int chatsScrollY;
+    public int sortedBy = 2;
     public boolean isChatsLoaded;
 
     public ChatsViewModel(@NonNull Application application) {

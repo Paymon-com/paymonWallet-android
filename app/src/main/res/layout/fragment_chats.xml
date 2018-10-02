@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/coordinatorLayout"
@@ -16,24 +16,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <!--<ProgressBar-->
-        <!--android:id="@+id/chats_all_progress_bar"-->
-        <!--style="@style/Widget.AppCompat.ProgressBar"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:background="@drawable/background_progress_dialog_gray"-->
-        <!--android:paddingLeft="8dp"-->
-        <!--android:paddingTop="8dp"-->
-        <!--android:paddingRight="8dp"-->
-        <!--android:paddingBottom="8dp"-->
-        <!--android:visibility="gone" />-->
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/appbarlayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
@@ -104,11 +93,18 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/fragment_dialog_recycler_view"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/fragment_chats_swipe_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/fragment_dialog_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
     </android.support.design.widget.CoordinatorLayout>
 
     <ImageView
