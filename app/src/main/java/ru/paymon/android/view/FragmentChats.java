@@ -44,7 +44,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     private LiveData<PagedList<ChatsItem>> allChatsItemLiveData;
     //    private LiveData<PagedList<ChatsItem>> dialogsChatsItemLiveData;
 //    private LiveData<PagedList<ChatsItem>> groupsChatsItemLiveData;
-        private SwipeRefreshLayout swipeRefreshLayout;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView dialogsIndicator;
     private ImageView chatsIndicator;
     private ImageView groupsIndicator;
@@ -174,6 +174,9 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     private void sortChats(int sortBy) {
         if (sortedBy == sortBy) return;
 
+        if (allChatsItemLiveData != null)
+            allChatsItemLiveData.removeObservers(getActivity());
+
         switch (sortBy) {
             case 0:
                 chatsIndicator.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -195,7 +198,6 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
                 break;
         }
 
-        allChatsItemLiveData.removeObservers(getActivity());
         allChatsItemLiveData.observe(getActivity(), pagedList -> {
             chatsAdapter.submitList(pagedList);
             chatsAdapter.notifyDataSetChanged();
