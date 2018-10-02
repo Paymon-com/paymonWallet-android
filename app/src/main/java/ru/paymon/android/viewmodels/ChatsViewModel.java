@@ -4,7 +4,6 @@ import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
-import android.arch.paging.DataSource;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
@@ -22,20 +21,17 @@ import ru.paymon.android.UsersManager;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.pagedlib.ChatsBoundaryCallback;
 import ru.paymon.android.utils.Utils;
 
 public class ChatsViewModel extends AndroidViewModel {
-    private MutableLiveData<Boolean> showProgress = new MutableLiveData<>();
-    private DataSource.Factory<Integer, ChatsItem> factory;
-    private LiveData<PagedList<ChatsItem>> allChats;
-    private LiveData<PagedList<ChatsItem>> dialogsChats;
-    private LiveData<PagedList<ChatsItem>> groupsChats;
     public int chatsScrollY;
     public int sortedBy = 2;
     public boolean isChatsLoaded;
     public boolean isSearchActivated;
     public String searchText;
+    private final PagedList.Config config = new PagedList.Config.Builder().setInitialLoadSizeHint(10).setPageSize(10).setEnablePlaceholders(false).build();
+    private MutableLiveData<Boolean> showProgress = new MutableLiveData<>();
+    private LiveData<PagedList<ChatsItem>> chats;
 
     public ChatsViewModel(@NonNull Application application) {
         super(application);
@@ -46,75 +42,33 @@ public class ChatsViewModel extends AndroidViewModel {
     }
 
     public LiveData<PagedList<ChatsItem>> getChats() {
-        factory = ApplicationLoader.db.chatsDao().chats();
-        final PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10)
-                .setEnablePlaceholders(false)
-                .build();
-        allChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-
-        return allChats;
+        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatsDao().chats(), config).build();
+        return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getGroupChats() {
-        factory = ApplicationLoader.db.chatsDao().chatsByChatType(true);
-        final PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10)
-                .setEnablePlaceholders(false)
-                .build();
-        groupsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-
-        return groupsChats;
+        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatsDao().chatsByChatType(true), config).build();
+        return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getDialogsChats() {
-        factory = ApplicationLoader.db.chatsDao().chatsByChatType(false);
-        final PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10)
-                .setEnablePlaceholders(false)
-                .build();
-        dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-
-        return dialogsChats;
+        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatsDao().chatsByChatType(false), config).build();
+        return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getDialogsChatsBySearch(String searchQuery) {
-        factory = ApplicationLoader.db.chatsDao().chatsBySearch("%" + searchQuery + "%", false);
-        final PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10)
-                .setEnablePlaceholders(false)
-                .build();
-        dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-
-        return dialogsChats;
+        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatsDao().chatsBySearch("%" + searchQuery + "%", false), config).build();
+        return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getGroupsChatsBySearch(String searchQuery) {
-        factory = ApplicationLoader.db.chatsDao().chatsBySearch("%" + searchQuery + "%", true);
-        final PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10)
-                .setEnablePlaceholders(false)
-                .build();
-        dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-
-        return dialogsChats;
+        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatsDao().chatsBySearch("%" + searchQuery + "%", true), config).build();
+        return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getChatsBySearch(String searchQuery) {
-        factory = ApplicationLoader.db.chatsDao().chatsBySearch("%" + searchQuery + "%");
-        final PagedList.Config config = new PagedList.Config.Builder()
-                .setInitialLoadSizeHint(10)
-                .setPageSize(10)
-                .setEnablePlaceholders(false)
-                .build();
-        dialogsChats = new LivePagedListBuilder<Integer, ChatsItem>(factory, config).setBoundaryCallback(new ChatsBoundaryCallback()).build();
-
-        return dialogsChats;
+        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatsDao().chatsBySearch("%" + searchQuery + "%"), config).build();
+        return chats;
     }
 
 
