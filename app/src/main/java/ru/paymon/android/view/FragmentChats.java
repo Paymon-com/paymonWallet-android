@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,29 +38,19 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     private ChatsAdapter chatsAdapter;
     private ChatsViewModel chatsViewModel;
     private MainViewModel mainViewModel;
-    private LiveData<Boolean> showProgress;
-    //    private LiveData<LinkedList<ChatsItem>> chatsItemsData;
-    private LiveData<Boolean> isAuthorized;
     private RecyclerView chatsAllRecyclerView;
     private LiveData<PagedList<ChatsItem>> allChatsItemLiveData;
-    //    private LiveData<PagedList<ChatsItem>> dialogsChatsItemLiveData;
-//    private LiveData<PagedList<ChatsItem>> groupsChatsItemLiveData;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ImageView dialogsIndicator;
     private ImageView chatsIndicator;
     private ImageView groupsIndicator;
-    private int sortedBy;
+    private int sortedBy = -1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         chatsViewModel = ViewModelProviders.of(getActivity()).get(ChatsViewModel.class);
         mainViewModel = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
-        showProgress = chatsViewModel.getProgressState();
-//        chatsItemLiveData = chatsViewModel.getChats();
-//        dialogsChatsItemLiveData = chatsViewModel.getDialogsChats();
-//        groupsChatsItemLiveData = chatsViewModel.getGroupChats();
-//        allChatsItemLiveData = chatsViewModel.getChats();
     }
 
     @Nullable
@@ -112,22 +103,8 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        showProgress = chatsViewModel.getProgressState();
-//        chatsItemsData = chatsViewModel.getChatsData();
-//        dialogsItemsData = chatsViewModel.getDialogsData();
-//        groupItemsData = chatsViewModel.getGroupsData();
-//        isAuthorized = mainViewModel.getAuthorizationState();
 
         sortChats(chatsViewModel.sortedBy);
-
-//        Observer observer = o -> {
-//            if (!(o instanceof PagedList)) return;
-//            chatsAdapter.submitList((PagedList<ChatsItem>) o);
-//        };
-
-//        allChatsItemLiveData.observe(this, observer);
-//        dialogsChatsItemLiveData.observe(this, observer);
-//        groupsChatsItemLiveData.observe(this, observer);
 
         chatsViewModel.getProgressState().observe(getActivity(), show -> {
             if (show == null) return;
@@ -135,21 +112,11 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         });
 
         mainViewModel.getAuthorizationState().observe(getActivity(), (state) -> {
-//            if (state == null) return;
-//            if (!swipeRefreshLayout.isRefreshing() && state)
             if (!chatsViewModel.isChatsLoaded)
                 chatsViewModel.updateChatsData();
         });
 
-
         ((LinearLayoutManager) chatsAllRecyclerView.getLayoutManager()).scrollToPosition(chatsViewModel.chatsScrollY);
-
-//        chatsViewModel.getChatsData().observe(getActivity(), data -> {
-//            if (data == null) return;
-//            chatsAdapter.chatsItemsList.clear();
-//            chatsAdapter.chatsItemsList.addAll(data);
-//            chatsAdapter.notifyDataSetChanged();
-//        });
     }
 
 
@@ -163,6 +130,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     @Override
     public void onPause() {
         chatsViewModel.chatsScrollY = ((LinearLayoutManager) chatsAllRecyclerView.getLayoutManager()).findFirstCompletelyVisibleItemPosition();
+        sortedBy = -1;
         super.onPause();
     }
 
@@ -172,6 +140,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void sortChats(int sortBy) {
+        Log.e("AAA", sortBy + " " + chatsViewModel.sortedBy + " " +sortedBy);
         if (sortedBy == sortBy) return;
 
         if (allChatsItemLiveData != null)
@@ -201,7 +170,6 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         allChatsItemLiveData.observe(getActivity(), pagedList -> {
             chatsAdapter.submitList(pagedList);
             chatsAdapter.notifyDataSetChanged();
-//            chatsAllRecyclerView.setAdapter(chatsAdapter);
         });
 
         sortedBy = sortBy;
