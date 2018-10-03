@@ -3,6 +3,7 @@ package ru.paymon.android.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -16,7 +17,7 @@ import ru.paymon.android.User;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NotificationManager.IListener {
     private static long back_pressed;
-    private TextView textView;
+    private ConstraintLayout connectingConstraint;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             return;
         }
 
-        textView = findViewById(R.id.connecting_activity);
+        connectingConstraint = findViewById(R.id.connecting_constraint);
 
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
@@ -132,9 +133,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
         if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED || event == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-            textView.setVisibility(View.GONE);
+            connectingConstraint.setVisibility(View.GONE);
         } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED || event == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
-            textView.setVisibility(View.VISIBLE);
+            connectingConstraint.setVisibility(View.VISIBLE);
         }
     }
 
