@@ -38,8 +38,8 @@ public class UsersManager {
 //        else
 //            MediaManager.getInstance().userProfilePhotoIDs.put(user.gid, user.photoID);
 
-        if (MessagesManager.getInstance().dialogsMessages.get(user.id) != null)
-            userContacts.put(user.id, user);
+//        if (MessagesManager.getInstance().dialogsMessages.get(user.id) != null)
+//            userContacts.put(user.id, user);
     }
 
     public void putSearchUser(RPC.UserObject user) {

@@ -1,24 +1,19 @@
 package ru.paymon.android;
 
-import android.util.LongSparseArray;
-import android.util.SparseArray;
-
-import java.util.Collections;
-import java.util.LinkedList;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ru.paymon.android.net.RPC;
+//import ru.paymon.android.net.RPC;
 
-public class MessagesManager implements NotificationManager.IListener {
+public class MessagesManager {
     public int currentChatID = 0;
-    public LongSparseArray<RPC.Message> messages = new LongSparseArray<>();
-    public SparseArray<LinkedList<RPC.Message>> dialogsMessages = new SparseArray<>();
-    public SparseArray<LinkedList<RPC.Message>> groupsMessages = new SparseArray<>();
-    public LongSparseArray<Long> lastMessages = new LongSparseArray<>();
-    public LongSparseArray<Long> lastGroupMessages = new LongSparseArray<>();
+//    public LongSparseArray<RPC.Message> messages = new LongSparseArray<>();
+//    public SparseArray<LinkedList<RPC.Message>> dialogsMessages = new SparseArray<>();
+//    public SparseArray<LinkedList<RPC.Message>> groupsMessages = new SparseArray<>();
+//    public LongSparseArray<Long> lastMessages = new LongSparseArray<>();
+//    public LongSparseArray<Long> lastGroupMessages = new LongSparseArray<>();
     private static AtomicInteger lastMessageID = new AtomicInteger(0);
     private static volatile MessagesManager Instance = null;
-
+//
     public static MessagesManager getInstance() {
         MessagesManager localInstance = Instance;
         if (localInstance == null) {
@@ -31,77 +26,77 @@ public class MessagesManager implements NotificationManager.IListener {
         }
         return localInstance;
     }
-
-    private MessagesManager() {
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES);
-    }
-
-    public void dispose() {
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES);
-        Instance = null;
-    }
+//
+//    private MessagesManager() {
+//        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES);
+//    }
+//
+//    public void dispose() {
+//        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES);
+//        Instance = null;
+//    }
 
     public static int generateMessageID() {
         return lastMessageID.incrementAndGet();
     }
 
-    public void putMessage(RPC.Message msg) {
-        if (messages.get(msg.id) != null) return;
-
-        messages.put(msg.id, msg);
-
-        RPC.PM_userFull currentUser = User.currentUser;
-
-        SparseArray<LinkedList<RPC.Message>> chatsMessages;
-        int chatID;
-
-        int to_id = msg.to_peer.user_id;
-        if (to_id == 0) {
-            to_id = msg.to_peer.group_id;
-            chatID = to_id;
-            chatsMessages = groupsMessages;
-        } else {
-            if (msg.from_id == currentUser.id) {
-                chatID = to_id;
-            } else {
-                chatID = msg.from_id;
-            }
-            chatsMessages = dialogsMessages;
-        }
-
-        LinkedList<RPC.Message> chatMessages = chatsMessages.get(chatID);
-        if (chatMessages == null) {
-            chatMessages = new LinkedList<>();
-        }
-        chatMessages.add(msg);
-        chatsMessages.put(chatID, chatMessages);
-    }
-
-    public void deleteMessage(RPC.Message msg) {
-        if (messages.get(msg.id) == null) return;
-
-        int chatID;
-
-        int to_id = msg.to_peer.user_id;
-        if (to_id == 0) {
-            chatID = to_id;
-        } else {
-            if (msg.from_id == User.currentUser.id)
-                chatID = to_id;
-            else
-                chatID = msg.from_id;
-        }
-
-        messages.remove(msg.id);
-
-        if (msg.to_peer.user_id != 0) {
-            dialogsMessages.get(chatID).remove(msg);
-            lastMessages.remove(msg.id);
-        } else {
-            groupsMessages.get(chatID).remove(msg);
-            lastGroupMessages.remove(msg.id);
-        }
-    }
+//    public void putMessage(RPC.Message msg) {
+//        if (messages.get(msg.id) != null) return;
+//
+//        messages.put(msg.id, msg);
+//
+//        RPC.PM_userFull currentUser = User.currentUser;
+//
+//        SparseArray<LinkedList<RPC.Message>> chatsMessages;
+//        int chatID;
+//
+//        int to_id = msg.to_peer.user_id;
+//        if (to_id == 0) {
+//            to_id = msg.to_peer.group_id;
+//            chatID = to_id;
+//            chatsMessages = groupsMessages;
+//        } else {
+//            if (msg.from_id == currentUser.id) {
+//                chatID = to_id;
+//            } else {
+//                chatID = msg.from_id;
+//            }
+//            chatsMessages = dialogsMessages;
+//        }
+//
+//        LinkedList<RPC.Message> chatMessages = chatsMessages.get(chatID);
+//        if (chatMessages == null) {
+//            chatMessages = new LinkedList<>();
+//        }
+//        chatMessages.add(msg);
+//        chatsMessages.put(chatID, chatMessages);
+//    }
+//
+//    public void deleteMessage(RPC.Message msg) {
+//        if (messages.get(msg.id) == null) return;
+//
+//        int chatID;
+//
+//        int to_id = msg.to_peer.user_id;
+//        if (to_id == 0) {
+//            chatID = to_id;
+//        } else {
+//            if (msg.from_id == User.currentUser.id)
+//                chatID = to_id;
+//            else
+//                chatID = msg.from_id;
+//        }
+//
+//        messages.remove(msg.id);
+//
+//        if (msg.to_peer.user_id != 0) {
+//            dialogsMessages.get(chatID).remove(msg);
+//            lastMessages.remove(msg.id);
+//        } else {
+//            groupsMessages.get(chatID).remove(msg);
+//            lastGroupMessages.remove(msg.id);
+//        }
+//    }
 
 //    public void loadChats(boolean fromCache) {
 //        if (fromCache) {
@@ -190,33 +185,34 @@ public class MessagesManager implements NotificationManager.IListener {
 //        });
 //    }
 
-    @Override
-    public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
-        if (id == NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES) {
-            LinkedList<RPC.Message> messages = (LinkedList<RPC.Message>) args[0];
-            LinkedList<Long> messagesToShow = new LinkedList<>();
-
-            for (RPC.Message msg : messages) {
-                putMessage(msg);
-                int to_id = msg.to_peer.user_id;
-                boolean isGroup = false;
-                if (to_id == 0) {
-                    isGroup = true;
-                    to_id = msg.to_peer.group_id;
-                }
-                if (!isGroup)
-                    if ((to_id == currentChatID && msg.from_id == User.currentUser.id) || (to_id == User.currentUser.id && msg.from_id == currentChatID)) {
-                        messagesToShow.add(msg.id);
-                    } else {
-                        if (to_id == currentChatID)
-                            messagesToShow.add(msg.id);
-                    }
-            }
-            if (messagesToShow.size() > 0) {
-                Collections.sort(messagesToShow, Long::compareTo);
-                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.chatAddMessages, messagesToShow, false);
-//                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, );
-            }
-        }
-    }
+//    @Override
+//    public void didReceivedNotification(NotificationManager.NotificationEvent id, Object... args) {
+//        if (id == NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES) {
+//            LinkedList<RPC.Message> messages = (LinkedList<RPC.Message>) args[0];
+//            ApplicationLoader.db.chatMessageDao().insertList(messages);
+////            LinkedList<Long> messagesToShow = new LinkedList<>();
+////
+////            for (RPC.Message msg : messages) {
+//////                putMessage(msg);
+////                int to_id = msg.to_peer.user_id;
+////                boolean isGroup = false;
+////                if (to_id == 0) {
+////                    isGroup = true;
+////                    to_id = msg.to_peer.group_id;
+////                }
+////                if (!isGroup)
+////                    if ((to_id == currentChatID && msg.from_id == User.currentUser.id) || (to_id == User.currentUser.id && msg.from_id == currentChatID)) {
+////                        messagesToShow.add(msg.id);
+////                    } else {
+////                        if (to_id == currentChatID)
+////                            messagesToShow.add(msg.id);
+////                    }
+////            }
+////            if (messagesToShow.size() > 0) {
+////                Collections.sort(messagesToShow, Long::compareTo);
+////                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.chatAddMessages, messagesToShow, false);
+////                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload, );
+////            }
+//        }
+//    }
 }

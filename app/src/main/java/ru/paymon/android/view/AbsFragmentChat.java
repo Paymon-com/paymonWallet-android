@@ -2,18 +2,16 @@ package ru.paymon.android.view;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +26,6 @@ import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 
 import androidx.navigation.Navigation;
 import androidx.recyclerview.selection.SelectionTracker;
@@ -38,12 +35,16 @@ import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.room.ChatMessageDao;
-import ru.paymon.android.utils.ImagePicker;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.ChatViewModel;
+
+import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
+
+//import ru.paymon.android.utils.ImagePicker;
 
 public abstract class AbsFragmentChat extends Fragment {
     public static final String CHAT_ID_KEY = "CHAT_ID_KEY";
@@ -75,18 +76,7 @@ public abstract class AbsFragmentChat extends Fragment {
     public ChatViewModel chatViewModel;
     public ChatMessageDao dao = ApplicationLoader.db.chatMessageDao();
     public ArrayList<RPC.UserObject> groupUsers;
-
     public int chatID;
-
-    public class MainThreadExecutor implements Executor {
-
-        private final Handler handler = new Handler(Looper.getMainLooper());
-
-        @Override
-        public void execute(Runnable runnable) {
-            handler.post(runnable);
-        }
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,6 +102,7 @@ public abstract class AbsFragmentChat extends Fragment {
         NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
             if (response == null) return;
             final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
+            Log.e("AAA", receivedMessages.messages.size() + " qq");
             if (receivedMessages.messages.size() == 0) return;
             ApplicationLoader.db.chatMessageDao().insertList(receivedMessages.messages);
         });
@@ -182,9 +173,9 @@ public abstract class AbsFragmentChat extends Fragment {
         });
 
         buttonImageAttachment.setOnClickListener(view12 -> {
-            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "Выберите");//TODO:string
-            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
-            includeAttachment.setVisibility(View.GONE);
+//            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "Выберите");//TODO:string
+//            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+//            includeAttachment.setVisibility(View.GONE);
         });
 
         buttonVideoAttachment.setOnClickListener(view14 -> {
@@ -213,6 +204,49 @@ public abstract class AbsFragmentChat extends Fragment {
         linearLayoutManager.setReverseLayout(true);
         messagesRecyclerView.setLayoutManager(linearLayoutManager);
 
+        sendButton.setOnClickListener((view1) -> {
+            Utils.netQueue.postRunnable(() -> {
+                final String messageText = messageInput.getText().toString();
+
+                if (User.currentUser == null || messageText.trim().isEmpty()) return;
+
+                RPC.PM_message messageRequest = new RPC.PM_message();
+                messageRequest.id = MessagesManager.generateMessageID();
+                messageRequest.text = messageText;
+                messageRequest.flags = MESSAGE_FLAG_FROM_ID;
+                messageRequest.date = (int) (System.currentTimeMillis() / 1000L);
+                messageRequest.from_id = User.currentUser.id;
+                messageRequest.to_peer = this instanceof FragmentChat ? new RPC.PM_peerUser(chatID) : new RPC.PM_peerGroup(chatID);
+                messageRequest.to_id = chatID;
+                messageRequest.unread = true;
+
+                NetworkManager.getInstance().sendRequest(messageRequest, (response, error) -> {
+                    if (error != null || response == null)
+                        return;     //TODO:сделать, чтобы если сообщение не дошло, предлагало переотправить
+
+                    RPC.PM_updateMessageID updateMsgID = (RPC.PM_updateMessageID) response;
+
+                    messageRequest.id = updateMsgID.newID;
+//                    MessagesManager.getInstance().putMessage(messageRequest);
+//
+//                    if (messageRequest.to_peer.user_id == User.currentUser.id)
+//                        MessagesManager.getInstance().lastMessages.put(messageRequest.from_id, messageRequest.id);
+//                    else
+//                        MessagesManager.getInstance().lastMessages.put(messageRequest.to_peer.user_id, messageRequest.id);
+
+                    chatViewModel.insert(messageRequest);
+                    ChatsItem chatsItem = ApplicationLoader.db.chatsDao().chat(this instanceof FragmentChat ? -chatID : chatID);
+                    if (chatsItem == null) return;
+                    chatsItem.lastMessageText = messageRequest.text;
+                    chatsItem.time = messageRequest.date;
+//                    if(this instanceof FragmentGroupChat)
+//                        chatsItem.lastMsgPhotoURL = //TODO: обновление фотки последнего написавшего!!!
+                    ApplicationLoader.db.chatsDao().insert(chatsItem);
+                });
+            });
+            messageInput.setText("");
+        });
+
         return view;
     }
 
@@ -234,7 +268,7 @@ public abstract class AbsFragmentChat extends Fragment {
         if (resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case PICK_IMAGE_ID:
-                    Bitmap bitmap = ImagePicker.getImageFromResult(ApplicationLoader.applicationContext, requestCode, resultCode, data);
+//                    Bitmap bitmap = ImagePicker.getImageFromResult(ApplicationLoader.applicationContext, requestCode, resultCode, data);
                     //TODO:Работа с картинками
                     break;
                 case PICK_DOCUMENT_ID:

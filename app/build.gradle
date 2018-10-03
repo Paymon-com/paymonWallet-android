@@ -94,6 +94,7 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:+"
 
     implementation "com.daimajia.swipelayout:library:+"
+    implementation 'com.github.esafirm.android-image-picker:imagepicker:+'
 
     implementation('com.coinbase.android:coinbase-android-sdk:1.0.1') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'

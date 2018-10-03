@@ -21,7 +21,6 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Locale;
 
 import ru.paymon.android.ApplicationLoader;
@@ -53,7 +52,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     private static final int NOTIFY_ID = 101;
     private final IBinder binder = new LocalBinder();
     private BroadcastReceiver broadcastReceiver;
-    private RPC.Message msg;
+    //    private RPC.Message msg;
     private boolean receiverRegistered;
     private android.app.NotificationManager notificationManager;
 
@@ -276,6 +275,70 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         NetworkManager.getInstance().native_sendData(buffer.getAddress(), 0, buffer.limit());
     }
 
+    private void receivedMessage(final RPC.Message msg) {
+        Utils.netQueue.postRunnable(() -> {
+            ApplicationLoader.db.chatMessageDao().insert(msg);
+            RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
+            if (user == null) {
+                RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo();
+                userInfo.user_id = msg.from_id;
+                NetworkManager.getInstance().sendRequest(userInfo, (response, error1) -> {
+                    if (response == null || error1 != null) return;
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        RPC.UserObject userObject = (RPC.UserObject) response;
+                        UsersManager.getInstance().users.put(userObject.id, userObject);
+                        if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
+                            UsersManager.getInstance().userContacts.put(userObject.id, userObject);
+                    });
+                });
+            } else {
+                if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
+                    UsersManager.getInstance().userContacts.put(user.id, user);
+            }
+            showNotify(msg);
+        });
+    }
+
+    private void receivedPhotoURL(final RPC.PM_photoURL photoURL) {
+        if (photoURL.peer instanceof RPC.PM_peerUser) {
+            RPC.PM_peerUser peerUser = (RPC.PM_peerUser) photoURL.peer;
+            UsersManager.getInstance().users.get(peerUser.user_id).photoURL.url = photoURL.url;
+            UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = photoURL.url;
+            if (User.currentUser.id == peerUser.user_id) {
+                User.currentUser.photoURL.url = photoURL.url;
+                User.saveConfig();
+            }
+        } else if (photoURL.peer instanceof RPC.PM_peerGroup) {
+            RPC.PM_peerGroup peerGroup = (RPC.PM_peerGroup) photoURL.peer;
+            GroupsManager.getInstance().groups.get(peerGroup.group_id).photoURL.url = photoURL.url;
+        }
+    }
+
+    private void receivedError(final RPC.PM_error error){
+        Log.w(Config.TAG, String.format(Locale.getDefault(), "PM_error(%d): %s", error.code, error.text));
+        Log.d("paymon_error_response", error.text);
+        if (error.code == ERROR_KEY) {
+            Log.e(Config.TAG, "ERROR_KEY, reconnecting");
+            NetworkManager.getInstance().reconnect();
+        } else if (error.code == ERROR_AUTH_TOKEN) {
+            Log.e(Config.TAG, "ERROR_AUTH_TOKEN, auth");
+            // FIXME: logout
+            NetworkManager.getInstance().authByToken();
+        } else if (error.code == ERROR_AUTH) {
+//                Looper.prepare();
+            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.auth_wrong_login_or_password), Toast.LENGTH_LONG).show());
+        } else if (error.code == ERROR_SPAMMING) {
+//                Looper.prepare();
+            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.error_spamming), Toast.LENGTH_LONG).show());
+        }
+    }
+
+    private void receivedPostConnectionData(final RPC.PM_postConnectionData data){
+        KeyGenerator.getInstance().setPostConnectionData(data);
+        NetworkManager.getInstance().setHandshaked(true);
+        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
+    }
+
     // TODO: сделать возможным передачу сообщения вместе с ошибкой
     public void processServerResponse(Packet packet, long messageID) {
         lastKeepAlive = System.currentTimeMillis() / 1000L;
@@ -284,94 +347,16 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         requestsMap.remove(messageID);
 
         if (packet instanceof RPC.Message) {
-            msg = (RPC.Message) packet;
-            final LinkedList<RPC.Message> messages = new LinkedList<>();
-            messages.add(msg);
-            Utils.netQueue.postRunnable(() -> {
-                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.RECEIVED_NEW_MESSAGES, messages);
-                RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
-                if (user == null) {
-                    RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo();
-                    userInfo.user_id = msg.from_id;
-                    NetworkManager.getInstance().sendRequest(userInfo, (response, error1) -> {
-                        if (response == null || error1 != null) return;
-                        ApplicationLoader.applicationHandler.post(() -> {
-                            RPC.UserObject userObject = (RPC.UserObject) response;
-                            UsersManager.getInstance().users.put(userObject.id, userObject);
-                            if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
-                                UsersManager.getInstance().userContacts.put(userObject.id, userObject);
-                        });
-                    });
-                } else {
-                    if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
-                        UsersManager.getInstance().userContacts.put(user.id, user);
-                }
-                MessagesManager.getInstance().putMessage(msg);
-                if (msg.to_peer.user_id != 0) {
-                    if (msg.to_peer.user_id == User.currentUser.id) {
-                        MessagesManager.getInstance().lastMessages.put(msg.from_id, msg.id);
-                    } else {
-                        MessagesManager.getInstance().lastMessages.put(msg.to_peer.user_id, msg.id);
-                    }
-                } else {
-                    MessagesManager.getInstance().lastGroupMessages.put(msg.to_peer.group_id, msg.id);
-                }
-                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
-                showNotify(msg);
-            });
+            receivedMessage((RPC.Message) packet);
         } else if (packet instanceof RPC.PM_photoURL) {
-            final RPC.PM_photoURL update = (RPC.PM_photoURL) packet;
-            if (update.peer instanceof RPC.PM_peerUser) {
-                RPC.PM_peerUser peerUser = (RPC.PM_peerUser) ((RPC.PM_photoURL) packet).peer;
-                UsersManager.getInstance().users.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
-                UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
-                if (User.currentUser.id == peerUser.user_id) {
-                    User.currentUser.photoURL.url = update.url;
-                    User.saveConfig();
-                }
-                Log.e(Config.TAG, "UPDATE PHOTO URL USER");
-            } else if (update.peer instanceof RPC.PM_peerGroup) {
-                RPC.PM_peerGroup peerGroup = (RPC.PM_peerGroup) ((RPC.PM_photoURL) packet).peer;
-                GroupsManager.getInstance().groups.get(peerGroup.group_id).photoURL.url = ((RPC.PM_photoURL) packet).url;
-                Log.e(Config.TAG, "UPDATE PHOTO URL GROUP");
-            }
-//        } else if (packet instanceof RPC.PM_photo) {
-//            RPC.PM_photo photoURL = (RPC.PM_photo) packet;
-//            MediaManager.getInstance().updatePhoto(photoURL);
+            receivedPhotoURL((RPC.PM_photoURL) packet);
         } else if (packet instanceof RPC.PM_error) {
-            Log.e(Config.TAG, "ERROR");
-
-            error = (RPC.PM_error) packet;
-            packet = null;
-
-            Log.w(Config.TAG, String.format(Locale.getDefault(), "PM_error(%d): %s", error.code, error.text));
-            final String text = error.text;
-            ApplicationLoader.applicationHandler.post(() -> Log.d("paymon_error_response", text));
-
-            if (error.code == ERROR_KEY) {
-                Log.e(Config.TAG, "ERROR_KEY, reconnecting");
-                NetworkManager.getInstance().reconnect();
-            } else if (error.code == ERROR_AUTH_TOKEN) {
-                Log.e(Config.TAG, "ERROR_AUTH_TOKEN, auth");
-                // FIXME: logout
-                NetworkManager.getInstance().authByToken();
-            } else if (error.code == ERROR_AUTH) {
-//                Looper.prepare();
-                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.auth_wrong_login_or_password), Toast.LENGTH_LONG).show());
-            } else if (error.code == ERROR_SPAMMING) {
-//                Looper.prepare();
-                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.error_spamming), Toast.LENGTH_LONG).show());
-                return;
-            }
+           receivedError((RPC.PM_error) packet);
         } else if (packet instanceof RPC.PM_postConnectionData) {
-            KeyGenerator.getInstance().setPostConnectionData((RPC.PM_postConnectionData) packet);
-            NetworkManager.getInstance().setHandshaked(true);
-//            requestsMap.clear();
-//            requestsMap.remove(messageID);
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
+            receivedPostConnectionData((RPC.PM_postConnectionData) packet);
         } else if (packet instanceof RPC.PM_file) {
 //            requestsMap.remove(messageID);
-            RPC.PM_file file = (RPC.PM_file) packet;
+//            RPC.PM_file file = (RPC.PM_file) packet;
 //            requestsMap.get(3);
 //            file.gid;
 //            if (file.type == FileManager.FileType.PHOTO) {

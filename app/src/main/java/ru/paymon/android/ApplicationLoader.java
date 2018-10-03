@@ -59,7 +59,7 @@ public class ApplicationLoader extends Application {
     }
 
     public static void finish() {
-        MessagesManager.getInstance().dispose();
+//        MessagesManager.getInstance().dispose();
 //        MediaManager.getInstance().dispose();
         UsersManager.getInstance().dispose();
         GroupsManager.getInstance().dispose();

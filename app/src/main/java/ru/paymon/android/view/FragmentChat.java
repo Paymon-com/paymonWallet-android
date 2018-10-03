@@ -10,18 +10,11 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.selection.StorageStrategy;
-import ru.paymon.android.MessagesManager;
-import ru.paymon.android.User;
 import ru.paymon.android.adapters.MessagesAdapter;
-import ru.paymon.android.net.NetworkManager;
-import ru.paymon.android.net.RPC;
 import ru.paymon.android.pagedlib.MessageDiffUtilCallback;
 import ru.paymon.android.selection.MessageItemKeyProvider;
 import ru.paymon.android.selection.MessageItemLookup;
-import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.ChatViewModel;
-
-import static ru.paymon.android.net.RPC.Message.MESSAGE_FLAG_FROM_ID;
 
 public class FragmentChat extends AbsFragmentChat {
     private MessagesAdapter messagesAdapter;
@@ -66,7 +59,7 @@ public class FragmentChat extends AbsFragmentChat {
                     if (selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.GONE);
                         toolbarViewSelected.setVisibility(View.VISIBLE);
-                        selectedItemCount.setText("Selected item count: " + selectionTracker.getSelection().size());//TODO:String
+                        selectedItemCount.setText(String.format("Selected item count: %d", selectionTracker.getSelection().size()));//TODO:String
                     } else if (!selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.VISIBLE);
                         toolbarViewSelected.setVisibility(View.GONE);
@@ -81,43 +74,6 @@ public class FragmentChat extends AbsFragmentChat {
         });
 
         messagesRecyclerView.setAdapter(messagesAdapter);
-
-        sendButton.setOnClickListener((view1) -> {
-            Utils.netQueue.postRunnable(() -> {
-                final String messageText = messageInput.getText().toString();
-
-                if (User.currentUser == null || messageText.trim().isEmpty()) return;
-
-                RPC.PM_message messageRequest = new RPC.PM_message();
-                messageRequest.id = MessagesManager.generateMessageID();
-                messageRequest.text = messageText;
-                messageRequest.flags = MESSAGE_FLAG_FROM_ID;
-                messageRequest.date = (int) (System.currentTimeMillis() / 1000L);
-                messageRequest.from_id = User.currentUser.id;
-                messageRequest.to_peer = new RPC.PM_peerUser(chatID);
-                messageRequest.to_id = chatID;
-                messageRequest.unread = true;
-
-                NetworkManager.getInstance().sendRequest(messageRequest, (response, error) -> {
-                    if (error != null || response == null)
-                        return;     //TODO:сделать, чтобы если сообщение не дошло, предлагало переотправить
-
-                    RPC.PM_updateMessageID updateMsgID = (RPC.PM_updateMessageID) response;
-
-                    messageRequest.id = updateMsgID.newID;
-                    MessagesManager.getInstance().putMessage(messageRequest);
-
-                    if (messageRequest.to_peer.user_id == User.currentUser.id)
-                        MessagesManager.getInstance().lastMessages.put(messageRequest.from_id, messageRequest.id);
-                    else
-                        MessagesManager.getInstance().lastMessages.put(messageRequest.to_peer.user_id, messageRequest.id);
-
-                    chatViewModel.insert(messageRequest);
-                });
-            });
-            messageInput.setText("");
-        });
-
 
         return view;
     }

@@ -1,6 +1,5 @@
 package ru.paymon.android.view;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -8,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +20,13 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.FileManager;
-import ru.paymon.android.utils.ImagePicker;
 import ru.paymon.android.utils.Utils;
+
+//import ru.paymon.android.utils.ImagePicker;
 
 
 public class FragmentProfileEdit extends Fragment {
@@ -171,65 +168,65 @@ public class FragmentProfileEdit extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            Utils.netQueue.postRunnable(() -> {
-                ApplicationLoader.applicationHandler.post(dialogProgress::show);
-
-                final String imagePath = ImagePicker.getImagePathFromResult(ApplicationLoader.applicationContext, 234, resultCode, data);
-                final RPC.PM_setProfilePhoto setProfilePhotoRequest = new RPC.PM_setProfilePhoto();
-
-                final long requestID = NetworkManager.getInstance().sendRequest(setProfilePhotoRequest, (response, error) -> {
-                    if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
-                        ApplicationLoader.applicationHandler.post(() -> {
-                            if (dialogProgress != null && dialogProgress.isShowing())
-                                dialogProgress.cancel();
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                    .setMessage(R.string.photo_upload_failed) //TODO:string
-                                    .setCancelable(true);
-                            AlertDialog alertDialog = builder.create();
-                            alertDialog.show();
-                        });
-                        return;
-                    }
-
-                    if (response instanceof RPC.PM_boolTrue) {
-                        FileManager.getInstance().startUploading(imagePath, new FileManager.IUploadingFile() {
-                            @Override
-                            public void onFinish() {
-                                Log.e(Config.TAG, "Profile photoURL successfully uploaded");
-                                ApplicationLoader.applicationHandler.post(() -> {
-                                    if (dialogProgress != null && dialogProgress.isShowing())
-                                        dialogProgress.dismiss();
-                                    if(!User.currentUser.photoURL.url.isEmpty())
-                                        Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
-                                });
-                            }
-
-                            @Override
-                            public void onProgress(int percent) {
-
-                            }
-
-                            @Override
-                            public void onError(int code) {
-                                Log.e(Config.TAG, "Error while uploading profile photoURL, error code: " + code);
-                                ApplicationLoader.applicationHandler.post(() -> {
-                                    if (dialogProgress != null && dialogProgress.isShowing())
-                                        dialogProgress.cancel();
-                                });
-                            }
-                        });
-                    }
-
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        if (dialogProgress != null && dialogProgress.isShowing())
-                            dialogProgress.dismiss();
-                    });
-                });
-
-                ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
-            });
-        }
+//        if (resultCode == Activity.RESULT_OK) {
+//            Utils.netQueue.postRunnable(() -> {
+//                ApplicationLoader.applicationHandler.post(dialogProgress::show);
+//
+//                final String imagePath = ImagePicker.getImagePathFromResult(ApplicationLoader.applicationContext, 234, resultCode, data);
+//                final RPC.PM_setProfilePhoto setProfilePhotoRequest = new RPC.PM_setProfilePhoto();
+//
+//                final long requestID = NetworkManager.getInstance().sendRequest(setProfilePhotoRequest, (response, error) -> {
+//                    if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+//                        ApplicationLoader.applicationHandler.post(() -> {
+//                            if (dialogProgress != null && dialogProgress.isShowing())
+//                                dialogProgress.cancel();
+//
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+//                                    .setMessage(R.string.photo_upload_failed) //TODO:string
+//                                    .setCancelable(true);
+//                            AlertDialog alertDialog = builder.create();
+//                            alertDialog.show();
+//                        });
+//                        return;
+//                    }
+//
+//                    if (response instanceof RPC.PM_boolTrue) {
+//                        FileManager.getInstance().startUploading(imagePath, new FileManager.IUploadingFile() {
+//                            @Override
+//                            public void onFinish() {
+//                                Log.e(Config.TAG, "Profile photoURL successfully uploaded");
+//                                ApplicationLoader.applicationHandler.post(() -> {
+//                                    if (dialogProgress != null && dialogProgress.isShowing())
+//                                        dialogProgress.dismiss();
+//                                    if(!User.currentUser.photoURL.url.isEmpty())
+//                                        Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
+//                                });
+//                            }
+//
+//                            @Override
+//                            public void onProgress(int percent) {
+//
+//                            }
+//
+//                            @Override
+//                            public void onError(int code) {
+//                                Log.e(Config.TAG, "Error while uploading profile photoURL, error code: " + code);
+//                                ApplicationLoader.applicationHandler.post(() -> {
+//                                    if (dialogProgress != null && dialogProgress.isShowing())
+//                                        dialogProgress.cancel();
+//                                });
+//                            }
+//                        });
+//                    }
+//
+//                    ApplicationLoader.applicationHandler.post(() -> {
+//                        if (dialogProgress != null && dialogProgress.isShowing())
+//                            dialogProgress.dismiss();
+//                    });
+//                });
+//
+//                ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
+//            });
+//        }
     }
 }

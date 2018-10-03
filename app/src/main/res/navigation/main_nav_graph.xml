@@ -26,9 +26,6 @@
             android:id="@+id/action_fragmentChats_to_fragmentCreateGroup"
             app:destination="@id/fragmentCreateGroup" />
         <action
-            android:id="@+id/action_fragmentChats_to_fragmentSearch"
-            app:destination="@id/fragmentSearch" />
-        <action
             android:id="@+id/action_fragmentChats_to_fragmentGroupChat"
             app:destination="@id/fragmentGroupChat" />
     </fragment>
@@ -124,11 +121,6 @@
             android:id="@+id/action_fragmentEthereumWalletTransfer_to_fragmentEthereumWalletTransferInfo"
             app:destination="@id/fragmentEthereumWalletTransferInfo" />
     </fragment>
-    <fragment
-        android:id="@+id/fragmentSearch"
-        android:name="ru.paymon.android.view.FragmentSearch"
-        android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/fragmentGroupChat"
         android:name="ru.paymon.android.view.FragmentGroupChat"

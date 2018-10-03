@@ -34,4 +34,7 @@ public interface ChatDao {
 
     @Query("SELECT * FROM ChatsItem WHERE name LIKE :searchQuery AND isGroup = :isGroup ORDER BY time DESC")
     DataSource.Factory<Integer, ChatsItem> chatsBySearch(String searchQuery, boolean isGroup);
+
+    @Query("SELECT * FROM ChatsItem WHERE id = :cid")
+    ChatsItem chat(int cid);
 }

@@ -109,15 +109,19 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onResume() {
         super.onResume();
         KeyGuardActivity.showCD();
-        NotificationManager.getInstance().addObserver(this,NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
-        NotificationManager.getInstance().addObserver(this,NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this,NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
-        NotificationManager.getInstance().removeObserver(this,NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
     }
 
     @Override
@@ -127,9 +131,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-        if(event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED){
+        if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED || event == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
             textView.setVisibility(View.GONE);
-        }else if(event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED){
+        } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED || event == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
             textView.setVisibility(View.VISIBLE);
         }
     }

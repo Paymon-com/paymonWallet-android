@@ -52,7 +52,7 @@ public class ChatsItem {
     }
 
     @Ignore
-    public ChatsItem( int chatID, RPC.PM_photoURL photoURL, String name, String lastMessageText, long time, FileManager.FileType fileType, RPC.PM_photoURL lastMsgPhotoURL) {
+    public ChatsItem(int chatID, RPC.PM_photoURL photoURL, String name, String lastMessageText, long time, FileManager.FileType fileType, RPC.PM_photoURL lastMsgPhotoURL) {
         this.id = chatID;
         this.chatID = chatID;
         this.isGroup = true;

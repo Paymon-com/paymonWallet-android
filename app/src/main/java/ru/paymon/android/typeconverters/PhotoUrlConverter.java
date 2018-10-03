@@ -8,15 +8,25 @@ public class PhotoUrlConverter {
 
     @TypeConverter
     public static RPC.PM_photoURL toPhotoURL(String string) {
-        if (!string.equals("")) {
+        if (!string.isEmpty()) {
             String[] parts = string.split(";");
-            int cid = Integer.parseInt(parts[1]);
-            int gid = Integer.parseInt(parts[2]);
-            int chid = Integer.parseInt(parts[3]);
             RPC.Peer peer = null;
-            peer = cid > 0 ? new RPC.PM_peerUser() : peer;
-            peer = gid > 0 ? new RPC.PM_peerGroup() : peer;
-            peer = chid > 0 ? new RPC.PM_peerChannel() : peer;
+            for (int i = 1; i < parts.length; i++) {
+                int id = Integer.parseInt(parts[i]);
+                if (id > 0) {
+                    switch (i) {
+                        case 1:
+                            peer = new RPC.PM_peerUser(id);
+                            break;
+                        case 2:
+                            peer = new RPC.PM_peerGroup(id);
+                            break;
+                        case 3:
+                            peer = new RPC.PM_peerChannel(id);
+                            break;
+                    }
+                }
+            }
             return new RPC.PM_photoURL(peer, parts[0]);
         } else {
             return null;

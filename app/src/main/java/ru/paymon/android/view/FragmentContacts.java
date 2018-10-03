@@ -1,7 +1,5 @@
 package ru.paymon.android.view;
 
-import android.graphics.Color;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,31 +8,20 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.TabHost;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
-import ru.paymon.android.UsersManager;
-import ru.paymon.android.adapters.ContactsAdapter;
 import ru.paymon.android.adapters.ContactsGlobalAdapter;
 import ru.paymon.android.components.CustomSearchView;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.RecyclerItemClickListener;
 import ru.paymon.android.utils.Utils;
-
-import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentContacts extends Fragment {
     private static FragmentContacts instance;
@@ -216,20 +203,20 @@ public class FragmentContacts extends Fragment {
 //            }
 //        }));
 
-        recyclerViewContactsGlobal.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewContactsGlobal, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                final Bundle bundle = new Bundle();
-                int userID = (int) recyclerViewContactsGlobal.getAdapter().getItemId(position);
-                bundle.putInt(CHAT_ID_KEY, userID);
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentFriendProfile, bundle);
-            }
-
-            @Override
-            public void onLongItemClick(View view, int position) {
-
-            }
-        }));
+//        recyclerViewContactsGlobal.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewContactsGlobal, new RecyclerItemClickListener.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                final Bundle bundle = new Bundle();
+//                int userID = (int) recyclerViewContactsGlobal.getAdapter().getItemId(position);
+//                bundle.putInt(CHAT_ID_KEY, userID);
+//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentFriendProfile, bundle);
+//            }
+//
+//            @Override
+//            public void onLongItemClick(View view, int position) {
+//
+//            }
+//        }));
 
         return view;
     }
