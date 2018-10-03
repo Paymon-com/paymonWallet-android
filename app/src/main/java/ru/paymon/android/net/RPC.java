@@ -2,6 +2,7 @@ package ru.paymon.android.net;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
+import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,6 +15,8 @@ import java.util.List;
 import ru.paymon.android.typeconverters.FileTypeConverter;
 import ru.paymon.android.typeconverters.MessageActionConverter;
 import ru.paymon.android.typeconverters.PeerConverter;
+import ru.paymon.android.typeconverters.PhotoUrlConverter;
+import ru.paymon.android.typeconverters.UsersArrayConverter;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.SerializableData;
 
@@ -138,16 +141,19 @@ public class RPC {
         }
     }
 
+    @Entity
     public static class UserObject extends Packet implements Parcelable {
         public static final int USER_FLAG_HIDDEN_EMAIL = 0b1;
 
         public int flags;
+        @PrimaryKey
         public int id;
         public byte[] token;
         public String login;
         public String first_name;
         public String last_name;
         public String email;
+        @TypeConverters(PhotoUrlConverter.class)
         public PM_photoURL photoURL;
         public boolean confirmed;
         public boolean isEmailHidden;
@@ -703,15 +709,19 @@ public class RPC {
         }
     }
 
+    @Entity
     public static class Group extends Packet {
         public static int svuid = 1150008731;
 
         public int flags;
+        @PrimaryKey
         public int id;
         public int creatorID;
         public String title;
         //        public int date;
+        @TypeConverters(UsersArrayConverter.class)
         public ArrayList<UserObject> users = new ArrayList<>();
+        @TypeConverters(PhotoUrlConverter.class)
         public PM_photoURL photoURL;
 
         public static Group PMdeserialize(SerializableData stream, int constructor, boolean exception) {
@@ -2261,7 +2271,7 @@ public class RPC {
 
     public static class MessageAction extends Packet {
         public String message;
-        public List<UserObject> users;
+        public List<UserObject> us1ers;
 
         public static MessageAction deserialize(SerializableData stream, int constructor, boolean exception) {
             MessageAction result = null;

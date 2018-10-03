@@ -108,6 +108,7 @@ public class ChatsViewModel extends AndroidViewModel {
 
                     for (final RPC.Group grp : packet.groups) {
 //                        groupsMap.put(grp.id, grp);
+                        ApplicationLoader.db.userDao().insertList(grp.users);
                         final RPC.Message msg = groupsMessagesMap.get(grp.id);
                         if (msg == null) continue;
                         final RPC.UserObject lastUsr = usersMap.get(msg.from_id);
@@ -115,6 +116,8 @@ public class ChatsViewModel extends AndroidViewModel {
                     }
 
                     ApplicationLoader.db.chatsDao().insertList(chatsItems);
+                    ApplicationLoader.db.userDao().insertList(packet.users);
+                    ApplicationLoader.db.groupDao().insertList(packet.groups);
 
                     if (chatsItems.size() > 0)
                         isChatsLoaded = true;
