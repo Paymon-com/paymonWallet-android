@@ -1,6 +1,7 @@
 package ru.paymon.android.view;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.esafirm.imagepicker.features.ImagePicker;
+import com.esafirm.imagepicker.features.ReturnMode;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.navigation.Navigation;
@@ -24,6 +27,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.PicassoImageLoader;
 import ru.paymon.android.utils.Utils;
 
 //import ru.paymon.android.utils.ImagePicker;
@@ -77,6 +81,25 @@ public class FragmentProfileEdit extends Fragment {
         email.setText(User.currentUser.email != null ? User.currentUser.email : "");
 
         View.OnClickListener avatarListener = (v) -> {
+            ImagePicker.create(this)
+                    .returnMode(ReturnMode.ALL) // set whether pick and / or camera action should return immediate result or not.
+//                    .folderMode(true) // folder mode (false by default)
+                    .toolbarFolderTitle("Folder") // folder selection title
+                    .toolbarImageTitle("Tap to select") // image selection title
+                    .toolbarArrowColor(Color.BLACK) // Toolbar 'up' arrow color
+                    .includeVideo(true) // Show video on image picker
+                    .single() // single mode
+//                    .multi() // multi mode (default mode)
+                    .limit(10) // max images can be selected (99 by default)
+                    .showCamera(true) // show camera or not (true by default)
+                    .imageDirectory("Camera") // directory name for captured image  ("Camera" folder by default)
+//                    .origin(images) // original selected images, used in multi mode
+//                    .exclude(images) // exclude anything that in image.getPath()
+//                    .excludeFiles(files) // same as exclude but using ArrayList<File>
+//                    .theme(R.style.CustomImagePickerTheme) // must inherit ef_BaseTheme. please refer to sample
+                    .enableLog(false) // disabling log
+                    .imageLoader(new PicassoImageLoader()) // custom image loader, must be serializeable
+                    .start(); // start image picker activity with request code
 //            ((MainActivity) getActivity()).requestAppPermissions(new String[]{
 //                            Manifest.permission.READ_EXTERNAL_STORAGE,
 //                            Manifest.permission.WRITE_EXTERNAL_STORAGE,

@@ -24,21 +24,8 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentContacts extends Fragment {
-    private static FragmentContacts instance;
     private DialogProgress dialogProgress;
-    //    private RecyclerView recyclerViewContacts;
-    private RecyclerView recyclerViewContactsGlobal;
 
-    public static synchronized FragmentContacts newInstance() {
-        instance = new FragmentContacts();
-        return instance;
-    }
-
-    public static synchronized FragmentContacts getInstance() {
-        if (instance == null)
-            instance = new FragmentContacts();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,52 +37,19 @@ public class FragmentContacts extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contacts, container, false);
 
-//        recyclerViewContacts = (RecyclerView) view.findViewById(R.id.recViewContacts);
-        recyclerViewContactsGlobal = (RecyclerView) view.findViewById(R.id.recViewContactsGlobal);
-//        EditText editText = view.findViewById(R.id.edit_text_contacts_search);
+        RecyclerView recyclerViewContactsGlobal = (RecyclerView) view.findViewById(R.id.recViewContactsGlobal);
         CustomSearchView searchView = view.findViewById(R.id.edit_text_contacts_search2);
-
-//        recyclerViewContacts.setHasFixedSize(true);
-//        recyclerViewContacts.setLayoutManager(new LinearLayoutManager(getContext()));
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewContactsGlobal.getContext(), (new LinearLayoutManager(getContext())).getOrientation());
         recyclerViewContactsGlobal.addItemDecoration(dividerItemDecoration);
         recyclerViewContactsGlobal.setHasFixedSize(true);
         recyclerViewContactsGlobal.setLayoutManager(new LinearLayoutManager(getContext()));
 
-//        ContactsAdapter contactsAdapter = new ContactsAdapter();
-//        recyclerViewContacts.setAdapter(contactsAdapter);
-
         ContactsGlobalAdapter contactsGlobalAdapter = new ContactsGlobalAdapter();
         recyclerViewContactsGlobal.setAdapter(contactsGlobalAdapter);
 
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
-
-//        editText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable editable) {
-//                String text = editable.toString().toLowerCase();
-//                contactsAdapter.contactsItems.clear();
-//                for (int i = 0; i < UsersManager.getInstance().userContacts.size(); i++) {
-//                    RPC.UserObject user = UsersManager.getInstance().userContacts.get(UsersManager.getInstance().userContacts.keyAt(i));
-//                    if (user.first_name.toLowerCase().contains(text) || user.last_name.toLowerCase().contains(text) || user.login.toLowerCase().contains(text)) {
-//                        contactsAdapter.contactsItems.add(user);
-//                    }
-//                }
-//                contactsAdapter.notifyDataSetChanged();
-//            }
-//        });
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             long requestID;
@@ -148,7 +102,7 @@ public class FragmentContacts extends Fragment {
                             if (error != null || response == null)
                                 ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_SHORT).show());//TODO string
 
-                            if (response != null && response instanceof RPC.PM_users) {
+                            if (response instanceof RPC.PM_users) {
                                 RPC.PM_users received = (RPC.PM_users) response;
                                 ArrayList<RPC.UserObject> users = received.users;
                                 contactsGlobalAdapter.contactsGlobalItems.clear();
@@ -164,44 +118,6 @@ public class FragmentContacts extends Fragment {
                 return false;
             }
         });
-
-//        TabHost tabHost = view.findViewById(R.id.tabHost);
-//
-//        tabHost.setup();
-//
-//        TabHost.TabSpec tabSpec = tabHost.newTabSpec("contacts");
-//        tabSpec.setContent(R.id.linearLayout);
-//        String contactTab = getString(R.string.title_contacts);
-//        tabSpec.setIndicator(contactTab);
-//        tabHost.addTab(tabSpec);
-//
-//        tabSpec = tabHost.newTabSpec("global");
-//        tabSpec.setContent(R.id.linearLayout2);
-//        String contactsGlobalTab = getString(R.string.global_search);
-//        tabSpec.setIndicator(contactsGlobalTab);
-//        tabHost.addTab(tabSpec);
-//        tabHost.setCurrentTab(0);
-//
-//        tabHost.setOnTabChangedListener((tag) -> {
-//            editText.setText("");
-//            searchView.setQuery("", false);
-//        });
-
-
-//        recyclerViewContacts.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewContacts, new RecyclerItemClickListener.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                final Bundle bundle = new Bundle();
-//                int userID = (int) recyclerViewContacts.getAdapter().getItemId(position);
-//                bundle.putInt(CHAT_ID_KEY, userID);
-//                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentFriendProfile, bundle);
-//            }
-//
-//            @Override
-//            public void onLongItemClick(View view, int position) {
-//
-//            }
-//        }));
 
 //        recyclerViewContactsGlobal.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerViewContactsGlobal, new RecyclerItemClickListener.OnItemClickListener() {
 //            @Override
@@ -225,7 +141,6 @@ public class FragmentContacts extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideActionBar(getActivity());
-//        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_contacts));
         Utils.showBottomBar(getActivity());
         setHasOptionsMenu(true);
     }
@@ -233,7 +148,5 @@ public class FragmentContacts extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-//        recyclerViewContacts.setAdapter(null);
-        recyclerViewContactsGlobal.setAdapter(null);
     }
 }

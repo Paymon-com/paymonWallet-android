@@ -123,7 +123,7 @@ public class ChatsViewModel extends AndroidViewModel {
 
 //                    for (RPC.Message msg : packet.messages)
 //                        MessagesManager.getInstance().putMessage(msg);
-//
+
 //                    for (RPC.UserObject usr : packet.users) {
 //                        UsersManager.getInstance().putUser(usr);
 //                        Log.e("AAA", (usr.email == null ? "null" : usr.email) + " qqq"); //TODO: delete this shitty log
@@ -177,14 +177,14 @@ public class ChatsViewModel extends AndroidViewModel {
 //                            dialogsItems.add(new ChatsItem(user.id, user.photoURL, username, lastMessageText, lastMsg.date, lastMsg.itemType));
 //                        }
 //                    }
-//
-//
+
+
 //                    LinkedList<ChatsItem> groupItems = new LinkedList<>();
 //                    for (int i = 0; i < GroupsManager.getInstance().groups.size(); i++) {
 //                        RPC.Group group = GroupsManager.getInstance().groups.get(GroupsManager.getInstance().groups.keyAt(i));
 //                        String title = group.title;
 //                        String lastMessageText = "";
-//
+
 //                        Long lastMsgId = MessagesManager.getInstance().lastGroupMessages.get(group.id);
 //                        if (lastMsgId != null) {
 //                            RPC.PM_photoURL lastMsgPhoto = null;
@@ -212,17 +212,17 @@ public class ChatsViewModel extends AndroidViewModel {
 //                            }
 //                        }
 //                    }
-//
-////                    if (!dialogsItems.isEmpty()) {
-////                        Collections.sort(dialogsItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
-////                        dialogsItemsData.postValue(dialogsItems);
-////                    }
-//
-////                    if (!groupItems.isEmpty()) {
-////                        Collections.sort(groupItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
-////                        groupsItemsData.postValue(groupItems);
-////                    }
-//
+
+//                    if (!dialogsItems.isEmpty()) {
+//                        Collections.sort(dialogsItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
+//                        dialogsItemsData.postValue(dialogsItems);
+//                    }
+
+//                    if (!groupItems.isEmpty()) {
+//                        Collections.sort(groupItems, (chatItem1, chatItem2) -> Long.compare(chatItem1.time, chatItem2.time) * -1);
+//                        groupsItemsData.postValue(groupItems);
+//                    }
+
 //                    if (!dialogsItems.isEmpty() || !groupItems.isEmpty()) {
 //                        LinkedList<ChatsItem> chatsItems = new LinkedList<>();
 //                        chatsItems.addAll(dialogsItems);
@@ -231,7 +231,7 @@ public class ChatsViewModel extends AndroidViewModel {
 //                        isChatsLoaded = true;
 ////                        chatsItemsData.postValue(chatsItems);
 //                    }
-
+//
 //                    showProgress.postValue(false);
                 });
             }

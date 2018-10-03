@@ -96,6 +96,10 @@ dependencies {
     implementation "com.daimajia.swipelayout:library:+"
     implementation 'com.github.esafirm.android-image-picker:imagepicker:+'
 
+    implementation("com.github.esafirm.android-image-picker:imagepicker:+", {
+        exclude group: 'com.github.bumptech.glide', module: 'glide'
+    })
+
     implementation('com.coinbase.android:coinbase-android-sdk:1.0.1') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient-android'

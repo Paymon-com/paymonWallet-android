@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,6 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import com.vanniktech.emoji.EmojiTextView;
 
 import androidx.recyclerview.selection.SelectionTracker;
-import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
@@ -185,12 +185,13 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
         @Override
         void bind(RPC.Message message) {
             if (message.action instanceof RPC.PM_messageActionGroupCreate) {
+                Log.e("AAA", "ACTION_GROUP");
 //                final RPC.PM_messageActionGroupCreate actionGroupCreate = (RPC.PM_messageActionGroupCreate) message.action;
-                final int groupID = message.to_peer.group_id;
-                final RPC.Group group = GroupsManager.getInstance().groups.get(groupID);
-                final RPC.UserObject creator = UsersManager.getInstance().users.get(group.creatorID);
-                String createGroupString = String.format("%s создал беседу \"%s\"", Utils.formatUserName(creator), group.title); //TODO:String
-                msg.setText(createGroupString);
+//                final int groupID = message.to_peer.group_id;
+//                final RPC.Group group = GroupsManager.getInstance().groups.get(groupID);
+//                final RPC.UserObject creator = UsersManager.getInstance().users.get(group.creatorID);
+//                String createGroupString = String.format("%s создал беседу \"%s\"", Utils.formatUserName(creator), group.title); //TODO:String
+//                msg.setText(createGroupString);
             }
         }
     }
