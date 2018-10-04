@@ -16,20 +16,9 @@ import static ru.paymon.android.User.CLIENT_SECURITY_PASSWORD_ENABLED_CHECK;
 import static ru.paymon.android.User.CLIENT_SECURITY_PASSWORD_PREFERENCE;
 
 public class FragmentSettingsSecurity extends PreferenceFragmentCompat {
-    private static FragmentSettingsSecurity instance;
     private CheckBoxPreference passwordEnabledPreference;
     private Preference passwordPreference;
 
-    public static synchronized FragmentSettingsSecurity newInstance() {
-        instance = new FragmentSettingsSecurity();
-        return instance;
-    }
-
-    public static synchronized FragmentSettingsSecurity getInstance() {
-        if (instance == null)
-            instance = new FragmentSettingsSecurity();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

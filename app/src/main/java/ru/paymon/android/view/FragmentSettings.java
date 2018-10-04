@@ -8,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -17,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
@@ -61,32 +61,19 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
         switch (itemId) {
             case R.id.settings_notifications:
                 toolbarTitle.setText(R.string.settings_notifications);
-                FragmentTransaction fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
-                fragmentTransaction.replace(R.id.settings_container, FragmentSettingsNotif.newInstance());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentSettingsNotif);
                 break;
             case R.id.settings_basic:
                 toolbarTitle.setText(R.string.settings_basic);
-                fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
-                fragmentTransaction.replace(R.id.settings_container, FragmentSettingsBasic.newInstance());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentSettingsBasic);
                 break;
             case R.id.settings_security:
                 toolbarTitle.setText(R.string.settings_security);
-                fragmentTransaction = getActivity().getSupportFragmentManager().beginTransaction();
-                fragmentTransaction.setCustomAnimations(R.anim.slide_in_left, R.animator.fade_to_back, R.animator.fade_to_up, R.animator.fade_to_back);
-                fragmentTransaction.replace(R.id.settings_container, FragmentSettingsSecurity.newInstance());
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentSettingsSecurity);
                 break;
             case R.id.settings_reset_settings:
                 User.setDefaultConfig();
-                Toast toast = Toast.makeText(getContext(), R.string.settings_reset, Toast.LENGTH_SHORT);
-                toast.show();
+                Toast.makeText(getContext(), R.string.settings_reset, Toast.LENGTH_SHORT).show();
                 break;
             case R.id.settings_about_programm:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

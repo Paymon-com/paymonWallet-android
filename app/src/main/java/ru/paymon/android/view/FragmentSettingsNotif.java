@@ -7,23 +7,10 @@ import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 
 import ru.paymon.android.R;
-import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.User.CLIENT_MESSAGES_NOTIFY_SOUND_PREFERENCE;
 
 public class FragmentSettingsNotif extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener{
-    private static FragmentSettingsNotif instance;
-
-    public static synchronized FragmentSettingsNotif newInstance(){
-        instance = new FragmentSettingsNotif();
-        return instance;
-    }
-
-    public static synchronized FragmentSettingsNotif getInstance(){
-        if (instance == null)
-            instance = new FragmentSettingsNotif();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

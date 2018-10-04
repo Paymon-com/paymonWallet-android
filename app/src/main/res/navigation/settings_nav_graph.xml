@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings_nav_graph"
+    app:startDestination="@id/fragmentSettings">
+
+    <fragment
+        android:id="@+id/fragmentSettings"
+        android:name="ru.paymon.android.view.FragmentSettings"
+        android:label="FragmentSettings"
+        tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_fragmentSettings_to_fragmentSettingsBasic"
+            app:destination="@id/fragmentSettingsBasic" />
+        <action
+            android:id="@+id/action_fragmentSettings_to_fragmentSettingsNotif"
+            app:destination="@id/fragmentSettingsNotif" />
+        <action
+            android:id="@+id/action_fragmentSettings_to_fragmentSettingsSecurity"
+            app:destination="@id/fragmentSettingsSecurity" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSettingsSecurity"
+        android:name="ru.paymon.android.view.FragmentSettingsSecurity"
+        android:label="FragmentSettingsSecurity" >
+        <action
+            android:id="@+id/action_fragmentSettingsSecurity_to_keyGuardActivity"
+            app:destination="@id/keyGuardActivity" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentSettingsBasic"
+        android:name="ru.paymon.android.view.FragmentSettingsBasic"
+        android:label="FragmentSettingsBasic" />
+    <fragment
+        android:id="@+id/fragmentSettingsNotif"
+        android:name="ru.paymon.android.view.FragmentSettingsNotif"
+        android:label="FragmentSettingsNotif" />
+    <activity
+        android:id="@+id/keyGuardActivity"
+        android:name="ru.paymon.android.activities.KeyGuardActivity"
+        android:label="activity_key_guard"
+        tools:layout="@layout/activity_key_guard" />
+</navigation>

@@ -21,18 +21,6 @@ import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_LIST;
 
 
 public class FragmentSettingsBasic extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
-    private static FragmentSettingsBasic instance;
-
-    public static synchronized FragmentSettingsBasic newInstance() {
-        instance = new FragmentSettingsBasic();
-        return instance;
-    }
-
-    public static synchronized FragmentSettingsBasic getInstance() {
-        if (instance == null)
-            instance = new FragmentSettingsBasic();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
