@@ -101,14 +101,6 @@ public class FragmentContacts extends Fragment {
                     contactsImage.setVisibility(View.GONE);
                     contactsText.setVisibility(View.GONE);
                 }
-
-//                if (!contactsGlobalAdapter.contactsGlobalItems.isEmpty()){
-//                    contactsImage.setVisibility(View.GONE);
-//                    contactsText.setVisibility(View.GONE);
-//                } else {
-//                    contactsImage.setVisibility(View.VISIBLE);
-//                    contactsText.setVisibility(View.VISIBLE);
-//                }
                 if (System.currentTimeMillis() - lastTimeSend >= 1500) {
                     Utils.netQueue.postRunnable(() -> {
                         if (requestID != 0)
