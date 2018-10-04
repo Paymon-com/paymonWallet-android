@@ -26,9 +26,8 @@ import ru.paymon.android.utils.KeyGenerator;
 public class ApplicationLoader extends Application {
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
-    //    public static volatile SQLiteDatabase db;
     public static volatile AppDatabase db;
-    public static RxPermission rxPermission;;
+    public static RxPermission rxPermission;
 
     @SuppressWarnings("JniMissingFunction")
     private static native int native_init(String host, short port, int version);
@@ -63,12 +62,12 @@ public class ApplicationLoader extends Application {
         initStrictMode();
     }
 
-    public static void finish() {
+//    public static void finish() {
 //        MessagesManager.getInstance().dispose();
 //        MediaManager.getInstance().dispose();
 //        UsersManager.getInstance().dispose();
 //        GroupsManager.getInstance().dispose();
-    }
+//    }
 
     private static StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
 

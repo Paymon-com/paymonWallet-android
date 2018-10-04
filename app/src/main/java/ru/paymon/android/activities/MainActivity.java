@@ -8,7 +8,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.NotificationManager;
@@ -16,7 +15,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NotificationManager.IListener {
-    private static long back_pressed;
+//    private static long back_pressed;
     private ConstraintLayout connectingConstraint;
 
     @Override
@@ -37,18 +36,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
     }
-
-//    private void init(){
-//        Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentPermissions.newInstance());
-//
-//        requestAppPermissions(new String[]{
-//                        Manifest.permission.READ_EXTERNAL_STORAGE,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                        Manifest.permission.VIBRATE,
-//                        Manifest.permission.INTERNET,
-//                        Manifest.permission.ACCESS_NETWORK_STATE},
-//                R.string.msg_permissions_required, IMPORTANT_PERMISSIONS);
-//    }
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -87,25 +74,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 //    }
 
 
-//    @Override
-//    public void onPermissionsGranted(final int requestCode) {
-//        switch (requestCode) {
-//            case IMPORTANT_PERMISSIONS:
-//                if (User.currentUser == null)
-//                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentStart.newInstance());
-//                else
-//                    Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentLoader.newInstance());
-
-//                NetworkManager.getInstance().connect();
-//                final Intent connectorIntent = new Intent(ApplicationLoader.applicationContext, ConnectorService.class);
-//                ApplicationLoader.applicationContext.startService(connectorIntent);
-//                break;
-//            case READ_CONTACTS_PERMISSION:
-//                Utils.replaceFragmentWithAnimationSlideFade(getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
-//                break;
-//        }
-//    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -138,33 +106,4 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             connectingConstraint.setVisibility(View.VISIBLE);
         }
     }
-
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (requestCode == 10) {
-//            if (resultCode == RESULT_OK) {
-//                init();
-//            }
-//        } else if (requestCode == 20) {
-//            if (resultCode == RESULT_OK) {
-//                User.CLIENT_SECURITY_PASSWORD_VALUE = null;
-//                User.CLIENT_SECURITY_PASSWORD_HINT = null;
-//                User.saveConfig();
-//            }
-//        } else {
-//            List<Fragment> fragments = getSupportFragmentManager().getFragments();
-//            for (Fragment fragment : fragments) {
-//                if (fragment instanceof FragmentProfileEdit) {
-//                    fragment.onActivityResult(requestCode, resultCode, data);
-//                    break;
-//                }
-//                if (fragment instanceof FragmentGroupSettings) {
-//                    fragment.onActivityResult(requestCode, resultCode, data);
-//                    break;
-//                }
-//            }
-//        }
-//    }
-
-
 }
