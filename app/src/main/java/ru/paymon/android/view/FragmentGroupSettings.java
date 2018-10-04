@@ -3,7 +3,6 @@ package ru.paymon.android.view;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,10 +18,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.esafirm.imagepicker.features.ImagePicker;
-import com.esafirm.imagepicker.features.ReturnMode;
-import com.esafirm.imagepicker.model.Image;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vanniktech.rxpermission.Permission;
 
 import java.util.ArrayList;
@@ -42,13 +40,12 @@ import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
-import ru.paymon.android.utils.PicassoImageLoader;
 import ru.paymon.android.utils.Utils;
 
+import static android.app.Activity.RESULT_OK;
 import static android.view.inputmethod.EditorInfo.IME_ACTION_DONE;
 import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
 
-//import ru.paymon.android.utils.ImagePicker;
 
 public class FragmentGroupSettings extends Fragment {
     private int chatID;
@@ -113,19 +110,12 @@ public class FragmentGroupSettings extends Fragment {
                 @Override
                 public void onComplete() {
                     if (ApplicationLoader.rxPermission.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE) && ApplicationLoader.rxPermission.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        ImagePicker.create(FragmentGroupSettings.this)
-                                .returnMode(ReturnMode.ALL)
-                                .toolbarFolderTitle("Folder")
-                                .toolbarImageTitle("Tap to select")
-                                .toolbarArrowColor(Color.BLACK)
-                                .includeVideo(true)
-                                .single()
-                                .showCamera(true)
-                                .imageDirectory("Camera")
-//                                  .theme(R.style.CustomImagePickerTheme) // must inherit ef_BaseTheme. please refer to sample
-                                .enableLog(false) // disabling log
-                                .imageLoader(new PicassoImageLoader())
-                                .start();
+                        CropImage.activity()
+                                .setGuidelines(CropImageView.Guidelines.OFF)
+                                .setCropShape(CropImageView.CropShape.OVAL)
+                                .setFixAspectRatio(true)
+                                .setMinCropWindowSize(Config.minAvatarSize, Config.minAvatarSize)
+                                .start(getContext(), FragmentGroupSettings.this);
                     } else {
                         Toast.makeText(getContext(), "Недостаточно прав!", Toast.LENGTH_LONG).show(); //TODO:String
                     }
@@ -133,7 +123,7 @@ public class FragmentGroupSettings extends Fragment {
             });
         });
 
-        if (!group.photoURL.url.isEmpty())
+        if (!group.photoURL.url.isEmpty()) //TODO:observable чтоб обновлять при загрузке фотки
             Utils.loadPhoto(group.photoURL.url, photoView);
 
         titleView.setText(group.title);
@@ -159,7 +149,7 @@ public class FragmentGroupSettings extends Fragment {
                                 if (dialogProgress != null && dialogProgress.isShowing())
                                     dialogProgress.cancel();
                                 Toast toast = Toast.makeText(getContext(),
-                                        getString(R.string.enter_group_title), Toast.LENGTH_SHORT);//TODO string
+                                        getString(R.string.enter_group_title), Toast.LENGTH_SHORT);
                                 toast.show();
                             });
                             return;
@@ -191,7 +181,7 @@ public class FragmentGroupSettings extends Fragment {
         Button blackListButton = (Button) view.findViewById(R.id.group_settings_black_list);
         blackListButton.setOnClickListener((view1) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(R.string.black_list);//TODO:string
+            builder.setTitle(R.string.black_list);
             view1 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_black_list, null);
             builder.setView(view1);
             builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupAddBlackList));
@@ -206,7 +196,7 @@ public class FragmentGroupSettings extends Fragment {
         Button adminListButton = (Button) view.findViewById(R.id.group_settings_administrators);
         adminListButton.setOnClickListener(view12 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(R.string.administrators);//TODO:string
+            builder.setTitle(R.string.administrators);
             view12 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_administrators, null);
             builder.setView(view12);
             builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupAddAdministrators));
@@ -249,15 +239,16 @@ public class FragmentGroupSettings extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-            final Image image = ImagePicker.getFirstImageOrNull(data);
-            if (image != null) {
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
                 Utils.netQueue.postRunnable(() -> {
                     ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
-                    final RPC.PM_setProfilePhoto setGrpupPhotoRequest = new RPC.PM_setProfilePhoto();
+                    final RPC.PM_group_setPhoto setProfilePhotoRequest = new RPC.PM_group_setPhoto(chatID);
 
-                    final long requestID = NetworkManager.getInstance().sendRequest(setGrpupPhotoRequest, (response, error) -> {
+                    final long requestID = NetworkManager.getInstance().sendRequest(setProfilePhotoRequest, (response, error) -> {
                         if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
                             ApplicationLoader.applicationHandler.post(() -> {
                                 if (dialogProgress != null && dialogProgress.isShowing())
@@ -273,7 +264,7 @@ public class FragmentGroupSettings extends Fragment {
                         }
 
                         if (response instanceof RPC.PM_boolTrue) {
-                            FileManager.getInstance().startUploading(image.getPath(), new FileManager.IUploadingFile() {
+                            FileManager.getInstance().startUploading(result.getUri().getPath(), true, Config.maxAvatarSize, 85, new FileManager.IUploadingFile() {
                                 @Override
                                 public void onFinish() {
                                     Log.e(Config.TAG, "Group photoURL successfully uploaded");
@@ -309,6 +300,9 @@ public class FragmentGroupSettings extends Fragment {
 
                     ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
                 });
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Log.e("AAA", error.getMessage());
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

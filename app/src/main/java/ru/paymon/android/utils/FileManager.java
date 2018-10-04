@@ -72,7 +72,7 @@ public class FileManager {
 
     }
 
-//    private LongSparseArray<DownloadingFile> downloadingFiles = new LongSparseArray<>();
+    //    private LongSparseArray<DownloadingFile> downloadingFiles = new LongSparseArray<>();
     private LongSparseArray<UploadingFile> uploadingFiles = new LongSparseArray<>();
     private static AtomicLong uploadingFileID = new AtomicLong(0);
 
@@ -95,20 +95,45 @@ public class FileManager {
     private FileManager() {
     }
 
-    public void startUploading(String filePath, IUploadingFile listener) {
-        Bitmap b= BitmapFactory.decodeFile(filePath);
-        Bitmap out = Bitmap.createScaledBitmap(b, 300, 300, false);
+//    public void startUploading(String filePath, IUploadingFile listener) {
+//        startUploading(filePath, false, 0, 100, listener);
+//    }
+//
+//    public void startUploading(String filePath, int compressQuality, IUploadingFile listener) {
+//        startUploading(filePath, false, 0, compressQuality, listener);
+//    }
+//
+//    public void startUploading(String filePath, boolean needResize, int maxHeightOrWidth, IUploadingFile listener) {
+//        startUploading(filePath, needResize, maxHeightOrWidth, listener);
+//    }
+
+    public void startUploading(String  filePath, boolean needResize, int maxHeightOrWidth, int compressQuality, IUploadingFile listener) {
+        Bitmap bitmap = BitmapFactory.decodeFile(filePath);
+
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+
+        if (needResize) {
+            if(width > Config.maxAvatarSize || height > Config.maxAvatarSize) {
+                int resizeCoef = width <= height ? width / maxHeightOrWidth : height / maxHeightOrWidth;
+                width = width / resizeCoef;
+                height = height / resizeCoef;
+            }
+        }
+
+        Bitmap out = Bitmap.createScaledBitmap(bitmap, width, height, false);
 
         File photoFile = new File(ApplicationLoader.applicationContext.getCacheDir(), "resize.jpg");
         FileOutputStream fOut;
         try {
             fOut = new FileOutputStream(photoFile);
-            out.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
+            out.compress(Bitmap.CompressFormat.JPEG, compressQuality, fOut);
             fOut.flush();
             fOut.close();
-            b.recycle();
+            bitmap.recycle();
             out.recycle();
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         byte bytes[] = new byte[(int) photoFile.length()];
         try {

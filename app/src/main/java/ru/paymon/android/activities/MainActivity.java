@@ -8,14 +8,16 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NotificationManager.IListener {
-//    private static long back_pressed;
+    private long lastTimeBackPressed;
     private ConstraintLayout connectingConstraint;
 
     @Override
@@ -39,18 +41,29 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        NavOptions.Builder builder = new NavOptions.Builder();
+        NavOptions navOptions = builder.setLaunchSingleTop(true).setClearTask(true).build();
+
         switch (item.getItemId()) {
             case R.id.fragmentChats:
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentChats);
+                if (Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.fragmentChats)
+                    return false;
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentChats, null, navOptions);
                 break;
             case R.id.fragmentContacts:
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentContacts);
+                if (Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.fragmentContacts)
+                    return false;
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentContacts, null, navOptions);
                 break;
             case R.id.fragmentMoney:
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney);
+                if (Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.fragmentMoney)
+                    return false;
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney, null, navOptions);
                 break;
             case R.id.fragmentMoreMenu:
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoreMenu);
+                if (Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.fragmentMoreMenu)
+                    return false;
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoreMenu, null, navOptions);
                 break;
         }
 
@@ -58,20 +71,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     }
 
 
-    //    @Override
-//    public void onBackPressed() {
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.container);
-//        if (fragment instanceof FragmentChats || fragment instanceof FragmentContacts || fragment instanceof FragmentMoney || fragment instanceof FragmentMoreMenu) {
-//            if (back_pressed + 2000 > System.currentTimeMillis()) {
-//                System.exit(0);
-//            } else {
-//                Toast.makeText(getBaseContext(), R.string.double_tap_to_close_the_app, Toast.LENGTH_LONG).show();
-//            }
-//            back_pressed = System.currentTimeMillis();
-//        } else {
-//            getSupportFragmentManager().popBackStack();
-//        }
-//    }
+    @Override
+    public void onBackPressed() {
+        int id = Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId();
+        if (id == R.id.fragmentChats || id == R.id.fragmentContacts || id == R.id.fragmentMoney || id == R.id.fragmentMoreMenu) {
+            if (lastTimeBackPressed + 2000 > System.currentTimeMillis()) {
+                System.exit(0);
+            } else {
+                Toast.makeText(getBaseContext(), R.string.double_tap_to_close_the_app, Toast.LENGTH_LONG).show();
+            }
+            lastTimeBackPressed = System.currentTimeMillis();
+        } else {
+            Navigation.findNavController(this, R.id.nav_host_fragment).popBackStack();
+        }
+    }
 
 
     @Override

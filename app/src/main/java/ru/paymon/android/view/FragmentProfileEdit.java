@@ -2,7 +2,6 @@ package ru.paymon.android.view;
 
 import android.Manifest;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,10 +18,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.esafirm.imagepicker.features.ImagePicker;
-import com.esafirm.imagepicker.features.ReturnMode;
-import com.esafirm.imagepicker.model.Image;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vanniktech.rxpermission.Permission;
 
 import androidx.navigation.Navigation;
@@ -35,8 +33,9 @@ import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
-import ru.paymon.android.utils.PicassoImageLoader;
 import ru.paymon.android.utils.Utils;
+
+import static android.app.Activity.RESULT_OK;
 
 //import ru.paymon.android.utils.ImagePicker;
 
@@ -97,19 +96,25 @@ public class FragmentProfileEdit extends Fragment {
                 @Override
                 public void onComplete() {
                     if (ApplicationLoader.rxPermission.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE) && ApplicationLoader.rxPermission.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                        ImagePicker.create(FragmentProfileEdit.this)
-                                .returnMode(ReturnMode.ALL)
-                                .toolbarFolderTitle("Folder")
-                                .toolbarImageTitle("Tap to select")
-                                .toolbarArrowColor(Color.BLACK)
-                                .includeVideo(true)
-                                .single()
-                                .showCamera(true)
-                                .imageDirectory("Camera")
-//                                  .theme(R.style.CustomImagePickerTheme) // must inherit ef_BaseTheme. please refer to sample
-                                .enableLog(false) // disabling log
-                                .imageLoader(new PicassoImageLoader())
-                                .start();
+//                        ImagePicker.create(FragmentProfileEdit.this)
+//                                .returnMode(ReturnMode.ALL)
+//                                .toolbarFolderTitle("Folder")
+//                                .toolbarImageTitle("Tap to select")
+//                                .toolbarArrowColor(Color.BLACK)
+//                                .includeVideo(true)
+//                                .single()
+//                                .showCamera(true)
+//                                .imageDirectory("Camera")
+////                                  .theme(R.style.CustomImagePickerTheme) // must inherit ef_BaseTheme. please refer to sample
+//                                .enableLog(false) // disabling log
+//                                .imageLoader(new PicassoImageLoader())
+//                                .start();
+                        CropImage.activity()
+                                .setGuidelines(CropImageView.Guidelines.OFF)
+                                .setCropShape(CropImageView.CropShape.OVAL)
+                                .setFixAspectRatio(true)
+                                .setMinCropWindowSize(Config.minAvatarSize, Config.minAvatarSize)
+                                .start(getContext(), FragmentProfileEdit.this);
                     } else {
                         Toast.makeText(getContext(), "Недостаточно прав!", Toast.LENGTH_LONG).show(); //TODO:String
                     }
@@ -199,9 +204,10 @@ public class FragmentProfileEdit extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
-            final Image image = ImagePicker.getFirstImageOrNull(data);
-            if(image != null){
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            CropImage.ActivityResult result = CropImage.getActivityResult(data);
+            if (resultCode == RESULT_OK) {
+
                 Utils.netQueue.postRunnable(() -> {
                     ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
@@ -223,7 +229,7 @@ public class FragmentProfileEdit extends Fragment {
                         }
 
                         if (response instanceof RPC.PM_boolTrue) {
-                            FileManager.getInstance().startUploading(image.getPath(), new FileManager.IUploadingFile() {
+                            FileManager.getInstance().startUploading(result.getUri().getPath(), true, Config.maxAvatarSize, 85, new FileManager.IUploadingFile() {
                                 @Override
                                 public void onFinish() {
                                     Log.e(Config.TAG, "Profile photoURL successfully uploaded");
@@ -259,6 +265,9 @@ public class FragmentProfileEdit extends Fragment {
 
                     ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
                 });
+            } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Exception error = result.getError();
+                Log.e("AAA", error.getMessage());
             }
         }
         super.onActivityResult(requestCode, resultCode, data);

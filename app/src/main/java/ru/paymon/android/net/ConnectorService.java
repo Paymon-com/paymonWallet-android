@@ -299,7 +299,6 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
     private void receivedPhotoURL(final RPC.PM_photoURL photoURL) {
         if (photoURL.peer instanceof RPC.PM_peerUser) {
-            Log.e("AAA", "PRISHLA FOTKA");
             RPC.PM_peerUser peerUser = (RPC.PM_peerUser) photoURL.peer;
 //            ApplicationLoader.db.userDao().getById(peerUser.user_id).photoURL.url = photoURL.url;
 //            UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = photoURL.url;

@@ -15,7 +15,8 @@
             app:destination="@id/fragmentMoney" />
         <action
             android:id="@+id/action_fragmentChats_to_fragmentContacts"
-            app:destination="@id/fragmentContacts" />
+            app:destination="@id/fragmentContacts"
+            app:launchSingleTop="false" />
         <action
             android:id="@+id/action_fragmentChats_to_fragmentMoreMenu"
             app:destination="@id/fragmentMoreMenu" />
