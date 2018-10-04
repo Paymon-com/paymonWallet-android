@@ -1,5 +1,8 @@
 package ru.paymon.android.view;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
+import android.arch.paging.PagedList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,47 +26,40 @@ import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.CreateGroupAdapter;
+import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.viewmodels.ChatsViewModel;
 
 import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
 
 public class FragmentGroupAddParticipants extends Fragment {
-    private static FragmentGroupAddParticipants instance;
     private int chatID;
     private RPC.Group group;
     private ArrayList<UserItem> addGroupList = new ArrayList<>();
     private CreateGroupAdapter adapter;
     private DialogProgress dialogProgress;
+    private ChatsViewModel chatsViewModel;
 
-    public static synchronized FragmentGroupAddParticipants newInstance() {
-        instance = new FragmentGroupAddParticipants();
-        return instance;
-    }
-
-    public static synchronized FragmentGroupAddParticipants getInstance() {
-        if (instance == null)
-            instance = new FragmentGroupAddParticipants();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        chatsViewModel = ViewModelProviders.of(getActivity()).get(ChatsViewModel.class);
+
 
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(CHAT_ID_KEY)) {
             chatID = bundle.getInt(CHAT_ID_KEY);
         }
 
-        group = GroupsManager.getInstance().groups.get(chatID);
+        group = ApplicationLoader.db.groupDao().getById(chatID);
     }
 
     @Nullable
@@ -74,7 +70,7 @@ public class FragmentGroupAddParticipants extends Fragment {
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
-        backToolbar.setOnClickListener(v-> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         acceptToolbar.setOnClickListener(view12 -> Utils.netQueue.postRunnable(() -> {
             ApplicationLoader.applicationHandler.post(dialogProgress::show);
@@ -100,8 +96,8 @@ public class FragmentGroupAddParticipants extends Fragment {
                 }
 
                 for (Integer uid : addParticipantsRequest.userIDs) {
-                    RPC.UserObject user = UsersManager.getInstance().users.get(uid);
-                    ArrayList<RPC.UserObject> userObjects = GroupsManager.getInstance().groupsUsers.get(chatID);
+                    RPC.UserObject user = ApplicationLoader.db.userDao().getById(uid);
+                    ArrayList<RPC.UserObject> userObjects = ApplicationLoader.db.groupDao().getById(chatID).users;
                     if (user != null) {
                         userObjects.add(user);
                     }
@@ -109,7 +105,8 @@ public class FragmentGroupAddParticipants extends Fragment {
 
                 ApplicationLoader.applicationHandler.post(() -> {
                     if (dialogProgress != null && dialogProgress.isShowing())
-                        dialogProgress.dismiss();dialogProgress.dismiss();
+                        dialogProgress.dismiss();
+                    dialogProgress.dismiss();
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack();
                 });
             });
@@ -142,10 +139,10 @@ public class FragmentGroupAddParticipants extends Fragment {
 
                 String text = editable.toString();
 
-                if(text.trim().isEmpty()) return;
+                if (text.trim().isEmpty()) return;
 
                 for (UserItem user : addGroupList) {
-                    if(user.name.toLowerCase().contains(text.toLowerCase())){
+                    if (user.name.toLowerCase().contains(text.toLowerCase())) {
                         sortedUserList.add(user);
                     }
                 }
@@ -161,6 +158,27 @@ public class FragmentGroupAddParticipants extends Fragment {
 
         setHasOptionsMenu(true);
 
+        SparseArray<RPC.UserObject> userContacts = new SparseArray<>();
+        LiveData<PagedList<ChatsItem>> liveChatsItems = chatsViewModel.getDialogsChats();
+        liveChatsItems.observe(this, chatsItems -> {
+            if (chatsItems == null) return;
+
+            for (ChatsItem chatItem : chatsItems) {
+                int id = chatItem.chatID;
+                userContacts.append(id, ApplicationLoader.db.userDao().getById(id));
+            }
+
+            addGroupList.clear();
+//            SparseArray<RPC.UserObject> userContacts = UsersManager.getInstance().userContacts;
+
+            for (int i = 0; i < userContacts.size(); i++) {
+                RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
+                if (group.users.contains(user) || user.id == User.currentUser.id) continue;
+                addGroupList.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
+            }
+
+        });
+
         return view;
     }
 
@@ -169,14 +187,14 @@ public class FragmentGroupAddParticipants extends Fragment {
         super.onResume();
         Utils.hideBottomBar(getActivity());
 
-        addGroupList.clear();
-        SparseArray<RPC.UserObject> userContacts = UsersManager.getInstance().userContacts;
-
-        for (int i = 0; i < userContacts.size(); i++) {
-            RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
-            if (group.users.contains(user) || user.id == User.currentUser.id) continue;
-            addGroupList.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
-        }
+//        addGroupList.clear();
+//        SparseArray<RPC.UserObject> userContacts = UsersManager.getInstance().userContacts;
+//
+//        for (int i = 0; i < userContacts.size(); i++) {
+//            RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
+//            if (group.users.contains(user) || user.id == User.currentUser.id) continue;
+//            addGroupList.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
+//        }
     }
 
     @Override
@@ -209,8 +227,8 @@ public class FragmentGroupAddParticipants extends Fragment {
                     }
 
                     for (Integer uid : addParticipantsRequest.userIDs) {
-                        RPC.UserObject user = UsersManager.getInstance().users.get(uid);
-                        ArrayList<RPC.UserObject> userObjects = GroupsManager.getInstance().groupsUsers.get(chatID);
+                        RPC.UserObject user = ApplicationLoader.db.userDao().getById(uid);
+                        ArrayList<RPC.UserObject> userObjects = ApplicationLoader.db.groupDao().getById(chatID).users;
                         if (user != null) {
                             userObjects.add(user);
                         }
@@ -218,7 +236,8 @@ public class FragmentGroupAddParticipants extends Fragment {
 
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
-                            dialogProgress.dismiss();dialogProgress.dismiss();
+                            dialogProgress.dismiss();
+                        dialogProgress.dismiss();
                         Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack();
                     });
                 });

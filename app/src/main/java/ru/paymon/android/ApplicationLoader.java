@@ -12,6 +12,8 @@ import android.os.StrictMode;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiManager;
+import com.vanniktech.rxpermission.RealRxPermission;
+import com.vanniktech.rxpermission.RxPermission;
 
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.emoji.CustomEmojiProvider;
@@ -26,6 +28,7 @@ public class ApplicationLoader extends Application {
     public static volatile Handler applicationHandler;
     //    public static volatile SQLiteDatabase db;
     public static volatile AppDatabase db;
+    public static RxPermission rxPermission;;
 
     @SuppressWarnings("JniMissingFunction")
     private static native int native_init(String host, short port, int version);
@@ -40,6 +43,8 @@ public class ApplicationLoader extends Application {
 
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
+
+        rxPermission = RealRxPermission.getInstance(this);
 
         User.loadConfig();
         Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000))/*.indicatorsEnabled(true)*/.build());
@@ -61,8 +66,8 @@ public class ApplicationLoader extends Application {
     public static void finish() {
 //        MessagesManager.getInstance().dispose();
 //        MediaManager.getInstance().dispose();
-        UsersManager.getInstance().dispose();
-        GroupsManager.getInstance().dispose();
+//        UsersManager.getInstance().dispose();
+//        GroupsManager.getInstance().dispose();
     }
 
     private static StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();

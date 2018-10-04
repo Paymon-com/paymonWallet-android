@@ -25,12 +25,10 @@ import java.util.Locale;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
-import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.UsersManager;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
 import ru.paymon.android.utils.Utils;
@@ -71,7 +69,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                     Bundle bundle = new Bundle();
                     bundle.putInt(CHAT_ID_KEY, cid);
                     if (isGroup)
-                        bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().groupsUsers.get(cid));
+                        bundle.putParcelableArrayList(CHAT_GROUP_USERS, ApplicationLoader.db.groupDao().getById(cid).users);
                     actIntent.putExtra("OPEN_CHAT_BUNDLE", bundle);
                     notificationManager.cancel(NOTIFY_ID);
                     startActivity(actIntent);
@@ -164,7 +162,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
         if (!User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) {
             Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
+            RPC.UserObject user = ApplicationLoader.db.userDao().getById(msg.from_id);
 
             String text = "";
             if (msg instanceof RPC.PM_message) {
@@ -278,7 +276,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     private void receivedMessage(final RPC.Message msg) {
         Utils.netQueue.postRunnable(() -> {
             ApplicationLoader.db.chatMessageDao().insert(msg);
-            RPC.UserObject user = UsersManager.getInstance().users.get(msg.from_id);
+            RPC.UserObject user = ApplicationLoader.db.userDao().getById(msg.from_id);
             if (user == null) {
                 RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo();
                 userInfo.user_id = msg.from_id;
@@ -286,14 +284,14 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                     if (response == null || error1 != null) return;
                     ApplicationLoader.applicationHandler.post(() -> {
                         RPC.UserObject userObject = (RPC.UserObject) response;
-                        UsersManager.getInstance().users.put(userObject.id, userObject);
-                        if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
-                            UsersManager.getInstance().userContacts.put(userObject.id, userObject);
+                        ApplicationLoader.db.userDao().insert(userObject);
+//                        if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
+//                            UsersManager.getInstance().userContacts.put(userObject.id, userObject);
                     });
                 });
             } else {
-                if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
-                    UsersManager.getInstance().userContacts.put(user.id, user);
+//                if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
+//                    UsersManager.getInstance().userContacts.put(user.id, user);
             }
             showNotify(msg);
         });
@@ -301,39 +299,42 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
     private void receivedPhotoURL(final RPC.PM_photoURL photoURL) {
         if (photoURL.peer instanceof RPC.PM_peerUser) {
+            Log.e("AAA", "PRISHLA FOTKA");
             RPC.PM_peerUser peerUser = (RPC.PM_peerUser) photoURL.peer;
-            UsersManager.getInstance().users.get(peerUser.user_id).photoURL.url = photoURL.url;
-            UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = photoURL.url;
+//            ApplicationLoader.db.userDao().getById(peerUser.user_id).photoURL.url = photoURL.url;
+//            UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = photoURL.url;
             if (User.currentUser.id == peerUser.user_id) {
                 User.currentUser.photoURL.url = photoURL.url;
                 User.saveConfig();
             }
         } else if (photoURL.peer instanceof RPC.PM_peerGroup) {
             RPC.PM_peerGroup peerGroup = (RPC.PM_peerGroup) photoURL.peer;
-            GroupsManager.getInstance().groups.get(peerGroup.group_id).photoURL.url = photoURL.url;
+            RPC.Group group = ApplicationLoader.db.groupDao().getById(peerGroup.group_id);
+            group.photoURL.url = photoURL.url;
+            ApplicationLoader.db.groupDao().insert(group);
         }
     }
 
-    private void receivedError(final RPC.PM_error error){
-        Log.w(Config.TAG, String.format(Locale.getDefault(), "PM_error(%d): %s", error.code, error.text));
-        Log.d("paymon_error_response", error.text);
-        if (error.code == ERROR_KEY) {
-            Log.e(Config.TAG, "ERROR_KEY, reconnecting");
-            NetworkManager.getInstance().reconnect();
-        } else if (error.code == ERROR_AUTH_TOKEN) {
-            Log.e(Config.TAG, "ERROR_AUTH_TOKEN, auth");
-            // FIXME: logout
-            NetworkManager.getInstance().authByToken();
-        } else if (error.code == ERROR_AUTH) {
-//                Looper.prepare();
-            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.auth_wrong_login_or_password), Toast.LENGTH_LONG).show());
-        } else if (error.code == ERROR_SPAMMING) {
-//                Looper.prepare();
-            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.error_spamming), Toast.LENGTH_LONG).show());
-        }
-    }
+//    private void receivedError(final RPC.PM_error error) {
+//        Log.w(Config.TAG, String.format(Locale.getDefault(), "PM_error(%d): %s", error.code, error.text));
+//        Log.d("paymon_error_response", error.text);
+//        if (error.code == ERROR_KEY) {
+//            Log.e(Config.TAG, "ERROR_KEY, reconnecting");
+//            NetworkManager.getInstance().reconnect();
+//        } else if (error.code == ERROR_AUTH_TOKEN) {
+//            Log.e(Config.TAG, "ERROR_AUTH_TOKEN, auth");
+//            // FIXME: logout
+//            NetworkManager.getInstance().authByToken();
+//        } else if (error.code == ERROR_AUTH) {
+////                Looper.prepare();
+//            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.auth_wrong_login_or_password), Toast.LENGTH_LONG).show());
+//        } else if (error.code == ERROR_SPAMMING) {
+////                Looper.prepare();
+//            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.error_spamming), Toast.LENGTH_LONG).show());
+//        }
+//    }
 
-    private void receivedPostConnectionData(final RPC.PM_postConnectionData data){
+    private void receivedPostConnectionData(final RPC.PM_postConnectionData data) {
         KeyGenerator.getInstance().setPostConnectionData(data);
         NetworkManager.getInstance().setHandshaked(true);
         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
@@ -351,7 +352,32 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         } else if (packet instanceof RPC.PM_photoURL) {
             receivedPhotoURL((RPC.PM_photoURL) packet);
         } else if (packet instanceof RPC.PM_error) {
-           receivedError((RPC.PM_error) packet);
+//            receivedError((RPC.PM_error) packet);
+//            packet = null;
+            Log.e(Config.TAG, "ERROR");
+
+            error = (RPC.PM_error) packet;
+            packet = null;
+
+            Log.w(Config.TAG, String.format(Locale.getDefault(), "PM_error(%d): %s", error.code, error.text));
+            final String text = error.text;
+            ApplicationLoader.applicationHandler.post(() -> Log.d("paymon_error_response", text));
+
+            if (error.code == ERROR_KEY) {
+                Log.e(Config.TAG, "ERROR_KEY, reconnecting");
+                NetworkManager.getInstance().reconnect();
+            } else if (error.code == ERROR_AUTH_TOKEN) {
+                Log.e(Config.TAG, "ERROR_AUTH_TOKEN, auth");
+                // FIXME: logout
+                NetworkManager.getInstance().authByToken();
+            } else if (error.code == ERROR_AUTH) {
+//                Looper.prepare();
+                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.auth_wrong_login_or_password), Toast.LENGTH_LONG).show());
+            } else if (error.code == ERROR_SPAMMING) {
+//                Looper.prepare();
+                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.error_spamming), Toast.LENGTH_LONG).show());
+                return;
+            }
         } else if (packet instanceof RPC.PM_postConnectionData) {
             receivedPostConnectionData((RPC.PM_postConnectionData) packet);
         } else if (packet instanceof RPC.PM_file) {
@@ -434,7 +460,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             Log.d(Config.TAG, "onConnectionDataReceived: " + i + " " + b);
             if (length < i || !b) {
                 Log.e(Config.TAG, "Can't decrypt packet");
-                NetworkManager.getInstance().reconnect();
+                NetworkManager.getInstance().reconnect(); //TODO:!!!
                 return;
             }
 

@@ -12,18 +12,19 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
-import ru.paymon.android.UsersManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
+
+//import ru.paymon.android.UsersManager;
 
 public class ContactsGlobalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public LinkedList<RPC.UserObject> contactsGlobalItems = new LinkedList<>();
 
     public ContactsGlobalAdapter() {
-        for (int i = 0; i < UsersManager.getInstance().searchUsers.size(); i++) {
-            RPC.UserObject userGlobal = UsersManager.getInstance().searchUsers.get(UsersManager.getInstance().searchUsers.keyAt(i));
-            contactsGlobalItems.add(userGlobal);
-        }
+//        for (int i = 0; i < UsersManager.getInstance().searchUsers.size(); i++) {
+//            RPC.UserObject userGlobal = UsersManager.getInstance().searchUsers.get(UsersManager.getInstance().searchUsers.keyAt(i));
+//            contactsGlobalItems.add(userGlobal);
+//        }
     }
 
     @NonNull

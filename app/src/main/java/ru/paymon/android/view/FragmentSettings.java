@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,13 +23,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 
 public class FragmentSettings extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
-    private static FragmentSettings instance;
     private TextView toolbarTitle;
-
-    public static FragmentSettings newInstance() {
-        instance = new FragmentSettings();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

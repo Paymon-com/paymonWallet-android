@@ -391,7 +391,7 @@ public class Utils {
 
     public static void loadPhoto(String url, ImageView view){
         Picasso.get().load(url)
-                .resize(300, 300)
+                .resize(300, 0)
                 .centerCrop()
                 .placeholder(R.drawable.profile_photo_none)
                 .error(R.drawable.profile_photo_none)
@@ -406,6 +406,8 @@ public class Utils {
                         Log.e("UTILS loadPhoto() ", "URL : " + url + " " + e.getMessage());
                         Picasso.get().load(url)
                                 .error(R.drawable.profile_photo_none)
+                                .resize(300, 0)
+                                .centerCrop()
                                 .into(view);
                     }
                 });

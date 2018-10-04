@@ -11,7 +11,6 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +29,9 @@ import java.util.ArrayList;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.selection.SelectionTracker;
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.UsersManager;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -102,7 +99,6 @@ public abstract class AbsFragmentChat extends Fragment {
         NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
             if (response == null) return;
             final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
-            Log.e("AAA", receivedMessages.messages.size() + " qq");
             if (receivedMessages.messages.size() == 0) return;
             ApplicationLoader.db.chatMessageDao().insertList(receivedMessages.messages);
         });
@@ -131,7 +127,7 @@ public abstract class AbsFragmentChat extends Fragment {
             chatTitleTextView = (TextView) toolbarView.findViewById(R.id.toolbar_title);
             toolbarAvatar = (CircularImageView) toolbarView.findViewById(R.id.toolbar_avatar);
             backToolbar = (ImageView) toolbarView.findViewById(R.id.toolbar_back_btn);
-            final RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
+            final RPC.UserObject user = ApplicationLoader.db.userDao().getById(chatID);
             if (user != null) {
                 chatTitleTextView.setText(Utils.formatUserName(user));
                 if (!user.photoURL.url.isEmpty())
@@ -144,7 +140,7 @@ public abstract class AbsFragmentChat extends Fragment {
             chatTitleTextView = (TextView) toolbarView.findViewById(R.id.toolbar_title);
             toolbarAvatar = (CircularImageView) toolbarView.findViewById(R.id.chat_group_avatar);
             backToolbar = (ImageView) toolbarView.findViewById(R.id.toolbar_back_btn);
-            final RPC.Group group = GroupsManager.getInstance().groups.get(chatID);
+            final RPC.Group group = ApplicationLoader.db.groupDao().getById(chatID);
             if (group != null) {
                 chatTitleTextView.setText(group.title);
                 participantsCountTextView.setText(String.format("%s: %d", getString(R.string.participants), ((FragmentGroupChat) this).groupUsers.size()));

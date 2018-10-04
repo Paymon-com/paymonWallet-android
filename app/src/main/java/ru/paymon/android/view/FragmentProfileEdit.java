@@ -1,5 +1,6 @@
 package ru.paymon.android.view;
 
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +21,20 @@ import android.widget.Toast;
 
 import com.esafirm.imagepicker.features.ImagePicker;
 import com.esafirm.imagepicker.features.ReturnMode;
+import com.esafirm.imagepicker.model.Image;
 import com.mikhaellopez.circularimageview.CircularImageView;
+import com.vanniktech.rxpermission.Permission;
 
 import androidx.navigation.Navigation;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.PicassoImageLoader;
 import ru.paymon.android.utils.Utils;
 
@@ -34,21 +42,8 @@ import ru.paymon.android.utils.Utils;
 
 
 public class FragmentProfileEdit extends Fragment {
-    public static final int PICK_IMAGE_ID = 100;
-    private static FragmentProfileEdit instance;
     private DialogProgress dialogProgress;
     private CircularImageView avatar;
-
-    public static synchronized FragmentProfileEdit newInstance() {
-        instance = new FragmentProfileEdit();
-        return instance;
-    }
-
-    public static synchronized FragmentProfileEdit getInstance() {
-        if (instance == null)
-            instance = new FragmentProfileEdit();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,32 +76,45 @@ public class FragmentProfileEdit extends Fragment {
         email.setText(User.currentUser.email != null ? User.currentUser.email : "");
 
         View.OnClickListener avatarListener = (v) -> {
-            ImagePicker.create(this)
-                    .returnMode(ReturnMode.ALL) // set whether pick and / or camera action should return immediate result or not.
-//                    .folderMode(true) // folder mode (false by default)
-                    .toolbarFolderTitle("Folder") // folder selection title
-                    .toolbarImageTitle("Tap to select") // image selection title
-                    .toolbarArrowColor(Color.BLACK) // Toolbar 'up' arrow color
-                    .includeVideo(true) // Show video on image picker
-                    .single() // single mode
-//                    .multi() // multi mode (default mode)
-                    .limit(10) // max images can be selected (99 by default)
-                    .showCamera(true) // show camera or not (true by default)
-                    .imageDirectory("Camera") // directory name for captured image  ("Camera" folder by default)
-//                    .origin(images) // original selected images, used in multi mode
-//                    .exclude(images) // exclude anything that in image.getPath()
-//                    .excludeFiles(files) // same as exclude but using ArrayList<File>
-//                    .theme(R.style.CustomImagePickerTheme) // must inherit ef_BaseTheme. please refer to sample
-                    .enableLog(false) // disabling log
-                    .imageLoader(new PicassoImageLoader()) // custom image loader, must be serializeable
-                    .start(); // start image picker activity with request code
-//            ((MainActivity) getActivity()).requestAppPermissions(new String[]{
-//                            Manifest.permission.READ_EXTERNAL_STORAGE,
-//                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-//                            Manifest.permission.CAMERA},
-//                    R.string.msg_permissions_required, CAMERA_PERMISSIONS);
-//            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "выберите");//TODO:string
-//            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
+            ApplicationLoader.rxPermission
+                    .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Observer<Permission>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(Permission permission) {
+
+                }
+
+                @Override
+                public void onError(Throwable e) {
+
+                }
+
+                @Override
+                public void onComplete() {
+                    if (ApplicationLoader.rxPermission.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE) && ApplicationLoader.rxPermission.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                        ImagePicker.create(FragmentProfileEdit.this)
+                                .returnMode(ReturnMode.ALL)
+                                .toolbarFolderTitle("Folder")
+                                .toolbarImageTitle("Tap to select")
+                                .toolbarArrowColor(Color.BLACK)
+                                .includeVideo(true)
+                                .single()
+                                .showCamera(true)
+                                .imageDirectory("Camera")
+//                                  .theme(R.style.CustomImagePickerTheme) // must inherit ef_BaseTheme. please refer to sample
+                                .enableLog(false) // disabling log
+                                .imageLoader(new PicassoImageLoader())
+                                .start();
+                    } else {
+                        Toast.makeText(getContext(), "Недостаточно прав!", Toast.LENGTH_LONG).show(); //TODO:String
+                    }
+                }
+            });
         };
 
         avatar.setOnClickListener(avatarListener);
@@ -191,65 +199,68 @@ public class FragmentProfileEdit extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        if (resultCode == Activity.RESULT_OK) {
-//            Utils.netQueue.postRunnable(() -> {
-//                ApplicationLoader.applicationHandler.post(dialogProgress::show);
-//
-//                final String imagePath = ImagePicker.getImagePathFromResult(ApplicationLoader.applicationContext, 234, resultCode, data);
-//                final RPC.PM_setProfilePhoto setProfilePhotoRequest = new RPC.PM_setProfilePhoto();
-//
-//                final long requestID = NetworkManager.getInstance().sendRequest(setProfilePhotoRequest, (response, error) -> {
-//                    if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
-//                        ApplicationLoader.applicationHandler.post(() -> {
-//                            if (dialogProgress != null && dialogProgress.isShowing())
-//                                dialogProgress.cancel();
-//
-//                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-//                                    .setMessage(R.string.photo_upload_failed) //TODO:string
-//                                    .setCancelable(true);
-//                            AlertDialog alertDialog = builder.create();
-//                            alertDialog.show();
-//                        });
-//                        return;
-//                    }
-//
-//                    if (response instanceof RPC.PM_boolTrue) {
-//                        FileManager.getInstance().startUploading(imagePath, new FileManager.IUploadingFile() {
-//                            @Override
-//                            public void onFinish() {
-//                                Log.e(Config.TAG, "Profile photoURL successfully uploaded");
-//                                ApplicationLoader.applicationHandler.post(() -> {
-//                                    if (dialogProgress != null && dialogProgress.isShowing())
-//                                        dialogProgress.dismiss();
-//                                    if(!User.currentUser.photoURL.url.isEmpty())
-//                                        Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
-//                                });
-//                            }
-//
-//                            @Override
-//                            public void onProgress(int percent) {
-//
-//                            }
-//
-//                            @Override
-//                            public void onError(int code) {
-//                                Log.e(Config.TAG, "Error while uploading profile photoURL, error code: " + code);
-//                                ApplicationLoader.applicationHandler.post(() -> {
-//                                    if (dialogProgress != null && dialogProgress.isShowing())
-//                                        dialogProgress.cancel();
-//                                });
-//                            }
-//                        });
-//                    }
-//
-//                    ApplicationLoader.applicationHandler.post(() -> {
-//                        if (dialogProgress != null && dialogProgress.isShowing())
-//                            dialogProgress.dismiss();
-//                    });
-//                });
-//
-//                ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
-//            });
-//        }
+        if (ImagePicker.shouldHandle(requestCode, resultCode, data)) {
+            final Image image = ImagePicker.getFirstImageOrNull(data);
+            if(image != null){
+                Utils.netQueue.postRunnable(() -> {
+                    ApplicationLoader.applicationHandler.post(dialogProgress::show);
+
+                    final RPC.PM_setProfilePhoto setProfilePhotoRequest = new RPC.PM_setProfilePhoto();
+
+                    final long requestID = NetworkManager.getInstance().sendRequest(setProfilePhotoRequest, (response, error) -> {
+                        if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+                            ApplicationLoader.applicationHandler.post(() -> {
+                                if (dialogProgress != null && dialogProgress.isShowing())
+                                    dialogProgress.cancel();
+
+                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                        .setMessage(R.string.photo_upload_failed) //TODO:string
+                                        .setCancelable(true);
+                                AlertDialog alertDialog = builder.create();
+                                alertDialog.show();
+                            });
+                            return;
+                        }
+
+                        if (response instanceof RPC.PM_boolTrue) {
+                            FileManager.getInstance().startUploading(image.getPath(), new FileManager.IUploadingFile() {
+                                @Override
+                                public void onFinish() {
+                                    Log.e(Config.TAG, "Profile photoURL successfully uploaded");
+                                    ApplicationLoader.applicationHandler.post(() -> {
+                                        if (dialogProgress != null && dialogProgress.isShowing())
+                                            dialogProgress.dismiss();
+                                        if (!User.currentUser.photoURL.url.isEmpty())
+                                            Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
+                                    });
+                                }
+
+                                @Override
+                                public void onProgress(int percent) {
+
+                                }
+
+                                @Override
+                                public void onError(int code) {
+                                    Log.e(Config.TAG, "Error while uploading profile photoURL, error code: " + code);
+                                    ApplicationLoader.applicationHandler.post(() -> {
+                                        if (dialogProgress != null && dialogProgress.isShowing())
+                                            dialogProgress.cancel();
+                                    });
+                                }
+                            });
+                        }
+
+                        ApplicationLoader.applicationHandler.post(() -> {
+                            if (dialogProgress != null && dialogProgress.isShowing())
+                                dialogProgress.dismiss();
+                        });
+                    });
+
+                    ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
+                });
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

@@ -1,5 +1,8 @@
 package ru.paymon.android.view;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.ViewModelProviders;
+import android.arch.paging.PagedList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,19 +24,28 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.CreateGroupAdapter;
+import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.viewmodels.ChatsViewModel;
 
 import static ru.paymon.android.view.AbsFragmentChat.CHAT_GROUP_USERS;
 
 public class FragmentCreateGroup extends Fragment {
     public ArrayList<UserItem> createGroupItemList = new ArrayList<>();
     private CreateGroupAdapter adapter;
+    private ChatsViewModel chatsViewModel;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        chatsViewModel = ViewModelProviders.of(getActivity()).get(ChatsViewModel.class);
+    }
 
     @Nullable
     @Override
@@ -49,11 +61,11 @@ public class FragmentCreateGroup extends Fragment {
 
         acceptButton.setOnClickListener(v -> {
             ArrayList<UserItem> arrayList = new ArrayList<>();
-            for (UserItem user:adapter.list) {
-                if(user.checked)
+            for (UserItem user : adapter.list) {
+                if (user.checked)
                     arrayList.add(user);
             }
-            if(arrayList.size() <= 0){
+            if (arrayList.size() <= 0) {
                 Toast.makeText(getContext(), "Никто не выбран!", Toast.LENGTH_LONG).show();
                 return;
             }
@@ -70,17 +82,28 @@ public class FragmentCreateGroup extends Fragment {
         contactsRecView.addItemDecoration(dividerItemDecoration);
         contactsRecView.setLayoutManager(llm);
 
-        SparseArray<RPC.UserObject> userContacts = UsersManager.getInstance().userContacts;
-        for (int i = 0; i < userContacts.size(); i++) {
-            RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
-            UserItem createGroupItem = new UserItem(user.id, Utils.formatUserName(user), user.photoURL);
-            if (createGroupItemList.contains(createGroupItem) || user.id == User.currentUser.id)
-                continue;
-            createGroupItemList.add(createGroupItem);
-        }
+        SparseArray<RPC.UserObject> userContacts = new SparseArray<>();
+        LiveData<PagedList<ChatsItem>> liveChatsItems = chatsViewModel.getDialogsChats();
+        liveChatsItems.observe(this, chatsItems -> {
+            if (chatsItems == null) return;
 
-        adapter = new CreateGroupAdapter(createGroupItemList);
-        contactsRecView.setAdapter(adapter);
+            for (ChatsItem chatItem : chatsItems) {
+                int id = chatItem.chatID;
+                userContacts.append(id, ApplicationLoader.db.userDao().getById(id));
+            }
+
+            createGroupItemList = new ArrayList<>();
+            for (int i = 0; i < userContacts.size(); i++) {
+                RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
+                UserItem createGroupItem = new UserItem(user.id, Utils.formatUserName(user), user.photoURL);
+                if (createGroupItemList.contains(createGroupItem) || user.id == User.currentUser.id)
+                    continue;
+                createGroupItemList.add(createGroupItem);
+            }
+
+            adapter = new CreateGroupAdapter(createGroupItemList);
+            contactsRecView.setAdapter(adapter);
+        });
 
         editText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -95,8 +118,8 @@ public class FragmentCreateGroup extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                if(editable.toString().isEmpty()){
-                    for (UserItem user:adapter.list)
+                if (editable.toString().isEmpty()) {
+                    for (UserItem user : adapter.list)
                         user.isHidden = false;
                     adapter.notifyDataSetChanged();
                     return;
@@ -113,7 +136,6 @@ public class FragmentCreateGroup extends Fragment {
                 adapter.notifyDataSetChanged();
             }
         });
-
 
 
         return view;

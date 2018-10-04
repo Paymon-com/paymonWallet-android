@@ -19,10 +19,8 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.UsersManager;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -91,7 +89,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
             RPC.PM_group_removeParticipant removeParticipant = new RPC.PM_group_removeParticipant();
             removeParticipant.id = chatID;
             removeParticipant.userID = createGroupItem.uid;
-            group = GroupsManager.getInstance().groups.get(chatID);
+            group = ApplicationLoader.db.groupDao().getById(chatID);
 
             long requestID = NetworkManager.getInstance().sendRequest(removeParticipant, (response, error) -> {
                 if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
@@ -103,7 +101,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 }
 
                 if (response instanceof RPC.PM_boolTrue) {
-                    RPC.UserObject userToRemove = UsersManager.getInstance().users.get(removeParticipant.userID);
+                    RPC.UserObject userToRemove = ApplicationLoader.db.userDao().getById(removeParticipant.userID);
                     group.users.remove(userToRemove);
 
                     for (UserItem item : list) {
