@@ -23,7 +23,6 @@ import ru.paymon.android.utils.Utils;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentFriendProfile extends Fragment {
-    private static FragmentFriendProfile instance;
     private int userId;
     private ImageButton floatMenu;
     private ImageButton chatButton;
@@ -32,17 +31,6 @@ public class FragmentFriendProfile extends Fragment {
     private ImageButton showEthereum;
     private DialogProgress dialogProgress;
     private boolean isFABOpen = false;
-
-    public static synchronized FragmentFriendProfile newInstance() {
-        instance = new FragmentFriendProfile();
-        return instance;
-    }
-
-    public static synchronized FragmentFriendProfile getInstance() {
-        if (instance == null)
-            instance = new FragmentFriendProfile();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -186,6 +174,5 @@ public class FragmentFriendProfile extends Fragment {
         //Utils.setActionBarWithTitle(getActivity(), "Профиль");
         //Utils.setArrowBackInToolbar(getActivity());
         Utils.showBottomBar(getActivity());
-        setHasOptionsMenu(true);
     }
 }

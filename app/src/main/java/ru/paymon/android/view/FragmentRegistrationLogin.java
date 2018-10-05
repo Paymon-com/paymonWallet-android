@@ -21,17 +21,8 @@ import static ru.paymon.android.utils.Utils.loginCorrect;
 
 public class FragmentRegistrationLogin extends Fragment {
     public static final String KEY_LOGIN_REGISTRATION = "login_registration";
-
-    private static FragmentRegistrationLogin instance;
     private EditText loginEditText;
     private TextView hintError;
-
-
-    public static synchronized FragmentRegistrationLogin getInstance() {
-        if (instance == null)
-            instance = new FragmentRegistrationLogin();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,9 +32,6 @@ public class FragmentRegistrationLogin extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-//        setHasOptionsMenu(true);
     }
 
     @Nullable

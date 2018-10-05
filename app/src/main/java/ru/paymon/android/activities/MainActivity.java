@@ -27,6 +27,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         setContentView(R.layout.activity_main);
 
+        if (User.currentUser.confirmed) {
+
+        }
+
         if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
             Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
             intent.putExtra("request_code", 10);
@@ -41,9 +45,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         Navigation.findNavController(this, R.id.nav_host_fragment).addOnNavigatedListener((controller, destination) -> {
             int id = destination.getId();
-            if(id == R.id.fragmentChat || id == R.id.fragmentGroupChat){
+            if (id == R.id.fragmentChat || id == R.id.fragmentGroupChat) {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE | WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
-            }else{
+            } else {
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
             }
         });

@@ -29,25 +29,13 @@ import ru.paymon.android.utils.Utils;
 import static ru.paymon.android.utils.Utils.emailCorrect;
 
 public class FragmentRegistrationEmailConfirmation extends Fragment {
-    private static FragmentRegistrationEmailConfirmation instance;
     private boolean isSendingAvailable = true;
-
     private EditText email;
     private TextView hintError;
     private TextView time;
     private CountDownTimer timer;
     private DialogProgress dialogProgress;
 
-    public static synchronized FragmentRegistrationEmailConfirmation newInstance() {
-        instance = new FragmentRegistrationEmailConfirmation();
-        return instance;
-    }
-
-    public static synchronized FragmentRegistrationEmailConfirmation getInstance() {
-        if (instance == null)
-            instance = new FragmentRegistrationEmailConfirmation();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -123,8 +111,6 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.authorization));
-        setHasOptionsMenu(true);
     }
 
     @Override
@@ -132,20 +118,6 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
         super.onPause();
         Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
-
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.next_menu, menu);
-//    }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//            case next:
-//                confirmRegistration();
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     public void confirmRegistration() {
         if (!emailCorrect(email.getText().toString())) return;

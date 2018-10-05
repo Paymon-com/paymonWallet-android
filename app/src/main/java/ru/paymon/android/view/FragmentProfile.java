@@ -18,18 +18,6 @@ import ru.paymon.android.User;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentProfile extends Fragment {
-    private static FragmentProfile instance;
-
-    public static synchronized FragmentProfile newInstance() {
-        instance = new FragmentProfile();
-        return instance;
-    }
-
-    public static synchronized FragmentProfile getInstance() {
-        if (instance == null)
-            instance = new FragmentProfile();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

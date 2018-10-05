@@ -25,8 +25,6 @@ import static ru.paymon.android.view.FragmentRegistrationLogin.KEY_LOGIN_REGISTR
 import static ru.paymon.android.view.FragmentRegistrationPassword.KEY_PASSWORD_REGISTRATION;
 
 public class FragmentRegistrationEmail extends Fragment {
-    private static FragmentRegistrationEmail instance;
-
     private String login;
     private String password;
     private EditText emailEditText;
@@ -34,16 +32,10 @@ public class FragmentRegistrationEmail extends Fragment {
     private TextView hintError;
     private DialogProgress dialogProgress;
 
-    public static synchronized FragmentRegistrationEmail getInstance() {
-        if (instance == null)
-            instance = new FragmentRegistrationEmail();
-        return instance;
-    }
 
     @Override
     public void onResume() {
         super.onResume();
-//        setHasOptionsMenu(true);
     }
 
     @Override

@@ -23,21 +23,10 @@ import ru.paymon.android.models.UserItem;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentGroupAddBlackList extends Fragment {
-    private static FragmentGroupAddBlackList instance;
     private AddBlackListAdapter adapter;
     private LinkedList<UserItem> list = new LinkedList<>();
     private TextView hintError;
 
-    public static synchronized FragmentGroupAddBlackList newInstance(){
-        instance = new FragmentGroupAddBlackList();
-        return instance;
-    }
-
-    public static synchronized FragmentGroupAddBlackList getInstance(){
-        if (instance == null)
-            instance = new FragmentGroupAddBlackList();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

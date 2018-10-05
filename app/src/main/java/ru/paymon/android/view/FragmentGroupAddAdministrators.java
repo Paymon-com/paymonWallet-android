@@ -23,21 +23,10 @@ import ru.paymon.android.models.UserItem;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentGroupAddAdministrators extends Fragment {
-    private static FragmentGroupAddAdministrators instance;
     private AddAdministratorsAdapter adapter;
     private LinkedList<UserItem> list = new LinkedList<>();
     private TextView hintError;
 
-    public static synchronized FragmentGroupAddAdministrators newInstance(){
-        instance = new FragmentGroupAddAdministrators();
-        return instance;
-    }
-
-    public static synchronized FragmentGroupAddAdministrators getInstance(){
-        if (instance == null)
-            instance = new FragmentGroupAddAdministrators();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

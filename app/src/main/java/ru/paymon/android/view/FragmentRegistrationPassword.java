@@ -23,18 +23,10 @@ import static ru.paymon.android.view.FragmentRegistrationLogin.KEY_LOGIN_REGISTR
 
 public class FragmentRegistrationPassword extends Fragment {
     public static final String KEY_PASSWORD_REGISTRATION = "password_registration";
-    private static FragmentRegistrationPassword instance;
     private String login;
     private TextView hintError;
     private EditText passwordEditText;
     private EditText repeatPasswordEditText;
-
-
-    public static synchronized FragmentRegistrationPassword getInstance() {
-        if (instance == null)
-            instance = new FragmentRegistrationPassword();
-        return instance;
-    }
 
 
     @Override
@@ -51,9 +43,6 @@ public class FragmentRegistrationPassword extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-//        setHasOptionsMenu(true);
-//        getActivity().invalidateOptionsMenu();
     }
 
     @Nullable
@@ -133,17 +122,6 @@ public class FragmentRegistrationPassword extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.next_menu, menu);
     }
-
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case next:
-//                showFragmentRegistrationEmail();
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     public void showFragmentRegistrationEmail() {
         if (passwordEditText.getText().toString().length() < 8 || !repeatPasswordEditText.getText().toString().equals(passwordEditText.getText().toString()))

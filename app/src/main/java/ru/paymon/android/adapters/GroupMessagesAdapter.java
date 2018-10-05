@@ -188,6 +188,7 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
                 final int groupID = message.to_peer.group_id;
                 final RPC.Group group = ApplicationLoader.db.groupDao().getById(groupID);
                 final RPC.UserObject creator = ApplicationLoader.db.userDao().getById(group.creatorID);
+                if(creator == null) return;
                 String createGroupString = String.format("%s создал беседу \"%s\"", Utils.formatUserName(creator), group.title); //TODO:String
                 msg.setText(createGroupString);
             }
