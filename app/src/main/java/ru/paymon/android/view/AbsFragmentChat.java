@@ -35,7 +35,6 @@ import ru.paymon.android.User;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.room.ChatMessageDao;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.ChatViewModel;
 
@@ -71,7 +70,6 @@ public abstract class AbsFragmentChat extends Fragment {
     public TextView copy;
     public SelectionTracker selectionTracker;
     public ChatViewModel chatViewModel;
-    public ChatMessageDao dao = ApplicationLoader.db.chatMessageDao();
     public ArrayList<RPC.UserObject> groupUsers;
     public int chatID;
 

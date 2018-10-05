@@ -56,7 +56,7 @@
             android:noHistory="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:windowSoftInputMode="adjustPan">
         </activity>
 
         <activity
