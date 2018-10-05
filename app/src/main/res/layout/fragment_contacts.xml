@@ -13,21 +13,51 @@
         android:id="@+id/edit_text_contacts_search2"
         android:layout_width="match_parent"
         android:layout_height="25dp"
-        android:layout_marginTop="13dp"
-        android:nextFocusUp="@id/edit_text_contacts_search2"
+        android:layout_marginTop="16dp"
         android:nextFocusLeft="@id/edit_text_contacts_search2"
+        android:nextFocusUp="@id/edit_text_contacts_search2"
         app:iconifiedByDefault="false"
+        app:layout_constraintBottom_toTopOf="@+id/recViewContactsGlobal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:queryHint="Search contacts"
         app:searchIcon="@drawable/search_white" />
 
+    <ImageView
+        android:id="@+id/fragment_contacts_image_imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:src="@drawable/contacts_white"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_contacts_text_textView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView6"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <TextView
+        android:id="@+id/fragment_contacts_text_textView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_thin"
+        android:gravity="center"
+        android:text="Здесь вы можете искать контакты"
+        android:textColor="@color/gray_dim"
+        android:textSize="21sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_contacts_image_imageView"
+        app:layout_constraintStart_toStartOf="@+id/fragment_contacts_image_imageView"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_contacts_image_imageView" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recViewContactsGlobal"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="13dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,6 +74,7 @@
         app:layout_constraintTop_toTopOf="@+id/recViewContactsGlobal" />
 
     <ImageView
+        android:id="@+id/imageView9"
         android:layout_width="match_parent"
         android:layout_height="8dp"
         android:src="@drawable/transparent_gradient"

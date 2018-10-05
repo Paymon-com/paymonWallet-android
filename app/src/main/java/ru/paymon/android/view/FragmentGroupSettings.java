@@ -178,35 +178,35 @@ public class FragmentGroupSettings extends Fragment {
             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.FragmentGroupAddParticipants, bundle);
         });
 
-        Button blackListButton = (Button) view.findViewById(R.id.group_settings_black_list);
-        blackListButton.setOnClickListener((view1) -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(R.string.black_list);
-            view1 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_black_list, null);
-            builder.setView(view1);
-            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupAddBlackList));
-            RecyclerView blackList = (RecyclerView) view1.findViewById(R.id.alert_dialog_custom_black_list_rv);
-            BlackListAdapter adapter = new BlackListAdapter(listAlertDialogBlackList, group.id, group.creatorID, dialogProgress);
-            blackList.setLayoutManager(new LinearLayoutManager(getContext()));
-            blackList.setAdapter(adapter);
-            builder.setCancelable(true);
-            builder.show();
-        });
+//        Button blackListButton = (Button) view.findViewById(R.id.group_settings_black_list);
+//        blackListButton.setOnClickListener((view1) -> {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//            builder.setTitle(R.string.black_list);
+//            view1 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_black_list, null);
+//            builder.setView(view1);
+//            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupAddBlackList));
+//            RecyclerView blackList = (RecyclerView) view1.findViewById(R.id.alert_dialog_custom_black_list_rv);
+//            BlackListAdapter adapter = new BlackListAdapter(listAlertDialogBlackList, group.id, group.creatorID, dialogProgress);
+//            blackList.setLayoutManager(new LinearLayoutManager(getContext()));
+//            blackList.setAdapter(adapter);
+//            builder.setCancelable(true);
+//            builder.show();
+//        });
 
-        Button adminListButton = (Button) view.findViewById(R.id.group_settings_administrators);
-        adminListButton.setOnClickListener(view12 -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(R.string.administrators);
-            view12 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_administrators, null);
-            builder.setView(view12);
-            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupAddAdministrators));
-            RecyclerView adminsList = (RecyclerView) view12.findViewById(R.id.alert_dialog_custom_administrators_rv);
-            AdministratorsAdapter adapter = new AdministratorsAdapter(listAlertDialogAdministrators, group.id, group.creatorID, dialogProgress);
-            adminsList.setLayoutManager(new LinearLayoutManager(getContext()));
-            adminsList.setAdapter(adapter);
-            builder.setCancelable(true);
-            builder.show();
-        });
+//        Button adminListButton = (Button) view.findViewById(R.id.group_settings_administrators);
+//        adminListButton.setOnClickListener(view12 -> {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+//            builder.setTitle(R.string.administrators);
+//            view12 = getLayoutInflater().inflate(R.layout.alert_dialog_custom_administrators, null);
+//            builder.setView(view12);
+//            builder.setPositiveButton(R.string.button_add, (dialogInterface, i) -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupAddAdministrators));
+//            RecyclerView adminsList = (RecyclerView) view12.findViewById(R.id.alert_dialog_custom_administrators_rv);
+//            AdministratorsAdapter adapter = new AdministratorsAdapter(listAlertDialogAdministrators, group.id, group.creatorID, dialogProgress);
+//            adminsList.setLayoutManager(new LinearLayoutManager(getContext()));
+//            adminsList.setAdapter(adapter);
+//            builder.setCancelable(true);
+//            builder.show();
+//        });
 
         Button leaveGroup = (Button) view.findViewById(R.id.group_settings_leave_group);
         leaveGroup.setOnClickListener(view13 -> {

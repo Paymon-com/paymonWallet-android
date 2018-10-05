@@ -8,9 +8,12 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -39,6 +42,9 @@ public class FragmentContacts extends Fragment {
 
         RecyclerView recyclerViewContactsGlobal = (RecyclerView) view.findViewById(R.id.recViewContactsGlobal);
         CustomSearchView searchView = view.findViewById(R.id.edit_text_contacts_search2);
+
+        ImageView contactsImage = (ImageView) view.findViewById(R.id.fragment_contacts_image_imageView);
+        TextView contactsText = (TextView) view.findViewById(R.id.fragment_contacts_text_textView);
 
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerViewContactsGlobal.getContext(), (new LinearLayoutManager(getContext())).getOrientation());
         recyclerViewContactsGlobal.addItemDecoration(dividerItemDecoration);
@@ -89,6 +95,11 @@ public class FragmentContacts extends Fragment {
                 if (searchText.isEmpty()) {
                     contactsGlobalAdapter.contactsGlobalItems.clear();
                     contactsGlobalAdapter.notifyDataSetChanged();
+                    contactsImage.setVisibility(View.VISIBLE);
+                    contactsText.setVisibility(View.VISIBLE);
+                } else {
+                    contactsImage.setVisibility(View.GONE);
+                    contactsText.setVisibility(View.GONE);
                 }
                 if (System.currentTimeMillis() - lastTimeSend >= 1500) {
                     Utils.netQueue.postRunnable(() -> {

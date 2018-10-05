@@ -31,7 +31,6 @@ public class CustomSearchView extends SearchView {
         Typeface typeface = Typeface.createFromAsset(getContext().getAssets(), "fonts/roboto_thin.ttf");
         searchText.setTextColor(getResources().getColor(R.color.gray_dim));
         searchText.setHintTextColor(getResources().getColor(R.color.gray_dim));
-        searchText.setTextSize(16);
         searchText.setTypeface(typeface);
     }
 }
