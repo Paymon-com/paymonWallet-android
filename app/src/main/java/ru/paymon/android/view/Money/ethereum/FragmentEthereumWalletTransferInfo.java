@@ -1,4 +1,4 @@
-package ru.paymon.android.view;
+package ru.paymon.android.view.Money.ethereum;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

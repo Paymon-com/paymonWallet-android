@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
@@ -15,7 +14,7 @@ import ru.paymon.android.activities.KeyGuardActivity;
 import static ru.paymon.android.User.CLIENT_SECURITY_PASSWORD_ENABLED_CHECK;
 import static ru.paymon.android.User.CLIENT_SECURITY_PASSWORD_PREFERENCE;
 
-public class FragmentSettingsSecurity extends PreferenceFragmentCompat {
+public class FragmentSettingsSecurity extends AbsFragmentSettings {
     private CheckBoxPreference passwordEnabledPreference;
     private Preference passwordPreference;
 

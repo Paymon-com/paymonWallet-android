@@ -1,4 +1,4 @@
-package ru.paymon.android.view;
+package ru.paymon.android.view.Money;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
@@ -26,6 +26,8 @@ import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.view.DialogProgress;
+import ru.paymon.android.view.Money.ethereum.DialogFragmentCreateRestoreEthereumWallet;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
 public class FragmentMoney extends Fragment {

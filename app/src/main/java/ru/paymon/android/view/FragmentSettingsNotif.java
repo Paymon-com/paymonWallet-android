@@ -2,15 +2,16 @@ package ru.paymon.android.view;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
+import android.view.View;
 
 import ru.paymon.android.R;
 
 import static ru.paymon.android.User.CLIENT_MESSAGES_NOTIFY_SOUND_PREFERENCE;
 
-public class FragmentSettingsNotif extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class FragmentSettingsNotif extends AbsFragmentSettings implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -25,6 +26,11 @@ public class FragmentSettingsNotif extends PreferenceFragmentCompat implements S
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
@@ -35,6 +41,8 @@ public class FragmentSettingsNotif extends PreferenceFragmentCompat implements S
         super.onPause();
         getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
     }
+
+
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {//TODO:название выбранного звука

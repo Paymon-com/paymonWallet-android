@@ -1,4 +1,4 @@
-package ru.paymon.android.view;
+package ru.paymon.android.view.Money.ethereum;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -26,6 +26,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.gateway.Ethereum;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.view.AlertDialogOpenFile;
 
 public class DialogFragmentRestoreEthereumWallet extends DialogFragment {
 

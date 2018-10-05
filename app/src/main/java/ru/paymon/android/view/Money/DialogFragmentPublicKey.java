@@ -1,4 +1,4 @@
-package ru.paymon.android.view;
+package ru.paymon.android.view.Money;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import ru.paymon.android.R;

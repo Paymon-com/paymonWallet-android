@@ -26,18 +26,11 @@ import static ru.paymon.android.view.FragmentRegistrationPassword.KEY_PASSWORD_R
 
 
 public class FragmentAuthorization extends Fragment {
-    private static FragmentAuthorization instance;
     private EditText loginView;
     private EditText passView;
     private DialogProgress dialog;
     private String login;
     private String password;
-
-    public static synchronized FragmentAuthorization getInstance() {
-        if (instance == null)
-            instance = new FragmentAuthorization();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

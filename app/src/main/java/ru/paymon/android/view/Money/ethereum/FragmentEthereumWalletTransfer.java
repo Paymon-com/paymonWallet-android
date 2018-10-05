@@ -1,4 +1,4 @@
-package ru.paymon.android.view;
+package ru.paymon.android.view.Money.ethereum;
 
 import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;

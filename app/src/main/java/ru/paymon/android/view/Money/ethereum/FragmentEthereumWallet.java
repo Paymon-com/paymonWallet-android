@@ -1,4 +1,4 @@
-package ru.paymon.android.view;
+package ru.paymon.android.view.Money.ethereum;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
@@ -23,6 +23,9 @@ import ru.paymon.android.adapters.EthereumTransactionAdapter;
 import ru.paymon.android.gateway.Ethereum;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.view.Money.DialogFragmentDeleteWallet;
+import ru.paymon.android.view.Money.DialogFragmentPrivateKey;
+import ru.paymon.android.view.Money.DialogFragmentPublicKey;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
 public class FragmentEthereumWallet extends Fragment {

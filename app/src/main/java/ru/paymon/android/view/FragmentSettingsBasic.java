@@ -7,7 +7,6 @@ import android.support.v14.preference.SwitchPreference;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
-import android.support.v7.preference.PreferenceFragmentCompat;
 import android.support.v7.preference.PreferenceManager;
 
 import ru.paymon.android.ApplicationLoader;
@@ -20,7 +19,7 @@ import ru.paymon.android.utils.Utils;
 import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_LIST;
 
 
-public class FragmentSettingsBasic extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+public class FragmentSettingsBasic extends AbsFragmentSettings implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,7 +71,7 @@ public class FragmentSettingsBasic extends PreferenceFragmentCompat implements S
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                                     .setMessage(getString(R.string.profile_edit_failed))
-                                    .setCancelable(false);
+                                    .setCancelable(true);
                             AlertDialog alertDialog = builder.create();
                             alertDialog.show();
                         });
