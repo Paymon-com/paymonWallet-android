@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -131,6 +132,8 @@ public class FragmentGroupAddParticipants extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         contactsList.setLayoutManager(llm);
         contactsList.setHasFixedSize(true);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(contactsList.getContext(), (new LinearLayoutManager(getContext())).getOrientation());
+        contactsList.addItemDecoration(dividerItemDecoration);
 
         adapter = new CreateGroupAdapter(addGroupList);
         contactsList.setAdapter(adapter);
