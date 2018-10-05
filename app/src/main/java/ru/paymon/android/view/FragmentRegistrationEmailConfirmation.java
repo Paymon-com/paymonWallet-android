@@ -17,10 +17,12 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.activities.EmailConfirmationActivity;
 import ru.paymon.android.activities.MainActivity;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -103,14 +105,13 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
             }
         };
 
-        email.setText(User.currentUser.email);
-
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        email.setText(User.currentUser.email);
     }
 
     @Override
@@ -152,33 +153,33 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
                         return;
                     }
 
-                    if (response != null) {
-                        if (response instanceof RPC.PM_boolFalse) {
-                            ApplicationLoader.applicationHandler.post(() -> {
-                                hintError.setText("");
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                        .setMessage(getString(R.string.confirmation_code_was_sent))
-                                        .setCancelable(false);
-                                AlertDialog alertDialog = builder.create();
-                                alertDialog.show();
-                            });
-                        }
+                    if (response instanceof RPC.PM_boolFalse) {
+                        ApplicationLoader.applicationHandler.post(() -> {
+                            hintError.setText("");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                    .setMessage(getString(R.string.confirmation_code_was_sent))
+                                    .setCancelable(false);
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                        });
+                    }
 
-                        if (response instanceof RPC.PM_boolTrue) {
-                            User.currentUser.confirmed = true;
-                            User.saveConfig();
+                    if (response instanceof RPC.PM_boolTrue) {
+                        User.currentUser.confirmed = true;
+                        User.saveConfig();
 
-                            ApplicationLoader.applicationHandler.post(() -> {
-                                Intent mainActivityIntent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
-                                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(mainActivityIntent);
-                            });
-                        }
+//                            ApplicationLoader.applicationHandler.post(() -> {
+//                                Intent mainActivityIntent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
+//                                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                startActivity(mainActivityIntent);
+//                            });
+                        NavOptions navOptions = new NavOptions.Builder().setClearTask(true).build();
+                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.mainActivity, null, navOptions);
                     }
 
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
-                            dialogProgress.dismiss();
+                            dialogProgress.cancel();
                     });
                 });
 

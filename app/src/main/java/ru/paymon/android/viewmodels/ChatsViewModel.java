@@ -7,6 +7,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.util.SparseArray;
 
 import java.util.ArrayList;
@@ -86,7 +87,7 @@ public class ChatsViewModel extends AndroidViewModel {
                     }
 
                     final RPC.PM_chatsAndMessages packet = (RPC.PM_chatsAndMessages) response;
-
+                    Log.e("AAA", packet.count + " " + packet.users.size() + " " + packet.messages.size());
                     final ArrayList<ChatsItem> chatsItems = new ArrayList<>();
                     final SparseArray<RPC.Message> usersMessagesMap = new SparseArray<>();
                     final SparseArray<RPC.Message> groupsMessagesMap = new SparseArray<>();

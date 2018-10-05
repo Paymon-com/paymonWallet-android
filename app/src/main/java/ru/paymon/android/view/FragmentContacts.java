@@ -1,5 +1,6 @@
 package ru.paymon.android.view;
 
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -143,10 +145,10 @@ public class FragmentContacts extends Fragment {
         });
 
         ItemClickSupport.addTo(recyclerViewContactsGlobal).setOnItemClickListener((recyclerView, position, v) -> {
-                final Bundle bundle = new Bundle();
-                int userID = (int) recyclerViewContactsGlobal.getAdapter().getItemId(position);
-                bundle.putInt(CHAT_ID_KEY, userID);
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentFriendProfile, bundle);
+            final Bundle bundle = new Bundle();
+            int userID = contactsGlobalAdapter.contactsGlobalItems.get(position).id;
+            bundle.putInt(CHAT_ID_KEY, userID);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentFriendProfile, bundle);
         });
 
         return view;

@@ -19,6 +19,7 @@ public class NotificationManager {
         didLoadedStickerPack,
         profileUpdated,
         userAuthorized,
+        authorizationFailed,
         chatAddMessages,
         dialogsNeedReload,
         didConnectedToServer,
