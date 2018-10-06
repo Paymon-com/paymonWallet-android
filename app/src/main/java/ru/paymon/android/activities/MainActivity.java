@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
@@ -127,10 +128,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-        if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED || event == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-            connectingConstraint.setVisibility(View.GONE);
-        } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED || event == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
-            connectingConstraint.setVisibility(View.VISIBLE);
-        }
+        ApplicationLoader.applicationHandler.post(() -> {
+            if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED || event == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
+                connectingConstraint.setVisibility(View.GONE);
+            } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED || event == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
+                connectingConstraint.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }
