@@ -5,56 +5,44 @@
     android:layout_height="wrap_content"
     android:background="@color/black">
 
-    <TextView
-        android:id="@+id/profile_invite_count"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="sans-serif-light"
-        android:textColor="@color/blue_dark"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/profile_invite_title2"
-        app:layout_constraintTop_toTopOf="@+id/profile_invite_title2" />
+    <!--<TextView-->
+        <!--android:id="@+id/profile_invite_count"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="8dp"-->
+        <!--android:fontFamily="sans-serif-light"-->
+        <!--android:textColor="@color/blue_dark"-->
+        <!--android:textSize="12sp"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintStart_toEndOf="@+id/profile_invite_title2"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/profile_invite_title2" />-->
 
-    <ImageView
-        android:id="@+id/profile_invite_count_image_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:src="@drawable/ic_invite_count"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_invite_title2"
-        app:layout_constraintEnd_toStartOf="@+id/profile_invite_title2"
-        app:layout_constraintTop_toTopOf="@+id/profile_invite_title2" />
+    <!--<ImageView-->
+        <!--android:id="@+id/profile_invite_count_image_view"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="8dp"-->
+        <!--android:src="@drawable/ic_invite_count"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/profile_invite_title2"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/profile_invite_title2"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/profile_invite_title2" />-->
 
-    <TextView
-        android:id="@+id/profile_invite_title2"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/invite_information_count"
-        android:textAllCaps="true"
-        android:textColor="@color/white"
-        android:textSize="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_avatar_image_view"
-        tools:ignore="MissingConstraints" />
-
-    <TextView
-        android:id="@+id/status_profile_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/status"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_avatar_image_view"
-        app:layout_constraintStart_toEndOf="@+id/profile_avatar_image_view" />
+    <!--<TextView-->
+        <!--android:id="@+id/profile_invite_title2"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginStart="64dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:fontFamily="sans-serif-light"-->
+        <!--android:text="@string/invite_information_count"-->
+        <!--android:textAllCaps="true"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="10dp"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/profile_avatar_image_view"-->
+        <!--tools:ignore="MissingConstraints" />-->
 
     <TextView
         android:id="@+id/login_profile_text_view"
@@ -64,7 +52,7 @@
         android:text="Логин"
         android:textColor="@color/white"
         android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/status_profile_text_view"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_avatar_image_view"
         app:layout_constraintStart_toEndOf="@+id/profile_avatar_image_view"
         app:layout_constraintTop_toBottomOf="@+id/name_profile_text_view" />
 
@@ -73,13 +61,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:maxLines="1"
         android:maxWidth="190dp"
+        android:maxLines="1"
         android:text="ник нейм"
         android:textColor="@color/white"
         android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/login_profile_text_view"
         app:layout_constraintStart_toEndOf="@+id/profile_avatar_image_view"
-        app:layout_constraintTop_toTopOf="@+id/profile_avatar_image_view" />
+        app:layout_constraintTop_toTopOf="@+id/profile_avatar_image_view"
+        app:layout_constraintVertical_chainStyle="spread" />
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/profile_avatar_image_view"
@@ -87,7 +77,9 @@
         android:layout_height="70dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/profile_photo_none"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
