@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources  tools:ignore="ExtraTranslation" xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">Paymon</string>
     <string name="date_format_24h">24 Hour</string>
     <string name="date_format_12h">12 Hour AM/PM</string>
@@ -59,19 +59,14 @@
     <string name="msg_permissions_required">Please provide permissions</string>
 
     <string name="ok">ОК</string>
-    <!--<string name="title_chats">Чаты</string>-->
     <string name="title_more">More</string>
-    <!--<string name="title_update_profile">Редактирование профиля</string>-->
     <string name="title_contacts">Contacts</string>
     <string name="title_money">Money</string>
     <string name="title_transfer">Transfer</string>
-    <!--<string name="title_deposit">Пополнение баланса</string>-->
     <string name="title_withdraw">Withdrawal of funds</string>
     <string name="title_games">Games</string>
     <string name="title_settings">Settings</string>
     <string name="title_faq">FAQ</string>
-    <!--<string name="title_registration">Регистрация</string>-->
-    <!--<string name="additionally">Прочее</string>-->
     <string name="exit">Exit</string>
     <string name="profile">Profile</string>
     <string name="enter_a_code">Enter a code</string>
@@ -82,19 +77,14 @@
     <string name="reg_check_password">Enter your password</string>
     <string name="reg_check_login_correct">Login contains invalid characters</string>
     <string name="reg_check_password_length">The password is too short</string>
-    <!--<string name="reg_check_login_length">Логин слишком короткий</string>-->
     <string name="check_connected_to_server">No connection to the server</string>
 
-    <!--<string name="update_profile_save">Ваш профиль был обновлен</string>-->
     <string name="update_profile">Edit profile</string>
 
-    <!--<string name="navigation_drawer_open">Открыть шторку</string>-->
-    <!--<string name="navigation_drawer_close">Закрыть шторку</string>-->
     <string name="authorization">Authorization</string>
 
     <string name="action_settings">Settings</string>
 
-    <!--&lt;!&ndash; Strings related to login &ndash;&gt;-->
     <string name="error_incorrect_double_password">Passwords do not match</string>
 
     <string name="default_input_hint">Enter your message</string>
@@ -114,8 +104,10 @@
 
     <string name="save_button">Save</string>
     <string name="message">Message</string>
+    <string name="connecting">Connecting</string>
     <string name="contact_information">Contact information</string>
     <string name="personal_information">Personal information</string>
+    <string name="personalization">Personalization</string>
     <string name="change_photo">Change photo</string>
     <string name="status">Status</string>
     <string name="bday">Date of Birth</string>
@@ -123,26 +115,14 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
 
-    <!--<string name="Page1Title">Добро пожаловать в Paymon!</string>-->
-    <!--<string name="Page2Title">Совершай переводы криптовалют во время общения! криптовалюту с минимальной для вас комиссией в момент прямого общения!</string>-->
-    <!--<string name="Page3Title">Создавай кошельки и не беспокойся о их безопасности!</string>-->
-    <!--<string name="Page4Title">Конвертируй свою криптовалюту!</string>-->
-    <!--<string name="Page5Title">Играй с друзьями и будь лучшим!</string>-->
-    <!--<string name="Page6Title">И все это удобно и быстро! Используй paymon и будь свободен!</string>-->
-    <!--<string name="Page7Title">Есть вопрос? Переходи в FAQ или пиши нам! Мы всегда готовы помочь.</string>-->
-
     <string name="deposit">Deposit</string>
     <string name="withdraw">Withdraw</string>
-    <!--<string name="yandex_money">Яндекс.Деньги</string>-->
     <string name="rub">RUB</string>
     <string name="btc">BTC</string>
 
-    <!--<string name="game_develop_text">Я только учусь играть</string>-->
-    <!--<string name="game_develop_text2">Сыграем позднее</string>-->
 
     <string name="settings_notifications">Notifications</string>
     <string name="settings_basic">Basic</string>
-    <!--<string name="settings_money">Кошелек</string>-->
     <string name="settings_security">Security</string>
     <string name="settings_other">Other</string>
     <string name="settings_about_programm">About program</string>
@@ -156,10 +136,8 @@
     <string name="notif_transactions">Transactions</string>
     <string name="enter_your_email">Enter your E-mail</string>
 
-    <!--<string name="app_title">Приложение</string>-->
     <string name="app_sort_friends">Sort friends list</string>
 
-    <!--<string name="money_control_btc">Деноминация и точность BTC</string>-->
 
     <string name="security_app">Application security</string>
     <string name="security_password_protect">Security Password</string>
@@ -176,128 +154,20 @@
     <string name="about_program_text">Paymon for Android</string>
     <string name="about_program_text_version">"version %s"</string>
 
-    <!--<string name="referal_share">Привет! Устанавливай и регистрируйся в приложении по коду \'%1$s\' и получи бесплатно криптовалюту от Paymon! https://paymon.org</string>-->
-
-    <!--<string name="toast_wallet_reset">Ваш кошелёк был сброшен!\nВосстановление займёт некоторое время.</string>-->
-    <!--<string name="wallet_disclaimer_fragment_remind_backup">Вам необходимо &lt;u&gt;сделать резервную копию вашего кошелька&lt;/u&gt;!</string>-->
-    <!--<string name="wallet_transactions_row_warning_backup">Поздравляем, вы получили первый платёж! Вы уже &lt;u&gt;сделали резервную копию кошелька&lt;/u&gt;, чтобы обезопаситься от потерь?</string>-->
-    <!--<string name="wallet_transactions_row_warning_storage_encryption">Подсказка: для улучшения безопасности вашего кошелька вы можете &lt;u&gt;зашифровать ваше устройство&lt;/u&gt;. Это также защитит данные других приложений.</string>-->
-    <!--<string name="wallet_transactions_fragment_coinbase">добыто</string>-->
-    <!--<string name="wallet_transactions_fragment_internal">внутренний</string>-->
-    <!--<string name="wallet_transactions_options_filter">Фильтр</string>-->
-    <!--<string name="wallet_transactions_options_filter_all">Все выплаты</string>-->
-    <!--<string name="wallet_transactions_options_filter_received">Полученные выплаты</string>-->
-    <!--<string name="wallet_transactions_options_filter_sent">Отправленные выплаты</string>-->
-    <!--<string name="wallet_options_donate">Пожертвовать</string>-->
-    <!--<string name="raise_fee_dialog_title">Увеличить комиссию сети</string>-->
-    <!--<string name="raise_fee_dialog_message">Увеличить комиссию для этого платежа на %s? Платёж будет подтверждён быстрее.</string>-->
-    <!--<string name="raise_fee_dialog_state_decrypting">Расшифровка…</string>-->
-    <!--<string name="raise_fee_dialog_state_done">Готово.</string>-->
-    <!--<string name="raise_fee_dialog_button_raise">Увеличить</string>-->
-    <!--<string name="edit_address_book_entry_dialog_title_add">Добавить метку получателя</string>-->
-    <!--<string name="edit_address_book_entry_dialog_title_edit">Изменить метку получателя</string>-->
-    <!--<string name="edit_address_book_entry_dialog_title_add_receive">Добавить метку для вашего адреса</string>-->
-    <!--<string name="edit_address_book_entry_dialog_title_edit_receive">Изменить метку вашего адреса</string>-->
-    <!--<string name="edit_address_book_entry_dialog_address_label">Адрес</string>-->
-    <!--<string name="edit_address_book_entry_dialog_label_label">Имя</string>-->
-    <!--<string name="edit_address_book_entry_dialog_button_edit">Сохранить</string>-->
-    <!--<string name="transaction_row_fee">Комиссия сети</string>-->
-    <!--<string name="transaction_row_message_purpose_key_rotation">Эта транзакция защищает ваш кошелек от воровства. &lt;u&gt;Подробнее.&lt;/u&gt;</string>-->
-    <!--<string name="transaction_row_message_purpose_raise_fee">Эта транзакция увеличит комиссию за предыдущий платёж.</string>-->
-    <!--<string name="transaction_row_message_own_unbroadcasted">Этот платёж ещё не был передан в сеть.</string>-->
-    <!--<string name="transaction_row_message_received_direct">Этот платеж был проведен напрямую. Существует риск того, что вы никогда не сможете потратить полученные средства.</string>-->
-    <!--<string name="transaction_row_message_received_unconfirmed_delayed">Подтверждение этого платежа задерживается, возможно, из-за перегрузки сети Bitcoin.</string>-->
-    <!--<string name="transaction_row_message_received_unconfirmed_unlocked">Этот платёж должен стать доступным через несколько минут.</string>-->
-    <!--<string name="transaction_row_message_received_in_conflict">Этот платёж с высокой вероятностью может быть отменён отправителем! Если можете, подождите подтверждения.</string>-->
-    <!--<string name="transaction_row_message_received_dead">Этот платёж был отменён отправителем.</string>-->
-    <!--<string name="transaction_row_message_received_dust">Столь малая сумма, скорее всего, никогда не будет потрачена экономически.</string>-->
-    <!--<string name="transaction_row_message_received_pay_to_many">Этот платеж посылает средства на много кошельков, что затрудняет его обработку. По возможности, платеж должны идти только на ваш адрес.</string>-->
-    <!--<string name="transaction_row_message_received_rbf">Этот платёж был задержан, потому что отправитель использовал небезопасный тип транзакции.</string>-->
-    <!--<string name="block_row_mining_difficulty_adjustment">Корректировка сложности майнинга</string>-->
-    <!--<string name="block_row_mining_reward_adjustment">Уполовинивание награды за майнинг</string>-->
-    <!--<string name="block_row_now">сейчас</string>-->
-    <!--<string name="import_keys_dialog_title">Восстановить кошелек</string>-->
     <string name="restore_wallet_dialog_replace_warning">You are about to replace the current wallet. Any coins in the current wallet will be lost if you do not have a separate backup</string>
     <string name="import_keys_dialog_warning">Important: Do not download private keys from questionable sources! Attackers can gain access to your funds</string>
     <string name="import_keys_dialog_button_import">Reestablish</string>
-    <!--<string name="restore_wallet_dialog_success">Кошелек был восстановлен.</string>-->
-    <!--<string name="restore_wallet_dialog_success_replay">Ваш кошелек успешно восстановлен. Сейчас определится его баланс. Это может занять какое-то время.</string>-->
-    <!--<string name="import_keys_dialog_failure">Кошелек не может быть восстановлен: Проверьте правильность набора пароля.</string>-->
-    <!--<string name="backup_wallet_dialog_message">Резервная копия будет зашифрована выбранным паролем и записана на внешнее хранилище.</string>-->
-    <!--<string name="backup_wallet_dialog_warning_encrypted">Ваш кошелек защищен ПИН кодом. Запомните ваш ПИН и пароль для восстановления резервной копии.</string>-->
-
-    <!--<string name="export_keys_dialog_success_title">Создана резервная копия кошелька</string>-->
-
-    <!--<string name="export_keys_dialog_success">Если ваше устройство имеет съемную SD-карту, резервная копия должна быть на этой карте. Извлеките её и хранить в безопасном месте. \n\nЕсли ваше устройство не поддерживает съемную SD-карту, то вы должны хранить резервную копию в другом месте, а не на вашем устройстве. \n\nЕсли ваше устройство это единственно место где хранится резервная копия, то вы рискуете потерять кошелек, потеряв устройство! В любом случае, убедитесь, что вы помните пароль от резервной копии. \n\nВы хотите архивировать ваш кошелек сейчас?</string>-->
-    <!--<string name="export_keys_dialog_failure">Не удается создать резервную копию кошелька:\n%s</string>-->
-    <!--<string name="export_keys_dialog_button_archive">Архив</string>-->
-    <!--<string name="export_keys_dialog_mail_subject">Резервное копирование Paymon Bitcoin Wallet</string>-->
-    <!--<string name="export_keys_dialog_mail_text">Приложенный зашифрованный файл содержит приватные ключи Bitcoin, он должен всегда храниться в безопасности. Не забудьте пароль шифрования!</string>-->
-    <!--<string name="export_keys_dialog_mail_intent_chooser">Архивировать кошелек с помощью…</string>-->
     <string name="export_keys_dialog_mail_intent_failed">Archiving the wallet was an error</string>
-    <!--<string name="import_export_keys_dialog_password">пароль</string>-->
     <string name="import_export_keys_dialog_show">Show password</string>
     <string name="import_export_keys_dialog_failure_title">Error</string>
-    <!--<string name="encrypt_keys_dialog_password_strength_weak">слабый</string>-->
-    <!--<string name="encrypt_keys_dialog_password_strength_fair">так себе</string>-->
-    <!--<string name="encrypt_keys_dialog_password_strength_good">нормальный</string>-->
-    <!--<string name="encrypt_keys_dialog_password_strength_strong">сильный</string>-->
-    <!--<string name="scan_camera_problem_dialog_title">Извините</string>-->
-    <!--<string name="scan_camera_problem_dialog_message">Проблема с камерой. Возможно, вам нужно перезагрузить устройство.</string>-->
-    <!--<string name="scan_camera_permission_dialog_title">Доступ к камере</string>-->
-    <!--<string name="scan_camera_permission_dialog_message">Чтобы сканировать QR-коды, вы должны разрешить использовать камеру.</string>-->
-    <!--<string name="input_parser_io_error">Не могу считать данные:\n%s</string>-->
-    <!--<string name="input_parser_cannot_classify">Не могу распознать ввод:\n%s</string>-->
-    <!--<string name="input_parser_invalid_bitcoin_uri">Неверный Bitcoin URI:\n%s</string>-->
-    <!--<string name="input_parser_invalid_address">Неверный адрес Bitcoin!\n(Путаем основную сеть с тестовой?)</string>-->
-    <!--<string name="input_parser_unverifyable_paymentrequest">Не могу проверить платежный запрос:\n%s</string>-->
-    <!--<string name="input_parser_invalid_paymentrequest">Неверный платежный запрос:\n%s</string>-->
-    <!--<string name="input_parser_invalid_transaction">Некорректная транзакция:\n%s</string>-->
-    <!--<string name="bitmap_fragment_share">Рассказать…</string>-->
-    <!--<string name="report_issue_dialog_description">описание проблемы</string>-->
-    <!--<string name="report_issue_dialog_report">Отчет</string>-->
-    <!--<string name="report_issue_dialog_collect_device_info">Добавить информацию об устройстве</string>-->
-    <!--<string name="report_issue_dialog_collect_installed_packages">Добавить список установленных пакетов</string>-->
-    <!--<string name="report_issue_dialog_collect_application_log">Добавить лог приложения</string>-->
-    <!--<string name="report_issue_dialog_collect_wallet_dump">Добавить дамп памяти кошелька</string>-->
-    <!--<string name="report_issue_dialog_mail_intent_chooser">Отправить отчет используя…</string>-->
-    <!--<string name="report_issue_dialog_mail_intent_failed">Ошибка при отправке отчета.</string>-->
-    <!--<string name="notification_coins_received_msg">Получено %s</string>-->
-    <!--<string name="notification_peers_connected_msg">подключено %d участников</string>-->
-    <!--<string name="notification_inactivity_title">У вас всё ещё есть биткоины на этом устройстве!</string>-->
-    <!--<string name="notification_inactivity_message">Внимание, ваш баланс %s будет потерян, если вы удалите Bitcoin Wallet до того, как перешлёте ваши средства.</string>-->
-    <!--<string name="notification_inactivity_message_donate">Если вам не нужны монеты, вы можете пожертвовать их проекту Bitcoin Wallet.</string>-->
-    <!--<string name="notification_inactivity_action_dismiss">Напомнить позже</string>-->
-    <!--<string name="notification_inactivity_action_dismiss_forever">Не напоминать</string>-->
-    <!--&lt;!&ndash;generic buttons&ndash;&gt;-->
     <string name="button_ok">OK</string>
-    <!--<string name="button_dismiss">Отклонить</string>-->
     <string name="button_cancel">Cancel</string>
-    <!--<string name="button_retry">Повторить</string>-->
     <string name="button_add">Add</string>
-    <!--<string name="button_deposit">Пополнить</string>-->
-    <!--<string name="button_delete">Удалить</string>-->
-    <!--<string name="button_edit">Правка</string>-->
     <string name="button_share">Share</string>
-    <!--<string name="action_browse">Обзор</string>-->
-    <!--&lt;!&ndash;generic strings&ndash;&gt;-->
     <string name="private_key_password">PIN</string>
-    <!--<string name="private_key_bad_password">ПИН не подходит!</string>-->
-    <!--&lt;!&ndash;generic error messages&ndash;&gt;-->
-    <!--<string name="error_io">Ошибка I/O: %s</string>-->
-    <!--<string name="error_http">Ошибка HTTP %1$s:\n%2$s</string>-->
 
-    <!--&lt;!&ndash;KeyGuard&ndash;&gt;-->
-
-    <!--<string name="password_incorrect">Пароль не верный</string>-->
-
-    <string name="keyguard_title">Введите пароль</string>
-    <!--<string name="button_clear">Очистить</string>-->
+    <string name="keyguard_title">Enter password</string>
     <string name="participants">Participants</string>
-    <!--<string name="start_using">Старт</string>-->
-
-    <!--<string name="not_chosen">Не выбрано</string>-->
-    <!--<string name="contacts_hint">Здесь Вы можете искать и добавлять контакты. Если вы хотите поговорить с разработчиками, вы можете найти учетную запись с ником \'paymon\' и именем Paymon Inc.</string>-->
 
     <string name="agreement_txt">
 \n
@@ -436,10 +306,10 @@
 \n
 2. Условия пользования Сайтом и мобильным приложением\n
 2.1. Оказывая услуги по использованию Сайта, мобильного приложения и его сервисов (далее – Услуги Сайта и мобильного приложения), Администрация Сайта, действуя разумно и добросовестно, считает, что Пользователь:\n
- - Обладает всеми необходимыми правами, позволяющими ему осуществлять регистрацию и использовать настоящий Сайт и мобильное приложение;/n
- - Указывает достоверную информацию о себе в объемах, необходимых для пользования Услугами мобильного приложения и Сайта/n
- -Осознает, что некоторые виды информации, переданные им другим Пользователям, не могут быть удалены самим Пользователем;\n
- -Ознакомлен с настоящими Правилами, выражает свое согласие с ними и принимает на себя указанные в них права и обязанности.\n
+  - Обладает всеми необходимыми правами, позволяющими ему осуществлять регистрацию и использовать настоящий Сайт и мобильное приложение;/n
+  - Указывает достоверную информацию о себе в объемах, необходимых для пользования Услугами мобильного приложения и Сайта/n
+  -Осознает, что некоторые виды информации, переданные им другим Пользователям, не могут быть удалены самим Пользователем;\n
+  -Ознакомлен с настоящими Правилами, выражает свое согласие с ними и принимает на себя указанные в них права и обязанности.\n
 2.2. Администрация Сайта не проверяет достоверность получаемой (собираемой) информации о пользователях, за исключением случаев, когда такая проверка необходима в целях исполнения Администрацией Сайта обязательств перед пользователем.\n
 2.3. Данные, предоставленные компании Paymon хранятся в соответствии с действующим законодательством в безопасных местах. Компания Paymon добилась того, что соответствующие стандарты безопасности находятся в сохранности, конфиденциальности и безопасности данных. В отношении субъектов данных пользователей сайта и мобильных приложений , Paymon, где требуется, регистрируется с соответствующих национальных защита данных / органы защиты информации. Компания Paymon также гарантирует, что данные хранятся в соответствии с требованиями национального законодательства государства.\n
         \n
@@ -488,70 +358,38 @@
 8.Обратная связь\n
 Любые вопросы по поводу данной политики, сбора, использования и раскрытия персональных данных Блокчейн  или доступ к вашим личным данным, которые требуются по закону и  подлежащая раскрытию информация должна быть направлена на privacy@paymon.ru .
     </string>
-    <!--<string name="error_bluetooth">Ошибка Bluetooth</string>-->
-    <!--<string name="raise_fee_dialog_cant_raise">Комиссия за этот платеж не может быть повышена.</string>-->
-    <!--<string name="raise_fee_dialog_determining_fee">Определение комиссии…</string>-->
-    <!--<string name="wallet_not_create">Кошелек еще не создан</string>-->
     <string name="back_to_reg">Back to registration</string>
     <string name="registration_login_hint">Login can only contain Latin characters and numbers. Length at least 3 characters</string>
     <string name="next">Next</string>
     <string name="registration_password_hint">The password must be at least 8 characters in length</string>
     <string name="registration_email">You will receive a confirmation of your registration to your mailbox</string>
     <string name="reg_check_email">Enter correct mail</string>
-    <!--<string name="reg_check_email_no_empty">Введите вашу электронную почту</string>-->
     <string name="password_recovery_email">To recover your password, enter your email address or username</string>
     <string name="email_confirmation_hint">To continue, you must confirm your email. It is possible that the message will be sent to the spam folder</string>
-    <!--<string name="title_confirmation">Подтверждение</string>-->
-    <!--<string name="email_not_confirmed_title">Ваша электронная почта</string>-->
-    <!--<string name="email_not_confirmed_title2">не подтверждена. Проверьте свою электронную почту. Если вы не получили письмо, проверьте папку спам или отправьте его еще раз.</string>-->
-    <!--<string name="reg_check_login_used">Такой логин уже занят</string>-->
     <string name="registration_email_used">This email or login is already in use</string>
-    <!--<string name="restart_application">Пожалуйста, перезапустите приложение</string>-->
-    <!--<string name="upload_photo">Загрузка фотографии</string>-->
-    <!--<string name="upload_photo_hint">Пожалуйста, подождите…</string>-->
 
-    <!--<string name="default_denomination_value_btc">BTC, 2 десятичных разряда</string>-->
-    <!--<string name="money_denomination_btc_8">BTC, 8 десятичных разрядов</string>-->
-    <!--<string name="money_denomination_btc_6">BTC, 6 десятичных разрядов</string>-->
-    <!--<string name="money_denomination_btc_4">BTC, 4 десятичных разряда</string>-->
-    <!--<string name="money_denomination_btc_2">BTC, 2 десятичных разряда</string>-->
-    <!--<string name="money_denomination_mbtc_2">mBTC, 2 десятичных разряда</string>-->
-    <!--<string name="money_denomination_μbtc_8">μBTC, без десятичных разрядов</string>-->
-
-    <string name="create_group">Create a conversation</string>
+    <string name="create_group">Create group</string>
+    <string name="group_creation">Group creation</string>
+    <string name="search_friend">Search your friend</string>
+    <string name="search_chats">Search chats</string>
+    <string name="search_contacts">Search contacts</string>
+    <string name="search_for_contacts">Here you can search for contacts</string>
+    <string name="title_dialogs">Dialogs</string>
     <string name="done">Done</string>
     <string name="enter_group_title">Enter group name</string>
-    <!--<string name="payeer">Payeer</string>-->
     <string name="agree">Agree</string>
-    <!--<string name="remove_wallet_dialog_hint">Вы уверены, что хотите удалить этот способ пополнения/вывода?</string>-->
     <string name="add_participants">Add participants</string>
-    <!--<string name="group_settings">Настройки Беседы</string>-->
-    <!--<string name="remove_participant_q">Убрать участника?</string>-->
-    <!--<string name="insufficient_funds">На вашем кошельке не достаточно средств</string>-->
-    <!--<string name="payment_info_comission_title">Вы получите</string>-->
-    <!--<string name="payment_succes_title">Перевод выполнен успешно!</string>-->
-    <!--<string name="title_payment_success">Успешно</string>-->
-    <!--<string name="payment_succes_back_button">Вернуться в финансы</string>-->
-    <!--<string name="payment_info_service_is_not_working">Сервис временно не работает</string>-->
     <string name="you_do_not_have_any_messages_yet">You do not have any messages yet</string>
     <string name="backup_wallet_menu_item_title">Create a backup copy</string>
     <string name="restore_backup_wallet_menu_item_title">Restore a backup copy</string>
-    <!--<string name="payeer_add_wallet_title">Введите ваш Payeer gid.</string>-->
-    <!--<string name="payeer_http">www.payeer.com</string>-->
-    <!--<string name="payeer_id_input_text_hint">Payeer gid</string>-->
-    <!--<string name="payeer_add_wallet_have_not_hint">Если у вас нет аккаунта Payeer, зарегистрируйтесь по ссылке ниже.</string>-->
-    <!--<string name="payeer_add_wallet_its_not_payeer">Это не Payeer gid</string>-->
-    <!--<string name="open_in_browser">Открыть в браузере?</string>-->
     <string name="auth_wrong_login_or_password">Wrong login or password</string>
     <string name="error_spamming">Too many requests, try again</string>
     <string name="eth">ETH</string>
     <string name="ethereum_wallet_create_title">Create a password for your Ethereum wallet. The operation may take several minutes</string>
-    <!--<string name="create_wallet">Кошелек успешно создан.</string>-->
     <string name="title_ethereum_wallet">Ethereum wallet</string>
     <string name="create_wallet_dialog_hint">The operation may take several minutes. Please wait…</string>
     <string name="ethereum_wallet_is_loaded_hint">Ethereum wallet is loading, please wait…</string>
     <string name="universal_transfer_address_title">Enter the address to which you want to transfer money or use the scanner</string>
-    <!--<string name="universal_transfer_set_wallet_til_error">Такой кошелек не существует</string>-->
     <string name="create_button">Create</string>
     <string name="delete_wallet">Delete wallet</string>
     <string name="delete_wallet_dialog_hint">Before you delete your wallet, it is recommended to make a backup or you will lose all your money</string>
@@ -562,40 +400,18 @@
     <string name="restore_wallet_success">Your wallet was successfully restored</string>
     <string name="restore_wallet_not_success">Wallet was not restored</string>
     <string name="restore_wallet_not_success_error_file">Fault when creating a file</string>
-    <!--<string name="not_create_wallet">Не удалось создать кошелек.</string>-->
-    <!--<string name="amount_small">Сумма перевода слишком мала.</string>-->
-    <!--<string name="eth_gaz_limit">GAS LIMIT</string>-->
-    <!--<string name="eth_gaz_price">GAS PRICE</string>-->
-    <!--<string name="title_bitcoin_wallet">Bitcoin кошелек</string>-->
 
-    <!--<string name="continue_question">Продолжить?</string>-->
-    <!--<string name="ssl_connection">Установка защищенного соединения.</string>-->
-    <!--<string name="not_recognize_address">Не удалось распознать адрес</string>-->
-    <!--<string name="after_registration">Что бы завершить регистрацию, подтвердите email и перезапустите приложение. Добро пожаловать!</string>-->
-
-    <!--<string name="ym_success_tx">Транзакция прошла успешно, ожидайте…</string>-->
-    <!--<string name="ym_refused_tx">Yandex Money не одобрили транцакцию, возможно ваши паспортные даннные не актуальны</string>-->
-    <!--<string name="ym_in_progress_tx">Транзакция обрабатывается…</string>-->
-    <!--<string name="invite_friends_hint">Приглашай своих друзей в Paymon и получай дополнительное вознаграждение после окончания ICO</string>-->
-    <!--<string name="invite_friends_hint_two">Чем больше людей зарегистрируются по твоему коду, тем больше будет твое вознаграждение</string>-->
     <string name="title_invite_fiends">Invite friends</string>
     <string name="title_invite_unreg_contacts">Invite</string>
     <string name="title_invite_reg_contacts">Invite</string>
     <string name="promotional_code">Invitation code (optional)</string>
     <string name="already_have_an_account">Do you already have an account?</string>
-    <!--<string name="password_is_installed">Пароль успешно установлен</string>-->
 
-    <!--<string name="remove_messages">Удалить сообщения</string>-->
-    <!--<string name="copy_messages">Копировать сообщения</string>-->
-    <!--<string name="title_detailed_invited">Приглашенные пользователи</string>-->
     <string name="invite_information_count">Number of guests:</string>
     <string name="invite_registered">Registered</string>
     <string name="invite_unregistered">Unregistered</string>
-    <!--<string name="invite_information_invited_list">Список приглашенных пользователей</string>-->
-    <!--<string name="menu_clear_messages">Удалить историю сообщений</string>-->
     <string name="selected_messages_count">Selected</string>
     <string name="text_is_copied">Text copied to clipboard</string>
-    <!--<string name="could_not_delete_message">Не удалось удалить сообщение</string>-->
     <string name="icons_from">Icons from icons8.com</string>
     <string name="replay_button">Reply</string>
     <string name="forgot_password">Forgot your password?</string>
@@ -604,89 +420,32 @@
     <string name="confirmation_code">Confirmation code</string>
     <string name="new_password">New password</string>
     <string name="enter_new_password_hint">Enter your new password</string>
-    <!--<string name="title_password_recovery">Восстановление пароля</string>-->
     <string name="password_recovery_failed">Incorrect code</string>
     <string name="send">Send</string>
     <string name="string_is_empty">The field is empty. Enter your email or login</string>
-    <!--<string name="email_not_linked">Аккаунт с этим адресом электронной почты не существует</string>-->
-    <!--<string name="login_not_linked">Аккаунт с этим логином не существует</string>-->
     <string name="confirmation_code_was_sent">A confirmation code has been sent to your email. Use it to recover your password</string>
     <string name="confirmation_code_verified">The code is correct, enter the new password</string>
     <string name="string_code_is_empty">"Field blank: Enter confirmation code"</string>
     <string name="password_was_changed">Password was successfully changed</string>
-    <!--<string name="invalid_confirmation_code">Неверный код подтверждения</string>-->
-    <!--<string name="pmnc">PMNC</string>-->
     <string name="private_key">Private key</string>
     <string name="public_key">Public key</string>
     <string name="dont_share_your_key">You can use this key to restore your wallet. Do not share your private key with anyone</string>
     <string name="history_transaction_is_empty">Transaction history is empty</string>
-    <!--<string name="exchange_rates">Курсы валют</string>-->
-    <!--<string name="title_ico">ICO</string>-->
-    <!--<string name="learn_more">Узнать подробнее</string>-->
-    <!--<string name="white_paper">White paper</string>-->
-    <!--<string name="fragment_ico_title">Приветствуем тебя!</string>-->
-    <!--<string name="fragment_ico_first_text">Paymon - это блокчейн платформа нового поколения.</string>-->
-    <!--<string name="fragment_ico_second_text">Основной задачей нашего проекта является создание блокчейн-экосистемы, в которой каждый пользователь сможет удовлетворить все свои потребности, начиная с покупки криптовалюты, заканчивая оплатой за неё любых товаров в магазине.</string>-->
-    <!--<string name="fragment_ico_third_text">Хайв</string>-->
-    <!--<string name="fragment_ico_fourth">Это ориентированный ациклический граф, на базе которого будет работать криптовалюта. «Hive» дает возможность осуществлять переводы без комиссий, а также без долгого ожидания подтверждения транзакций.</string>-->
-    <!--<string name="fragment_ico_fifth">Профит - это платформа, где любой владелец бизнеса может принимать оплату за свой товар в криптовалюте.</string>-->
-    <!--<string name="fragment_ico_sixth">Главной целью ICO является распространение токенов, которые будут использоваться на нашей платформе и работать на технологии Хайв.</string>-->
-    <!--<string name="fragment_ico_seventh">Старт третьего этапа ICO:</string>-->
-    <!--<string name="fragment_ico_eighth">10-ого Мая 2018</string>-->
     <string name="update">Update</string>
-    <!--<string name="find_more">Вы можете узнать больше на нашем сайте.</string>-->
     <string name="loading_one">"Load.  "</string>
     <string name="loading_two">"Load.. "</string>
     <string name="loading_three">Load…</string>
-    <!--<string name="pmnt_hint">Чтобы узнать количество PMNT на вашем счету, добавьте кошелек Ethereum, на котором они хранятся</string>-->
-    <!--<string name="balance">Баланс</string>-->
-    <!--<string name="account">Аккаунт</string>-->
-    <!--<string name="to_pay">К оплате</string>-->
-    <!--<string name="pmnt_wallet">Paymon Token кошелек</string>-->
-    <!--<string name="create_new_wallet">Создать новый кошелек</string>-->
-    <!--<string name="paymon_wallet_soon">Пэймон кошелек будет доступен в скором времени</string>-->
     <string name="amount">Amount</string>
     <string name="deposit_account">Deposit account</string>
-    <!--<string name="rubles">Рубли</string>-->
-    <!--<string name="dollars">Доллары</string>-->
-    <!--<string name="euro">Евро</string>-->
-    <!--<string name="payment_systems">Платежные системы</string>-->
-    <!--<string name="funds_receipt_account">Счет получения</string>-->
-    <!--<string name="amount_of_payment">Сумма платежа</string>-->
-    <!--<string name="button_withdraw">Вывести</string>-->
-    <!--<string name="please_wait">Пожалуйста подождите…</string>-->
-    <!--<string name="min">Мин</string>-->
-    <!--<string name="max">Макс</string>-->
     <string name="address_of_the_recipient">Address of the recipient</string>
-    <!--<string name="beneficiary_account">Счет получателя</string>-->
-    <!--<string name="transfer_amount">Сумма перевода</string>-->
-    <!--<string name="commission">Комиссия</string>-->
-    <!--<string name="copy">Скопировать</string>-->
-    <!--<string name="open">Открыть</string>-->
     <string name="input_login">Enter login</string>
     <string name="profit_title">Profit</string>
-    <!--<string name="first_stage">Первый этап</string>-->
-    <!--<string name="second_stage">Второй этап</string>-->
-    <!--<string name="apply_now">Подать заявку</string>-->
     <string name="hi">Hi</string>
     <string name="msg_time">Yesterday</string>
-    <!--<string name="recommended">Рекомендовано</string>-->
-    <!--<string name="backup_ether_want">Хотите сделать резервную копию кошелька?</string>-->
-    <!--<string name="give_file_permission">Предоставьте приложению доступ к вашим файлам.</string>-->
-    <!--<string name="the_limit_of_people">Вы превысили лимит в 15 человек</string>-->
     <string name="want_delete_message">Are you sure you want to delete the messages?</string>
     <string name="sticker">Sticker</string>
-    <!--<string name="event">Событие</string>-->
 
-    <!--<string name="sys_group_msg">создал диалог</string>-->
-    <!--<string name="graph_one_hour">1 Час</string>-->
-    <!--<string name="graph_one_day">1 День</string>-->
-    <!--<string name="graph_one_week">1 Неделя</string>-->
-    <!--<string name="graph_one_month">1 Месяц</string>-->
-    <!--<string name="graph_three_month">3 Месяца</string>-->
-    <!--<string name="graph_six_month">6 Месяцев</string>-->
-    <!--<string name="graph_one_year">1 Год</string>-->
-    <!--<string name="chart">График</string>-->
+
     <string name="go_to_profile">Go to profile</string>
 
     <string name="format_time">Format time</string>

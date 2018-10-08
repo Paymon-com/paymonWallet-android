@@ -42,5 +42,4 @@
         app:layout_constraintTop_toTopOf="@+id/include_profile_contact_info"
         app:srcCompat="@drawable/ic_update_profile" />
 
-
 </android.support.constraint.ConstraintLayout>

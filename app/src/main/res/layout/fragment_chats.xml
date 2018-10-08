@@ -57,7 +57,7 @@
                     android:layout_marginBottom="10dp"
                     android:background="@color/bg_dialog_title"
                     android:fontFamily="@font/roboto_thin"
-                    android:hint="Search chats"
+                    android:hint="@string/search_chats"
                     android:nextFocusLeft="@id/editText"
                     android:nextFocusUp="@id/editText"
                     android:selectAllOnFocus="false"
