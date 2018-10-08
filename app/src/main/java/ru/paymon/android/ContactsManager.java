@@ -41,12 +41,12 @@
 //
 //
 //    public ContactsManager(DialogProgress dialogProgress) {
-//        allContacts = getAll();
+//        allContacts = getGroups();
 //        registeredContacts = getRegistered(dialogProgress);
 //        unregisteredContacts = getUnregistered();
 //    }
 //
-//    private ArrayList<Contact> getAll() {
+//    private ArrayList<Contact> getGroups() {
 //        ContentResolver cr = ApplicationLoader.applicationContext.getContentResolver();
 //
 //        Cursor pCur = cr.query(
@@ -146,7 +146,7 @@
 //    }
 //
 //    private ArrayList<Contact> getUnregistered() {
-//        ArrayList<Contact> unregisteredContacts = getAll();
+//        ArrayList<Contact> unregisteredContacts = getGroups();
 //
 //        for (Contact registeredContact : registeredContacts) {
 //            for (Contact unregisteredContact : unregisteredContacts)

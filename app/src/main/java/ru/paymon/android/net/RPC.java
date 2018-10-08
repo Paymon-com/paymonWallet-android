@@ -2,11 +2,9 @@ package ru.paymon.android.net;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
-import android.arch.persistence.room.TypeConverter;
 import android.arch.persistence.room.TypeConverters;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -157,14 +155,6 @@ public class RPC {
         public PM_photoURL photoURL;
         public boolean confirmed;
         public boolean isEmailHidden;
-//        public String patronymic;
-//        public String country;
-//        public String city;
-//        public String birthdate;
-//        public long phoneNumber;
-//        public int gender;
-//        public String walletKey;
-//        public String inviteCode;
 
         public UserObject() {
         }
@@ -177,6 +167,9 @@ public class RPC {
                     break;
                 case PM_userFull.svuid:
                     result = new PM_userFull();
+                    break;
+                case PM_userSelf.svuid:
+                    result = new PM_userSelf();
                     break;
             }
             if (result == null && exception) {
@@ -214,17 +207,9 @@ public class RPC {
             dest.writeString(this.login);
             dest.writeString(this.first_name);
             dest.writeString(this.last_name);
-//            dest.writeString(this.patronymic);
             dest.writeString(this.email);
-//            dest.writeString(this.country);
-//            dest.writeString(this.city);
-//            dest.writeString(this.birthdate);
-//            dest.writeLong(this.phoneNumber);
-//            dest.writeInt(this.gender);
-//            dest.writeString(this.walletKey);
             dest.writeParcelable(this.photoURL, flags);
             dest.writeByte(this.confirmed ? (byte) 1 : (byte) 0);
-//            dest.writeString(this.inviteCode);
         }
 
         protected UserObject(Parcel in) {
@@ -235,17 +220,9 @@ public class RPC {
             this.login = in.readString();
             this.first_name = in.readString();
             this.last_name = in.readString();
-//            this.patronymic = in.readString();
             this.email = in.readString();
-//            this.country = in.readString();
-//            this.city = in.readString();
-//            this.birthdate = in.readString();
-//            this.phoneNumber = in.readLong();
-//            this.gender = in.readInt();
-//            this.walletKey = in.readString();
             this.photoURL = in.readParcelable(PM_photoURL.class.getClassLoader());
             this.confirmed = in.readByte() != 0;
-//            this.inviteCode = in.readString();
         }
 
         public static final Creator<UserObject> CREATOR = new Creator<UserObject>() {
@@ -260,6 +237,7 @@ public class RPC {
             }
         };
     }
+
 
     public static class PM_user extends UserObject {
         public static final int svuid = 143710769;
@@ -282,7 +260,6 @@ public class RPC {
             login = stream.readString(exception);
             first_name = stream.readString(exception);
             last_name = stream.readString(exception);
-            token = stream.readByteArray(exception);
             int magic = stream.readInt32(exception);
             if (magic != PM_photoURL.svuid) {
                 if (exception) {
@@ -300,7 +277,6 @@ public class RPC {
             stream.writeString(login);
             stream.writeString(first_name);
             stream.writeString(last_name);
-            stream.writeByteArray(token);
             photoURL.serializeToStream(stream);
         }
     }
@@ -329,15 +305,62 @@ public class RPC {
             login = stream.readString(exception);
             first_name = stream.readString(exception);
             last_name = stream.readString(exception);
-//            patronymic = stream.readString(exception);
             if (!isEmailHidden) {
                 email = stream.readString(exception);
             }
-//            country = stream.readString(exception);
-//            city = stream.readString(exception);
-//            birthdate = stream.readString(exception);
-//            phoneNumber = stream.readInt64(exception);
-//            gender = stream.readInt32(exception);
+            int magic = stream.readInt32(exception);
+            if (magic != PM_photoURL.svuid) {
+                if (exception) {
+                    throw new RuntimeException(String.format("wrong PM_photoURL magic, got %x", magic));
+                }
+                return;
+            }
+            photoURL = new RPC.PM_photoURL();
+            photoURL.readParams(stream, exception);
+            confirmed = stream.readBool(exception);
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            flags = isEmailHidden ? (flags | USER_FLAG_HIDDEN_EMAIL) : (flags & ~USER_FLAG_HIDDEN_EMAIL);
+            stream.writeInt32(flags);
+            stream.writeInt32(id);
+            stream.writeString(login);
+            stream.writeString(first_name);
+            stream.writeString(last_name);
+            if (!isEmailHidden) {
+                stream.writeString(email);
+            }
+            photoURL.serializeToStream(stream);
+            stream.writeBool(confirmed);
+        }
+    }
+
+    public static class PM_userSelf extends UserObject {
+        public static final int svuid = 483277281;
+
+        public static PM_userSelf deserialize(SerializableData stream, int constructor, boolean exception) {
+            if (PM_userSelf.svuid != constructor) {
+                if (exception) {
+                    throw new RuntimeException(String.format("can't parse magic %x in PM_userSelf", constructor));
+                } else {
+                    return null;
+                }
+            }
+            PM_userSelf result = new PM_userSelf();
+            result.readParams(stream, exception);
+            return result;
+        }
+
+        public void readParams(SerializableData stream, boolean exception) {
+            flags = stream.readInt32(exception);
+            isEmailHidden = (flags & USER_FLAG_HIDDEN_EMAIL) != 0;
+
+            id = stream.readInt32(exception);
+            login = stream.readString(exception);
+            first_name = stream.readString(exception);
+            last_name = stream.readString(exception);
+            email = stream.readString(exception);
             token = stream.readByteArray(exception);
             int magic = stream.readInt32(exception);
             if (magic != PM_photoURL.svuid) {
@@ -348,33 +371,21 @@ public class RPC {
             }
             photoURL = new RPC.PM_photoURL();
             photoURL.readParams(stream, exception);
-//            walletKey = stream.readString(exception);
             confirmed = stream.readBool(exception);
-//            inviteCode = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            flags = isEmailHidden ? (flags | USER_FLAG_HIDDEN_EMAIL) : (flags &~ USER_FLAG_HIDDEN_EMAIL);
+            flags = isEmailHidden ? (flags | USER_FLAG_HIDDEN_EMAIL) : (flags & ~USER_FLAG_HIDDEN_EMAIL);
             stream.writeInt32(flags);
             stream.writeInt32(id);
             stream.writeString(login);
             stream.writeString(first_name);
             stream.writeString(last_name);
-//            stream.writeString(patronymic);
-            if (!isEmailHidden) {
-                stream.writeString(email);
-            }
-//            stream.writeString(country);
-//            stream.writeString(city);
-//            stream.writeString(birthdate);
-//            stream.writeInt64(phoneNumber);
-//            stream.writeInt32(gender);
+            stream.writeString(email);
             stream.writeByteArray(token);
             photoURL.serializeToStream(stream);
-//            stream.writeString(walletKey);
             stream.writeBool(confirmed);
-//            stream.writeString(inviteCode);
         }
     }
 
@@ -476,11 +487,11 @@ public class RPC {
             channel_id = stream.readInt32(exception);
         }
 
-        public PM_peerChannel(){
+        public PM_peerChannel() {
 
         }
 
-        public PM_peerChannel(int chid){
+        public PM_peerChannel(int chid) {
             channel_id = chid;
         }
 
@@ -631,7 +642,7 @@ public class RPC {
         public static int MESSAGE_FLAG_REPLY = 0b100;
         public static int MESSAGE_FLAG_VIEWS = 0b1000;
         public static int MESSAGE_FLAG_EDITED = 0b10000;
-        public static int MESSAGE_FLAG_ACTION =  0b100000;
+        public static int MESSAGE_FLAG_ACTION = 0b100000;
 
         @PrimaryKey
         public long id;
@@ -754,7 +765,6 @@ public class RPC {
             for (int i = 0; i < count; i++) {
                 UserObject object = UserObject.deserialize(stream, stream.readInt32(exception), exception);
                 if (object == null) {
-                    Log.e("RPC", "USER IS NULL");
                     return;
                 }
                 users.add(object);
@@ -1078,7 +1088,7 @@ public class RPC {
                 stream.writeInt32(from_id);
             }
 
-            if(to_peer != null) {
+            if (to_peer != null) {
                 to_peer.serializeToStream(stream);
             }
 
@@ -1141,8 +1151,8 @@ public class RPC {
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags &~ MESSAGE_FLAG_UNREAD);
-            flags = (action != null) ? (flags | MESSAGE_FLAG_ACTION) : (flags &~ MESSAGE_FLAG_ACTION);
+            flags = unread ? (flags | MESSAGE_FLAG_UNREAD) : (flags & ~MESSAGE_FLAG_UNREAD);
+            flags = (action != null) ? (flags | MESSAGE_FLAG_ACTION) : (flags & ~MESSAGE_FLAG_ACTION);
 
             stream.writeInt32(flags);
             stream.writeInt64(id);
@@ -1151,7 +1161,7 @@ public class RPC {
                 stream.writeInt32(from_id);
             }
 
-            if(to_peer != null) {
+            if (to_peer != null) {
                 to_peer.serializeToStream(stream);
             }
 
@@ -2072,6 +2082,14 @@ public class RPC {
 
     public static class PM_getUserInfo extends Packet {
         public static int svuid = 543732124;
+
+        public PM_getUserInfo() {
+
+        }
+
+        public PM_getUserInfo(int uid) {
+            user_id = uid;
+        }
 
         public int user_id;
 

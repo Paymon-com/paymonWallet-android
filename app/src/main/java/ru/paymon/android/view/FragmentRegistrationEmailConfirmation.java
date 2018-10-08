@@ -1,6 +1,5 @@
 package ru.paymon.android.view;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -22,8 +21,6 @@ import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.activities.EmailConfirmationActivity;
-import ru.paymon.android.activities.MainActivity;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;

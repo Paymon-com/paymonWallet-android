@@ -31,10 +31,9 @@ import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.adapters.AdministratorsAdapter;
-import ru.paymon.android.adapters.BlackListAdapter;
 import ru.paymon.android.adapters.GroupSettingsAdapter;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
@@ -66,7 +65,7 @@ public class FragmentGroupSettings extends Fragment {
         if (bundle != null && bundle.containsKey(CHAT_ID_KEY)) {
             chatID = bundle.getInt(CHAT_ID_KEY);
 
-            group = ApplicationLoader.db.groupDao().getById(chatID);
+            group = GroupsManager.getInstance().getGroup(chatID);
             int creatorID = group.creatorID;
             isCreator = (creatorID == User.currentUser.id);
         }
@@ -139,9 +138,9 @@ public class FragmentGroupSettings extends Fragment {
                     final long requestID = NetworkManager.getInstance().sendRequest(setSettings, (response, error) -> {
 
                         if (response != null) {
-                            RPC.Group group = ApplicationLoader.db.groupDao().getById(chatID);
+                            RPC.Group group = GroupsManager.getInstance().getGroup(chatID);
                             group.title = title;
-                            ApplicationLoader.db.groupDao().insert(group);
+                            GroupsManager.getInstance().putGroup(group);
                         }
 
                         if (error != null || response == null) {
@@ -231,7 +230,7 @@ public class FragmentGroupSettings extends Fragment {
         Utils.hideBottomBar(getActivity());
 
         list.clear();
-        ArrayList<RPC.UserObject> users = ApplicationLoader.db.groupDao().getById(chatID).users;
+        ArrayList<RPC.UserObject> users = GroupsManager.getInstance().getGroup(chatID).users;
         for (RPC.UserObject user : users) {
             list.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
         }

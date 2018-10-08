@@ -15,7 +15,7 @@ import ru.paymon.android.models.ChatsItem;
 public interface ChatDao {
 
     @Query("SELECT * FROM ChatsItem  WHERE isGroup = :isGroup ORDER BY time DESC")
-    DataSource.Factory<Integer, ChatsItem> chatsByChatType(boolean isGroup);
+    DataSource.Factory<Integer, ChatsItem> getChatsByChatType(boolean isGroup);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertList(List<ChatsItem> chatsItems);
@@ -27,14 +27,14 @@ public interface ChatDao {
     void delete(ChatsItem chatsItem);
 
     @Query("SELECT * FROM ChatsItem ORDER BY time DESC")
-    DataSource.Factory<Integer, ChatsItem> chats();
+    DataSource.Factory<Integer, ChatsItem> getChats();
 
     @Query("SELECT * FROM ChatsItem WHERE name LIKE :searchQuery ORDER BY time DESC")
-    DataSource.Factory<Integer, ChatsItem> chatsBySearch(String searchQuery);
+    DataSource.Factory<Integer, ChatsItem> getChatsBySearch(String searchQuery);
 
     @Query("SELECT * FROM ChatsItem WHERE name LIKE :searchQuery AND isGroup = :isGroup ORDER BY time DESC")
-    DataSource.Factory<Integer, ChatsItem> chatsBySearch(String searchQuery, boolean isGroup);
+    DataSource.Factory<Integer, ChatsItem> getChatsBySearch(String searchQuery, boolean isGroup);
 
     @Query("SELECT * FROM ChatsItem WHERE id = :cid")
-    ChatsItem chat(int cid);
+    ChatsItem getChatByChatID(int cid);
 }

@@ -27,6 +27,7 @@ public class ClassStore {
         classStore.put(RPC.PM_error.svuid, RPC.PM_error.class);
         classStore.put(RPC.PM_user.svuid, RPC.PM_user.class);
         classStore.put(RPC.PM_userFull.svuid, RPC.PM_userFull.class);
+        classStore.put(RPC.PM_userSelf.svuid, RPC.PM_userSelf.class);
         classStore.put(RPC.Group.svuid, RPC.Group.class);
         classStore.put(RPC.PM_chat_messages.svuid, RPC.PM_chat_messages.class);
         classStore.put(RPC.PM_chatsAndMessages.svuid, RPC.PM_chatsAndMessages.class);

@@ -145,7 +145,7 @@ public class FragmentProfileEdit extends Fragment {
             }
 
             Utils.netQueue.postRunnable(() -> {
-                RPC.PM_userFull user = User.currentUser;
+                RPC.PM_userSelf user = User.currentUser;
                 user.first_name = firstName.getText().toString();
                 user.last_name = lastName.getText().toString();
                 user.email = email.getText().toString();

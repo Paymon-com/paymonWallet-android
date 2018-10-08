@@ -12,13 +12,11 @@ import ru.paymon.android.net.RPC;
 
 @Dao
 public interface GroupDao {
-    //TODO:get users list by group id
-
     @Query("SELECT * FROM `Group`")
-    List<RPC.Group> getAll();
+    List<RPC.Group> getGroups();
 
     @Query("SELECT * FROM `Group` WHERE id = :id")
-    RPC.Group getById(int id);
+    RPC.Group getGroupById(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertList(List<RPC.Group> groups);

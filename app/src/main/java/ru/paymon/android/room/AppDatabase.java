@@ -9,7 +9,7 @@ import ru.paymon.android.net.RPC;
 @Database(entities = {RPC.Message.class, ChatsItem.class, RPC.UserObject.class, RPC.Group.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     public abstract ChatMessageDao chatMessageDao();
-    public abstract ChatDao chatsDao();
+    public abstract ChatDao chatDao();
     public abstract UserDao userDao();
     public abstract GroupDao groupDao();
 }

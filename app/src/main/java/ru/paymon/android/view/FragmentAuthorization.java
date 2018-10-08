@@ -150,7 +150,7 @@ public class FragmentAuthorization extends Fragment {
                 });
 
                 if (response == null) return;
-                User.currentUser = (RPC.PM_userFull) response;
+                User.currentUser = (RPC.PM_userSelf) response;
                 User.saveConfig();
                 User.loadConfig();
                 NetworkManager.getInstance().setAuthorized(true);

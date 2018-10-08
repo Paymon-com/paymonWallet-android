@@ -28,11 +28,11 @@ import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
 import androidx.recyclerview.selection.SelectionTracker;
-import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.models.ChatsItem;
+import ru.paymon.android.UsersManager;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -98,7 +98,8 @@ public abstract class AbsFragmentChat extends Fragment {
             if (response == null) return;
             final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
             if (receivedMessages.messages.size() == 0) return;
-            ApplicationLoader.db.chatMessageDao().insertList(receivedMessages.messages);
+            MessagesManager.getInstance().putMessages(receivedMessages.messages);
+//            ApplicationLoader.db.chatMessageDao().insertList(receivedMessages.messages);
         });
     }
 
@@ -125,7 +126,7 @@ public abstract class AbsFragmentChat extends Fragment {
             chatTitleTextView = (TextView) toolbarView.findViewById(R.id.toolbar_title);
             toolbarAvatar = (CircularImageView) toolbarView.findViewById(R.id.toolbar_avatar);
             backToolbar = (ImageView) toolbarView.findViewById(R.id.toolbar_back_btn);
-            final RPC.UserObject user = ApplicationLoader.db.userDao().getById(chatID);
+            final RPC.UserObject user = UsersManager.getInstance().getUser(chatID);
             if (user != null) {
                 chatTitleTextView.setText(Utils.formatUserName(user));
                 if (!user.photoURL.url.isEmpty())
@@ -138,7 +139,7 @@ public abstract class AbsFragmentChat extends Fragment {
             chatTitleTextView = (TextView) toolbarView.findViewById(R.id.toolbar_title);
             toolbarAvatar = (CircularImageView) toolbarView.findViewById(R.id.chat_group_avatar);
             backToolbar = (ImageView) toolbarView.findViewById(R.id.toolbar_back_btn);
-            final RPC.Group group = ApplicationLoader.db.groupDao().getById(chatID);
+            final RPC.Group group = GroupsManager.getInstance().getGroup(chatID);
             if (group != null) {
                 chatTitleTextView.setText(group.title);
                 participantsCountTextView.setText(String.format("%s: %d", getString(R.string.participants), ((FragmentGroupChat) this).groupUsers.size()));
@@ -219,23 +220,8 @@ public abstract class AbsFragmentChat extends Fragment {
                         return;     //TODO:сделать, чтобы если сообщение не дошло, предлагало переотправить
 
                     RPC.PM_updateMessageID updateMsgID = (RPC.PM_updateMessageID) response;
-
                     messageRequest.id = updateMsgID.newID;
-//                    MessagesManager.getInstance().putMessage(messageRequest);
-//
-//                    if (messageRequest.to_peer.user_id == User.currentUser.id)
-//                        MessagesManager.getInstance().lastMessages.put(messageRequest.from_id, messageRequest.id);
-//                    else
-//                        MessagesManager.getInstance().lastMessages.put(messageRequest.to_peer.user_id, messageRequest.id);
-
-                    chatViewModel.insert(messageRequest);
-                    ChatsItem chatsItem = ApplicationLoader.db.chatsDao().chat(this instanceof FragmentChat ? -chatID : chatID);
-                    if (chatsItem == null) return;
-                    chatsItem.lastMessageText = messageRequest.text;
-                    chatsItem.time = messageRequest.date;
-//                    if(this instanceof FragmentGroupChat)
-//                        chatsItem.lastMsgPhotoURL = //TODO: обновление фотки последнего написавшего!!!
-                    ApplicationLoader.db.chatsDao().insert(chatsItem);
+                    MessagesManager.getInstance().putMessage(messageRequest);
                 });
             });
             messageInput.setText("");

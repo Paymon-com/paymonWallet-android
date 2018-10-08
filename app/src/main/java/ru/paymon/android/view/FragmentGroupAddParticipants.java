@@ -12,8 +12,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +24,9 @@ import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
+import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.CreateGroupAdapter;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.models.UserItem;
@@ -58,7 +57,7 @@ public class FragmentGroupAddParticipants extends Fragment {
             chatID = bundle.getInt(CHAT_ID_KEY);
         }
 
-        group = ApplicationLoader.db.groupDao().getById(chatID);
+        group = GroupsManager.getInstance().getGroup(chatID);
     }
 
     @Nullable
@@ -78,7 +77,7 @@ public class FragmentGroupAddParticipants extends Fragment {
             addGroupList = new ArrayList<>();
             for (ChatsItem chatItem : chatsItems) {
                 int id = chatItem.chatID;
-                RPC.UserObject user = ApplicationLoader.db.userDao().getById(id);
+                RPC.UserObject user = UsersManager.getInstance().getUser(id);
                 if (group.users.contains(user)) continue;
                 addGroupList.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
             }
@@ -110,8 +109,8 @@ public class FragmentGroupAddParticipants extends Fragment {
                 }
 
                 for (Integer uid : addParticipantsRequest.userIDs) {
-                    RPC.UserObject user = ApplicationLoader.db.userDao().getById(uid);
-                    ArrayList<RPC.UserObject> userObjects = ApplicationLoader.db.groupDao().getById(chatID).users;
+                    RPC.UserObject user = UsersManager.getInstance().getUser(uid);
+                    ArrayList<RPC.UserObject> userObjects = GroupsManager.getInstance().getGroup(chatID).users;
                     if (user != null) {
                         userObjects.add(user);
                     }

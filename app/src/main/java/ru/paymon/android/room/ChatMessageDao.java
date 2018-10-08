@@ -15,10 +15,10 @@ import ru.paymon.android.net.RPC;
 public interface ChatMessageDao {
 
     @Query("SELECT * FROM message WHERE to_id = :cid ORDER BY date DESC")
-    DataSource.Factory<Integer,RPC.Message> messagesByChatID(int cid);
+    DataSource.Factory<Integer,RPC.Message> getMessagesByChatID(int cid);
 
     @Query("SELECT * FROM message WHERE id = :id")
-    RPC.Message messageByChatID(int id);
+    RPC.Message getMessageByChatID(int id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertList(List<RPC.Message> messageList);

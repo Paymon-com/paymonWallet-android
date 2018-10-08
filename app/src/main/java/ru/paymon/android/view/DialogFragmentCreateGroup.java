@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.models.UserItem;
@@ -90,7 +91,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
 
                 if (response instanceof RPC.Group) {
                     RPC.Group group = (RPC.Group) response;
-                    ApplicationLoader.db.groupDao().insert(group);
+                    GroupsManager.getInstance().putGroup(group);
                     NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.dialogsNeedReload);
                     getDialog().dismiss();
                     Bundle bundle = new Bundle();

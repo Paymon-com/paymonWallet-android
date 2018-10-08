@@ -108,7 +108,7 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-                ApplicationLoader.db.chatsDao().delete(chatsItem);
+                ApplicationLoader.db.chatDao().delete(chatsItem);
             });
         }
     }
@@ -156,7 +156,7 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-                ApplicationLoader.db.chatsDao().delete(chatsItem);
+                ApplicationLoader.db.chatDao().delete(chatsItem);
             });
         }
     }

@@ -88,12 +88,12 @@
 ////        SparseArray<LinkedList<RPC.Message>> groupChats = MessagesManager.getInstance().groupsMessages;
 //
 //        for (int i = 0; i < chatsDialog.size(); i++) {
-//            LinkedList<RPC.Message> chat = chatsDialog.get(chatsDialog.keyAt(i));
-//            int chatID = chat.getFirst().from_id;
+//            LinkedList<RPC.Message> getChatByChatID = chatsDialog.get(chatsDialog.keyAt(i));
+//            int chatID = getChatByChatID.getFirst().from_id;
 //            RPC.UserObject user = UsersManager.getInstance().users.get(chatID);
 //            if(user != null) {
-//                for (int j = 0; j < chat.size(); j++) {
-//                    RPC.Message message = chat.get(j);
+//                for (int j = 0; j < getChatByChatID.size(); j++) {
+//                    RPC.Message message = getChatByChatID.get(j);
 //                    listMessages.add(new MessageItem(message.id, Utils.formatUserName(user), message.text, user.photoURL));
 //                }
 //            }
@@ -156,9 +156,9 @@
 //                        return;
 //                    }
 //
-//                    for (ChatsSearchItem chat : listChats) {
-//                        if (chat.name.toLowerCase().contains(text.toLowerCase())) {
-//                            sortedChatsList.add(chat);
+//                    for (ChatsSearchItem getChatByChatID : listChats) {
+//                        if (getChatByChatID.name.toLowerCase().contains(text.toLowerCase())) {
+//                            sortedChatsList.add(getChatByChatID);
 //                        }
 //                    }
 //
@@ -210,8 +210,8 @@
 //
 //        tabSpec = tabHost.newTabSpec("Чаты");
 //        tabSpec.setContent(R.id.linearLayout);
-//        String chats = getString(R.string.title_chats);
-//        tabSpec.setIndicator(chats);
+//        String getChats = getString(R.string.title_chats);
+//        tabSpec.setIndicator(getChats);
 //        tabHost.addTab(tabSpec);
 //        tabHost.setCurrentTab(0);
 //

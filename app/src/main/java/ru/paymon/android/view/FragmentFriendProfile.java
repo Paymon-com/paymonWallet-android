@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
+import ru.paymon.android.UsersManager;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -89,7 +89,7 @@ public class FragmentFriendProfile extends Fragment {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.dismiss();
 
-                        ApplicationLoader.db.userDao().insert(user);
+                        UsersManager.getInstance().putUser(user);
 
                         friendProfileName.setText(Utils.formatUserName(user));
                         friendProfileLogin.setText("@" + user.login);

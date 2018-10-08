@@ -21,7 +21,7 @@ public class User {
     //region UserPreferences
     private static final String USER_CONFIG = "USER_CONFIG";
     private static final String USER = "USER";
-    public static RPC.PM_userFull currentUser;
+    public static RPC.PM_userSelf currentUser;
     //endregion
 
     //region ClientPreferences
@@ -107,8 +107,8 @@ public class User {
             if (userBytes != null) {
                 SerializedStream data = new SerializedStream(userBytes);
                 RPC.UserObject deserialize = RPC.UserObject.deserialize(data, data.readInt32(false), true);
-                if (deserialize instanceof RPC.PM_userFull) {
-                    currentUser = (RPC.PM_userFull) deserialize;
+                if (deserialize instanceof RPC.PM_userSelf) {
+                    currentUser = (RPC.PM_userSelf) deserialize;
                 } else {
                     currentUser = null;
                     data.close();

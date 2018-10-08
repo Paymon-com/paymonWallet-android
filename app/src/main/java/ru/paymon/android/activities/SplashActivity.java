@@ -6,7 +6,6 @@ import android.support.v7.app.AppCompatActivity;
 
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
-import ru.paymon.android.net.NetworkManager;
 
 public class SplashActivity extends AppCompatActivity implements NotificationManager.IListener {
     @Override

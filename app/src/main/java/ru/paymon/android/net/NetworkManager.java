@@ -221,7 +221,7 @@ public class NetworkManager {
     }
 
     public void authByToken() {
-        RPC.PM_userFull user = User.currentUser;
+        RPC.PM_userSelf user = User.currentUser;
         if (user != null) {
             if (user.token != null) {
                 RPC.PM_authToken packet = new RPC.PM_authToken();
@@ -233,7 +233,7 @@ public class NetworkManager {
                         return;
                     }
 
-                    User.currentUser = (RPC.PM_userFull) response;
+                    User.currentUser = (RPC.PM_userSelf) response;
                     User.saveConfig();
 
                     Log.d(TAG, "login successful, new token=" + Utils.bytesToHexString(User.currentUser.token));

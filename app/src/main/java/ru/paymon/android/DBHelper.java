@@ -19,7 +19,7 @@
 //    public static final String TABlE_MESSAGES = "messages";
 //    public static final String TABlE_USERS = "users";
 //    public static final String TABlE_GROUPS = "groups";
-//    public static final String TABlE_CHATS = "chats";
+//    public static final String TABlE_CHATS = "getChats";
 //    public static final String TABlE_CHANNELS = "channels";
 //    public static final String TABlE_EX_RATES = "ex_rates";
 //

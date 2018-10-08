@@ -19,7 +19,7 @@ public class ChatViewModel extends ViewModel {
 
     public LiveData<PagedList<RPC.Message>> getMessages(int chatID){
         if(messages == null){
-            factory = ApplicationLoader.db.chatMessageDao().messagesByChatID(chatID);
+            factory = ApplicationLoader.db.chatMessageDao().getMessagesByChatID(chatID);
             final PagedList.Config config = new PagedList.Config.Builder()
                     .setInitialLoadSizeHint(100)
                     .setPageSize(100)
@@ -28,13 +28,5 @@ public class ChatViewModel extends ViewModel {
             messages = new LivePagedListBuilder<Integer,RPC.Message>(factory, config).build();
         }
         return messages;
-    }
-
-    public void insert(RPC.Message message){
-        ApplicationLoader.db.chatMessageDao().insert(message);
-    }
-
-    public void remove(RPC.Message message){
-        ApplicationLoader.db.chatMessageDao().delete(message);
     }
 }

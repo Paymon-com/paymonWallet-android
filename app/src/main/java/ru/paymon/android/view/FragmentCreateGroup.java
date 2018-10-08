@@ -24,9 +24,9 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.UsersManager;
 import ru.paymon.android.adapters.CreateGroupAdapter;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.models.UserItem;
@@ -89,7 +89,7 @@ public class FragmentCreateGroup extends Fragment {
 
             for (ChatsItem chatItem : chatsItems) {
                 int id = chatItem.chatID;
-                userContacts.append(id, ApplicationLoader.db.userDao().getById(id));
+                userContacts.append(id, UsersManager.getInstance().getUser(id));
             }
 
             createGroupItemList = new ArrayList<>();

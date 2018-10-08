@@ -25,10 +25,12 @@ import java.util.Locale;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
+import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.UsersManager;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
 import ru.paymon.android.utils.Utils;
@@ -69,7 +71,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                     Bundle bundle = new Bundle();
                     bundle.putInt(CHAT_ID_KEY, cid);
                     if (isGroup)
-                        bundle.putParcelableArrayList(CHAT_GROUP_USERS, ApplicationLoader.db.groupDao().getById(cid).users);
+                        bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().getGroup(cid).users);
                     actIntent.putExtra("OPEN_CHAT_BUNDLE", bundle);
                     notificationManager.cancel(NOTIFY_ID);
                     startActivity(actIntent);
@@ -162,7 +164,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
         if (!User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) {
             Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            RPC.UserObject user = ApplicationLoader.db.userDao().getById(msg.from_id);
+            RPC.UserObject user = UsersManager.getInstance().getUser(msg.from_id);
 
             String text = "";
             if (msg instanceof RPC.PM_message) {
@@ -194,7 +196,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 intentBtnReply.putExtra(CHAT_ID_KEY, cid);
                 PendingIntent pIntentBtnReply = PendingIntent.getBroadcast(this, 2, intentBtnReply, 0);
 
-                Bitmap bmp = null;
+                Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.profile_photo_none);
                 try {
                     Picasso.get().load(user.photoURL.url).get();
                 } catch (Exception e) {
@@ -275,24 +277,39 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
     private void receivedMessage(final RPC.Message msg) {
         Utils.netQueue.postRunnable(() -> {
-            ApplicationLoader.db.chatMessageDao().insert(msg);
-            RPC.UserObject user = ApplicationLoader.db.userDao().getById(msg.from_id);
-            if (user == null) {
-                RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo();
-                userInfo.user_id = msg.from_id;
-                NetworkManager.getInstance().sendRequest(userInfo, (response, error1) -> {
-                    if (response == null || error1 != null) return;
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        RPC.UserObject userObject = (RPC.UserObject) response;
-                        ApplicationLoader.db.userDao().insert(userObject);
-//                        if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
-//                            UsersManager.getInstance().userContacts.put(userObject.id, userObject);
-                    });
-                });
-            } else {
-//                if (UsersManager.getInstance().userContacts.get(msg.from_id) == null)
-//                    UsersManager.getInstance().userContacts.put(user.id, user);
-            }
+//            ApplicationLoader.db.chatMessageDao().insert(msg);
+//            RPC.UserObject user = ApplicationLoader.db.userDao().getUserById(msg.from_id);
+//            if (user == null) {
+//                RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo();
+//                userInfo.user_id = msg.from_id;
+//                NetworkManager.getInstance().sendRequest(userInfo, (response, error1) -> {
+//                    if (response == null || error1 != null) return;
+//                    ApplicationLoader.applicationHandler.post(() -> {
+//                        RPC.UserObject userObject = (RPC.UserObject) response;
+//                        ApplicationLoader.db.userDao().insert(userObject);
+//                        int cid = msg.to_peer instanceof RPC.PM_peerUser ? -msg.to_peer.user_id : msg.to_peer.group_id;
+//                        ChatsItem chatsItem = ApplicationLoader.db.chatDao().getChatByChatID(cid);
+//                        chatsItem.time = msg.date;
+//                        chatsItem.lastMsgPhotoURL = userObject.photoURL;
+//                        chatsItem.lastMessageText = msg.text;
+//                        chatsItem.fileType = msg.itemType;
+//                        ApplicationLoader.db.chatDao().insert(chatsItem);
+//                    });
+//                });
+//            } else {
+//                int cid = msg.to_peer instanceof RPC.PM_peerUser ? -msg.to_peer.user_id : msg.to_peer.group_id;
+//                ChatsItem chatsItem = ApplicationLoader.db.chatDao().getChatByChatID(cid);
+//                if(chatsItem != null) {
+//                    chatsItem.time = msg.date;
+//                    chatsItem.lastMsgPhotoURL = user.photoURL;
+//                    chatsItem.lastMessageText = msg.text;
+//                    chatsItem.fileType = msg.itemType;
+//                }else{
+////                    chatsItem = new ChatsItem()//TODO:!!!
+//                }
+//                ApplicationLoader.db.chatDao().insert(chatsItem);
+//            }
+            MessagesManager.getInstance().putMessage(msg);
             showNotify(msg);
         });
     }
@@ -300,7 +317,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     private void receivedPhotoURL(final RPC.PM_photoURL photoURL) {
         if (photoURL.peer instanceof RPC.PM_peerUser) {
             RPC.PM_peerUser peerUser = (RPC.PM_peerUser) photoURL.peer;
-//            ApplicationLoader.db.userDao().getById(peerUser.user_id).photoURL.url = photoURL.url;
+//            ApplicationLoader.db.userDao().getGroupById(peerUser.user_id).photoURL.url = photoURL.url;
 //            UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = photoURL.url;
             if (User.currentUser.id == peerUser.user_id) {
                 User.currentUser.photoURL.url = photoURL.url;
@@ -308,9 +325,9 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             }
         } else if (photoURL.peer instanceof RPC.PM_peerGroup) {
             RPC.PM_peerGroup peerGroup = (RPC.PM_peerGroup) photoURL.peer;
-            RPC.Group group = ApplicationLoader.db.groupDao().getById(peerGroup.group_id);
+            RPC.Group group = GroupsManager.getInstance().getGroup(peerGroup.group_id);
             group.photoURL.url = photoURL.url;
-            ApplicationLoader.db.groupDao().insert(group);
+            GroupsManager.getInstance().putGroup(group);
         }
     }
 

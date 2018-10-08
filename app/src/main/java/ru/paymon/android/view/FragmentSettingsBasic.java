@@ -58,13 +58,13 @@ public class FragmentSettingsBasic extends AbsFragmentSettings implements Shared
         }
         if (preference instanceof SwitchPreference) {
             Utils.netQueue.postRunnable(() -> {
-                RPC.PM_userFull user = User.currentUser;
+                RPC.PM_userSelf user = User.currentUser;
                 User.currentUser.isEmailHidden = ((SwitchPreference) preference).isChecked();
 
 //                ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
                 final long requestID = NetworkManager.getInstance().sendRequest(user, (response, error) -> {
-                    if (error != null || (response != null && response instanceof RPC.PM_boolFalse)) {
+                    if (error != null || response instanceof RPC.PM_boolFalse) {
                         ApplicationLoader.applicationHandler.post(() -> {
 //                            if (dialogProgress != null && dialogProgress.isShowing())
 //                                dialogProgress.cancel();
