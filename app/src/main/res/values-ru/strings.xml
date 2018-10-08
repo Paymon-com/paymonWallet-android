@@ -107,6 +107,7 @@
 
     <string name="save_button">Сохранить</string>
     <string name="message">Сообщение</string>
+    <string name="connecting">Подключение</string>
     <string name="contact_information">Контактная информация</string>
     <string name="personal_information">Персональная информация</string>
     <string name="personalization">Персонализация</string>

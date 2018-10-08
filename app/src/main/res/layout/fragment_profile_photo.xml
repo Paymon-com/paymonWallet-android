@@ -46,13 +46,15 @@
 
     <TextView
         android:id="@+id/login_profile_text_view"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="Логин"
         android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/profile_avatar_image_view"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_avatar_image_view"
         app:layout_constraintTop_toBottomOf="@+id/name_profile_text_view" />
 
@@ -61,12 +63,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:maxWidth="190dp"
         android:maxLines="1"
         android:text="ник нейм"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/login_profile_text_view"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_avatar_image_view"
         app:layout_constraintTop_toTopOf="@+id/profile_avatar_image_view"
         app:layout_constraintVertical_chainStyle="spread" />
@@ -76,8 +80,8 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:src="@drawable/profile_photo_none"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
