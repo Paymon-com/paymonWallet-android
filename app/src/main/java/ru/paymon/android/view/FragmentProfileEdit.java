@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,7 @@ public class FragmentProfileEdit extends Fragment {
         EditText email = (EditText) view.findViewById(R.id.profile_update_email);
         Button saveButton = (Button) view.findViewById(R.id.profile_update_save_button);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
+        Switch hideEmailSwitch = (Switch) view.findViewById(R.id.switch_hide_email);
 
         backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 

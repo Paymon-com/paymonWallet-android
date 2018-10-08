@@ -57,7 +57,7 @@
     <string name="unable_to_delete_messages">Не удалось удалить сообщения</string>
     <string name="delete_for_everyone">Удалить для всех</string>
     <string name="twosome">Тет-а-тет</string>
-    <string name="groups">Групыы</string>
+    <string name="groups">Группы</string>
     <string name="global_search">Глобальный поиск</string>
     <string name="you_did_not_choose_anyone">Вы никого не выбрали</string>
     <string name="not_specified">Не указан</string>
@@ -109,6 +109,7 @@
     <string name="message">Сообщение</string>
     <string name="contact_information">Контактная информация</string>
     <string name="personal_information">Персональная информация</string>
+    <string name="personalization">Персонализация</string>
     <string name="change_photo">Изменить фото</string>
     <string name="status">Статус</string>
     <string name="bday">Дата рождения</string>
@@ -364,7 +365,13 @@
     <string name="email_confirmation_hint">Для продолжения, вы должны подтвердить вашу электронную почту. Возможно, что письмо попадет в папку спам.</string>
     <string name="registration_email_used">Такая электронная почта или логин уже используются</string>
 
-    <string name="create_group">Создать Беседу</string>
+    <string name="create_group">Создать группу</string>
+    <string name="group_creation">Создание группы</string>
+    <string name="search_friend">Поиск друга</string>
+    <string name="search_chats">Поиск чатов</string>
+    <string name="search_contacts">Поиск контактов</string>
+    <string name="title_dialogs">Диалоги</string>
+    <string name="search_for_contacts">Здесь вы можете искать контакты</string>
     <string name="done">Готово</string>
     <string name="enter_group_title">Введите название группы</string>
     <string name="agree">Принять</string>

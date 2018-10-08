@@ -107,6 +107,7 @@
     <string name="message">Message</string>
     <string name="contact_information">Contact information</string>
     <string name="personal_information">Personal information</string>
+    <string name="personalization">Personalization</string>
     <string name="change_photo">Change photo</string>
     <string name="status">Status</string>
     <string name="bday">Date of Birth</string>
@@ -363,7 +364,13 @@
     <string name="email_confirmation_hint">To continue, you must confirm your email. It is possible that the message will be sent to the spam folder</string>
     <string name="registration_email_used">This email or login is already in use</string>
 
-    <string name="create_group">Create a conversation</string>
+    <string name="create_group">Create group</string>
+    <string name="group_creation">Group creation</string>
+    <string name="search_friend">Search your friend</string>
+    <string name="search_chats">Search chats</string>
+    <string name="title_dialogs">Dialogs</string>
+    <string name="search_contacts">Search contacts</string>
+    <string name="search_for_contacts">Here you can search for contacts</string>
     <string name="done">Done</string>
     <string name="enter_group_title">Enter group name</string>
     <string name="agree">Agree</string>

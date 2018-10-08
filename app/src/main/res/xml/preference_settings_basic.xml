@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <PreferenceCategory
+        android:title="@string/personalization">
     <ListPreference
         android:defaultValue="@string/default_sort_friends"
         android:entries="@array/sort_friends_list"
@@ -13,13 +14,5 @@
         android:entryValues="@array/format_time"
         android:key="CLIENT_BASIC_DATE_FORMAT_LIST"
         android:title="@string/format_time" />
-
-    <PreferenceCategory
-        android:key="MESSAGES_CONF_CATEGORY"
-        android:title="@string/confidentiality">
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="CLIENT_CONF_HIDE_EMAIL_SWITCH"
-            android:title="@string/hide_email" />
     </PreferenceCategory>
 </PreferenceScreen>
