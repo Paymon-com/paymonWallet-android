@@ -228,7 +228,10 @@ public class NetworkManager {
                 packet.token = user.token;
 
                 NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
-                    if (error != null || response == null) return;
+                    if (error != null || response == null) {
+                        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.authorizationFailed);
+                        return;
+                    }
 
                     User.currentUser = (RPC.PM_userFull) response;
                     User.saveConfig();

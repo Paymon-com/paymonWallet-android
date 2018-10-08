@@ -460,7 +460,7 @@ static int asn1_set_seq_out(STACK_OF(ASN1_VALUE) *sk, unsigned char **out,
     }
     p = tmpdat;
 
-    /* Doing sort: build up a list of each member's DER encoding */
+    /* Doing sort: build up a transactionItems of each member's DER encoding */
     for (i = 0, tder = derlst; i < sk_ASN1_VALUE_num(sk); i++, tder++) {
         skitem = sk_ASN1_VALUE_value(sk, i);
         tder->data = p;

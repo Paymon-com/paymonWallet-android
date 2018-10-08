@@ -7,10 +7,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -71,13 +71,13 @@
 typedef struct bignum_pool_item {
   /* The bignum values */
   BIGNUM vals[BN_CTX_POOL_SIZE];
-  /* Linked-list admin */
+  /* Linked-transactionItems admin */
   struct bignum_pool_item *prev, *next;
 } BN_POOL_ITEM;
 
 
 typedef struct bignum_pool {
-  /* Linked-list admin */
+  /* Linked-transactionItems admin */
   BN_POOL_ITEM *head, *current, *tail;
   /* Stack depth and allocation size */
   unsigned used, size;

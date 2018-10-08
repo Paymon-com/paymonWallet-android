@@ -2,6 +2,7 @@ package ru.paymon.android.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ru.paymon.android.R;
@@ -18,14 +20,7 @@ import ru.paymon.android.utils.Utils;
 //import ru.paymon.android.UsersManager;
 
 public class ContactsGlobalAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    public LinkedList<RPC.UserObject> contactsGlobalItems = new LinkedList<>();
-
-    public ContactsGlobalAdapter() {
-//        for (int i = 0; i < UsersManager.getInstance().searchUsers.size(); i++) {
-//            RPC.UserObject userGlobal = UsersManager.getInstance().searchUsers.get(UsersManager.getInstance().searchUsers.keyAt(i));
-//            contactsGlobalItems.add(userGlobal);
-//        }
-    }
+    public ArrayList<RPC.UserObject> contactsGlobalItems = new ArrayList<>();
 
     @NonNull
     @Override

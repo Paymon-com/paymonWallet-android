@@ -24,9 +24,9 @@
  * modification, are permitted provided that the following conditions
  * are met:
  * 1. Redistributions of source code must retain the copyright
- *    notice, this list of conditions and the following disclaimer.
+ *    notice, this transactionItems of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
+ *    notice, this transactionItems of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
  * 3. All advertising materials mentioning features or use of this software
  *    must display the following acknowledgement:
@@ -149,9 +149,9 @@ int X509_REQ_check_private_key(X509_REQ *x, EVP_PKEY *k)
 }
 
 /*
- * It seems several organisations had the same idea of including a list of
+ * It seems several organisations had the same idea of including a transactionItems of
  * extensions in a certificate request. There are at least two OIDs that are
- * used and there may be more: so the list is configurable.
+ * used and there may be more: so the transactionItems is configurable.
  */
 
 static const int ext_nid_list[] = { NID_ext_req, NID_ms_ext_req, NID_undef };

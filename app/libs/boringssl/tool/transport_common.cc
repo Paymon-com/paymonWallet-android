@@ -291,7 +291,7 @@ void PrintConnectionInfo(const SSL *ssl) {
     const uint8_t *sct_list;
     size_t sct_list_len;
     SSL_get0_signed_cert_timestamp_list(ssl, &sct_list, &sct_list_len);
-    fprintf(stderr, "  SCT list: %s\n", sct_list_len > 0 ? "yes" : "no");
+    fprintf(stderr, "  SCT transactionItems: %s\n", sct_list_len > 0 ? "yes" : "no");
   }
 
   fprintf(stderr, "  Early data: %s\n",

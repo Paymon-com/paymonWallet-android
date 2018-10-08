@@ -11,10 +11,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -336,10 +336,10 @@ static int nid_cmp(const void *void_a, const void *void_b)
 int X509_supported_extension(X509_EXTENSION *ex)
 {
     /*
-     * This table is a list of the NIDs of supported extensions: that is
+     * This table is a transactionItems of the NIDs of supported extensions: that is
      * those which are used by the verify process. If an extension is
-     * critical and doesn't appear in this list then the verify process will
-     * normally reject the certificate. The list must be kept in numerical
+     * critical and doesn't appear in this transactionItems then the verify process will
+     * normally reject the certificate. The transactionItems must be kept in numerical
      * order because it will be searched using bsearch.
      */
 

@@ -57,16 +57,16 @@ struct ExpectedCipher {
 struct CipherTest {
   // The rule string to apply.
   const char *rule;
-  // The list of expected ciphers, in order.
+  // The transactionItems of expected ciphers, in order.
   std::vector<ExpectedCipher> expected;
-  // True if this cipher list should fail in strict mode.
+  // True if this cipher transactionItems should fail in strict mode.
   bool strict_fail;
 };
 
 struct CurveTest {
   // The rule string to apply.
   const char *rule;
-  // The list of expected curves, in order.
+  // The transactionItems of expected curves, in order.
   std::vector<uint16_t> expected;
 };
 
@@ -845,7 +845,7 @@ static size_t GetClientHelloLen(uint16_t max_version, uint16_t session_version,
     return 0;
   }
 
-  // Set a one-element cipher list so the baseline ClientHello is unpadded.
+  // Set a one-element cipher transactionItems so the baseline ClientHello is unpadded.
   bssl::UniquePtr<SSL> ssl(SSL_new(ctx.get()));
   if (!ssl || !SSL_set_session(ssl.get(), session.get()) ||
       !SSL_set_strict_cipher_list(ssl.get(), "ECDHE-RSA-AES128-GCM-SHA256") ||
@@ -960,13 +960,13 @@ static void AppendSession(SSL_SESSION *session, void *arg) {
 // order.
 static bool CacheEquals(SSL_CTX *ctx,
                         const std::vector<SSL_SESSION*> &expected) {
-  // Check the linked list.
+  // Check the linked transactionItems.
   SSL_SESSION *ptr = ctx->session_cache_head;
   for (SSL_SESSION *session : expected) {
     if (ptr != session) {
       return false;
     }
-    // TODO(davidben): This is an absurd way to denote the end of the list.
+    // TODO(davidben): This is an absurd way to denote the end of the transactionItems.
     if (ptr->next ==
         reinterpret_cast<SSL_SESSION *>(&ctx->session_cache_tail)) {
       ptr = nullptr;
@@ -1025,7 +1025,7 @@ TEST(SSLTest, InternalSessionCache) {
     ASSERT_TRUE(SSL_CTX_add_session(ctx.get(), session.get()));
   }
 
-  // Only the last five should be in the list.
+  // Only the last five should be in the transactionItems.
   ASSERT_TRUE(CacheEquals(
       ctx.get(), {sessions[9].get(), sessions[8].get(), sessions[7].get(),
                   sessions[6].get(), sessions[5].get()}));
@@ -1746,7 +1746,7 @@ static bool TestRetainOnlySHA256OfCerts(bool is_dtls, const SSL_METHOD *method,
 static bool ClientHelloMatches(uint16_t version, const uint8_t *expected,
                                size_t expected_len) {
   bssl::UniquePtr<SSL_CTX> ctx(SSL_CTX_new(TLS_method()));
-  // Our default cipher list varies by CPU capabilities, so manually place the
+  // Our default cipher transactionItems varies by CPU capabilities, so manually place the
   // ChaCha20 ciphers in front.
   const char* cipher_list = "CHACHA20:ALL";
   if (!ctx ||
@@ -2473,12 +2473,12 @@ static bool TestSNICallback(bool is_dtls, const SSL_METHOD *method,
     return false;
   }
 
-  // The client should have received |server_ctx2|'s SCT list.
+  // The client should have received |server_ctx2|'s SCT transactionItems.
   const uint8_t *data;
   size_t len;
   SSL_get0_signed_cert_timestamp_list(client.get(), &data, &len);
   if (Bytes(kSCTList) != Bytes(data, len)) {
-    fprintf(stderr, "Incorrect SCT list received.\n");
+    fprintf(stderr, "Incorrect SCT transactionItems received.\n");
     return false;
   }
 
@@ -3165,20 +3165,20 @@ TEST(SSLTest, SetChainAndKey) {
                                      nullptr /* no session */));
 }
 
-// Configuring the empty cipher list, though an error, should still modify the
+// Configuring the empty cipher transactionItems, though an error, should still modify the
 // configuration.
 TEST(SSLTest, EmptyCipherList) {
   bssl::UniquePtr<SSL_CTX> ctx(SSL_CTX_new(TLS_method()));
   ASSERT_TRUE(ctx);
 
-  // Initially, the cipher list is not empty.
+  // Initially, the cipher transactionItems is not empty.
   EXPECT_NE(0u, sk_SSL_CIPHER_num(SSL_CTX_get_ciphers(ctx.get())));
 
-  // Configuring the empty cipher list fails.
+  // Configuring the empty cipher transactionItems fails.
   EXPECT_FALSE(SSL_CTX_set_cipher_list(ctx.get(), ""));
   ERR_clear_error();
 
-  // But the cipher list is still updated to empty.
+  // But the cipher transactionItems is still updated to empty.
   EXPECT_EQ(0u, sk_SSL_CIPHER_num(SSL_CTX_get_ciphers(ctx.get())));
 }
 

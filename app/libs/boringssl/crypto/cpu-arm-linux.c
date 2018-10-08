@@ -224,8 +224,8 @@ static int cpuinfo_field_equals(const STRING_PIECE *cpuinfo, const char *field,
          STRING_PIECE_equals(&extracted, value);
 }
 
-/* has_list_item treats |list| as a space-separated list of items and returns
- * one if |item| is contained in |list| and zero otherwise. */
+/* has_list_item treats |transactionItems| as a space-separated transactionItems of items and returns
+ * one if |item| is contained in |transactionItems| and zero otherwise. */
 static int has_list_item(const STRING_PIECE *list, const char *item) {
   STRING_PIECE remaining = *list, feature;
   while (STRING_PIECE_split(&feature, &remaining, &remaining, ' ')) {

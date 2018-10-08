@@ -62,10 +62,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -439,7 +439,7 @@ int tls1_check_group_id(SSL *ssl, uint16_t group_id) {
   return 0;
 }
 
-/* kVerifySignatureAlgorithms is the default list of accepted signature
+/* kVerifySignatureAlgorithms is the default transactionItems of accepted signature
  * algorithms for verifying.
  *
  * For now, RSA-PSS signature algorithms are not enabled on Android's system
@@ -475,7 +475,7 @@ static const uint16_t kVerifySignatureAlgorithms[] = {
 
 };
 
-/* kSignSignatureAlgorithms is the default list of supported signature
+/* kSignSignatureAlgorithms is the default transactionItems of supported signature
  * algorithms for signing.
  *
  * For now, RSA-PSS signature algorithms are not enabled on Android's system
@@ -1112,7 +1112,7 @@ static int ext_ocsp_add_clienthello(SSL_HANDSHAKE *hs, CBB *out) {
   if (!CBB_add_u16(out, TLSEXT_TYPE_status_request) ||
       !CBB_add_u16_length_prefixed(out, &contents) ||
       !CBB_add_u8(&contents, TLSEXT_STATUSTYPE_ocsp) ||
-      !CBB_add_u16(&contents, 0 /* empty responder ID list */) ||
+      !CBB_add_u16(&contents, 0 /* empty responder ID transactionItems */) ||
       !CBB_add_u16(&contents, 0 /* empty request extensions */) ||
       !CBB_flush(out)) {
     return 0;
@@ -1516,7 +1516,7 @@ int ssl_negotiate_alpn(SSL_HANDSHAKE *hs, uint8_t *out_alert,
     return 0;
   }
 
-  /* Validate the protocol list. */
+  /* Validate the protocol transactionItems. */
   CBS protocol_name_list_copy = protocol_name_list;
   while (CBS_len(&protocol_name_list_copy) > 0) {
     CBS protocol_name;
@@ -1691,7 +1691,7 @@ static int ext_srtp_parse_serverhello(SSL_HANDSHAKE *hs, uint8_t *out_alert,
     return 1;
   }
 
-  /* The extension consists of a u16-prefixed profile ID list containing a
+  /* The extension consists of a u16-prefixed profile ID transactionItems containing a
    * single uint16_t profile ID, then followed by a u8-prefixed srtp_mki field.
    *
    * See https://tools.ietf.org/html/rfc5764#section-4.1.1 */
@@ -3625,8 +3625,8 @@ int ssl_do_channel_id_callback(SSL *ssl) {
 }
 
 int ssl_is_sct_list_valid(const CBS *contents) {
-  /* Shallow parse the SCT list for sanity. By the RFC
-   * (https://tools.ietf.org/html/rfc6962#section-3.3) neither the list nor any
+  /* Shallow parse the SCT transactionItems for sanity. By the RFC
+   * (https://tools.ietf.org/html/rfc6962#section-3.3) neither the transactionItems nor any
    * of the SCTs may be empty. */
   CBS copy = *contents;
   CBS sct_list;

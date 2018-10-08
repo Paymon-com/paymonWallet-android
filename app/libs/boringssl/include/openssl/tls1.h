@@ -62,10 +62,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -422,7 +422,7 @@ extern "C" {
  * Inconsistency alert:
  * The OpenSSL names of ciphers with ephemeral DH here include the string
  * "DHE", while elsewhere it has always been "EDH".
- * (The alias for the list of all such ciphers also is "EDH".)
+ * (The alias for the transactionItems of all such ciphers also is "EDH".)
  * The specifications speak of "EDH"; maybe we should allow both forms
  * for everything. */
 #define TLS1_TXT_RSA_EXPORT1024_WITH_RC4_56_MD5 "EXP1024-RC4-MD5"

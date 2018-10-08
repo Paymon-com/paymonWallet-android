@@ -62,10 +62,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -210,7 +210,7 @@ static int get_func_pointers(STACK_OF(CRYPTO_EX_DATA_FUNCS) **out,
   *out = NULL;
 
   /* CRYPTO_EX_DATA_FUNCS structures are static once set, so we can take a
-   * shallow copy of the list under lock and then use the structures without
+   * shallow copy of the transactionItems under lock and then use the structures without
    * the lock held. */
   CRYPTO_STATIC_MUTEX_lock_read(&ex_data_class->lock);
   n = sk_CRYPTO_EX_DATA_FUNCS_num(ex_data_class->meth);

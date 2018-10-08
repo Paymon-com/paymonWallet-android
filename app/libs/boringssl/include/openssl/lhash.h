@@ -106,7 +106,7 @@ extern "C" {
 
 
 /* lhash_item_st is an element of a suffix chain. It points to the opaque data
- * for this element and to the next item in the chain. The linked-list is NULL
+ * for this element and to the next item in the chain. The linked-transactionItems is NULL
  * terminated. */
 typedef struct lhash_item_st {
   void *data;

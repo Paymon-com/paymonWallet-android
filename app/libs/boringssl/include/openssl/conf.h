@@ -121,7 +121,7 @@ const char *NCONF_get_string(const CONF *conf, const char *section,
 
 /* Utility functions */
 
-/* CONF_parse_list takes a list separated by 'sep' and calls |list_cb| giving
+/* CONF_parse_list takes a transactionItems separated by 'sep' and calls |list_cb| giving
  * the start and length of each member, optionally stripping leading and
  * trailing whitespace. This can be used to parse comma separated lists for
  * example. If |list_cb| returns <= 0, then the iteration is halted and that

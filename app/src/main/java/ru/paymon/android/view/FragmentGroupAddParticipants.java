@@ -7,14 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -64,30 +67,27 @@ public class FragmentGroupAddParticipants extends Fragment {
         View view = inflater.inflate(R.layout.fragment_group_add_participants, container, false);
 
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
-        ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
+        Button acceptButton = (Button) view.findViewById(R.id.toolbar_next_btn);
 
         backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
-        SparseArray<RPC.UserObject> userContacts = new SparseArray<>();
         LiveData<PagedList<ChatsItem>> liveChatsItems = chatsViewModel.getDialogsChats();
         liveChatsItems.observe(this, chatsItems -> {
             if (chatsItems == null) return;
 
+            addGroupList = new ArrayList<>();
             for (ChatsItem chatItem : chatsItems) {
                 int id = chatItem.chatID;
-                userContacts.append(id, ApplicationLoader.db.userDao().getById(id));
-            }
-
-            addGroupList.clear();
-
-            for (int i = 0; i < userContacts.size(); i++) {
-                RPC.UserObject user = userContacts.get(userContacts.keyAt(i));
-                if (group.users.contains(user) || user.id == User.currentUser.id) continue;
+                RPC.UserObject user = ApplicationLoader.db.userDao().getById(id);
+                if (group.users.contains(user)) continue;
                 addGroupList.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
             }
+            adapter.list.clear();
+            adapter.list.addAll(addGroupList);
+            adapter.notifyDataSetChanged();
         });
 
-        acceptToolbar.setOnClickListener(v -> Utils.netQueue.postRunnable(() -> {
+        acceptButton.setOnClickListener(v -> Utils.netQueue.postRunnable(() -> {
             ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
             RPC.PM_group_addParticipants addParticipantsRequest = new RPC.PM_group_addParticipants();
@@ -132,6 +132,8 @@ public class FragmentGroupAddParticipants extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         contactsList.setLayoutManager(llm);
         contactsList.setHasFixedSize(true);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(contactsList.getContext(), (new LinearLayoutManager(getContext())).getOrientation());
+        contactsList.addItemDecoration(dividerItemDecoration);
 
         adapter = new CreateGroupAdapter(addGroupList);
         contactsList.setAdapter(adapter);
@@ -150,20 +152,21 @@ public class FragmentGroupAddParticipants extends Fragment {
 
             @Override
             public void afterTextChanged(Editable editable) {
-                ArrayList<UserItem> sortedUserList = new ArrayList<>();
-
                 String text = editable.toString();
+
+                if (text.isEmpty()) {
+                    for (UserItem user : adapter.list)
+                        user.isHidden = false;
+                    adapter.notifyDataSetChanged();
+                    return;
+                }
 
                 if (text.trim().isEmpty()) return;
 
-                for (UserItem user : addGroupList) {
-                    if (user.name.toLowerCase().contains(text.toLowerCase())) {
-                        sortedUserList.add(user);
-                    }
-                }
+                for (UserItem user : adapter.list)
+                    user.isHidden = !user.name.toLowerCase().contains(text.toLowerCase());
 
-                adapter = new CreateGroupAdapter(sortedUserList);
-                contactsList.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
             }
         });
 

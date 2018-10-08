@@ -62,10 +62,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -785,15 +785,15 @@ void ssl_write_buffer_clear(SSL *ssl);
  * configured and zero otherwise. */
 int ssl_has_certificate(const SSL *ssl);
 
-/* ssl_parse_cert_chain parses a certificate list from |cbs| in the format used
+/* ssl_parse_cert_chain parses a certificate transactionItems from |cbs| in the format used
  * by a TLS Certificate message. On success, it returns a newly-allocated
- * |CRYPTO_BUFFER| list and advances |cbs|. Otherwise, it returns NULL and sets
+ * |CRYPTO_BUFFER| transactionItems and advances |cbs|. Otherwise, it returns NULL and sets
  * |*out_alert| to an alert to send to the peer.
  *
- * If the list is non-empty then |*out_pubkey| will be set to a freshly
+ * If the transactionItems is non-empty then |*out_pubkey| will be set to a freshly
  * allocated public-key from the leaf certificate.
  *
- * If the list is non-empty and |out_leaf_sha256| is non-NULL, it writes the
+ * If the transactionItems is non-empty and |out_leaf_sha256| is non-NULL, it writes the
  * SHA-256 suffix of the leaf to |out_leaf_sha256|. */
 STACK_OF(CRYPTO_BUFFER) *ssl_parse_cert_chain(uint8_t *out_alert,
                                               EVP_PKEY **out_pubkey,
@@ -803,7 +803,7 @@ STACK_OF(CRYPTO_BUFFER) *ssl_parse_cert_chain(uint8_t *out_alert,
 
 /* ssl_add_cert_chain adds |ssl|'s certificate chain to |cbb| in the format used
  * by a TLS Certificate message. If there is no certificate chain, it emits an
- * empty certificate list. It returns one on success and zero on error. */
+ * empty certificate transactionItems. It returns one on success and zero on error. */
 int ssl_add_cert_chain(SSL *ssl, CBB *cbb);
 
 /* ssl_cert_check_digital_signature_key_usage parses the DER-encoded, X.509
@@ -817,14 +817,14 @@ int ssl_cert_check_digital_signature_key_usage(const CBS *in);
  * and pushes to the error queue. */
 EVP_PKEY *ssl_cert_parse_pubkey(const CBS *in);
 
-/* ssl_parse_client_CA_list parses a CA list from |cbs| in the format used by a
+/* ssl_parse_client_CA_list parses a CA transactionItems from |cbs| in the format used by a
  * TLS CertificateRequest message. On success, it returns a newly-allocated
- * |CRYPTO_BUFFER| list and advances |cbs|. Otherwise, it returns NULL and sets
+ * |CRYPTO_BUFFER| transactionItems and advances |cbs|. Otherwise, it returns NULL and sets
  * |*out_alert| to an alert to send to the peer. */
 STACK_OF(CRYPTO_BUFFER) *
     ssl_parse_client_CA_list(SSL *ssl, uint8_t *out_alert, CBS *cbs);
 
-/* ssl_add_client_CA_list adds the configured CA list to |cbb| in the format
+/* ssl_add_client_CA_list adds the configured CA transactionItems to |cbb| in the format
  * used by a TLS CertificateRequest message. It returns one on success and zero
  * on error. */
 int ssl_add_client_CA_list(SSL *ssl, CBB *cbb);
@@ -1028,7 +1028,7 @@ struct ssl_handshake_st {
    * server when using a TLS 1.2 PSK key exchange. */
   char *peer_psk_identity_hint;
 
-  /* ca_names, on the client, contains the list of CAs received in a
+  /* ca_names, on the client, contains the transactionItems of CAs received in a
    * CertificateRequest message. */
   STACK_OF(CRYPTO_BUFFER) *ca_names;
 
@@ -1180,7 +1180,7 @@ int ssl_ext_pre_shared_key_parse_clienthello(
     uint32_t *out_obfuscated_ticket_age, uint8_t *out_alert, CBS *contents);
 int ssl_ext_pre_shared_key_add_serverhello(SSL_HANDSHAKE *hs, CBB *out);
 
-/* ssl_is_sct_list_valid does a shallow parse of the SCT list in |contents| and
+/* ssl_is_sct_list_valid does a shallow parse of the SCT transactionItems in |contents| and
  * returns one iff it's valid. */
 int ssl_is_sct_list_valid(const CBS *contents);
 
@@ -1267,7 +1267,7 @@ uint16_t ssl_get_grease_value(const SSL *ssl, enum ssl_grease_index_t index);
 
 /* Signature algorithms. */
 
-/* tls1_parse_peer_sigalgs parses |sigalgs| as the list of peer signature
+/* tls1_parse_peer_sigalgs parses |sigalgs| as the transactionItems of peer signature
  * algorithms and saves them on |hs|. It returns one on success and zero on
  * error. */
 int tls1_parse_peer_sigalgs(SSL_HANDSHAKE *hs, const CBS *sigalgs);
@@ -1353,7 +1353,7 @@ typedef struct cert_st {
    * store is used instead. */
   X509_STORE *verify_store;
 
-  /* Signed certificate timestamp list to be sent to the client, if requested */
+  /* Signed certificate timestamp transactionItems to be sent to the client, if requested */
   CRYPTO_BUFFER *signed_cert_timestamp_list;
 
   /* OCSP response to be sent to the client, if requested. */
@@ -1462,7 +1462,7 @@ struct ssl_protocol_method_st {
 };
 
 struct ssl_x509_method_st {
-  /* check_client_CA_list returns one if |names| is a good list of X.509
+  /* check_client_CA_list returns one if |names| is a good transactionItems of X.509
    * distinguished names and zero otherwise. This is used to ensure that we can
    * reject unparsable values at handshake time when using crypto/x509. */
   int (*check_client_CA_list)(STACK_OF(CRYPTO_BUFFER) *names);
@@ -1894,7 +1894,7 @@ struct ssl_st {
   /* extra application data */
   CRYPTO_EX_DATA ex_data;
 
-  /* for server side, keep the list of CA_dn we can use */
+  /* for server side, keep the transactionItems of CA_dn we can use */
   STACK_OF(CRYPTO_BUFFER) *client_CA;
 
   /* cached_x509_client_CA is a cache of parsed versions of the elements of
@@ -1906,13 +1906,13 @@ struct ssl_st {
   uint32_t max_cert_list;
   char *tlsext_hostname;
   size_t supported_group_list_len;
-  uint16_t *supported_group_list; /* our list */
+  uint16_t *supported_group_list; /* our transactionItems */
 
   /* session_ctx is the |SSL_CTX| used for the session cache and related
    * settings. */
   SSL_CTX *session_ctx;
 
-  /* srtp_profiles is the list of configured SRTP protection profiles for
+  /* srtp_profiles is the transactionItems of configured SRTP protection profiles for
    * DTLS-SRTP. */
   STACK_OF(SRTP_PROTECTION_PROFILE) *srtp_profiles;
 
@@ -1923,7 +1923,7 @@ struct ssl_st {
   /* The client's Channel ID private key. */
   EVP_PKEY *tlsext_channel_id_private;
 
-  /* For a client, this contains the list of supported protocols in wire
+  /* For a client, this contains the transactionItems of supported protocols in wire
    * format. */
   uint8_t *alpn_client_proto_list;
   unsigned alpn_client_proto_list_len;
@@ -2065,7 +2065,7 @@ void ssl_session_renew_timeout(SSL *ssl, SSL_SESSION *session,
 void ssl_cipher_preference_list_free(
     struct ssl_cipher_preference_list_st *cipher_list);
 
-/* ssl_get_cipher_preferences returns the cipher preference list for TLS 1.2 and
+/* ssl_get_cipher_preferences returns the cipher preference transactionItems for TLS 1.2 and
  * below. */
 const struct ssl_cipher_preference_list_st *ssl_get_cipher_preferences(
     const SSL *ssl);
@@ -2162,7 +2162,7 @@ int tls1_generate_master_secret(SSL_HANDSHAKE *hs, uint8_t *out,
                                 const uint8_t *premaster, size_t premaster_len);
 
 /* tls1_get_grouplist sets |*out_group_ids| and |*out_group_ids_len| to the
- * locally-configured group preference list. */
+ * locally-configured group preference transactionItems. */
 void tls1_get_grouplist(SSL *ssl, const uint16_t **out_group_ids,
                         size_t *out_group_ids_len);
 

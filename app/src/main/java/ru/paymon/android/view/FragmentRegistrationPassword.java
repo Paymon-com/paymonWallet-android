@@ -130,7 +130,7 @@ public class FragmentRegistrationPassword extends Fragment {
         final Bundle passwordBundle = new Bundle();
         passwordBundle.putString(KEY_LOGIN_REGISTRATION, login);
         passwordBundle.putString(KEY_PASSWORD_REGISTRATION, passwordEditText.getText().toString());
-        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentRegistrationEmail);
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentRegistrationEmail, passwordBundle);
     }
 
     @Override

@@ -62,10 +62,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -791,7 +791,7 @@ static enum ssl_session_result_t ssl_lookup_session(
     if (session != NULL) {
       SSL_SESSION_up_ref(session);
     }
-    /* TODO(davidben): This should probably move it to the front of the list. */
+    /* TODO(davidben): This should probably move it to the front of the transactionItems. */
     CRYPTO_MUTEX_unlock_read(&ssl->session_ctx->lock);
   }
 
@@ -883,7 +883,7 @@ enum ssl_session_result_t ssl_get_prev_session(
 }
 
 int SSL_CTX_add_session(SSL_CTX *ctx, SSL_SESSION *session) {
-  /* Although |session| is inserted into two structures (a doubly-linked list
+  /* Although |session| is inserted into two structures (a doubly-linked transactionItems
    * and the suffix table), |ctx| only takes one reference. */
   SSL_SESSION_up_ref(session);
 
@@ -904,7 +904,7 @@ int SSL_CTX_add_session(SSL_CTX *ctx, SSL_SESSION *session) {
     }
 
     /* There was a session ID collision. |old_session| must be removed from
-     * the linked list and released. */
+     * the linked transactionItems and released. */
     SSL_SESSION_list_remove(ctx, old_session);
     SSL_SESSION_free(old_session);
   }
@@ -1056,9 +1056,9 @@ static void SSL_SESSION_list_remove(SSL_CTX *ctx, SSL_SESSION *session) {
   }
 
   if (session->next == (SSL_SESSION *)&ctx->session_cache_tail) {
-    /* last element in list */
+    /* last element in transactionItems */
     if (session->prev == (SSL_SESSION *)&ctx->session_cache_head) {
-      /* only one element in list */
+      /* only one element in transactionItems */
       ctx->session_cache_head = NULL;
       ctx->session_cache_tail = NULL;
     } else {
@@ -1067,10 +1067,10 @@ static void SSL_SESSION_list_remove(SSL_CTX *ctx, SSL_SESSION *session) {
     }
   } else {
     if (session->prev == (SSL_SESSION *)&ctx->session_cache_head) {
-      /* first element in list */
+      /* first element in transactionItems */
       ctx->session_cache_head = session->next;
       session->next->prev = (SSL_SESSION *)&(ctx->session_cache_head);
-    } else { /* middle of list */
+    } else { /* middle of transactionItems */
       session->next->prev = session->prev;
       session->prev->next = session->next;
     }

@@ -533,7 +533,7 @@ typedef struct NETSCAPE_X509_st
 	X509 *cert;
 	} NETSCAPE_X509;
 
-/* This is used to contain a list of bit names */
+/* This is used to contain a transactionItems of bit names */
 typedef struct BIT_STRING_BITNAME_st {
 	int bitnum;
 	const char *lname;

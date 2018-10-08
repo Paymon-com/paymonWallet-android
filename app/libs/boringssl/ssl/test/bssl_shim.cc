@@ -1488,7 +1488,7 @@ static bool CheckHandshakeProperties(SSL *ssl, bool is_resume) {
     if (config->expected_signed_cert_timestamps.size() != len ||
         OPENSSL_memcmp(config->expected_signed_cert_timestamps.data(), data,
                        len) != 0) {
-      fprintf(stderr, "SCT list mismatch\n");
+      fprintf(stderr, "SCT transactionItems mismatch\n");
       return false;
     }
   }

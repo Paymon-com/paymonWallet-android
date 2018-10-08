@@ -62,10 +62,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -783,7 +783,7 @@ static void ssl_cipher_collect_ciphers(const SSL_PROTOCOL_METHOD *ssl_method,
                                        CIPHER_ORDER **head_p,
                                        CIPHER_ORDER **tail_p) {
   /* The set of ciphers is static, but some subset may be unsupported by
-   * |ssl_method|, so the list may be smaller. */
+   * |ssl_method|, so the transactionItems may be smaller. */
   size_t co_list_num = 0;
   for (size_t i = 0; i < kCiphersLen; i++) {
     const SSL_CIPHER *cipher = &kCiphers[i];
@@ -799,7 +799,7 @@ static void ssl_cipher_collect_ciphers(const SSL_PROTOCOL_METHOD *ssl_method,
     }
   }
 
-  /* Prepare linked list from list entries. */
+  /* Prepare linked transactionItems from transactionItems entries. */
   if (co_list_num > 0) {
     co_list[0].prev = NULL;
 
@@ -822,8 +822,8 @@ static void ssl_cipher_collect_ciphers(const SSL_PROTOCOL_METHOD *ssl_method,
 }
 
 /* ssl_cipher_apply_rule applies the rule type |rule| to ciphers matching its
- * parameters in the linked list from |*head_p| to |*tail_p|. It writes the new
- * head and tail of the list to |*head_p| and |*tail_p|, respectively.
+ * parameters in the linked transactionItems from |*head_p| to |*tail_p|. It writes the new
+ * head and tail of the transactionItems to |*head_p| and |*tail_p|, respectively.
  *
  * - If |cipher_id| is non-zero, only that cipher is selected.
  * - Otherwise, if |strength_bits| is non-negative, it selects ciphers
@@ -956,7 +956,7 @@ static int ssl_cipher_strength_sort(CIPHER_ORDER **head_p,
 
   /* This routine sorts the ciphers with descending strength. The sorting must
    * keep the pre-sorted sequence, so we apply the normal sorting routine as
-   * '+' movement to the end of the list. */
+   * '+' movement to the end of the transactionItems. */
   max_strength_bits = 0;
   curr = *head_p;
   while (curr != NULL) {
@@ -983,7 +983,7 @@ static int ssl_cipher_strength_sort(CIPHER_ORDER **head_p,
     curr = curr->next;
   }
 
-  /* Go through the list of used strength_bits values in descending order. */
+  /* Go through the transactionItems of used strength_bits values in descending order. */
   for (i = max_strength_bits; i >= 0; i--) {
     if (number_uses[i] > 0) {
       ssl_cipher_apply_rule(0, 0, 0, 0, 0, 0, CIPHER_ORD, i, 0, head_p, tail_p);
@@ -1291,7 +1291,7 @@ int ssl_create_cipher_list(
     goto err;
   }
 
-  /* The cipher selection for the list is done. The ciphers are added
+  /* The cipher selection for the transactionItems is done. The ciphers are added
    * to the resulting precedence to the STACK_OF(SSL_CIPHER). */
   for (curr = head; curr != NULL; curr = curr->next) {
     if (curr->active) {
@@ -1322,7 +1322,7 @@ int ssl_create_cipher_list(
   *out_cipher_list = pref_list;
   pref_list = NULL;
 
-  /* Configuring an empty cipher list is an error but still updates the
+  /* Configuring an empty cipher transactionItems is an error but still updates the
    * output. */
   if (sk_SSL_CIPHER_num((*out_cipher_list)->ciphers) == 0) {
     OPENSSL_PUT_ERROR(SSL, SSL_R_NO_CIPHER_MATCH);

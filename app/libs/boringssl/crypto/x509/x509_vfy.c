@@ -318,7 +318,7 @@ int X509_verify_cert(X509_STORE_CTX *ctx)
     /* Remember how many untrusted certs we have */
     j = num;
     /*
-     * at this point, chain should contain a list of untrusted certificates.
+     * at this point, chain should contain a transactionItems of untrusted certificates.
      * We now need to add at least one trusted one, if possible, otherwise we
      * complain.
      */

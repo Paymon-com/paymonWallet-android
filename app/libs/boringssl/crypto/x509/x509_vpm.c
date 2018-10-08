@@ -10,10 +10,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -292,7 +292,7 @@ int X509_VERIFY_PARAM_inherit(X509_VERIFY_PARAM *dest,
             return 0;
     }
 
-    /* Copy the host flags if and only if we're copying the host list */
+    /* Copy the host flags if and only if we're copying the host transactionItems */
     if (test_x509_verify_param_copy_id(hosts, NULL)) {
         if (dest->id->hosts) {
             string_stack_free(dest->id->hosts);

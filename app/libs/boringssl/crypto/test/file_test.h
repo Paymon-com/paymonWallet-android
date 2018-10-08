@@ -211,7 +211,7 @@ typedef bool (*FileTestFunc)(FileTest *t, void *arg);
 //
 // Tests are guaranteed to run serially and may affect global state if need be.
 // It is legal to use "tests" which, for example, import a private key into a
-// list of keys. This may be used to initialize a shared set of keys for many
+// transactionItems of keys. This may be used to initialize a shared set of keys for many
 // tests. However, if one fragment_friend_profile fails, the framework will continue to run
 // subsequent tests.
 int FileTestMain(FileTestFunc run_test, void *arg, const char *path);

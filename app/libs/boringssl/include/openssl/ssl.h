@@ -62,10 +62,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -901,22 +901,22 @@ OPENSSL_EXPORT int SSL_CTX_get_extra_chain_certs(const SSL_CTX *ctx,
 OPENSSL_EXPORT int SSL_get0_chain_certs(const SSL *ssl,
                                         STACK_OF(X509) **out_chain);
 
-/* SSL_CTX_set_signed_cert_timestamp_list sets the list of signed certificate
- * timestamps that is sent to clients that request it. The |list| argument must
+/* SSL_CTX_set_signed_cert_timestamp_list sets the transactionItems of signed certificate
+ * timestamps that is sent to clients that request it. The |transactionItems| argument must
  * contain one or more SCT structures serialised as a SignedCertificateTimestamp
  * List (see https://tools.ietf.org/html/rfc6962#section-3.3) – i.e. each SCT
  * is prefixed by a big-endian, uint16 length and the concatenation of one or
  * more such prefixed SCTs are themselves also prefixed by a uint16 length. It
  * returns one on success and zero on error. The caller retains ownership of
- * |list|. */
+ * |transactionItems|. */
 OPENSSL_EXPORT int SSL_CTX_set_signed_cert_timestamp_list(SSL_CTX *ctx,
                                                           const uint8_t *list,
                                                           size_t list_len);
 
-/* SSL_set_signed_cert_timestamp_list sets the list of signed certificate
+/* SSL_set_signed_cert_timestamp_list sets the transactionItems of signed certificate
  * timestamps that is sent to clients that request is. The same format as the
  * one used for |SSL_CTX_set_signed_cert_timestamp_list| applies. The caller
- * retains ownership of |list|. */
+ * retains ownership of |transactionItems|. */
 OPENSSL_EXPORT int SSL_set_signed_cert_timestamp_list(SSL *ctx,
                                                       const uint8_t *list,
                                                       size_t list_len);
@@ -955,7 +955,7 @@ OPENSSL_EXPORT int SSL_set_ocsp_response(SSL *ssl,
 #define SSL_SIGN_RSA_PKCS1_MD5_SHA1 0xff01
 
 /* SSL_CTX_set_signing_algorithm_prefs configures |ctx| to use |prefs| as the
- * preference list when signing with |ctx|'s private key. It returns one on
+ * preference transactionItems when signing with |ctx|'s private key. It returns one on
  * success and zero on error. |prefs| should not include the internal-only value
  * |SSL_SIGN_RSA_PKCS1_MD5_SHA1|. */
 OPENSSL_EXPORT int SSL_CTX_set_signing_algorithm_prefs(SSL_CTX *ctx,
@@ -963,7 +963,7 @@ OPENSSL_EXPORT int SSL_CTX_set_signing_algorithm_prefs(SSL_CTX *ctx,
                                                        size_t num_prefs);
 
 /* SSL_set_signing_algorithm_prefs configures |ssl| to use |prefs| as the
- * preference list when signing with |ssl|'s private key. It returns one on
+ * preference transactionItems when signing with |ssl|'s private key. It returns one on
  * success and zero on error. |prefs| should not include the internal-only value
  * |SSL_SIGN_RSA_PKCS1_MD5_SHA1|. */
 OPENSSL_EXPORT int SSL_set_signing_algorithm_prefs(SSL *ssl,
@@ -1264,7 +1264,7 @@ OPENSSL_EXPORT int SSL_CIPHER_get_bits(const SSL_CIPHER *cipher,
 /* Cipher suite configuration.
  *
  * OpenSSL uses a mini-language to configure cipher suites. The language
- * maintains an ordered list of enabled ciphers, along with an ordered list of
+ * maintains an ordered transactionItems of enabled ciphers, along with an ordered transactionItems of
  * disabled but available ciphers. Initially, all ciphers are disabled with a
  * default ordering. The cipher string is then interpreted as a sequence of
  * directives, separated by colons, each of which modifies this state.
@@ -1275,18 +1275,18 @@ OPENSSL_EXPORT int SSL_CIPHER_get_bits(const SSL_CIPHER *cipher,
  * Available opcodes are:
  *
  *   The empty opcode enables and appends all matching disabled ciphers to the
- *   end of the enabled list. The newly appended ciphers are ordered relative to
- *   each other matching their order in the disabled list.
+ *   end of the enabled transactionItems. The newly appended ciphers are ordered relative to
+ *   each other matching their order in the disabled transactionItems.
  *
  *   |-| disables all matching enabled ciphers and prepends them to the disabled
- *   list, with relative order from the enabled list preserved. This means the
+ *   transactionItems, with relative order from the enabled transactionItems preserved. This means the
  *   most recently disabled ciphers get highest preference relative to other
  *   disabled ciphers if re-enabled.
  *
- *   |+| moves all matching enabled ciphers to the end of the enabled list, with
+ *   |+| moves all matching enabled ciphers to the end of the enabled transactionItems, with
  *   relative order preserved.
  *
- *   |!| deletes all matching ciphers, enabled or not, from either list. Deleted
+ *   |!| deletes all matching ciphers, enabled or not, from either transactionItems. Deleted
  *   ciphers will not matched by future operations.
  *
  * A selector may be a specific cipher (using the OpenSSL name for the cipher)
@@ -1359,43 +1359,43 @@ OPENSSL_EXPORT int SSL_CIPHER_get_bits(const SSL_CIPHER *cipher,
  *
  * TLS 1.3 ciphers do not participate in this mechanism and instead have a
  * built-in preference order. Functions to set cipher lists do not affect TLS
- * 1.3, and functions to query the cipher list do not include TLS 1.3
+ * 1.3, and functions to query the cipher transactionItems do not include TLS 1.3
  * ciphers. */
 
 /* SSL_DEFAULT_CIPHER_LIST is the default cipher suite configuration. It is
  * substituted when a cipher string starts with 'DEFAULT'. */
 #define SSL_DEFAULT_CIPHER_LIST "ALL"
 
-/* SSL_CTX_set_strict_cipher_list configures the cipher list for |ctx|,
+/* SSL_CTX_set_strict_cipher_list configures the cipher transactionItems for |ctx|,
  * evaluating |str| as a cipher string and returning error if |str| contains
  * anything meaningless. It returns one on success and zero on failure. */
 OPENSSL_EXPORT int SSL_CTX_set_strict_cipher_list(SSL_CTX *ctx,
                                                   const char *str);
 
-/* SSL_CTX_set_cipher_list configures the cipher list for |ctx|, evaluating
+/* SSL_CTX_set_cipher_list configures the cipher transactionItems for |ctx|, evaluating
  * |str| as a cipher string. It returns one on success and zero on failure.
  *
  * Prefer to use |SSL_CTX_set_strict_cipher_list|. This function tolerates
- * garbage inputs, unless an empty cipher list results. */
+ * garbage inputs, unless an empty cipher transactionItems results. */
 OPENSSL_EXPORT int SSL_CTX_set_cipher_list(SSL_CTX *ctx, const char *str);
 
-/* SSL_set_strict_cipher_list configures the cipher list for |ssl|, evaluating
+/* SSL_set_strict_cipher_list configures the cipher transactionItems for |ssl|, evaluating
  * |str| as a cipher string and returning error if |str| contains anything
  * meaningless. It returns one on success and zero on failure. */
 OPENSSL_EXPORT int SSL_set_strict_cipher_list(SSL *ssl, const char *str);
 
-/* SSL_set_cipher_list configures the cipher list for |ssl|, evaluating |str| as
+/* SSL_set_cipher_list configures the cipher transactionItems for |ssl|, evaluating |str| as
  * a cipher string. It returns one on success and zero on failure.
  *
  * Prefer to use |SSL_set_strict_cipher_list|. This function tolerates garbage
- * inputs, unless an empty cipher list results. */
+ * inputs, unless an empty cipher transactionItems results. */
 OPENSSL_EXPORT int SSL_set_cipher_list(SSL *ssl, const char *str);
 
-/* SSL_CTX_get_ciphers returns the cipher list for |ctx|, in order of
+/* SSL_CTX_get_ciphers returns the cipher transactionItems for |ctx|, in order of
  * preference. */
 OPENSSL_EXPORT STACK_OF(SSL_CIPHER) *SSL_CTX_get_ciphers(const SSL_CTX *ctx);
 
-/* SSL_get_ciphers returns the cipher list for |ssl|, in order of preference. */
+/* SSL_get_ciphers returns the cipher transactionItems for |ssl|, in order of preference. */
 OPENSSL_EXPORT STACK_OF(SSL_CIPHER) *SSL_get_ciphers(const SSL *ssl);
 
 
@@ -1423,7 +1423,7 @@ OPENSSL_EXPORT int SSL_in_false_start(const SSL *ssl);
 OPENSSL_EXPORT X509 *SSL_get_peer_certificate(const SSL *ssl);
 
 /* SSL_get_peer_cert_chain returns the peer's certificate chain or NULL if
- * unavailable or the peer did not use certificates. This is the unverified list
+ * unavailable or the peer did not use certificates. This is the unverified transactionItems
  * of certificates as sent by the peer, not the final chain built during
  * verification. The caller does not take ownership of the result.
  *
@@ -1433,7 +1433,7 @@ OPENSSL_EXPORT X509 *SSL_get_peer_certificate(const SSL *ssl);
 OPENSSL_EXPORT STACK_OF(X509) *SSL_get_peer_cert_chain(const SSL *ssl);
 
 /* SSL_get_peer_full_cert_chain returns the peer's certificate chain, or NULL if
- * unavailable or the peer did not use certificates. This is the unverified list
+ * unavailable or the peer did not use certificates. This is the unverified transactionItems
  * of certificates as sent by the peer, not the final chain built during
  * verification. The caller does not take ownership of the result.
  *
@@ -1445,7 +1445,7 @@ OPENSSL_EXPORT STACK_OF(X509) *SSL_get_peer_cert_chain(const SSL *ssl);
 OPENSSL_EXPORT STACK_OF(X509) *SSL_get_peer_full_cert_chain(const SSL *ssl);
 
 /* SSL_get0_peer_certificates returns the peer's certificate chain, or NULL if
- * unavailable or the peer did not use certificates. This is the unverified list
+ * unavailable or the peer did not use certificates. This is the unverified transactionItems
  * of certificates as sent by the peer, not the final chain built during
  * verification. The caller does not take ownership of the result.
  *
@@ -2095,13 +2095,13 @@ OPENSSL_EXPORT int SSL_set1_curves(SSL *ssl, const int *curves,
                                    size_t curves_len);
 
 /* SSL_CTX_set1_curves_list sets the preferred curves for |ctx| to be the
- * colon-separated list |curves|. Each element of |curves| should be a curve
+ * colon-separated transactionItems |curves|. Each element of |curves| should be a curve
  * name (e.g. P-256, X25519, ...). It returns one on success and zero on
  * failure. */
 OPENSSL_EXPORT int SSL_CTX_set1_curves_list(SSL_CTX *ctx, const char *curves);
 
 /* SSL_set1_curves_list sets the preferred curves for |ssl| to be the
- * colon-separated list |curves|. Each element of |curves| should be a curve
+ * colon-separated transactionItems |curves|. Each element of |curves| should be a curve
  * name (e.g. P-256, X25519, ...). It returns one on success and zero on
  * failure. */
 OPENSSL_EXPORT int SSL_set1_curves_list(SSL *ssl, const char *curves);
@@ -2369,11 +2369,11 @@ OPENSSL_EXPORT int SSL_set0_verify_cert_store(SSL *ssl, X509_STORE *store);
 OPENSSL_EXPORT int SSL_set1_verify_cert_store(SSL *ssl, X509_STORE *store);
 
 /* SSL_CTX_set_ed25519_enabled configures whether |ctx| advertises support for
- * the Ed25519 signature algorithm when using the default preference list. */
+ * the Ed25519 signature algorithm when using the default preference transactionItems. */
 OPENSSL_EXPORT void SSL_CTX_set_ed25519_enabled(SSL_CTX *ctx, int enabled);
 
 /* SSL_CTX_set_verify_algorithm_prefs confingures |ctx| to use |prefs| as the
- * preference list when verifying signature's from the peer's long-term key. It
+ * preference transactionItems when verifying signature's from the peer's long-term key. It
  * returns one on zero on error. |prefs| should not include the internal-only
  * value |SSL_SIGN_RSA_PKCS1_MD5_SHA1|. */
 OPENSSL_EXPORT int SSL_CTX_set_verify_algorithm_prefs(SSL_CTX *ctx,
@@ -2381,27 +2381,27 @@ OPENSSL_EXPORT int SSL_CTX_set_verify_algorithm_prefs(SSL_CTX *ctx,
                                                       size_t num_prefs);
 
 
-/* Client certificate CA list.
+/* Client certificate CA transactionItems.
  *
- * When requesting a client certificate, a server may advertise a list of
+ * When requesting a client certificate, a server may advertise a transactionItems of
  * certificate authorities which are accepted. These functions may be used to
- * configure this list. */
+ * configure this transactionItems. */
 
-/* SSL_set_client_CA_list sets |ssl|'s client certificate CA list to
+/* SSL_set_client_CA_list sets |ssl|'s client certificate CA transactionItems to
  * |name_list|. It takes ownership of |name_list|. */
 OPENSSL_EXPORT void SSL_set_client_CA_list(SSL *ssl,
                                            STACK_OF(X509_NAME) *name_list);
 
-/* SSL_CTX_set_client_CA_list sets |ctx|'s client certificate CA list to
+/* SSL_CTX_set_client_CA_list sets |ctx|'s client certificate CA transactionItems to
  * |name_list|. It takes ownership of |name_list|. */
 OPENSSL_EXPORT void SSL_CTX_set_client_CA_list(SSL_CTX *ctx,
                                                STACK_OF(X509_NAME) *name_list);
 
-/* SSL_get_client_CA_list returns |ssl|'s client certificate CA list. If |ssl|
- * has not been configured as a client, this is the list configured by
+/* SSL_get_client_CA_list returns |ssl|'s client certificate CA transactionItems. If |ssl|
+ * has not been configured as a client, this is the transactionItems configured by
  * |SSL_CTX_set_client_CA_list|.
  *
- * If configured as a client, it returns the client certificate CA list sent by
+ * If configured as a client, it returns the client certificate CA transactionItems sent by
  * the server. In this mode, the behavior is undefined except during the
  * callbacks set by |SSL_CTX_set_cert_cb| and |SSL_CTX_set_client_cert_cb| or
  * when the handshake is paused because of them. */
@@ -2417,17 +2417,17 @@ OPENSSL_EXPORT STACK_OF(X509_NAME) *SSL_get_client_CA_list(const SSL *ssl);
 OPENSSL_EXPORT STACK_OF(CRYPTO_BUFFER) *SSL_get0_server_requested_CAs(
     const SSL *ssl);
 
-/* SSL_CTX_get_client_CA_list returns |ctx|'s client certificate CA list. */
+/* SSL_CTX_get_client_CA_list returns |ctx|'s client certificate CA transactionItems. */
 OPENSSL_EXPORT STACK_OF(X509_NAME) *
     SSL_CTX_get_client_CA_list(const SSL_CTX *ctx);
 
-/* SSL_add_client_CA appends |x509|'s subject to the client certificate CA list.
+/* SSL_add_client_CA appends |x509|'s subject to the client certificate CA transactionItems.
  * It returns one on success or zero on error. The caller retains ownership of
  * |x509|. */
 OPENSSL_EXPORT int SSL_add_client_CA(SSL *ssl, X509 *x509);
 
 /* SSL_CTX_add_client_CA appends |x509|'s subject to the client certificate CA
- * list. It returns one on success or zero on error. The caller retains
+ * transactionItems. It returns one on success or zero on error. The caller retains
  * ownership of |x509|. */
 OPENSSL_EXPORT int SSL_CTX_add_client_CA(SSL_CTX *ctx, X509 *x509);
 
@@ -2436,7 +2436,7 @@ OPENSSL_EXPORT int SSL_CTX_add_client_CA(SSL_CTX *ctx, X509 *x509);
  * on error. */
 OPENSSL_EXPORT STACK_OF(X509_NAME) *SSL_load_client_CA_file(const char *file);
 
-/* SSL_dup_CA_list makes a deep copy of |list|. It returns the new list on
+/* SSL_dup_CA_list makes a deep copy of |transactionItems|. It returns the new transactionItems on
  * success or NULL on allocation error. */
 OPENSSL_EXPORT STACK_OF(X509_NAME) *SSL_dup_CA_list(STACK_OF(X509_NAME) *list);
 
@@ -2515,20 +2515,20 @@ OPENSSL_EXPORT SSL_CTX *SSL_set_SSL_CTX(SSL *ssl, SSL_CTX *ctx);
  * protocols over a single port. This is used, for example, to negotiate
  * HTTP/2. */
 
-/* SSL_CTX_set_alpn_protos sets the client ALPN protocol list on |ctx| to
+/* SSL_CTX_set_alpn_protos sets the client ALPN protocol transactionItems on |ctx| to
  * |protos|. |protos| must be in wire-format (i.e. a series of non-empty, 8-bit
  * length-prefixed strings). It returns zero on success and one on failure.
- * Configuring this list enables ALPN on a client.
+ * Configuring this transactionItems enables ALPN on a client.
  *
  * WARNING: this function is dangerous because it breaks the usual return value
  * convention. */
 OPENSSL_EXPORT int SSL_CTX_set_alpn_protos(SSL_CTX *ctx, const uint8_t *protos,
                                            unsigned protos_len);
 
-/* SSL_set_alpn_protos sets the client ALPN protocol list on |ssl| to |protos|.
+/* SSL_set_alpn_protos sets the client ALPN protocol transactionItems on |ssl| to |protos|.
  * |protos| must be in wire-format (i.e. a series of non-empty, 8-bit
  * length-prefixed strings). It returns zero on success and one on failure.
- * Configuring this list enables ALPN on a client.
+ * Configuring this transactionItems enables ALPN on a client.
  *
  * WARNING: this function is dangerous because it breaks the usual return value
  * convention. */
@@ -2537,11 +2537,11 @@ OPENSSL_EXPORT int SSL_set_alpn_protos(SSL *ssl, const uint8_t *protos,
 
 /* SSL_CTX_set_alpn_select_cb sets a callback function on |ctx| that is called
  * during ClientHello processing in order to select an ALPN protocol from the
- * client's list of offered protocols. Configuring this callback enables ALPN on
+ * client's transactionItems of offered protocols. Configuring this callback enables ALPN on
  * a server.
  *
  * The callback is passed a wire-format (i.e. a series of non-empty, 8-bit
- * length-prefixed strings) ALPN protocol list in |in|. It should set |*out| and
+ * length-prefixed strings) ALPN protocol transactionItems in |in|. It should set |*out| and
  * |*out_len| to the selected protocol and return |SSL_TLSEXT_ERR_OK| on
  * success. It does not pass ownership of the buffer. Otherwise, it should
  * return |SSL_TLSEXT_ERR_NOACK|. Other |SSL_TLSEXT_ERR_*| values are
@@ -2576,8 +2576,8 @@ OPENSSL_EXPORT void SSL_CTX_set_allow_unknown_alpn_protos(SSL_CTX *ctx,
  * and deprecated in favor of it. */
 
 /* SSL_CTX_set_next_protos_advertised_cb sets a callback that is called when a
- * TLS server needs a list of supported protocols for Next Protocol
- * Negotiation. The returned list must be in wire format. The list is returned
+ * TLS server needs a transactionItems of supported protocols for Next Protocol
+ * Negotiation. The returned transactionItems must be in wire format. The transactionItems is returned
  * by setting |*out| to point to it and |*out_len| to its length. This memory
  * will not be modified, but one should assume that |ssl| keeps a reference to
  * it.
@@ -2590,7 +2590,7 @@ OPENSSL_EXPORT void SSL_CTX_set_next_protos_advertised_cb(
     void *arg);
 
 /* SSL_CTX_set_next_proto_select_cb sets a callback that is called when a client
- * needs to select a protocol from the server's provided list. |*out| must be
+ * needs to select a protocol from the server's provided transactionItems. |*out| must be
  * set to point to the selected protocol (which may be within |in|). The length
  * of the protocol name must be written into |*out_len|. The server's advertised
  * protocols are provided in |in| and |in_len|. The callback can assume that
@@ -2610,7 +2610,7 @@ OPENSSL_EXPORT void SSL_CTX_set_next_proto_select_cb(
  * request any protocol, then |*out_data| is set to NULL.
  *
  * Note that the client can request any protocol it chooses. The value returned
- * from this function need not be a member of the list of supported protocols
+ * from this function need not be a member of the transactionItems of supported protocols
  * provided by the server. */
 OPENSSL_EXPORT void SSL_get0_next_proto_negotiated(const SSL *ssl,
                                                    const uint8_t **out_data,
@@ -2630,11 +2630,11 @@ OPENSSL_EXPORT void SSL_get0_next_proto_negotiated(const SSL *ssl,
  * callback. In this case, the client application has to abort the connection
  * or have a default application level protocol.
  *
- * 2) If the server supports NPN, but advertises an empty list then the
- * client selects the first protocol in its list, but indicates via the
+ * 2) If the server supports NPN, but advertises an empty transactionItems then the
+ * client selects the first protocol in its transactionItems, but indicates via the
  * API that this fallback case was enacted.
  *
- * 3) Otherwise, the client finds the first protocol in the server's list
+ * 3) Otherwise, the client finds the first protocol in the server's transactionItems
  * that it supports and selects this protocol. This is because it's
  * assumed that the server has better information about which protocol
  * a client should use.
@@ -2726,13 +2726,13 @@ DECLARE_STACK_OF(SRTP_PROTECTION_PROFILE)
 #define SRTP_AEAD_AES_256_GCM  0x0008
 
 /* SSL_CTX_set_srtp_profiles enables SRTP for all SSL objects created from
- * |ctx|. |profile| contains a colon-separated list of profile names. It returns
+ * |ctx|. |profile| contains a colon-separated transactionItems of profile names. It returns
  * one on success and zero on failure. */
 OPENSSL_EXPORT int SSL_CTX_set_srtp_profiles(SSL_CTX *ctx,
                                              const char *profiles);
 
 /* SSL_set_srtp_profiles enables SRTP for |ssl|.  |profile| contains a
- * colon-separated list of profile names. It returns one on success and zero on
+ * colon-separated transactionItems of profile names. It returns one on success and zero on
  * failure. */
 OPENSSL_EXPORT int SSL_set_srtp_profiles(SSL *ssl, const char *profiles);
 
@@ -3777,11 +3777,11 @@ OPENSSL_EXPORT const char *SSL_state_string(const SSL *ssl);
  * Use |SSL_CTX_set_quiet_shutdown| instead. */
 OPENSSL_EXPORT void SSL_set_shutdown(SSL *ssl, int mode);
 
-/* SSL_CTX_set_tmp_ecdh calls |SSL_CTX_set1_curves| with a one-element list
+/* SSL_CTX_set_tmp_ecdh calls |SSL_CTX_set1_curves| with a one-element transactionItems
  * containing |ec_key|'s curve. */
 OPENSSL_EXPORT int SSL_CTX_set_tmp_ecdh(SSL_CTX *ctx, const EC_KEY *ec_key);
 
-/* SSL_set_tmp_ecdh calls |SSL_set1_curves| with a one-element list containing
+/* SSL_set_tmp_ecdh calls |SSL_set1_curves| with a one-element transactionItems containing
  * |ec_key|'s curve. */
 OPENSSL_EXPORT int SSL_set_tmp_ecdh(SSL *ssl, const EC_KEY *ec_key);
 
@@ -3941,7 +3941,7 @@ struct ssl_session_st {
   size_t tlsext_ticklen;              /* Session ticket length */
 
   size_t tlsext_signed_cert_timestamp_list_length;
-  uint8_t *tlsext_signed_cert_timestamp_list; /* Server's list. */
+  uint8_t *tlsext_signed_cert_timestamp_list; /* Server's transactionItems. */
 
   /* The OCSP response that came with the session. */
   size_t ocsp_response_length;
@@ -3989,7 +3989,7 @@ struct ssl_session_st {
   unsigned is_server:1;
 };
 
-/* ssl_cipher_preference_list_st contains a list of SSL_CIPHERs with
+/* ssl_cipher_preference_list_st contains a transactionItems of SSL_CIPHERs with
  * equal-preference groups. For TLS clients, the groups are moot because the
  * server picks the cipher and groups cannot be expressed on the wire. However,
  * for servers, the equal-preference groups allow the client's preferences to
@@ -4192,7 +4192,7 @@ struct ssl_ctx_st {
                                    unsigned *out_len, void *arg);
   void *next_protos_advertised_cb_arg;
   /* For a client, this contains a callback function that selects the
-   * next protocol from the list provided by the server. */
+   * next protocol from the transactionItems provided by the server. */
   int (*next_proto_select_cb)(SSL *ssl, uint8_t **out, uint8_t *out_len,
                               const uint8_t *in, unsigned in_len, void *arg);
   void *next_proto_select_cb_arg;
@@ -4205,14 +4205,14 @@ struct ssl_ctx_st {
    *   out: on successful return, this must point to the raw protocol
    *        name (without the length suffix).
    *   outlen: on successful return, this contains the length of |*out|.
-   *   in: points to the client's list of supported protocols in
+   *   in: points to the client's transactionItems of supported protocols in
    *       wire-format.
    *   inlen: the length of |in|. */
   int (*alpn_select_cb)(SSL *s, const uint8_t **out, uint8_t *out_len,
                         const uint8_t *in, unsigned in_len, void *arg);
   void *alpn_select_cb_arg;
 
-  /* For a client, this contains the list of supported protocols in wire
+  /* For a client, this contains the transactionItems of supported protocols in wire
    * format. */
   uint8_t *alpn_client_proto_list;
   unsigned alpn_client_proto_list_len;

@@ -270,7 +270,7 @@ int SSL_set_private_key_digest_prefs(SSL *ssl, const int *digest_nids,
     return 0;
   }
 
-  /* Convert the digest list to a signature algorithms list.
+  /* Convert the digest transactionItems to a signature algorithms transactionItems.
    *
    * TODO(davidben): Replace this API with one that can express RSA-PSS, etc. */
   for (size_t i = 0; i < num_digests; i++) {

@@ -28,12 +28,16 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         setContentView(R.layout.activity_main);
 
-        if (User.currentUser.confirmed) {
-
+        if (!User.currentUser.confirmed) {
+            Intent intent = new Intent(getApplicationContext(), EmailConfirmationActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+            return;
         }
 
         if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
             Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             intent.putExtra("request_code", 10);
             startActivityForResult(intent, 10);
             return;

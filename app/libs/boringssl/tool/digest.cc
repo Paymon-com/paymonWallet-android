@@ -375,7 +375,7 @@ static bool DigestSum(const EVP_MD *md,
     }
 
     if (arg == "-") {
-      // "-" ends the argument list and indicates that stdin should be used.
+      // "-" ends the argument transactionItems and indicates that stdin should be used.
       sources.push_back(Source(Source::STDIN));
       break;
     }

@@ -62,10 +62,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -622,7 +622,7 @@ static int read_v2_client_hello(SSL *ssl) {
   /* Write out an equivalent SSLv3 ClientHello. */
   size_t max_v3_client_hello = SSL3_HM_HEADER_LENGTH + 2 /* version */ +
                                SSL3_RANDOM_SIZE + 1 /* session ID length */ +
-                               2 /* cipher list length */ +
+                               2 /* cipher transactionItems length */ +
                                CBS_len(&cipher_specs) / 3 * 2 +
                                1 /* compression length */ + 1 /* compression */;
   CBB client_hello, hello_body, cipher_suites;

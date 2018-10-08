@@ -62,10 +62,10 @@
  * are met:
  *
  * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer. 
+ *    notice, this transactionItems of conditions and the following disclaimer.
  *
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in
+ *    notice, this transactionItems of conditions and the following disclaimer in
  *    the documentation and/or other materials provided with the
  *    distribution.
  *
@@ -760,7 +760,7 @@ static const SSL_CIPHER *ssl3_choose_cipher(
         /* Check the cipher is supported for the server configuration. */
         (c->algorithm_mkey & mask_k) &&
         (c->algorithm_auth & mask_a) &&
-        /* Check the cipher is in the |allow| list. */
+        /* Check the cipher is in the |allow| transactionItems. */
         sk_SSL_CIPHER_find(allow, &cipher_index, c)) {
       if (in_group_flags != NULL && in_group_flags[i] == 1) {
         /* This element of |prio| is in a group. Update the minimum index found

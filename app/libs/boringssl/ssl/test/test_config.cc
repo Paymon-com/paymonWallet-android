@@ -151,8 +151,8 @@ const Flag<std::string> kStringFlags[] = {
   { "-export-label", &TestConfig::export_label },
   { "-export-context", &TestConfig::export_context },
   { "-expect-peer-cert-file", &TestConfig::expect_peer_cert_file },
-  { "-use-client-ca-list", &TestConfig::use_client_ca_list },
-  { "-expect-client-ca-list", &TestConfig::expected_client_ca_list },
+  { "-use-client-ca-transactionItems", &TestConfig::use_client_ca_list },
+  { "-expect-client-ca-transactionItems", &TestConfig::expected_client_ca_list },
 };
 
 const Flag<std::string> kBase64Flags[] = {
@@ -178,7 +178,7 @@ const Flag<int> kIntFlags[] = {
     &TestConfig::expect_peer_signature_algorithm },
   { "-expect-curve-gid", &TestConfig::expect_curve_id },
   { "-initial-timeout-duration-ms", &TestConfig::initial_timeout_duration_ms },
-  { "-max-cert-list", &TestConfig::max_cert_list },
+  { "-max-cert-transactionItems", &TestConfig::max_cert_list },
   { "-expect-cipher-aes", &TestConfig::expect_cipher_aes },
   { "-expect-cipher-no-aes", &TestConfig::expect_cipher_no_aes },
   { "-resumption-delay", &TestConfig::resumption_delay },
@@ -287,7 +287,7 @@ bool ParseConfig(int argc, char **argv, bool is_resume,
         return false;
       }
 
-      // Each instance of the flag adds to the list.
+      // Each instance of the flag adds to the transactionItems.
       if (!skip) {
         int_vector_field->push_back(atoi(argv[i]));
       }

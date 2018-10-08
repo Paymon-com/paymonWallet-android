@@ -502,7 +502,7 @@
     <!--<string name="email_not_confirmed_title">Ваша электронная почта</string>-->
     <!--<string name="email_not_confirmed_title2">не подтверждена. Проверьте свою электронную почту. Если вы не получили письмо, проверьте папку спам или отправьте его еще раз.</string>-->
     <!--<string name="reg_check_login_used">Такой логин уже занят</string>-->
-    <string name="registration_email_used">Такая электронная почта уже используется</string>
+    <string name="registration_email_used">Такая электронная почта или логин уже используются</string>
     <!--<string name="restart_application">Пожалуйста, перезапустите приложение</string>-->
     <!--<string name="upload_photo">Загрузка фотографии</string>-->
     <!--<string name="upload_photo_hint">Пожалуйста, подождите…</string>-->

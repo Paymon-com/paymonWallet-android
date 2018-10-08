@@ -87,7 +87,7 @@ typedef struct x509_file_st
 	{
 	int num_paths;	/* number of paths to files or directories */
 	int num_alloced;
-	char **paths;	/* the list of paths or directories */
+	char **paths;	/* the transactionItems of paths or directories */
 	int *path_type;
 	} X509_CERT_FILE_CTX;
 
