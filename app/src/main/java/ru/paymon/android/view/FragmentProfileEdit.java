@@ -69,6 +69,8 @@ public class FragmentProfileEdit extends Fragment {
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
+        hideEmailSwitch.setChecked(User.currentUser.isEmailHidden);
+
         if (!User.currentUser.photoURL.url.isEmpty())
             Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
 
@@ -151,6 +153,8 @@ public class FragmentProfileEdit extends Fragment {
                 user.first_name = firstName.getText().toString();
                 user.last_name = lastName.getText().toString();
                 user.email = email.getText().toString();
+                user.isEmailHidden= hideEmailSwitch.isChecked();
+
 
                 ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
