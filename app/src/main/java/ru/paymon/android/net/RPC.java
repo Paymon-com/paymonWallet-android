@@ -730,8 +730,9 @@ public class RPC {
         public int creatorID;
         public String title;
         //        public int date;
+//        public ArrayList<UserObject> users = new ArrayList<>();
         @TypeConverters(UsersArrayConverter.class)
-        public ArrayList<UserObject> users = new ArrayList<>();
+        public ArrayList<Integer> users = new ArrayList<>();
         @TypeConverters(PhotoUrlConverter.class)
         public PM_photoURL photoURL;
 
@@ -763,11 +764,12 @@ public class RPC {
             }
             int count = stream.readInt32(exception);
             for (int i = 0; i < count; i++) {
-                UserObject object = UserObject.deserialize(stream, stream.readInt32(exception), exception);
-                if (object == null) {
-                    return;
-                }
-                users.add(object);
+//                UserObject object = UserObject.deserialize(stream, stream.readInt32(exception), exception);
+                Integer uid = stream.readInt32(exception);
+//                if (uid == null) {
+//                    return;
+//                }
+                users.add(uid);
             }
 
             magic = stream.readInt32(exception);
@@ -787,7 +789,12 @@ public class RPC {
             stream.writeInt32(id);
             stream.writeInt32(creatorID);
             stream.writeString(title);
-            writeArray(stream, users);
+            stream.writeInt32(SVUID_ARRAY);
+            stream.writeInt32(users.size());
+            for (Integer uid : users) {
+                stream.writeInt32(uid);
+            }
+//            writeArray(stream, users);
             photoURL.serializeToStream(stream);
         }
     }
@@ -899,6 +906,7 @@ public class RPC {
         public ArrayList<Message> messages = new ArrayList<>();
         public ArrayList<Group> groups = new ArrayList<>();
         public ArrayList<UserObject> users = new ArrayList<>();
+        public ArrayList<Peer> peers = new ArrayList<>();
         public int count;
 
         public void readParams(SerializableData stream, boolean exception) {
@@ -947,6 +955,21 @@ public class RPC {
                 }
                 users.add(object);
             }
+            magic = stream.readInt32(exception);
+            if (magic != SVUID_ARRAY) {
+                if (exception) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", magic));
+                }
+                return;
+            }
+            count = stream.readInt32(exception);
+            for (int i = 0; i < count; i++) {
+                Peer object = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
+                if (object == null) {
+                    return;
+                }
+                peers.add(object);
+            }
         }
 
         public void serializeToStream(SerializableData stream) {
@@ -954,6 +977,7 @@ public class RPC {
             writeArray(stream, messages);
             writeArray(stream, groups);
             writeArray(stream, users);
+            writeArray(stream, peers);
         }
     }
 
