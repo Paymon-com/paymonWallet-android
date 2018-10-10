@@ -12,7 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.mikhaellopez.circularimageview.CircularImageView;
+import ru.paymon.android.components.CircularImageView;
 
 import java.util.LinkedList;
 

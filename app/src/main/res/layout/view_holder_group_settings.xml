@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.mikhaellopez.circularimageview.CircularImageView
+    <ru.paymon.android.components.CircularImageView
         android:id="@+id/cell_group_participant_photo"
         android:layout_width="60dp"
         android:layout_height="60dp"

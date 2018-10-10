@@ -183,7 +183,7 @@ public class User {
         editor.putString(CLIENT_BASIC_DATE_FORMAT_LIST, ApplicationLoader.applicationContext.getString(R.string.date_format_24h));
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_DONT_WORRY_SWITCH, false);
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_VIBRATION_SWITCH, true);
-        editor.putString(CLIENT_BASIC_DATE_FORMAT_LIST, "");//TODO:default sound file uri
+        editor.putString(CLIENT_MESSAGES_NOTIFY_SOUND_PREFERENCE, "");//TODO:default sound file uri
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_NOTIFICATIONS_ENABLED_SWITCH, true);
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_TRANSACTIONS_SWITCH, true);
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_FRIENDS_INVITES_SWITCH, true);

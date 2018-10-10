@@ -61,7 +61,7 @@
             <!--app:layout_constraintTop_toTopOf="parent"-->
             <!--app:srcCompat="@drawable/circle_button" />-->
 
-        <com.mikhaellopez.circularimageview.CircularImageView
+        <ru.paymon.android.components.CircularImageView
             android:id="@+id/group_settings_photo"
             android:layout_width="80dp"
             android:layout_height="80dp"

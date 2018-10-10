@@ -73,4 +73,13 @@
     <color name="scan_result_dots">#c099cc00</color>
 
     <color name="colorAccent">@color/blue_dark</color>
+    <color name="borderGreen">#8BC34A</color>
+    <color name="borderBlue">#33b5e5</color>
+    <color name="borderRed">#e15754</color>
+    <color name="borderGreenGradientFrom">#33b5e5</color>
+    <color name="borderRedGradientFrom">#33b5e5</color>
+    <color name="borderBlueGradientFrom">#323232</color>
+    <color name="borderGreenGradientTo">#45ba56</color>
+    <color name="borderRedGradientTo">#e15754</color>
+    <color name="borderBlueGradientTo">#33b5e5</color>
 </resources>

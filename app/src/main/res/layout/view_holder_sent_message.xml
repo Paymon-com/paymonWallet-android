@@ -4,47 +4,59 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="?android:attr/activatedBackgroundIndicator"
-    android:paddingEnd="8dp"
-    android:paddingStart="72dp"
-    android:paddingBottom="2dp"
-    android:paddingTop="1dp"
+    android:gravity="end"
     android:orientation="horizontal"
-    android:gravity="end">
+    android:paddingStart="72dp"
+    android:paddingTop="1dp"
+    android:paddingEnd="8dp"
+    android:paddingBottom="2dp">
 
     <LinearLayout
-        android:id="@+id/bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
-        android:layout_marginRight="2dp"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="4dp"
-        android:background="@drawable/background_msg_sent"
+        android:background="@color/bg_dialog_title"
         android:orientation="vertical">
 
-        <com.vanniktech.emoji.EmojiTextView
-            android:id="@+id/message_text_view"
+        <LinearLayout
+            android:id="@+id/bubble"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="2dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/default_message_sent_color"
-            android:textSize="16sp"/>
+            android:background="@drawable/background_msg_sent"
+            android:orientation="vertical">
+
+            <com.vanniktech.emoji.EmojiTextView
+                android:id="@+id/message_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/roboto_thin"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/timestamp_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:layout_marginEnd="8dp"
+            android:layout_gravity="end"
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
-            android:textColor="@color/default_tstamp_color"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="4dp"
+            android:fontFamily="@font/roboto_thin"
+            android:textColor="@color/white"
             android:textSize="@dimen/default_timestamp_text_size"
-            android:layout_gravity="end"
             tools:text="12:10 am" />
 
     </LinearLayout>
+
 </LinearLayout>

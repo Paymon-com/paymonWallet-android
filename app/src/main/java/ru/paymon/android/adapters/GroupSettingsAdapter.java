@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mikhaellopez.circularimageview.CircularImageView;
+import ru.paymon.android.components.CircularImageView;
 
 import java.util.LinkedList;
 

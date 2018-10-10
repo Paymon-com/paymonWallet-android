@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.mikhaellopez.circularimageview.CircularImageView;
+import ru.paymon.android.components.CircularImageView;
 import com.vanniktech.emoji.EmojiTextView;
 
 import androidx.recyclerview.selection.SelectionTracker;

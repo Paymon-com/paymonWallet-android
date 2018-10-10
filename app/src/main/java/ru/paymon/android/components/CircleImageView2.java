@@ -4,7 +4,7 @@
 //import android.graphics.Bitmap;
 //import android.util.AttributeSet;
 //
-//import com.mikhaellopez.circularimageview.CircularImageView;
+//import ru.paymon.android.components.CircularImageView;
 //
 //import ru.paymon.android.ApplicationLoader;
 //import ru.paymon.android.MediaManager;

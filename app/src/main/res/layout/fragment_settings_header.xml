@@ -16,7 +16,7 @@
         <!--app:layout_constraintTop_toTopOf="parent"-->
         <!--app:srcCompat="@android:color/holo_green_dark" />-->
 
-    <com.mikhaellopez.circularimageview.CircularImageView
+    <ru.paymon.android.components.CircularImageView
         android:id="@+id/fragment_settings_header_profile_avatar_image_view"
         android:layout_width="40dp"
         android:layout_height="40dp"

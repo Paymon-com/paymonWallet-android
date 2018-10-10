@@ -7,7 +7,9 @@ import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceManager;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
+import ru.paymon.android.User;
 
 import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_LIST;
 
@@ -46,7 +48,9 @@ public class FragmentSettingsBasic extends AbsFragmentSettings implements Shared
             ListPreference listPreference = (ListPreference) preference;
             int prefIndex = listPreference.findIndexOfValue(sharedPreferences.getString(key, ""));
             if (prefIndex >= 0) {
-                preference.setSummary(listPreference.getEntries()[prefIndex]);
+                String value = listPreference.getEntries()[prefIndex].toString();
+                preference.setSummary(value);
+                User.CLIENT_BASIC_DATE_FORMAT_IS_24H = value.equals(ApplicationLoader.applicationContext.getString(R.string.date_format_24h));
             }
         }
     }

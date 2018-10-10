@@ -9,7 +9,7 @@
     android:paddingBottom="2dp"
     android:paddingTop="1dp">
 
-    <com.mikhaellopez.circularimageview.CircularImageView
+    <ru.paymon.android.components.CircularImageView
         android:id="@+id/photo_wallet_received_group"
         android:layout_width="48dp"
         android:layout_height="48dp"

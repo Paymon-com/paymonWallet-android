@@ -19,8 +19,8 @@
     <string name="hide_phone">Скрыть телефон</string>
     <string name="hide_username">Скрыть имя пользователя</string>
 
-    <string name="date_format_24h">24</string>
-    <string name="date_format_12h">12 AM/PM</string>
+    <string name="date_format_24h">24 часовой</string>
+    <string name="date_format_12h">12 часовой</string>
 
     <string name="profile_edit_failed">Изменения не сохранены</string>
     <string name="profile_edit_success">Профиль успешно изменен</string>

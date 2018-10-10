@@ -10,7 +10,7 @@
     android:paddingBottom="2dp"
     android:paddingTop="1dp">
 
-    <com.mikhaellopez.circularimageview.CircularImageView
+    <ru.paymon.android.components.CircularImageView
         android:id="@+id/message_group_received_video_photo"
         android:layout_width="48dp"
         android:layout_height="48dp"

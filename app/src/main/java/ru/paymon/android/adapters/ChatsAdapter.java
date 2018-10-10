@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.mikhaellopez.circularimageview.CircularImageView;
+import ru.paymon.android.components.CircularImageView;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;

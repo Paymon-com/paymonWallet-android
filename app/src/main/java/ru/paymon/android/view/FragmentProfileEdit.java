@@ -19,7 +19,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.mikhaellopez.circularimageview.CircularImageView;
+import ru.paymon.android.components.CircularImageView;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vanniktech.rxpermission.Permission;
