@@ -21,7 +21,7 @@
         <!--app:srcCompat="@drawable/profile_photo_none" />-->
 
 
-    <com.mikhaellopez.circularimageview.CircularImageView
+    <ru.paymon.android.components.CircularImageView
         android:id="@+id/profile_update_photo"
         android:layout_width="60dp"
         android:layout_height="60dp"

@@ -47,7 +47,7 @@
                 app:layout_constraintTop_toTopOf="@+id/friend_profile_avatar_image_view"
                 tools:text="Имя Фмаилия" />
 
-            <com.mikhaellopez.circularimageview.CircularImageView
+            <ru.paymon.android.components.CircularImageView
                 android:id="@+id/friend_profile_avatar_image_view"
                 android:layout_width="70dp"
                 android:layout_height="70dp"

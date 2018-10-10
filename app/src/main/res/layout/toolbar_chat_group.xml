@@ -1,40 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="?attr/colorPrimary"
-    android:orientation="horizontal"
-    android:weightSum="10">
+    android:background="@color/colorPrimary">
 
-    <ImageView
+    <ImageButton
         android:id="@+id/toolbar_back_btn"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="2dp"
-        android:layout_marginTop="2dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginEnd="2dp"
-        android:src="@drawable/ic_arrow_back"
-        android:layout_weight="0.01"/>
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_arrow_back" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_weight="10"
-        >
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="8dp"
+        android:gravity="center">
 
-        <com.mikhaellopez.circularimageview.CircularImageView
+        <ru.paymon.android.components.CircularImageView
             android:id="@+id/chat_group_avatar"
             android:layout_width="40dp"
             android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:src="@drawable/profile_photo_none"
-            local:civ_border_color="#EEEEEE"
+            local:civ_border="true"
+            local:civ_border_color="@color/borderBlue"
             local:civ_border_width="2dp"
-            local:civ_shadow="true"
-            local:civ_shadow_radius="0" />
+            local:civ_shadow="false" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -45,23 +44,27 @@
                 android:id="@+id/toolbar_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/white"
-                android:textStyle="bold"
-                android:text=""/>
+                android:textSize="18sp"
+                tools:text="Name group" />
 
             <TextView
                 android:id="@+id/participants_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
                 android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/white" />
+                android:textSize="12sp"
+                android:layout_gravity="center"
+                android:textColor="@color/white"
+                tools:text="participants" />
+
         </LinearLayout>
 
     </LinearLayout>
+
 </LinearLayout>

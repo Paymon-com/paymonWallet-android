@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.mikhaellopez.circularimageview.CircularImageView;
+import ru.paymon.android.components.CircularImageView;
 import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 
@@ -51,7 +51,7 @@ public abstract class AbsFragmentChat extends Fragment {
 
     public RecyclerView messagesRecyclerView;
     public EmojiEditText messageInput;
-    public Button sendButton;
+    public ImageButton sendButton;
     public ImageView emoticonsButton;
     public ConstraintLayout includeAttachment;
     public ImageButton buttonAttachment;
@@ -110,13 +110,13 @@ public abstract class AbsFragmentChat extends Fragment {
 
         messageInput = (EmojiEditText) view.findViewById(R.id.input_edit_text);
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
-        sendButton = (Button) view.findViewById(R.id.sendButton);
+        sendButton = (ImageButton) view.findViewById(R.id.sendButton);
         emoticonsButton = (ImageView) view.findViewById(R.id.smilesButton);
-        includeAttachment = (ConstraintLayout) view.findViewById(R.id.fragment_chat_attachment_include);
-        buttonAttachment = (ImageButton) view.findViewById(R.id.attach_button);
-        buttonDocumentAttachment = (ImageButton) view.findViewById(R.id.document_chat_attachment);
-        buttonImageAttachment = (ImageButton) view.findViewById(R.id.image_chat_attachment);
-        buttonVideoAttachment = (ImageButton) view.findViewById(R.id.video_chat_attachment);
+//        includeAttachment = (ConstraintLayout) view.findViewById(R.id.fragment_chat_attachment_include);
+//        buttonAttachment = (ImageButton) view.findViewById(R.id.attach_button);
+//        buttonDocumentAttachment = (ImageButton) view.findViewById(R.id.document_chat_attachment);
+//        buttonImageAttachment = (ImageButton) view.findViewById(R.id.image_chat_attachment);
+//        buttonVideoAttachment = (ImageButton) view.findViewById(R.id.video_chat_attachment);
         toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
 
         final Bundle bundle = new Bundle();
@@ -160,34 +160,34 @@ public abstract class AbsFragmentChat extends Fragment {
         toolbarContainer.addView(toolbarViewSelected);
         backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
-        buttonDocumentAttachment.setOnClickListener(view13 -> {
-            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-            Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/myFolder/");
-            intent.setDataAndType(uri, "*/*");
-            startActivityForResult(Intent.createChooser(intent, "Open folder"), PICK_DOCUMENT_ID);
-            includeAttachment.setVisibility(View.GONE);
-        });
+//        buttonDocumentAttachment.setOnClickListener(view13 -> {
+//            Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//            Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "/myFolder/");
+//            intent.setDataAndType(uri, "*/*");
+//            startActivityForResult(Intent.createChooser(intent, "Open folder"), PICK_DOCUMENT_ID);
+//            includeAttachment.setVisibility(View.GONE);
+//        });
 
-        buttonImageAttachment.setOnClickListener(view12 -> {
+//        buttonImageAttachment.setOnClickListener(view12 -> {
 //            Intent chooseImageIntent = ImagePicker.getPickImageIntent(ApplicationLoader.applicationContext, "Выберите");//TODO:string
 //            startActivityForResult(chooseImageIntent, PICK_IMAGE_ID);
 //            includeAttachment.setVisibility(View.GONE);
-        });
+//        });
 
-        buttonVideoAttachment.setOnClickListener(view14 -> {
-            Intent chooseVideoIntent = new Intent(Intent.ACTION_PICK);
-            chooseVideoIntent.setType("video/*");
-            startActivityForResult(chooseVideoIntent, PICK_VIDEO_ID);
-            includeAttachment.setVisibility(View.GONE);
-        });
-
-        buttonAttachment.setOnClickListener((view1) -> {
-            if (includeAttachment.getVisibility() == View.GONE) {
-                includeAttachment.setVisibility(View.VISIBLE);
-            } else {
-                includeAttachment.setVisibility(View.GONE);
-            }
-        });
+//        buttonVideoAttachment.setOnClickListener(view14 -> {
+//            Intent chooseVideoIntent = new Intent(Intent.ACTION_PICK);
+//            chooseVideoIntent.setType("video/*");
+//            startActivityForResult(chooseVideoIntent, PICK_VIDEO_ID);
+//            includeAttachment.setVisibility(View.GONE);
+//        });
+//
+//        buttonAttachment.setOnClickListener((view1) -> {
+//            if (includeAttachment.getVisibility() == View.GONE) {
+//                includeAttachment.setVisibility(View.VISIBLE);
+//            } else {
+//                includeAttachment.setVisibility(View.GONE);
+//            }
+//        });
 
         final EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(emoticonsButton).build(messageInput);
         emoticonsButton.setOnClickListener((view1) -> emojiPopup.toggle());

@@ -75,7 +75,7 @@
         app:layout_constraintTop_toTopOf="@+id/profile_avatar_image_view"
         app:layout_constraintVertical_chainStyle="spread" />
 
-    <com.mikhaellopez.circularimageview.CircularImageView
+    <ru.paymon.android.components.CircularImageView
         android:id="@+id/profile_avatar_image_view"
         android:layout_width="70dp"
         android:layout_height="70dp"
