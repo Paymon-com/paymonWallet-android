@@ -82,8 +82,8 @@ public abstract class AbsFragmentChat extends Fragment {
         if (bundle != null) {
             if (bundle.containsKey(CHAT_ID_KEY))
                 chatID = bundle.getInt(CHAT_ID_KEY);
-            if (bundle.containsKey(CHAT_GROUP_USERS))
-                groupUsers = bundle.getParcelableArrayList(CHAT_GROUP_USERS);
+//            if (bundle.containsKey(CHAT_GROUP_USERS))
+//                groupUsers = bundle.getParcelableArrayList(CHAT_GROUP_USERS);
         }
 
         if (User.currentUser == null || chatID == 0) return;
@@ -140,6 +140,7 @@ public abstract class AbsFragmentChat extends Fragment {
             toolbarAvatar = (CircularImageView) toolbarView.findViewById(R.id.chat_group_avatar);
             backToolbar = (ImageView) toolbarView.findViewById(R.id.toolbar_back_btn);
             final RPC.Group group = GroupsManager.getInstance().getGroup(chatID);
+            groupUsers = GroupsManager.getInstance().getGroupUsers(chatID);
             if (group != null) {
                 chatTitleTextView.setText(group.title);
                 participantsCountTextView.setText(String.format("%s: %d", getString(R.string.participants), ((FragmentGroupChat) this).groupUsers.size()));

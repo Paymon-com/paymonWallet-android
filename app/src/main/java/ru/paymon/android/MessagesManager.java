@@ -51,7 +51,7 @@ public class MessagesManager {
                     } else {
                         chatsItem.fileType = message.itemType;
                         chatsItem.lastMessageText = message.text;
-                        chatsItem.lastMsgPhotoURL = userObject.photoURL;
+                        chatsItem.photoURL = userObject.photoURL;
                         chatsItem.time = message.date;
                     }
                     ApplicationLoader.db.chatDao().insert(chatsItem);
@@ -63,7 +63,7 @@ public class MessagesManager {
                 } else {
                     chatsItem.fileType = message.itemType;
                     chatsItem.lastMessageText = message.text;
-                    chatsItem.lastMsgPhotoURL = user.photoURL;
+                    chatsItem.photoURL = user.photoURL;
                     chatsItem.time = message.date;
                 }
                 ApplicationLoader.db.chatDao().insert(chatsItem);

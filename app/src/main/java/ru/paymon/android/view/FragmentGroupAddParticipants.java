@@ -108,13 +108,8 @@ public class FragmentGroupAddParticipants extends Fragment {
                     return;
                 }
 
-                for (Integer uid : addParticipantsRequest.userIDs) {
-                    RPC.UserObject user = UsersManager.getInstance().getUser(uid);
-                    ArrayList<RPC.UserObject> userObjects = GroupsManager.getInstance().getGroup(chatID).users;
-                    if (user != null) {
-                        userObjects.add(user);
-                    }
-                }
+                group.users.addAll(addParticipantsRequest.userIDs);
+                GroupsManager.getInstance().putGroup(group);
 
                 ApplicationLoader.applicationHandler.post(() -> {
                     if (dialogProgress != null && dialogProgress.isShowing())

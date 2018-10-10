@@ -96,7 +96,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                     getDialog().dismiss();
                     Bundle bundle = new Bundle();
                     bundle.putInt(CHAT_ID_KEY, group.id);
-                    bundle.putParcelableArrayList(CHAT_GROUP_USERS, group.users);
+//                    bundle.putParcelableArrayList(CHAT_GROUP_USERS, group.users);
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
                 }
 

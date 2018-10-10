@@ -84,9 +84,9 @@ public class ApplicationLoader extends Application {
         rxPermission = RealRxPermission.getInstance(this);
 
         User.loadConfig();
-        Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000))/*.indicatorsEnabled(true)*/.build());
+        Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000)).build());
         EmojiManager.install(new CustomEmojiProvider());
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database").allowMainThreadQueries().build();
+        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database").allowMainThreadQueries().build();//TODO:delete allow main thread queries
 
         IntentFilter networkIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         ApplicationLoader.applicationContext.registerReceiver(new NetworkStateReceiver(), networkIntentFilter);

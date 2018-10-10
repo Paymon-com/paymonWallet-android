@@ -21,6 +21,7 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.net.NetworkManager;
 
 public class FragmentSettings extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
     private TextView toolbarTitle;
@@ -86,6 +87,8 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 break;
             case R.id.settings_exit:
                 User.clearConfig();
+                ApplicationLoader.db.clearAllTables();
+                NetworkManager.getInstance().reconnect();
                 PackageManager packageManager = ApplicationLoader.applicationContext.getPackageManager();
                 Intent intent = packageManager.getLaunchIntentForPackage(ApplicationLoader.applicationContext.getPackageName());
                 ComponentName componentName = intent.getComponent();

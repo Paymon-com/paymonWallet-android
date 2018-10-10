@@ -1,5 +1,6 @@
 package ru.paymon.android;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import ru.paymon.android.net.RPC;
@@ -32,5 +33,15 @@ public class GroupsManager {
 
     public RPC.Group getGroup(int gid) {
         return ApplicationLoader.db.groupDao().getGroupById(gid);
+    }
+
+    public ArrayList<RPC.UserObject> getGroupUsers(int gid){
+        ArrayList<RPC.UserObject> result = new ArrayList<>();
+        RPC.Group group = ApplicationLoader.db.groupDao().getGroupById(gid);
+        for (Integer uid : group.users){
+            RPC.UserObject user = ApplicationLoader.db.userDao().getUserById(uid);
+            result.add(user);
+        }
+        return result;
     }
 }

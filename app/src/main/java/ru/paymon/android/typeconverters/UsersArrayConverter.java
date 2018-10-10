@@ -4,28 +4,45 @@ import android.arch.persistence.room.TypeConverter;
 
 import java.util.ArrayList;
 
-import ru.paymon.android.UsersManager;
-import ru.paymon.android.net.RPC;
-
 public class UsersArrayConverter {
 
+//    @TypeConverter
+//    public static String toString(ArrayList<RPC.UserObject> userObjects) {
+//        String result = "";
+//        for (RPC.UserObject user : userObjects) {
+//            result += user.id + ";";
+//        }
+//        UsersManager.getInstance().putUsers(userObjects);
+//        return result;
+//    }
+//
+//    @TypeConverter
+//    public static ArrayList<RPC.UserObject> toArray(String string) {
+//        String[] parts = string.split(";");
+//        ArrayList<RPC.UserObject> result = new ArrayList<>();
+//        for (String part : parts) {
+//            int id = Integer.parseInt(part);
+//            result.add(UsersManager.getInstance().getUser(id));
+//        }
+//        return result;
+//    }
+
     @TypeConverter
-    public static String toString(ArrayList<RPC.UserObject> userObjects) {
+    public static String toString(ArrayList<Integer> uids) {
         String result = "";
-        for (RPC.UserObject user : userObjects) {
-            result += user.id + ";";
+        for (Integer uid : uids) {
+            result += uid + ";";
         }
-        UsersManager.getInstance().putUsers(userObjects);
         return result;
     }
 
     @TypeConverter
-    public static ArrayList<RPC.UserObject> toArray(String string) {
+    public static ArrayList<Integer> toArray(String string) {
         String[] parts = string.split(";");
-        ArrayList<RPC.UserObject> result = new ArrayList<>();
+        ArrayList<Integer> result = new ArrayList<>();
         for (String part : parts) {
             int id = Integer.parseInt(part);
-            result.add(UsersManager.getInstance().getUser(id));
+            result.add(id);
         }
         return result;
     }

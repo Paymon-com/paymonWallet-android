@@ -230,7 +230,7 @@ public class FragmentGroupSettings extends Fragment {
         Utils.hideBottomBar(getActivity());
 
         list.clear();
-        ArrayList<RPC.UserObject> users = GroupsManager.getInstance().getGroup(chatID).users;
+        ArrayList<RPC.UserObject> users = GroupsManager.getInstance().getGroupUsers(chatID);
         for (RPC.UserObject user : users) {
             list.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
         }

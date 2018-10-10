@@ -144,7 +144,6 @@ public class NetworkManager {
     }
 
     public void reconnect() {
-//        ApplicationLoader.applicationHandler.post(() -> NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didDisconnectedFromTheServer));
         reset();
         native_reconnect();
     }

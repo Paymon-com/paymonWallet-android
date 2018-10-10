@@ -40,7 +40,6 @@ import static ru.paymon.android.net.RPC.ERROR_AUTH;
 import static ru.paymon.android.net.RPC.ERROR_AUTH_TOKEN;
 import static ru.paymon.android.net.RPC.ERROR_KEY;
 import static ru.paymon.android.net.RPC.ERROR_SPAMMING;
-import static ru.paymon.android.view.AbsFragmentChat.CHAT_GROUP_USERS;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class ConnectorService extends Service implements NotificationManager.IListener {
@@ -70,8 +69,8 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                     actIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     Bundle bundle = new Bundle();
                     bundle.putInt(CHAT_ID_KEY, cid);
-                    if (isGroup)
-                        bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().getGroup(cid).users);
+//                    if (isGroup)
+//                        bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().getGroup(cid).users);
                     actIntent.putExtra("OPEN_CHAT_BUNDLE", bundle);
                     notificationManager.cancel(NOTIFY_ID);
                     startActivity(actIntent);

@@ -22,7 +22,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.navigation.Navigation;
-import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.ChatsAdapter;
@@ -33,7 +32,6 @@ import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.ChatsViewModel;
 import ru.paymon.android.viewmodels.MainViewModel;
 
-import static ru.paymon.android.view.AbsFragmentChat.CHAT_GROUP_USERS;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
@@ -87,7 +85,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
             final Bundle bundle = new Bundle();
             bundle.putInt(CHAT_ID_KEY, chatsItem.chatID);
             if (chatsItem.isGroup) {
-                bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().getGroup(chatsItem.chatID).users);
+//                bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().getGroup(chatsItem.chatID).users);
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
             } else {
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
