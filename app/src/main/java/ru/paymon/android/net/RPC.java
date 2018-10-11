@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import ru.paymon.android.User;
 import ru.paymon.android.typeconverters.FileTypeConverter;
 import ru.paymon.android.typeconverters.MessageActionConverter;
 import ru.paymon.android.typeconverters.PeerConverter;
@@ -1080,7 +1081,7 @@ public class RPC {
             }
 
             to_peer = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
-            to_id = to_peer instanceof PM_peerUser ? to_peer.user_id : to_peer.group_id;
+            to_id = to_peer instanceof PM_peerUser ? (User.currentUser.id == from_id ? to_peer.user_id : from_id) : to_peer.group_id;
             if (from_id == 0) {
                 if (to_peer.user_id != 0) {
                     from_id = to_peer.user_id;
@@ -1145,7 +1146,7 @@ public class RPC {
             }
 
             to_peer = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
-            to_id = to_peer instanceof PM_peerUser ? to_peer.user_id : to_peer.group_id;
+            to_id = to_peer instanceof PM_peerUser ? (User.currentUser.id == from_id ? to_peer.user_id : from_id) : to_peer.group_id;
             if (from_id == 0) {
                 if (to_peer.user_id != 0) {
                     from_id = to_peer.user_id;

@@ -1,4 +1,4 @@
-package ru.paymon.android.gateway;
+package ru.paymon.android.gateway.ethereum;
 
 import android.Manifest;
 import android.content.Intent;
@@ -52,7 +52,7 @@ import ru.paymon.android.User;
 import ru.paymon.android.utils.Utils;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
-import static ru.paymon.android.gateway.Ethereum.TX_STATUS.DONE;
+import static ru.paymon.android.gateway.ethereum.Ethereum.TX_STATUS.DONE;
 
 
 public class Ethereum {

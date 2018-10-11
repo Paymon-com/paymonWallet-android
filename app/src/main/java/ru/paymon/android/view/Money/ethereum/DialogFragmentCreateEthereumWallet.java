@@ -15,7 +15,7 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.gateway.Ethereum;
+import ru.paymon.android.gateway.ethereum.Ethereum;
 import ru.paymon.android.utils.Utils;
 
 public class DialogFragmentCreateEthereumWallet extends DialogFragment {

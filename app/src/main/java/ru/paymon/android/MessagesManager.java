@@ -31,6 +31,8 @@ public class MessagesManager {
         return lastMessageID.incrementAndGet();
     }
 
+
+
     public void putMessage(final RPC.Message message) {
         ApplicationLoader.db.chatMessageDao().insert(message);
         boolean isGroup = !(message.to_peer instanceof RPC.PM_peerUser);

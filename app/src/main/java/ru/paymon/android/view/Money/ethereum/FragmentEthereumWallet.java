@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.EthereumTransactionAdapter;
-import ru.paymon.android.gateway.Ethereum;
+import ru.paymon.android.gateway.ethereum.Ethereum;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.Money.DialogFragmentDeleteWallet;

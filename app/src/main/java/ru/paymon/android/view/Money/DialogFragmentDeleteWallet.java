@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.gateway.Ethereum;
+import ru.paymon.android.gateway.ethereum.Ethereum;
 import ru.paymon.android.utils.Utils;
 
 public class DialogFragmentDeleteWallet extends DialogFragment {

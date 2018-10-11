@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import ru.paymon.android.R;
-import ru.paymon.android.gateway.Ethereum;
+import ru.paymon.android.gateway.ethereum.Ethereum;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentEthereumWalletTransferInfo extends Fragment {

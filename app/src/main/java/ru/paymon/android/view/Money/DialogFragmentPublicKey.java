@@ -12,7 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ru.paymon.android.R;
-import ru.paymon.android.gateway.Ethereum;
+import ru.paymon.android.gateway.ethereum.Ethereum;
 import ru.paymon.android.utils.Utils;
 
 public class DialogFragmentPublicKey extends DialogFragment {

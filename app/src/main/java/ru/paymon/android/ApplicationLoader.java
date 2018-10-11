@@ -1,7 +1,6 @@
 package ru.paymon.android;
 
 import android.Manifest;
-import android.app.Application;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
@@ -58,7 +57,7 @@ import ru.paymon.android.utils.KeyGenerator;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 
-public class ApplicationLoader extends Application {
+public class ApplicationLoader extends WalletApplication {
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
     public static volatile AppDatabase db;

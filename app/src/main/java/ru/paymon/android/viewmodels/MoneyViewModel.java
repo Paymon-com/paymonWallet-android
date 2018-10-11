@@ -20,7 +20,7 @@ import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
 
 import ru.paymon.android.User;
-import ru.paymon.android.gateway.Ethereum;
+import ru.paymon.android.gateway.ethereum.Ethereum;
 import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.TransactionItem;
