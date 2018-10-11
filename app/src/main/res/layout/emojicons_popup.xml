@@ -111,8 +111,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@null"
-            android:id="@+id/emojis_backspace"
-            android:src="@drawable/emoji_x" />
+            android:id="@+id/emojis_backspace"/>
 
     </LinearLayout>
 
