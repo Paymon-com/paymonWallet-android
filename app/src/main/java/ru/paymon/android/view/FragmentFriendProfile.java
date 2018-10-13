@@ -177,6 +177,5 @@ public class FragmentFriendProfile extends Fragment {
         super.onResume();
         //Utils.setActionBarWithTitle(getActivity(), "Профиль");
         //Utils.setArrowBackInToolbar(getActivity());
-        Utils.showBottomBar(getActivity());
     }
 }

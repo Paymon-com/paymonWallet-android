@@ -33,9 +33,8 @@ import ru.paymon.android.view.FragmentFriendProfile;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 
-public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context context;
-    private LinkedList<UserItem> list;
+public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdapter.GroupsSettingsViewHolder> {
+    public LinkedList<UserItem> list;
     private boolean isCreator;
     private int chatID;
     private RPC.Group group;
@@ -48,40 +47,66 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
         isCreator = creatorID == User.currentUser.id;
     }
 
-
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public GroupsSettingsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_holder_group_settings, parent, false);
-        GroupsSettingsViewHolder holder = new GroupsSettingsViewHolder(view);
-        context = holder.itemView.getContext();
         return new GroupsSettingsViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull GroupsSettingsViewHolder holder, int position) {
         UserItem userItem = list.get(position);
-        GroupsSettingsViewHolder groupsSettingsViewHolder = (GroupsSettingsViewHolder) holder;
 
-        groupsSettingsViewHolder.name.setText(userItem.name);
+        if (userItem == null) return;
 
-        if (!userItem.photo.url.isEmpty())
-            Utils.loadPhoto(userItem.photo.url, groupsSettingsViewHolder.photo);
+        holder.bind(userItem);
+    }
 
-        if (userItem.uid == User.currentUser.id)
-            groupsSettingsViewHolder.removeButton.setVisibility(View.GONE);
+    @Override
+    public int getItemCount() {
+        return list.size();
+    }
 
-        groupsSettingsViewHolder.removeButton.setOnClickListener((view) ->
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(context);
-            builder.setTitle("Подтверждение удаления")
-                    .setMessage("Вы хотите удалить участника?")
-                    .setCancelable(true).setPositiveButton("Да", (dialogInterface, i) -> deleteParticipant(userItem)).setNegativeButton("Нет", (dialogInterface, i) -> {
+
+    public class GroupsSettingsViewHolder extends RecyclerView.ViewHolder {
+        private TextView name;
+        private CircularImageView photo;
+        private ImageView removeButton;
+
+        private GroupsSettingsViewHolder(View itemView) {
+            super(itemView);
+            name = (TextView) itemView.findViewById(R.id.cell_group_participant_name);
+            photo = (CircularImageView) itemView.findViewById(R.id.cell_group_participant_photo);
+            removeButton = (ImageView) itemView.findViewById(R.id.cell_group_participant_remove);
+
+            removeButton.setImageResource(R.drawable.ic_close);
+
+            if (!isCreator)
+                removeButton.setVisibility(View.GONE);
+        }
+
+        public void bind(UserItem userItem) {
+            name.setText(userItem.name);
+
+            if (!userItem.photo.url.isEmpty())
+                Utils.loadPhoto(userItem.photo.url, photo);
+
+            if (userItem.uid == User.currentUser.id)
+                removeButton.setVisibility(View.GONE);
+
+            removeButton.setOnClickListener((view) ->
+            {
+                AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
+                builder.setTitle("Подтверждение удаления") //TODO: добавить в стринг
+                        .setMessage("Вы хотите удалить участника?")
+                        .setCancelable(true).setPositiveButton("Да", (dialogInterface, i) -> deleteParticipant(userItem)).setNegativeButton("Нет", (dialogInterface, i) -> {
+                });
+
+                AlertDialog alert = builder.create();
+                alert.show();
             });
-
-            AlertDialog alert = builder.create();
-            alert.show();
-        });
+        }
     }
 
     private void deleteParticipant(UserItem createGroupItem) {
@@ -121,44 +146,4 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<RecyclerView.View
             ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
         });
     }
-
-    @Override
-    public int getItemCount() {
-        return list.size();
-    }
-
-
-    private class GroupsSettingsViewHolder extends RecyclerView.ViewHolder {
-        private TextView name;
-        private CircularImageView photo;
-        private ImageView removeButton;
-
-        private GroupsSettingsViewHolder(View itemView) {
-            super(itemView);
-            name = (TextView) itemView.findViewById(R.id.cell_group_participant_name);
-            photo = (CircularImageView) itemView.findViewById(R.id.cell_group_participant_photo);
-            removeButton = (ImageView) itemView.findViewById(R.id.cell_group_participant_remove);
-
-            removeButton.setImageResource(R.drawable.ic_close);
-
-            if (!isCreator)
-                removeButton.setVisibility(View.GONE);
-
-            View.OnClickListener listener = v -> {
-                int position = getLayoutPosition();
-                final int uid = list.get(position).uid;
-                final Bundle bundle = new Bundle();
-                bundle.putInt(CHAT_ID_KEY, uid);
-                final FragmentFriendProfile fragmentFriendProfile = new FragmentFriendProfile();
-                fragmentFriendProfile.setArguments(bundle);
-
-                final FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                Utils.replaceFragmentWithAnimationFade(fragmentManager, fragmentFriendProfile, null);//TODO:NAV FIX
-            };
-            itemView.setOnClickListener(listener);
-            name.setOnClickListener(listener);
-            photo.setOnClickListener(listener);
-        }
-    }
-
 }

@@ -21,8 +21,8 @@ public class ChatViewModel extends ViewModel {
 //        if(messages == null){
             factory = ApplicationLoader.db.chatMessageDao().getMessagesByChatID(chatID);
             final PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(100)
-                    .setPageSize(100)
+                    .setInitialLoadSizeHint(3)
+                    .setPageSize(3)
                     .setEnablePlaceholders(false)
                     .build();
             messages = new LivePagedListBuilder<Integer,RPC.Message>(factory, config).build();

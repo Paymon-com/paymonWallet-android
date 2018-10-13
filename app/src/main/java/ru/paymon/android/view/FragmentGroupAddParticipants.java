@@ -126,8 +126,6 @@ public class FragmentGroupAddParticipants extends Fragment {
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         contactsList.setLayoutManager(llm);
         contactsList.setHasFixedSize(true);
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(contactsList.getContext(), (new LinearLayoutManager(getContext())).getOrientation());
-        contactsList.addItemDecoration(dividerItemDecoration);
 
         adapter = new CreateGroupAdapter(addGroupList);
         contactsList.setAdapter(adapter);
