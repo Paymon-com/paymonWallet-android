@@ -7,11 +7,14 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
+import ru.paymon.android.firebase.FcmService;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
 import ru.paymon.android.utils.Utils;
@@ -225,6 +228,7 @@ public class NetworkManager {
             if (user.token != null) {
                 RPC.PM_authToken packet = new RPC.PM_authToken();
                 packet.token = user.token;
+                packet.fcmToken = FcmService.token == null ? FirebaseInstanceId.getInstance().getToken() : FcmService.token;
 
                 NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
                     if (error != null || response == null) {

@@ -1,16 +1,15 @@
 package ru.paymon.android.firebase;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
+import android.os.Build;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import org.apache.commons.codec.binary.Base64;
 
 import java.util.Map;
 
@@ -33,15 +32,12 @@ public class FcmService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d("AAA", "log " + remoteMessage.getFrom() + " " + remoteMessage.getMessageId());
         if (remoteMessage.getData().size() > 0) {
-            Log.e("AAA", "SIZE > 0 " + remoteMessage.getData());
             final Map<String, String> data = remoteMessage.getData();
-            final String b64string = data.get("base64");
-            final byte[] bytes = Base64.decodeBase64(b64string);
+            final String b64string = data.get("packet");
+            final byte[] bytes = android.util.Base64.decode(b64string, android.util.Base64.DEFAULT);
             final SerializedStream stream = new SerializedStream(bytes);
             final int svuid = stream.readInt32(false);
-
             switch (svuid) {
                 case RPC.PM_message.svuid:
                 case RPC.PM_messageItem.svuid:
@@ -49,12 +45,12 @@ public class FcmService extends FirebaseMessagingService {
                     showNotification(message);
                     break;
             }
-//            showNotification(remoteMessage.getData());
+
+            return;
         }
 
         if (remoteMessage.getNotification() != null) {
-            Log.e("AAA", "NOTIFY " + remoteMessage.getNotification().getBody());
-//            showNotification(remoteMessage.getNotification());
+            showNotification(remoteMessage.getNotification());
         }
     }
 
@@ -82,8 +78,15 @@ public class FcmService extends FirebaseMessagingService {
                 .setContentTitle(title)
                 .setContentText(text);
 
-        final NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, builder.build());
+        final NotificationManager notificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId("my_channel_01");
+            NotificationChannel mChannel = new NotificationChannel("my_channel_01", "channel_name", NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(mChannel);
+        }
+
+        notificationManager.notify(111, builder.build());
     }
 
     private void showNotification(RemoteMessage.Notification notification) {
@@ -101,24 +104,13 @@ public class FcmService extends FirebaseMessagingService {
                 .setContentText(notification.getBody());
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(0, builder.build());
-    }
 
-    private void showNotification(Map<String, String> data) {
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId("my_channel_01");
+            NotificationChannel mChannel = new NotificationChannel("my_channel_01", "channel_name", NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(mChannel);
+        }
 
-        Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentIntent(pendingIntent)
-                .setAutoCancel(true)
-                .setWhen(System.currentTimeMillis())
-                .setSmallIcon(R.drawable.ic_notification)
-                .setTicker(getString(R.string.message))
-                .setContentTitle(data.get("_nmt"))
-                .setContentText("test");
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, builder.build());
     }
 }

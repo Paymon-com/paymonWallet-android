@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
@@ -143,7 +145,8 @@ public class FragmentAuthorization extends Fragment {
             RPC.PM_auth request = new RPC.PM_auth();
             request.login = login;
             request.password = password;
-            request.fcmToken = FcmService.token;
+            request.fcmToken = FcmService.token == null ? FirebaseInstanceId.getInstance().getToken() : FcmService.token;
+
 
             final long msgID = NetworkManager.getInstance().sendRequest(request, (response, error) -> {
                 ApplicationLoader.applicationHandler.post(() -> {
