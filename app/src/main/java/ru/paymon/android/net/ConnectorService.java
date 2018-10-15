@@ -1,6 +1,7 @@
 package ru.paymon.android.net;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.BroadcastReceiver;
@@ -12,6 +13,7 @@ import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
@@ -216,9 +218,16 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
                 builder.setVibrate(new long[]{100, 200, 100, 300});
 
-                Notification notification = builder.build();
-
                 notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    builder.setChannelId("my_channel_01");
+                    NotificationChannel mChannel = new NotificationChannel("my_channel_01", "channel_name", android.app.NotificationManager.IMPORTANCE_HIGH);
+                    if (notificationManager != null)
+                        notificationManager.createNotificationChannel(mChannel);
+                }
+
+                Notification notification = builder.build();
 
                 if (notificationManager != null)
                     notificationManager.notify(NOTIFY_ID, notification);

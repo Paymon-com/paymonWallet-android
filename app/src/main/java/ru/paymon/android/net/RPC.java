@@ -130,16 +130,18 @@ public class RPC {
 
     public static class PM_authToken extends Packet {
         public static int svuid = 359382942;
-
         public byte[] token;
+        public String fcmToken;
 
         public void readParams(SerializableData stream, boolean exception) {
             token = stream.readByteArray(exception);
+            fcmToken = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
             stream.writeByteArray(token);
+            stream.writeString(fcmToken);
         }
     }
 
