@@ -98,5 +98,16 @@
             </intent-filter>
         </receiver>
 
+
+        <service android:name=".firebase.FcmService" >
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".gateway.bitcoin.service.BlockchainService"
+            android:exported="false" />
     </application>
 </manifest>

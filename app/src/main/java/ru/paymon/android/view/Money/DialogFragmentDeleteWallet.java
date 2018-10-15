@@ -15,17 +15,40 @@ import android.widget.Toast;
 
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.gateway.ethereum.Ethereum;
+import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.Utils;
 
-public class DialogFragmentDeleteWallet extends DialogFragment {
-    private static DialogFragmentDeleteWallet instance;
-    private static String currency;
+import static ru.paymon.android.view.Money.FragmentMoney.CURRENCY_KEY;
+import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
 
-    public static DialogFragmentDeleteWallet newInstance(String cur) {
-        instance = new DialogFragmentDeleteWallet();
-        currency = cur;
-        return instance;
+public class DialogFragmentDeleteWallet extends DialogFragment {
+    private String currency;
+
+    public DialogFragmentDeleteWallet setArgs(Bundle bundle) {
+        this.setArguments(bundle);
+        return this;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments();
+        if(bundle!= null){
+            if(!bundle.containsKey(CURRENCY_KEY)) return;
+
+            currency = bundle.getString(CURRENCY_KEY);
+
+            switch (currency){
+                case BTC_CURRENCY_VALUE:
+                    break;
+                case ETH_CURRENCY_VALUE:
+                    break;
+//                case PMNT_CURRENCY_VALUE:
+//                    break;
+            }
+        }
     }
 
     @Nullable
@@ -48,12 +71,13 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                     final String password = editText.getText().toString().trim();
 
                     if (password.equals(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD)) {
-                        Ethereum.getInstance().deleteWallet();
+                        ((WalletApplication) getActivity().getApplication()).deleteEthereumWallet();
                         User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = null;
                         User.saveConfig();
 
                         Utils.hideKeyboard(view);
                         getDialog().dismiss();
+                        getActivity().onBackPressed();
                     } else {
                         getDialog().dismiss();
                         Toast.makeText(getActivity(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
@@ -62,6 +86,8 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                 break;
             case "BTC":
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
+
+                ((WalletApplication) getActivity().getApplication()).deleteBitcoinWallet();
 
 //                okButton.setOnClickListener(view1 -> { //TODO:
 //                    final String password = editText.getText().toString().trim();
@@ -81,6 +107,8 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                 break;
             case "PMNT":
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnc_color));
+
+                ((WalletApplication) getActivity().getApplication()).deletePaymonWallet();
 
 //                okButton.setOnClickListener(view1 -> {//TODO:
 //                    final String password = editText.getText().toString().trim();

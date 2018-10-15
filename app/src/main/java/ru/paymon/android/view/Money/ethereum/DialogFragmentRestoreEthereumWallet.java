@@ -17,21 +17,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 
+import ru.paymon.android.AbsWalletApplication;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.gateway.ethereum.Ethereum;
+import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.AlertDialogOpenFile;
 
 public class DialogFragmentRestoreEthereumWallet extends DialogFragment {
 
-    public static DialogFragmentRestoreEthereumWallet newInstance() {
-        return new DialogFragmentRestoreEthereumWallet();
+    public DialogFragmentRestoreEthereumWallet setArgs(Bundle bundle){
+        this.setArguments(bundle);
+        return this;
     }
 
     @Nullable
@@ -84,17 +83,10 @@ public class DialogFragmentRestoreEthereumWallet extends DialogFragment {
 
             Toast.makeText(ApplicationLoader.applicationContext, R.string.ethereum_wallet_is_loaded_hint, Toast.LENGTH_SHORT).show();
             passwordEditText.setText(null);
-            InputStream inputStream = null;
-            try {
-                inputStream = new FileInputStream(file);
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            final InputStream finalInputStream = inputStream;
 
             getDialog().cancel();
             Utils.stageQueue.postRunnable(() -> {
-                Ethereum.RestoreStatus restoreStatus = Ethereum.getInstance().restoreWallet(finalInputStream, password);
+                AbsWalletApplication.RestoreStatus restoreStatus = ((WalletApplication) getActivity().getApplication()).restoreEthereumWallet(file, password);
                 ApplicationLoader.applicationHandler.post(() -> {
                     switch (restoreStatus) {
                         case DONE:

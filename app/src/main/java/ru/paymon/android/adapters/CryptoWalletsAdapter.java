@@ -15,6 +15,9 @@ import ru.paymon.android.R;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
 
+import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+
 public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public ArrayList<WalletItem> walletItems;
     private IOnItemClickListener iOnItemClickListener;
@@ -74,7 +77,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 walletViewHolder.publicAddress.setText(btcWalletItem.publicAddress);
                 walletViewHolder.cryptoCurrency.setText(btcWalletItem.cryptoCurrency);
                 walletViewHolder.cryptoBalance.setText(btcWalletItem.cryptoBalance);
-                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick("BTC"));
+                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick(BTC_CURRENCY_VALUE));
                 break;
             case ETH:
                 NonEmptyWalletItem ethWalletItem = (NonEmptyWalletItem) walletItem;
@@ -83,31 +86,31 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 walletViewHolder.publicAddress.setText(ethWalletItem.publicAddress);
                 walletViewHolder.cryptoCurrency.setText(ethWalletItem.cryptoCurrency);
                 walletViewHolder.cryptoBalance.setText(ethWalletItem.cryptoBalance);
-                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick("ETH"));
+                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick(ETH_CURRENCY_VALUE));
                 break;
             case PMNT:
-                NonEmptyWalletItem pmntWalletItem = (NonEmptyWalletItem) walletItem;
-                walletViewHolder = (WalletViewHolder) holder;
-                walletViewHolder.icon.setImageResource(R.drawable.ic_pmnt);
-                walletViewHolder.publicAddress.setText(pmntWalletItem.publicAddress);
-                walletViewHolder.cryptoCurrency.setText(pmntWalletItem.cryptoCurrency);
-                walletViewHolder.cryptoBalance.setText(pmntWalletItem.cryptoBalance);
-                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick("PMNT"));
+//                NonEmptyWalletItem pmntWalletItem = (NonEmptyWalletItem) walletItem;
+//                walletViewHolder = (WalletViewHolder) holder;
+//                walletViewHolder.icon.setImageResource(R.drawable.ic_pmnt);
+//                walletViewHolder.publicAddress.setText(pmntWalletItem.publicAddress);
+//                walletViewHolder.cryptoCurrency.setText(pmntWalletItem.cryptoCurrency);
+//                walletViewHolder.cryptoBalance.setText(pmntWalletItem.cryptoBalance);
+//                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick(PMNT_CURRENCY_VALUE));
                 break;
             case EMPTY_BTC:
                 EmptyWalletViewHolder emptyWallet = (EmptyWalletViewHolder) holder;
                 emptyWallet.icon.setImageResource(R.drawable.ic_bitcoin);
-                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick("BTC"));
+                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick(BTC_CURRENCY_VALUE));
                 break;
             case EMPTY_ETH:
                 emptyWallet = (EmptyWalletViewHolder) holder;
                 emptyWallet.icon.setImageResource(R.drawable.ic_ethereum);
-                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick("ETH"));
+                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick(ETH_CURRENCY_VALUE));
                 break;
             case EMPTY_PMNT:
-                emptyWallet = (EmptyWalletViewHolder) holder;
-                emptyWallet.icon.setImageResource(R.drawable.ic_pmnt);
-                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick("PMNT"));
+//                emptyWallet = (EmptyWalletViewHolder) holder;
+//                emptyWallet.icon.setImageResource(R.drawable.ic_pmnt);
+//                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick(PMNT_CURRENCY_VALUE));
                 break;
         }
     }

@@ -31,8 +31,11 @@ public class NotificationManager {
         NETWORK_STATE_CONNECTED,
 
         ETHEREUM_WALLET_CREATED,
+        BITCOIN_WALLET_CREATED,
+        PAYMON_WALLET_CREATED,
 
         PHOTOS_URL_RECEIVED,
+
     }
 
     private SparseArray<ArrayList<Object>> observers = new SparseArray<>();
@@ -126,7 +129,7 @@ public class NotificationManager {
             objects.remove(observer);
     }
 
-    public void dispose(){
+    public void dispose() {
         Instance = null;
     }
 }

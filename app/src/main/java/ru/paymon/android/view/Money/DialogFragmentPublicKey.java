@@ -12,17 +12,41 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ru.paymon.android.R;
-import ru.paymon.android.gateway.ethereum.Ethereum;
+import ru.paymon.android.User;
+import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.Utils;
 
-public class DialogFragmentPublicKey extends DialogFragment {
-    private static DialogFragmentPublicKey instance;
-    private static String currency;
+import static ru.paymon.android.view.Money.FragmentMoney.CURRENCY_KEY;
+import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
 
-    public static DialogFragmentPublicKey newInstance(String cur) {
-        instance = new DialogFragmentPublicKey();
-        currency = cur;
-        return instance;
+public class DialogFragmentPublicKey extends DialogFragment {
+    private  String currency;
+
+    public DialogFragmentPublicKey setArgs(Bundle bundle){
+        this.setArguments(bundle);
+        return this;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments();
+        if(bundle!= null){
+            if(!bundle.containsKey(CURRENCY_KEY)) return;
+
+            currency = bundle.getString(CURRENCY_KEY);
+
+            switch (currency){
+                case BTC_CURRENCY_VALUE:
+                    break;
+                case ETH_CURRENCY_VALUE:
+                    break;
+//                case PMNT_CURRENCY_VALUE:
+//                    break;
+            }
+        }
     }
 
     @Nullable
@@ -37,15 +61,15 @@ public class DialogFragmentPublicKey extends DialogFragment {
         switch (currency) {
             case "ETH":
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
-                publicKeyStr = Ethereum.getInstance().getAddress();
+                publicKeyStr = ((WalletApplication) getActivity().getApplication()).getEthereumWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD).publicAddress;
                 break;
             case "BTC":
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
-//                publicKeyStr = Bitcoin.getInstance().getAddress();//TODO:
+                publicKeyStr = ((WalletApplication) getActivity().getApplication()).getBitcoinWallet().currentReceiveAddress().toString();
                 break;
             case "PMNT":
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnc_color));
-//                publicKeyStr = Paymon.getInstance().getAddress();//TODO:
+//                publicKeyStr = ((WalletApplication) getActivity().getApplication()).getPaymonWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD).publicAddress;
                 break;
         }
 

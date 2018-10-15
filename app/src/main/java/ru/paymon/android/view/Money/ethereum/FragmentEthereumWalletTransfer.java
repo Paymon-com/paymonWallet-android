@@ -31,7 +31,7 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.gateway.ethereum.Ethereum;
+import ru.paymon.android.WalletApplication;
 import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.MoneyViewModel;
@@ -255,7 +255,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                 if (exchangeRatesData.getValue() != null) {
                     for (ExchangeRatesItem exRateItem : exchangeRatesData.getValue()) {
                         if (exRateItem.fiatCurrency.equals(currentFiatCurrency) && exRateItem.cryptoCurrency.equals(cryptoCurrency)) {
-                            final String fiatEquivalentStr = Ethereum.getInstance().convertEthToFiat(ethAmount, exRateItem.value);
+                            final String fiatEquivalentStr = ((WalletApplication) getActivity().getApplication()).convertEthereumToFiat(ethAmount, exRateItem.value);
                             fiatEquivalent.setText(fiatEquivalentStr);
                         }
                     }

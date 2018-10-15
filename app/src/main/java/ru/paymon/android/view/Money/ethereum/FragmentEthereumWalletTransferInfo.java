@@ -18,7 +18,8 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import ru.paymon.android.R;
-import ru.paymon.android.gateway.ethereum.Ethereum;
+import ru.paymon.android.User;
+import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentEthereumWalletTransferInfo extends Fragment {
@@ -55,7 +56,8 @@ public class FragmentEthereumWalletTransferInfo extends Fragment {
             final BigDecimal feeVal = new BigDecimal(bundle.getString("FEE"));
             final BigDecimal totalVal = new BigDecimal(bundle.getString("TOTAL"));
 
-            fromAddress.setText(Ethereum.getInstance().getAddress());
+            WalletApplication application = ((WalletApplication) getActivity().getApplication());
+            fromAddress.setText(application.getEthereumWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD).publicAddress);
             toAddress.setText(toAddr);
             fee.setText(String.valueOf(feeVal));
             amount.setText(String.valueOf(amountValue));
@@ -63,7 +65,7 @@ public class FragmentEthereumWalletTransferInfo extends Fragment {
 
             pay.setOnClickListener((view1) -> {
                 Utils.netQueue.postRunnable(() -> {
-                    EthSendTransaction ethSendTransaction = Ethereum.getInstance().send(gasPrice, gasLimit, toAddr, Convert.toWei(amountValue, Convert.Unit.ETHER).toBigInteger());
+                    EthSendTransaction ethSendTransaction = application.sendRawEthereumTx(toAddr, Convert.toWei(amountValue, Convert.Unit.ETHER).toBigInteger(), gasPrice, gasLimit);
                     if (ethSendTransaction != null) {
                         Log.e("AAA", ethSendTransaction.getTransactionHash());
                         Log.e("AAA", ethSendTransaction.getResult());

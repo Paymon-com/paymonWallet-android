@@ -41,6 +41,9 @@
         <action
             android:id="@+id/action_fragmentMoney_to_dialogFragmentCreateRestoreEthereumWallet"
             app:destination="@id/dialogFragmentCreateRestoreEthereumWallet" />
+        <action
+            android:id="@+id/action_fragmentMoney_to_fragment_bitcoin_wallet"
+            app:destination="@id/fragmentBitcoinWallet" />
     </fragment>
     <fragment
         android:id="@+id/fragmentContacts"
@@ -177,7 +180,7 @@
         tools:layout="@layout/dialog_fragment_create_group" />
     <fragment
         android:id="@+id/dialogFragmentCreateRestoreEthereumWallet"
-        android:name="ru.paymon.android.view.Money.ethereum.DialogFragmentCreateRestoreEthereumWallet"
+        android:name="ru.paymon.android.view.Money.DialogFragmentCreateRestoreWallet"
         android:label="dialog_fragment_create_restore_eth_wallet"
         tools:layout="@layout/dialog_fragment_create_restore_eth_wallet" >
         <action
@@ -192,4 +195,9 @@
         android:name="ru.paymon.android.view.Money.ethereum.DialogFragmentCreateEthereumWallet"
         android:label="DialogFragmentRestoreEthereumWallet"
         tools:layout="@layout/dialog_fragment_create_eth_wallet" />
+    <fragment
+        android:id="@+id/fragmentBitcoinWallet"
+        android:name="ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet"
+        android:label="fragment_bitcoin_wallet"
+        tools:layout="@layout/fragment_bitcoin_wallet" />
 </navigation>

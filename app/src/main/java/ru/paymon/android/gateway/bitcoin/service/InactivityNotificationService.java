@@ -73,7 +73,7 @@ public final class InactivityNotificationService extends IntentService {
     @Override
     protected void onHandleIntent(final Intent intent) {
         org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
-        final Wallet wallet = application.getWallet();
+        final Wallet wallet = application.getBitcoinWallet();
 
         if (ACTION_DISMISS.equals(intent.getAction()))
             handleDismiss();

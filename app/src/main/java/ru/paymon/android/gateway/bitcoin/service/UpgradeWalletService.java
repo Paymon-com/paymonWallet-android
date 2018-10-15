@@ -57,7 +57,7 @@ public final class UpgradeWalletService extends IntentService {
     protected void onHandleIntent(final Intent intent) {
         org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
 
-        final Wallet wallet = application.getWallet();
+        final Wallet wallet = application.getBitcoinWallet();
 
         if (wallet.isDeterministicUpgradeRequired()) {
             log.info("detected non-HD wallet, upgrading");

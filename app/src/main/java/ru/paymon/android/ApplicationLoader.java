@@ -1,6 +1,5 @@
 package ru.paymon.android;
 
-import android.Manifest;
 import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +15,6 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiManager;
-import com.vanniktech.rxpermission.Permission;
 import com.vanniktech.rxpermission.RealRxPermission;
 import com.vanniktech.rxpermission.RxPermission;
 
@@ -45,10 +43,9 @@ import org.bitcoinj.wallet.listeners.WalletCoinsSentEventListener;
 import java.io.File;
 import java.util.List;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.emoji.CustomEmojiProvider;
+import ru.paymon.android.gateway.bitcoin.service.BlockchainService;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.room.AppDatabase;
@@ -97,34 +94,36 @@ public class ApplicationLoader extends WalletApplication {
         NetworkManager.getInstance().bindServices();
 
 //        initStrictMode();
-        rxPermission
-                .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Observer<Permission>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-
-            }
-
-            @Override
-            public void onNext(Permission permission) {
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-                if (ApplicationLoader.rxPermission.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE) && ApplicationLoader.rxPermission.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-//                    Executors.newSingleThreadExecutor().submit(() -> {
-//                        test();
-//                        initBtcBlockchaine(new String[]{"muY4qKejpNVhih8TMycMUq1rxUaiYZkfcX", "testnet"});
-//                    });
-                }
-            }
-        });
+        BlockchainService.start(this, true);
+//
+//        rxPermission
+//                .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,
+//                        Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Observer<Permission>() {
+//            @Override
+//            public void onSubscribe(Disposable d) {
+//
+//            }
+//
+//            @Override
+//            public void onNext(Permission permission) {
+//
+//            }
+//
+//            @Override
+//            public void onError(Throwable e) {
+//
+//            }
+//
+//            @Override
+//            public void onComplete() {
+//                if (ApplicationLoader.rxPermission.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE) && ApplicationLoader.rxPermission.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+////                    Executors.newSingleThreadExecutor().submit(() -> {
+////                        test();
+////                        initBtcBlockchaine(new String[]{"muY4qKejpNVhih8TMycMUq1rxUaiYZkfcX", "testnet"});
+////                    });
+//                }
+//            }
+//        });
     }
 
 //    public static void finish() {

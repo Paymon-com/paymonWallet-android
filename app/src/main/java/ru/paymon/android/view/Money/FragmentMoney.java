@@ -27,11 +27,14 @@ import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.DialogProgress;
-import ru.paymon.android.view.Money.ethereum.DialogFragmentCreateRestoreEthereumWallet;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
+import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+
 public class FragmentMoney extends Fragment {
-    private static FragmentMoney instance;
+    public static final String CURRENCY_KEY = "CURRENCY_KEY";
+
     private DialogProgress dialogProgress;
     private Spinner fiatCurrencySpinner;
     private RecyclerView exchangeRatesRecView;
@@ -44,12 +47,6 @@ public class FragmentMoney extends Fragment {
     private ArrayList<ExchangeRatesItem> exchangeRatesItems;
     private LiveData<String> ethereumBalanceData;
 
-
-    public static FragmentMoney getInstance() {
-        if (instance == null)
-            instance = new FragmentMoney();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -103,7 +100,7 @@ public class FragmentMoney extends Fragment {
             for (WalletItem walletItem : walletItems) {
                 if (walletItem instanceof NonEmptyWalletItem) {
                     NonEmptyWalletItem wi = (NonEmptyWalletItem) walletItem;
-                    if (wi.cryptoCurrency.equals("ETH")) {
+                    if (wi.cryptoCurrency.equals(ETH_CURRENCY_VALUE)) {
                         wi.cryptoBalance = balanceData;
                     }
                 }
@@ -124,6 +121,19 @@ public class FragmentMoney extends Fragment {
                 moneyViewModel.getExchangeRatesData();
             }
         });
+
+//        moneyViewModel.getBlockchainState().observe(this, new Observer<BlockchainState>() {
+//            @Override
+//            public void onChanged(final BlockchainState blockchainState) {
+////                updateView();
+//            }
+//        });
+//        moneyViewModel.getBalance().observe(this, new Observer<Coin>() {
+//            @Override
+//            public void onChanged(final Coin balance) {
+//                Log.e("AAA", "balance " + balance);
+//            }
+//        });
 
         fiatCurrencySpinner.setOnItemSelectedListener(fiatCurrencyListener);
 
@@ -167,30 +177,30 @@ public class FragmentMoney extends Fragment {
         @Override
         public void onClick(String cryptoCurrency) {
             switch (cryptoCurrency) {
-                case "BTC":
-//                            fragment = FragmentBitcoinWallet.newInstance();
-                    break;
-                case "ETH":
+                case BTC_CURRENCY_VALUE:
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWallet);
                     break;
-                case "PMNT":
-//                            fragment = FragmentPaymonWallet.newInstance();
+                case ETH_CURRENCY_VALUE:
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentBitcoinWallet);
                     break;
+//                case PMNT_CURRENCY_VALUE:
+//                    break;
             }
         }
 
         @Override
         public void onCreateClick(String cryptoCurrency) {
+            Bundle bundle = new Bundle();
+            bundle.putString(CURRENCY_KEY, cryptoCurrency);
             switch (cryptoCurrency) {
-                case "BTC":
-//                            DialogFragmentCreateRestoreBitcoinWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
+                case BTC_CURRENCY_VALUE:
+                    new DialogFragmentCreateRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null);
                     break;
-                case "ETH":
-                    DialogFragmentCreateRestoreEthereumWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
+                case ETH_CURRENCY_VALUE:
+                    new DialogFragmentCreateRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null);
                     break;
-                case "PMNT":
-//                            DialogFragmentCreateRestorePaymonWallet.newInstance().show(getActivity().getSupportFragmentManager(), null);
-                    break;
+//                case PMNT_CURRENCY_VALUE:
+//                    break;
             }
         }
     };

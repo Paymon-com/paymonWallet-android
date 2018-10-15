@@ -180,8 +180,7 @@ public class WalletUtils {
         builder.clearLastSeenBlockTimeSecs();
         final Protos.Wallet walletProto = builder.build();
 
-        try (final OutputStream os = context.openFileOutput(Constants.Files.WALLET_KEY_BACKUP_PROTOBUF,
-                Context.MODE_PRIVATE)) {
+        try (final OutputStream os = context.openFileOutput(Constants.Files.WALLET_KEY_BACKUP_PROTOBUF, Context.MODE_PRIVATE)) {
             walletProto.writeTo(os);
             watch.stop();
             log.info("wallet backed up to: '{}', took {}", Constants.Files.WALLET_KEY_BACKUP_PROTOBUF, watch);

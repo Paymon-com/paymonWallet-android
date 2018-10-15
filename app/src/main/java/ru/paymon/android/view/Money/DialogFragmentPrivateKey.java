@@ -12,18 +12,43 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ru.paymon.android.R;
-import ru.paymon.android.gateway.ethereum.Ethereum;
+import ru.paymon.android.User;
+import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.Utils;
 
-public class DialogFragmentPrivateKey extends DialogFragment {
-    private static DialogFragmentPrivateKey instance;
-    private static String currency;
+import static ru.paymon.android.view.Money.FragmentMoney.CURRENCY_KEY;
+import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
 
-    public static DialogFragmentPrivateKey newInstance(String cur) {
-        instance = new DialogFragmentPrivateKey();
-        currency = cur;
-        return instance;
+public class DialogFragmentPrivateKey extends DialogFragment {
+    private String currency;
+
+    public DialogFragmentPrivateKey setArgs(Bundle bundle){
+        this.setArguments(bundle);
+        return this;
     }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Bundle bundle = getArguments();
+        if(bundle!= null){
+            if(!bundle.containsKey(CURRENCY_KEY)) return;
+
+            currency = bundle.getString(CURRENCY_KEY);
+
+            switch (currency){
+                case BTC_CURRENCY_VALUE:
+                    break;
+                case ETH_CURRENCY_VALUE:
+                    break;
+//                case PMNT_CURRENCY_VALUE:
+//                    break;
+            }
+        }
+    }
+
 
     @Nullable
     @Override
@@ -37,7 +62,7 @@ public class DialogFragmentPrivateKey extends DialogFragment {
         switch (currency) {
             case "ETH":
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
-                 privateKeyStr = Ethereum.getInstance().getPrivateKey();
+                 privateKeyStr = ((WalletApplication) getActivity().getApplication()).getEthereumWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD).privateAddress;
                 break;
             case "BTC":
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));

@@ -25,6 +25,7 @@ import android.os.PowerManager.WakeLock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.format.DateUtils;
+import android.util.Log;
 
 import com.google.common.base.Stopwatch;
 
@@ -82,7 +83,6 @@ import ru.paymon.android.gateway.bitcoin.Configuration;
 import ru.paymon.android.gateway.bitcoin.Constants;
 import ru.paymon.android.gateway.bitcoin.data.SelectedExchangeRateLiveData;
 import ru.paymon.android.gateway.bitcoin.data.TimeLiveData;
-import ru.paymon.android.gateway.bitcoin.data.WalletBalanceLiveData;
 import ru.paymon.android.gateway.bitcoin.data.WalletLiveData;
 import ru.paymon.android.gateway.bitcoin.util.CrashReporter;
 import ru.paymon.android.gateway.bitcoin.util.WalletUtils;
@@ -187,6 +187,7 @@ public class BlockchainService extends LifecycleService {
 
         @Override
         protected void onActive() {
+            Log.e("AAA", wallet.getBalance() + " ");
             wallet.addCoinsReceivedEventListener(Threading.SAME_THREAD, walletListener);
             wallet.addCoinsSentEventListener(Threading.SAME_THREAD, walletListener);
         }
@@ -202,6 +203,7 @@ public class BlockchainService extends LifecycleService {
         private class WalletListener implements WalletCoinsReceivedEventListener, WalletCoinsSentEventListener {
             @Override
             public void onCoinsReceived(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
+                Log.e("AAA", "RECEIVED : " + newBalance);
                 postValue(tx);
             }
 
@@ -462,14 +464,14 @@ public class BlockchainService extends LifecycleService {
 
         broadcastPeerState(0);
 
-        final WalletBalanceLiveData walletBalance = new WalletBalanceLiveData(application);
+//        final WalletBalanceLiveData walletBalance = new WalletBalanceLiveData(application);
         final SelectedExchangeRateLiveData exchangeRate = new SelectedExchangeRateLiveData(application);
-        walletBalance.observe(this, walletBal -> {
+//        walletBalance.observe(this, walletBal -> {
 //            WalletBalanceWidgetProvider.updateWidgets(BlockchainService.this, walletBal, exchangeRate.getValue());
-        });
+//        });
         if (Constants.ENABLE_EXCHANGE_RATES) {
             exchangeRate.observe(this, exRate -> {
-                final Coin balance = walletBalance.getValue();
+//                final Coin balance = walletBalance.getValue();
 //                if (balance != null)
 //                    WalletBalanceWidgetProvider.updateWidgets(BlockchainService.this, balance, exRate);
             });
@@ -478,6 +480,8 @@ public class BlockchainService extends LifecycleService {
         wallet.observe(this, new Observer<Wallet>() {
             @Override
             public void onChanged(final Wallet wallet) {
+                if (wallet == null) return;
+
                 BlockchainService.this.wallet.removeObserver(this);
                 final boolean blockChainFileExists = blockChainFile.exists();
                 if (!blockChainFileExists) {
@@ -733,7 +737,7 @@ public class BlockchainService extends LifecycleService {
                 stopSelf();
             } else if (BlockchainService.ACTION_BROADCAST_TRANSACTION.equals(action)) {
                 final Sha256Hash hash = Sha256Hash.wrap(intent.getByteArrayExtra(BlockchainService.ACTION_BROADCAST_TRANSACTION_HASH));
-                final Transaction tx = application.getWallet().getTransaction(hash);
+                final Transaction tx = application.getBitcoinWallet().getTransaction(hash);
 
                 if (peerGroup != null) {
                     log.info("broadcasting transaction " + tx.getHashAsString());

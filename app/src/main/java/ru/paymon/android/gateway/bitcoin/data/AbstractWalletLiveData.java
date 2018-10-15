@@ -35,8 +35,7 @@ public abstract class AbstractWalletLiveData<T> extends ThrottelingLiveData<T> {
 
     @Override
     protected final void onActive() {
-        broadcastManager.registerReceiver(walletReferenceChangeReceiver,
-                new IntentFilter(WalletApplication.ACTION_WALLET_REFERENCE_CHANGED));
+        broadcastManager.registerReceiver(walletReferenceChangeReceiver, new IntentFilter(WalletApplication.ACTION_WALLET_REFERENCE_CHANGED));
         loadWallet();
     }
 
@@ -49,7 +48,7 @@ public abstract class AbstractWalletLiveData<T> extends ThrottelingLiveData<T> {
     }
 
     private void loadWallet() {
-        application.getWalletAsync(onWalletLoadedListener);
+        application.getBitcoinWalletAsync(onWalletLoadedListener);
     }
 
     protected Wallet getWallet() {

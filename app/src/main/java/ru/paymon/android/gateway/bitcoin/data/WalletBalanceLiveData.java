@@ -18,8 +18,7 @@ import ru.paymon.android.WalletApplication;
 import ru.paymon.android.gateway.bitcoin.Configuration;
 import ru.paymon.android.gateway.bitcoin.Constants;
 
-public final class WalletBalanceLiveData extends AbstractWalletLiveData<Coin>
-        implements OnSharedPreferenceChangeListener {
+public final class WalletBalanceLiveData extends AbstractWalletLiveData<Coin> implements OnSharedPreferenceChangeListener {
     private final BalanceType balanceType;
     private final Configuration config;
 
@@ -74,17 +73,14 @@ public final class WalletBalanceLiveData extends AbstractWalletLiveData<Coin>
 
     private final WalletListener walletListener = new WalletListener();
 
-    private class WalletListener implements WalletCoinsReceivedEventListener, WalletCoinsSentEventListener,
-            WalletReorganizeEventListener, WalletChangeEventListener {
+    private class WalletListener implements WalletCoinsReceivedEventListener, WalletCoinsSentEventListener, WalletReorganizeEventListener, WalletChangeEventListener {
         @Override
-        public void onCoinsReceived(final Wallet wallet, final Transaction tx, final Coin prevBalance,
-                                    final Coin newBalance) {
+        public void onCoinsReceived(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
             triggerLoad();
         }
 
         @Override
-        public void onCoinsSent(final Wallet wallet, final Transaction tx, final Coin prevBalance,
-                                final Coin newBalance) {
+        public void onCoinsSent(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
             triggerLoad();
         }
 
