@@ -20,9 +20,6 @@ import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.gateway.bitcoin.Configuration;
 import ru.paymon.android.gateway.bitcoin.Constants;
-import ru.paymon.android.gateway.bitcoin.data.FeeCategory;
-import ru.paymon.android.view.Money.bitcoin.SendCoinsActivity;
-import ru.paymon.android.view.Money.bitcoin.WalletActivity;
 
 /**
  * This service is responsible for showing a notification if the user hasn't used the app for a longer time.
@@ -115,7 +112,7 @@ public final class InactivityNotificationService extends IntentService {
             notification.setSmallIcon(R.drawable.stat_notify_received_24dp);
             notification.setContentTitle(title);
             notification.setContentText(text);
-            notification.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, WalletActivity.class), 0));
+//            notification.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, WalletActivity.class), 0));
             notification.setAutoCancel(true);
             if (!canDonate)
                 notification.addAction(new NotificationCompat.Action.Builder(0,
@@ -145,7 +142,7 @@ public final class InactivityNotificationService extends IntentService {
 
     private void handleDonate(final Wallet wallet) {
         final Coin balance = wallet.getBalance(BalanceType.AVAILABLE_SPENDABLE);
-        SendCoinsActivity.startDonate(this, balance, FeeCategory.ECONOMIC, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//        SendCoinsActivity.startDonate(this, balance, FeeCategory.ECONOMIC, Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         nm.cancel(Constants.NOTIFICATION_ID_INACTIVITY);
         sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
     }

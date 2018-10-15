@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.bitcoinj.wallet.Wallet;
 import org.json.JSONObject;
@@ -132,6 +133,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
 
             EthereumWallet ethereumWallet = application.getEthereumWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
             if(ethereumWallet != null){
+                Log.e("AAA", ethereumWallet.publicAddress);
                 BigInteger balance = application.getEthereumBalance();
                 if(balance != null)
                     walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, balance.toString(), ethereumWallet.publicAddress));//TODO:convert balance

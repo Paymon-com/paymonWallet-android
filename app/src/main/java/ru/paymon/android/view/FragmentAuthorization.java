@@ -17,6 +17,7 @@ import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.firebase.FcmService;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -142,6 +143,7 @@ public class FragmentAuthorization extends Fragment {
             RPC.PM_auth request = new RPC.PM_auth();
             request.login = login;
             request.password = password;
+            request.fcmToken = FcmService.token;
 
             final long msgID = NetworkManager.getInstance().sendRequest(request, (response, error) -> {
                 ApplicationLoader.applicationHandler.post(() -> {

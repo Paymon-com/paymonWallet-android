@@ -177,10 +177,10 @@ public class FragmentMoney extends Fragment {
         @Override
         public void onClick(String cryptoCurrency) {
             switch (cryptoCurrency) {
-                case BTC_CURRENCY_VALUE:
+                case ETH_CURRENCY_VALUE:
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWallet);
                     break;
-                case ETH_CURRENCY_VALUE:
+                case BTC_CURRENCY_VALUE:
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentBitcoinWallet);
                     break;
 //                case PMNT_CURRENCY_VALUE:

@@ -88,7 +88,6 @@ import ru.paymon.android.gateway.bitcoin.util.CrashReporter;
 import ru.paymon.android.gateway.bitcoin.util.WalletUtils;
 import ru.paymon.android.room.AddressBookDao;
 import ru.paymon.android.room.AppDatabase;
-import ru.paymon.android.view.Money.bitcoin.WalletActivity;
 
 public class BlockchainService extends LifecycleService {
     private WalletApplication application;
@@ -243,7 +242,7 @@ public class BlockchainService extends LifecycleService {
             }
             summaryNotification.setContentText(text);
         }
-        summaryNotification.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, WalletActivity.class), 0));
+//        summaryNotification.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, WalletActivity.class), 0));
         nm.notify(Constants.NOTIFICATION_ID_COINS_RECEIVED, summaryNotification.build());
 
         // child notification
@@ -263,7 +262,7 @@ public class BlockchainService extends LifecycleService {
             else
                 childNotification.setContentText(addressStr);
         }
-        childNotification.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, WalletActivity.class), 0));
+//        childNotification.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, WalletActivity.class), 0));
         childNotification.setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.coins_received));
         nm.notify(transactionHash.toString(), Constants.NOTIFICATION_ID_COINS_RECEIVED, childNotification.build());
     }
@@ -316,7 +315,7 @@ public class BlockchainService extends LifecycleService {
                     notification.setSmallIcon(R.drawable.stat_notify_peers, Math.min(numPeers, 4));
                     notification.setContentTitle(getString(R.string.app_name));
                     notification.setContentText(getString(R.string.notification_peers_connected_msg, numPeers));
-                    notification.setContentIntent(PendingIntent.getActivity(BlockchainService.this, 0, new Intent(BlockchainService.this, WalletActivity.class), 0));
+//                    notification.setContentIntent(PendingIntent.getActivity(BlockchainService.this, 0, new Intent(BlockchainService.this, WalletActivity.class), 0));
                     notification.setWhen(System.currentTimeMillis());
                     notification.setOngoing(true);
                     startForeground(Constants.NOTIFICATION_ID_CONNECTED, notification.build());

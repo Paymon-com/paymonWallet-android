@@ -97,6 +97,7 @@ public class RPC {
         public int id;
         public String login;
         public String password;
+        public String fcmToken;
 
         public static PM_auth PMdeserialize(SerializableData stream, int constructor, boolean exception) {
             if (PM_auth.svuid != constructor) {
@@ -115,6 +116,7 @@ public class RPC {
             id = stream.readInt32(exception);
             login = stream.readString(exception);
             password = stream.readString(exception);
+            fcmToken = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
@@ -122,6 +124,7 @@ public class RPC {
             stream.writeInt32(id);
             stream.writeString(login);
             stream.writeString(password);
+            stream.writeString(fcmToken);
         }
     }
 
