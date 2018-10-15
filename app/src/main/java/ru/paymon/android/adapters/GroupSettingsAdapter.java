@@ -1,11 +1,7 @@
 package ru.paymon.android.adapters;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ru.paymon.android.components.CircularImageView;
-
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
@@ -23,14 +17,12 @@ import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.DialogProgress;
-import ru.paymon.android.view.FragmentFriendProfile;
-
-import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 
 public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdapter.GroupsSettingsViewHolder> {
@@ -98,9 +90,9 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdap
             removeButton.setOnClickListener((view) ->
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
-                builder.setTitle("Подтверждение удаления") //TODO: добавить в стринг
-                        .setMessage("Вы хотите удалить участника?")
-                        .setCancelable(true).setPositiveButton("Да", (dialogInterface, i) -> deleteParticipant(userItem)).setNegativeButton("Нет", (dialogInterface, i) -> {
+                builder.setTitle(R.string.deletion_confirmation)
+                        .setMessage(R.string.delete_participants)
+                        .setCancelable(true).setPositiveButton(R.string.yes, (dialogInterface, i) -> deleteParticipant(userItem)).setNegativeButton(R.string.no, (dialogInterface, i) -> {
                 });
 
                 AlertDialog alert = builder.create();
