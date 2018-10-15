@@ -5,6 +5,8 @@
     <string name="date_format_12h">12 Hour AM/PM</string>
 
     <string name="profile_edit_failed">Changes were not saved</string>
+    <string name="deletion_confirmation">Deletion confirmation</string>
+    <string name="delete_participants">Do you want to delete a participant?</string>
     <string name="profile_edit_success">Profile successfully changed</string>
     <string name="reg_phone_correct">Check if the entered phone number is correct</string>
     <string name="pick_image_intent_text">Please Select</string>

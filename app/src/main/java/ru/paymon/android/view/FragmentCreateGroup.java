@@ -78,8 +78,6 @@ public class FragmentCreateGroup extends Fragment {
 
         contactsRecView.setHasFixedSize(true);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(contactsRecView.getContext(), llm.getOrientation());
-        contactsRecView.addItemDecoration(dividerItemDecoration);
         contactsRecView.setLayoutManager(llm);
 
         SparseArray<RPC.UserObject> userContacts = new SparseArray<>();

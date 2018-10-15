@@ -9,6 +9,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,11 +51,11 @@ public abstract class AbsFragmentChat extends Fragment {
     public EmojiEditText messageInput;
     public ImageButton sendButton;
     public ImageView emoticonsButton;
-    public ConstraintLayout includeAttachment;
-    public ImageButton buttonAttachment;
-    public ImageButton buttonDocumentAttachment;
-    public ImageButton buttonImageAttachment;
-    public ImageButton buttonVideoAttachment;
+//    public ConstraintLayout includeAttachment;
+//    public ImageButton buttonAttachment;
+//    public ImageButton buttonDocumentAttachment;
+//    public ImageButton buttonImageAttachment;
+//    public ImageButton buttonVideoAttachment;
     public LinearLayout toolbarContainer;
     public View toolbarView;
     public View toolbarViewSelected;
@@ -185,6 +186,32 @@ public abstract class AbsFragmentChat extends Fragment {
 //                includeAttachment.setVisibility(View.GONE);
 //            }
 //        });
+        messagesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
+                Log.e("AAA", llm.findFirstVisibleItemPosition() + " " + llm.findLastVisibleItemPosition());
+//                if(llm == null) return;
+//                if(llm.findFirstVisibleItemPosition() == 0){
+//                    if (User.currentUser == null || chatID == 0) return;
+//
+//                    RPC.PM_getChatMessages packet = new RPC.PM_getChatMessages();
+//
+//                    packet.chatID = AbsFragmentChat.this instanceof FragmentChat ? new RPC.PM_peerUser(chatID) : new RPC.PM_peerGroup(chatID);
+//                    packet.offset = 0;
+//                    packet.count = 15;
+//
+//                    NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
+//                        if (response == null) return;
+//                        final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
+//                        if (receivedMessages.messages.size() == 0) return;
+//                        MessagesManager.getInstance().putMessages(receivedMessages.messages);
+////            ApplicationLoader.db.chatMessageDao().insertList(receivedMessages.messages);
+//                    });
+//                }
+            }
+        });
 
         final EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(emoticonsButton).build(messageInput);
         emoticonsButton.setOnClickListener((view1) -> emojiPopup.toggle());
@@ -193,7 +220,7 @@ public abstract class AbsFragmentChat extends Fragment {
         messagesRecyclerView.setOverScrollMode(View.OVER_SCROLL_NEVER);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        linearLayoutManager.setStackFromEnd(true);
+//        linearLayoutManager.setStackFromEnd(true);
         linearLayoutManager.setReverseLayout(true);
         messagesRecyclerView.setLayoutManager(linearLayoutManager);
 

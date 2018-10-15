@@ -3,8 +3,10 @@
     <string name="msg_permissions_required">Пожалуйста, предоставьте разрешения</string>
 
     <string name="ok">ОК</string>
+    <string name="deletion_confirmation">Подтверждение удаления</string>
     <string name="title_chats">Чаты</string>
     <string name="title_more">Еще</string>
+    <string name="delete_participants">Вы хотите удалить участника?</string>
     <string name="title_contacts">Контакты</string>
     <string name="title_money">Деньги</string>
     <string name="title_transfer">Перевод</string>

@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import ru.paymon.android.components.CircularImageView;
+
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vanniktech.rxpermission.Permission;
@@ -39,6 +40,7 @@ import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.FileManager;
+import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
 
 import static android.app.Activity.RESULT_OK;
@@ -168,6 +170,7 @@ public class FragmentGroupSettings extends Fragment {
         });
 
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+        contactsList.setHasFixedSize(true);
         contactsList.setLayoutManager(llm);
 
         Button addParticipants = (Button) view.findViewById(R.id.group_settings_add);
@@ -219,7 +222,12 @@ public class FragmentGroupSettings extends Fragment {
         GroupSettingsAdapter adapter = new GroupSettingsAdapter(list, group.id, group.creatorID, dialogProgress);
         contactsList.setAdapter(adapter);
 
-        setHasOptionsMenu(true);
+        ItemClickSupport.addTo(contactsList).setOnItemClickListener((recyclerView, position, v) -> {
+            final int uid = adapter.list.get(position).uid;
+            final Bundle bundle = new Bundle();
+            bundle.putInt(CHAT_ID_KEY, uid);
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentFriendProfile, bundle);
+        });
 
         return view;
     }
