@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "262323478669",
+    "firebase_url": "https://paymonandroid.firebaseio.com",
+    "project_id": "paymonandroid",
+    "storage_bucket": "paymonandroid.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262323478669:android:ccce3836d52923c2",
+        "android_client_info": {
+          "package_name": "ru.paymon.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "262323478669-akgvb37era832205p6gd3rbtv8a2noj5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.paymon.android",
+            "certificate_hash": "9d4ef33bf35d9f33e7e0570a6d0844551c959ca7"
+          }
+        },
+        {
+          "client_id": "262323478669-4qlcu5vob861h9gce0atlk9snn7t4pdi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCc9qwAsPsXhJWQFPGk0lvYwYjJw7zc2EQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "262323478669-4qlcu5vob861h9gce0atlk9snn7t4pdi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
