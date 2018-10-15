@@ -147,6 +147,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onResume() {
         super.onResume();
         Utils.showBottomBar(getActivity());
+        search.getText().clear();
         MessagesManager.getInstance().currentChatID = 0;
         Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
         onRefresh();
