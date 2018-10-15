@@ -27,6 +27,7 @@ import ru.paymon.android.utils.Utils;
 
 public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMessagesAdapter.BaseMessageViewHolder> {
     private SelectionTracker selectionTracker;
+    Context context;
 
     public GroupMessagesAdapter(@NonNull DiffUtil.ItemCallback<RPC.Message> diffCallback) {
         super(diffCallback);
@@ -51,7 +52,7 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
     public BaseMessageViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int viewType) {
         BaseMessageViewHolder vh = null;
 
-        Context context = viewGroup.getContext();
+        context = viewGroup.getContext();
         MessagesAdapter.ViewTypes viewTypes = MessagesAdapter.ViewTypes.values()[viewType];
         switch (viewTypes) {
             case SENT_MESSAGE:
@@ -190,7 +191,7 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
                 final RPC.Group group = GroupsManager.getInstance().getGroup(groupID);
                 final RPC.UserObject creator = UsersManager.getInstance().getUser(group.creatorID);
                 if(creator == null) return;
-                String createGroupString = String.format("%s создал беседу \"%s\"", Utils.formatUserName(creator), group.title); //TODO:String
+                String createGroupString = String.format("%s %s \"%s\"", Utils.formatUserName(creator), context.getString(R.string.created_group), group.title);
                 msg.setText(createGroupString);
             }
         }

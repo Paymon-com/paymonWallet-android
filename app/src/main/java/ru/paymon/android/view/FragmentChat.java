@@ -11,10 +11,12 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.selection.StorageStrategy;
+import ru.paymon.android.R;
 import ru.paymon.android.adapters.MessagesAdapter;
 import ru.paymon.android.pagedlib.MessageDiffUtilCallback;
 import ru.paymon.android.selection.MessageItemKeyProvider;
 import ru.paymon.android.selection.MessageItemLookup;
+import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.ChatViewModel;
 
 public class FragmentChat extends AbsFragmentChat {
@@ -61,7 +63,7 @@ public class FragmentChat extends AbsFragmentChat {
                     if (selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.GONE);
                         toolbarViewSelected.setVisibility(View.VISIBLE);
-                        selectedItemCount.setText(String.format("Selected item count: %d", selectionTracker.getSelection().size()));//TODO:String
+                        selectedItemCount.setText(getString(R.string.selected_item_count) + ": " + selectionTracker.getSelection().size());
                     } else if (!selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.VISIBLE);
                         toolbarViewSelected.setVisibility(View.GONE);
@@ -83,6 +85,7 @@ public class FragmentChat extends AbsFragmentChat {
     @Override
     public void onResume() {
         super.onResume();
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 
     @Override

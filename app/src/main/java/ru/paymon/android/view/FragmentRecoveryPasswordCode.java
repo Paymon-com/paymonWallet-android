@@ -98,8 +98,6 @@ public class FragmentRecoveryPasswordCode extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
-
         setHasOptionsMenu(true);
     }
 

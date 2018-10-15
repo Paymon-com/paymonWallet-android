@@ -66,7 +66,7 @@ public class FragmentCreateGroup extends Fragment {
                     arrayList.add(user);
             }
             if (arrayList.size() <= 0) {
-                Toast.makeText(getContext(), "Никто не выбран!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.no_one_selected, Toast.LENGTH_LONG).show();
                 return;
             }
             Bundle bundle = new Bundle();
@@ -143,5 +143,6 @@ public class FragmentCreateGroup extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 }

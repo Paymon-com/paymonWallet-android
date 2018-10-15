@@ -102,7 +102,7 @@ public class FragmentGroupAddParticipants extends Fragment {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
                         Toast toast = Toast.makeText(getContext(),
-                                getString(R.string.you_did_not_choose_anyone), Toast.LENGTH_SHORT);//TODO sting
+                                getString(R.string.you_did_not_choose_anyone), Toast.LENGTH_SHORT);
                         toast.show();
                     });
                     return;

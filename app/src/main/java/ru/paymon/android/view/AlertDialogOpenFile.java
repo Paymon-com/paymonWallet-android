@@ -213,16 +213,12 @@ public class AlertDialogOpenFile extends AlertDialog.Builder {
         drawable.setBounds(0, 0, 60, 60);
         textView.setCompoundDrawables(drawable, null, null, null);
         textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        textView.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                File file = new File(currentPath);
-                File parentDirectory = file.getParentFile();
-                if (parentDirectory != null) {
-                    currentPath = parentDirectory.getPath();
-                    RebuildFiles(((FileAdapter) listView.getAdapter()));
-                }
+        textView.setOnClickListener(view -> {
+            File file = new File(currentPath);
+            File parentDirectory = file.getParentFile();
+            if (parentDirectory != null) {
+                currentPath = parentDirectory.getPath();
+                RebuildFiles(((FileAdapter) listView.getAdapter()));
             }
         });
         return textView;
@@ -290,22 +286,18 @@ public class AlertDialogOpenFile extends AlertDialog.Builder {
 
     private ListView createListView(Context context) {
         ListView listView = new ListView(context);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int index, long l) {
-                final ArrayAdapter<File> adapter = (FileAdapter) adapterView.getAdapter();
-                File file = adapter.getItem(index);
-                if (file.isDirectory()) {
-                    currentPath = file.getPath();
-                    RebuildFiles(adapter);
-                } else {
-                    if (index != selectedIndex)
-                        selectedIndex = index;
-                    else
-                        selectedIndex = -1;
-                    adapter.notifyDataSetChanged();
-                }
+        listView.setOnItemClickListener((adapterView, view, index, l) -> {
+            final ArrayAdapter<File> adapter = (FileAdapter) adapterView.getAdapter();
+            File file = adapter.getItem(index);
+            if (file.isDirectory()) {
+                currentPath = file.getPath();
+                RebuildFiles(adapter);
+            } else {
+                if (index != selectedIndex)
+                    selectedIndex = index;
+                else
+                    selectedIndex = -1;
+                adapter.notifyDataSetChanged();
             }
         });
         return listView;

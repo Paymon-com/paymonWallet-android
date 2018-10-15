@@ -118,7 +118,7 @@ public class FragmentGroupSettings extends Fragment {
                                 .setMinCropWindowSize(Config.minAvatarSize, Config.minAvatarSize)
                                 .start(getContext(), FragmentGroupSettings.this);
                     } else {
-                        Toast.makeText(getContext(), "Недостаточно прав!", Toast.LENGTH_LONG).show(); //TODO:String
+                        Toast.makeText(getContext(), R.string.insufficient_rights, Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -262,7 +262,7 @@ public class FragmentGroupSettings extends Fragment {
                                     dialogProgress.cancel();
 
                                 android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext())
-                                        .setMessage(R.string.photo_upload_failed) //TODO:string
+                                        .setMessage(R.string.photo_upload_failed)
                                         .setCancelable(true);
                                 android.support.v7.app.AlertDialog alertDialog = builder.create();
                                 alertDialog.show();

@@ -57,8 +57,6 @@ public class FragmentGroupAddBlackList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Utils.setActionBarWithTitle(getActivity(), "Добавить в черный список");
-        //Utils.setArrowBackInToolbar(getActivity());
         Utils.hideBottomBar(getActivity());
     }
 

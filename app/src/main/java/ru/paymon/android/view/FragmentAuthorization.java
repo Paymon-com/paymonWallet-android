@@ -90,10 +90,6 @@ public class FragmentAuthorization extends Fragment {
         dialog = new DialogProgress(getContext());
         dialog.setCancelable(true);
 
-//        getActivity().invalidateOptionsMenu();
-//        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-//        setHasOptionsMenu(true);
-
         recoveryPassword.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentRecoveryPasswordEmail));
 
         passView.setOnKeyListener((v, keyCode, event) -> {

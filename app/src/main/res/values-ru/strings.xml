@@ -31,6 +31,13 @@
     <string name="select_the_recipient">Выберите получателя</string>
 
     <string name="yes">Да</string>
+    <string name="clear">Очистить</string>
+    <string name="hint">Подсказка</string>
+    <string name="created_group">создал группу</string>
+    <string name="no_one_selected">Никто не выбран</string>
+    <string name="selected_item_count">Количество выбранных элементов</string>
+    <string name="insufficient_rights">Недостаточно прав</string>
+    <string name="time_to_next_dispatch">Время до следующей отправки</string>
 
     <string name="friend_requests">Заявки в друзья</string>
 

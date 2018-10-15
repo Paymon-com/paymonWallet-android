@@ -175,7 +175,5 @@ public class FragmentFriendProfile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Utils.setActionBarWithTitle(getActivity(), "Профиль");
-        //Utils.setArrowBackInToolbar(getActivity());
     }
 }
