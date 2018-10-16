@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary">
 
     <TextView
         android:id="@+id/dialog_fragment_with_edit_title"
@@ -11,68 +13,72 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-light"
         android:text="@string/enter_group_title"
-        android:textColor="@color/colorPrimary"
+        android:textSize="18sp"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/dialog_fragment_with_edit_edit_text"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:background="@color/blue_light"
-        android:ems="10"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/roboto_thin"
         android:inputType="textPersonName"
-        android:maxLength="128"
-        android:maxLines="1"
-        android:paddingBottom="8dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp"
         android:paddingTop="8dp"
-        android:textColor="@color/colorPrimary"
+        android:paddingRight="16dp"
+        android:paddingBottom="8dp"
+        android:singleLine="true"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_with_edit_title" />
 
-    <FrameLayout
-        android:id="@+id/frame"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:layout_marginTop="16dp"
-        android:background="@color/blue_light"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_with_edit_edit_text">
+    <!--<FrameLayout-->
+        <!--android:id="@+id/frame"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1px"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:background="@color/blue_light"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_with_edit_edit_text">-->
 
-    </FrameLayout>
+    <!--</FrameLayout>-->
 
     <Button
         android:id="@+id/dialog_fragment_with_edit_ok"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:fontFamily="sans-serif-light"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorPrimary"
+        android:fontFamily="@font/roboto_thin"
         android:text="@string/agree"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/dialog_fragment_with_edit_cancel"
-        app:layout_constraintTop_toBottomOf="@+id/frame" />
+        app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_with_edit_edit_text" />
 
     <Button
         android:id="@+id/dialog_fragment_with_edit_cancel"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:fontFamily="sans-serif-light"
+        android:layout_marginTop="16dp"
+        android:background="@color/colorPrimary"
+        android:fontFamily="@font/roboto_thin"
         android:text="@string/button_cancel"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/dialog_fragment_with_edit_ok"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frame" />
+        app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_with_edit_edit_text" />
 </android.support.constraint.ConstraintLayout>
 
 
