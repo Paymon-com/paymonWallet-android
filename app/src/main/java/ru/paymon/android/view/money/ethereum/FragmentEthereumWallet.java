@@ -1,4 +1,4 @@
-package ru.paymon.android.view.Money.ethereum;
+package ru.paymon.android.view.money.ethereum;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
@@ -24,12 +24,13 @@ import ru.paymon.android.adapters.EthereumTransactionAdapter;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.view.Money.DialogFragmentDeleteWallet;
-import ru.paymon.android.view.Money.DialogFragmentPrivateKey;
-import ru.paymon.android.view.Money.DialogFragmentPublicKey;
+import ru.paymon.android.view.money.DialogFragmentDeleteWallet;
+import ru.paymon.android.view.money.DialogFragmentPrivateKey;
+import ru.paymon.android.view.money.DialogFragmentPublicKey;
+import ru.paymon.android.view.money.DialogFragmentRestoreWallet;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
-import static ru.paymon.android.view.Money.FragmentMoney.CURRENCY_KEY;
+import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
 
 public class FragmentEthereumWallet extends Fragment {
     public static final String ETH_CURRENCY_VALUE = "ETH";
@@ -71,7 +72,7 @@ public class FragmentEthereumWallet extends Fragment {
         bundle.putString(CURRENCY_KEY, ETH_CURRENCY_VALUE);
 
         backBtn.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
-        restoreBtn.setOnClickListener(v -> new DialogFragmentRestoreEthereumWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
+        restoreBtn.setOnClickListener(v -> new DialogFragmentRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        backupBtn.setOnClickListener(v -> ((WalletApplication) getActivity().getApplication()).backupEthereumWallet());//TODO: вызов вьюшки с выбором места куда бэкапить
         deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));

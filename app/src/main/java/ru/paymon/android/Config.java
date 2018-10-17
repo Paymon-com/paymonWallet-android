@@ -35,4 +35,7 @@ public class Config {
 
     public static final int minAvatarSize = 256;
     public static final int maxAvatarSize = 512;
+
+    public static final String MESSAGES_NOTIFICATION_CHANNEL_ID = "MESSAGES_NOTIFICATION_CHANNEL_ID";
+    public static final String MESSAGES_NOTIFICATION_CHANNEL_NAME = "Messages";
 }

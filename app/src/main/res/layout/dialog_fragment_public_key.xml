@@ -10,7 +10,6 @@
         android:id="@+id/dialog_fragment_public_key_image"
         android:layout_width="@dimen/bitmap_dialog_qr_size"
         android:layout_height="@dimen/bitmap_dialog_qr_size"
-
         android:background="@color/white"
         android:contentDescription="@null"
         android:keepScreenOn="true"

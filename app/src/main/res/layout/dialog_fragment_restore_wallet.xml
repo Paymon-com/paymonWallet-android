@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/dialog_fragment_restore_eth_wallet_from_explorer_button"
+            android:id="@+id/dialog_fragment_restore_wallet_from_explorer_button"
             android:layout_width="wrap_content"
             android:layout_height="35dp"
             android:layout_marginEnd="8dp"
@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/dialog_fragment_restore_eth_wallet_path"
+            android:id="@+id/dialog_fragment_restore_wallet_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -40,10 +40,10 @@
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_eth_wallet_from_explorer_button" />
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_from_explorer_button" />
 
         <TextView
-            android:id="@+id/dialog_fragment_restore_eth_wallet_hint1"
+            android:id="@+id/dialog_fragment_restore_wallet_hint1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -54,10 +54,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_eth_wallet_pass" />
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_pass" />
 
         <CheckBox
-            android:id="@+id/dialog_fragment_restore_eth_wallet_check"
+            android:id="@+id/dialog_fragment_restore_wallet_check"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -73,11 +73,11 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_eth_wallet_hint1"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_hint1"
             tools:targetApi="lollipop" />
 
         <TextView
-            android:id="@+id/dialog_fragment_restore_eth_wallet_hint2"
+            android:id="@+id/dialog_fragment_restore_wallet_hint2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -88,10 +88,10 @@
             android:textSize="@dimen/font_size_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_eth_wallet_check" />
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_check" />
 
         <TextView
-            android:id="@+id/dialog_fragment_restore_eth_wallet_hint3"
+            android:id="@+id/dialog_fragment_restore_wallet_hint3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -102,7 +102,7 @@
             android:textSize="@dimen/font_size_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_eth_wallet_hint2" />
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_hint2" />
 
         <FrameLayout
             android:id="@+id/frame"
@@ -112,12 +112,12 @@
             android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_eth_wallet_hint3">
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_hint3">
 
         </FrameLayout>
 
         <Button
-            android:id="@+id/dialog_fragment_restore_eth_wallet_import_button"
+            android:id="@+id/dialog_fragment_restore_wallet_import_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -129,7 +129,7 @@
             app:layout_constraintTop_toBottomOf="@+id/frame" />
 
         <EditText
-            android:id="@+id/dialog_fragment_restore_eth_wallet_pass"
+            android:id="@+id/dialog_fragment_restore_wallet_pass"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -142,7 +142,7 @@
             android:textColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_eth_wallet_path" />
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_path" />
 
     </android.support.constraint.ConstraintLayout>
 

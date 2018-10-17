@@ -16,7 +16,8 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
-import ru.paymon.android.gateway.ethereum.EthereumWallet;
+import ru.paymon.android.models.EthereumWallet;
+import ru.paymon.android.models.PaymonWallet;
 
 public abstract class AbsWalletApplication extends Application {
     protected ActivityManager activityManager;
@@ -28,25 +29,32 @@ public abstract class AbsWalletApplication extends Application {
     protected static final BigDecimal TEN_POW_18 = new BigDecimal("1000000000000000000");
     protected static final BigDecimal TEN_POW_9 = new BigDecimal("1000000000");
 
-    public abstract boolean createBitcoinWallet();
-    public abstract Wallet getBitcoinWallet();
-    public abstract Wallet backupBitcoinWallet();
-    public abstract Wallet restoreBitcoinWallet();
+    public abstract boolean createBitcoinWallet(final String password); //TODO: применить пароль при создании
+    protected abstract Wallet getBitcoinWallet(final String password);
+    public abstract RestoreStatus restoreBitcoinWallet(final File file, final String password);//TODO: применить пароль при создании
+    public abstract boolean backupBitcoinWallet(final String path);
+    public abstract BigInteger getBitcoinBalance();
     public abstract boolean deleteBitcoinWallet();
+    public abstract String convertBitcoinToFiat(final String btcAmount,final float fiatExRate);
+    public abstract String getBitcoinPublicAddress();
+    public abstract String getBitcoinPrivateAddress();
 
     public abstract boolean createEthereumWallet(final String password);
-    public abstract EthereumWallet getEthereumWallet(final String password);
+    protected abstract EthereumWallet getEthereumWallet(final String password);
     public abstract RestoreStatus restoreEthereumWallet(final File file, final String password);
     public abstract boolean backupEthereumWallet(final String path);
     public abstract BigInteger getEthereumBalance();
     public abstract boolean deleteEthereumWallet();
     public abstract String convertEthereumToFiat(final String ethAmount,final float fiatExRate);
 
-    public abstract Wallet createPaymonWallet();
-    public abstract Wallet getPaymonWallet();
-    public abstract Wallet restorePaymonWallet();
-    public abstract Wallet backupPaymonWallet();
+    public abstract boolean createPaymonWallet(final String password);
+    protected abstract PaymonWallet getPaymonWallet(final String password);
+    public abstract RestoreStatus restorePaymonWallet(final File file, final String password);
+    public abstract boolean backupPaymonWallet(final String path);
+    public abstract BigInteger getPaymonBalance();
     public abstract boolean deletePaymonWallet();
+    public abstract String convertPaymonToFiat(final String pmntAmount,final float fiatExRate);
+
 
     protected abstract void setBitcoinWalletListeners();
 

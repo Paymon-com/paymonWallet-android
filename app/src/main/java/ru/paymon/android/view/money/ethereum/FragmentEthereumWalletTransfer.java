@@ -1,4 +1,4 @@
-package ru.paymon.android.view.Money.ethereum;
+package ru.paymon.android.view.money.ethereum;
 
 import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
@@ -30,7 +30,6 @@ import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.utils.Utils;
@@ -48,7 +47,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     private TextView totalValue;
     private IndicatorSeekBar gasPriceBar;
     private IndicatorSeekBar gasLimitBar;
-//    private DialogProgress dialogProgress;
+    //    private DialogProgress dialogProgress;
     private EditText receiverAddress;
 
     private HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates = new HashMap<>();
@@ -103,12 +102,13 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_back_image_button);
         TextView nextButton = (TextView) view.findViewById(R.id.toolbar_eth_wallet_transf_next_text_view);
 
+        WalletApplication application = (WalletApplication) getActivity().getApplication();
+
         gasPriceBar.setIndicatorTextFormat("Current gas price: ${PROGRESS} GWEI");
         gasLimitBar.setIndicatorTextFormat("Current gas limit: ${PROGRESS}");
         cryptoAmountTitle.setText(cryptoCurrency);
         fiatEquivalentTitle.setText(currentFiatCurrency);
-        if (User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS != null)
-            idFrom.setText(User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS);
+        idFrom.setText(application.getEthereumWallet().publicAddress);
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         nextButton.setOnClickListener(v -> openNextFragment());
         cryptoAmount.addTextChangedListener(cryptoAmountTextWatcher);
@@ -118,7 +118,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
 //        dialogProgress.setCancelable(false);
         ethereumBalanceData.observe(getActivity(), (balanceData) -> balance.setText(String.format("%s ETH", balanceData)));
         maxGasPriceData.observe(getActivity(), maxGasPrice -> {
-            if(maxGasPrice == null) return;
+            if (maxGasPrice == null) return;
             gasPriceBar.setMax(maxGasPrice);
             gasLimitBar.setMax(Config.GAS_LIMIT_MAX);
             gasLimitBar.setMin(Config.GAS_LIMIT_MIN);
@@ -126,7 +126,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             gasLimitValue.postValue(Config.GAS_LIMIT_DEFAULT);
         });
         midGasPriceData.observe(getActivity(), midGasPrice -> {
-            if(midGasPrice == null) return;
+            if (midGasPrice == null) return;
             gasPriceBar.setProgress(midGasPrice);
             gasPriceValue.postValue(midGasPrice);
         });
@@ -154,7 +154,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             Toast.makeText(ApplicationLoader.applicationContext, "Заполнены не все поля!", Toast.LENGTH_SHORT).show();
             return;
         }
-        if(!Utils.verifyETHpubKey(receiverAddress.getText().toString())){
+        if (!Utils.verifyETHpubKey(receiverAddress.getText().toString())) {
             Toast.makeText(ApplicationLoader.applicationContext, "Адрес получателя введен не верно!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -164,7 +164,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                     .setCancelable(false)
                     .setNegativeButton(R.string.ok, (dialog, which) -> dialog.cancel()).show();
         } else {
-            if(networkFeeValue.getValue() == null || cryptoAmountValue.getValue() == null
+            if (networkFeeValue.getValue() == null || cryptoAmountValue.getValue() == null
                     || gasLimitValue.getValue() == null || gasPriceValue.getValue() == null) return;
             Bundle bundle = new Bundle();
             bundle.putString("TO_ADDRESS", receiverAddress.getText().toString().trim());

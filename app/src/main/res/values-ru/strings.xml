@@ -47,6 +47,8 @@
     <string name="login_or_email_is_empty">Логин или E-mail пусты</string>
     <string name="create_ethereum_wallet_failed">Не удалось создать Ethereum кошелек</string>
     <string name="ethereum_wallet_created">Ethereum кошелек создан</string>
+    <string name="bitcoin_wallet_created">Bitcoin кошелек создан</string>
+    <string name="paymon_wallet_created">Paymon кошелек создан</string>
 
     <string name="default_denomination_value_eth">2 десятичных знака</string>
     <string name="money_denomination_auto">Автоматический формат</string>
@@ -125,6 +127,7 @@
     <string name="withdraw">Вывод</string>
     <string name="rub">RUB</string>
     <string name="btc">BTC</string>
+    <string name="pmnt">PMNT</string>
 
     <string name="settings_notifications">Уведомления</string>
     <string name="settings_basic">Основные</string>
@@ -385,7 +388,7 @@
     <string name="auth_wrong_login_or_password">Неверный логин или пароль</string>
     <string name="error_spamming">Слишком много запросов, попробуйте снова</string>
     <string name="eth">ETH</string>
-    <string name="ethereum_wallet_create_title">Придумайте пароль для вашего Ethereum кошелька. Операция может занять несколько минут.</string>
+    <string name="wallet_create_title">Придумайте пароль для вашего кошелька. Операция может занять несколько минут.</string>
     <string name="title_ethereum_wallet">Ethereum кошелек</string>
     <string name="create_wallet_dialog_hint">Операция может занять несколько минут. Пожулайста, подождите…</string>
     <string name="ethereum_wallet_is_loaded_hint">Ethereum кошелек загружается, пожалуйста, подождите…</string>

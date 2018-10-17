@@ -21,17 +21,18 @@ import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
 
 import ru.paymon.android.NotificationManager;
-import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
-import ru.paymon.android.gateway.ethereum.EthereumWallet;
+import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.models.NonEmptyWalletItem;
+import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
-import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURRENCY_VALUE;
 
 public class MoneyViewModel extends AndroidViewModel implements NotificationManager.IListener {
     private MutableLiveData<ArrayList<ExchangeRatesItem>> exchangeRatesData;
@@ -131,25 +132,31 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             showProgress.postValue(true);
             final ArrayList<WalletItem> walletItems = new ArrayList<>();
 
-            EthereumWallet ethereumWallet = application.getEthereumWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
-            if(ethereumWallet != null){
+            EthereumWallet ethereumWallet = application.getEthereumWallet();
+            if (ethereumWallet != null) {
                 Log.e("AAA", ethereumWallet.publicAddress);
                 BigInteger balance = application.getEthereumBalance();
-                if(balance != null)
+                if (balance != null)
                     walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, balance.toString(), ethereumWallet.publicAddress));//TODO:convert balance
                 else
                     walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, "0", ethereumWallet.publicAddress));
-            }else{
+            } else {
                 walletItems.add(new WalletItem(ETH_CURRENCY_VALUE));
             }
 
-            Wallet wallet = application.getBitcoinWallet();
-            if (wallet == null) {
+            Wallet bitcoinWallet = application.getBitcoinWallet();
+            if (bitcoinWallet == null) {
                 walletItems.add(new WalletItem(BTC_CURRENCY_VALUE));
             } else {
-                walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, wallet.getBalance().toString(), wallet.currentReceiveAddress().toString()));
+                walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, bitcoinWallet.getBalance().toString(), bitcoinWallet.currentReceiveAddress().toString()));
             }
 
+            PaymonWallet paymonWallet = application.getPaymonWallet();
+            if(paymonWallet== null) {
+                walletItems.add(new WalletItem(PMNT_CURRENCY_VALUE));
+            }else{
+//                walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, paymonWallet.getBalance().toString(), paymonWallet.currentReceiveAddress().toString()));
+            }
 //            if (User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD != null) {
 //                boolean isWalletLoaded = Ethereum.getInstance().loadWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
 //                if (isWalletLoaded) {
@@ -300,7 +307,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-        if(event == NotificationManager.NotificationEvent.ETHEREUM_WALLET_CREATED || event == NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED || event == NotificationManager.NotificationEvent.PAYMON_WALLET_CREATED){
+        if (event == NotificationManager.NotificationEvent.ETHEREUM_WALLET_CREATED || event == NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED || event == NotificationManager.NotificationEvent.PAYMON_WALLET_CREATED) {
             loadWalletsData();
         }
     }

@@ -1,4 +1,4 @@
-package ru.paymon.android.view.Money;
+package ru.paymon.android.view.money;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,9 +18,9 @@ import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.view.Money.FragmentMoney.CURRENCY_KEY;
-import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
-import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
+import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
 
 public class DialogFragmentDeleteWallet extends DialogFragment {
     private String currency;
@@ -106,7 +106,7 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
 //                });
                 break;
             case "PMNT":
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnc_color));
+                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
 
                 ((WalletApplication) getActivity().getApplication()).deletePaymonWallet();
 

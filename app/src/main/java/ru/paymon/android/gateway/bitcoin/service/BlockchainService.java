@@ -84,7 +84,6 @@ import ru.paymon.android.gateway.bitcoin.Constants;
 import ru.paymon.android.gateway.bitcoin.data.SelectedExchangeRateLiveData;
 import ru.paymon.android.gateway.bitcoin.data.TimeLiveData;
 import ru.paymon.android.gateway.bitcoin.data.WalletLiveData;
-import ru.paymon.android.gateway.bitcoin.util.CrashReporter;
 import ru.paymon.android.gateway.bitcoin.util.WalletUtils;
 import ru.paymon.android.room.AddressBookDao;
 import ru.paymon.android.room.AppDatabase;
@@ -634,7 +633,6 @@ public class BlockchainService extends LifecycleService {
                     final String message = "wallet/blockchain out of sync: " + walletLastBlockSeenHeight + "/"
                             + bestChainHeight;
                     log.error(message);
-                    CrashReporter.saveBackgroundTrace(new RuntimeException(message), application.packageInfo());
                 }
 
                 peerGroup = new PeerGroup(Constants.NETWORK_PARAMETERS, blockChain);

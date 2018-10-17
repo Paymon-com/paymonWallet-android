@@ -32,7 +32,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentMoney"
-        android:name="ru.paymon.android.view.Money.FragmentMoney"
+        android:name="ru.paymon.android.view.money.FragmentMoney"
         android:label="fragment_money"
         tools:layout="@layout/fragment_money" >
         <action
@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_fragmentMoney_to_fragment_bitcoin_wallet"
             app:destination="@id/fragmentBitcoinWallet" />
+        <action
+            android:id="@+id/action_fragmentMoney_to_fragmentPaymonWallet"
+            app:destination="@id/fragmentPaymonWallet" />
     </fragment>
     <fragment
         android:id="@+id/fragmentContacts"
@@ -109,7 +112,7 @@
         tools:layout="@layout/fragment_edit_profile" />
     <fragment
         android:id="@+id/fragmentEthereumWallet"
-        android:name="ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet"
+        android:name="ru.paymon.android.view.money.ethereum.FragmentEthereumWallet"
         android:label="fragment_ethereum_wallet"
         tools:layout="@layout/fragment_ethereum_wallet" >
         <action
@@ -118,7 +121,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentEthereumWalletTransfer"
-        android:name="ru.paymon.android.view.Money.ethereum.FragmentEthereumWalletTransfer"
+        android:name="ru.paymon.android.view.money.ethereum.FragmentEthereumWalletTransfer"
         android:label="fragment_ethereum_wallet_transfer"
         tools:layout="@layout/fragment_ethereum_wallet_transfer" >
         <action
@@ -165,7 +168,7 @@
         tools:layout="@layout/fragment_group_add_administrators" />
     <fragment
         android:id="@+id/fragmentEthereumWalletTransferInfo"
-        android:name="ru.paymon.android.view.Money.ethereum.FragmentEthereumWalletTransferInfo"
+        android:name="ru.paymon.android.view.money.ethereum.FragmentEthereumWalletTransferInfo"
         android:label="fragment_ethereum_wallet_transfer_info"
         tools:layout="@layout/fragment_ethereum_wallet_transfer_info" />
     <activity
@@ -180,9 +183,9 @@
         tools:layout="@layout/dialog_fragment_create_group" />
     <fragment
         android:id="@+id/dialogFragmentCreateRestoreEthereumWallet"
-        android:name="ru.paymon.android.view.Money.DialogFragmentCreateRestoreWallet"
+        android:name="ru.paymon.android.view.money.DialogFragmentCreateRestoreWallet"
         android:label="dialog_fragment_create_restore_eth_wallet"
-        tools:layout="@layout/dialog_fragment_create_restore_eth_wallet" >
+        tools:layout="@layout/dialog_fragment_create_restore_wallet" >
         <action
             android:id="@+id/action_dialogFragmentCreateRestoreEthereumWallet_to_dialogFragmentCreateGroup"
             app:destination="@id/DialogFragmentCreateEthereumWallet" />
@@ -192,12 +195,17 @@
     </fragment>
     <fragment
         android:id="@+id/DialogFragmentRestoreEthereumWallet"
-        android:name="ru.paymon.android.view.Money.ethereum.DialogFragmentCreateEthereumWallet"
+        android:name="ru.paymon.android.view.money.DialogFragmentCreateWallet"
         android:label="DialogFragmentRestoreEthereumWallet"
-        tools:layout="@layout/dialog_fragment_create_eth_wallet" />
+        tools:layout="@layout/dialog_fragment_create_wallet" />
     <fragment
         android:id="@+id/fragmentBitcoinWallet"
-        android:name="ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet"
+        android:name="ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet"
         android:label="fragment_bitcoin_wallet"
         tools:layout="@layout/fragment_bitcoin_wallet" />
+    <fragment
+        android:id="@+id/fragmentPaymonWallet"
+        android:name="ru.paymon.android.view.money.pmnt.FragmentPaymonWallet"
+        android:label="fragment_paymon_wallet"
+        tools:layout="@layout/fragment_paymon_wallet" />
 </navigation>

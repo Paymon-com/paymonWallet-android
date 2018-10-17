@@ -15,8 +15,9 @@ import ru.paymon.android.R;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
 
-import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
-import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURRENCY_VALUE;
 
 public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public ArrayList<WalletItem> walletItems;
@@ -89,13 +90,13 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick(ETH_CURRENCY_VALUE));
                 break;
             case PMNT:
-//                NonEmptyWalletItem pmntWalletItem = (NonEmptyWalletItem) walletItem;
-//                walletViewHolder = (WalletViewHolder) holder;
-//                walletViewHolder.icon.setImageResource(R.drawable.ic_pmnt);
-//                walletViewHolder.publicAddress.setText(pmntWalletItem.publicAddress);
-//                walletViewHolder.cryptoCurrency.setText(pmntWalletItem.cryptoCurrency);
-//                walletViewHolder.cryptoBalance.setText(pmntWalletItem.cryptoBalance);
-//                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick(PMNT_CURRENCY_VALUE));
+                NonEmptyWalletItem pmntWalletItem = (NonEmptyWalletItem) walletItem;
+                walletViewHolder = (WalletViewHolder) holder;
+                walletViewHolder.icon.setImageResource(R.drawable.ic_pmnt);
+                walletViewHolder.publicAddress.setText(pmntWalletItem.publicAddress);
+                walletViewHolder.cryptoCurrency.setText(pmntWalletItem.cryptoCurrency);
+                walletViewHolder.cryptoBalance.setText(pmntWalletItem.cryptoBalance);
+                walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick(PMNT_CURRENCY_VALUE));
                 break;
             case EMPTY_BTC:
                 EmptyWalletViewHolder emptyWallet = (EmptyWalletViewHolder) holder;
@@ -108,9 +109,9 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick(ETH_CURRENCY_VALUE));
                 break;
             case EMPTY_PMNT:
-//                emptyWallet = (EmptyWalletViewHolder) holder;
-//                emptyWallet.icon.setImageResource(R.drawable.ic_pmnt);
-//                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick(PMNT_CURRENCY_VALUE));
+                emptyWallet = (EmptyWalletViewHolder) holder;
+                emptyWallet.icon.setImageResource(R.drawable.ic_pmnt);
+                emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick(PMNT_CURRENCY_VALUE));
                 break;
         }
     }

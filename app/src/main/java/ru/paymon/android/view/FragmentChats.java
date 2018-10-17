@@ -85,7 +85,6 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
             final Bundle bundle = new Bundle();
             bundle.putInt(CHAT_ID_KEY, chatsItem.chatID);
             if (chatsItem.isGroup) {
-//                bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().getGroup(chatsItem.chatID).users);
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
             } else {
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);

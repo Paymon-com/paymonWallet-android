@@ -1,4 +1,4 @@
-package ru.paymon.android.view.Money.ethereum;
+package ru.paymon.android.view.money.ethereum;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.Utils;
 
@@ -57,7 +56,7 @@ public class FragmentEthereumWalletTransferInfo extends Fragment {
             final BigDecimal totalVal = new BigDecimal(bundle.getString("TOTAL"));
 
             WalletApplication application = ((WalletApplication) getActivity().getApplication());
-            fromAddress.setText(application.getEthereumWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD).publicAddress);
+            fromAddress.setText(application.getEthereumWallet().publicAddress);
             toAddress.setText(toAddr);
             fee.setText(String.valueOf(feeVal));
             amount.setText(String.valueOf(amountValue));

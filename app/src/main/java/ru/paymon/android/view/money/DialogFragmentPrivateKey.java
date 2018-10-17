@@ -1,4 +1,4 @@
-package ru.paymon.android.view.Money;
+package ru.paymon.android.view.money;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -12,13 +12,13 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import ru.paymon.android.R;
-import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.view.Money.FragmentMoney.CURRENCY_KEY;
-import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
-import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
+import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURRENCY_VALUE;
 
 public class DialogFragmentPrivateKey extends DialogFragment {
     private String currency;
@@ -35,17 +35,7 @@ public class DialogFragmentPrivateKey extends DialogFragment {
         Bundle bundle = getArguments();
         if(bundle!= null){
             if(!bundle.containsKey(CURRENCY_KEY)) return;
-
             currency = bundle.getString(CURRENCY_KEY);
-
-            switch (currency){
-                case BTC_CURRENCY_VALUE:
-                    break;
-                case ETH_CURRENCY_VALUE:
-                    break;
-//                case PMNT_CURRENCY_VALUE:
-//                    break;
-            }
         }
     }
 
@@ -58,19 +48,21 @@ public class DialogFragmentPrivateKey extends DialogFragment {
         TextView privateKey = (TextView) view.findViewById(R.id.dialog_fragment_private_key_address);
         Button button = (Button) view.findViewById(R.id.dialog_fragment_private_key_button);
 
+        WalletApplication application = ((WalletApplication) getActivity().getApplication());
+
         String privateKeyStr = "";
         switch (currency) {
-            case "ETH":
+            case ETH_CURRENCY_VALUE:
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
-                 privateKeyStr = ((WalletApplication) getActivity().getApplication()).getEthereumWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD).privateAddress;
+                 privateKeyStr = application.getEthereumWallet().privateAddress;
                 break;
-            case "BTC":
+            case BTC_CURRENCY_VALUE:
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
-//                privateKeyStr = Bitcoin.getInstance().getPrivateKey();//TODO:
+                privateKeyStr = application.getBitcoinPrivateAddress();
                 break;
-            case "PMNT":
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnc_color));
-//                privateKeyStr = Paymon.getInstance().getPrivateKey();//TODO:
+            case PMNT_CURRENCY_VALUE:
+                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
+                privateKeyStr = application.getPaymonWallet().privateAddress;
                 break;
         }
 

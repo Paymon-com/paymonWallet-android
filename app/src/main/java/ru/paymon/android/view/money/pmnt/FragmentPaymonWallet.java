@@ -1,4 +1,4 @@
-package ru.paymon.android.view.Money.bitcoin;
+package ru.paymon.android.view.money.pmnt;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -13,17 +13,22 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.view.money.DialogFragmentDeleteWallet;
+import ru.paymon.android.view.money.DialogFragmentPrivateKey;
+import ru.paymon.android.view.money.DialogFragmentPublicKey;
+import ru.paymon.android.view.money.DialogFragmentRestoreWallet;
 
-import static ru.paymon.android.view.Money.FragmentMoney.CURRENCY_KEY;
+import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
 
-public class FragmentBitcoinWallet extends Fragment {
-    public static final String BTC_CURRENCY_VALUE = "BTC";
-//    private BitcoinTransactionAdapter bitcoinTransactionAdapter;
+public class FragmentPaymonWallet extends Fragment {
+    public static final String PMNT_CURRENCY_VALUE = "PMNT";
 
+    //    private paymonTransactionAdapter paymonTransactionAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -33,35 +38,35 @@ public class FragmentBitcoinWallet extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_bitcoin_wallet, container, false);
+        View view = inflater.inflate(R.layout.fragment_paymon_wallet, container, false);
 
-        ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_deposit_button);
-        ImageButton transfer = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_button);
-        ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_withdraw_button);
-        ImageButton backBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_back_btn);
-        ImageButton restoreBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_restore_btn);
-        ImageButton backupBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_backup_btn);
-        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_delete_btn);
-        Button privateKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_private_key_button);
-        Button publicKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_public_key_button);
+        ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_deposit_button);
+        ImageButton transfer = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_transfer_button);
+        ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_withdraw_button);
+        ImageButton backBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_back_btn);
+        ImageButton restoreBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_restore_btn);
+        ImageButton backupBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_backup_btn);
+        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_delete_btn);
+        Button privateKey = (Button) view.findViewById(R.id.fragment_paymon_wallet_private_key_button);
+        Button publicKey = (Button) view.findViewById(R.id.fragment_paymon_wallet_public_key_button);
         TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
-        TextView balance = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance);
+        TextView balance = (TextView) view.findViewById(R.id.fragment_paymon_wallet_balance);
 
         RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
 
         Bundle bundle = new Bundle();
-        bundle.putString(CURRENCY_KEY, BTC_CURRENCY_VALUE);
+        bundle.putString(CURRENCY_KEY, PMNT_CURRENCY_VALUE);
 
-//        backBtn.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
-//        restoreBtn.setOnClickListener(v -> new DialogFragmentRestoreBitcoinWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
-//        backupBtn.setOnClickListener(v -> ((WalletApplication) getActivity().getApplication()).backupbitcoinWallet());//TODO: вызов вьюшки с выбором места куда бэкапить
-//        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
-//        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentbitcoinDeposit.newInstance(), null));
-//        transfer.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentBitcoinWalletTransfer));
-//        withdraw.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentbitcoinWidthdraw.newInstance(), null));
-//        privateKey.setOnClickListener(view1 -> new DialogFragmentPrivateKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
-//        publicKey.setOnClickListener(view1 -> new DialogFragmentPublicKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
+        backBtn.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        restoreBtn.setOnClickListener(v -> new DialogFragmentRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
+//        backupBtn.setOnClickListener(v -> ((WalletApplication) getActivity().getApplication()).backupEthereumWallet());//TODO: вызов вьюшки с выбором места куда бэкапить
+        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
+//        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));
+        transfer.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWalletTransfer));
+//        withdraw.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumWidthdraw.newInstance(), null));
+        privateKey.setOnClickListener(view1 -> new DialogFragmentPrivateKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
+        publicKey.setOnClickListener(view1 -> new DialogFragmentPublicKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         transactionsRecView.setLayoutManager(linearLayoutManager);

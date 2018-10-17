@@ -203,8 +203,7 @@ public class WalletUtils {
         }
     }
 
-    public static Wallet restoreWalletFromProtobufOrBase58(final InputStream is,
-                                                           final NetworkParameters expectedNetworkParameters) throws IOException {
+    public static Wallet restoreWalletFromProtobufOrBase58(final InputStream is, final NetworkParameters expectedNetworkParameters) throws IOException {
         is.mark((int) Constants.BACKUP_MAX_CHARS);
 
         try {
@@ -214,14 +213,12 @@ public class WalletUtils {
                 is.reset();
                 return restorePrivateKeysFromBase58(is, expectedNetworkParameters);
             } catch (final IOException x2) {
-                throw new IOException(
-                        "cannot read protobuf (" + x.getMessage() + ") or base58 (" + x2.getMessage() + ")", x);
+                throw new IOException("cannot read protobuf (" + x.getMessage() + ") or base58 (" + x2.getMessage() + ")", x);
             }
         }
     }
 
-    public static Wallet restoreWalletFromProtobuf(final InputStream is,
-                                                   final NetworkParameters expectedNetworkParameters) throws IOException {
+    public static Wallet restoreWalletFromProtobuf(final InputStream is, final NetworkParameters expectedNetworkParameters) throws IOException {
         try {
             final Wallet wallet = new WalletProtobufSerializer().readWallet(is, true, null);
 
@@ -236,8 +233,7 @@ public class WalletUtils {
         }
     }
 
-    public static Wallet restorePrivateKeysFromBase58(final InputStream is,
-                                                      final NetworkParameters expectedNetworkParameters) throws IOException {
+    public static Wallet restorePrivateKeysFromBase58(final InputStream is, final NetworkParameters expectedNetworkParameters) throws IOException {
         final BufferedReader keyReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
 
         // create non-HD wallet

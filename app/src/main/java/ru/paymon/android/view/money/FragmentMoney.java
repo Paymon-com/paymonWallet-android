@@ -1,4 +1,4 @@
-package ru.paymon.android.view.Money;
+package ru.paymon.android.view.money;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
@@ -29,8 +29,9 @@ import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.DialogProgress;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
-import static ru.paymon.android.view.Money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
-import static ru.paymon.android.view.Money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURRENCY_VALUE;
 
 public class FragmentMoney extends Fragment {
     public static final String CURRENCY_KEY = "CURRENCY_KEY";
@@ -183,8 +184,9 @@ public class FragmentMoney extends Fragment {
                 case BTC_CURRENCY_VALUE:
                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentBitcoinWallet);
                     break;
-//                case PMNT_CURRENCY_VALUE:
-//                    break;
+                case PMNT_CURRENCY_VALUE:
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentPaymonWallet);
+                    break;
             }
         }
 
@@ -192,16 +194,7 @@ public class FragmentMoney extends Fragment {
         public void onCreateClick(String cryptoCurrency) {
             Bundle bundle = new Bundle();
             bundle.putString(CURRENCY_KEY, cryptoCurrency);
-            switch (cryptoCurrency) {
-                case BTC_CURRENCY_VALUE:
-                    new DialogFragmentCreateRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null);
-                    break;
-                case ETH_CURRENCY_VALUE:
-                    new DialogFragmentCreateRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null);
-                    break;
-//                case PMNT_CURRENCY_VALUE:
-//                    break;
-            }
+            new DialogFragmentCreateRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null);
         }
     };
 
