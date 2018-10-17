@@ -26,6 +26,13 @@
 
     <string name="title_chats">Chats</string>
     <string name="yes">Yes</string>
+    <string name="clear">Clear</string>
+    <string name="hint">Hint</string>
+    <string name="created_group">created a group</string>
+    <string name="no_one_selected">No one selected</string>
+    <string name="selected_item_count">Selected item count</string>
+    <string name="insufficient_rights">Insufficient rights</string>
+    <string name="time_to_next_dispatch">Time to next dispatch</string>
 
     <string name="friend_requests">Friend requests</string>
 
@@ -162,7 +169,6 @@
     <!--<string name="import_keys_dialog_button_import">Reestablish</string>-->
     <string name="export_keys_dialog_mail_intent_failed">Archiving the wallet was an error</string>
     <!--<string name="import_export_keys_dialog_show">Show password</string>-->
-    <!--<string name="import_export_keys_dialog_failure_title">Error</string>-->
     <!--<string name="button_ok">OK</string>-->
     <!--<string name="button_cancel">Cancel</string>-->
     <!--<string name="button_add">Add</string>-->

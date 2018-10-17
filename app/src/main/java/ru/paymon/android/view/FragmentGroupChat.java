@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.selection.SelectionTracker;
 import androidx.recyclerview.selection.StorageStrategy;
+import ru.paymon.android.R;
 import ru.paymon.android.adapters.GroupMessagesAdapter;
 import ru.paymon.android.pagedlib.MessageDiffUtilCallback;
 import ru.paymon.android.selection.MessageItemKeyProvider;
@@ -60,7 +61,7 @@ public class FragmentGroupChat extends AbsFragmentChat {
                     if (selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.GONE);
                         toolbarViewSelected.setVisibility(View.VISIBLE);
-                        selectedItemCount.setText("Selected item count: " + selectionTracker.getSelection().size());//TODO:String
+                        selectedItemCount.setText(getString(R.string.selected_item_count) + ": " + selectionTracker.getSelection().size());
                     } else if (!selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.VISIBLE);
                         toolbarViewSelected.setVisibility(View.GONE);

@@ -42,19 +42,19 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
         blurLockView = (BlurLockView) findViewById(R.id.blurlockview);
 
         if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
-            blurLockView.setTitle("Введите пароль");
+            blurLockView.setTitle(getString(R.string.security_enter_password));
             blurLockView.setTypeface(Typeface.DEFAULT);
             blurLockView.setType(Password.NUMBER, false);
-            blurLockView.setLeftButton("Очистить");
-            blurLockView.setRightButton("Подсказка");//TODO:
+            blurLockView.setLeftButton(getString(R.string.clear));
+            blurLockView.setRightButton(getString(R.string.hint));//TODO:
             blurLockView.setOnRightButtonClickListener(() -> blurLockView.showHint());
         } else {
-            blurLockView.setTitle("Введите желаемый пароль");
+            blurLockView.setTitle(getString(R.string.security_enter_password));
             blurLockView.setPasswordLength(10);
             blurLockView.setTypeface(Typeface.DEFAULT);
             blurLockView.setType(Password.NUMBER, false);
-            blurLockView.setRightButton("OK");
-            blurLockView.setLeftButton("Очистить");
+            blurLockView.setRightButton(getString(R.string.ok));
+            blurLockView.setLeftButton(getString(R.string.clear));
         }
 
         blurLockView.setOnPasswordInputListener(this);
@@ -122,7 +122,7 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void incorrect(String inputPassword) {
-        Toast.makeText(getApplicationContext(), "Пароль не верный!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
     }
 
     @Override

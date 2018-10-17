@@ -92,7 +92,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
         timer = new CountDownTimer(30000, 1000) {
             @Override
             public void onTick(long l) {
-                time.setText("Время до след отправки : " + android.text.format.DateFormat.format("mm:ss", l).toString());
+                time.setText(getString(R.string.time_to_next_dispatch) + ": " + android.text.format.DateFormat.format("mm:ss", l).toString());
             }
 
             @Override
@@ -136,7 +136,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
                             if (dialogProgress != null && dialogProgress.isShowing())
                                 dialogProgress.cancel();
                         });
-                        switch (error.code) { //TODO: add text to string file
+                        switch (error.code) {
                             case 1:
                                 ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.login_or_email_is_empty));
                                 break;

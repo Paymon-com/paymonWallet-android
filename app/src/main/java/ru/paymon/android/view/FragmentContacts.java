@@ -85,7 +85,7 @@ public class FragmentContacts extends Fragment {
                     lastTimeSend = System.currentTimeMillis();
                     requestID = NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
                         if (error != null || response == null)
-                            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_SHORT).show());//TODO string
+                            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_SHORT).show());
 
                         if (response instanceof RPC.PM_users) {
                             RPC.PM_users received = (RPC.PM_users) response;
@@ -123,7 +123,7 @@ public class FragmentContacts extends Fragment {
                             lastTimeSend = System.currentTimeMillis();
                             requestID = NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
                                 if (error != null || response == null)
-                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_SHORT).show());//TODO string
+                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_SHORT).show());
 
                                 if (response instanceof RPC.PM_users) {
                                     RPC.PM_users received = (RPC.PM_users) response;
@@ -155,9 +155,7 @@ public class FragmentContacts extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.hideActionBar(getActivity());
         Utils.showBottomBar(getActivity());
-        setHasOptionsMenu(true);
     }
 
     @Override

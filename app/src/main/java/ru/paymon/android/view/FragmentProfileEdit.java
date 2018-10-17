@@ -120,7 +120,7 @@ public class FragmentProfileEdit extends Fragment {
                                 .setMinCropWindowSize(Config.minAvatarSize, Config.minAvatarSize)
                                 .start(getContext(), FragmentProfileEdit.this);
                     } else {
-                        Toast.makeText(getContext(), "Недостаточно прав!", Toast.LENGTH_LONG).show(); //TODO:String
+                        Toast.makeText(getContext(), R.string.insufficient_rights, Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -226,7 +226,7 @@ public class FragmentProfileEdit extends Fragment {
                                     dialogProgress.cancel();
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                        .setMessage(R.string.photo_upload_failed) //TODO:string
+                                        .setMessage(R.string.photo_upload_failed)
                                         .setCancelable(true);
                                 AlertDialog alertDialog = builder.create();
                                 alertDialog.show();
