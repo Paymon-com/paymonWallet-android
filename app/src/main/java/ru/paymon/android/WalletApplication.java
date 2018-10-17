@@ -253,7 +253,7 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    public String convertEthereumToFiat(final String ethAmount, final float fiatExRate) {
+    public String convertEthereumToFiat(final String ethAmount, final String fiatExRate) {
         return new BigDecimal(ethAmount).multiply(new BigDecimal(fiatExRate)).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
     }
 
@@ -283,7 +283,7 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    public String convertPaymonToFiat(String pmntAmount, float fiatExRate) {
+    public String convertPaymonToFiat(String pmntAmount, String fiatExRate) {
         return null;
     }
 
@@ -311,7 +311,7 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    public String convertBitcoinToFiat(String btcAmount, float fiatExRate) {
+    public String convertBitcoinToFiat(String btcAmount, String fiatExRate) {
         return null;
     }
 

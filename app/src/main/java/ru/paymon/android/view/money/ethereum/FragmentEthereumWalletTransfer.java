@@ -23,15 +23,14 @@ import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
-import ru.paymon.android.models.ExchangeRatesItem;
+import ru.paymon.android.gateway.exchangerates.ExchangeRate;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
@@ -50,14 +49,14 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     //    private DialogProgress dialogProgress;
     private EditText receiverAddress;
 
-    private HashMap<String, HashMap<String, ExchangeRatesItem>> exchangeRates = new HashMap<>();
+
     private String currentFiatCurrency = "USD";//TODO:
     private final String cryptoCurrency = "ETH";
     private MoneyViewModel moneyViewModel;
     private LiveData<String> ethereumBalanceData;
     private LiveData<Integer> midGasPriceData;
     private LiveData<Integer> maxGasPriceData;
-    private LiveData<ArrayList<ExchangeRatesItem>> exchangeRatesData;
+    private LiveData<List<ExchangeRate>> exchangeRatesData;
     private MutableLiveData<Integer> gasPriceValue = new MutableLiveData<>();
     private MutableLiveData<Integer> gasLimitValue = new MutableLiveData<>();
     private MutableLiveData<BigDecimal> cryptoAmountValue = new MutableLiveData<>();
@@ -251,16 +250,14 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                 return;
             }
 
+            List<ExchangeRate> exchangeRates = exchangeRatesData.getValue();
             if (exchangeRates != null) {
-                if (exchangeRatesData.getValue() != null) {
-                    for (ExchangeRatesItem exRateItem : exchangeRatesData.getValue()) {
-                        if (exRateItem.fiatCurrency.equals(currentFiatCurrency) && exRateItem.cryptoCurrency.equals(cryptoCurrency)) {
-                            final String fiatEquivalentStr = ((WalletApplication) getActivity().getApplication()).convertEthereumToFiat(ethAmount, exRateItem.value);
-                            fiatEquivalent.setText(fiatEquivalentStr);
-                        }
+                for (ExchangeRate exRateItem : exchangeRatesData.getValue()) {
+                    if (exRateItem.fiatCurrency.equals(currentFiatCurrency) && exRateItem.cryptoCurrency.equals(cryptoCurrency)) {
+                        final String fiatEquivalentStr = ((WalletApplication) getActivity().getApplication()).convertEthereumToFiat(ethAmount, exRateItem.value);
+                        fiatEquivalent.setText(fiatEquivalentStr);
                     }
                 }
-
             } else {
                 fiatEquivalent.setText("Курс получить не удалось");
             }

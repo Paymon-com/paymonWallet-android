@@ -173,7 +173,7 @@
     <string name="import_export_keys_dialog_failure_title">Ошибка</string>
     <string name="button_ok">OK</string>
     <string name="button_cancel">Отмена</string>
-    <string name="button_add">Добавить</string>
+    <string name="button_add">Создать кошелек</string>
     <string name="button_share">Поделиться</string>
     <string name="private_key_password">ПИН</string>
 

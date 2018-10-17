@@ -17,12 +17,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
-import ru.paymon.android.models.ExchangeRatesItem;
+import ru.paymon.android.gateway.exchangerates.ExchangeRate;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.utils.Utils;
@@ -42,10 +43,9 @@ public class FragmentMoney extends Fragment {
     private MoneyViewModel moneyViewModel;
     private ExchangeRatesAdapter exchangeRatesAdapter;
     private CryptoWalletsAdapter cryptoWalletsAdapter;
-    private LiveData<ArrayList<ExchangeRatesItem>> exchangeRatesData;
+    private LiveData<List<ExchangeRate>> exchangeRatesData;
     private LiveData<ArrayList<WalletItem>> walletsData;
     private LiveData<Boolean> showProgress;
-    private ArrayList<ExchangeRatesItem> exchangeRatesItems;
     private LiveData<String> ethereumBalanceData;
 
 
@@ -85,7 +85,6 @@ public class FragmentMoney extends Fragment {
         fiatCurrencySpinner.setSelection(0);
 
         exchangeRatesData.observe(this, (exchangeRatesItems) -> {
-            this.exchangeRatesItems = exchangeRatesItems;
             changeCurrency();
         });
 
@@ -161,11 +160,12 @@ public class FragmentMoney extends Fragment {
     }
 
     private void changeCurrency() {
-        if (exchangeRatesItems == null || exchangeRatesItems.size() <= 0)
+        List<ExchangeRate> exchangeRates = exchangeRatesData.getValue();
+        if (exchangeRates == null || exchangeRates.size() <= 0)
             return;
         String currentCurrency = fiatCurrencySpinner.getSelectedItem().toString();
-        ArrayList<ExchangeRatesItem> exRatesItems = new ArrayList<>();
-        for (ExchangeRatesItem exchangeRateItem : exchangeRatesItems) {
+        List<ExchangeRate> exRatesItems = new ArrayList<>();
+        for (ExchangeRate exchangeRateItem : exchangeRates) {
             if (exchangeRateItem.fiatCurrency.equals(currentCurrency)) {
                 exRatesItems.add(exchangeRateItem);
             }

@@ -35,7 +35,7 @@ public abstract class AbsWalletApplication extends Application {
     public abstract boolean backupBitcoinWallet(final String path);
     public abstract BigInteger getBitcoinBalance();
     public abstract boolean deleteBitcoinWallet();
-    public abstract String convertBitcoinToFiat(final String btcAmount,final float fiatExRate);
+    public abstract String convertBitcoinToFiat(final String btcAmount,final String fiatExRate);
     public abstract String getBitcoinPublicAddress();
     public abstract String getBitcoinPrivateAddress();
 
@@ -45,7 +45,7 @@ public abstract class AbsWalletApplication extends Application {
     public abstract boolean backupEthereumWallet(final String path);
     public abstract BigInteger getEthereumBalance();
     public abstract boolean deleteEthereumWallet();
-    public abstract String convertEthereumToFiat(final String ethAmount,final float fiatExRate);
+    public abstract String convertEthereumToFiat(final String ethAmount,final String fiatExRate);
 
     public abstract boolean createPaymonWallet(final String password);
     protected abstract PaymonWallet getPaymonWallet(final String password);
@@ -53,7 +53,7 @@ public abstract class AbsWalletApplication extends Application {
     public abstract boolean backupPaymonWallet(final String path);
     public abstract BigInteger getPaymonBalance();
     public abstract boolean deletePaymonWallet();
-    public abstract String convertPaymonToFiat(final String pmntAmount,final float fiatExRate);
+    public abstract String convertPaymonToFiat(final String pmntAmount,final String fiatExRate);
 
 
     protected abstract void setBitcoinWalletListeners();

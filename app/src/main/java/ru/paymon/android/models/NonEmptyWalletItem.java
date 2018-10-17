@@ -2,11 +2,18 @@ package ru.paymon.android.models;
 
 public class NonEmptyWalletItem extends WalletItem {
     public String cryptoBalance;
-    public String publicAddress;
+    public String fiatCurrency;
+    public String fiatBalance;
 
-    public NonEmptyWalletItem(String cryptoCurrency, String cryptoBalance, String publicAddress) {
+    public NonEmptyWalletItem(final String cryptoCurrency, final String cryptoBalance, final String fiatBalance, final String fiatCurrency) {
         super(cryptoCurrency);
         this.cryptoBalance = cryptoBalance;
-        this.publicAddress = publicAddress;
+        this.fiatCurrency = fiatCurrency;
+        this.fiatBalance = fiatBalance;
+    }
+
+    public NonEmptyWalletItem(final String cryptoCurrency, final String cryptoBalance) {
+        super(cryptoCurrency);
+        this.cryptoBalance = cryptoBalance;
     }
 }

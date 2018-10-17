@@ -5,7 +5,6 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import org.bitcoinj.wallet.Wallet;
 import org.json.JSONObject;
@@ -16,14 +15,16 @@ import java.math.BigInteger;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Currency;
+import java.util.List;
 import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.WalletApplication;
+import ru.paymon.android.gateway.exchangerates.ExchangeRate;
 import ru.paymon.android.models.EthereumWallet;
-import ru.paymon.android.models.ExchangeRatesItem;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.models.TransactionItem;
@@ -35,7 +36,7 @@ import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_C
 import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURRENCY_VALUE;
 
 public class MoneyViewModel extends AndroidViewModel implements NotificationManager.IListener {
-    private MutableLiveData<ArrayList<ExchangeRatesItem>> exchangeRatesData;
+    private MutableLiveData<List<ExchangeRate>> exchangeRatesData;
     private MutableLiveData<ArrayList<WalletItem>> walletsData;
     private MutableLiveData<Boolean> showProgress = new MutableLiveData<>();
     private MutableLiveData<String> ethereumBalance;
@@ -43,9 +44,6 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
     private MutableLiveData<Integer> maxGasPriceData = new MutableLiveData<>();
     private MutableLiveData<Integer> midGasPriceData = new MutableLiveData<>();
     private final WalletApplication application;
-//    private BlockchainStateLiveData blockchainState;
-//    private WalletBalanceLiveData balance;
-//    private SelectedExchangeRateLiveData exchangeRate;
 
 
     public MoneyViewModel(@NonNull Application application) {
@@ -64,26 +62,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.PAYMON_WALLET_CREATED);
     }
 
-    //    public BlockchainStateLiveData getBlockchainState() {
-//        if (blockchainState == null)
-//            blockchainState = new BlockchainStateLiveData(application);
-//        return blockchainState;
-//    }
-//
-//    public WalletBalanceLiveData getBalance() {
-//        if (balance == null)
-//            balance = new WalletBalanceLiveData(application);
-//        return balance;
-//    }
-//
-//    public SelectedExchangeRateLiveData getExchangeRate() {
-//        if (exchangeRate == null)
-//            exchangeRate = new SelectedExchangeRateLiveData(application);
-//        return exchangeRate;
-//    }
-
-
-    public LiveData<ArrayList<ExchangeRatesItem>> getExchangeRatesData() {
+    public LiveData<List<ExchangeRate>> getExchangeRatesData() {
         if (exchangeRatesData == null)
             exchangeRatesData = new MutableLiveData<>();
         loadExchangeRatesData();
@@ -134,46 +113,34 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
 
             EthereumWallet ethereumWallet = application.getEthereumWallet();
             if (ethereumWallet != null) {
-                Log.e("AAA", ethereumWallet.publicAddress);
                 BigInteger balance = application.getEthereumBalance();
                 if (balance != null)
-                    walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, balance.toString(), ethereumWallet.publicAddress));//TODO:convert balance
+                    walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, balance.toString()));//TODO:convert balance
                 else
-                    walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, "0", ethereumWallet.publicAddress));
-            } else {
-                walletItems.add(new WalletItem(ETH_CURRENCY_VALUE));
-            }
-
-            Wallet bitcoinWallet = application.getBitcoinWallet();
-            if (bitcoinWallet == null) {
-                walletItems.add(new WalletItem(BTC_CURRENCY_VALUE));
-            } else {
-                walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, bitcoinWallet.getBalance().toString(), bitcoinWallet.currentReceiveAddress().toString()));
+                    walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, "0"));
             }
 
             PaymonWallet paymonWallet = application.getPaymonWallet();
-            if(paymonWallet== null) {
-                walletItems.add(new WalletItem(PMNT_CURRENCY_VALUE));
-            }else{
-//                walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, paymonWallet.getBalance().toString(), paymonWallet.currentReceiveAddress().toString()));
+            if (paymonWallet != null) {
+                BigInteger balance = application.getPaymonBalance();
+                if (balance != null)
+                    walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, paymonWallet.balance));
+                else
+                    walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, "0"));
             }
-//            if (User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD != null) {
-//                boolean isWalletLoaded = Ethereum.getInstance().loadWallet(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD);
-//                if (isWalletLoaded) {
-//                    BigDecimal balance = Ethereum.getInstance().getBalance();
-//                    if (balance != null) {
-//                        ethereumBalance.postValue(balance.toString());
-//                        User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS = Ethereum.getInstance().getAddress();
-//                        User.CLIENT_MONEY_ETHEREUM_WALLET_PRIVATE_ADDRESS = Ethereum.getInstance().getPrivateKey();
-//                        User.saveConfig();
-//                        walletItems.add(new NonEmptyWalletItem(cryptoCurrency, balance.toString(), User.CLIENT_MONEY_ETHEREUM_WALLET_PUBLIC_ADDRESS));
-//                    }
-//                } /*else { //TODO: обрабатывать ситуацию когда кошелек не получилось загрузить
-//                    walletItems.add(new WalletItem(cryptoCurrency));
-//                }*/
-//            } else {
-//                walletItems.add(new WalletItem(cryptoCurrency));
-//            }
+
+            Wallet bitcoinWallet = application.getBitcoinWallet();
+            if (bitcoinWallet != null)
+                walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, bitcoinWallet.getBalance().toString()));
+
+            if (bitcoinWallet == null)
+                walletItems.add(new WalletItem(BTC_CURRENCY_VALUE));
+
+            if (paymonWallet == null)
+                walletItems.add(new WalletItem(PMNT_CURRENCY_VALUE));
+
+            if (ethereumWallet == null)
+                walletItems.add(new WalletItem(ETH_CURRENCY_VALUE));
 
             walletsData.postValue(walletItems);
             showProgress.postValue(false);
@@ -186,7 +153,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             final String[] cryptoCurrencies = new String[]{"BTC", "ETH", "PMNT"};
             final String[] fiatCurrencies = new String[]{"USD", "EUR"};
             final String link = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,PMNT&tsyms=USD,EUR," + Currency.getInstance(Locale.getDefault()).getCurrencyCode().toUpperCase();
-            final ArrayList<ExchangeRatesItem> exchangeRatesItems = new ArrayList<>();
+            final ArrayList<ExchangeRate> exchangeRatesItems = new ArrayList<>();
 
             try {
                 final HttpsURLConnection httpsURLConnection = (HttpsURLConnection) ((new URL(link).openConnection()));
@@ -203,15 +170,19 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
 
                 final JSONObject jsonObject = new JSONObject(stringBuilder.toString());
 
+                int id = 0;
                 for (String cryptoCurrency : cryptoCurrencies) {
                     final JSONObject cryptoObject = (JSONObject) jsonObject.get(cryptoCurrency);
                     for (String fiatCurrency : fiatCurrencies) {
-                        final String fiatCurrencyValue = cryptoObject.getString(fiatCurrency);
-                        exchangeRatesItems.add(new ExchangeRatesItem(cryptoCurrency, fiatCurrency, Float.parseFloat(fiatCurrencyValue)));
+                        exchangeRatesItems.add(new ExchangeRate(++id, fiatCurrency, cryptoCurrency, String.format("%.09f", cryptoObject.getDouble(fiatCurrency)).replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", "")));
                     }
                 }
 
-                exchangeRatesData.postValue(exchangeRatesItems);
+                if (exchangeRatesItems.size() > 0) {
+                    ApplicationLoader.db.exchangeRatesDao().deleteAll();
+                    ApplicationLoader.db.exchangeRatesDao().insertList(exchangeRatesItems);
+                    exchangeRatesData.postValue(exchangeRatesItems);
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

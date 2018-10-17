@@ -781,7 +781,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_retry">Retry</string>
     <string name="button_help">Help</string>
-    <string name="button_add">Add</string>
+    <string name="button_add">Create wallet</string>
     <string name="button_delete">Delete</string>
     <string name="button_set">Set</string>
     <string name="button_remove">Remove</string>

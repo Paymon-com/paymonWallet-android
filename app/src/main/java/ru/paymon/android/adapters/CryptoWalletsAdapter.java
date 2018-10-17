@@ -75,7 +75,8 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 NonEmptyWalletItem btcWalletItem = (NonEmptyWalletItem) walletItem;
                 WalletViewHolder walletViewHolder = (WalletViewHolder) holder;
                 walletViewHolder.icon.setImageResource(R.drawable.ic_bitcoin);
-                walletViewHolder.publicAddress.setText(btcWalletItem.publicAddress);
+                walletViewHolder.fiatCurrency.setText(btcWalletItem.fiatCurrency);
+                walletViewHolder.fiatBalance.setText(btcWalletItem.fiatBalance);
                 walletViewHolder.cryptoCurrency.setText(btcWalletItem.cryptoCurrency);
                 walletViewHolder.cryptoBalance.setText(btcWalletItem.cryptoBalance);
                 walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick(BTC_CURRENCY_VALUE));
@@ -84,7 +85,8 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 NonEmptyWalletItem ethWalletItem = (NonEmptyWalletItem) walletItem;
                 walletViewHolder = (WalletViewHolder) holder;
                 walletViewHolder.icon.setImageResource(R.drawable.ic_ethereum);
-                walletViewHolder.publicAddress.setText(ethWalletItem.publicAddress);
+                walletViewHolder.fiatCurrency.setText(ethWalletItem.fiatCurrency);
+                walletViewHolder.fiatBalance.setText(ethWalletItem.fiatBalance);
                 walletViewHolder.cryptoCurrency.setText(ethWalletItem.cryptoCurrency);
                 walletViewHolder.cryptoBalance.setText(ethWalletItem.cryptoBalance);
                 walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick(ETH_CURRENCY_VALUE));
@@ -93,7 +95,8 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 NonEmptyWalletItem pmntWalletItem = (NonEmptyWalletItem) walletItem;
                 walletViewHolder = (WalletViewHolder) holder;
                 walletViewHolder.icon.setImageResource(R.drawable.ic_pmnt);
-                walletViewHolder.publicAddress.setText(pmntWalletItem.publicAddress);
+                walletViewHolder.fiatCurrency.setText(pmntWalletItem.fiatCurrency);
+                walletViewHolder.fiatBalance.setText(pmntWalletItem.fiatBalance);
                 walletViewHolder.cryptoCurrency.setText(pmntWalletItem.cryptoCurrency);
                 walletViewHolder.cryptoBalance.setText(pmntWalletItem.cryptoBalance);
                 walletViewHolder.itemView.setOnClickListener(view -> iOnItemClickListener.onClick(PMNT_CURRENCY_VALUE));
@@ -122,20 +125,20 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
         boolean isEmpty = !(walletItems.get(position) instanceof NonEmptyWalletItem);
         if (!isEmpty) {
             switch (crpytoCurrency) {
-                case "BTC":
+                case BTC_CURRENCY_VALUE:
                     return WalletTypes.BTC.ordinal();
-                case "ETH":
+                case ETH_CURRENCY_VALUE:
                     return WalletTypes.ETH.ordinal();
-                case "PMNT":
+                case PMNT_CURRENCY_VALUE:
                     return WalletTypes.PMNT.ordinal();
             }
         } else {
             switch (crpytoCurrency) {
-                case "BTC":
+                case BTC_CURRENCY_VALUE:
                     return WalletTypes.EMPTY_BTC.ordinal();
-                case "ETH":
+                case ETH_CURRENCY_VALUE:
                     return WalletTypes.EMPTY_ETH.ordinal();
-                case "PMNT":
+                case PMNT_CURRENCY_VALUE:
                     return WalletTypes.EMPTY_PMNT.ordinal();
             }
         }
@@ -149,14 +152,16 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     class WalletViewHolder extends RecyclerView.ViewHolder {
         final ImageView icon;
-        final TextView publicAddress;
+        final TextView fiatBalance;
+        final TextView fiatCurrency;
         final TextView cryptoCurrency;
         final TextView cryptoBalance;
 
         WalletViewHolder(View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.wallet_icon);
-            publicAddress = itemView.findViewById(R.id.wallet_address);
+            fiatBalance = itemView.findViewById(R.id.wallet_fiat_balance);
+            fiatCurrency = itemView.findViewById(R.id.wallet_fiat_currency);
             cryptoCurrency = itemView.findViewById(R.id.wallet_crypto_currency);
             cryptoBalance = itemView.findViewById(R.id.wallet_crypto_balance);
         }
@@ -164,13 +169,11 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     class EmptyWalletViewHolder extends RecyclerView.ViewHolder {
         final ImageView icon;
-        final TextView hint;
         final Button create;
 
         EmptyWalletViewHolder(View itemView) {
             super(itemView);
             icon = itemView.findViewById(R.id.wallet_icon);
-            hint = itemView.findViewById(R.id.wallet_hint);
             create = itemView.findViewById(R.id.wallet_create);
         }
     }
