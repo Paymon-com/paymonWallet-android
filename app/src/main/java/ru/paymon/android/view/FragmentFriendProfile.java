@@ -175,5 +175,6 @@ public class FragmentFriendProfile extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        Utils.hideBottomBar(getActivity());
     }
 }

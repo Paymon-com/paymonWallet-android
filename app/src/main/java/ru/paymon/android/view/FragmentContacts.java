@@ -155,9 +155,7 @@ public class FragmentContacts extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Utils.hideActionBar(getActivity());
         Utils.showBottomBar(getActivity());
-        setHasOptionsMenu(true);
     }
 
     @Override
