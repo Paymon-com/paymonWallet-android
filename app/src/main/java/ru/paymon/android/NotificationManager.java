@@ -36,6 +36,9 @@ public class NotificationManager {
 
         PHOTOS_URL_RECEIVED,
 
+        MONEY_FIAT_CURRENCY_CHANGED,
+        MONEY_BALANCE_CHANGED,
+
     }
 
     private SparseArray<ArrayList<Object>> observers = new SparseArray<>();

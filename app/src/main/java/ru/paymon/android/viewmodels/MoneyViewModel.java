@@ -36,6 +36,7 @@ import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_C
 import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURRENCY_VALUE;
 
 public class MoneyViewModel extends AndroidViewModel implements NotificationManager.IListener {
+    public String fiatCurrency = "USD";
     private MutableLiveData<List<ExchangeRate>> exchangeRatesData;
     private MutableLiveData<ArrayList<WalletItem>> walletsData;
     private MutableLiveData<Boolean> showProgress = new MutableLiveData<>();
@@ -44,7 +45,6 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
     private MutableLiveData<Integer> maxGasPriceData = new MutableLiveData<>();
     private MutableLiveData<Integer> midGasPriceData = new MutableLiveData<>();
     private final WalletApplication application;
-
 
     public MoneyViewModel(@NonNull Application application) {
         super(application);
@@ -114,24 +114,46 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             EthereumWallet ethereumWallet = application.getEthereumWallet();
             if (ethereumWallet != null) {
                 BigInteger balance = application.getEthereumBalance();
-                if (balance != null)
-                    walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, balance.toString()));//TODO:convert balance
-                else
-                    walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, "0"));
+                if (balance != null) {
+                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
+                    if (exchangeRate != null) {
+                        String fiatBalance = WalletApplication.convertEthereumToFiat(balance, exchangeRate.value);
+                        walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, balance.toString(), fiatCurrency, fiatBalance));
+                    } else {
+                        walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, "0", fiatCurrency, "0"));
+                    }
+                } else {
+                    walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, "0", fiatCurrency, "0"));
+                }
             }
 
             PaymonWallet paymonWallet = application.getPaymonWallet();
             if (paymonWallet != null) {
                 BigInteger balance = application.getPaymonBalance();
-                if (balance != null)
-                    walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, paymonWallet.balance));
-                else
-                    walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, "0"));
+                if (balance != null) {
+                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
+                    if (exchangeRate != null) {
+                        String fiatBalance = WalletApplication.convertPaymonToFiat(balance, exchangeRate.value);
+                        walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, paymonWallet.balance, fiatCurrency, fiatBalance));
+                    } else {
+                        walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, "0", fiatCurrency, "0"));
+                    }
+                } else {
+                    walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, "0", fiatCurrency, "0"));
+                }
             }
 
             Wallet bitcoinWallet = application.getBitcoinWallet();
-            if (bitcoinWallet != null)
-                walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, bitcoinWallet.getBalance().toString()));
+            if (bitcoinWallet != null) {
+                String balance = bitcoinWallet.getBalance().toString();
+                ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
+                if (exchangeRate != null) {
+                    String fiatBalance = WalletApplication.convertBitcoinToFiat("1", exchangeRate.value);
+                    walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, "1", fiatCurrency, fiatBalance));
+                } else {
+                    walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, balance, fiatCurrency, "0"));
+                }
+            }
 
             if (bitcoinWallet == null)
                 walletItems.add(new WalletItem(BTC_CURRENCY_VALUE));

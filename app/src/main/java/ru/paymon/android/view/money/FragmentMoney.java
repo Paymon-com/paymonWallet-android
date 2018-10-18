@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.navigation.Navigation;
+import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
@@ -169,6 +170,7 @@ public class FragmentMoney extends Fragment {
     }
 
     private void changeCurrency() {
+        moneyViewModel.fiatCurrency = fiatCurrencySpinner.getSelectedItem().toString();
         List<ExchangeRate> exchangeRates = exchangeRatesData.getValue();
         if (exchangeRates == null || exchangeRates.size() <= 0)
             return;
@@ -181,6 +183,8 @@ public class FragmentMoney extends Fragment {
         }
         exchangeRatesAdapter = new ExchangeRatesAdapter(exRatesItems);
         exchangeRatesRecView.setAdapter(exchangeRatesAdapter);
+        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_FIAT_CURRENCY_CHANGED, currentCurrency);
+        cryptoWalletsAdapter.notifyDataSetChanged();
     }
 
     private CryptoWalletsAdapter.IOnItemClickListener cryptoWalletsListener = new CryptoWalletsAdapter.IOnItemClickListener() {

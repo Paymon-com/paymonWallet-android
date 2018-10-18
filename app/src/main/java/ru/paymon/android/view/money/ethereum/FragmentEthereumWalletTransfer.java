@@ -23,6 +23,7 @@ import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.List;
 
 import androidx.navigation.Navigation;
@@ -254,7 +255,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             if (exchangeRates != null) {
                 for (ExchangeRate exRateItem : exchangeRatesData.getValue()) {
                     if (exRateItem.fiatCurrency.equals(currentFiatCurrency) && exRateItem.cryptoCurrency.equals(cryptoCurrency)) {
-                        final String fiatEquivalentStr = ((WalletApplication) getActivity().getApplication()).convertEthereumToFiat(ethAmount, exRateItem.value);
+                        final String fiatEquivalentStr = ((WalletApplication) getActivity().getApplication()).convertEthereumToFiat(new BigInteger(ethAmount), exRateItem.value);
                         fiatEquivalent.setText(fiatEquivalentStr);
                     }
                 }

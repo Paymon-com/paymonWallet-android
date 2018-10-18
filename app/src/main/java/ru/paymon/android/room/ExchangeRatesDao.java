@@ -23,7 +23,7 @@ public interface ExchangeRatesDao {
     List<ExchangeRate> getExchangeRatesByCryptoCurrecy(final String cryptoCurrency);
 
     @Query("SELECT * FROM exchangerate WHERE fiatCurrency = :fiatCurrency AND cryptoCurrency = :cryptoCurrency")
-    List<ExchangeRate> getExchangeRatesByFiatCurrecy(final String fiatCurrency, final String cryptoCurrency);
+    ExchangeRate getExchangeRatesByFiatAndCryptoCurrecy(final String fiatCurrency, final String cryptoCurrency);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertList(final List<ExchangeRate> exchangeRates);

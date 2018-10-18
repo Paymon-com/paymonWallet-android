@@ -36,6 +36,7 @@ import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
 import java.io.BufferedReader;
@@ -67,6 +68,8 @@ import ru.paymon.android.gateway.bitcoin.util.WalletUtils;
 import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.utils.Utils;
+
+import static java.math.BigDecimal.ROUND_HALF_UP;
 
 
 public class WalletApplication extends AbsWalletApplication {
@@ -252,9 +255,8 @@ public class WalletApplication extends AbsWalletApplication {
         return new File(FILE_PATH).delete();
     }
 
-    @Override
-    public String convertEthereumToFiat(final String ethAmount, final String fiatExRate) {
-        return new BigDecimal(ethAmount).multiply(new BigDecimal(fiatExRate)).setScale(2, BigDecimal.ROUND_HALF_UP).toString();
+    public static String convertEthereumToFiat(final BigInteger ethAmount, final String fiatExRate) {
+        return Convert.fromWei(new BigDecimal(ethAmount, 0), Convert.Unit.GWEI).setScale(0, ROUND_HALF_UP).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
     @Override
@@ -282,9 +284,9 @@ public class WalletApplication extends AbsWalletApplication {
         return false;
     }
 
-    @Override
-    public String convertPaymonToFiat(String pmntAmount, String fiatExRate) {
-        return null;
+
+    public static String convertPaymonToFiat(final BigInteger pmntAmount, final String fiatExRate) {
+        return Convert.fromWei(new BigDecimal(pmntAmount, 0), Convert.Unit.GWEI).setScale(0, ROUND_HALF_UP).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
     @Override
@@ -310,9 +312,8 @@ public class WalletApplication extends AbsWalletApplication {
         return false;
     }
 
-    @Override
-    public String convertBitcoinToFiat(String btcAmount, String fiatExRate) {
-        return null;
+    public static String convertBitcoinToFiat(String btcAmount, String fiatExRate) {
+        return new BigDecimal(btcAmount).setScale(0, ROUND_HALF_UP).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
     @Override
