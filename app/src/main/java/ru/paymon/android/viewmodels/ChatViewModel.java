@@ -8,6 +8,7 @@ import android.arch.paging.PagedList;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.pagedlib.MessagesBoundaryCallback;
 
 public class ChatViewModel extends ViewModel {
     private DataSource.Factory<Integer,RPC.Message>  factory;
@@ -17,15 +18,15 @@ public class ChatViewModel extends ViewModel {
         super();
     }
 
-    public LiveData<PagedList<RPC.Message>> getMessages(int chatID){
+    public LiveData<PagedList<RPC.Message>> getMessages(int chatID, boolean isGroup){
 //        if(messages == null){
             factory = ApplicationLoader.db.chatMessageDao().getMessagesByChatID(chatID);
             final PagedList.Config config = new PagedList.Config.Builder()
-                    .setInitialLoadSizeHint(3)
-                    .setPageSize(3)
+                    .setInitialLoadSizeHint(15)
+                    .setPageSize(15)
                     .setEnablePlaceholders(false)
                     .build();
-            messages = new LivePagedListBuilder<Integer,RPC.Message>(factory, config).build();
+            messages = new LivePagedListBuilder<Integer,RPC.Message>(factory, config).setBoundaryCallback(new MessagesBoundaryCallback(chatID, isGroup)).build();
 //        }
         return messages;
     }

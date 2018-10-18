@@ -31,4 +31,8 @@ public interface ChatMessageDao {
 
     @Query("SELECT * FROM message ORDER BY date DESC")
     List<RPC.Message> messages();
+
+    @Query("SELECT * FROM message WHERE to_id = :cid ORDER BY date DESC")
+    List<RPC.Message> getMessagesByChatIDList(int cid);
+
 }

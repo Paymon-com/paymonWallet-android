@@ -34,7 +34,7 @@ public class FragmentGroupChat extends AbsFragmentChat {
         chatViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
 
         messagesAdapter = new GroupMessagesAdapter(new MessageDiffUtilCallback());
-        chatViewModel.getMessages(chatID).observe(this, pagedList -> {
+        chatViewModel.getMessages(chatID,true).observe(this, pagedList -> {
             messagesAdapter.submitList(pagedList);
             selectionTracker = new SelectionTracker.Builder<>(
                     "my-selection-id",
