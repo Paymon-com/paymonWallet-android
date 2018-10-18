@@ -2,7 +2,6 @@ package ru.paymon.android.gateway.bitcoin;
 
 
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Resources;
 import android.net.Uri;
@@ -11,13 +10,11 @@ import android.text.format.DateUtils;
 import com.google.common.base.Strings;
 
 import org.bitcoinj.core.Coin;
-import org.bitcoinj.utils.Fiat;
 import org.bitcoinj.utils.MonetaryFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ru.paymon.android.R;
-import ru.paymon.android.gateway.bitcoin.data.ExchangeRate;
 
 /**
  * @author Andreas Schildbach
@@ -213,53 +210,6 @@ public class Configuration {
     public void maybeIncrementBestChainHeightEver(final int bestChainHeightEver) {
         if (bestChainHeightEver > getBestChainHeightEver())
             prefs.edit().putInt(PREFS_KEY_BEST_CHAIN_HEIGHT_EVER, bestChainHeightEver).apply();
-    }
-
-    public ExchangeRate getCachedExchangeRate() {
-        if (prefs.contains(PREFS_KEY_CACHED_EXCHANGE_CURRENCY) && prefs.contains(PREFS_KEY_CACHED_EXCHANGE_RATE_COIN)
-                && prefs.contains(PREFS_KEY_CACHED_EXCHANGE_RATE_FIAT)) {
-            final String cachedExchangeCurrency = prefs.getString(PREFS_KEY_CACHED_EXCHANGE_CURRENCY, null);
-            final Coin cachedExchangeRateCoin = Coin.valueOf(prefs.getLong(PREFS_KEY_CACHED_EXCHANGE_RATE_COIN, 0));
-            final Fiat cachedExchangeRateFiat = Fiat.valueOf(cachedExchangeCurrency,
-                    prefs.getLong(PREFS_KEY_CACHED_EXCHANGE_RATE_FIAT, 0));
-            return new ExchangeRate(new org.bitcoinj.utils.ExchangeRate(cachedExchangeRateCoin, cachedExchangeRateFiat),
-                    null);
-        } else {
-            return null;
-        }
-    }
-
-    public void setCachedExchangeRate(final ExchangeRate cachedExchangeRate) {
-        final Editor edit = prefs.edit();
-        edit.putString(PREFS_KEY_CACHED_EXCHANGE_CURRENCY, cachedExchangeRate.getCurrencyCode());
-        edit.putLong(PREFS_KEY_CACHED_EXCHANGE_RATE_COIN, cachedExchangeRate.rate.coin.value);
-        edit.putLong(PREFS_KEY_CACHED_EXCHANGE_RATE_FIAT, cachedExchangeRate.rate.fiat.value);
-        edit.apply();
-    }
-
-    public boolean getLastExchangeDirection() {
-        return prefs.getBoolean(PREFS_KEY_LAST_EXCHANGE_DIRECTION, true);
-    }
-
-    public void setLastExchangeDirection(final boolean exchangeDirection) {
-        prefs.edit().putBoolean(PREFS_KEY_LAST_EXCHANGE_DIRECTION, exchangeDirection).apply();
-    }
-
-    public boolean changeLogVersionCodeCrossed(final int currentVersionCode, final int triggeringVersionCode) {
-        final int changeLogVersion = prefs.getInt(PREFS_KEY_CHANGE_LOG_VERSION, 0);
-
-        final boolean wasBelow = changeLogVersion < triggeringVersionCode;
-        final boolean wasUsedBefore = changeLogVersion > 0;
-        final boolean isNowAbove = currentVersionCode >= triggeringVersionCode;
-
-        prefs.edit().putInt(PREFS_KEY_CHANGE_LOG_VERSION, currentVersionCode).apply();
-
-        return /* wasUsedBefore && */wasBelow && isNowAbove;
-    }
-
-    public void updateLastBluetoothAddress(final String bluetoothAddress) {
-        if (bluetoothAddress != null)
-            prefs.edit().putString(PREFS_KEY_LAST_BLUETOOTH_ADDRESS, bluetoothAddress).apply();
     }
 
     public void registerOnSharedPreferenceChangeListener(final OnSharedPreferenceChangeListener listener) {

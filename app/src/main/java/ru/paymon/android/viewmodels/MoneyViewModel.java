@@ -151,8 +151,8 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
         Utils.stageQueue.postRunnable(() -> {
             showProgress.postValue(true);
             final String[] cryptoCurrencies = new String[]{"BTC", "ETH", "PMNT"};
-            final String[] fiatCurrencies = new String[]{"USD", "EUR"};
-            final String link = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,PMNT&tsyms=USD,EUR," + Currency.getInstance(Locale.getDefault()).getCurrencyCode().toUpperCase();
+            final String[] fiatCurrencies = new String[]{"USD", "EUR", "RUB"};
+            final String link = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,PMNT&tsyms=USD,EUR,RUB," + Currency.getInstance(Locale.getDefault()).getCurrencyCode().toUpperCase();
             final ArrayList<ExchangeRate> exchangeRatesItems = new ArrayList<>();
 
             try {

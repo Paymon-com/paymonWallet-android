@@ -5,12 +5,11 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import ru.paymon.android.gateway.bitcoin.data.AddressBookEntry;
 import ru.paymon.android.gateway.exchangerates.ExchangeRate;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.RPC;
 
-@Database(entities = {RPC.Message.class, ChatsItem.class, RPC.UserObject.class, RPC.Group.class, AddressBookEntry.class, ExchangeRate.class}, version = 1)
+@Database(entities = {RPC.Message.class, ChatsItem.class, RPC.UserObject.class, RPC.Group.class,  ExchangeRate.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
@@ -30,7 +29,6 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract ChatDao chatDao();
     public abstract UserDao userDao();
     public abstract GroupDao groupDao();
-    public abstract AddressBookDao addressBookDao();
     public abstract ExchangeRatesDao exchangeRatesDao();
 
 //    private static final Migration MIGRATION_1_2 = new Migration(1, 2) {

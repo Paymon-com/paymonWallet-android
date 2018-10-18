@@ -17,7 +17,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Currency;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.R;
@@ -78,7 +82,12 @@ public class FragmentMoney extends Fragment {
         walletsRecView.setHasFixedSize(true);
         walletsRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, new String[]{"USD", "EUR"});
+        String localCurrency = Currency.getInstance(Locale.getDefault()).getCurrencyCode().toUpperCase();
+        List<String> currencies = new LinkedList<>();
+        currencies.addAll(Arrays.asList(new String[]{"USD", "EUR", "RUB"}));
+        if (!currencies.contains(localCurrency))
+            currencies.add(localCurrency);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, currencies);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         fiatCurrencySpinner.setAdapter(adapter);

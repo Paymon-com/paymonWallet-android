@@ -81,17 +81,13 @@ import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.gateway.bitcoin.Configuration;
 import ru.paymon.android.gateway.bitcoin.Constants;
-import ru.paymon.android.gateway.bitcoin.data.SelectedExchangeRateLiveData;
 import ru.paymon.android.gateway.bitcoin.data.TimeLiveData;
 import ru.paymon.android.gateway.bitcoin.data.WalletLiveData;
 import ru.paymon.android.gateway.bitcoin.util.WalletUtils;
-import ru.paymon.android.room.AddressBookDao;
-import ru.paymon.android.room.AppDatabase;
 
 public class BlockchainService extends LifecycleService {
     private WalletApplication application;
     private Configuration config;
-    private AddressBookDao addressBookDao;
     private WalletLiveData wallet;
 
     private BlockStore blockStore;
@@ -236,8 +232,8 @@ public class BlockchainService extends LifecycleService {
                 if (text.length() > 0)
                     text.append(", ");
                 final String addressStr = notificationAddress.toBase58();
-                final String label = addressBookDao.resolveLabel(addressStr);
-                text.append(label != null ? label : addressStr);
+//                final String label = addressBookDao.resolveLabel(addressStr);
+//                text.append(label != null ? label : addressStr);
             }
             summaryNotification.setContentText(text);
         }
@@ -255,11 +251,11 @@ public class BlockchainService extends LifecycleService {
         childNotification.setContentTitle(msg);
         if (address != null) {
             final String addressStr = address.toBase58();
-            final String addressLabel = addressBookDao.resolveLabel(addressStr);
-            if (addressLabel != null)
-                childNotification.setContentText(addressLabel);
-            else
-                childNotification.setContentText(addressStr);
+//            final String addressLabel = addressBookDao.resolveLabel(addressStr);
+//            if (addressLabel != null)
+//                childNotification.setContentText(addressLabel);
+//            else
+//                childNotification.setContentText(addressStr);
         }
 //        childNotification.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, WalletActivity.class), 0));
         childNotification.setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.coins_received));
@@ -455,7 +451,7 @@ public class BlockchainService extends LifecycleService {
         wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, getClass().getName());
         application = (WalletApplication) getApplication();
         config = application.getConfiguration();
-        addressBookDao = AppDatabase.getDatabase(application).addressBookDao();
+//        addressBookDao = AppDatabase.getDatabase(application).addressBookDao();
         blockChainFile = new File(getDir("blockstore", Context.MODE_PRIVATE), Constants.Files.BLOCKCHAIN_FILENAME);
 
         peerConnectivityListener = new PeerConnectivityListener();
@@ -463,16 +459,16 @@ public class BlockchainService extends LifecycleService {
         broadcastPeerState(0);
 
 //        final WalletBalanceLiveData walletBalance = new WalletBalanceLiveData(application);
-        final SelectedExchangeRateLiveData exchangeRate = new SelectedExchangeRateLiveData(application);
+//        final SelectedExchangeRateLiveData exchangeRate = new SelectedExchangeRateLiveData(application);
 //        walletBalance.observe(this, walletBal -> {
 //            WalletBalanceWidgetProvider.updateWidgets(BlockchainService.this, walletBal, exchangeRate.getValue());
 //        });
         if (Constants.ENABLE_EXCHANGE_RATES) {
-            exchangeRate.observe(this, exRate -> {
+//            exchangeRate.observe(this, exRate -> {
 //                final Coin balance = walletBalance.getValue();
 //                if (balance != null)
 //                    WalletBalanceWidgetProvider.updateWidgets(BlockchainService.this, balance, exRate);
-            });
+//            });
         }
         wallet = new WalletLiveData(application);
         wallet.observe(this, new Observer<Wallet>() {
