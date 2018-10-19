@@ -10,13 +10,16 @@ import android.support.annotation.NonNull;
 import android.support.annotation.WorkerThread;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.PreferenceManager;
+import android.util.Log;
 
 import com.android.volley.toolbox.Volley;
 import com.google.common.base.Charsets;
 import com.google.common.util.concurrent.SettableFuture;
 
 import org.apache.commons.io.IOUtils;
+import org.bitcoinj.core.Address;
 import org.bitcoinj.core.Coin;
+import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.VersionMessage;
 import org.bitcoinj.crypto.LinuxSecureRandom;
@@ -53,6 +56,8 @@ import java.math.BigInteger;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -70,6 +75,7 @@ import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.utils.Utils;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
+import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
 
 
 public class WalletApplication extends AbsWalletApplication {
@@ -165,7 +171,7 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public boolean createBitcoinWallet(final String password) {
         final SettableFuture<Wallet> future = SettableFuture.create();
-        createBitcoinWalletAsync(wallet -> future.set(wallet));
+        createBitcoinWalletAsync(password, wallet -> future.set(wallet));
         try {
             bitcoinWallet = future.get();
             return bitcoinWallet != null;
@@ -220,8 +226,8 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    public BigInteger getBitcoinBalance() {
-        return null;
+    public Coin getBitcoinBalance() {
+        return bitcoinWallet.getBalance();
     }
 
     @Override
@@ -256,7 +262,7 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     public static String convertEthereumToFiat(final BigInteger ethAmount, final String fiatExRate) {
-        return Convert.fromWei(new BigDecimal(ethAmount, 0), Convert.Unit.GWEI).setScale(0, ROUND_HALF_UP).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
+        return Convert.fromWei(new BigDecimal(ethAmount), Convert.Unit.GWEI).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
     @Override
@@ -286,7 +292,7 @@ public class WalletApplication extends AbsWalletApplication {
 
 
     public static String convertPaymonToFiat(final BigInteger pmntAmount, final String fiatExRate) {
-        return Convert.fromWei(new BigDecimal(pmntAmount, 0), Convert.Unit.GWEI).setScale(0, ROUND_HALF_UP).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
+        return Convert.fromWei(new BigDecimal(pmntAmount), Convert.Unit.GWEI).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
     @Override
@@ -313,7 +319,7 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     public static String convertBitcoinToFiat(String btcAmount, String fiatExRate) {
-        return new BigDecimal(btcAmount).setScale(0, ROUND_HALF_UP).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
+        return new BigDecimal(btcAmount).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
     @Override
@@ -324,6 +330,16 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public String getBitcoinPrivateAddress() {
         return bitcoinWallet.getActiveKeyChain().getWatchingKey().getPrivateKeyAsWiF(Constants.NETWORK_PARAMETERS);
+    }
+
+    @Override
+    public List<String> getAllBitcoinPublicAdresses() {
+        List<ECKey> keys = bitcoinWallet.getActiveKeyChain().getIssuedReceiveKeys();
+        List<String> keysList = new ArrayList<>();
+        for (ECKey key : keys) {
+            keysList.add(new Address(Constants.NETWORK_PARAMETERS, key.getPubKeyHash()).toBase58());
+        }
+        return keysList;
     }
 
     @Override
@@ -360,11 +376,6 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    protected void setBitcoinWalletListeners() {
-
-    }
-
-    @Override
     public EthSendTransaction sendRawEthereumTx(@NonNull String recipientAddress, @NonNull BigInteger ethAmount, @NonNull BigInteger gasPrise, @NonNull BigInteger gasLimit) {
         EthSendTransaction ethSendTransaction = null;
         try {
@@ -397,7 +408,7 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @MainThread
-    private void createBitcoinWalletAsync(final OnWalletLoadedListener listener) {
+    private void createBitcoinWalletAsync(final String password, final OnWalletLoadedListener listener) {
         getWalletExecutor.execute(new Runnable() {
             @Override
             public void run() {
@@ -405,10 +416,12 @@ public class WalletApplication extends AbsWalletApplication {
                 synchronized (getWalletLock) {
                     initMnemonicCode();
                     if (walletFiles == null)
-                        createWallet();
+                        createWallet(password);
                 }
                 if (walletFiles != null) {
                     bitcoinWallet = walletFiles.getWallet();
+                    if (bitcoinWallet.isEncrypted())
+                        bitcoinWallet.decrypt(password);
                     bitcoinWallet.addCoinsReceivedEventListener(Threading.SAME_THREAD, walletListener);
                     bitcoinWallet.addCoinsSentEventListener(Threading.SAME_THREAD, walletListener);
                     bitcoinWallet.addReorganizeEventListener(Threading.SAME_THREAD, walletListener);
@@ -418,8 +431,9 @@ public class WalletApplication extends AbsWalletApplication {
             }
 
             @WorkerThread
-            private void createWallet() {
+            private void createWallet(final String password) {
                 Wallet wallet = new Wallet(Constants.NETWORK_PARAMETERS);
+                wallet.encrypt(password);
                 walletFiles = wallet.autosaveToFile(walletFile, Constants.Files.WALLET_AUTOSAVE_DELAY_MS, TimeUnit.MILLISECONDS, null);
                 autosaveWalletNow();
                 WalletUtils.autoBackupWallet(WalletApplication.this, wallet);
@@ -452,6 +466,8 @@ public class WalletApplication extends AbsWalletApplication {
 
                 if (walletFiles != null) {
                     bitcoinWallet = walletFiles.getWallet();
+                    if (bitcoinWallet.isEncrypted())
+                        bitcoinWallet.decrypt(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
                     bitcoinWallet.addCoinsReceivedEventListener(Threading.SAME_THREAD, walletListener);
                     bitcoinWallet.addCoinsSentEventListener(Threading.SAME_THREAD, walletListener);
                     bitcoinWallet.addReorganizeEventListener(Threading.SAME_THREAD, walletListener);
@@ -527,12 +543,14 @@ public class WalletApplication extends AbsWalletApplication {
     private class WalletListener implements WalletCoinsReceivedEventListener, WalletCoinsSentEventListener, WalletReorganizeEventListener, WalletChangeEventListener {
         @Override
         public void onCoinsReceived(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
-
+            Log.e("AAA", prevBalance + " QQ " + newBalance);
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, ETH_CURRENCY_VALUE, newBalance.toString());
         }
 
         @Override
         public void onCoinsSent(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
-
+            Log.e("AAA", prevBalance + " QQ " + newBalance);
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, ETH_CURRENCY_VALUE, newBalance.toString());
         }
 
         @Override

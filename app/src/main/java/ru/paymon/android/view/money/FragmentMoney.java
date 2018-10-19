@@ -184,7 +184,8 @@ public class FragmentMoney extends Fragment {
         exchangeRatesAdapter = new ExchangeRatesAdapter(exRatesItems);
         exchangeRatesRecView.setAdapter(exchangeRatesAdapter);
         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_FIAT_CURRENCY_CHANGED, currentCurrency);
-        cryptoWalletsAdapter.notifyDataSetChanged();
+        if (cryptoWalletsAdapter != null)
+            cryptoWalletsAdapter.notifyDataSetChanged();
     }
 
     private CryptoWalletsAdapter.IOnItemClickListener cryptoWalletsListener = new CryptoWalletsAdapter.IOnItemClickListener() {

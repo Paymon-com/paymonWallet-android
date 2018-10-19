@@ -21,6 +21,7 @@ import ru.paymon.android.utils.Utils;
 import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
 import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
 import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURRENCY_VALUE;
 
 public class DialogFragmentDeleteWallet extends DialogFragment {
     private String currency;
@@ -35,19 +36,10 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getArguments();
-        if(bundle!= null){
-            if(!bundle.containsKey(CURRENCY_KEY)) return;
+        if (bundle != null) {
+            if (!bundle.containsKey(CURRENCY_KEY)) return;
 
             currency = bundle.getString(CURRENCY_KEY);
-
-            switch (currency){
-                case BTC_CURRENCY_VALUE:
-                    break;
-                case ETH_CURRENCY_VALUE:
-                    break;
-//                case PMNT_CURRENCY_VALUE:
-//                    break;
-            }
         }
     }
 
@@ -64,67 +56,79 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
         hint.setText(R.string.delete_wallet_dialog_hint);
 
         switch (currency) {
-            case "ETH":
+            case ETH_CURRENCY_VALUE:
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
 
                 okButton.setOnClickListener(view1 -> {
                     final String password = editText.getText().toString().trim();
 
                     if (password.equals(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD)) {
-                        ((WalletApplication) getActivity().getApplication()).deleteEthereumWallet();
-                        User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = null;
-                        User.saveConfig();
+                        boolean isDeleted = ((WalletApplication) getActivity().getApplication()).deleteEthereumWallet();
+                        if (isDeleted) {
+                            User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = null;
+                            User.saveConfig();
+                            Toast.makeText(getContext(), "Кошелек успешно удален", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "Кошелек удалить не удалось", Toast.LENGTH_LONG).show();
+                        }
 
                         Utils.hideKeyboard(view);
                         getDialog().dismiss();
+                        getDialog().cancel();
                         getActivity().onBackPressed();
                     } else {
-                        getDialog().dismiss();
                         Toast.makeText(getActivity(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
-            case "BTC":
+            case BTC_CURRENCY_VALUE:
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
 
-                ((WalletApplication) getActivity().getApplication()).deleteBitcoinWallet();
+                okButton.setOnClickListener(view1 -> {
+                    final String password = editText.getText().toString().trim();
 
-//                okButton.setOnClickListener(view1 -> { //TODO:
-//                    final String password = editText.getText().toString().trim();
-//
-//                    if (password.equals(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD)) {
-//                        Ethereum.getInstance().deleteWallet();
-//                        User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = null;
-//                        User.saveConfig();
-//
-//                        Utils.hideKeyboard(view);
-//                        getDialog().dismiss();
-//                    } else {
-//                        getDialog().dismiss();
-//                        Toast.makeText(getActivity(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                    if (password.equals(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD)) {
+                        boolean isDeleted = ((WalletApplication) getActivity().getApplication()).deleteBitcoinWallet();
+                        if (isDeleted) {
+                            User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = null;
+                            User.saveConfig();
+                            Toast.makeText(getContext(), "Кошелек успешно удален", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "Кошелек удалить не удалось", Toast.LENGTH_LONG).show();
+                        }
+                        Utils.hideKeyboard(view);
+                        getDialog().dismiss();
+                        getDialog().cancel();
+                        getActivity().onBackPressed();
+                    } else {
+                        Toast.makeText(getActivity(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
-            case "PMNT":
+            case PMNT_CURRENCY_VALUE:
                 view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
 
-                ((WalletApplication) getActivity().getApplication()).deletePaymonWallet();
+                okButton.setOnClickListener(view1 -> {
+                    final String password = editText.getText().toString().trim();
 
-//                okButton.setOnClickListener(view1 -> {//TODO:
-//                    final String password = editText.getText().toString().trim();
-//
-//                    if (password.equals(User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD)) {
-//                        Ethereum.getInstance().deleteWallet();
-//                        User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = null;
-//                        User.saveConfig();
-//
-//                        Utils.hideKeyboard(view);
-//                        getDialog().dismiss();
-//                    } else {
-//                        getDialog().dismiss();
-//                        Toast.makeText(getActivity(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                    if (password.equals(User.CLIENT_MONEY_PAYMON_WALLET_PASSWORD)) {
+                        boolean isDeleted = ((WalletApplication) getActivity().getApplication()).deletePaymonWallet();
+                        if (isDeleted) {
+                            User.CLIENT_MONEY_PAYMON_WALLET_PASSWORD = null;
+                            User.saveConfig();
+                            Toast.makeText(getContext(), "Кошелек успешно удален", Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getContext(), "Кошелек удалить не удалось", Toast.LENGTH_LONG).show();
+                        }
+
+                        Utils.hideKeyboard(view);
+                        getDialog().dismiss();
+                        getDialog().cancel();
+                        getActivity().onBackPressed();
+                    } else {
+                        Toast.makeText(getActivity(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                    }
+                });
                 break;
         }
 

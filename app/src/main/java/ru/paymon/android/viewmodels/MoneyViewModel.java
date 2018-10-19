@@ -111,58 +111,61 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             showProgress.postValue(true);
             final ArrayList<WalletItem> walletItems = new ArrayList<>();
 
-            EthereumWallet ethereumWallet = application.getEthereumWallet();
-            if (ethereumWallet != null) {
-                BigInteger balance = application.getEthereumBalance();
-                if (balance != null) {
-                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
-                    if (exchangeRate != null) {
-                        String fiatBalance = WalletApplication.convertEthereumToFiat(balance, exchangeRate.value);
-                        walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, balance.toString(), fiatCurrency, fiatBalance));
+            final EthereumWallet ethereumWallet = application.getEthereumWallet();
+            final PaymonWallet paymonWallet = application.getPaymonWallet();
+            final Wallet bitcoinWallet = application.getBitcoinWallet();
+
+            ApplicationLoader.applicationHandler.post(() -> {
+                if (ethereumWallet != null) {
+                    BigInteger balance = application.getEthereumBalance();
+                    if (balance != null) {
+                        ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
+                        if (exchangeRate != null) {
+                            String fiatBalance = WalletApplication.convertEthereumToFiat(balance, exchangeRate.value);
+                            walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, balance.toString(), fiatCurrency, fiatBalance));
+                        } else {
+                            walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, "0", fiatCurrency, "0"));
+                        }
                     } else {
                         walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, "0", fiatCurrency, "0"));
                     }
-                } else {
-                    walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, "0", fiatCurrency, "0"));
                 }
-            }
 
-            PaymonWallet paymonWallet = application.getPaymonWallet();
-            if (paymonWallet != null) {
-                BigInteger balance = application.getPaymonBalance();
-                if (balance != null) {
-                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
-                    if (exchangeRate != null) {
-                        String fiatBalance = WalletApplication.convertPaymonToFiat(balance, exchangeRate.value);
-                        walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, paymonWallet.balance, fiatCurrency, fiatBalance));
+                if (paymonWallet != null) {
+                    BigInteger balance = application.getPaymonBalance();
+                    if (balance != null) {
+                        ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
+                        if (exchangeRate != null) {
+                            String fiatBalance = WalletApplication.convertPaymonToFiat(balance, exchangeRate.value);
+                            walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, paymonWallet.balance, fiatCurrency, fiatBalance));
+                        } else {
+                            walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, "0", fiatCurrency, "0"));
+                        }
                     } else {
                         walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, "0", fiatCurrency, "0"));
                     }
-                } else {
-                    walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, "0", fiatCurrency, "0"));
                 }
-            }
 
-            Wallet bitcoinWallet = application.getBitcoinWallet();
-            if (bitcoinWallet != null) {
-                String balance = bitcoinWallet.getBalance().toString();
-                ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
-                if (exchangeRate != null) {
-                    String fiatBalance = WalletApplication.convertBitcoinToFiat("1", exchangeRate.value);
-                    walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, "1", fiatCurrency, fiatBalance));
-                } else {
-                    walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, balance, fiatCurrency, "0"));
+                if (bitcoinWallet != null) {
+                    String balance = bitcoinWallet.getBalance().toPlainString();
+                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
+                    if (exchangeRate != null) {
+                        String fiatBalance = WalletApplication.convertBitcoinToFiat(balance, exchangeRate.value);
+                        walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, balance, fiatCurrency, fiatBalance));
+                    } else {
+                        walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, balance, fiatCurrency, "0"));
+                    }
                 }
-            }
 
-            if (bitcoinWallet == null)
-                walletItems.add(new WalletItem(BTC_CURRENCY_VALUE));
+                if (bitcoinWallet == null)
+                    walletItems.add(new WalletItem(BTC_CURRENCY_VALUE));
 
-            if (paymonWallet == null)
-                walletItems.add(new WalletItem(PMNT_CURRENCY_VALUE));
+                if (paymonWallet == null)
+                    walletItems.add(new WalletItem(PMNT_CURRENCY_VALUE));
 
-            if (ethereumWallet == null)
-                walletItems.add(new WalletItem(ETH_CURRENCY_VALUE));
+                if (ethereumWallet == null)
+                    walletItems.add(new WalletItem(ETH_CURRENCY_VALUE));
+            });
 
             walletsData.postValue(walletItems);
             showProgress.postValue(false);

@@ -9,6 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -18,7 +20,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.view.money.DialogFragmentDeleteWallet;
+import ru.paymon.android.view.money.DialogFragmentBackupWallet;
 import ru.paymon.android.view.money.DialogFragmentPrivateKey;
 import ru.paymon.android.view.money.DialogFragmentPublicKey;
 import ru.paymon.android.view.money.DialogFragmentRestoreWallet;
@@ -27,12 +29,14 @@ import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
 
 public class FragmentBitcoinWallet extends Fragment {
     public static final String BTC_CURRENCY_VALUE = "BTC";
-//    private BitcoinTransactionAdapter bitcoinTransactionAdapter;
-
+    //    private BitcoinTransactionAdapter bitcoinTransactionAdapter;
+    private TextView balance;
+    private WalletApplication application;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        application = ((WalletApplication) getActivity().getApplication());
     }
 
     @Nullable
@@ -46,11 +50,11 @@ public class FragmentBitcoinWallet extends Fragment {
         ImageButton backBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_back_btn);
         ImageButton restoreBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_restore_btn);
         ImageButton backupBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_backup_btn);
-        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_delete_btn);
+//        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_delete_btn);
         Button privateKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_public_key_button);
         TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
-        TextView balance = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance);
+        balance = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance);
 
         RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
@@ -60,10 +64,10 @@ public class FragmentBitcoinWallet extends Fragment {
 
         backBtn.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         restoreBtn.setOnClickListener(v -> new DialogFragmentRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
-//        backupBtn.setOnClickListener(v -> ((WalletApplication) getActivity().getApplication()).backupEthereumWallet());//TODO: вызов вьюшки с выбором места куда бэкапить
-        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
+        backupBtn.setOnClickListener(v -> new DialogFragmentBackupWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
+//        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));
-        transfer.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWalletTransfer));
+//        transfer.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWalletTransfer));
 //        withdraw.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumWidthdraw.newInstance(), null));
         privateKey.setOnClickListener(view1 -> new DialogFragmentPrivateKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
         publicKey.setOnClickListener(view1 -> new DialogFragmentPublicKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
@@ -109,6 +113,10 @@ public class FragmentBitcoinWallet extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
+        balance.setText(application.getBitcoinBalance().toFriendlyString());
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
+        animation.setDuration(700);
+        balance.startAnimation(animation);
     }
 
     @Override
