@@ -6,13 +6,18 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,7 +57,7 @@ public abstract class AbsFragmentChat extends Fragment {
     public ImageButton sendButton;
     public ImageView emoticonsButton;
 //    public ConstraintLayout includeAttachment;
-//    public ImageButton buttonAttachment;
+    public Button buttonAttachment;
 //    public ImageButton buttonDocumentAttachment;
 //    public ImageButton buttonImageAttachment;
 //    public ImageButton buttonVideoAttachment;
@@ -110,12 +115,17 @@ public abstract class AbsFragmentChat extends Fragment {
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (ImageButton) view.findViewById(R.id.sendButton);
         emoticonsButton = (ImageView) view.findViewById(R.id.smilesButton);
-//        includeAttachment = (ConstraintLayout) view.findViewById(R.id.fragment_chat_attachment_include);
-//        buttonAttachment = (ImageButton) view.findViewById(R.id.attach_button);
+//        includeAttachment = (ConstraintLayout) view.findViewById(R.id.coordinator_attachment_test);
+        buttonAttachment = (Button) view.findViewById(R.id.button_attachment_test);
 //        buttonDocumentAttachment = (ImageButton) view.findViewById(R.id.document_chat_attachment);
 //        buttonImageAttachment = (ImageButton) view.findViewById(R.id.image_chat_attachment);
 //        buttonVideoAttachment = (ImageButton) view.findViewById(R.id.video_chat_attachment);
         toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
+
+        buttonAttachment.setOnClickListener(v -> {
+            FragmentSheetDialog fragmentSheetDialog = new FragmentSheetDialog();
+            fragmentSheetDialog.show(getActivity().getSupportFragmentManager(), null);
+        });
 
         final Bundle bundle = new Bundle();
         bundle.putInt(CHAT_ID_KEY, chatID);
