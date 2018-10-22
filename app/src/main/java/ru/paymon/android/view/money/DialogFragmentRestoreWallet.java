@@ -85,7 +85,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
 
         openExplorerButton.setOnClickListener((view1) -> {
             AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(getContext())
-                    .setFilter(".*\\.json")
+//                    .setFilter(".*\\.json")
                     .setOpenDialogListener((fileName) -> {
                         path.setVisibility(View.VISIBLE);
                         path.setText(fileName);
@@ -107,7 +107,6 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
             }
 
             Utils.hideKeyboard(view);
-            getDialog().dismiss();
 
             final File file = new File(filePath[0]);
 
@@ -141,6 +140,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
                         User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = password;
                         User.saveConfig();
                         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.ETHEREUM_WALLET_CREATED);
+                        getDialog().dismiss();
                         break;
                     case NO_USER_ID:
                         break;
@@ -162,12 +162,17 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
                         User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = password;
                         User.saveConfig();
                         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED);
+                        Toast.makeText(getContext(), "OK", Toast.LENGTH_LONG).show();
+                        getDialog().dismiss();
                         break;
                     case NO_USER_ID:
+                        Toast.makeText(ApplicationLoader.applicationContext, "Не удалось", Toast.LENGTH_LONG).show();
                         break;
                     case ERROR_CREATE_FILE:
+                        Toast.makeText(ApplicationLoader.applicationContext, "Не удалось", Toast.LENGTH_LONG).show();
                         break;
                     case ERROR_DECRYPTING_WRONG_PASS:
+                        Toast.makeText(ApplicationLoader.applicationContext, "Не удалось", Toast.LENGTH_LONG).show();
                         break;
                 }
             });
@@ -183,6 +188,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
                         User.CLIENT_MONEY_PAYMON_WALLET_PASSWORD = password;
                         User.saveConfig();
                         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.PAYMON_WALLET_CREATED);
+                        getDialog().dismiss();
                         break;
                     case NO_USER_ID:
                         break;

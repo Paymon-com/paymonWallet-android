@@ -25,6 +25,7 @@ import org.bitcoinj.core.VersionMessage;
 import org.bitcoinj.crypto.LinuxSecureRandom;
 import org.bitcoinj.crypto.MnemonicCode;
 import org.bitcoinj.utils.Threading;
+import org.bitcoinj.wallet.SendRequest;
 import org.bitcoinj.wallet.UnreadableWalletException;
 import org.bitcoinj.wallet.Wallet;
 import org.bitcoinj.wallet.WalletProtobufSerializer;
@@ -94,7 +95,7 @@ public class WalletApplication extends AbsWalletApplication {
     private String bitcoinWalletPath;
     private String ethereumWalletPath;
     private String paymonWalletPath;
-
+    public static final int btcTxSize = (148 * 1) + (34 * 2) + 10;
 
     @Override
     public void onCreate() {
@@ -304,11 +305,12 @@ public class WalletApplication extends AbsWalletApplication {
             cipherIn.close();
             final byte[] plainText = Crypto.decryptBytes(cipherText.toString(), password.toCharArray());
             final InputStream is = new ByteArrayInputStream(plainText);
-            final Wallet wallet = WalletUtils.restoreWalletFromProtobufOrBase58(is, Constants.NETWORK_PARAMETERS);
+            final Wallet wallet = WalletUtils.restoreWalletFromProtobufOrBase58(is, Constants.NETWORK_PARAMETERS, password);
             replaceWallet(wallet);
 
             return RestoreStatus.DONE;
         } catch (final IOException x) {
+            x.printStackTrace();
             return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
         }
     }
@@ -391,6 +393,40 @@ public class WalletApplication extends AbsWalletApplication {
         return ethSendTransaction;
     }
 
+    public Transaction sendBitcoinTx(String destinationAddress, long satoshis, long feePerB) {
+        Address dest = Address.fromBase58(Constants.NETWORK_PARAMETERS, destinationAddress);
+        SendRequest request = SendRequest.to(dest, Coin.valueOf(satoshis));
+        request.feePerKb = Coin.valueOf(feePerB * 1000);
+        Log.e("AAA", " FEE per KB : " + request.feePerKb + " FEE : " + request.tx.getFee());
+        Wallet.SendResult result;
+        Transaction endTransaction = null;
+        try {
+            result = bitcoinWallet.sendCoins(request);
+            endTransaction = result.broadcastComplete.get();
+            Log.e("AAA", " HASH : " + endTransaction.getHashAsString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return endTransaction;
+    }
+
+    @Override
+    public Transaction sendBitcoinTx(String destinationAddress, long satoshis) {
+        Address dest = Address.fromBase58(Constants.NETWORK_PARAMETERS, destinationAddress);
+        SendRequest request = SendRequest.to(dest, Coin.valueOf(satoshis));
+        Log.e("AAA", " FEE per KB : " + request.feePerKb + " FEE : " + request.tx.getFee());
+        Wallet.SendResult result;
+        Transaction endTransaction = null;
+        try {
+            result = bitcoinWallet.sendCoins(request);
+            endTransaction = result.broadcastComplete.get();
+            Log.e("AAA", " HASH : " + endTransaction.getHashAsString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return endTransaction;
+    }
+
     public void replaceWallet(final Wallet newWallet) {
         newWallet.cleanup();
         BlockchainService.resetBlockchain(this);
@@ -433,7 +469,8 @@ public class WalletApplication extends AbsWalletApplication {
             @WorkerThread
             private void createWallet(final String password) {
                 Wallet wallet = new Wallet(Constants.NETWORK_PARAMETERS);
-                wallet.encrypt(password);
+                if (!password.isEmpty())
+                    wallet.encrypt(password);
                 walletFiles = wallet.autosaveToFile(walletFile, Constants.Files.WALLET_AUTOSAVE_DELAY_MS, TimeUnit.MILLISECONDS, null);
                 autosaveWalletNow();
                 WalletUtils.autoBackupWallet(WalletApplication.this, wallet);
@@ -543,7 +580,7 @@ public class WalletApplication extends AbsWalletApplication {
     private class WalletListener implements WalletCoinsReceivedEventListener, WalletCoinsSentEventListener, WalletReorganizeEventListener, WalletChangeEventListener {
         @Override
         public void onCoinsReceived(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
-            Log.e("AAA", prevBalance + " QQ " + newBalance);
+            Log.e("AAA", prevBalance + "  received QQ " + newBalance);
             NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, ETH_CURRENCY_VALUE, newBalance.toString());
         }
 

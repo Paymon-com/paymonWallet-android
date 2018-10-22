@@ -21,6 +21,8 @@
     <string name="settings_reset">Settings reset</string>
     <string name="double_tap_to_close_the_app">Double tap to close the app</string>
     <string name="ethereum_remittance">Ethereum remittance</string>
+    <string name="bitcoin_remittance">Bitcoin remittance</string>
+    <string name="paymon_remittance">Paymon remittance</string>
 
     <string name="keyguard_title">Enter password</string>
 
@@ -395,6 +397,8 @@
     <string name="eth">ETH</string>
     <string name="wallet_create_title">Create a password for your wallet. The operation may take several minutes</string>
     <string name="title_ethereum_wallet">Ethereum wallet</string>
+    <string name="title_bitcoin_wallet">Bitcoin wallet</string>
+    <string name="title_paymon_wallet">Paymon wallet</string>
     <string name="create_wallet_dialog_hint">The operation may take several minutes. Please wait…</string>
     <string name="ethereum_wallet_is_loaded_hint">Ethereum wallet is loading, please wait…</string>
     <string name="universal_transfer_address_title">Enter the address to which you want to transfer money or use the scanner</string>

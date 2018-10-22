@@ -38,4 +38,6 @@ public class Config {
 
     public static final String MESSAGES_NOTIFICATION_CHANNEL_ID = "MESSAGES_NOTIFICATION_CHANNEL_ID";
     public static final String MESSAGES_NOTIFICATION_CHANNEL_NAME = "Messages";
+
+    public static final String[] fiatCurrencies = new String[]{"USD", "EUR", "RUB"};
 }

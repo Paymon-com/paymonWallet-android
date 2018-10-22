@@ -202,10 +202,19 @@
         android:id="@+id/fragmentBitcoinWallet"
         android:name="ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet"
         android:label="fragment_bitcoin_wallet"
-        tools:layout="@layout/fragment_bitcoin_wallet" />
+        tools:layout="@layout/fragment_bitcoin_wallet" >
+        <action
+            android:id="@+id/action_fragmentBitcoinWallet_to_fragmentBitcoinWalletTransfer"
+            app:destination="@id/fragmentBitcoinWalletTransfer" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentPaymonWallet"
         android:name="ru.paymon.android.view.money.pmnt.FragmentPaymonWallet"
         android:label="fragment_paymon_wallet"
         tools:layout="@layout/fragment_paymon_wallet" />
+    <fragment
+        android:id="@+id/fragmentBitcoinWalletTransfer"
+        android:name="ru.paymon.android.view.money.bitcoin.FragmentBitcoinWalletTransfer"
+        android:label="fragment_bitcoin_wallet_transfer"
+        tools:layout="@layout/fragment_bitcoin_wallet_transfer" />
 </navigation>

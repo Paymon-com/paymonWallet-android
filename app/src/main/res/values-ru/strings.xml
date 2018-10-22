@@ -92,6 +92,8 @@
     <string name="settings_reset">Настройки сброшены</string>
     <string name="double_tap_to_close_the_app">Нажмите дважды чтобы закрыть приложение</string>
     <string name="ethereum_remittance">Ethereum перевод</string>
+    <string name="bitcoin_remittance">Bitcoin перевод</string>
+    <string name="paymon_remittance">Paymon перевод</string>
 
     <string name="update_profile">Редактировать профиль</string>
 
@@ -397,6 +399,8 @@
     <string name="eth">ETH</string>
     <string name="wallet_create_title">Придумайте пароль для вашего кошелька. Операция может занять несколько минут.</string>
     <string name="title_ethereum_wallet">Ethereum кошелек</string>
+    <string name="title_bitcoin_wallet">Bitcoin кошелек</string>
+    <string name="title_paymon_wallet">Paymon кошелек</string>
     <string name="create_wallet_dialog_hint">Операция может занять несколько минут. Пожулайста, подождите…</string>
     <string name="ethereum_wallet_is_loaded_hint">Ethereum кошелек загружается, пожалуйста, подождите…</string>
     <string name="universal_transfer_address_title">Введите адрес, на который вы хотите перечислить денежные средства или воспользуйтесь сканером.</string>

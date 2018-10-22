@@ -14,10 +14,12 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.media.RingtoneManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -74,6 +76,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import javax.annotation.Nullable;
 
+import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.gateway.bitcoin.Configuration;
@@ -232,6 +235,15 @@ public class BlockchainService extends LifecycleService {
             }
             summaryNotification.setContentText(text);
         }
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            summaryNotification.setChannelId(Config.MESSAGES_NOTIFICATION_CHANNEL_ID);
+        } else {
+            summaryNotification.setVibrate(new long[]{100, 200, 100, 300});
+            Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            summaryNotification.setSound(soundUri);
+        }
+
 //        summaryNotification.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, WalletActivity.class), 0));
         nm.notify(Constants.NOTIFICATION_ID_COINS_RECEIVED, summaryNotification.build());
 
@@ -251,6 +263,14 @@ public class BlockchainService extends LifecycleService {
 //                childNotification.setContentText(addressLabel);
 //            else
 //                childNotification.setContentText(addressStr);
+        }
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            childNotification.setChannelId(Config.MESSAGES_NOTIFICATION_CHANNEL_ID);
+        } else {
+            childNotification.setVibrate(new long[]{100, 200, 100, 300});
+            Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            childNotification.setSound(soundUri);
         }
 //        childNotification.setContentIntent(PendingIntent.getActivity(this, 0, new Intent(this, WalletActivity.class), 0));
         childNotification.setSound(Uri.parse("android.resource://" + getPackageName() + "/" + R.raw.coins_received));

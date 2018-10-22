@@ -203,7 +203,7 @@ public class WalletUtils {
         }
     }
 
-    public static Wallet restoreWalletFromProtobufOrBase58(final InputStream is, final NetworkParameters expectedNetworkParameters) throws IOException {
+    public static Wallet restoreWalletFromProtobufOrBase58(final InputStream is, final NetworkParameters expectedNetworkParameters, final String password) throws IOException {
         is.mark((int) Constants.BACKUP_MAX_CHARS);
 
         try {
@@ -211,7 +211,7 @@ public class WalletUtils {
         } catch (final IOException x) {
             try {
                 is.reset();
-                return restorePrivateKeysFromBase58(is, expectedNetworkParameters);
+                return restorePrivateKeysFromBase58(is, expectedNetworkParameters, password);
             } catch (final IOException x2) {
                 throw new IOException("cannot read protobuf (" + x.getMessage() + ") or base58 (" + x2.getMessage() + ")", x);
             }
@@ -233,13 +233,16 @@ public class WalletUtils {
         }
     }
 
-    public static Wallet restorePrivateKeysFromBase58(final InputStream is, final NetworkParameters expectedNetworkParameters) throws IOException {
+    public static Wallet restorePrivateKeysFromBase58(final InputStream is, final NetworkParameters expectedNetworkParameters, final String password) throws IOException {
         final BufferedReader keyReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
-
         // create non-HD wallet
         final KeyChainGroup group = new KeyChainGroup(expectedNetworkParameters);
         group.importKeys(WalletUtils.readKeys(keyReader, expectedNetworkParameters));
-        return new Wallet(expectedNetworkParameters, group);
+        Wallet wallet = new Wallet(expectedNetworkParameters, group);
+
+        if(wallet.isEncrypted())
+            wallet.decrypt(password);
+        return wallet;
     }
 
     public static void writeKeys(final Writer out, final List<ECKey> keys) throws IOException {

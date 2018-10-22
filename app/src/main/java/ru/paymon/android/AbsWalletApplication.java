@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import com.android.volley.RequestQueue;
 
 import org.bitcoinj.core.Coin;
+import org.bitcoinj.core.Transaction;
 import org.bitcoinj.wallet.Wallet;
 import org.bitcoinj.wallet.WalletFiles;
 import org.web3j.crypto.Credentials;
@@ -60,6 +61,8 @@ public abstract class AbsWalletApplication extends Application {
 
 
     public abstract EthSendTransaction sendRawEthereumTx(final @NonNull String recipientAddress, final  @NonNull BigInteger ethAmount, final @NonNull BigInteger gasPrise, final @NonNull BigInteger gasLimit);
+    public abstract Transaction sendBitcoinTx(final String destinationAddress, long satoshis);
+
 
     public enum RestoreStatus {
         NO_USER_ID,

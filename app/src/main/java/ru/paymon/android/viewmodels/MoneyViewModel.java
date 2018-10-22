@@ -5,6 +5,7 @@ import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import org.bitcoinj.wallet.Wallet;
 import org.json.JSONObject;
@@ -147,6 +148,10 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                 }
 
                 if (bitcoinWallet != null) {
+                    Log.e("AAA", "typeBalance AVAILABLE: " + application.getBitcoinWallet().getBalance(Wallet.BalanceType.AVAILABLE));
+                    Log.e("AAA", "typeBalance ESTIMATED: " + application.getBitcoinWallet().getBalance(Wallet.BalanceType.ESTIMATED));
+                    Log.e("AAA", "typeBalance AVAILABLE_SPENDABLE: " + application.getBitcoinWallet().getBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE));
+                    Log.e("AAA", "typeBalance ESTIMATED_SPENDABLE: " + application.getBitcoinWallet().getBalance(Wallet.BalanceType.ESTIMATED_SPENDABLE));
                     String balance = bitcoinWallet.getBalance().toPlainString();
                     ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
                     if (exchangeRate != null) {
@@ -199,7 +204,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                 for (String cryptoCurrency : cryptoCurrencies) {
                     final JSONObject cryptoObject = (JSONObject) jsonObject.get(cryptoCurrency);
                     for (String fiatCurrency : fiatCurrencies) {
-                        exchangeRatesItems.add(new ExchangeRate(++id, fiatCurrency, cryptoCurrency, String.format("%.09f", cryptoObject.getDouble(fiatCurrency)).replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", "")));
+                        exchangeRatesItems.add(new ExchangeRate(++id, fiatCurrency, cryptoCurrency, String.format(Locale.US,"%.09f", cryptoObject.getDouble(fiatCurrency)).replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", "")));
                     }
                 }
 
