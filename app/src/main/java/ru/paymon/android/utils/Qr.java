@@ -15,7 +15,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package ru.paymon.android.gateway.bitcoin.util;
+package ru.paymon.android.utils;
 
 import android.graphics.Bitmap;
 

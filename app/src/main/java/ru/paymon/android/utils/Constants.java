@@ -1,4 +1,4 @@
-package ru.paymon.android.gateway.bitcoin;
+package ru.paymon.android.utils;
 
 import android.os.Build;
 import android.os.Environment;

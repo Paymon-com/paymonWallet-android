@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.paymon.android.gateway.bitcoin.util;
+package ru.paymon.android.utils;
 
 import java.nio.charset.StandardCharsets;
 

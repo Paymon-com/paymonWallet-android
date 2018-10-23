@@ -2,16 +2,13 @@ package ru.paymon.android;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.toolbox.Volley;
-import com.google.common.base.Charsets;
 
 import org.apache.commons.io.IOUtils;
 import org.bitcoinj.core.Address;
@@ -37,13 +34,11 @@ import org.web3j.protocol.http.HttpService;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -53,16 +48,11 @@ import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
-import ru.paymon.android.gateway.bitcoin.Configuration;
-import ru.paymon.android.gateway.bitcoin.Constants;
-import ru.paymon.android.gateway.bitcoin.service.BlockchainService;
-import ru.paymon.android.gateway.bitcoin.util.Crypto;
-import ru.paymon.android.gateway.bitcoin.util.Io;
-import ru.paymon.android.gateway.bitcoin.util.WalletUtils;
 import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.PaymonWallet;
+import ru.paymon.android.utils.Configuration;
+import ru.paymon.android.utils.Constants;
 import ru.paymon.android.utils.Utils;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
@@ -258,21 +248,27 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public boolean backupBitcoinWallet(final String path) {
         try {
-            final String BACKUP_FILE_PATH = path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis() + ".json";
-            final File backupFile = new File(BACKUP_FILE_PATH);
-
-            final BufferedReader cipherIn = new BufferedReader(new InputStreamReader(new FileInputStream(walletFile), Charsets.UTF_8));
-            final StringBuilder cipherText = new StringBuilder();
-            Io.copy(cipherIn, cipherText, Constants.BACKUP_MAX_CHARS);
-            final String encryptedString = Crypto.encrypt(cipherText.toString(), User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD.toCharArray());
-            FileOutputStream stream = new FileOutputStream(backupFile);
-            stream.write(encryptedString.getBytes());
-            stream.close();
-
+            kit.wallet().saveToFile(new File(path));
             return true;
-        } catch (Exception e) {
+        }catch (Exception e){
             return false;
         }
+//        try {
+//            final String BACKUP_FILE_PATH = path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis() + ".json";
+//            final File backupFile = new File(BACKUP_FILE_PATH);
+//
+//            final BufferedReader cipherIn = new BufferedReader(new InputStreamReader(new FileInputStream(walletFile), Charsets.UTF_8));
+//            final StringBuilder cipherText = new StringBuilder();
+//            Io.copy(cipherIn, cipherText, Constants.BACKUP_MAX_CHARS);
+//            final String encryptedString = Crypto.encrypt(cipherText.toString(), User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD.toCharArray());
+//            FileOutputStream stream = new FileOutputStream(backupFile);
+//            stream.write(encryptedString.getBytes());
+//            stream.close();
+//
+//            return true;
+//        } catch (Exception e) {
+//            return false;
+//        }
     }
 
 //    @Override
@@ -494,21 +490,21 @@ public class WalletApplication extends AbsWalletApplication {
         return sendResult != null ? sendResult.tx : null;
     }
 
-    public void replaceWallet(final Wallet newWallet) {
-        newWallet.cleanup();
-        BlockchainService.resetBlockchain(this);
-
-        final Wallet oldWallet = getBitcoinWallet();
-        synchronized (getWalletLock) {
-            oldWallet.shutdownAutosaveAndWait(); // this will also prevent BlockchainService to save
-            walletFiles = newWallet.autosaveToFile(walletFile, Constants.Files.WALLET_AUTOSAVE_DELAY_MS, TimeUnit.MILLISECONDS, null);
-        }
-        config.maybeIncrementBestChainHeightEver(newWallet.getLastBlockSeenHeight());
-        WalletUtils.autoBackupWallet(this, newWallet);
-
-        final Intent broadcast = new Intent(ACTION_WALLET_REFERENCE_CHANGED);
-        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
-    }
+//    public void replaceWallet(final Wallet newWallet) {
+//        newWallet.cleanup();
+//        BlockchainService.resetBlockchain(this);
+//
+//        final Wallet oldWallet = getBitcoinWallet();
+//        synchronized (getWalletLock) {
+//            oldWallet.shutdownAutosaveAndWait(); // this will also prevent BlockchainService to save
+//            walletFiles = newWallet.autosaveToFile(walletFile, Constants.Files.WALLET_AUTOSAVE_DELAY_MS, TimeUnit.MILLISECONDS, null);
+//        }
+//        config.maybeIncrementBestChainHeightEver(newWallet.getLastBlockSeenHeight());
+//        WalletUtils.autoBackupWallet(this, newWallet);
+//
+//        final Intent broadcast = new Intent(ACTION_WALLET_REFERENCE_CHANGED);
+//        LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
+//    }
 
 //    @MainThread
 //    private void createBitcoinWalletAsync(final String password, final OnWalletLoadedListener listener) {

@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
-import ru.paymon.android.gateway.bitcoin.util.Qr;
+import ru.paymon.android.utils.Qr;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
