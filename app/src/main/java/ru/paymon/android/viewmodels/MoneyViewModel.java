@@ -23,6 +23,7 @@ import javax.net.ssl.HttpsURLConnection;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
+import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.gateway.exchangerates.ExchangeRate;
 import ru.paymon.android.models.EthereumWallet;
@@ -147,7 +148,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                     }
                 }
 
-                if (bitcoinWallet != null) {
+                if (bitcoinWallet != null && User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD != null) {
                     Log.e("AAA", "typeBalance AVAILABLE: " + application.getBitcoinWallet().getBalance(Wallet.BalanceType.AVAILABLE));
                     Log.e("AAA", "typeBalance ESTIMATED: " + application.getBitcoinWallet().getBalance(Wallet.BalanceType.ESTIMATED));
                     Log.e("AAA", "typeBalance AVAILABLE_SPENDABLE: " + application.getBitcoinWallet().getBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE));
@@ -162,7 +163,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                     }
                 }
 
-                if (bitcoinWallet == null)
+                if (bitcoinWallet != null && User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null)
                     walletItems.add(new WalletItem(BTC_CURRENCY_VALUE));
 
                 if (paymonWallet == null)

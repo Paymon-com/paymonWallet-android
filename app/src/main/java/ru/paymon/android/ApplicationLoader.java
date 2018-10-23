@@ -23,7 +23,6 @@ import com.vanniktech.rxpermission.RxPermission;
 
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.emoji.CustomEmojiProvider;
-import ru.paymon.android.gateway.bitcoin.service.BlockchainService;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.room.AppDatabase;
@@ -81,7 +80,7 @@ public class ApplicationLoader extends WalletApplication {
         startService(new Intent(applicationContext, ConnectorService.class));
         NetworkManager.getInstance().bindServices();
 
-        BlockchainService.start(this, true);
+//        BlockchainService.start(this, true);
 //
 //        rxPermission
 //                .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,

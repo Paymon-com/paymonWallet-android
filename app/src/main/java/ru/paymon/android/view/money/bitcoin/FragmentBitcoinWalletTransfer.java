@@ -1,11 +1,14 @@
 package ru.paymon.android.view.money.bitcoin;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,8 +31,12 @@ import ru.paymon.android.Config;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
+import ru.paymon.android.activities.QrCodeScannerActivity;
 import ru.paymon.android.gateway.exchangerates.ExchangeRate;
 
+import static android.app.Activity.RESULT_OK;
+import static ru.paymon.android.activities.QrCodeScannerActivity.QR_SCAN_RESULT_KEY;
+import static ru.paymon.android.activities.QrCodeScannerActivity.REQUEST_CODE_QR_SCANNER_START;
 import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
 
 public class FragmentBitcoinWalletTransfer extends Fragment implements NotificationManager.IListener {
@@ -38,6 +45,8 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
     private String currentExchangeRate;
     private NumberPicker fiatCurrencyPicker;
     private TextView fiatEqualTextView;
+    private TextView balanceTextView;
+    private EditText receiverAddressEditText;
     private double btcAmount;
     private long feeSatoshis;
     private Double feeBtc;
@@ -59,10 +68,10 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_currency);
         IndicatorSeekBar feeSeekBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_gas_limit_slider);
         TextView totalTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_total_value);
-        EditText receiverAddressEditText = (EditText) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_receiver_address);
+        receiverAddressEditText = (EditText) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_receiver_address);
         FloatingActionButton qrScannerButton = (FloatingActionButton) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_qr);
         TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_id_from);
-        TextView balanceTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_balance);
+        balanceTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_balance);
         TextView nextButtonTextView = (TextView) view.findViewById(R.id.toolbar_btc_wallet_transf_next_text_view);
         fiatEqualTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_eq);
         TextInputLayout textInputLayout = (TextInputLayout) view.findViewById(R.id.textInputLayout);
@@ -77,7 +86,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         final String balance = application.getBitcoinBalance().toPlainString();
 
         fromAddressTextView.setText(fromAddress);
-        balanceTextView.setText(balance);
+        balanceTextView.setText(balance + " BTC");
 
         amountEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -112,7 +121,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
 
                 changeCurrency();
                 fiatEqualTextView.setVisibility(View.VISIBLE);
-                totalValueBtc = feeBtc +  btcAmount;
+                totalValueBtc = feeBtc + btcAmount;
                 totalTextView.setText(String.format("%.8f BTC", totalValueBtc));
             }
         });
@@ -123,7 +132,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 feeSatoshis = seekParams.progress * WalletApplication.btcTxSize;
                 feeBtc = feeSatoshis / Math.pow(10, 8);
                 feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + "BTC (${PROGRESS} satoshi per byte)");
-                totalValueBtc = feeBtc +  btcAmount;
+                totalValueBtc = feeBtc + btcAmount;
                 totalTextView.setText(String.format("%.8f BTC", totalValueBtc));
             }
 
@@ -163,32 +172,46 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
             }
         });
 
-        nextButtonTextView.setOnClickListener(v -> {
+        nextButtonTextView.setOnClickListener(v -> { //TODO:Strings
             final String toAddress = receiverAddressEditText.getText().toString();
 
             if (btcAmount <= 0.0001 || toAddress.isEmpty()) {
                 return;
             }
 
-            if(totalValueBtc > application.getBitcoinBalance().value){
-                //TODO:алерт что недостаточно средств
+            if (totalValueBtc > application.getBitcoinBalance().value) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                        .setMessage("Не достаточно средств")
+                        .setCancelable(true);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
                 return;
             }
 
-            if(feeSeekBar.getProgress() < 10){
-                //TODO: алерт с текстом (чтобы юзер был вкурсе, что транзация будет идти долго)
-            }
-
-            final long btcAmountToSatoshi = (long) (btcAmount * Math.pow(10, 8));
-            Transaction transaction = application.sendBitcoinTx(toAddress, btcAmountToSatoshi, feeSeekBar.getProgress());
-            if(transaction != null){
-                //TODO: выдача алерта о подтверждении, результат (Хэш)
-                String hash = transaction.getHashAsString();
-            }
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    .setMessage(feeSeekBar.getProgress() < 10 ? "Будьте аккуратны, низкое значение комиссии может привести к долгой отправке транзакции. Продолжить?" : "Продолжить?")
+                    .setCancelable(true)
+                    .setPositiveButton("Продолжить", (DialogInterface dialog, int which) -> {
+                        final long btcAmountToSatoshi = (long) (btcAmount * Math.pow(10, 8));
+                        Transaction transaction = application.sendBitcoinTx(toAddress, btcAmountToSatoshi, feeSeekBar.getProgress());
+                        if (transaction != null) {
+                            String hash = transaction.getHashAsString();
+                            AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
+                                    .setMessage("Хэш транзакции " + hash)
+                                    .setCancelable(true);
+                            AlertDialog alertDialog = builder2.create();
+                            alertDialog.show();
+                        }
+                    })
+                    .setNegativeButton("Отмена", (DialogInterface dialog, int which) -> {
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
 
-        qrScannerButton.setOnClickListener(v->{
-            //TODO:вызов QR сканнера и занос резульата в строку получателя
+        qrScannerButton.setOnClickListener(v -> {
+            Intent qrScannerIntent = new Intent(getContext(), QrCodeScannerActivity.class);
+            startActivityForResult(qrScannerIntent, REQUEST_CODE_QR_SCANNER_START);
         });
 
         return view;
@@ -209,7 +232,11 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
         if (event == NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED) {
-            //TODO:обновление баланса
+            String currency = (String) args[0];
+            if (currency.equals(BTC_CURRENCY_VALUE)) {
+                String balance = (String) args[1];
+                balanceTextView.setText(balance + " BTC");
+            }
         }
     }
 
@@ -222,5 +249,25 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         }
         final String fiatEqual = WalletApplication.convertBitcoinToFiat(String.valueOf(btcAmount), currentExchangeRate);
         fiatEqualTextView.setText(String.format("%s %s", fiatEqual, currentFiatCurrency));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                if (data.getExtras() != null) {
+                    if (data.getExtras().containsKey(QR_SCAN_RESULT_KEY)) {
+                        String receiverAddress = data.getStringExtra(QR_SCAN_RESULT_KEY);
+                        receiverAddressEditText.setText(receiverAddress);
+                    }
+                }
+            }
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    .setMessage("Не удалсоь считать Qr код")
+                    .setCancelable(true);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
     }
 }

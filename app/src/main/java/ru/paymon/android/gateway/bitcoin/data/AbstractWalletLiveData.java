@@ -36,7 +36,7 @@ public abstract class AbstractWalletLiveData<T> extends ThrottelingLiveData<T> {
     @Override
     protected final void onActive() {
         broadcastManager.registerReceiver(walletReferenceChangeReceiver, new IntentFilter(WalletApplication.ACTION_WALLET_REFERENCE_CHANGED));
-        loadWallet();
+//        loadWallet();
     }
 
     @Override
@@ -47,33 +47,33 @@ public abstract class AbstractWalletLiveData<T> extends ThrottelingLiveData<T> {
         broadcastManager.unregisterReceiver(walletReferenceChangeReceiver);
     }
 
-    private void loadWallet() {
-        application.getBitcoinWalletAsync(onWalletLoadedListener);
-    }
+//    private void loadWallet() {
+//        application.getBitcoinWalletAsync(onWalletLoadedListener);
+//    }
 
     protected Wallet getWallet() {
         return wallet;
     }
 
-    private final WalletApplication.OnWalletLoadedListener onWalletLoadedListener = new WalletApplication.OnWalletLoadedListener() {
-        @Override
-        public void onWalletLoaded(final Wallet wallet) {
-            handler.post(new Runnable() {
-                @Override
-                public void run() {
-                    AbstractWalletLiveData.this.wallet = wallet;
-                    onWalletActive(wallet);
-                }
-            });
-        }
-    };
+//    private final WalletApplication.OnWalletLoadedListener onWalletLoadedListener = new WalletApplication.OnWalletLoadedListener() {
+//        @Override
+//        public void onWalletLoaded(final Wallet wallet) {
+//            handler.post(new Runnable() {
+//                @Override
+//                public void run() {
+//                    AbstractWalletLiveData.this.wallet = wallet;
+//                    onWalletActive(wallet);
+//                }
+//            });
+//        }
+//    };
 
     private final BroadcastReceiver walletReferenceChangeReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(final Context context, final Intent intent) {
             if (wallet != null)
                 onWalletInactive(wallet);
-            loadWallet();
+//            loadWallet();
         }
     };
 

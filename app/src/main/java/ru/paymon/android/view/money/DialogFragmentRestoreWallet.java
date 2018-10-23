@@ -155,7 +155,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
 
     private void restoreBitcoinWallet(final File file, final String password){
         Utils.stageQueue.postRunnable(() -> {
-            AbsWalletApplication.RestoreStatus restoreStatus = ((WalletApplication) getActivity().getApplication()).restoreBitcoinWallet(file, password);
+            AbsWalletApplication.RestoreStatus restoreStatus = ((WalletApplication) getActivity().getApplication()).restoreBitcoinWallet(file);
             ApplicationLoader.applicationHandler.post(() -> {
                 switch (restoreStatus) {
                     case DONE:

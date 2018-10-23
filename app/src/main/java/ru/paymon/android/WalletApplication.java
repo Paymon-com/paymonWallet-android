@@ -5,34 +5,28 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.support.annotation.MainThread;
 import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.android.volley.toolbox.Volley;
 import com.google.common.base.Charsets;
-import com.google.common.util.concurrent.SettableFuture;
 
 import org.apache.commons.io.IOUtils;
 import org.bitcoinj.core.Address;
+import org.bitcoinj.core.CheckpointManager;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.Transaction;
+import org.bitcoinj.core.TransactionConfidence;
 import org.bitcoinj.core.VersionMessage;
 import org.bitcoinj.crypto.LinuxSecureRandom;
-import org.bitcoinj.crypto.MnemonicCode;
+import org.bitcoinj.kits.WalletAppKit;
+import org.bitcoinj.script.Script;
 import org.bitcoinj.utils.Threading;
 import org.bitcoinj.wallet.SendRequest;
-import org.bitcoinj.wallet.UnreadableWalletException;
 import org.bitcoinj.wallet.Wallet;
-import org.bitcoinj.wallet.WalletProtobufSerializer;
-import org.bitcoinj.wallet.listeners.WalletChangeEventListener;
-import org.bitcoinj.wallet.listeners.WalletCoinsReceivedEventListener;
-import org.bitcoinj.wallet.listeners.WalletCoinsSentEventListener;
-import org.bitcoinj.wallet.listeners.WalletReorganizeEventListener;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
@@ -44,7 +38,6 @@ import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -59,8 +52,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
@@ -69,33 +60,34 @@ import ru.paymon.android.gateway.bitcoin.Constants;
 import ru.paymon.android.gateway.bitcoin.service.BlockchainService;
 import ru.paymon.android.gateway.bitcoin.util.Crypto;
 import ru.paymon.android.gateway.bitcoin.util.Io;
-import ru.paymon.android.gateway.bitcoin.util.Toast;
 import ru.paymon.android.gateway.bitcoin.util.WalletUtils;
 import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.utils.Utils;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
-import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
 
 
 public class WalletApplication extends AbsWalletApplication {
-    private final Executor getWalletExecutor = Executors.newSingleThreadExecutor();
+    public static final int btcTxSize = (148 * 1) + (34 * 2) + 10;
+
+    //    private final Executor getWalletExecutor = Executors.newSingleThreadExecutor();
     private final Object getWalletLock = new Object();
-    private static final String BIP39_WORDLIST_FILENAME = "bip39-wordlist.txt";
-    private final WalletListener walletListener = new WalletListener();
+    //    private static final String BIP39_WORDLIST_FILENAME = "bip39-wordlist.txt";
+//    private final WalletListener walletListener = new WalletListener();
     private Configuration config;
     private PackageInfo packageInfo;
     public static final String ACTION_WALLET_REFERENCE_CHANGED = WalletApplication.class.getPackage().getName() + ".wallet_reference_changed";
     private static final boolean IS_TEST = true;
     private static final String INFURA_LINK = IS_TEST ? "https://ropsten.infura.io/BAWTZQzsbBDZG6g9D0IP" : "https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP";
-    private Wallet bitcoinWallet;
+    //    private Wallet bitcoinWallet;
     private EthereumWallet ethereumWallet;
     private PaymonWallet paymonWallet;
-    private String bitcoinWalletPath;
+    //    private String bitcoinWalletPath;
     private String ethereumWalletPath;
     private String paymonWalletPath;
-    public static final int btcTxSize = (148 * 1) + (34 * 2) + 10;
+    private WalletAppKit kit;
 
     @Override
     public void onCreate() {
@@ -105,25 +97,82 @@ public class WalletApplication extends AbsWalletApplication {
         org.bitcoinj.core.Context.enableStrictMode();
         org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
 
+        Executors.newSingleThreadExecutor().submit(() -> {
+            test();
+        });
+
         super.onCreate();
 
-        bitcoinWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-btc-wallet.json";
+//        bitcoinWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-btc-wallet.json";
         ethereumWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-eth-wallet.json";
         paymonWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-pmnt-wallet.json";
 
         activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        walletFile = new File(bitcoinWalletPath);
+//        walletFile = new File(bitcoinWalletPath);
         cleanupFiles();
 
         web3j = Web3jFactory.build(new HttpService(INFURA_LINK));
         requestQueue = Volley.newRequestQueue(getApplicationContext());
     }
 
+    public void test() {
+        kit = new WalletAppKit(Constants.NETWORK_PARAMETERS, new File(getCacheDir().getPath()), "walletappkit1-example");
+
+        InputStream checkpoint = CheckpointManager.openStream(Constants.NETWORK_PARAMETERS);
+        kit.setCheckpoints(checkpoint);
+        kit.setAutoSave(true);
+        kit.setBlockingStartup(false);
+
+        Log.e("AAA", "before start");
+        kit.startAsync();
+        Log.e("AAA", "after start");
+        kit.awaitRunning();
+        Log.e("AAA", "after await");
+
+        kit.wallet().addCoinsReceivedEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
+            Log.e("AAA", "-----> coins resceived: " + tx.getHashAsString());
+            Log.e("AAA", "received: " + tx.getValue(wallet));
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, newBalance.toPlainString());
+        });
+
+        kit.wallet().addCoinsSentEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
+            Log.e("AAA", "coins sent");
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, newBalance.toPlainString());
+        });
+
+        kit.wallet().addKeyChainEventListener((List<ECKey> keys) -> {
+            Log.e("AAA", "new key added");
+        });
+
+        kit.wallet().addScriptsChangeEventListener((Wallet wallet, List<Script> scripts, boolean isAddingScripts) -> {
+            Log.e("AAA", "new script added");
+        });
+
+        kit.wallet().addTransactionConfidenceEventListener((Wallet wallet, Transaction tx) -> {
+            Log.e("AAA", "-----> confidence changed: " + tx.getHashAsString());
+            TransactionConfidence confidence = tx.getConfidence();
+            Log.e("AAA", "new block depth: " + confidence.getDepthInBlocks());
+        });
+
+        // Make sure to properly shut down all the running services when you manually want to stop the kit. The WalletAppKit registers a runtime ShutdownHook so we actually do not need to worry about that when our application is stopping.
+        //Log.e("AAA", "shutting down again");
+        //kit.stopAsync();
+        //kit.awaitTerminated();
+    }
+
+
+//    public Wallet getBitcoinWallet() {
+//        if (bitcoinWallet == null) {
+//            getBitcoinWallet(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
+//        }
+//        return bitcoinWallet;
+//    }
+
+    @Override
     public Wallet getBitcoinWallet() {
-        if (bitcoinWallet == null) {
-            getBitcoinWallet(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
-        }
-        return bitcoinWallet;
+        if (kit.wallet().isEncrypted())
+            kit.wallet().decrypt(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
+        return kit.wallet();
     }
 
     public EthereumWallet getEthereumWallet() {
@@ -140,17 +189,17 @@ public class WalletApplication extends AbsWalletApplication {
         return paymonWallet;
     }
 
-    @Override
-    protected Wallet getBitcoinWallet(final String password) {
-        final SettableFuture<Wallet> future = SettableFuture.create();
-        getBitcoinWalletAsync(wallet -> future.set(wallet));
-        try {
-            bitcoinWallet = future.get();
-            return bitcoinWallet;
-        } catch (final InterruptedException | ExecutionException x) {
-            throw new RuntimeException(x);
-        }
-    }
+//    @Override
+//    protected Wallet getBitcoinWallet(final String password) {
+//        final SettableFuture<Wallet> future = SettableFuture.create();
+//        getBitcoinWalletAsync(wallet -> future.set(wallet));
+//        try {
+//            bitcoinWallet = future.get();
+//            return bitcoinWallet;
+//        } catch (final InterruptedException | ExecutionException x) {
+//            throw new RuntimeException(x);
+//        }
+//    }
 
     @Override
     protected EthereumWallet getEthereumWallet(final String password) {
@@ -169,17 +218,17 @@ public class WalletApplication extends AbsWalletApplication {
         return null;
     }
 
-    @Override
-    public boolean createBitcoinWallet(final String password) {
-        final SettableFuture<Wallet> future = SettableFuture.create();
-        createBitcoinWalletAsync(password, wallet -> future.set(wallet));
-        try {
-            bitcoinWallet = future.get();
-            return bitcoinWallet != null;
-        } catch (final InterruptedException | ExecutionException x) {
-            return false;
-        }
-    }
+//    @Override
+//    public boolean createBitcoinWallet(final String password) {
+//        final SettableFuture<Wallet> future = SettableFuture.create();
+//        createBitcoinWalletAsync(password, wallet -> future.set(wallet));
+//        try {
+//            bitcoinWallet = future.get();
+//            return bitcoinWallet != null;
+//        } catch (final InterruptedException | ExecutionException x) {
+//            return false;
+//        }
+//    }
 
     @Override
     public boolean createEthereumWallet(final String password) {
@@ -226,9 +275,14 @@ public class WalletApplication extends AbsWalletApplication {
         }
     }
 
+//    @Override
+//    public Coin getBitcoinBalance() {
+//        return bitcoinWallet.getBalance();
+//    }
+
     @Override
     public Coin getBitcoinBalance() {
-        return bitcoinWallet.getBalance();
+        return getBitcoinWallet().getBalance();
     }
 
     @Override
@@ -297,22 +351,28 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    public RestoreStatus restoreBitcoinWallet(final File file, final String password) {
+    public RestoreStatus restoreBitcoinWallet(final File file) {
         try {
-            final BufferedReader cipherIn = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charsets.UTF_8));
-            final StringBuilder cipherText = new StringBuilder();
-            Io.copy(cipherIn, cipherText, Constants.BACKUP_MAX_CHARS);
-            cipherIn.close();
-            final byte[] plainText = Crypto.decryptBytes(cipherText.toString(), password.toCharArray());
-            final InputStream is = new ByteArrayInputStream(plainText);
-            final Wallet wallet = WalletUtils.restoreWalletFromProtobufOrBase58(is, Constants.NETWORK_PARAMETERS, password);
-            replaceWallet(wallet);
-
+            kit.wallet().loadFromFile(file);
             return RestoreStatus.DONE;
-        } catch (final IOException x) {
-            x.printStackTrace();
+        } catch (Exception e) {
             return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
         }
+//        try {
+//            final BufferedReader cipherIn = new BufferedReader(new InputStreamReader(new FileInputStream(file), Charsets.UTF_8));
+//            final StringBuilder cipherText = new StringBuilder();
+//            Io.copy(cipherIn, cipherText, Constants.BACKUP_MAX_CHARS);
+//            cipherIn.close();
+//            final byte[] plainText = Crypto.decryptBytes(cipherText.toString(), password.toCharArray());
+//            final InputStream is = new ByteArrayInputStream(plainText);
+//            final Wallet wallet = WalletUtils.restoreWalletFromProtobufOrBase58(is, Constants.NETWORK_PARAMETERS, password);
+//            replaceWallet(wallet);
+//
+//            return RestoreStatus.DONE;
+//        } catch (final IOException x) {
+//            x.printStackTrace();
+//            return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
+//        }
     }
 
     @Override
@@ -324,25 +384,45 @@ public class WalletApplication extends AbsWalletApplication {
         return new BigDecimal(btcAmount).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
+//    @Override
+//    public String getBitcoinPublicAddress() {
+//        return bitcoinWallet.currentReceiveAddress().toBase58();
+//    }
+//
+//    @Override
+//    public String getBitcoinPrivateAddress() {
+//        return bitcoinWallet.getActiveKeyChain().getWatchingKey().getPrivateKeyAsWiF(Constants.NETWORK_PARAMETERS);
+//    }
+
     @Override
     public String getBitcoinPublicAddress() {
-        return bitcoinWallet.currentReceiveAddress().toBase58();
+        return getBitcoinWallet().currentReceiveAddress().toBase58();
     }
 
     @Override
     public String getBitcoinPrivateAddress() {
-        return bitcoinWallet.getActiveKeyChain().getWatchingKey().getPrivateKeyAsWiF(Constants.NETWORK_PARAMETERS);
+        return getBitcoinWallet().getActiveKeyChain().getWatchingKey().getPrivateKeyAsWiF(Constants.NETWORK_PARAMETERS);
     }
 
     @Override
     public List<String> getAllBitcoinPublicAdresses() {
-        List<ECKey> keys = bitcoinWallet.getActiveKeyChain().getIssuedReceiveKeys();
+        List<ECKey> keys = getBitcoinWallet().getActiveKeyChain().getIssuedReceiveKeys();
         List<String> keysList = new ArrayList<>();
         for (ECKey key : keys) {
             keysList.add(new Address(Constants.NETWORK_PARAMETERS, key.getPubKeyHash()).toBase58());
         }
         return keysList;
     }
+
+//    @Override
+//    public List<String> getAllBitcoinPublicAdresses() {
+//        List<ECKey> keys = bitcoinWallet.getActiveKeyChain().getIssuedReceiveKeys();
+//        List<String> keysList = new ArrayList<>();
+//        for (ECKey key : keys) {
+//            keysList.add(new Address(Constants.NETWORK_PARAMETERS, key.getPubKeyHash()).toBase58());
+//        }
+//        return keysList;
+//    }
 
     @Override
     public RestoreStatus restoreEthereumWallet(final File file, final String password) {
@@ -393,38 +473,25 @@ public class WalletApplication extends AbsWalletApplication {
         return ethSendTransaction;
     }
 
-    public Transaction sendBitcoinTx(String destinationAddress, long satoshis, long feePerB) {
-        Address dest = Address.fromBase58(Constants.NETWORK_PARAMETERS, destinationAddress);
-        SendRequest request = SendRequest.to(dest, Coin.valueOf(satoshis));
-        request.feePerKb = Coin.valueOf(feePerB * 1000);
-        Log.e("AAA", " FEE per KB : " + request.feePerKb + " FEE : " + request.tx.getFee());
-        Wallet.SendResult result;
-        Transaction endTransaction = null;
-        try {
-            result = bitcoinWallet.sendCoins(request);
-            endTransaction = result.broadcastComplete.get();
-            Log.e("AAA", " HASH : " + endTransaction.getHashAsString());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return endTransaction;
-    }
-
     @Override
-    public Transaction sendBitcoinTx(String destinationAddress, long satoshis) {
-        Address dest = Address.fromBase58(Constants.NETWORK_PARAMETERS, destinationAddress);
-        SendRequest request = SendRequest.to(dest, Coin.valueOf(satoshis));
-        Log.e("AAA", " FEE per KB : " + request.feePerKb + " FEE : " + request.tx.getFee());
-        Wallet.SendResult result;
-        Transaction endTransaction = null;
+    public Transaction sendBitcoinTx(final String destinationAddress, final long satoshis, final long feePerB) {
+        Coin value = Coin.valueOf(satoshis);
+        Address to = Address.fromBase58(Constants.NETWORK_PARAMETERS, destinationAddress);
+
+        Transaction transaction = new Transaction(Constants.NETWORK_PARAMETERS);
+        transaction.addInput(getBitcoinWallet().getUnspents().get(0));// important to add proper input
+        transaction.addOutput(value, to);
+
+        SendRequest request1 = SendRequest.forTx(transaction);
+        request1.feePerKb = Coin.valueOf(feePerB * 1000);
+
+        Wallet.SendResult sendResult = null;
         try {
-            result = bitcoinWallet.sendCoins(request);
-            endTransaction = result.broadcastComplete.get();
-            Log.e("AAA", " HASH : " + endTransaction.getHashAsString());
+            sendResult = getBitcoinWallet().sendCoins(kit.peerGroup(), request1);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return endTransaction;
+        return sendResult != null ? sendResult.tx : null;
     }
 
     public void replaceWallet(final Wallet newWallet) {
@@ -443,117 +510,117 @@ public class WalletApplication extends AbsWalletApplication {
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcast);
     }
 
-    @MainThread
-    private void createBitcoinWalletAsync(final String password, final OnWalletLoadedListener listener) {
-        getWalletExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
-                synchronized (getWalletLock) {
-                    initMnemonicCode();
-                    if (walletFiles == null)
-                        createWallet(password);
-                }
-                if (walletFiles != null) {
-                    bitcoinWallet = walletFiles.getWallet();
-                    if (bitcoinWallet.isEncrypted())
-                        bitcoinWallet.decrypt(password);
-                    bitcoinWallet.addCoinsReceivedEventListener(Threading.SAME_THREAD, walletListener);
-                    bitcoinWallet.addCoinsSentEventListener(Threading.SAME_THREAD, walletListener);
-                    bitcoinWallet.addReorganizeEventListener(Threading.SAME_THREAD, walletListener);
-                    bitcoinWallet.addChangeEventListener(Threading.SAME_THREAD, walletListener);
-                    listener.onWalletLoaded(bitcoinWallet);
-                }
-            }
-
-            @WorkerThread
-            private void createWallet(final String password) {
-                Wallet wallet = new Wallet(Constants.NETWORK_PARAMETERS);
-                if (!password.isEmpty())
-                    wallet.encrypt(password);
-                walletFiles = wallet.autosaveToFile(walletFile, Constants.Files.WALLET_AUTOSAVE_DELAY_MS, TimeUnit.MILLISECONDS, null);
-                autosaveWalletNow();
-                WalletUtils.autoBackupWallet(WalletApplication.this, wallet);
-            }
-
-            private void initMnemonicCode() {
-                if (MnemonicCode.INSTANCE == null) {
-                    try {
-                        MnemonicCode.INSTANCE = new MnemonicCode(getAssets().open(BIP39_WORDLIST_FILENAME), null);
-                    } catch (final IOException x) {
-                        throw new Error(x);
-                    }
-                }
-            }
-        });
-    }
-
-
-    @MainThread
-    public void getBitcoinWalletAsync(final OnWalletLoadedListener listener) {
-        getWalletExecutor.execute(new Runnable() {
-            @Override
-            public void run() {
-                org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
-                synchronized (getWalletLock) {
-                    initMnemonicCode();
-                    if (walletFiles == null)
-                        loadWalletFromProtobuf();
-                }
-
-                if (walletFiles != null) {
-                    bitcoinWallet = walletFiles.getWallet();
-                    if (bitcoinWallet.isEncrypted())
-                        bitcoinWallet.decrypt(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
-                    bitcoinWallet.addCoinsReceivedEventListener(Threading.SAME_THREAD, walletListener);
-                    bitcoinWallet.addCoinsSentEventListener(Threading.SAME_THREAD, walletListener);
-                    bitcoinWallet.addReorganizeEventListener(Threading.SAME_THREAD, walletListener);
-                    bitcoinWallet.addChangeEventListener(Threading.SAME_THREAD, walletListener);
-                    listener.onWalletLoaded(bitcoinWallet);
-                } else {
-                    listener.onWalletLoaded(null);
-                }
-            }
-
-            @WorkerThread
-            private void loadWalletFromProtobuf() {
-                if (walletFile.exists()) {
-                    try (final FileInputStream walletStream = new FileInputStream(walletFile)) {
-                        bitcoinWallet = new WalletProtobufSerializer().readWallet(walletStream);
-
-                        if (!bitcoinWallet.getParams().equals(Constants.NETWORK_PARAMETERS))
-                            throw new UnreadableWalletException("bad wallet network parameters: " + bitcoinWallet.getParams().getId());
-
-                    } catch (final IOException | UnreadableWalletException x) {
-                        bitcoinWallet = WalletUtils.restoreWalletFromAutoBackup(WalletApplication.this);
-                        if (bitcoinWallet != null)
-                            new Toast(WalletApplication.this).postLongToast(R.string.toast_wallet_reset);
-                    }
-                    if (!bitcoinWallet.isConsistent()) {
-                        bitcoinWallet = WalletUtils.restoreWalletFromAutoBackup(WalletApplication.this);
-                        if (bitcoinWallet != null)
-                            new Toast(WalletApplication.this).postLongToast(R.string.toast_wallet_reset);
-                    }
-
-                    if (!bitcoinWallet.getParams().equals(Constants.NETWORK_PARAMETERS))
-                        throw new Error("bad wallet network parameters: " + bitcoinWallet.getParams().getId());
-
-                    bitcoinWallet.cleanup();
-                    walletFiles = bitcoinWallet.autosaveToFile(walletFile, Constants.Files.WALLET_AUTOSAVE_DELAY_MS, TimeUnit.MILLISECONDS, null);
-                }
-            }
-
-            private void initMnemonicCode() {
-                if (MnemonicCode.INSTANCE == null) {
-                    try {
-                        MnemonicCode.INSTANCE = new MnemonicCode(getAssets().open(BIP39_WORDLIST_FILENAME), null);
-                    } catch (final IOException x) {
-                        throw new Error(x);
-                    }
-                }
-            }
-        });
-    }
+//    @MainThread
+//    private void createBitcoinWalletAsync(final String password, final OnWalletLoadedListener listener) {
+//        getWalletExecutor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
+//                synchronized (getWalletLock) {
+//                    initMnemonicCode();
+//                    if (walletFiles == null)
+//                        createWallet(password);
+//                }
+//                if (walletFiles != null) {
+//                    bitcoinWallet = walletFiles.getWallet();
+//                    if (bitcoinWallet.isEncrypted())
+//                        bitcoinWallet.decrypt(password);
+//                    bitcoinWallet.addCoinsReceivedEventListener(Threading.SAME_THREAD, walletListener);
+//                    bitcoinWallet.addCoinsSentEventListener(Threading.SAME_THREAD, walletListener);
+//                    bitcoinWallet.addReorganizeEventListener(Threading.SAME_THREAD, walletListener);
+//                    bitcoinWallet.addChangeEventListener(Threading.SAME_THREAD, walletListener);
+//                    listener.onWalletLoaded(bitcoinWallet);
+//                }
+//            }
+//
+//            @WorkerThread
+//            private void createWallet(final String password) {
+//                Wallet wallet = new Wallet(Constants.NETWORK_PARAMETERS);
+//                if (!password.isEmpty())
+//                    wallet.encrypt(password);
+//                walletFiles = wallet.autosaveToFile(walletFile, Constants.Files.WALLET_AUTOSAVE_DELAY_MS, TimeUnit.MILLISECONDS, null);
+//                autosaveWalletNow();
+//                WalletUtils.autoBackupWallet(WalletApplication.this, wallet);
+//            }
+//
+//            private void initMnemonicCode() {
+//                if (MnemonicCode.INSTANCE == null) {
+//                    try {
+//                        MnemonicCode.INSTANCE = new MnemonicCode(getAssets().open(BIP39_WORDLIST_FILENAME), null);
+//                    } catch (final IOException x) {
+//                        throw new Error(x);
+//                    }
+//                }
+//            }
+//        });
+//    }
+//
+//
+//    @MainThread
+//    public void getBitcoinWalletAsync(final OnWalletLoadedListener listener) {
+//        getWalletExecutor.execute(new Runnable() {
+//            @Override
+//            public void run() {
+//                org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
+//                synchronized (getWalletLock) {
+//                    initMnemonicCode();
+//                    if (walletFiles == null)
+//                        loadWalletFromProtobuf();
+//                }
+//
+//                if (walletFiles != null) {
+//                    bitcoinWallet = walletFiles.getWallet();
+//                    if (bitcoinWallet.isEncrypted())
+//                        bitcoinWallet.decrypt(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
+//                    bitcoinWallet.addCoinsReceivedEventListener(Threading.SAME_THREAD, walletListener);
+//                    bitcoinWallet.addCoinsSentEventListener(Threading.SAME_THREAD, walletListener);
+//                    bitcoinWallet.addReorganizeEventListener(Threading.SAME_THREAD, walletListener);
+//                    bitcoinWallet.addChangeEventListener(Threading.SAME_THREAD, walletListener);
+//                    listener.onWalletLoaded(bitcoinWallet);
+//                } else {
+//                    listener.onWalletLoaded(null);
+//                }
+//            }
+//
+//            @WorkerThread
+//            private void loadWalletFromProtobuf() {
+//                if (walletFile.exists()) {
+//                    try (final FileInputStream walletStream = new FileInputStream(walletFile)) {
+//                        bitcoinWallet = new WalletProtobufSerializer().readWallet(walletStream);
+//
+//                        if (!bitcoinWallet.getParams().equals(Constants.NETWORK_PARAMETERS))
+//                            throw new UnreadableWalletException("bad wallet network parameters: " + bitcoinWallet.getParams().getId());
+//
+//                    } catch (final IOException | UnreadableWalletException x) {
+//                        bitcoinWallet = WalletUtils.restoreWalletFromAutoBackup(WalletApplication.this);
+//                        if (bitcoinWallet != null)
+//                            new Toast(WalletApplication.this).postLongToast(R.string.toast_wallet_reset);
+//                    }
+//                    if (!bitcoinWallet.isConsistent()) {
+//                        bitcoinWallet = WalletUtils.restoreWalletFromAutoBackup(WalletApplication.this);
+//                        if (bitcoinWallet != null)
+//                            new Toast(WalletApplication.this).postLongToast(R.string.toast_wallet_reset);
+//                    }
+//
+//                    if (!bitcoinWallet.getParams().equals(Constants.NETWORK_PARAMETERS))
+//                        throw new Error("bad wallet network parameters: " + bitcoinWallet.getParams().getId());
+//
+//                    bitcoinWallet.cleanup();
+//                    walletFiles = bitcoinWallet.autosaveToFile(walletFile, Constants.Files.WALLET_AUTOSAVE_DELAY_MS, TimeUnit.MILLISECONDS, null);
+//                }
+//            }
+//
+//            private void initMnemonicCode() {
+//                if (MnemonicCode.INSTANCE == null) {
+//                    try {
+//                        MnemonicCode.INSTANCE = new MnemonicCode(getAssets().open(BIP39_WORDLIST_FILENAME), null);
+//                    } catch (final IOException x) {
+//                        throw new Error(x);
+//                    }
+//                }
+//            }
+//        });
+//    }
 
     public void autosaveWalletNow() {
         synchronized (getWalletLock) {
@@ -577,33 +644,33 @@ public class WalletApplication extends AbsWalletApplication {
         }
     }
 
-    private class WalletListener implements WalletCoinsReceivedEventListener, WalletCoinsSentEventListener, WalletReorganizeEventListener, WalletChangeEventListener {
-        @Override
-        public void onCoinsReceived(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
-            Log.e("AAA", prevBalance + "  received QQ " + newBalance);
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, ETH_CURRENCY_VALUE, newBalance.toString());
-        }
-
-        @Override
-        public void onCoinsSent(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
-            Log.e("AAA", prevBalance + " QQ " + newBalance);
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, ETH_CURRENCY_VALUE, newBalance.toString());
-        }
-
-        @Override
-        public void onReorganize(final Wallet wallet) {
-
-        }
-
-        @Override
-        public void onWalletChanged(final Wallet wallet) {
-
-        }
-    }
-
-    public interface OnWalletLoadedListener {
-        void onWalletLoaded(Wallet wallet);
-    }
+//    private class WalletListener implements WalletCoinsReceivedEventListener, WalletCoinsSentEventListener, WalletReorganizeEventListener, WalletChangeEventListener {
+//        @Override
+//        public void onCoinsReceived(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
+//            Log.e("AAA", prevBalance + "  received QQ " + newBalance);
+//            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, newBalance.toString());
+//        }
+//
+//        @Override
+//        public void onCoinsSent(final Wallet wallet, final Transaction tx, final Coin prevBalance, final Coin newBalance) {
+//            Log.e("AAA", prevBalance + " QQ " + newBalance);
+//            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, newBalance.toString());
+//        }
+//
+//        @Override
+//        public void onReorganize(final Wallet wallet) {
+//
+//        }
+//
+//        @Override
+//        public void onWalletChanged(final Wallet wallet) {
+//
+//        }
+//    }
+//
+//    public interface OnWalletLoadedListener {
+//        void onWalletLoaded(Wallet wallet);
+//    }
 
     public final String applicationPackageFlavor() {
         final String packageName = getPackageName();

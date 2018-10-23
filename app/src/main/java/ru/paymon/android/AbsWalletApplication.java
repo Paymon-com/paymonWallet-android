@@ -32,9 +32,10 @@ public abstract class AbsWalletApplication extends Application {
     protected static final BigDecimal TEN_POW_18 = new BigDecimal("1000000000000000000");
     protected static final BigDecimal TEN_POW_9 = new BigDecimal("1000000000");
 
-    public abstract boolean createBitcoinWallet(final String password); //TODO: применить пароль при создании
-    protected abstract Wallet getBitcoinWallet(final String password);
-    public abstract RestoreStatus restoreBitcoinWallet(final File file, final String password);//TODO: применить пароль при создании
+//    public abstract boolean createBitcoinWallet(final String password); //TODO: применить пароль при создании
+    public abstract Wallet getBitcoinWallet();
+//    protected abstract Wallet getBitcoinWallet(final String password);
+    public abstract RestoreStatus restoreBitcoinWallet(final File file);//TODO: применить пароль при создании
     public abstract boolean backupBitcoinWallet(final String path);
     public abstract Coin getBitcoinBalance();
     public abstract boolean deleteBitcoinWallet();
@@ -61,7 +62,7 @@ public abstract class AbsWalletApplication extends Application {
 
 
     public abstract EthSendTransaction sendRawEthereumTx(final @NonNull String recipientAddress, final  @NonNull BigInteger ethAmount, final @NonNull BigInteger gasPrise, final @NonNull BigInteger gasLimit);
-    public abstract Transaction sendBitcoinTx(final String destinationAddress, long satoshis);
+    public abstract Transaction sendBitcoinTx(final String destinationAddress, final long satoshis, final long feePerB);
 
 
     public enum RestoreStatus {
