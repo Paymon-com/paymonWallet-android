@@ -160,6 +160,12 @@ public class WalletApplication extends AbsWalletApplication {
 
     @Override
     public Wallet getBitcoinWallet() {
+        try {
+            kit.startAsync();
+            kit.awaitRunning();
+        }catch (Exception e){
+
+        }
         if (kit.wallet().isEncrypted())
             kit.wallet().decrypt(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
         return kit.wallet();
@@ -489,6 +495,7 @@ public class WalletApplication extends AbsWalletApplication {
         }
         return sendResult != null ? sendResult.tx : null;
     }
+
 
 //    public void replaceWallet(final Wallet newWallet) {
 //        newWallet.cleanup();
