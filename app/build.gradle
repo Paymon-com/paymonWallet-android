@@ -87,6 +87,7 @@ dependencies {
     implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.0'
+    implementation 'com.github.esafirm.android-image-picker:imagepicker:1.13.1'
 
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
     implementation "android.arch.paging:runtime:1.0.1"
@@ -106,16 +107,12 @@ dependencies {
 
     implementation 'com.shawnlin:number-picker:2.4.6'
 
-    implementation("com.github.esafirm.android-image-picker:imagepicker:1.13.1", {
-//        exclude group: 'com.github.bumptech.glide', module: 'glide'
-    })
-
     implementation('com.coinbase.android:coinbase-android-sdk:1.0.1') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient-android'
     }
 
-    implementation ('com.theartofdev.edmodo:android-image-cropper:2.7.0'){
+    implementation('com.theartofdev.edmodo:android-image-cropper:2.7.0') {
         exclude group: 'com.android.support', module: 'exifinterface'
     }
 
