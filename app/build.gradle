@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -9,7 +10,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.startBitcoinKit.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 19
         multiDexEnabled true
         renderscriptSupportModeEnabled true
@@ -82,7 +83,7 @@ dependencies {
 
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.12'
     implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'org.ethereumWeb3j:core:3.3.1-android'
+    implementation 'org.web3j:core:3.3.1-android'
     implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.0'
@@ -106,7 +107,7 @@ dependencies {
     implementation 'com.shawnlin:number-picker:2.4.6'
 
     implementation("com.github.esafirm.android-image-picker:imagepicker:1.13.1", {
-        exclude group: 'com.github.bumptech.glide', module: 'glide'
+//        exclude group: 'com.github.bumptech.glide', module: 'glide'
     })
 
     implementation('com.coinbase.android:coinbase-android-sdk:1.0.1') {
@@ -117,4 +118,13 @@ dependencies {
     implementation ('com.theartofdev.edmodo:android-image-cropper:2.7.0'){
         exclude group: 'com.android.support', module: 'exifinterface'
     }
+
+    dependencies {
+        implementation 'com.github.bumptech.glide:glide:4.8.0'
+        annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    }
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }
