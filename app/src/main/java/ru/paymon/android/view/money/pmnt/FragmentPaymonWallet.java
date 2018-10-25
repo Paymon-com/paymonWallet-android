@@ -24,6 +24,7 @@ import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.view.money.DialogFragmentBackupWallet;
 import ru.paymon.android.view.money.DialogFragmentPrivateKey;
 import ru.paymon.android.view.money.DialogFragmentPublicKey;
 import ru.paymon.android.view.money.DialogFragmentRestoreWallet;
@@ -58,19 +59,17 @@ public class FragmentPaymonWallet extends Fragment {
         Button publicKey = (Button) view.findViewById(R.id.fragment_paymon_wallet_public_key_button);
         TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
         TextView balance = (TextView) view.findViewById(R.id.fragment_paymon_wallet_balance);
-
         RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
-        WalletApplication application = ((WalletApplication) getActivity().getApplication());
 
         Bundle bundle = new Bundle();
         bundle.putString(CURRENCY_KEY, PMNT_CURRENCY_VALUE);
 
         backBtn.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         restoreBtn.setOnClickListener(v -> new DialogFragmentRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
-//        backupBtn.setOnClickListener(v -> ((WalletApplication) getActivity().getApplication()).backupEthereumWallet());//TODO: вызов вьюшки с выбором места куда бэкапить
+        backupBtn.setOnClickListener(v -> new DialogFragmentBackupWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));
-        transfer.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWalletTransfer));
+        transfer.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentBitcoinWalletTransfer));
 //        withdraw.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumWidthdraw.newInstance(), null));
         privateKey.setOnClickListener(view1 -> new DialogFragmentPrivateKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
         publicKey.setOnClickListener(view1 -> new DialogFragmentPublicKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));

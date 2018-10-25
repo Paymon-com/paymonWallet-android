@@ -1,4 +1,4 @@
-# Install script for directory: /home/negi/Development/Android/paymon/app/libs/boringssl/crypto/test
+# Install script for directory: /home/negi/Development/Android/paymon/app/libs/boringssl/crypto/startBitcoinKit
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)

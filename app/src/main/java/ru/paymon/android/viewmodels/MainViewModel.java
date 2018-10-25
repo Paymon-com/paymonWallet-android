@@ -5,26 +5,30 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 
 import ru.paymon.android.NotificationManager;
+import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.utils.Utils;
 
 public class MainViewModel extends ViewModel implements NotificationManager.IListener {
-//    private MutableLiveData<Boolean> isNetworkConnected = new MutableLiveData<>();
-//    private MutableLiveData<Boolean> isServerConnected = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isNetworkConnected = new MutableLiveData<>();
+    private MutableLiveData<Boolean> isServerConnected = new MutableLiveData<>();
     private MutableLiveData<Boolean> isAuthorized = new MutableLiveData<>();
 
-//    public LiveData<Boolean> getNetworkConnectionState(){
-//        if(isNetworkConnected.getValue() == null)
-//            isNetworkConnected.postValue(NetworkManager.getInstance().networkState == NetworkManager.NetworkState.CONNECTED);
-//        return isNetworkConnected;
-//    }
+    public LiveData<Boolean> getNetworkConnectionState() {
+        if (isNetworkConnected.getValue() == null)
+            isNetworkConnected.postValue(NetworkManager.getInstance().networkState == NetworkManager.NetworkState.CONNECTED);
+        return isNetworkConnected;
+    }
 
-//    public LiveData<Boolean> getServerConnectionState(){
-//        return isServerConnected;
-//    }
+    public LiveData<Boolean> getServerConnectionState() {
+        if (isServerConnected.getValue() == null)
+            isServerConnected.postValue(NetworkManager.getInstance().connectionState == NetworkManager.ConnectionState.CONNECTED);
+        return isServerConnected;
+    }
 
-    public LiveData<Boolean> getAuthorizationState(){
+    public LiveData<Boolean> getAuthorizationState() {
         return isAuthorized;
     }
+
 
     public MainViewModel() {
         super();
@@ -51,13 +55,14 @@ public class MainViewModel extends ViewModel implements NotificationManager.ILis
             if (event == NotificationManager.NotificationEvent.userAuthorized) {
                 isAuthorized.postValue(true);
             } else if (event == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-//                isServerConnected.postValue(true);
+                isServerConnected.postValue(true);
             } else if (event == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
-//                isServerConnected.postValue(false);
+                isServerConnected.postValue(false);
+                isAuthorized.postValue(false);
             } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED) {
-//                isNetworkConnected.postValue(false);
+                isNetworkConnected.postValue(false);
             } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED) {
-//                isNetworkConnected.postValue(true);
+                isNetworkConnected.postValue(true);
             }
         });
     }

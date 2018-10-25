@@ -17,20 +17,20 @@
 //import org.apache.commons.io.IOUtils;
 //import org.json.JSONException;
 //import org.json.JSONObject;
-//import org.web3j.crypto.CipherException;
-//import org.web3j.crypto.Credentials;
-//import org.web3j.crypto.RawTransaction;
-//import org.web3j.crypto.TransactionEncoder;
-//import org.web3j.crypto.WalletUtils;
-//import org.web3j.protocol.Web3j;
-//import org.web3j.protocol.Web3jFactory;
-//import org.web3j.protocol.core.DefaultBlockParameterName;
-//import org.web3j.protocol.core.methods.response.EthGasPrice;
-//import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
-//import org.web3j.protocol.core.methods.response.EthSendTransaction;
-//import org.web3j.protocol.http.HttpService;
-//import org.web3j.utils.Convert;
-//import org.web3j.utils.Numeric;
+//import org.ethereumWeb3j.crypto.CipherException;
+//import org.ethereumWeb3j.crypto.Credentials;
+//import org.ethereumWeb3j.crypto.RawTransaction;
+//import org.ethereumWeb3j.crypto.TransactionEncoder;
+//import org.ethereumWeb3j.crypto.WalletUtils;
+//import org.ethereumWeb3j.protocol.Web3j;
+//import org.ethereumWeb3j.protocol.Web3jFactory;
+//import org.ethereumWeb3j.protocol.core.DefaultBlockParameterName;
+//import org.ethereumWeb3j.protocol.core.methods.response.EthGasPrice;
+//import org.ethereumWeb3j.protocol.core.methods.response.EthGetTransactionCount;
+//import org.ethereumWeb3j.protocol.core.methods.response.EthSendTransaction;
+//import org.ethereumWeb3j.protocol.http.HttpService;
+//import org.ethereumWeb3j.utils.Convert;
+//import org.ethereumWeb3j.utils.Numeric;
 //
 //import java.io.File;
 //import java.io.FileOutputStream;
@@ -66,9 +66,9 @@
 //    private static final BigDecimal TEN_POW_18 = new BigDecimal("1000000000000000000");
 //    private static final BigDecimal TEN_POW_9 = new BigDecimal("1000000000");
 //
-//    private Web3j web3j;
-//    private RequestQueue requestQueue;
-//    private Credentials walletCredentials;
+//    private Web3j ethereumWeb3j;
+//    private RequestQueue ethereumRequestQueue;
+//    private Credentials ethereumWalletCredentials;
 //
 //    public enum TX_STATUS {
 //        DONE,
@@ -87,8 +87,8 @@
 //    }
 //
 //    private Ethereum() {
-//        web3j = Web3jFactory.build(new HttpService(INFURA_LINK));
-//        requestQueue = Volley.newRequestQueue(ApplicationLoader.applicationContext);
+//        ethereumWeb3j = Web3jFactory.build(new HttpService(INFURA_LINK));
+//        ethereumRequestQueue = Volley.newRequestQueue(ApplicationLoader.applicationContext);
 //    }
 //
 //    public static Ethereum getInstance() {
@@ -103,12 +103,12 @@
 //
 //    public boolean loadWallet(final String password) {
 //        try {
-//            walletCredentials = WalletUtils.loadCredentials(password, FILE_PATH + "/" + FILE_NAME + User.currentUser.id + ".json");
+//            ethereumWalletCredentials = WalletUtils.loadCredentials(password, FILE_PATH + "/" + FILE_NAME + User.currentUser.id + ".json");
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
 //
-//        return walletCredentials != null;
+//        return ethereumWalletCredentials != null;
 //    }
 //
 //    public boolean createWallet(final int userID, final String password) {
@@ -159,7 +159,7 @@
 //            outputStream = new FileOutputStream(walletFileForRestore);
 //            IOUtils.copy(inputStream, outputStream);
 //            try {
-//                walletCredentials = null;
+//                ethereumWalletCredentials = null;
 //                loadWallet(password);
 //                return RestoreStatus.DONE;
 //            } catch (Exception e) {
@@ -177,18 +177,18 @@
 //    }
 //
 //    public String getAddress() {
-//        if (walletCredentials == null) return null;
-//        else return walletCredentials.getAddress();
+//        if (ethereumWalletCredentials == null) return null;
+//        else return ethereumWalletCredentials.getAddress();
 //    }
 //
 //    public String getPrivateKey() {
-//        return walletCredentials == null ? null : walletCredentials.getEcKeyPair().getPrivateKey().toString(16);
+//        return ethereumWalletCredentials == null ? null : ethereumWalletCredentials.getEcKeyPair().getPrivateKey().toString(16);
 //    }
 //
 //    public BigDecimal getBalance() {
 //        try {
 //            Log.e("AAA", getAddress());
-//            return Convert.fromWei(new BigDecimal(web3j.ethGetBalance(getAddress(), DefaultBlockParameterName.fromString("latest")).send().getBalance()), Convert.Unit.ETHER);
+//            return Convert.fromWei(new BigDecimal(ethereumWeb3j.ethGetBalance(getAddress(), DefaultBlockParameterName.fromString("latest")).send().getBalance()), Convert.Unit.ETHER);
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
@@ -204,7 +204,7 @@
 //
 //    public BigDecimal getNormalGasPrice() {
 //        try {
-//            EthGasPrice ethGasPrice = web3j.ethGasPrice().send();
+//            EthGasPrice ethGasPrice = ethereumWeb3j.ethGasPrice().send();
 //            return Convert.fromWei(new BigDecimal(ethGasPrice.getGasPrice(), 0), Convert.Unit.GWEI).setScale(0, ROUND_HALF_UP);
 //        } catch (Exception e) {
 //            e.printStackTrace();
@@ -213,7 +213,7 @@
 //    }
 //
 //    public TX_STATUS send_RawTx(@NonNull String recipientAddress, @NonNull BigDecimal ethAmount, @NonNull BigDecimal gasPrise, @NonNull BigInteger gasLimit) {
-//        if (walletCredentials == null) return TX_STATUS.CREDENTIALS_NULL;
+//        if (ethereumWalletCredentials == null) return TX_STATUS.CREDENTIALS_NULL;
 //        Log.d(TAG, "send_RawTx: " + ethAmount + "->" + ethAmount.multiply(TEN_POW_18).setScale(0, RoundingMode.HALF_UP).toString());
 //        final BigInteger ethAmountBigInteger16 = new BigInteger(ethAmount.multiply(TEN_POW_18).setScale(0, RoundingMode.HALF_UP).toString(), 16);
 //        final BigInteger gasPriseBigInteger16 = new BigInteger(gasPrise.multiply(TEN_POW_9).setScale(0, RoundingMode.HALF_UP).toString(), 16);
@@ -222,7 +222,7 @@
 //
 //        EthGetTransactionCount ethGetTransactionCount;
 //        try {
-//            ethGetTransactionCount = web3j.ethGetTransactionCount(getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
+//            ethGetTransactionCount = ethereumWeb3j.ethGetTransactionCount(getAddress(), DefaultBlockParameterName.LATEST).sendAsync().get();
 //        } catch (InterruptedException | ExecutionException e) {
 //            e.printStackTrace();
 //            Log.d(TAG, "sendETH: " + TX_STATUS.ERROR_GET_NONCE.name());
@@ -233,7 +233,7 @@
 //        Log.d(TAG, "send_RawTx: create raw " + nonce + " " + gasPriseBigInteger16 + " " + gasLimitBigInteger16 + " " + recipientAddress + " " + ethAmountBigInteger16);
 //        RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPriseBigInteger16, gasLimitBigInteger16, recipientAddress, ethAmountBigInteger16, "0x");
 //
-//        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, walletCredentials);
+//        byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ethereumWalletCredentials);
 //        String hexValue = Numeric.toHexString(signedMessage);
 //        Log.d(TAG, "send_RawTx: hex " + hexValue);
 //
@@ -251,7 +251,7 @@
 //        }
 //
 //        assert requestObject != null;
-//        requestQueue.add(requestObject);
+//        ethereumRequestQueue.add(requestObject);
 //
 //        return DONE;
 //    }
@@ -260,11 +260,11 @@
 //
 //    public EthSendTransaction send(BigInteger gasPrice, BigInteger gasLimit, String to, BigInteger amount) {
 //            try {
-//                BigInteger nonce = web3j.ethGetTransactionCount(getAddress(), DefaultBlockParameterName.LATEST).send().getTransactionCount();
+//                BigInteger nonce = ethereumWeb3j.ethGetTransactionCount(getAddress(), DefaultBlockParameterName.LATEST).send().getTransactionCount();
 //                RawTransaction rawTransaction = RawTransaction.createEtherTransaction(nonce, gasPrice, gasLimit, to, amount);
-//                byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, walletCredentials);
+//                byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ethereumWalletCredentials);
 //                String hexValue = Numeric.toHexString(signedMessage);
-//                ethSendTransaction = web3j.ethSendRawTransaction(hexValue).send();
+//                ethSendTransaction = ethereumWeb3j.ethSendRawTransaction(hexValue).send();
 //            } catch (Exception e) {
 //                e.printStackTrace();
 //            }
@@ -273,7 +273,7 @@
 //    }
 //
 //    public void getTransactionsHistory(){
-////        web3j.transactionObservable() // TODO: JUST DO IT
+////        ethereumWeb3j.transactionObservable() // TODO: JUST DO IT
 //
 //    }
 //

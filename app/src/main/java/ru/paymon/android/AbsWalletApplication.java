@@ -24,22 +24,18 @@ import ru.paymon.android.models.PaymonWallet;
 
 public abstract class AbsWalletApplication extends Application {
     protected ActivityManager activityManager;
-    protected File walletFile;
-    protected WalletFiles walletFiles;
-    protected Web3j web3j;
-    protected RequestQueue requestQueue;
-    protected Credentials walletCredentials;
-    protected static final BigDecimal TEN_POW_18 = new BigDecimal("1000000000000000000");
-    protected static final BigDecimal TEN_POW_9 = new BigDecimal("1000000000");
+    protected Web3j ethereumWeb3j;
+    protected Web3j paymonmWeb3j;
+    protected RequestQueue ethereumRequestQueue;
+    protected RequestQueue paymonRequestQueue;
+    protected Credentials ethereumWalletCredentials;
+    protected Credentials paymonWalletCredentials;
 
-//    public abstract boolean createBitcoinWallet(final String password); //TODO: применить пароль при создании
     public abstract Wallet getBitcoinWallet();
-//    protected abstract Wallet getBitcoinWallet(final String password);
     public abstract RestoreStatus restoreBitcoinWallet(final File file);//TODO: применить пароль при создании
     public abstract boolean backupBitcoinWallet(final String path);
     public abstract Coin getBitcoinBalance();
     public abstract boolean deleteBitcoinWallet();
-//    public abstract String convertBitcoinToFiat(final String btcAmount,final String fiatExRate);
     public abstract String getBitcoinPublicAddress();
     public abstract String getBitcoinPrivateAddress();
     public abstract List<String> getAllBitcoinPublicAdresses();
@@ -50,7 +46,6 @@ public abstract class AbsWalletApplication extends Application {
     public abstract boolean backupEthereumWallet(final String path);
     public abstract BigInteger getEthereumBalance();
     public abstract boolean deleteEthereumWallet();
-//    public  abstract String convertEthereumToFiat(final BigInteger ethAmount,final String fiatExRate);
 
     public abstract boolean createPaymonWallet(final String password);
     protected abstract PaymonWallet getPaymonWallet(final String password);
@@ -58,10 +53,10 @@ public abstract class AbsWalletApplication extends Application {
     public abstract boolean backupPaymonWallet(final String path);
     public abstract BigInteger getPaymonBalance();
     public abstract boolean deletePaymonWallet();
-//    public abstract String convertPaymonToFiat(final BigInteger pmntAmount,final String fiatExRate);
 
 
-    public abstract EthSendTransaction sendRawEthereumTx(final @NonNull String recipientAddress, final  @NonNull BigInteger ethAmount, final @NonNull BigInteger gasPrise, final @NonNull BigInteger gasLimit);
+    public abstract EthSendTransaction sendRawEthereumTx(final @NonNull String recipientAddress, final  @NonNull BigInteger ethAmount, final @NonNull BigInteger gasPrice, final @NonNull BigInteger gasLimit);
+    public abstract EthSendTransaction sendPmntContract(final @NonNull String recipientAddress, final  @NonNull BigInteger pmntAmount, final @NonNull BigInteger gasPrice, final @NonNull BigInteger gasLimit);
     public abstract Transaction sendBitcoinTx(final String destinationAddress, final long satoshis, final long feePerB);
 
 

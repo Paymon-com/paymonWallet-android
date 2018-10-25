@@ -88,8 +88,6 @@ public class ChatsViewModel extends AndroidViewModel {
 
                     final RPC.PM_chatsAndMessages packet = (RPC.PM_chatsAndMessages) response;
 
-                    Log.e("AAA", packet.groups.size() + " " + packet.users.size() + " " + packet.messages.size());
-
 
 //                    final ArrayList<ChatsItem> chatsItems = new ArrayList<>();
 //                    final SparseArray<RPC.Message> usersMessagesMap = new SparseArray<>();

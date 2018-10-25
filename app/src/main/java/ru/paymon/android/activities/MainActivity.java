@@ -1,5 +1,9 @@
 package ru.paymon.android.activities;
 
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,20 +23,31 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.viewmodels.MainViewModel;
 
 import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NotificationManager.IListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
     public static final String INTENT_ACTION_OPEN_CHAT = "INTENT_ACTION_OPEN_CHAT";
     public static final String IS_GROUP = "IS_GROUP";
     private long lastTimeBackPressed;
     private ConstraintLayout connectingConstraint;
+    private MainViewModel mainViewModel;
+    private LiveData<Boolean> connectionState;
+    private LiveData<Boolean> networkState;
+    private LiveData<Boolean> authorizationState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        connectionState = mainViewModel.getServerConnectionState();
+        networkState = mainViewModel.getNetworkConnectionState();
+        authorizationState = mainViewModel.getAuthorizationState();
+
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        connectingConstraint = findViewById(R.id.connecting_constraint);
 
         if (!User.currentUser.confirmed) {
             Intent intent = new Intent(getApplicationContext(), EmailConfirmationActivity.class);
@@ -49,8 +64,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             return;
         }
 
-        connectingConstraint = findViewById(R.id.connecting_constraint);
-
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);
 
@@ -62,6 +75,23 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
             }
         });
+
+        final Observer<Boolean> stateObserver = state -> checkConnection();
+        networkState.observe(this, stateObserver);
+        connectionState.observe(this, stateObserver);
+        authorizationState.observe(this, stateObserver);
+    }
+
+    private void checkConnection() {
+        Boolean nState = networkState.getValue();
+        Boolean cState = connectionState.getValue();
+        Boolean aState = authorizationState.getValue();
+        if (nState == null || cState == null || aState == null) return;
+        if (nState && cState && aState)
+            connectingConstraint.setVisibility(View.GONE);
+        else {
+            connectingConstraint.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -125,19 +155,11 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     protected void onResume() {
         super.onResume();
         KeyGuardActivity.showCD();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didDisconnectedFromTheServer);
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
     }
 
     @Override
@@ -154,17 +176,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
             }
         }
-    }
-
-    @Override
-    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-        ApplicationLoader.applicationHandler.post(() -> {
-            if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED || event == NotificationManager.NotificationEvent.didEstablishedSecuredConnection) {
-                connectingConstraint.setVisibility(View.GONE);
-            } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED || event == NotificationManager.NotificationEvent.didDisconnectedFromTheServer) {
-                connectingConstraint.setVisibility(View.VISIBLE);
-            }
-        });
     }
 
     @Override

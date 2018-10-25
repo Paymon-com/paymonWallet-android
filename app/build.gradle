@@ -9,7 +9,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.support.startBitcoinKit.runner.AndroidJUnitRunner"
         renderscriptTargetApi 19
         multiDexEnabled true
         renderscriptSupportModeEnabled true
@@ -58,7 +58,7 @@ dependencies {
     testImplementation 'junit:junit:4.12'
 
     implementation 'com.android.support:multidex:1.0.3'
-    implementation "com.android.support.constraint:constraint-layout:+"
+    implementation "com.android.support.constraint:constraint-layout:2.0.0-alpha2"
     implementation "com.android.support:appcompat-v7:$project.supportVersion"
     implementation "com.android.support:preference-v7:$project.supportVersion"
     implementation "com.android.support:preference-v14:$project.supportVersion"
@@ -67,6 +67,7 @@ dependencies {
     implementation "com.android.support:cardview-v7:$project.supportVersion"
     implementation "com.android.support:recyclerview-v7:$project.supportVersion"
     implementation "com.android.support:recyclerview-selection:$project.supportVersion"
+    implementation "com.android.support:exifinterface:$project.supportVersion"
 
     implementation 'com.vanniktech:rxpermission:0.4.0'
     implementation 'com.vanniktech:emoji:0.5.1'
@@ -81,11 +82,10 @@ dependencies {
 
     implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.12'
     implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'org.web3j:core:3.3.1-android'
+    implementation 'org.ethereumWeb3j:core:3.3.1-android'
     implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
     implementation 'com.android.volley:volley:1.1.1'
     implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.0'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
 
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
     implementation "android.arch.paging:runtime:1.0.1"
@@ -95,7 +95,7 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
     annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 
-    implementation 'com.google.firebase:firebase-messaging:17.3.3'
+    implementation 'com.google.firebase:firebase-messaging:17.3.4'
     implementation 'com.google.firebase:firebase-core:16.0.4'
     implementation 'com.google.android.gms:play-services-analytics:16.0.4'
     implementation 'com.google.protobuf:protobuf-java:3.4.0'
@@ -112,5 +112,9 @@ dependencies {
     implementation('com.coinbase.android:coinbase-android-sdk:1.0.1') {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'org.apache.httpcomponents', module: 'httpclient-android'
+    }
+
+    implementation ('com.theartofdev.edmodo:android-image-cropper:2.7.0'){
+        exclude group: 'com.android.support', module: 'exifinterface'
     }
 }

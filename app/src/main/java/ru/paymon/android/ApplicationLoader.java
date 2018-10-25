@@ -103,7 +103,7 @@ public class ApplicationLoader extends WalletApplication {
 //            public void onComplete() {
 //                if (ApplicationLoader.rxPermission.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE) && ApplicationLoader.rxPermission.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
 ////                    Executors.newSingleThreadExecutor().submit(() -> {
-////                        test();
+////                        startBitcoinKit();
 ////                        initBtcBlockchaine(new String[]{"muY4qKejpNVhih8TMycMUq1rxUaiYZkfcX", "testnet"});
 ////                    });
 //                }
@@ -160,7 +160,7 @@ public class ApplicationLoader extends WalletApplication {
 //        kit = new WalletAppKit(params, new File(getCacheDir().getPath()), filePrefix);
 //
 //        if (params == RegTestParams.get()) {
-//            // Regression test mode is designed for testing and development only, so there's no public network for it.
+//            // Regression startBitcoinKit mode is designed for testing and development only, so there's no public network for it.
 //            // If you pick this mode, you're expected to be running a local "bitcoind -regtest" instance.
 //            kit.connectToLocalHost();
 //        }
@@ -235,7 +235,7 @@ public class ApplicationLoader extends WalletApplication {
 //        }
 //    }
 //
-//    public void test() {
+//    public void startBitcoinKit() {
 //
 //        // First we configure the network we want to use.
 //        // The available options are:
@@ -243,7 +243,7 @@ public class ApplicationLoader extends WalletApplication {
 //        // - TestNet3Params
 //        // - RegTestParams
 //        // While developing your application you probably want to use the Regtest mode and run your local bitcoin network. Run bitcoind with the -regtest flag
-//        // To test you app with a real network you can use the testnet. The testnet is an alternative bitcoin network that follows the same rules as main network. Coins are worth nothing and you can get coins for example from http://faucet.xeno-genesis.com/
+//        // To startBitcoinKit you app with a real network you can use the testnet. The testnet is an alternative bitcoin network that follows the same rules as main network. Coins are worth nothing and you can get coins for example from http://faucet.xeno-genesis.com/
 //        //
 //        // For more information have a look at: https://bitcoinj.github.io/testing and https://bitcoin.org/en/developer-examples#testing-applications
 //        NetworkParameters params = TestNet3Params.get();
@@ -253,7 +253,7 @@ public class ApplicationLoader extends WalletApplication {
 //        WalletAppKit kit = new WalletAppKit(params, new File(getCacheDir().getPath()), "walletappkit1-example");
 //
 //        // In case you want to connect with your local bitcoind tell the kit to connect to localhost.
-//        // You must do that in reg test mode.
+//        // You must do that in reg startBitcoinKit mode.
 //        //kit.connectToLocalHost();
 //
 //        // Now we start the kit and sync the blockchain.
@@ -304,7 +304,7 @@ public class ApplicationLoader extends WalletApplication {
 //        });
 //
 //        // Ready to run. The kit syncs the blockchain and our wallet event listener gets notified when something happens.
-//        // To test everything we create and print a fresh receiving address. Send some coins to that address and see if everything works.
+//        // To startBitcoinKit everything we create and print a fresh receiving address. Send some coins to that address and see if everything works.
 //        Log.e("AAA", "send money to: " + kit.wallet().freshReceiveAddress().toString());
 //
 //        // Make sure to properly shut down all the running services when you manually want to stop the kit. The WalletAppKit registers a runtime ShutdownHook so we actually do not need to worry about that when our application is stopping.

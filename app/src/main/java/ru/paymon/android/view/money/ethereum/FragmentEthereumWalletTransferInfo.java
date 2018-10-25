@@ -11,8 +11,8 @@
 //import android.widget.Button;
 //import android.widget.TextView;
 //
-//import org.web3j.protocol.core.methods.response.EthSendTransaction;
-//import org.web3j.utils.Convert;
+//import org.ethereumWeb3j.protocol.core.methods.response.EthSendTransaction;
+//import org.ethereumWeb3j.utils.Convert;
 //
 //import java.math.BigDecimal;
 //import java.math.BigInteger;

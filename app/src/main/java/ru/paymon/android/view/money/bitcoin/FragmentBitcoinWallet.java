@@ -54,10 +54,8 @@ public class FragmentBitcoinWallet extends Fragment {
         Button privateKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_public_key_button);
         TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
-        balance = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance);
-
         RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
-        WalletApplication application = ((WalletApplication) getActivity().getApplication());
+        balance = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance);
 
         Bundle bundle = new Bundle();
         bundle.putString(CURRENCY_KEY, BTC_CURRENCY_VALUE);

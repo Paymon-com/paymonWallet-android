@@ -74,8 +74,6 @@ public class FragmentEthereumWallet extends Fragment {
         balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
         RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
 
-        WalletApplication application = ((WalletApplication) getActivity().getApplication());
-
         Bundle bundle = new Bundle();
         bundle.putString(CURRENCY_KEY, ETH_CURRENCY_VALUE);
 
