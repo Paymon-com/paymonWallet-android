@@ -16,6 +16,9 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -85,7 +88,6 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
             final Bundle bundle = new Bundle();
             bundle.putInt(CHAT_ID_KEY, chatsItem.chatID);
             if (chatsItem.isGroup) {
-//                bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().getGroup(chatsItem.chatID).users);
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
             } else {
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
@@ -95,9 +97,9 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         chatsAdapter = new ChatsAdapter(new ChatDiffUtilCallback());
         chatsAllRecyclerView.setAdapter(chatsAdapter);
 
-        chatsButton.setOnClickListener(v -> sortChats(2,false));
-        groupsButton.setOnClickListener(v -> sortChats(1,false));
-        dialogsButton.setOnClickListener(v -> sortChats(0,false));
+        chatsButton.setOnClickListener(v -> sortChats(2, false));
+        groupsButton.setOnClickListener(v -> sortChats(1, false));
+        dialogsButton.setOnClickListener(v -> sortChats(0, false));
 
         search.addTextChangedListener(new TextWatcher() {
             @Override
@@ -114,9 +116,14 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
             public void afterTextChanged(Editable search) {
                 chatsViewModel.searchText = search.toString();
                 chatsViewModel.isSearchActivated = !search.toString().isEmpty();
-                sortChats(chatsViewModel.sortedBy,true);
+                sortChats(chatsViewModel.sortedBy, true);
             }
         });
+
+        chatsAllRecyclerView.setItemAnimator(null);
+        int resId = R.anim.layout_animation_fall_down;
+        LayoutAnimationController animation = AnimationUtils.loadLayoutAnimation(getContext(), resId);
+        chatsAllRecyclerView.setLayoutAnimation(animation);
 
         return view;
     }
@@ -125,7 +132,7 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        sortChats(chatsViewModel.sortedBy,false);
+        sortChats(chatsViewModel.sortedBy, false);
 
         chatsViewModel.getProgressState().observe(getActivity(), show -> {
             if (show == null) return;
@@ -200,9 +207,13 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
                 break;
         }
 
+        Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.item_animation_fall_down);
+        animation.setDuration(500);
+        chatsAllRecyclerView.startAnimation(animation);
+
+
         allChatsItemLiveData.observe(getActivity(), pagedList -> {
             chatsAdapter.submitList(pagedList);
-            chatsAdapter.notifyDataSetChanged();
         });
 
         sortedBy = sortBy;

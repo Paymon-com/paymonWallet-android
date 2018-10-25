@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
@@ -18,7 +19,11 @@ import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 
+import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
+
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, NotificationManager.IListener {
+    public static final String INTENT_ACTION_OPEN_CHAT = "INTENT_ACTION_OPEN_CHAT";
+    public static final String IS_GROUP = "IS_GROUP";
     private long lastTimeBackPressed;
     private ConstraintLayout connectingConstraint;
 
@@ -62,46 +67,55 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         NavOptions.Builder builder = new NavOptions.Builder();
         NavOptions navOptions = builder.setLaunchSingleTop(true).setClearTask(true).build();
+        final NavDestination currentNavigationDestination = Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination();
+        if (currentNavigationDestination != null) {
+            final int id = currentNavigationDestination.getId();
 
-        switch (item.getItemId()) {
-            case R.id.fragmentChats:
-                if (Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.fragmentChats)
-                    return false;
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentChats, null, navOptions);
-                break;
-            case R.id.fragmentContacts:
-                if (Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.fragmentContacts)
-                    return false;
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentContacts, null, navOptions);
-                break;
-            case R.id.fragmentMoney:
-                if (Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.fragmentMoney)
-                    return false;
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney, null, navOptions);
-                break;
-            case R.id.fragmentMoreMenu:
-                if (Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId() == R.id.fragmentMoreMenu)
-                    return false;
-                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoreMenu, null, navOptions);
-                break;
+            switch (item.getItemId()) {
+                case R.id.fragmentChats:
+                    if (id == R.id.fragmentChats)
+                        return false;
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentChats, null, navOptions);
+                    break;
+                case R.id.fragmentContacts:
+                    if (id == R.id.fragmentContacts)
+                        return false;
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentContacts, null, navOptions);
+                    break;
+                case R.id.fragmentMoney:
+                    if (id == R.id.fragmentMoney)
+                        return false;
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney, null, navOptions);
+                    break;
+                case R.id.fragmentMoreMenu:
+                    if (id == R.id.fragmentMoreMenu)
+                        return false;
+                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoreMenu, null, navOptions);
+                    break;
+            }
+
+            return true;
         }
 
-        return true;
+        return false;
     }
 
 
     @Override
     public void onBackPressed() {
-        int id = Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination().getId();
-        if (id == R.id.fragmentChats || id == R.id.fragmentContacts || id == R.id.fragmentMoney || id == R.id.fragmentMoreMenu) {
-            if (lastTimeBackPressed + 2000 > System.currentTimeMillis()) {
-                System.exit(0);
+        final NavDestination currentNavigationDestination = Navigation.findNavController(this, R.id.nav_host_fragment).getCurrentDestination();
+        if (currentNavigationDestination != null) {
+            final int id = currentNavigationDestination.getId();
+            if (id == R.id.fragmentChats || id == R.id.fragmentContacts || id == R.id.fragmentMoney || id == R.id.fragmentMoreMenu) {
+                if (lastTimeBackPressed + 2000 > System.currentTimeMillis()) {
+                    System.exit(0);
+                } else {
+                    Toast.makeText(getBaseContext(), R.string.double_tap_to_close_the_app, Toast.LENGTH_LONG).show();
+                }
+                lastTimeBackPressed = System.currentTimeMillis();
             } else {
-                Toast.makeText(getBaseContext(), R.string.double_tap_to_close_the_app, Toast.LENGTH_LONG).show();
+                Navigation.findNavController(this, R.id.nav_host_fragment).popBackStack();
             }
-            lastTimeBackPressed = System.currentTimeMillis();
-        } else {
-            Navigation.findNavController(this, R.id.nav_host_fragment).popBackStack();
         }
     }
 
@@ -128,6 +142,17 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
+        if (intent.getBooleanExtra(INTENT_ACTION_OPEN_CHAT, false)) {
+            final boolean isGroup = intent.getBooleanExtra(IS_GROUP, false);
+            final int cid = intent.getIntExtra(CHAT_ID_KEY, 0);
+            final Bundle bundle = new Bundle();
+            bundle.putInt(CHAT_ID_KEY, cid);
+            if (isGroup) {
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentGroupChat, bundle);
+            } else {
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
+            }
+        }
     }
 
     @Override

@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.google.gms.google-services'
 
 android {
@@ -68,45 +69,42 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$project.supportVersion"
     implementation "com.android.support:recyclerview-selection:$project.supportVersion"
 
-//    implementation 'com.davidecirillo.multichoicerecyclerview:multichoicerecyclerview:2.3.0'
-    implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.12'
-    implementation 'io.requery:sqlite-android:3.24.0'
-    implementation 'com.nineoldandroids:library:2.4.0'
-    implementation 'com.daimajia.androidanimations:library:1.1.2@aar'
-    implementation 'org.web3j:core:3.3.1-android'
-    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
-//    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
-    implementation 'com.android.volley:volley:1.1.1'
-//    implementation 'org.jsoup:jsoup:1.10.3'
-    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.0'
-//    implementation 'com.mikhaellopez:circularimageview:3.2.0'
-    implementation 'com.squareup.okhttp3:okhttp:3.10.0'
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.10.0'
-    implementation 'com.squareup.picasso:picasso:2.71828'
-//    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'com.vanniktech:rxpermission:0.4.0'
     implementation 'com.vanniktech:emoji:0.5.1'
     implementation 'com.vanniktech:emoji-google:0.5.1'
+
+    implementation 'com.daimajia.androidanimations:library:1.1.2@aar'
+    implementation "com.daimajia.swipelayout:library:1.2.0"
+
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
+    implementation 'com.googlecode.libphonenumber:libphonenumber:8.9.12'
+    implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'org.web3j:core:3.3.1-android'
+    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
+    implementation 'com.android.volley:volley:1.1.1'
+    implementation 'com.github.warkiz.widget:indicatorseekbar:2.1.0'
+    implementation 'com.theartofdev.edmodo:android-image-cropper:2.7.0'
+
     implementation 'android.arch.navigation:navigation-fragment:1.0.0-alpha06'
-
-    implementation "android.arch.paging:runtime:+"
-    implementation "android.arch.lifecycle:extensions:+"
-    annotationProcessor "android.arch.lifecycle:compiler:+"
-
-    implementation "android.arch.paging:runtime:+"
-    implementation "android.arch.persistence.room:runtime:+"
-    annotationProcessor "android.arch.persistence.room:compiler:+"
-
-    implementation "com.daimajia.swipelayout:library:+"
-    implementation 'com.github.esafirm.android-image-picker:imagepicker:+'
-    implementation 'com.vanniktech:rxpermission:+'
-    implementation 'com.theartofdev.edmodo:android-image-cropper:+'
+    implementation "android.arch.paging:runtime:1.0.1"
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    implementation "android.arch.paging:runtime:1.0.1"
+    implementation "android.arch.persistence.room:runtime:1.1.1"
+    annotationProcessor "android.arch.lifecycle:compiler:1.1.1"
+    annotationProcessor "android.arch.persistence.room:compiler:1.1.1"
 
     implementation 'com.google.firebase:firebase-messaging:17.3.3'
     implementation 'com.google.firebase:firebase-core:16.0.4'
     implementation 'com.google.android.gms:play-services-analytics:16.0.4'
+    implementation 'com.google.protobuf:protobuf-java:3.4.0'
+    implementation 'com.google.guava:guava:24.1-android'
+    implementation 'com.google.zxing:core:3.3.3'
 
-    implementation("com.github.esafirm.android-image-picker:imagepicker:+", {
-        exclude group: 'com.github.bumptech.glide', module: 'glide'
+    implementation("com.github.esafirm.android-image-picker:imagepicker:1.13.1", {
+//        exclude group: 'com.github.bumptech.glide', module: 'glide'
     })
 
     implementation('com.coinbase.android:coinbase-android-sdk:1.0.1') {
@@ -114,12 +112,12 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient-android'
     }
 
-    //!!!!!!!!! TEST !!!!!!!!
-    implementation 'com.google.protobuf:protobuf-java:2.6.1'
-    implementation 'com.google.guava:guava:24.1-android'
-    implementation 'com.google.zxing:core:3.3.3'
-    implementation 'com.squareup.moshi:moshi:1.6.0'
-    implementation 'org.slf4j:slf4j-api:1.7.25'
-    implementation 'com.github.tony19:logback-android:1.1.1-8'
-    implementation 'com.google.code.findbugs:jsr305:2.0.3'
+    dependencies {
+        implementation 'com.github.bumptech.glide:glide:4.8.0'
+        annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
+    }
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

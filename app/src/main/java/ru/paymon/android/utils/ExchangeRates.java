@@ -14,17 +14,17 @@
 //
 //import ru.paymon.android.models.ExchangeRatesItem;
 //
-//public class ExchangeRates {
-//    private static ExchangeRates instance;
+//public class ExchangeRatesManager {
+//    private static ExchangeRatesManager instance;
 //    public HashSet<String> fiatCurrencies = new HashSet<>();
 //
-//    public static ExchangeRates getInstance(){
+//    public static ExchangeRatesManager getInstance(){
 //        if(instance == null)
-//            instance = new ExchangeRates();
+//            instance = new ExchangeRatesManager();
 //        return instance;
 //    }
 //
-//    private ExchangeRates(){
+//    private ExchangeRatesManager(){
 //        fiatCurrencies.add("USD");//TODO: добавить остальные валюты
 //        fiatCurrencies.add("EUR");
 //        fiatCurrencies.add(Currency.getInstance(Locale.getDefault()).getCurrencyCode().toUpperCase());

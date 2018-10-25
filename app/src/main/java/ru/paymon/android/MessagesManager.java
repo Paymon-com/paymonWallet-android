@@ -32,20 +32,19 @@ public class MessagesManager {
     }
 
 
-
     public void putMessage(final RPC.Message message) {
         ApplicationLoader.db.chatMessageDao().insert(message);
         boolean isGroup = !(message.to_peer instanceof RPC.PM_peerUser);
 
         if (!isGroup) {
-            int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
-            RPC.UserObject user = UsersManager.getInstance().getUser(cid);
+            final int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
+            final RPC.UserObject user = UsersManager.getInstance().getUser(cid);
 
             if (user == null) {
-                RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo(cid);
+                final RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo(cid);
                 NetworkManager.getInstance().sendRequest(userInfo, (response, error) -> {
                     if (response == null || error != null) return;
-                    RPC.UserObject userObject = (RPC.UserObject) response;
+                    final RPC.UserObject userObject = (RPC.UserObject) response;
                     UsersManager.getInstance().putUser(userObject);
                     ChatsItem chatsItem = ApplicationLoader.db.chatDao().getChatByChatID(-cid);
                     if (chatsItem == null) {
@@ -71,11 +70,11 @@ public class MessagesManager {
                 ApplicationLoader.db.chatDao().insert(chatsItem);
             }
         } else {
-            int gid = message.to_peer.group_id;
-            RPC.Group group = GroupsManager.getInstance().getGroup(gid);
+            final int gid = message.to_peer.group_id;
+            final RPC.Group group = GroupsManager.getInstance().getGroup(gid);
 
             if (group == null) {
-//                RPC.PM_getGroupInfo groupInfo = new RPC.PM_getGroupInfo(gid); //TODO:дописать
+//                final RPC.PM_getGroupInfo groupInfo = new RPC.PM_getGroupInfo(gid); //TODO:дописать
 //                NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
 //                    if (response == null || error != null) return;
 //                    RPC.Group groupObject = (RPC.Group) response;
@@ -85,8 +84,8 @@ public class MessagesManager {
 //                    ApplicationLoader.db.chatDao().insert(newChatsItem);
 //                });
             } else {
-                RPC.UserObject lastMsgUser = UsersManager.getInstance().getUser(message.from_id);
-                ChatsItem newChatsItem = new ChatsItem(gid, group.photoURL, group.title, message.text, message.date, message.itemType, lastMsgUser.photoURL);
+                final RPC.UserObject lastMsgUser = UsersManager.getInstance().getUser(message.from_id);
+                final ChatsItem newChatsItem = new ChatsItem(gid, group.photoURL, group.title, message.text, message.date, message.itemType, lastMsgUser.photoURL);
                 ApplicationLoader.db.chatDao().insert(newChatsItem);
             }
         }

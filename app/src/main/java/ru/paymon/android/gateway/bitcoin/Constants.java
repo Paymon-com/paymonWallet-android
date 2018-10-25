@@ -44,11 +44,10 @@ public final class Constants {
     public static final boolean ENABLE_BROWSE = true;
 
     public final static class Files {
-        private static final String FILENAME_NETWORK_SUFFIX = NETWORK_PARAMETERS.getId()
-                .equals(NetworkParameters.ID_MAINNET) ? "" : "-testnet";
+        private static final String FILENAME_NETWORK_SUFFIX = NETWORK_PARAMETERS.getId().equals(NetworkParameters.ID_MAINNET) ? "" : "-testnet";
 
         /** Filename of the wallet. */
-        public static final String WALLET_FILENAME_PROTOBUF = "wallet-protobuf" + FILENAME_NETWORK_SUFFIX;
+//        public static final String WALLET_FILENAME_PROTOBUF = Environment.getDataDirectory().getAbsolutePath() + "/" + "paymon-btc-wallet" + FILENAME_NETWORK_SUFFIX;
 
         /** How often the wallet is autosaved. */
         public static final long WALLET_AUTOSAVE_DELAY_MS = 3 * DateUtils.SECOND_IN_MILLIS;
@@ -63,8 +62,7 @@ public final class Constants {
         public static final File EXTERNAL_STORAGE_DIR = Environment.getExternalStorageDirectory();
 
         /** Manual backups go here. */
-        public static final File EXTERNAL_WALLET_BACKUP_DIR = Environment
-                .getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        public static final File EXTERNAL_WALLET_BACKUP_DIR = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
         /** Filename of the manual key backup (old format, can only be read). */
         public static final String EXTERNAL_WALLET_KEY_BACKUP = "bitcoin-wallet-keys" + FILENAME_NETWORK_SUFFIX;

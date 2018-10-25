@@ -49,6 +49,8 @@
     <string name="login_or_email_is_empty">Login or E-mail is empty</string>
     <string name="create_ethereum_wallet_failed">Create an Ethereum wallet failed</string>
     <string name="ethereum_wallet_created">Ethereum wallet created</string>
+    <string name="bitcoin_wallet_created">Bitcoin wallet created</string>
+    <string name="paymon_wallet_created">Paymon wallet created</string>
 
     <string name="default_denomination_value_eth">2 decimal places</string>
     <string name="money_denomination_auto">Autoformat</string>
@@ -129,6 +131,7 @@
     <string name="withdraw">Withdraw</string>
     <string name="rub">RUB</string>
     <string name="btc">BTC</string>
+    <string name="pmnt">PMNT</string>
 
     <string name="settings_notifications">Notifications</string>
     <string name="settings_basic">Basic</string>
@@ -390,7 +393,7 @@
     <string name="auth_wrong_login_or_password">Wrong login or password</string>
     <string name="error_spamming">Too many requests, try again</string>
     <string name="eth">ETH</string>
-    <string name="ethereum_wallet_create_title">Create a password for your Ethereum wallet. The operation may take several minutes</string>
+    <string name="wallet_create_title">Create a password for your wallet. The operation may take several minutes</string>
     <string name="title_ethereum_wallet">Ethereum wallet</string>
     <string name="create_wallet_dialog_hint">The operation may take several minutes. Please wait…</string>
     <string name="ethereum_wallet_is_loaded_hint">Ethereum wallet is loading, please wait…</string>
@@ -778,7 +781,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_retry">Retry</string>
     <string name="button_help">Help</string>
-    <string name="button_add">Add</string>
+    <string name="button_add">Create wallet</string>
     <string name="button_delete">Delete</string>
     <string name="button_set">Set</string>
     <string name="button_remove">Remove</string>

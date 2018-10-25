@@ -22,6 +22,7 @@
     <string name="double_tap_to_close_the_app">Double tap to close the app</string>
     <string name="ethereum_remittance">Ethereum remittance</string>
 
+    <string name="keyguard_title">Enter password</string>
 
     <string name="title_chats">Chats</string>
     <string name="yes">Yes</string>
@@ -48,6 +49,8 @@
     <string name="login_or_email_is_empty">Login or E-mail is empty</string>
     <string name="create_ethereum_wallet_failed">Create an Ethereum wallet failed</string>
     <string name="ethereum_wallet_created">Ethereum wallet created</string>
+    <string name="bitcoin_wallet_created">Bitcoin wallet created</string>
+    <string name="paymon_wallet_created">Paymon wallet created</string>
 
     <string name="default_denomination_value_eth">2 decimal places</string>
     <string name="money_denomination_auto">Autoformat</string>
@@ -128,7 +131,7 @@
     <string name="withdraw">Withdraw</string>
     <string name="rub">RUB</string>
     <string name="btc">BTC</string>
-
+    <string name="pmnt">PMNT</string>
 
     <string name="settings_notifications">Notifications</string>
     <string name="settings_basic">Basic</string>
@@ -147,7 +150,6 @@
 
     <string name="app_sort_friends">Sort friends list</string>
 
-
     <string name="security_app">Application security</string>
     <string name="security_password_protect">Security Password</string>
     <string name="security_enter_password">Enter password</string>
@@ -162,7 +164,6 @@
 
     <string name="about_program_text">Paymon for Android</string>
     <string name="about_program_text_version">"version %s"</string>
-
     <!--<string name="restore_wallet_dialog_replace_warning">You are about to replace the current wallet. Any coins in the current wallet will be lost if you do not have a separate backup</string>-->
     <!--<string name="import_keys_dialog_warning">Important: Do not download private keys from questionable sources! Attackers can gain access to your funds</string>-->
     <!--<string name="import_keys_dialog_button_import">Reestablish</string>-->
@@ -174,7 +175,6 @@
     <!--<string name="button_share">Share</string>-->
     <!--<string name="private_key_password">PIN</string>-->
 
-    <string name="keyguard_title">Enter password</string>
     <string name="participants">Participants</string>
 
     <string name="agreement_txt">
@@ -314,10 +314,10 @@
 \n
 2. Условия пользования Сайтом и мобильным приложением\n
 2.1. Оказывая услуги по использованию Сайта, мобильного приложения и его сервисов (далее – Услуги Сайта и мобильного приложения), Администрация Сайта, действуя разумно и добросовестно, считает, что Пользователь:\n
-  - Обладает всеми необходимыми правами, позволяющими ему осуществлять регистрацию и использовать настоящий Сайт и мобильное приложение;/n
-  - Указывает достоверную информацию о себе в объемах, необходимых для пользования Услугами мобильного приложения и Сайта/n
-  -Осознает, что некоторые виды информации, переданные им другим Пользователям, не могут быть удалены самим Пользователем;\n
-  -Ознакомлен с настоящими Правилами, выражает свое согласие с ними и принимает на себя указанные в них права и обязанности.\n
+ - Обладает всеми необходимыми правами, позволяющими ему осуществлять регистрацию и использовать настоящий Сайт и мобильное приложение;/n
+ - Указывает достоверную информацию о себе в объемах, необходимых для пользования Услугами мобильного приложения и Сайта/n
+ -Осознает, что некоторые виды информации, переданные им другим Пользователям, не могут быть удалены самим Пользователем;\n
+ -Ознакомлен с настоящими Правилами, выражает свое согласие с ними и принимает на себя указанные в них права и обязанности.\n
 2.2. Администрация Сайта не проверяет достоверность получаемой (собираемой) информации о пользователях, за исключением случаев, когда такая проверка необходима в целях исполнения Администрацией Сайта обязательств перед пользователем.\n
 2.3. Данные, предоставленные компании Paymon хранятся в соответствии с действующим законодательством в безопасных местах. Компания Paymon добилась того, что соответствующие стандарты безопасности находятся в сохранности, конфиденциальности и безопасности данных. В отношении субъектов данных пользователей сайта и мобильных приложений , Paymon, где требуется, регистрируется с соответствующих национальных защита данных / органы защиты информации. Компания Paymon также гарантирует, что данные хранятся в соответствии с требованиями национального законодательства государства.\n
         \n
@@ -380,9 +380,9 @@
     <string name="group_creation">Group creation</string>
     <string name="search_friend">Search your friend</string>
     <string name="search_chats">Search chats</string>
+    <string name="title_dialogs">Dialogs</string>
     <string name="search_contacts">Search contacts</string>
     <string name="search_for_contacts">Here you can search for contacts</string>
-    <string name="title_dialogs">Dialogs</string>
     <string name="done">Done</string>
     <string name="enter_group_title">Enter group name</string>
     <string name="agree">Agree</string>
@@ -393,7 +393,7 @@
     <string name="auth_wrong_login_or_password">Wrong login or password</string>
     <string name="error_spamming">Too many requests, try again</string>
     <string name="eth">ETH</string>
-    <string name="ethereum_wallet_create_title">Create a password for your Ethereum wallet. The operation may take several minutes</string>
+    <string name="wallet_create_title">Create a password for your wallet. The operation may take several minutes</string>
     <string name="title_ethereum_wallet">Ethereum wallet</string>
     <string name="create_wallet_dialog_hint">The operation may take several minutes. Please wait…</string>
     <string name="ethereum_wallet_is_loaded_hint">Ethereum wallet is loading, please wait…</string>
@@ -453,11 +453,9 @@
     <string name="want_delete_message">Are you sure you want to delete the messages?</string>
     <string name="sticker">Sticker</string>
 
-
     <string name="go_to_profile">Go to profile</string>
 
     <string name="format_time">Format time</string>
-
 
     ////////////////////////////////////// BEGIN
     <string name="toast_wallet_reset">Your wallet was reset!\nIt will take some time to recover.</string>
@@ -783,7 +781,7 @@
     <string name="button_cancel">Cancel</string>
     <string name="button_retry">Retry</string>
     <string name="button_help">Help</string>
-    <string name="button_add">Add</string>
+    <string name="button_add">Create wallet</string>
     <string name="button_delete">Delete</string>
     <string name="button_set">Set</string>
     <string name="button_remove">Remove</string>

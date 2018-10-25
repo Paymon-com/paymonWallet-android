@@ -661,7 +661,6 @@ public class RPC {
         public String text;
         public int flags;
         public boolean unread;
-        //        public ArrayList<MessageEntity> entities = new ArrayList<>();
         public int views;
         public int edit_date;
         @TypeConverters(FileTypeConverter.class)
@@ -735,8 +734,6 @@ public class RPC {
         public int id;
         public int creatorID;
         public String title;
-        //        public int date;
-//        public ArrayList<UserObject> users = new ArrayList<>();
         @TypeConverters(UsersArrayConverter.class)
         public ArrayList<Integer> users = new ArrayList<>();
         @TypeConverters(PhotoUrlConverter.class)
@@ -770,11 +767,7 @@ public class RPC {
             }
             int count = stream.readInt32(exception);
             for (int i = 0; i < count; i++) {
-//                UserObject object = UserObject.deserialize(stream, stream.readInt32(exception), exception);
                 Integer uid = stream.readInt32(exception);
-//                if (uid == null) {
-//                    return;
-//                }
                 users.add(uid);
             }
 
@@ -800,7 +793,6 @@ public class RPC {
             for (Integer uid : users) {
                 stream.writeInt32(uid);
             }
-//            writeArray(stream, users);
             photoURL.serializeToStream(stream);
         }
     }
@@ -991,7 +983,6 @@ public class RPC {
         public static int svuid = 929127698;
 
         public Peer chatID;
-        //        public ArrayList<Message> messages = new ArrayList<>();
         public LinkedList<Message> messages = new LinkedList<>();
 
         public void readParams(SerializableData stream, boolean exception) {

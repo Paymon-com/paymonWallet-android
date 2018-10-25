@@ -1,20 +1,18 @@
 package ru.paymon.android.net;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
-import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -33,11 +31,14 @@ import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.activities.MainActivity;
 import ru.paymon.android.utils.KeyGenerator;
 import ru.paymon.android.utils.SerializedBuffer;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.MessagesManager.generateMessageID;
+import static ru.paymon.android.activities.MainActivity.INTENT_ACTION_OPEN_CHAT;
+import static ru.paymon.android.activities.MainActivity.IS_GROUP;
 import static ru.paymon.android.net.RPC.ERROR_AUTH;
 import static ru.paymon.android.net.RPC.ERROR_AUTH_TOKEN;
 import static ru.paymon.android.net.RPC.ERROR_KEY;
@@ -45,49 +46,13 @@ import static ru.paymon.android.net.RPC.ERROR_SPAMMING;
 import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;
 
 public class ConnectorService extends Service implements NotificationManager.IListener {
+    public static final String LIVE_TIME_KEY = "LIVE_TIME_KEY";
+    private final IBinder binder = new LocalBinder();
     public HashMap<Long, Packet.OnResponseListener> requestsMap = new HashMap<>(2);
     public long lastKeepAlive;
     public String ACTION = "ACTION_NOTIFY_BUTTON";
+    private int liveTime;
 
-    private static final String BROADCAST_ACTION = "START_NOTIFY_SERVICE";
-    private static final int NOTIFY_ID = 101;
-    private final IBinder binder = new LocalBinder();
-    private BroadcastReceiver broadcastReceiver;
-    //    private RPC.Message msg;
-    private boolean receiverRegistered;
-    private android.app.NotificationManager notificationManager;
-
-    private void registerReceiver() {
-        broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                Log.e(Config.TAG, "Notify accepted action: " + intent.getAction());
-                String code = intent.getAction();
-
-                if (code != null && code.equals(ACTION)) {
-                    final boolean isGroup = intent.getBooleanExtra("IS_GROUP", false);
-                    final int cid = intent.getIntExtra(CHAT_ID_KEY, 0);
-                    Intent actIntent = getBaseContext().getPackageManager().getLaunchIntentForPackage(getBaseContext().getPackageName());
-                    actIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(CHAT_ID_KEY, cid);
-//                    if (isGroup)
-//                        bundle.putParcelableArrayList(CHAT_GROUP_USERS, GroupsManager.getInstance().getGroup(cid).users);
-                    actIntent.putExtra("OPEN_CHAT_BUNDLE", bundle);
-                    notificationManager.cancel(NOTIFY_ID);
-                    startActivity(actIntent);
-                }
-            }
-        };
-        IntentFilter filter = new IntentFilter(ACTION);
-        registerReceiver(broadcastReceiver, filter);
-        receiverRegistered = true;
-    }
-
-    private void unregisterReceiver() {
-        unregisterReceiver(broadcastReceiver);
-        receiverRegistered = false;
-    }
 
     //region binding
     public class LocalBinder extends Binder {
@@ -108,6 +73,12 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     }
     //endregion
 
+    @Override
+    public ComponentName startService(Intent service) {
+        liveTime = service.getIntExtra(LIVE_TIME_KEY, 0);
+        return super.startService(service);
+    }
+
     //region life cycle
     @Override
     public void onCreate() {
@@ -115,7 +86,12 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
-        registerReceiver();
+
+        if (liveTime != 0) {
+            Handler handler = new Handler();
+            handler.postDelayed(() -> stopSelf(), liveTime);
+        }
+
         super.onCreate();
     }
 
@@ -127,8 +103,6 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     @Override
     public void onTaskRemoved(Intent rootIntent) {
         super.onTaskRemoved(rootIntent);
-        if (receiverRegistered)
-            unregisterReceiver(broadcastReceiver);
     }
 
     @Override
@@ -137,7 +111,6 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
-        unregisterReceiver();
         super.onDestroy();
     }
     //endregion
@@ -151,89 +124,89 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED) {
             NetworkManager.getInstance().connect();
         } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED) {
-
+            NetworkManager.getInstance().reconnect();
         }
     }
 
-    private void showNotify(RPC.Message msg) {
-        if (msg.to_peer.user_id != 0)
-            if (msg.from_id == MessagesManager.getInstance().currentChatID)
-                return;
-            else if (msg.to_peer.group_id != 0)
-                if (msg.to_peer.group_id == MessagesManager.getInstance().currentChatID)
-                    return;
+    private void showNotification(RPC.Message message) {
+        final boolean isGroup = message.to_peer.user_id == 0;
 
-        if (!User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) {
-            Uri ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            RPC.UserObject user = UsersManager.getInstance().getUser(msg.from_id);
+        if (!isGroup && message.from_id == MessagesManager.getInstance().currentChatID)
+            return;
 
-            String text = "";
-            if (msg instanceof RPC.PM_message) {
-                text = msg.text;
-            } else if (msg instanceof RPC.PM_messageItem) {
-                switch (msg.itemType) {
-                    case PHOTO:
-                        text = "Photo";
-                        break;
-                    case STICKER:
-                        text = "Sticker";
-                        break;
-                    case ACTION:
-                        text = msg.text;
-                        break;
-                    default:
-                        text = "Item"; //"Вложение";
-                }
-            }
+        if (isGroup && message.to_peer.group_id == MessagesManager.getInstance().currentChatID)
+            return;
 
-            Context context = getApplicationContext();
+        final int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
 
-            if (user != null) {
-                final boolean isGroup = msg.to_peer instanceof RPC.PM_peerGroup;
-                final int cid = isGroup ? msg.to_peer.group_id : msg.from_id;
-                Intent intentBtnReply = new Intent(ACTION);
-                intentBtnReply.setAction(ACTION);
-                intentBtnReply.putExtra("IS_GROUP", isGroup);
-                intentBtnReply.putExtra(CHAT_ID_KEY, cid);
-                PendingIntent pIntentBtnReply = PendingIntent.getBroadcast(this, 2, intentBtnReply, 0);
+        final Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(INTENT_ACTION_OPEN_CHAT, true);
+        intent.putExtra(IS_GROUP, isGroup);
+        intent.putExtra(CHAT_ID_KEY, cid);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-                Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.drawable.profile_photo_none);
-                try {
-                    Picasso.get().load(user.photoURL.url).get();
-                } catch (Exception e) {
-                    bmp = BitmapFactory.decodeResource(getResources(), R.drawable.profile_photo_none);
-                }
-
-                Notification.Builder builder = new Notification.Builder(context);
-                builder.setContentIntent(pIntentBtnReply)
-                        .setAutoCancel(true)
-                        .setWhen(System.currentTimeMillis())
-                        .setSmallIcon(R.drawable.ic_notification)
-                        .setLargeIcon(bmp)
-                        .setSound(ringtoneUri)
-                        .setTicker(getString(R.string.message))
-                        .setContentTitle(Utils.formatUserName(user))
-                        .setContentText(text)
-                        .addAction(R.drawable.ic_answer_message, getString(R.string.replay_button), pIntentBtnReply);
-
-                builder.setVibrate(new long[]{100, 200, 100, 300});
-
-                notificationManager = (android.app.NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    builder.setChannelId("my_channel_01");
-                    NotificationChannel mChannel = new NotificationChannel("my_channel_01", "channel_name", android.app.NotificationManager.IMPORTANCE_HIGH);
-                    if (notificationManager != null)
-                        notificationManager.createNotificationChannel(mChannel);
-                }
-
-                Notification notification = builder.build();
-
-                if (notificationManager != null)
-                    notificationManager.notify(NOTIFY_ID, notification);
+        String text = "";
+        if (message instanceof RPC.PM_message) {
+            text = message.text;
+        } else if (message instanceof RPC.PM_messageItem) {
+            switch (message.itemType) {
+                case PHOTO:
+                    text = "Photo";
+                    break;
+                case STICKER:
+                    text = "Sticker";
+                    break;
+                case ACTION:
+                    text = "Action";
+                    break;
+                default:
+                    text = "Item";
             }
         }
 
+        final RPC.UserObject user = UsersManager.getInstance().getUser(message.from_id);
+
+        Bitmap bmp;
+        try {
+            bmp = Picasso.get().load(user.photoURL.url).get();
+        } catch (Exception e) {
+            bmp = BitmapFactory.decodeResource(getResources(), R.drawable.profile_photo_none);
+        }
+
+        final Notification.Builder builder = new Notification.Builder(this)
+                .setAutoCancel(true)
+                .setWhen(System.currentTimeMillis())
+                .setTicker(getString(R.string.message))
+                .setContentText(text)
+                .setLargeIcon(bmp);
+
+        if (!isGroup) {
+            final String title = Utils.formatUserName(user);
+
+            builder.setContentIntent(pendingIntent)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentTitle(title);
+        } else {
+            final RPC.Group group = GroupsManager.getInstance().getGroup(message.to_peer.group_id);
+            final String title = GroupsManager.getInstance().getGroup(group.id).title;
+
+            builder.setContentIntent(pendingIntent)
+                    .setSmallIcon(R.drawable.ic_notification)
+                    .setContentTitle(title);
+        }
+
+        final android.app.NotificationManager notificationManager = (android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            builder.setChannelId(Config.MESSAGES_NOTIFICATION_CHANNEL_ID);
+        } else {
+            builder.setVibrate(new long[]{100, 200, 100, 300});
+            Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+            builder.setSound(soundUri);
+        }
+
+        notificationManager.notify(message.from_id, builder.build());
     }
 
     public long sendRequest(final Packet packet) {
@@ -285,40 +258,8 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
     private void receivedMessage(final RPC.Message msg) {
         Utils.netQueue.postRunnable(() -> {
-//            ApplicationLoader.db.chatMessageDao().insert(msg);
-//            RPC.UserObject user = ApplicationLoader.db.userDao().getUserById(msg.from_id);
-//            if (user == null) {
-//                RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo();
-//                userInfo.user_id = msg.from_id;
-//                NetworkManager.getInstance().sendRequest(userInfo, (response, error1) -> {
-//                    if (response == null || error1 != null) return;
-//                    ApplicationLoader.applicationHandler.post(() -> {
-//                        RPC.UserObject userObject = (RPC.UserObject) response;
-//                        ApplicationLoader.db.userDao().insert(userObject);
-//                        int cid = msg.to_peer instanceof RPC.PM_peerUser ? -msg.to_peer.user_id : msg.to_peer.group_id;
-//                        ChatsItem chatsItem = ApplicationLoader.db.chatDao().getChatByChatID(cid);
-//                        chatsItem.time = msg.date;
-//                        chatsItem.lastMsgPhotoURL = userObject.photoURL;
-//                        chatsItem.lastMessageText = msg.text;
-//                        chatsItem.fileType = msg.itemType;
-//                        ApplicationLoader.db.chatDao().insert(chatsItem);
-//                    });
-//                });
-//            } else {
-//                int cid = msg.to_peer instanceof RPC.PM_peerUser ? -msg.to_peer.user_id : msg.to_peer.group_id;
-//                ChatsItem chatsItem = ApplicationLoader.db.chatDao().getChatByChatID(cid);
-//                if(chatsItem != null) {
-//                    chatsItem.time = msg.date;
-//                    chatsItem.lastMsgPhotoURL = user.photoURL;
-//                    chatsItem.lastMessageText = msg.text;
-//                    chatsItem.fileType = msg.itemType;
-//                }else{
-////                    chatsItem = new ChatsItem()//TODO:!!!
-//                }
-//                ApplicationLoader.db.chatDao().insert(chatsItem);
-//            }
             MessagesManager.getInstance().putMessage(msg);
-            showNotify(msg);
+            showNotification(msg);
         });
     }
 
@@ -339,24 +280,6 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         }
     }
 
-//    private void receivedError(final RPC.PM_error error) {
-//        Log.w(Config.TAG, String.format(Locale.getDefault(), "PM_error(%d): %s", error.code, error.text));
-//        Log.d("paymon_error_response", error.text);
-//        if (error.code == ERROR_KEY) {
-//            Log.e(Config.TAG, "ERROR_KEY, reconnecting");
-//            NetworkManager.getInstance().reconnect();
-//        } else if (error.code == ERROR_AUTH_TOKEN) {
-//            Log.e(Config.TAG, "ERROR_AUTH_TOKEN, auth");
-//            // FIXME: logout
-//            NetworkManager.getInstance().authByToken();
-//        } else if (error.code == ERROR_AUTH) {
-////                Looper.prepare();
-//            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.auth_wrong_login_or_password), Toast.LENGTH_LONG).show());
-//        } else if (error.code == ERROR_SPAMMING) {
-////                Looper.prepare();
-//            ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.error_spamming), Toast.LENGTH_LONG).show());
-//        }
-//    }
 
     private void receivedPostConnectionData(final RPC.PM_postConnectionData data) {
         KeyGenerator.getInstance().setPostConnectionData(data);

@@ -19,6 +19,7 @@
     <color name="white_light">#28ffffff</color>
     <color name="gray_dim">#c2c2c2</color>
     <color name="gray">#1e7d7d7d</color>
+    <color name="gray_transparent">#8f2b2b2b</color>
     <color name="gray_white">#1ebfbfbf</color>
     <color name="dark_gray">#dab3b3b3</color>
     <color name="light_gray">#f5f5f5</color>
@@ -31,7 +32,7 @@
     <color name="usd_color">#005e04</color>
     <color name="btc_color">#ecb309</color>
     <color name="eth_color">#127397</color>
-    <color name="pmnc_color">#0099cc</color>
+    <color name="pmnt_color">#282828</color>
 
 
     <color name="orange">#ffffbb33</color>

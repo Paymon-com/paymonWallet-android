@@ -1,8 +1,6 @@
 package ru.paymon.android.view;
 
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,15 +8,15 @@ import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 
 public class FragmentSheetDialog extends BottomSheetDialogFragment {
@@ -35,8 +33,16 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_attachment_document, container, false);
+        View view = inflater.inflate(R.layout.fragment_attachment, container, false);
         buttonsAttachmentsInclude = (LinearLayout) view.findViewById(R.id.buttons_attachments);
+
+        ImageButton imageAttachButton = (ImageButton) view.findViewById(R.id.image_chat_attachment);
+        ImageButton docAttachButton = (ImageButton) view.findViewById(R.id.document_chat_attachment);
+
+        View navControllerView = view.findViewById(R.id.nav_attachment_fragment);
+        NavController navController = Navigation.findNavController(navControllerView);
+        imageAttachButton.setOnClickListener(v -> navController.navigate(R.id.fragmentImage));
+        docAttachButton.setOnClickListener(v -> navController.navigate(R.id.fragmentDocPicker));
 
         return view;
     }
