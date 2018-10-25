@@ -47,7 +47,7 @@ public class FragmentAttachmentImage extends Fragment {
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
 
         MediaStoreHelper.getPhotosDir(getActivity().getContentResolver(), mediaStoreArgs, dirs -> {
-            for (FileDirectory photoDir: dirs)
+            for (FileDirectory photoDir : dirs)
                 medias.addAll(photoDir.getFiles());
             photoGridAdapter = new PhotoGridAdapter(getContext(), Glide.with(getActivity()), medias, PickerManager.getInstance().getSelectedPhotos(), false);
             recyclerView.setAdapter(photoGridAdapter);

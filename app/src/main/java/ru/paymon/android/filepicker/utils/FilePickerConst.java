@@ -14,7 +14,6 @@ public class FilePickerConst {
     public final static int FILE_TYPE_MEDIA = 1;
     public final static int FILE_TYPE_DOCUMENT = 2;
 
-    public final static int MEDIA_TYPE_IMAGE = 1;
     public final static int MEDIA_TYPE_VIDEO = 3;
 }
 

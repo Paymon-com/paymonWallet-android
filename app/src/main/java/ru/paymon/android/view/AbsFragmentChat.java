@@ -213,7 +213,7 @@ public abstract class AbsFragmentChat extends Fragment {
         MessagesManager.getInstance().currentChatID = 0;
     }
 
-    private void loadMessages(){
+    private void loadMessages() {
         if (User.currentUser == null || chatID == 0) return;
 
         RPC.PM_getChatMessages packet = new RPC.PM_getChatMessages();

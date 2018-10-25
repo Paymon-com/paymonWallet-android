@@ -5,12 +5,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.DrawableRes;
 
-import ru.paymon.android.R;
+import java.util.Objects;
 
 /**
  * Created by droidNinja on 29/07/16.
  */
-public class FileType implements Parcelable{
+public class FileType implements Parcelable {
     public String title;
 
     @DrawableRes
@@ -42,11 +42,19 @@ public class FileType implements Parcelable{
         }
     };
 
-    public int getDrawable()
-    {
-        if(drawable==0)
-            return R.drawable.icon_file_unknown;
-        return drawable;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FileType fileType = (FileType) o;
+
+        return Objects.equals(title, fileType.title);
+    }
+
+    @Override
+    public int hashCode() {
+        return title != null ? title.hashCode() : 0;
     }
 
     @Override
@@ -55,22 +63,7 @@ public class FileType implements Parcelable{
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(title);
-        parcel.writeInt(drawable);
-        parcel.writeStringArray(extensions);
-    }
+    public void writeToParcel(Parcel dest, int flags) {
 
-    @Override public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        FileType fileType = (FileType) o;
-
-        return title != null ? title.equals(fileType.title) : fileType.title == null;
-    }
-
-    @Override public int hashCode() {
-        return title != null ? title.hashCode() : 0;
     }
 }

@@ -1,5 +1,5 @@
 package ru.paymon.android.filepicker.adapters;
 
-public interface FileAdapterListener{
+public interface FileAdapterListener {
     void onItemSelected();
 }

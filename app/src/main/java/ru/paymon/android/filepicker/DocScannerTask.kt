@@ -9,13 +9,13 @@ import ru.paymon.android.filepicker.models.Document
 import ru.paymon.android.filepicker.utils.FileResultCallback
 import java.util.ArrayList
 
-class DocScannerTask(val contentResolver: ContentResolver, private val resultCallback: FileResultCallback<Document>?) : AsyncTask<Void, Void, MutableList<Document>>() {
+class DocScannerTask(private val contentResolver: ContentResolver, private val resultCallback: FileResultCallback<Document>?) : AsyncTask<Void, Void, MutableList<Document>>() {
 
     override fun doInBackground(vararg voids: Void): MutableList<Document> {
         val projection = null
         val uri = MediaStore.Files.getContentUri("external")
         val sortOrder = MediaStore.Files.FileColumns._ID + " DESC"
-        var selection = null
+        val selection = null
 
         val cursor = contentResolver.query(uri, projection, selection, null, sortOrder)
 

@@ -3,10 +3,8 @@ package ru.paymon.android.filepicker;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 
-import ru.paymon.android.R;
 import ru.paymon.android.filepicker.models.FileType;
 import ru.paymon.android.filepicker.utils.FilePickerConst;
-import ru.paymon.android.filepicker.utils.Orientation;
 
 /**
  * Created by droidNinja on 29/07/16.
@@ -24,12 +22,6 @@ public class PickerManager {
 
     private LinkedHashSet<FileType> fileTypes;
 
-    private int theme = R.style.AppTheme;
-
-    private String title = null;
-
-    private Orientation orientation = Orientation.UNSPECIFIED;
-
     private PickerManager() {
         mediaFiles = new ArrayList<>();
         docFiles = new ArrayList<>();
@@ -40,7 +32,7 @@ public class PickerManager {
         return maxCount;
     }
 
-    public int getCurrentCount() {
+    private int getCurrentCount() {
         return mediaFiles.size() + docFiles.size();
     }
 
@@ -50,15 +42,7 @@ public class PickerManager {
                 mediaFiles.add(path);
             } else if (!docFiles.contains(path) && type == FilePickerConst.FILE_TYPE_DOCUMENT) {
                 docFiles.add(path);
-            } else {
-                return;
             }
-        }
-    }
-
-    public void add(ArrayList<String> paths, int type) {
-        for (int index = 0; index < paths.size(); index++) {
-            add(paths.get(index), type);
         }
     }
 
@@ -81,37 +65,6 @@ public class PickerManager {
 
     public ArrayList<String> getSelectedFiles() {
         return docFiles;
-    }
-
-    public void reset() {
-        docFiles.clear();
-        mediaFiles.clear();
-        fileTypes.clear();
-        maxCount = -1;
-    }
-
-    public int getTheme() {
-        return theme;
-    }
-
-    public void setTheme(int theme) {
-        this.theme = theme;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Orientation getOrientation() {
-        return orientation;
-    }
-
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
     }
 }
 

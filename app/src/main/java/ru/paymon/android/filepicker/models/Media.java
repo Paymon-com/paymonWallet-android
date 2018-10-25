@@ -2,7 +2,7 @@ package ru.paymon.android.filepicker.models;
 
 public class Media extends BaseFile {
 
-    public int mediaType;
+    private int mediaType;
 
     public Media(int id, String name, String path, int mediaType) {
         super(id, name, path);
@@ -25,27 +25,7 @@ public class Media extends BaseFile {
     }
 
     public String getPath() {
-        return (path!=null)?path:"";
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+        return (path != null) ? path : "";
     }
 
     public int getMediaType() {

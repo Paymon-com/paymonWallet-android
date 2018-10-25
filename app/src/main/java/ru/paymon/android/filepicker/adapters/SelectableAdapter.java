@@ -7,14 +7,13 @@ import java.util.List;
 
 import ru.paymon.android.filepicker.models.BaseFile;
 
-public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder, T extends BaseFile>
-        extends RecyclerView.Adapter<VH> implements Selectable<T> {
+public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder, T extends BaseFile> extends RecyclerView.Adapter<VH> implements Selectable<T> {
 
     private List<T> items;
 
-    protected List<T> selectedPhotos;
+    private List<T> selectedPhotos;
 
-    public SelectableAdapter(List<T> items, List<String> selectedPaths) {
+    SelectableAdapter(List<T> items, List<String> selectedPaths) {
         this.items = items;
         selectedPhotos = new ArrayList<>();
 
@@ -39,7 +38,8 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder, T ex
      * @param photo Media of the item to check
      * @return true if the item is selected, false otherwise
      */
-    @Override public boolean isSelected(T photo) {
+    @Override
+    public boolean isSelected(T photo) {
         return selectedPhotos.contains(photo);
     }
 
@@ -48,7 +48,8 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder, T ex
      *
      * @param photo Media of the item to toggle the selection status for
      */
-    @Override public void toggleSelection(T photo) {
+    @Override
+    public void toggleSelection(T photo) {
         if (selectedPhotos.contains(photo)) {
             selectedPhotos.remove(photo);
         } else {
