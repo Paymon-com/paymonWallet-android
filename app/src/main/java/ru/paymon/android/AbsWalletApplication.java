@@ -13,6 +13,7 @@ import org.bitcoinj.wallet.WalletFiles;
 import org.web3j.crypto.Credentials;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 
 import java.io.File;
 import java.math.BigDecimal;
@@ -56,7 +57,7 @@ public abstract class AbsWalletApplication extends Application {
 
 
     public abstract EthSendTransaction sendRawEthereumTx(final @NonNull String recipientAddress, final  @NonNull BigInteger ethAmount, final @NonNull BigInteger gasPrice, final @NonNull BigInteger gasLimit);
-    public abstract EthSendTransaction sendPmntContract(final @NonNull String recipientAddress, final  @NonNull BigInteger pmntAmount, final @NonNull BigInteger gasPrice, final @NonNull BigInteger gasLimit);
+    public abstract TransactionReceipt sendPmntContract(final @NonNull String recipientAddress, final  @NonNull BigInteger pmntAmount, final @NonNull BigInteger gasPrice, final @NonNull BigInteger gasLimit);
     public abstract Transaction sendBitcoinTx(final String destinationAddress, final long satoshis, final long feePerB);
 
 

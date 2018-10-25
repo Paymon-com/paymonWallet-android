@@ -18,6 +18,7 @@ import android.widget.TextView;
 import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
+import ru.paymon.android.adapters.TransactionAdapter;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.money.DialogFragmentBackupWallet;
@@ -29,8 +30,8 @@ import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
 
 public class FragmentBitcoinWallet extends Fragment {
     public static final String BTC_CURRENCY_VALUE = "BTC";
-    //    private BitcoinTransactionAdapter bitcoinTransactionAdapter;
-    private TextView balance;
+    private TransactionAdapter transactionAdapter;
+    private TextView balanceTextView;
     private WalletApplication application;
 
     @Override
@@ -44,6 +45,7 @@ public class FragmentBitcoinWallet extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bitcoin_wallet, container, false);
 
+        balanceTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance);
         ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_deposit_button);
         ImageButton transfer = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_button);
         ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_withdraw_button);
@@ -55,7 +57,6 @@ public class FragmentBitcoinWallet extends Fragment {
         Button publicKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_public_key_button);
         TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
         RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
-        balance = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance);
 
         Bundle bundle = new Bundle();
         bundle.putString(CURRENCY_KEY, BTC_CURRENCY_VALUE);
@@ -111,10 +112,10 @@ public class FragmentBitcoinWallet extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
-        balance.setText(application.getBitcoinBalance().toFriendlyString());
+        balanceTextView.setText(application.getBitcoinBalance().toFriendlyString());
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
         animation.setDuration(700);
-        balance.startAnimation(animation);
+        balanceTextView.startAnimation(animation);
     }
 
     @Override

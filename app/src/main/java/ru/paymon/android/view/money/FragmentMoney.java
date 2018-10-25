@@ -28,7 +28,7 @@ import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
-import ru.paymon.android.gateway.exchangerates.ExchangeRate;
+import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.utils.Utils;
@@ -47,11 +47,11 @@ public class FragmentMoney extends Fragment {
     private RecyclerView exchangeRatesRecView;
     private MoneyViewModel moneyViewModel;
     private ExchangeRatesAdapter exchangeRatesAdapter;
+    private RecyclerView walletsRecView;
     private CryptoWalletsAdapter cryptoWalletsAdapter;
     private LiveData<List<ExchangeRate>> exchangeRatesData;
     private LiveData<ArrayList<WalletItem>> walletsData;
     private LiveData<Boolean> showProgress;
-    private LiveData<BigInteger> ethereumBalanceData;
 
 
     @Override
@@ -59,9 +59,6 @@ public class FragmentMoney extends Fragment {
         super.onCreate(savedInstanceState);
         moneyViewModel = ViewModelProviders.of(getActivity()).get(MoneyViewModel.class);
         showProgress = moneyViewModel.getProgressState();
-        walletsData = moneyViewModel.getWalletsData();
-        exchangeRatesData = moneyViewModel.getExchangeRatesData();
-        ethereumBalanceData = moneyViewModel.getEthereumBalanceData();
     }
 
     @Nullable
@@ -70,9 +67,8 @@ public class FragmentMoney extends Fragment {
         View view = inflater.inflate(R.layout.fragment_money, container, false);
 
         exchangeRatesRecView = (RecyclerView) view.findViewById(R.id.fragment_money_exchange_rates);
-        RecyclerView walletsRecView = (RecyclerView) view.findViewById(R.id.fragment_money_wallets);
+        walletsRecView = (RecyclerView) view.findViewById(R.id.fragment_money_wallets);
         fiatCurrencySpinner = (NumberPicker) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_currency);
-
         TextView updateButton = (TextView) view.findViewById(R.id.fragment_money_update);
 
         dialogProgress = new DialogProgress(getContext());
@@ -90,29 +86,6 @@ public class FragmentMoney extends Fragment {
         fiatCurrencySpinner.setValue(2);
 
         fiatCurrencySpinner.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
-
-        exchangeRatesData.observe(this, (exchangeRatesItems) -> {
-            changeCurrency();
-        });
-
-        walletsData.observe(this, (walletsData) -> {
-            cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, cryptoWalletsListener);
-            walletsRecView.setAdapter(cryptoWalletsAdapter);
-        });
-
-        ethereumBalanceData.observe(getActivity(), (balanceData) -> {
-            ArrayList<WalletItem> walletItems = walletsData.getValue();
-            if (walletItems == null)
-                return;
-            for (WalletItem walletItem : walletItems) {
-                if (walletItem instanceof NonEmptyWalletItem) {
-                    NonEmptyWalletItem wi = (NonEmptyWalletItem) walletItem;
-                    if (wi.cryptoCurrency.equals(ETH_CURRENCY_VALUE)) {
-                        wi.cryptoBalance = Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString();
-                    }
-                }
-            }
-        });
 
         showProgress.observe(getActivity(), (flag) -> {
             if (flag == null) return;
@@ -136,11 +109,24 @@ public class FragmentMoney extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.showBottomBar(getActivity());
+        walletsData = moneyViewModel.getWalletsData();
+        exchangeRatesData = moneyViewModel.getExchangeRatesData();
+
+        exchangeRatesData.observe(this, (exchangeRatesItems) -> {
+            changeCurrency();
+        });
+
+        walletsData.observe(this, (walletsData) -> {
+            cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, cryptoWalletsListener);
+            walletsRecView.setAdapter(cryptoWalletsAdapter);
+        });
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        walletsData.removeObservers(this);
+        exchangeRatesData.removeObservers(this);
     }
 
     private void showProgress() {

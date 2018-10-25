@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import ru.paymon.android.R;
-import ru.paymon.android.gateway.exchangerates.ExchangeRate;
+import ru.paymon.android.models.ExchangeRate;
 
 
 public class ExchangeRatesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
