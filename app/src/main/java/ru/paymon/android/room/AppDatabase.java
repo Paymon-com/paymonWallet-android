@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import ru.paymon.android.gateway.exchangerates.ExchangeRate;
+import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.RPC;
 

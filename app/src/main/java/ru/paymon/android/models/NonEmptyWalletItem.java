@@ -1,11 +1,12 @@
 package ru.paymon.android.models;
 
+import android.util.Log;
+
 import java.math.BigInteger;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.WalletApplication;
-import ru.paymon.android.gateway.exchangerates.ExchangeRate;
 
 import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
 import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;

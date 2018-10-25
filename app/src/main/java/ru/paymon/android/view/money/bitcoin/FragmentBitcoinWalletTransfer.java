@@ -34,7 +34,7 @@ import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.activities.QrCodeScannerActivity;
-import ru.paymon.android.gateway.exchangerates.ExchangeRate;
+import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.utils.Utils;
 
 import static android.app.Activity.RESULT_OK;

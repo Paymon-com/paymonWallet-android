@@ -1,11 +1,14 @@
 package ru.paymon.android.view.money.ethereum;
 
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -24,10 +27,8 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
-import ru.paymon.android.WalletApplication;
-import ru.paymon.android.adapters.EthereumTransactionAdapter;
+import ru.paymon.android.adapters.TransactionAdapter;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
@@ -41,19 +42,17 @@ import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
 public class FragmentEthereumWallet extends Fragment {
     public static final String ETH_CURRENCY_VALUE = "ETH";
     private MoneyViewModel moneyViewModel;
-    private LiveData<BigInteger> ethereumBalanceData;
+    private LiveData<BigInteger> balanceLiveData;
     private LiveData<ArrayList<TransactionItem>> transactionsData;
-    private EthereumTransactionAdapter ethereumTransactionAdapter;
-    private TextView balance;
-    private WalletApplication application;
+    private TransactionAdapter transactionAdapter;
+    private TextView balanceTextView;
+    private TextView historyText;
+    private RecyclerView transactionsRecView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        application = ((WalletApplication) getActivity().getApplication());
         moneyViewModel = ViewModelProviders.of(getActivity()).get(MoneyViewModel.class);
-        ethereumBalanceData = moneyViewModel.getEthereumBalanceData();
-        transactionsData = moneyViewModel.getTranscationsData();
     }
 
     @Nullable
@@ -61,6 +60,7 @@ public class FragmentEthereumWallet extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ethereum_wallet, container, false);
 
+        balanceTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
         ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_deposit_button);
         ImageButton transfer = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_transfer_button);
         ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_withdraw_button);
@@ -70,9 +70,8 @@ public class FragmentEthereumWallet extends Fragment {
 //        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_ethereum_wallet_delete_btn);
         Button privateKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_public_key_button);
-        TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
-        balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
-        RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
+        historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
+        transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
 
         Bundle bundle = new Bundle();
         bundle.putString(CURRENCY_KEY, ETH_CURRENCY_VALUE);
@@ -92,46 +91,33 @@ public class FragmentEthereumWallet extends Fragment {
         transactionsRecView.setHasFixedSize(true);
 
         ItemClickSupport.addTo(transactionsRecView).setOnItemClickListener((recyclerView, position, v) -> {
-//                TransactionItem transactionItem = ethereumTransactionAdapter.transactionItems.get(position);
-//
-//                AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
-//
-//                view = (ConstraintLayout) getLayoutInflater().inflate(R.layout.alert_dialog_custom_transaction_info, null);
-//
-//                TextView hash = (TextView) view.findViewById(R.id.ethereum_transaction_hash_alert);
-//                TextView status = (TextView) view.findViewById(R.id.ethereum_transaction_status_alert);
-//                TextView time = (TextView) view.findViewById(R.id.ethereum_transaction_time_alert);
-//                TextView value = (TextView) view.findViewById(R.id.ethereum_transaction_value_alert);
-//                TextView to = (TextView) view.findViewById(R.id.ethereum_transaction_to_alert);
-//                TextView from = (TextView) view.findViewById(R.id.ethereum_transaction_from_alert);
-//                TextView gasLimit = (TextView) view.findViewById(R.id.ethereum_transaction_gas_limit_alert);
-//                TextView gasUsed = (TextView) view.findViewById(R.id.ethereum_transaction_gas_used_alert);
-//                TextView gasPrice = (TextView) view.findViewById(R.id.ethereum_transaction_gas_price_alert);
-//
-//                hash.setText(transactionItem.hash);
-//                status.setText(transactionItem.status);
-//                time.setText(transactionItem.time);
-//                value.setText(transactionItem.value);
-//                to.setText(transactionItem.to);
-//                from.setText(transactionItem.from);
-//                gasLimit.setText(transactionItem.gasLimit);
-//                gasUsed.setText(transactionItem.gasUsed);
-//                gasPrice.setText(transactionItem.gasPrice);
-//
-//                adb.setView(view).create().show();
-        });
+            TransactionItem transactionItem = transactionAdapter.transactionItems.get(position);
 
-        ethereumBalanceData.observe(getActivity(), (balanceData) -> {
-            if (balanceData != null)
-                balance.setText(String.format("%s ETH", Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString()));
-        });
+            AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
 
-        transactionsData.observe(getActivity(), (transactionItems) -> {
-            ethereumTransactionAdapter = new EthereumTransactionAdapter(transactionItems);
-            transactionsRecView.setAdapter(ethereumTransactionAdapter);
-            if (ethereumTransactionAdapter.transactionItems.size() > 0) {
-                historyText.setVisibility(View.INVISIBLE);
-            }
+            View dialogView = (ConstraintLayout) getLayoutInflater().inflate(R.layout.alert_dialog_custom_transaction_info, null);
+
+            TextView hash = (TextView) dialogView.findViewById(R.id.ethereum_transaction_hash_alert);
+            TextView status = (TextView) dialogView.findViewById(R.id.ethereum_transaction_status_alert);
+            TextView time = (TextView) dialogView.findViewById(R.id.ethereum_transaction_time_alert);
+            TextView value = (TextView) dialogView.findViewById(R.id.ethereum_transaction_value_alert);
+            TextView to = (TextView) dialogView.findViewById(R.id.ethereum_transaction_to_alert);
+            TextView from = (TextView) dialogView.findViewById(R.id.ethereum_transaction_from_alert);
+            TextView gasLimit = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_limit_alert);
+            TextView gasUsed = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_used_alert);
+            TextView gasPrice = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_price_alert);
+
+            hash.setText(transactionItem.hash);
+            status.setText(transactionItem.status);
+            time.setText(transactionItem.time);
+            value.setText(transactionItem.value);
+            to.setText(transactionItem.to);
+            from.setText(transactionItem.from);
+            gasLimit.setText(transactionItem.gasLimit);
+            gasUsed.setText(transactionItem.gasUsed);
+            gasPrice.setText(transactionItem.gasPrice);
+
+            adb.setView(dialogView).create().show();
         });
 
         return view;
@@ -141,20 +127,33 @@ public class FragmentEthereumWallet extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
-        Utils.netQueue.postRunnable(() -> {
-            final String balanceS = Convert.fromWei(new BigDecimal(application.getEthereumBalance()), Convert.Unit.ETHER).toString();
-            ApplicationLoader.applicationHandler.post(() -> {
-                String balanceStr = String.format("%s %s", balanceS, getActivity().getResources().getString(R.string.eth));
-                balance.setText(balanceStr);
-            });
+        balanceLiveData = moneyViewModel.getEthereumBalanceData();
+        transactionsData = moneyViewModel.getEthereumTranscationsData();
+        balanceLiveData.observe(this, value -> {
+            if (value != null) {
+                final String balance = Convert.fromWei(new BigDecimal(value), Convert.Unit.ETHER).toString();
+                balanceTextView.setText(String.format("%s ETH", balance));
+            } else {
+                balanceTextView.setText("0 ETH");
+            }
+        });
+
+        transactionsData.observe(this, (transactionItems) -> {
+            if (transactionItems == null) return;
+            transactionAdapter = new TransactionAdapter(transactionItems);
+            transactionsRecView.setAdapter(transactionAdapter);
+            if (transactionAdapter.transactionItems.size() > 0)
+                historyText.setVisibility(View.INVISIBLE);
         });
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
         animation.setDuration(700);
-        balance.startAnimation(animation);
+        balanceTextView.startAnimation(animation);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        balanceLiveData.removeObservers(this);
+        transactionsData.removeObservers(this);
     }
 }

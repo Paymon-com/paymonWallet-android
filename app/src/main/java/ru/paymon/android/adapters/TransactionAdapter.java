@@ -12,10 +12,10 @@ import java.util.ArrayList;
 import ru.paymon.android.R;
 import ru.paymon.android.models.TransactionItem;
 
-public class EthereumTransactionAdapter extends RecyclerView.Adapter<EthereumTransactionAdapter.ViewHolder> {
+public class TransactionAdapter extends RecyclerView.Adapter<TransactionAdapter.ViewHolder> {
     public ArrayList<TransactionItem> transactionItems;
 
-    public EthereumTransactionAdapter(ArrayList<TransactionItem> transactionItems){
+    public TransactionAdapter(ArrayList<TransactionItem> transactionItems){
         this.transactionItems = transactionItems;
     }
 

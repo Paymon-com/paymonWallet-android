@@ -22,6 +22,7 @@ import org.bitcoinj.wallet.SendRequest;
 import org.bitcoinj.wallet.Wallet;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
+import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.crypto.WalletUtils;
@@ -29,8 +30,14 @@ import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
+import org.web3j.tx.ChainId;
+import org.web3j.tx.Contract;
 import org.web3j.tx.RawTransactionManager;
+import org.web3j.tx.TransactionManager;
+import org.web3j.tx.response.NoOpProcessor;
+import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
@@ -50,6 +57,7 @@ import java.util.List;
 import java.util.concurrent.Executors;
 
 import ru.paymon.android.models.EthereumWallet;
+import ru.paymon.android.models.PaymonTokenContract;
 import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.utils.Constants;
 import ru.paymon.android.utils.Utils;
@@ -88,7 +96,7 @@ public class WalletApplication extends AbsWalletApplication {
         ethereumWeb3j = Web3jFactory.build(new HttpService(INFURA_LINK));
         ethereumRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        paymonmWeb3j = Web3jFactory.build(new HttpService(INFURA_LINK));
+        paymonmWeb3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP"));
         paymonRequestQueue = Volley.newRequestQueue(getApplicationContext());
     }
 
@@ -274,8 +282,10 @@ public class WalletApplication extends AbsWalletApplication {
         return new File(FILE_PATH).delete();
     }
 
-    public static String convertEthereumToFiat(final BigInteger ethAmount, final String fiatExRate) {
-        return Convert.fromWei(new BigDecimal(ethAmount), Convert.Unit.ETHER).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
+    public static String convertEthereumToFiat(final BigInteger weiAmount, final String fiatExRate) {
+        BigDecimal bigDecimalEthAmount = Convert.fromWei(new BigDecimal(weiAmount), Convert.Unit.ETHER);
+        BigDecimal bigDecimalExRate = new BigDecimal(fiatExRate);
+        return bigDecimalEthAmount.multiply(bigDecimalExRate).setScale(2, ROUND_HALF_UP).toString();
     }
 
     public static String convertEthereumToFiat(final String ethAmount, final String fiatExRate) {
@@ -285,7 +295,7 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public boolean backupPaymonWallet(final String path) {
         final String BACKUP_FILE_PATH = path + "/" + "paymon-pmnt-wallet_backup_" + System.currentTimeMillis() + ".json";
-        File walletFile = new File(ethereumWalletPath);
+        File walletFile = new File(paymonWalletPath);
         File backupFile = new File(BACKUP_FILE_PATH);
 
         if (!Utils.copyFile(walletFile, backupFile)) {
@@ -298,9 +308,12 @@ public class WalletApplication extends AbsWalletApplication {
 
     @Override
     public BigInteger getPaymonBalance() {
+        TransactionReceiptProcessor transactionReceiptProcessor = new NoOpProcessor(paymonmWeb3j);
+        TransactionManager transactionManager = new RawTransactionManager(paymonmWeb3j, paymonWalletCredentials, ChainId.MAINNET, transactionReceiptProcessor);
+        PaymonTokenContract paymonTokenContract = PaymonTokenContract.load("0x81b4d08645da11374a03749ab170836e4e539767", paymonmWeb3j, transactionManager, new BigInteger("0"), new BigInteger("0"));
         BigInteger balance = null;
         try {
-            balance = ethereumWeb3j.ethGetBalance(ethereumWalletCredentials.getAddress(), DefaultBlockParameterName.fromString("latest")).send().getBalance();
+            balance = paymonTokenContract.balanceOf(getPaymonWallet().publicAddress).sendAsync().get();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -309,7 +322,7 @@ public class WalletApplication extends AbsWalletApplication {
 
     @Override
     public boolean deletePaymonWallet() {
-        final String FILE_PATH = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-eth-wallet.json";
+        final String FILE_PATH = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-pmnt-wallet.json";
         return new File(FILE_PATH).delete();
     }
 
@@ -430,25 +443,19 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    public EthSendTransaction sendPmntContract(@NonNull String recipientAddress, @NonNull BigInteger pmntAmount, @NonNull BigInteger gasPrice, @NonNull BigInteger gasLimit) {
-//        final RawTransactionManager manager = new RawTransactionManager(paymonmWeb3j, paymonWalletCredentials);
-//        final String contractAddress = "0x81b4d08645da11374a03749ab170836e4e539767";
-//        String data = encodeTransferData(toAddress, sum);
-//        EthSendTransaction transaction = manager.sendTransaction(gasPrice, gasLimit, contractAddress, data, null);
-
-//        EthSendTransaction ethSendTransaction = null;
-//        try {
-//            BigInteger nonce = ethereumWeb3j.ethGetTransactionCount(ethereumWalletCredentials.getAddress(), DefaultBlockParameterName.LATEST).send().getTransactionCount();
-//            RawTransaction rawTransaction = RawTransaction.createContractTransaction(nonce, gasPrice, gasLimit, recipientAddress, pmntAmount);
-//            byte[] signedMessage = TransactionEncoder.signMessage(rawTransaction, ethereumWalletCredentials);
-//            String hexValue = Numeric.toHexString(signedMessage);
-//            ethSendTransaction = ethereumWeb3j.ethSendRawTransaction(hexValue).send();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-
-//        return ethSendTransaction;
-        return null;
+    public TransactionReceipt sendPmntContract(@NonNull String recipientAddress, @NonNull BigInteger pmntAmount, @NonNull BigInteger gasPrice, @NonNull BigInteger gasLimit) {
+        TransactionReceiptProcessor transactionReceiptProcessor = new NoOpProcessor(paymonmWeb3j);
+        TransactionManager transactionManager = new RawTransactionManager(paymonmWeb3j, paymonWalletCredentials, ChainId.ROPSTEN, transactionReceiptProcessor);
+        PaymonTokenContract paymonTokenContract = PaymonTokenContract.load("0x81b4d08645da11374a03749ab170836e4e539767", paymonmWeb3j, transactionManager, gasPrice, gasLimit);
+        TransactionReceipt transactionReceipt = null;
+        try {
+            transactionReceipt = paymonTokenContract.transfer(recipientAddress, pmntAmount).sendAsync().get();
+            String sTransHash = transactionReceipt.getTransactionHash();
+            System.out.println("toAccount: " + recipientAddress + " coinAmount: " + pmntAmount + " transactionhash: " + sTransHash);
+        } catch (Exception e) {
+            System.out.println("PMNT Exception " + e.getMessage());
+        }
+        return transactionReceipt;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package ru.paymon.android.gateway.exchangerates;
+package ru.paymon.android.models;
 
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
