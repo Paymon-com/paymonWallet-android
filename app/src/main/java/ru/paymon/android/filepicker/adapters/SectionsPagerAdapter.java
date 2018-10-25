@@ -11,6 +11,7 @@ public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
     private final List<Fragment> mFragmentList = new ArrayList<>();
     private final List<String> mFragmentTitles = new ArrayList<>();
+
     public SectionsPagerAdapter(FragmentManager fm) {
         super(fm);
     }

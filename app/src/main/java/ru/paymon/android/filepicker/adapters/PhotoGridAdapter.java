@@ -17,12 +17,12 @@ import java.io.File;
 import java.util.ArrayList;
 
 import ru.paymon.android.R;
+import ru.paymon.android.components.SmoothCheckBox;
+import ru.paymon.android.filepicker.PickerManager;
 import ru.paymon.android.filepicker.models.BaseFile;
 import ru.paymon.android.filepicker.models.Media;
 import ru.paymon.android.filepicker.utils.AndroidLifecycleUtils;
 import ru.paymon.android.filepicker.utils.FilePickerConst;
-import ru.paymon.android.filepicker.PickerManager;
-import ru.paymon.android.filepicker.SmoothCheckBox;
 
 public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoViewHolder, BaseFile> {
 
@@ -31,15 +31,15 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     private final boolean showCamera;
     private int imageSize;
 
-    public final static int ITEM_TYPE_CAMERA = 100;
-    public final static int ITEM_TYPE_PHOTO  = 101;
+    private final static int ITEM_TYPE_CAMERA = 100;
+    private final static int ITEM_TYPE_PHOTO = 101;
 
     public PhotoGridAdapter(Context context, RequestManager requestManager, ArrayList<BaseFile> medias, ArrayList<String> selectedPaths, boolean showCamera) {
         super(medias, selectedPaths);
         this.context = context;
         this.glide = requestManager;
         this.showCamera = showCamera;
-        setColumnNumber(context,3);
+        setColumnNumber(context);
     }
 
     @NonNull
@@ -52,11 +52,11 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
     @Override
     public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
-        if(getItemViewType(position) == ITEM_TYPE_PHOTO) {
+        if (getItemViewType(position) == ITEM_TYPE_PHOTO) {
 
-            final Media media = (Media) getItems().get(showCamera?position-1:position);
+            final Media media = (Media) getItems().get(showCamera ? position - 1 : position);
 
-            if(AndroidLifecycleUtils.canLoadImage(holder.imageView.getContext())) {
+            if (AndroidLifecycleUtils.canLoadImage(holder.imageView.getContext())) {
                 glide.load(new File(media.getPath()))
                         .apply(RequestOptions
                                 .centerCropTransform()
@@ -67,16 +67,16 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             }
 
 
-            if(media.getMediaType()==FilePickerConst.MEDIA_TYPE_VIDEO)
+            if (media.getMediaType() == FilePickerConst.MEDIA_TYPE_VIDEO)
                 holder.videoIcon.setVisibility(View.VISIBLE);
             else
                 holder.videoIcon.setVisibility(View.GONE);
 
-            holder.itemView.setOnClickListener(v -> onItemClicked(holder,media));
+            holder.itemView.setOnClickListener(v -> onItemClicked(holder));
 
             holder.checkBox.setVisibility(View.GONE);
             holder.checkBox.setOnCheckedChangeListener(null);
-            holder.checkBox.setOnClickListener(view -> onItemClicked(holder,media));
+            holder.checkBox.setOnClickListener(view -> onItemClicked(holder));
 
             holder.checkBox.setChecked(isSelected(media));
 
@@ -87,27 +87,22 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
                 toggleSelection(media);
                 holder.selectBg.setVisibility(isChecked ? View.VISIBLE : View.GONE);
 
-                if (isChecked)
-                {
+                if (isChecked) {
                     holder.checkBox.setVisibility(View.VISIBLE);
                     PickerManager.getInstance().add(media.getPath(), FilePickerConst.FILE_TYPE_MEDIA);
-                }
-                else
-                {
+                } else {
                     holder.checkBox.setVisibility(View.GONE);
-                    PickerManager.getInstance().remove(media.getPath(),FilePickerConst.FILE_TYPE_MEDIA);
+                    PickerManager.getInstance().remove(media.getPath(), FilePickerConst.FILE_TYPE_MEDIA);
                 }
             });
 
-        }
-        else
-        {
+        } else {
             holder.checkBox.setVisibility(View.GONE);
             holder.videoIcon.setVisibility(View.GONE);
         }
     }
 
-    private void onItemClicked(PhotoViewHolder holder, Media media) {
+    private void onItemClicked(PhotoViewHolder holder) {
         if (holder.checkBox.isChecked() || PickerManager.getInstance().shouldAdd()) {
             holder.checkBox.setChecked(!holder.checkBox.isChecked(), true);
         }
@@ -115,7 +110,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
     @Override
     public int getItemViewType(int position) {
-        if(showCamera)
+        if (showCamera)
             return (position == 0) ? ITEM_TYPE_CAMERA : ITEM_TYPE_PHOTO;
         else
             return ITEM_TYPE_PHOTO;
@@ -123,17 +118,17 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
 
     @Override
     public int getItemCount() {
-        if(showCamera)
-            return getItems().size()+1;
+        if (showCamera)
+            return getItems().size() + 1;
         return getItems().size();
     }
 
-    private void setColumnNumber(Context context, int columnNum) {
+    private void setColumnNumber(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         wm.getDefaultDisplay().getMetrics(metrics);
         int widthPixels = metrics.widthPixels;
-        imageSize = widthPixels / columnNum;
+        imageSize = widthPixels / 3;
     }
 
     public class PhotoViewHolder extends RecyclerView.ViewHolder {

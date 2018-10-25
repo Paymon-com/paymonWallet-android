@@ -10,14 +10,16 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.paymon.android.R;
+import ru.paymon.android.components.SmoothCheckBox;
+import ru.paymon.android.filepicker.PickerManager;
 import ru.paymon.android.filepicker.models.Document;
 import ru.paymon.android.filepicker.utils.FilePickerConst;
-import ru.paymon.android.filepicker.PickerManager;
-import ru.paymon.android.filepicker.SmoothCheckBox;
 
 /**
  * Created by droidNinja on 29/07/16.
@@ -37,13 +39,16 @@ public class FileListAdapter extends SelectableAdapter<FileListAdapter.FileViewH
         this.mListener = fileAdapterListener;
     }
 
-    @Override public FileViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    @NotNull
+    @Override
+    public FileViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(context).inflate(R.layout.item_doc_layout, parent, false);
 
         return new FileViewHolder(itemView);
     }
 
-    @Override public void onBindViewHolder(final FileViewHolder holder, int position) {
+    @Override
+    public void onBindViewHolder(@NotNull final FileViewHolder holder, int position) {
         final Document document = mFilteredList.get(position);
 
         holder.fileNameTextView.setText(document.getTitle());
@@ -83,13 +88,16 @@ public class FileListAdapter extends SelectableAdapter<FileListAdapter.FileViewH
         if (mListener != null) mListener.onItemSelected();
     }
 
-    @Override public int getItemCount() {
+    @Override
+    public int getItemCount() {
         return mFilteredList.size();
     }
 
-    @Override public Filter getFilter() {
+    @Override
+    public Filter getFilter() {
         return new Filter() {
-            @Override protected FilterResults performFiltering(CharSequence charSequence) {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
 
                 String charString = charSequence.toString();
 
@@ -125,23 +133,15 @@ public class FileListAdapter extends SelectableAdapter<FileListAdapter.FileViewH
     }
 
     public static class FileViewHolder extends RecyclerView.ViewHolder {
-        TextView fileTypeTv;
-
         SmoothCheckBox checkBox;
-
         ImageView imageView;
-
         TextView fileNameTextView;
-
-        TextView fileSizeTextView;
 
         public FileViewHolder(View itemView) {
             super(itemView);
             checkBox = itemView.findViewById(R.id.checkbox);
             imageView = itemView.findViewById(R.id.file_iv);
             fileNameTextView = itemView.findViewById(R.id.file_name_tv);
-            fileTypeTv = itemView.findViewById(R.id.file_type_tv);
-            fileSizeTextView = itemView.findViewById(R.id.file_size_tv);
         }
     }
 }

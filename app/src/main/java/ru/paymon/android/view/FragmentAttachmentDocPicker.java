@@ -79,7 +79,6 @@ public class FragmentAttachmentDocPicker extends Fragment {
     }
 
 
-
     public static FragmentAttachmentDocPicker newInstance() {
         FragmentAttachmentDocPicker fragmentAttachmentDocPicker = new FragmentAttachmentDocPicker();
         return fragmentAttachmentDocPicker;

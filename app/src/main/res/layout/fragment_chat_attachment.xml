@@ -31,16 +31,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_document_attach" />
 
-    <ImageButton
-        android:id="@+id/video_chat_attachment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:src="@drawable/ic_video_attach"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/image_chat_attachment"
-        app:layout_constraintTop_toTopOf="parent" />
-
 </LinearLayout>

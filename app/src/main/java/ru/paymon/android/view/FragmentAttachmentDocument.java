@@ -31,29 +31,33 @@ public class FragmentAttachmentDocument extends FragmentAttachmentDocPicker impl
     }
 
 
-    @Override public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_attachment_document_picker, container, false);
     }
 
-    @Override public void onDetach() {
+    @Override
+    public void onDetach() {
         super.onDetach();
     }
 
-    @Override public void onCreate(@Nullable Bundle savedInstanceState) {
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
     }
-
 
 
     public String getFileType() {
         return getArguments().getString("FILE_TYPE");
     }
 
-    @Override public void onItemSelected() {
+    @Override
+    public void onItemSelected() {
     }
 
-    @Override public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
     }
@@ -74,7 +78,8 @@ public class FragmentAttachmentDocument extends FragmentAttachmentDocPicker impl
 
             FileListAdapter fileListAdapter = (FileListAdapter) recyclerView.getAdapter();
             if (fileListAdapter == null) {
-                fileListAdapter = new FileListAdapter(getActivity(), documents, PickerManager.getInstance().getSelectedFiles(),this);
+                fileListAdapter = new FileListAdapter(getActivity(), documents, PickerManager.getInstance().getSelectedFiles(), this);
+
                 recyclerView.setAdapter(fileListAdapter);
             } else {
                 fileListAdapter.setData(documents);

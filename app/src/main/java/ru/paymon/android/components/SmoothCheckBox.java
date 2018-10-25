@@ -1,4 +1,4 @@
-package ru.paymon.android.filepicker;
+package ru.paymon.android.components;
 
 import android.animation.ValueAnimator;
 import android.annotation.TargetApi;
