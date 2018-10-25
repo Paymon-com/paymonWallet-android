@@ -20,9 +20,11 @@ import android.widget.TextView;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.adapters.EthereumTransactionAdapter;
@@ -39,7 +41,7 @@ import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
 public class FragmentEthereumWallet extends Fragment {
     public static final String ETH_CURRENCY_VALUE = "ETH";
     private MoneyViewModel moneyViewModel;
-    private LiveData<String> ethereumBalanceData;
+    private LiveData<BigInteger> ethereumBalanceData;
     private LiveData<ArrayList<TransactionItem>> transactionsData;
     private EthereumTransactionAdapter ethereumTransactionAdapter;
     private TextView balance;
@@ -69,7 +71,7 @@ public class FragmentEthereumWallet extends Fragment {
         Button privateKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_ethereum_wallet_public_key_button);
         TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
-        TextView balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
+        balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
         RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
 
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
@@ -82,7 +84,7 @@ public class FragmentEthereumWallet extends Fragment {
 //        backupBtn.setOnClickListener(v -> ((WalletApplication) getActivity().getApplication()).backupEthereumWallet());//TODO: вызов вьюшки с выбором места куда бэкапить
 //        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));
-        transfer.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWalletTransfer));
+        transfer.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentEthereumWalletTransfer));
 //        withdraw.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumWidthdraw.newInstance(), null));
         privateKey.setOnClickListener(view1 -> new DialogFragmentPrivateKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
         publicKey.setOnClickListener(view1 -> new DialogFragmentPublicKey().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
@@ -121,7 +123,10 @@ public class FragmentEthereumWallet extends Fragment {
 //                adb.setView(view).create().show();
         });
 
-        ethereumBalanceData.observe(getActivity(), (balanceData) -> balance.setText(balanceData));
+        ethereumBalanceData.observe(getActivity(), (balanceData) -> {
+            if (balanceData != null)
+                balance.setText(String.format("%s ETH", Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString()));
+        });
 
         transactionsData.observe(getActivity(), (transactionItems) -> {
             ethereumTransactionAdapter = new EthereumTransactionAdapter(transactionItems);
@@ -138,8 +143,13 @@ public class FragmentEthereumWallet extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
-        String balanceStr = String.format("%s %s", Convert.fromWei(new BigDecimal(application.getEthereumBalance()), Convert.Unit.GWEI).toString(), getActivity().getResources().getString(R.string.eth));
-        balance.setText(balanceStr);
+        Utils.netQueue.postRunnable(() -> {
+            final String balanceS = Convert.fromWei(new BigDecimal(application.getEthereumBalance()), Convert.Unit.ETHER).toString();
+            ApplicationLoader.applicationHandler.post(() -> {
+                String balanceStr = String.format("%s %s", balanceS, getActivity().getResources().getString(R.string.eth));
+                balance.setText(balanceStr);
+            });
+        });
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
         animation.setDuration(700);
         balance.startAnimation(animation);

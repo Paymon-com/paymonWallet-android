@@ -13,7 +13,6 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.os.StrictMode;
 
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -112,23 +111,23 @@ public class ApplicationLoader extends WalletApplication {
 //        });
     }
 
-    private static StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
-
-    public static void initStrictMode() {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskReads()
-                .detectNetwork()
-                .detectAll()
-                .penaltyLog()
-                .penaltyDeath()
-                .build();
-        StrictMode.setThreadPolicy(policy);
-    }
-
-    public static void setOldStrictMode() {
-        StrictMode.setThreadPolicy(old);
-    }
+//    private static StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
+//
+//    public static void initStrictMode() {
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//                .detectDiskReads()
+//                .detectDiskReads()
+//                .detectNetwork()
+//                .detectAll()
+//                .penaltyLog()
+//                .penaltyDeath()
+//                .build();
+//        StrictMode.setThreadPolicy(policy);
+//    }
+//
+//    public static void setOldStrictMode() {
+//        StrictMode.setThreadPolicy(old);
+//    }
 
 //    private void initBtcBlockchaine(String[] args) {
 //        BriefLogFormatter.init();

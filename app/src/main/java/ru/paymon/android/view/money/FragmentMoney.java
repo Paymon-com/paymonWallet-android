@@ -15,6 +15,10 @@ import android.widget.TextView;
 
 import com.shawnlin.numberpicker.NumberPicker;
 
+import org.web3j.utils.Convert;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +51,7 @@ public class FragmentMoney extends Fragment {
     private LiveData<List<ExchangeRate>> exchangeRatesData;
     private LiveData<ArrayList<WalletItem>> walletsData;
     private LiveData<Boolean> showProgress;
-    private LiveData<String> ethereumBalanceData;
+    private LiveData<BigInteger> ethereumBalanceData;
 
 
     @Override
@@ -104,7 +108,7 @@ public class FragmentMoney extends Fragment {
                 if (walletItem instanceof NonEmptyWalletItem) {
                     NonEmptyWalletItem wi = (NonEmptyWalletItem) walletItem;
                     if (wi.cryptoCurrency.equals(ETH_CURRENCY_VALUE)) {
-                        wi.cryptoBalance = balanceData;
+                        wi.cryptoBalance = Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString();
                     }
                 }
             }

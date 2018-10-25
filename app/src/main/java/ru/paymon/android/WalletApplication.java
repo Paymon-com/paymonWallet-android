@@ -68,7 +68,7 @@ public class WalletApplication extends AbsWalletApplication {
 //    private final WalletListener walletListener = new WalletListener();
     private Configuration config;
     private PackageInfo packageInfo;
-    public static final String ACTION_WALLET_REFERENCE_CHANGED = WalletApplication.class.getPackage().getName() + ".wallet_reference_changed";
+//    public static final String ACTION_WALLET_REFERENCE_CHANGED = WalletApplication.class.getPackage().getName() + ".wallet_reference_changed";
     private static final boolean IS_TEST = true;
     private static final String INFURA_LINK = IS_TEST ? "https://ropsten.infura.io/BAWTZQzsbBDZG6g9D0IP" : "https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP";
     //    private Wallet bitcoinWallet;
@@ -122,12 +122,12 @@ public class WalletApplication extends AbsWalletApplication {
         kit.wallet().addCoinsReceivedEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
             Log.e("AAA", "-----> coins resceived: " + tx.getHashAsString());
             Log.e("AAA", "received: " + tx.getValue(wallet));
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, newBalance.toPlainString());
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, kit.wallet().getBalance().toPlainString());
         });
 
         kit.wallet().addCoinsSentEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
             Log.e("AAA", "coins sent");
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, newBalance.toPlainString());
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, kit.wallet().getBalance().toPlainString());
         });
 
         kit.wallet().addKeyChainEventListener((List<ECKey> keys) -> {
@@ -319,7 +319,11 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     public static String convertEthereumToFiat(final BigInteger ethAmount, final String fiatExRate) {
-        return Convert.fromWei(new BigDecimal(ethAmount), Convert.Unit.GWEI).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
+        return Convert.fromWei(new BigDecimal(ethAmount), Convert.Unit.ETHER).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
+    }
+
+    public static String convertEthereumToFiat(final String ethAmount, final String fiatExRate) {
+        return new BigDecimal(Double.parseDouble(ethAmount) * Double.parseDouble(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
     @Override
