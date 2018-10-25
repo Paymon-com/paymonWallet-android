@@ -22,15 +22,9 @@ import ru.paymon.android.filepicker.models.Document;
 import ru.paymon.android.filepicker.MediaStoreHelper;
 
 public class FragmentAttachmentDocPicker extends Fragment {
-
-    private TabLayout tabLayout;
     private ViewPager viewPager;
-    private DocPickerFragmentListener mListener;
 
     public FragmentAttachmentDocPicker() {
-    }
-
-    public interface DocPickerFragmentListener {
     }
 
     @Override
@@ -44,11 +38,10 @@ public class FragmentAttachmentDocPicker extends Fragment {
         View view = inflater.inflate(R.layout.fragment_attachment_document, container, false);
 
         viewPager = view.findViewById(R.id.attachment_view_pager);
-        tabLayout = view.findViewById(R.id.tabs);
+        TabLayout tabLayout = view.findViewById(R.id.tabs);
 
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-
         tabLayout.setupWithViewPager(viewPager);
 
         SectionsPagerAdapter adapter = new SectionsPagerAdapter(getChildFragmentManager());
@@ -95,7 +88,6 @@ public class FragmentAttachmentDocPicker extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     private void setDataOnFragments(Map<String, List<Document>> filesMap) {

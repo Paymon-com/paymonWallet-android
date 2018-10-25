@@ -11,20 +11,16 @@
         android:label="fragment_attachment_image"
         tools:layout="@layout/fragment_attachment_image" >
         <action
-            android:id="@+id/action_fragmentImage_to_fragmentDocument"
-            app:destination="@id/fragmentDocument" />
-        <action
             android:id="@+id/action_fragmentImage_to_fragmentDocument2"
             app:destination="@id/fragmentDocPicker" />
     </fragment>
     <fragment
-        android:id="@+id/fragmentDocument"
-        android:name="ru.paymon.android.view.FragmentAttachmentDocument"
-        android:label="fragment_attachment_document"
-        tools:layout="@layout/fragment_attachment_document" />
-    <fragment
         android:id="@+id/fragmentDocPicker"
         android:name="ru.paymon.android.view.FragmentAttachmentDocPicker"
         android:label="fragment_attachment_document_picker"
-        tools:layout="@layout/fragment_attachment_document" />
+        tools:layout="@layout/fragment_attachment_document" >
+        <action
+            android:id="@+id/action_fragmentDocPicker_to_fragmentImage"
+            app:destination="@id/fragmentImage" />
+    </fragment>
 </navigation>

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import androidx.navigation.Navigation;
 import androidx.recyclerview.selection.SelectionTracker;
@@ -85,7 +87,7 @@ public abstract class AbsFragmentChat extends Fragment {
 
         buttonAttachment.setOnClickListener(v -> {
             FragmentSheetDialog fragmentSheetDialog = new FragmentSheetDialog();
-            fragmentSheetDialog.show(getActivity().getSupportFragmentManager(), null);
+            fragmentSheetDialog.show(getChildFragmentManager(), null);
         });
 
         final Bundle bundle = new Bundle();
@@ -128,32 +130,6 @@ public abstract class AbsFragmentChat extends Fragment {
         toolbarContainer.addView(toolbarView);
         toolbarContainer.addView(toolbarViewSelected);
         backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
-
-        messagesRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                LinearLayoutManager llm = (LinearLayoutManager) recyclerView.getLayoutManager();
-//                if(llm == null) return;
-//                if(llm.findFirstVisibleItemPosition() == 0){
-//                    if (User.currentUser == null || chatID == 0) return;
-//
-//                    RPC.PM_getChatMessages packet = new RPC.PM_getChatMessages();
-//
-//                    packet.chatID = AbsFragmentChat.this instanceof FragmentChat ? new RPC.PM_peerUser(chatID) : new RPC.PM_peerGroup(chatID);
-//                    packet.offset = 0;
-//                    packet.count = 15;
-//
-//                    NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
-//                        if (response == null) return;
-//                        final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
-//                        if (receivedMessages.messages.size() == 0) return;
-//                        MessagesManager.getInstance().putMessages(receivedMessages.messages);
-////            ApplicationLoader.db.chatMessageDao().insertList(receivedMessages.messages);
-//                    });
-//                }
-            }
-        });
 
         final EmojiPopup emojiPopup = EmojiPopup.Builder.fromRootView(emoticonsButton).build(messageInput);
         emoticonsButton.setOnClickListener((view1) -> emojiPopup.toggle());
