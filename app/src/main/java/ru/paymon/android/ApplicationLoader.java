@@ -13,7 +13,6 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
-import android.os.StrictMode;
 
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
@@ -23,7 +22,6 @@ import com.vanniktech.rxpermission.RxPermission;
 
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.emoji.CustomEmojiProvider;
-import ru.paymon.android.gateway.bitcoin.service.BlockchainService;
 import ru.paymon.android.net.ConnectorService;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.room.AppDatabase;
@@ -81,7 +79,7 @@ public class ApplicationLoader extends WalletApplication {
         startService(new Intent(applicationContext, ConnectorService.class));
         NetworkManager.getInstance().bindServices();
 
-        BlockchainService.start(this, true);
+//        BlockchainService.start(this, true);
 //
 //        rxPermission
 //                .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -113,23 +111,23 @@ public class ApplicationLoader extends WalletApplication {
 //        });
     }
 
-    private static StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
-
-    public static void initStrictMode() {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-                .detectDiskReads()
-                .detectDiskReads()
-                .detectNetwork()
-                .detectAll()
-                .penaltyLog()
-                .penaltyDeath()
-                .build();
-        StrictMode.setThreadPolicy(policy);
-    }
-
-    public static void setOldStrictMode() {
-        StrictMode.setThreadPolicy(old);
-    }
+//    private static StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
+//
+//    public static void initStrictMode() {
+//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+//                .detectDiskReads()
+//                .detectDiskReads()
+//                .detectNetwork()
+//                .detectAll()
+//                .penaltyLog()
+//                .penaltyDeath()
+//                .build();
+//        StrictMode.setThreadPolicy(policy);
+//    }
+//
+//    public static void setOldStrictMode() {
+//        StrictMode.setThreadPolicy(old);
+//    }
 
 //    private void initBtcBlockchaine(String[] args) {
 //        BriefLogFormatter.init();

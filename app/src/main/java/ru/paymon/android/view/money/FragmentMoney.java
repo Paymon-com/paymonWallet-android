@@ -11,19 +11,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.shawnlin.numberpicker.NumberPicker;
+
+import org.web3j.utils.Convert;
+
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Currency;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Locale;
 
 import androidx.navigation.Navigation;
+import ru.paymon.android.Config;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
@@ -43,7 +43,7 @@ public class FragmentMoney extends Fragment {
     public static final String CURRENCY_KEY = "CURRENCY_KEY";
 
     private DialogProgress dialogProgress;
-    private Spinner fiatCurrencySpinner;
+    private NumberPicker fiatCurrencySpinner;
     private RecyclerView exchangeRatesRecView;
     private MoneyViewModel moneyViewModel;
     private ExchangeRatesAdapter exchangeRatesAdapter;
@@ -51,7 +51,7 @@ public class FragmentMoney extends Fragment {
     private LiveData<List<ExchangeRate>> exchangeRatesData;
     private LiveData<ArrayList<WalletItem>> walletsData;
     private LiveData<Boolean> showProgress;
-    private LiveData<String> ethereumBalanceData;
+    private LiveData<BigInteger> ethereumBalanceData;
 
 
     @Override
@@ -71,7 +71,8 @@ public class FragmentMoney extends Fragment {
 
         exchangeRatesRecView = (RecyclerView) view.findViewById(R.id.fragment_money_exchange_rates);
         RecyclerView walletsRecView = (RecyclerView) view.findViewById(R.id.fragment_money_wallets);
-        fiatCurrencySpinner = (Spinner) view.findViewById(R.id.fragment_money_spinner);
+        fiatCurrencySpinner = (NumberPicker) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_currency);
+
         TextView updateButton = (TextView) view.findViewById(R.id.fragment_money_update);
 
         dialogProgress = new DialogProgress(getContext());
@@ -83,16 +84,12 @@ public class FragmentMoney extends Fragment {
         walletsRecView.setHasFixedSize(true);
         walletsRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        String localCurrency = Currency.getInstance(Locale.getDefault()).getCurrencyCode().toUpperCase();
-        List<String> currencies = new LinkedList<>();
-        currencies.addAll(Arrays.asList(new String[]{"USD", "EUR", "RUB"}));
-        if (!currencies.contains(localCurrency))
-            currencies.add(localCurrency);
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, currencies);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        fiatCurrencySpinner.setMinValue(1);
+        fiatCurrencySpinner.setMaxValue(Config.fiatCurrencies.length);
+        fiatCurrencySpinner.setDisplayedValues(Config.fiatCurrencies);
+        fiatCurrencySpinner.setValue(2);
 
-        fiatCurrencySpinner.setAdapter(adapter);
-        fiatCurrencySpinner.setSelection(0);
+        fiatCurrencySpinner.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
 
         exchangeRatesData.observe(this, (exchangeRatesItems) -> {
             changeCurrency();
@@ -111,7 +108,7 @@ public class FragmentMoney extends Fragment {
                 if (walletItem instanceof NonEmptyWalletItem) {
                     NonEmptyWalletItem wi = (NonEmptyWalletItem) walletItem;
                     if (wi.cryptoCurrency.equals(ETH_CURRENCY_VALUE)) {
-                        wi.cryptoBalance = balanceData;
+                        wi.cryptoBalance = Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString();
                     }
                 }
             }
@@ -131,21 +128,6 @@ public class FragmentMoney extends Fragment {
                 moneyViewModel.getExchangeRatesData();
             }
         });
-
-//        moneyViewModel.getBlockchainState().observe(this, new Observer<BlockchainState>() {
-//            @Override
-//            public void onChanged(final BlockchainState blockchainState) {
-////                updateView();
-//            }
-//        });
-//        moneyViewModel.getBalance().observe(this, new Observer<Coin>() {
-//            @Override
-//            public void onChanged(final Coin balance) {
-//                Log.e("AAA", "balance " + balance);
-//            }
-//        });
-
-        fiatCurrencySpinner.setOnItemSelectedListener(fiatCurrencyListener);
 
         return view;
     }
@@ -170,11 +152,11 @@ public class FragmentMoney extends Fragment {
     }
 
     private void changeCurrency() {
-        moneyViewModel.fiatCurrency = fiatCurrencySpinner.getSelectedItem().toString();
+        String currentCurrency = fiatCurrencySpinner.getDisplayedValues()[fiatCurrencySpinner.getValue() - 1];
+        moneyViewModel.fiatCurrency = currentCurrency;
         List<ExchangeRate> exchangeRates = exchangeRatesData.getValue();
         if (exchangeRates == null || exchangeRates.size() <= 0)
             return;
-        String currentCurrency = fiatCurrencySpinner.getSelectedItem().toString();
         List<ExchangeRate> exRatesItems = new ArrayList<>();
         for (ExchangeRate exchangeRateItem : exchangeRates) {
             if (exchangeRateItem.fiatCurrency.equals(currentCurrency)) {
@@ -212,15 +194,4 @@ public class FragmentMoney extends Fragment {
         }
     };
 
-    AdapterView.OnItemSelectedListener fiatCurrencyListener = new AdapterView.OnItemSelectedListener() {
-        @Override
-        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-            changeCurrency();
-        }
-
-        @Override
-        public void onNothingSelected(AdapterView<?> adapterView) {
-
-        }
-    };
 }

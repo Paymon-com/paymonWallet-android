@@ -50,7 +50,7 @@ public class NonEmptyWalletItem extends WalletItem implements NotificationManage
                     fiatBalance = WalletApplication.convertBitcoinToFiat(cryptoBalance, exchangeRate.value);
                     break;
                 case ETH_CURRENCY_VALUE:
-                    fiatBalance = WalletApplication.convertEthereumToFiat(new BigInteger(cryptoBalance), exchangeRate.value);
+                    fiatBalance = WalletApplication.convertEthereumToFiat(cryptoBalance, exchangeRate.value);
                     break;
                 case PMNT_CURRENCY_VALUE:
                     fiatBalance = WalletApplication.convertPaymonToFiat(new BigInteger(cryptoBalance), exchangeRate.value);

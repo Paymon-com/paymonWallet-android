@@ -102,6 +102,9 @@ dependencies {
     implementation 'com.google.protobuf:protobuf-java:3.4.0'
     implementation 'com.google.guava:guava:24.1-android'
     implementation 'com.google.zxing:core:3.3.3'
+    implementation 'com.dlazaro66.qrcodereaderview:qrcodereaderview:2.0.3'
+
+    implementation 'com.shawnlin:number-picker:2.4.6'
 
     implementation("com.github.esafirm.android-image-picker:imagepicker:1.13.1", {
 //        exclude group: 'com.github.bumptech.glide', module: 'glide'

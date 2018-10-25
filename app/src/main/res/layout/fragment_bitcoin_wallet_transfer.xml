@@ -12,24 +12,23 @@
         android:layout_height="wrap_content">
 
         <include
-            android:id="@+id/include_toolbar_ethereum_wallet_transfer"
-            layout="@layout/toolbar_ethereum_wallet_transfer"
+            android:id="@+id/include_toolbar_bitcoin_wallet_transfer"
+            layout="@layout/toolbar_bitcoin_wallet_transfer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/fragment_ethereum_wallet_transfer_address_layout"
+            android:id="@+id/fragment_bitcoin_wallet_transfer_address_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/eth_color"
+            android:background="@color/btc_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_amount_layout">
-
+            app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_transfer_amount_layout">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/fragment_ethereum_receiver_address_input_layout"
+                android:id="@+id/fragment_bitcoin_receiver_address_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -39,7 +38,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView1">
 
                 <EditText
-                    android:id="@+id/fragment_ethereum_wallet_transfer_receiver_address"
+                    android:id="@+id/fragment_bitcoin_wallet_transfer_receiver_address"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="4dp"
@@ -58,6 +57,7 @@
                     android:textSize="14sp" />
 
             </android.support.design.widget.TextInputLayout>
+
 
             <TextView
                 android:id="@+id/textView1"
@@ -91,49 +91,22 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_receiver_address_input_layout" />
+                app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_receiver_address_input_layout" />
 
         </android.support.constraint.ConstraintLayout>
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/fragment_ethereum_wallet_transfer_amount_layout"
+            android:id="@+id/fragment_bitcoin_wallet_transfer_amount_layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/eth_color"
+            android:background="@color/btc_color"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include_toolbar_ethereum_wallet_transfer">
-
-
-            <TextView
-                android:id="@+id/fragment_ethereum_wallet_transfer_fiat_eq"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="23sp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_amount_input_layout" />
-
-            <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/fragment_ethereum_wallet_transfer_fiat_currency"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
-                android:layout_marginTop="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_fiat_eq"
-                app:np_dividerColor="@color/colorPrimary"
-                app:np_orientation="horizontal"
-                app:np_selectedTextColor="@color/colorPrimary"
-                app:np_textColor="@color/colorPrimary" />
-
+            app:layout_constraintTop_toBottomOf="@+id/include_toolbar_bitcoin_wallet_transfer">
 
             <android.support.design.widget.TextInputLayout
-                android:id="@+id/fragment_ethereum_amount_input_layout"
+                android:id="@+id/fragment_bitcoin_amount_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
@@ -142,7 +115,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView28">
 
                 <EditText
-                    android:id="@+id/fragment_ethereum_wallet_transfer_amount"
+                    android:id="@+id/fragment_bitcoin_wallet_transfer_amount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="4dp"
@@ -159,7 +132,10 @@
                     android:textAllCaps="true"
                     android:textColor="@color/white"
                     android:textSize="24sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView28" />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -174,40 +150,43 @@
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/fragment_bitcoin_wallet_transfer_fiat_eq"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textSize="23sp"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_amount_input_layout" />
+
+            <com.shawnlin.numberpicker.NumberPicker
+                android:id="@+id/fragment_bitcoin_wallet_transfer_fiat_currency"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="4dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_transfer_fiat_eq"
+                app:np_dividerColor="@color/colorPrimary"
+                app:np_orientation="horizontal"
+                app:np_selectedTextColor="@color/colorPrimary"
+                app:np_textColor="@color/colorPrimary" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 android:layout_marginBottom="4dp"
                 android:orientation="vertical"
                 android:padding="2dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_fiat_currency">
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <com.warkiz.widget.IndicatorStayLayout
-                        android:id="@+id/indilayout1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
-
-                        <com.warkiz.widget.IndicatorSeekBar
-                            android:id="@+id/fragment_ethereum_wallet_transfer_gas_price_slider"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </com.warkiz.widget.IndicatorStayLayout>
-                </android.support.constraint.ConstraintLayout>
+                app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_transfer_fiat_currency">
 
                 <com.warkiz.widget.IndicatorStayLayout
                     android:id="@+id/indilayout2"
@@ -217,32 +196,11 @@
                     android:layout_marginBottom="4dp">
 
                     <com.warkiz.widget.IndicatorSeekBar
-                        android:id="@+id/fragment_ethereum_wallet_transfer_gas_limit_slider"
+                        android:id="@+id/fragment_bitcoin_wallet_transfer_gas_limit_slider"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </com.warkiz.widget.IndicatorStayLayout>
 
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="2dp">
-
-                    <TextView
-                        android:id="@+id/label_network_fee"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:text="network fee"
-                        android:textAppearance="?android:textAppearanceListItem" />
-
-                    <TextView
-                        android:id="@+id/fragment_ethereum_wallet_transfer_network_fee_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="--"
-                        tools:text="0.0027 ETH" />
-                </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -258,12 +216,12 @@
                         android:textAppearance="?android:textAppearanceListItem" />
 
                     <TextView
-                        android:id="@+id/fragment_ethereum_wallet_transfer_total_value"
+                        android:id="@+id/fragment_bitcoin_wallet_transfer_total_value"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:text="--"
-                        tools:text="0.0027 ETH" />
+                        tools:text="0.0027 btc" />
                 </RelativeLayout>
             </LinearLayout>
 
@@ -280,65 +238,64 @@
             android:textAllCaps="true"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_address_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_transfer_address_layout" />
 
         <ImageView
-            android:id="@+id/fragment_ethereum_wallet_transfer_image"
+            android:id="@+id/fragment_bitcoin_wallet_transfer_image"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_ethereum"
+            android:src="@drawable/ic_bitcoin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView29"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/fragment_ethereum_wallet_transfer_title_from"
+            android:id="@+id/fragment_bitcoin_wallet_transfer_title_from"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:text="@string/title_ethereum_wallet"
-            android:textColor="@color/eth_color"
+            android:text="@string/title_bitcoin_wallet"
+            android:textColor="@color/btc_color"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_image"
-            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_image" />
+            app:layout_constraintStart_toEndOf="@+id/fragment_bitcoin_wallet_transfer_image"
+            app:layout_constraintTop_toTopOf="@+id/fragment_bitcoin_wallet_transfer_image" />
 
         <TextView
-            android:id="@+id/fragment_ethereum_wallet_transfer_id_from"
+            android:id="@+id/fragment_bitcoin_wallet_transfer_id_from"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:maxLines="1"
-            android:singleLine="true"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_image"
-            app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_balance"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_bitcoin_wallet_transfer_image"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_bitcoin_wallet_transfer_balance"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_image" />
+            app:layout_constraintStart_toEndOf="@+id/fragment_bitcoin_wallet_transfer_image" />
 
         <TextView
-            android:id="@+id/fragment_ethereum_wallet_transfer_balance"
+            android:id="@+id/fragment_bitcoin_wallet_transfer_balance"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:singleLine="true"
             android:textColor="@color/rub_color"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_id_from"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_bitcoin_wallet_transfer_id_from"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_id_from" />
+            app:layout_constraintTop_toTopOf="@+id/fragment_bitcoin_wallet_transfer_id_from" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fragment_ethereum_wallet_transfer_qr"
+            android:id="@+id/fragment_bitcoin_wallet_transfer_qr"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_address_layout"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_bitcoin_wallet_transfer_address_layout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_address_layout"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_transfer_address_layout"
             app:srcCompat="@drawable/ic_qrcode" />
 
     </android.support.constraint.ConstraintLayout>

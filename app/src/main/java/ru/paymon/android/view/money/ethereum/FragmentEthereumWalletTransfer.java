@@ -1,13 +1,15 @@
 package ru.paymon.android.view.money.ethereum;
 
-import android.app.AlertDialog;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,11 +18,14 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.shawnlin.numberpicker.NumberPicker;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
+
+import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -31,51 +36,49 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
+import ru.paymon.android.activities.QrCodeScannerActivity;
 import ru.paymon.android.gateway.exchangerates.ExchangeRate;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
-public class FragmentEthereumWalletTransfer extends Fragment {
-    private static FragmentEthereumWalletTransfer instance;
+import static android.app.Activity.RESULT_OK;
+import static ru.paymon.android.activities.QrCodeScannerActivity.QR_SCAN_RESULT_KEY;
+import static ru.paymon.android.activities.QrCodeScannerActivity.REQUEST_CODE_QR_SCANNER_START;
+import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
 
-    private EditText cryptoAmount;
-    private TextView fiatEquivalent;
-    private TextView titleFrom;
-    private TextView idFrom;
-    private TextView balance;
-    private TextView networkFeeValueView;
-    private TextView totalValue;
+public class FragmentEthereumWalletTransfer extends Fragment {
+    private EditText amountEditText;
+    private TextView fiatEquivalentTextView;
+    private TextView balanceTextView;
+    private TextView feeTextView;
+    private TextView totalTextView;
     private IndicatorSeekBar gasPriceBar;
     private IndicatorSeekBar gasLimitBar;
-    //    private DialogProgress dialogProgress;
-    private EditText receiverAddress;
+    private EditText receiverAddressEditText;
+    private NumberPicker fiatCurrencyPicker;
+    private TextView fiatEqualTextView;
 
-
-    private String currentFiatCurrency = "USD";//TODO:
-    private final String cryptoCurrency = "ETH";
+    private WalletApplication application;
     private MoneyViewModel moneyViewModel;
-    private LiveData<String> ethereumBalanceData;
+    private LiveData<BigInteger> ethereumBalanceData;
     private LiveData<Integer> midGasPriceData;
     private LiveData<Integer> maxGasPriceData;
-    private LiveData<List<ExchangeRate>> exchangeRatesData;
-    private MutableLiveData<Integer> gasPriceValue = new MutableLiveData<>();
-    private MutableLiveData<Integer> gasLimitValue = new MutableLiveData<>();
-    private MutableLiveData<BigDecimal> cryptoAmountValue = new MutableLiveData<>();
-    private MutableLiveData<BigDecimal> totalAmountValue = new MutableLiveData<>();
-    private MutableLiveData<BigDecimal> networkFeeValue = new MutableLiveData<>();
-
-    public static FragmentEthereumWalletTransfer newInstance() {
-        if (instance == null)
-            instance = new FragmentEthereumWalletTransfer();
-        return instance;
-    }
+    private String currentExchangeRate;
+    private double ethAmount;
+    private double ethFee;
+    private double totalValueEth;
+    private int gasPrice;
+    private int gasLimit = Config.GAS_LIMIT_DEFAULT;
+    private BigDecimal bigIntegerWeiFee;
+    private BigDecimal bigIntegerWeiAmount;
+    private BigDecimal bigIntegerWeiTotal;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        application = (WalletApplication) getActivity().getApplication();
         moneyViewModel = ViewModelProviders.of(getActivity()).get(MoneyViewModel.class);
         ethereumBalanceData = moneyViewModel.getEthereumBalanceData();
-        exchangeRatesData = moneyViewModel.getExchangeRatesData();
         moneyViewModel.updateMidAndMaxGasPriceData();
         midGasPriceData = moneyViewModel.getMidGasPriceData();
         maxGasPriceData = moneyViewModel.getMaxGasPriceData();
@@ -86,55 +89,161 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_ethereum_wallet_transfer, container, false);
 
-        receiverAddress = (EditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_receiver_address);
-        cryptoAmount = (EditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_amount);
-        TextView cryptoAmountTitle = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_amount_title);
-        fiatEquivalent = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_equivalent);
-        TextView fiatEquivalentTitle = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_equivalent_title);
-        titleFrom = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_title_from);
-        idFrom = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_id_from);
-        balance = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_balance);
-//        FloatingActionButton qr = (FloatingActionButton) view.findViewById(R.gid.fragment_ethereum_wallet_transfer_qr);
+        receiverAddressEditText = (EditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_receiver_address);
+        amountEditText = (EditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_amount);
+        fiatEquivalentTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_eq);
+        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_currency);
+        balanceTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_balance);
         gasPriceBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_price_slider);
         gasLimitBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_limit_slider);
-        networkFeeValueView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_network_fee_value);
-        totalValue = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_total_value);
+        feeTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_network_fee_value);
+        totalTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_total_value);
+        fiatEqualTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_eq);
+        TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_id_from);
+        FloatingActionButton qrScannerButton = (FloatingActionButton) view.findViewById(R.id.fragment_ethereum_wallet_transfer_qr);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_back_image_button);
-        TextView nextButton = (TextView) view.findViewById(R.id.toolbar_eth_wallet_transf_next_text_view);
+        TextView payButton = (TextView) view.findViewById(R.id.toolbar_eth_wallet_transf_next_text_view);
+        TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_ethereum_amount_input_layout);
+        TextInputLayout receiverAddressInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_ethereum_receiver_address_input_layout);
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
+        fiatCurrencyPicker.setMinValue(1);
+        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
+        fiatCurrencyPicker.setDisplayedValues(Config.fiatCurrencies);
+        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
+        fiatCurrencyPicker.setValue(2);
+
         gasPriceBar.setIndicatorTextFormat("Current gas price: ${PROGRESS} GWEI");
         gasLimitBar.setIndicatorTextFormat("Current gas limit: ${PROGRESS}");
-        cryptoAmountTitle.setText(cryptoCurrency);
-        fiatEquivalentTitle.setText(currentFiatCurrency);
-        idFrom.setText(application.getEthereumWallet().publicAddress);
+        fromAddressTextView.setText(application.getEthereumWallet().publicAddress);
+
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
-        nextButton.setOnClickListener(v -> openNextFragment());
-        cryptoAmount.addTextChangedListener(cryptoAmountTextWatcher);
-        gasPriceBar.setOnSeekChangeListener(gasPriceListener);
-        gasLimitBar.setOnSeekChangeListener(gasLimitListener);
-//        dialogProgress = new DialogProgress(getContext());
-//        dialogProgress.setCancelable(false);
-        ethereumBalanceData.observe(getActivity(), (balanceData) -> balance.setText(String.format("%s ETH", balanceData)));
+        payButton.setOnClickListener(v -> pay());
+
+        final String fromAddress = application.getEthereumWallet().publicAddress;
+        fromAddressTextView.setText(fromAddress);
+
+        receiverAddressEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String value = s.toString();
+
+                if (!Utils.verifyETHpubKey(value)) {
+                    receiverAddressInputLayout.setError("Введеное значение не является ETH адресом!");
+                }else{
+                    receiverAddressInputLayout.setError(null);
+                }
+            }
+        });
+
+        amountEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                final String value = editable.toString();
+
+                if (value.startsWith(".")) {
+                    amountEditText.setText(null);
+                    return;
+                }
+
+                if (value.isEmpty()) {
+                    amountInputLayout.setError("Обязательное поле для заполнения!");
+                    fiatEqualTextView.setVisibility(View.GONE);
+                    return;
+                }
+
+                ethAmount = Double.parseDouble(value);
+
+                amountInputLayout.setError(null);
+
+                fiatEqualTextView.setVisibility(View.VISIBLE);
+                calculateFees();
+                changeCurrency();
+            }
+        });
+
+        gasPriceBar.setOnSeekChangeListener(new OnSeekChangeListener() {
+            @Override
+            public void onSeeking(SeekParams seekParams) {
+                gasPrice = seekParams.progress;
+                calculateFees();
+            }
+
+            @Override
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+
+            }
+        });
+
+        gasLimitBar.setOnSeekChangeListener(new OnSeekChangeListener() {
+            @Override
+            public void onSeeking(SeekParams seekParams) {
+                gasLimit = seekParams.progress;
+                calculateFees();
+            }
+
+            @Override
+            public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
+
+            }
+        });
+
+        ethereumBalanceData.observe(getActivity(), (balanceData) -> {
+            if (balanceData != null)
+                balanceTextView.setText(String.format("%s %s", Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString(), getActivity().getResources().getString(R.string.eth)));
+        });
+
         maxGasPriceData.observe(getActivity(), maxGasPrice -> {
-            if (maxGasPrice == null) return;
-            gasPriceBar.setMax(maxGasPrice);
+            gasPriceBar.setMin(1);
+            gasPriceBar.setMax(maxGasPrice != null ? maxGasPrice : 100);
             gasLimitBar.setMax(Config.GAS_LIMIT_MAX);
             gasLimitBar.setMin(Config.GAS_LIMIT_MIN);
             gasLimitBar.setProgress(Config.GAS_LIMIT_DEFAULT);
-            gasLimitValue.postValue(Config.GAS_LIMIT_DEFAULT);
         });
+
         midGasPriceData.observe(getActivity(), midGasPrice -> {
-            if (midGasPrice == null) return;
-            gasPriceBar.setProgress(midGasPrice);
-            gasPriceValue.postValue(midGasPrice);
+            if (midGasPrice != null) {
+                gasPriceBar.setProgress(midGasPrice);
+                gasPrice = midGasPrice;
+            } else {
+                gasPriceBar.setProgress(10);
+                gasPrice = 10;
+            }
         });
-        gasLimitValue.observe(getActivity(), gasLimit -> calculateFees());
-        gasPriceValue.observe(getActivity(), gasPrice -> calculateFees());
-        cryptoAmountValue.observe(getActivity(), amount -> calculateFees());
-        totalAmountValue.observe(getActivity(), totalVal -> totalValue.setText(String.format("%s ETH", totalVal)));
-        networkFeeValue.observe(getActivity(), fee -> networkFeeValueView.setText(String.format("%s ETH", fee)));
+
+        qrScannerButton.setOnClickListener(v -> {
+            Intent qrScannerIntent = new Intent(getContext(), QrCodeScannerActivity.class);
+            startActivityForResult(qrScannerIntent, REQUEST_CODE_QR_SCANNER_START);
+        });
 
         return view;
     }
@@ -149,121 +258,101 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         super.onPause();
     }
 
-    private void openNextFragment() {
-        if (cryptoAmount.getText().toString().isEmpty()) {
-            Toast.makeText(ApplicationLoader.applicationContext, "Заполнены не все поля!", Toast.LENGTH_SHORT).show();
+    private void pay() {
+        final String toAddress = receiverAddressEditText.getText().toString();
+
+        if (toAddress.isEmpty() || !Utils.verifyBTCpubKey(toAddress)) {
             return;
         }
-        if (!Utils.verifyETHpubKey(receiverAddress.getText().toString())) {
-            Toast.makeText(ApplicationLoader.applicationContext, "Адрес получателя введен не верно!", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (totalAmountValue.getValue() != null && totalAmountValue.getValue().compareTo(new BigDecimal(ethereumBalanceData.getValue())) == 1) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-            builder.setMessage("У вас недостаточно средств")
-                    .setCancelable(false)
-                    .setNegativeButton(R.string.ok, (dialog, which) -> dialog.cancel()).show();
+
+        final BigInteger bigIntegerBalance = moneyViewModel.getEthereumBalanceData().getValue();
+        if (bigIntegerBalance != null) {
+            if (Convert.toWei(new BigDecimal(totalValueEth), Convert.Unit.ETHER).toBigInteger().compareTo(bigIntegerBalance) == 1) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                        .setMessage("Не достаточно средств")
+                        .setCancelable(true);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+            }
         } else {
-            if (networkFeeValue.getValue() == null || cryptoAmountValue.getValue() == null
-                    || gasLimitValue.getValue() == null || gasPriceValue.getValue() == null) return;
-            Bundle bundle = new Bundle();
-            bundle.putString("TO_ADDRESS", receiverAddress.getText().toString().trim());
-            bundle.putString("AMOUNT", cryptoAmountValue.getValue().toString());
-            bundle.putString("FEE", networkFeeValue.getValue().toString());
-            bundle.putString("TOTAL", totalAmountValue.getValue().toString());
-            bundle.putString("GAS_PRICE", gasPriceValue.getValue().toString());
-            bundle.putString("GAS_LIMIT", gasLimitValue.getValue().toString());
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWalletTransferInfo, bundle);
+            final BigInteger bigIntegerGasPrice = new BigDecimal(gasPrice).toBigInteger();
+            final BigInteger bigIntegerGasLimit = new BigDecimal(gasLimit).toBigInteger();
+            EthSendTransaction ethSendTransaction = application.sendRawEthereumTx(toAddress, bigIntegerWeiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
         }
+//        if (amountEditText.getText().toString().isEmpty()) {
+//            Toast.makeText(ApplicationLoader.applicationContext, "Заполнены не все поля!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (!Utils.verifyETHpubKey(receiverAddressEditText.getText().toString())) {
+//            Toast.makeText(ApplicationLoader.applicationContext, "Адрес получателя введен не верно!", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        if (totalAmountValue.getValue() != null && totalAmountValue.getValue().compareTo(new BigDecimal(ethereumBalanceData.getValue())) == 1) {
+//            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//            builder.setMessage("У вас недостаточно средств")
+//                    .setCancelable(false)
+//                    .setNegativeButton(R.string.ok, (dialog, which) -> dialog.cancel()).show();
+//        } else {
+//            if (networkFeeValue.getValue() == null || cryptoAmountValue.getValue() == null
+//                    || gasLimitValue.getValue() == null || gasPriceValue.getValue() == null) return;
+//            Bundle bundle = new Bundle();
+//            bundle.putString("TO_ADDRESS", receiverAddressEditText.getText().toString().trim());
+//            bundle.putString("AMOUNT", cryptoAmountValue.getValue().toString());
+//            bundle.putString("FEE", networkFeeValue.getValue().toString());
+//            bundle.putString("TOTAL", totalAmountValue.getValue().toString());
+//            bundle.putString("GAS_PRICE", gasPriceValue.getValue().toString());
+//            bundle.putString("GAS_LIMIT", gasLimitValue.getValue().toString());
+//            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWalletTransferInfo, bundle);
+//        }
     }
 
     private void calculateFees() {
-        BigDecimal bigDecimalFee = null;
-        if (gasPriceValue.getValue() != null && gasLimitValue.getValue() != null) {
-            bigDecimalFee = new BigDecimal(gasPriceValue.getValue()).divide(new BigDecimal("1000000000")).multiply(new BigDecimal(gasLimitValue.getValue()));
-            networkFeeValue.postValue(bigDecimalFee);
-        }
-        if (cryptoAmountValue.getValue() != null && bigDecimalFee != null) {
-            BigDecimal cryptoAmount = cryptoAmountValue.getValue() == null ? new BigDecimal(0) : cryptoAmountValue.getValue();
-            BigDecimal bigDecimalTotalFee = bigDecimalFee.add(cryptoAmount);
-            totalAmountValue.postValue(bigDecimalTotalFee);
+        BigDecimal bigDecimalWeiGasPrice = new BigDecimal(gasPrice).multiply(new BigDecimal(Math.pow(10, 9)));
+        ethFee = Double.parseDouble(Convert.fromWei(new BigDecimal(gasLimit).multiply(bigDecimalWeiGasPrice), Convert.Unit.ETHER).toString());
+
+        if (gasPrice != 0 && gasLimit != 0) {
+            bigIntegerWeiFee = new BigDecimal(ethFee);
+            feeTextView.setText(String.format("%.9f %s", ethFee, getActivity().getResources().getString(R.string.eth)));
         } else {
-            totalAmountValue.postValue(bigDecimalFee);
+            feeTextView.setText("0 ETH");
         }
+
+        if (ethAmount != 0)
+            bigIntegerWeiAmount = new BigDecimal(ethAmount).multiply(new BigDecimal(Math.pow(10, 18)));
+
+        totalValueEth = ethFee + ethAmount;
+        bigIntegerWeiTotal = (bigIntegerWeiAmount != null && bigIntegerWeiFee != null) ? bigIntegerWeiAmount.add(bigIntegerWeiFee) : bigIntegerWeiAmount != null ? bigIntegerWeiAmount : bigIntegerWeiFee;
+        totalTextView.setText(String.format("%.9f %s", totalValueEth, getActivity().getResources().getString(R.string.eth)));
     }
 
-    private OnSeekChangeListener gasLimitListener = new OnSeekChangeListener() {
-        @Override
-        public void onSeeking(SeekParams seekParams) {
-            gasLimitValue.postValue(seekParams.progress);
+    private void changeCurrency() {
+        final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
+        final List<ExchangeRate> exchangeRates = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByCryptoCurrecy(ETH_CURRENCY_VALUE);
+        for (ExchangeRate exchangeRate : exchangeRates) {
+            if (exchangeRate.fiatCurrency.equals(currentFiatCurrency))
+                currentExchangeRate = exchangeRate.value;
         }
+        final String fiatEqual = WalletApplication.convertEthereumToFiat(bigIntegerWeiAmount.toBigInteger(), currentExchangeRate);
+        fiatEqualTextView.setText(String.format("%s %s", fiatEqual, currentFiatCurrency));
+    }
 
-        @Override
-        public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
-
-        }
-
-        @Override
-        public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
-
-        }
-    };
-
-    private OnSeekChangeListener gasPriceListener = new OnSeekChangeListener() {
-        @Override
-        public void onSeeking(SeekParams seekParams) {
-            gasPriceValue.postValue(seekParams.progress);
-        }
-
-        @Override
-        public void onStartTrackingTouch(IndicatorSeekBar seekBar) {
-
-        }
-
-        @Override
-        public void onStopTrackingTouch(IndicatorSeekBar seekBar) {
-
-        }
-    };
-
-    private TextWatcher cryptoAmountTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable editable) {
-            final String ethAmount = editable.toString();
-            if (ethAmount.isEmpty()) {
-                fiatEquivalent.setText(null);
-                cryptoAmountValue.postValue(new BigDecimal(0));
-                return;
-            }
-
-            if (ethAmount.startsWith(".")) {
-                cryptoAmount.setText(null);
-                return;
-            }
-
-            List<ExchangeRate> exchangeRates = exchangeRatesData.getValue();
-            if (exchangeRates != null) {
-                for (ExchangeRate exRateItem : exchangeRatesData.getValue()) {
-                    if (exRateItem.fiatCurrency.equals(currentFiatCurrency) && exRateItem.cryptoCurrency.equals(cryptoCurrency)) {
-                        final String fiatEquivalentStr = ((WalletApplication) getActivity().getApplication()).convertEthereumToFiat(new BigInteger(ethAmount), exRateItem.value);
-                        fiatEquivalent.setText(fiatEquivalentStr);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (data != null) {
+                if (data.getExtras() != null) {
+                    if (data.getExtras().containsKey(QR_SCAN_RESULT_KEY)) {
+                        String receiverAddress = data.getStringExtra(QR_SCAN_RESULT_KEY);
+                        receiverAddressEditText.setText(receiverAddress);
                     }
                 }
-            } else {
-                fiatEquivalent.setText("Курс получить не удалось");
             }
-
-            cryptoAmountValue.postValue(new BigDecimal(ethAmount));
+        } else {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext())
+                    .setMessage("Не удалсоь считать Qr код")
+                    .setCancelable(true);
+            android.support.v7.app.AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         }
-    };
+    }
 }
