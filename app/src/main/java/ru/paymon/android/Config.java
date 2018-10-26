@@ -29,6 +29,7 @@ public class Config {
 
     public static final int GAS_PRICE_DEFAULT = 40;
     public static final int GAS_LIMIT_DEFAULT = 21000;
+    public static final int GAS_LIMIT_CONTRACT_DEFAULT = 200000;
     public static final int GAS_PRICE_MIN = 1;
     public static final int GAS_LIMIT_MIN = 21000;
     public static final int GAS_LIMIT_MAX = 300000;

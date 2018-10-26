@@ -1,7 +1,8 @@
-package ru.paymon.android.view.money.ethereum;
+package ru.paymon.android.view.money.pmnt;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
 
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
+import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
@@ -44,13 +46,13 @@ import ru.paymon.android.viewmodels.MoneyViewModel;
 import static android.app.Activity.RESULT_OK;
 import static ru.paymon.android.activities.QrCodeScannerActivity.QR_SCAN_RESULT_KEY;
 import static ru.paymon.android.activities.QrCodeScannerActivity.REQUEST_CODE_QR_SCANNER_START;
-import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
+import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURRENCY_VALUE;
 
-public class FragmentEthereumWalletTransfer extends Fragment {
+public class FragmentPaymonWalletTransfer extends Fragment {
     private EditText amountEditText;
     private TextView balanceTextView;
+    private TextView balanceEthTextView;
     private TextView feeTextView;
-    private TextView totalTextView;
     private IndicatorSeekBar gasPriceBar;
     private IndicatorSeekBar gasLimitBar;
     private EditText receiverAddressEditText;
@@ -59,25 +61,25 @@ public class FragmentEthereumWalletTransfer extends Fragment {
 
     private WalletApplication application;
     private MoneyViewModel moneyViewModel;
-    private LiveData<BigInteger> ethereumBalanceData;
+    private LiveData<BigInteger> paymonBalanceData;
+    private LiveData<BigInteger> paymonEthBalanceData;
     private LiveData<Integer> midGasPriceData;
     private LiveData<Integer> maxGasPriceData;
     private String currentExchangeRate;
-    private double ethAmount;
+    private double pmntAmount;
     private double ethFee;
-    private double totalValueEth;
     private int gasPrice;
-    private int gasLimit = Config.GAS_LIMIT_DEFAULT;
+    private int gasLimit = Config.GAS_LIMIT_CONTRACT_DEFAULT;
     private BigDecimal bigIntegerWeiFee;
     private BigDecimal bigIntegerWeiAmount;
-    private BigDecimal bigIntegerWeiTotal;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         application = (WalletApplication) getActivity().getApplication();
         moneyViewModel = ViewModelProviders.of(getActivity()).get(MoneyViewModel.class);
-        ethereumBalanceData = moneyViewModel.getEthereumBalanceData();
+        paymonBalanceData = moneyViewModel.getPaymonBalanceData();
+        paymonEthBalanceData = moneyViewModel.getPaymonEthBalanceData();
         moneyViewModel.updateMidAndMaxGasPriceData();
         midGasPriceData = moneyViewModel.getMidGasPriceData();
         maxGasPriceData = moneyViewModel.getMaxGasPriceData();
@@ -86,23 +88,23 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_ethereum_wallet_transfer, container, false);
+        View view = inflater.inflate(R.layout.fragment_paymon_wallet_transfer, container, false);
 
-        receiverAddressEditText = (EditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_receiver_address);
-        amountEditText = (EditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_amount);
-        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_currency);
-        balanceTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_balance);
-        gasPriceBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_price_slider);
-        gasLimitBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_limit_slider);
-        feeTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_network_fee_value);
-        totalTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_total_value);
-        fiatEqualTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_eq);
-        TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_id_from);
-        FloatingActionButton qrScannerButton = (FloatingActionButton) view.findViewById(R.id.fragment_ethereum_wallet_transfer_qr);
-        ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_back_image_button);
-        TextView payButton = (TextView) view.findViewById(R.id.toolbar_eth_wallet_transf_next_text_view);
-        TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_ethereum_amount_input_layout);
-        TextInputLayout receiverAddressInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_ethereum_receiver_address_input_layout);
+        receiverAddressEditText = (EditText) view.findViewById(R.id.fragment_paymon_wallet_transfer_receiver_address);
+        amountEditText = (EditText) view.findViewById(R.id.fragment_paymon_wallet_transfer_amount);
+        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_paymon_wallet_transfer_fiat_currency);
+        balanceTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_balance);
+        balanceEthTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_eth_balance);
+        gasPriceBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_paymon_wallet_transfer_gas_price_slider);
+        gasLimitBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_paymon_wallet_transfer_gas_limit_slider);
+        feeTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_network_fee_value);
+        fiatEqualTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_fiat_eq);
+        TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_id_from);
+        FloatingActionButton qrScannerButton = (FloatingActionButton) view.findViewById(R.id.fragment_paymon_wallet_transfer_qr);
+        ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_pmnt_wallet_transf_back_image_button);
+        TextView payButton = (TextView) view.findViewById(R.id.toolbar_pmnt_wallet_transf_next_text_view);
+        TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_paymon_amount_input_layout);
+        TextInputLayout receiverAddressInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_paymon_receiver_address_input_layout);
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
@@ -169,7 +171,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                     return;
                 }
 
-                ethAmount = Double.parseDouble(value);
+                pmntAmount = Double.parseDouble(value);
 
                 amountInputLayout.setError(null);
 
@@ -215,9 +217,14 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             }
         });
 
-        ethereumBalanceData.observe(getActivity(), (balanceData) -> {
+        paymonEthBalanceData.observe(this, balanceData->{
             if (balanceData != null)
-                balanceTextView.setText(String.format("%s ETH", Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString()));
+                balanceEthTextView.setText(String.format("%s ETH", Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString()));
+        });
+
+        paymonBalanceData.observe(this, (balanceData) -> {
+            if (balanceData != null)
+                balanceTextView.setText(String.format("%s PMNT", Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString()));
         });
 
         maxGasPriceData.observe(getActivity(), maxGasPrice -> {
@@ -225,7 +232,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             gasPriceBar.setMax(maxGasPrice != null ? maxGasPrice : 100);
             gasLimitBar.setMax(Config.GAS_LIMIT_MAX);
             gasLimitBar.setMin(Config.GAS_LIMIT_MIN);
-            gasLimitBar.setProgress(Config.GAS_LIMIT_DEFAULT);
+            gasLimitBar.setProgress(Config.GAS_LIMIT_CONTRACT_DEFAULT);
         });
 
         midGasPriceData.observe(getActivity(), midGasPrice -> {
@@ -246,16 +253,6 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-    }
-
     private void pay() {
         final String toAddress = receiverAddressEditText.getText().toString();
 
@@ -263,9 +260,25 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             return;
         }
 
-        final BigInteger bigIntegerBalance = moneyViewModel.getEthereumBalanceData().getValue();
-        if (bigIntegerBalance != null) {
-            if (bigIntegerWeiTotal.toBigInteger().compareTo(bigIntegerBalance) == 1) {
+        if (gasLimit < Config.GAS_LIMIT_CONTRACT_DEFAULT) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    .setMessage("Значение Gas Limit меньше 200000, это может привести к неуспешной транзакции и списанной комиссии")
+                    .setCancelable(true)
+                    .setNegativeButton("Отмена", (DialogInterface dialog, int which) ->{ })
+                    .setPositiveButton("Продолжить",  (DialogInterface dialog, int which) ->send());
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }else{
+            send();
+        }
+    }
+
+    private void send(){
+        final String toAddress = receiverAddressEditText.getText().toString();
+        final BigInteger bigIntegerBalance = moneyViewModel.getPaymonBalanceData().getValue();
+        final BigInteger bigIntegerEthBalance = moneyViewModel.getPaymonEthBalanceData().getValue();
+        if (bigIntegerBalance != null && bigIntegerEthBalance != null) {
+            if (bigIntegerWeiAmount.toBigInteger().compareTo(bigIntegerBalance) == 1 && bigIntegerWeiFee.toBigInteger().compareTo(bigIntegerEthBalance) == 1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                         .setMessage("Не достаточно средств")
                         .setCancelable(true);
@@ -274,9 +287,10 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             } else {
                 final BigInteger bigIntegerGasPrice = new BigDecimal(gasPrice).toBigInteger();
                 final BigInteger bigIntegerGasLimit = new BigDecimal(gasLimit).toBigInteger();
-                EthSendTransaction ethSendTransaction = application.sendRawEthereumTx(toAddress, bigIntegerWeiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
-                if (ethSendTransaction != null) {
-                    final String txHash = ethSendTransaction.getTransactionHash();
+                TransactionReceipt transactionReceipt = application.sendPmntContract(toAddress, bigIntegerWeiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
+
+                if(transactionReceipt!=null){
+                    final String txHash = transactionReceipt.getTransactionHash();
                     AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
                             .setMessage("Хэш транзакции " + txHash)
                             .setCancelable(true);
@@ -298,17 +312,13 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             feeTextView.setText("0 ETH");
         }
 
-        if (ethAmount != 0)
-            bigIntegerWeiAmount = new BigDecimal(ethAmount).multiply(new BigDecimal(Math.pow(10, 18)));
-
-        totalValueEth = ethFee + ethAmount;
-        bigIntegerWeiTotal = (bigIntegerWeiAmount != null && bigIntegerWeiFee != null) ? bigIntegerWeiAmount.add(bigIntegerWeiFee) : bigIntegerWeiAmount != null ? bigIntegerWeiAmount : bigIntegerWeiFee;
-        totalTextView.setText(String.format("%.9f ETH", totalValueEth));
+        if (pmntAmount != 0)
+            bigIntegerWeiAmount = new BigDecimal(pmntAmount).multiply(new BigDecimal(Math.pow(10, 18)));
     }
 
     private void changeCurrency() {
         final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
-        final List<ExchangeRate> exchangeRates = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByCryptoCurrecy(ETH_CURRENCY_VALUE);
+        final List<ExchangeRate> exchangeRates = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByCryptoCurrecy(PMNT_CURRENCY_VALUE);
         for (ExchangeRate exchangeRate : exchangeRates) {
             if (exchangeRate.fiatCurrency.equals(currentFiatCurrency))
                 currentExchangeRate = exchangeRate.value;
@@ -335,5 +345,15 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             android.support.v7.app.AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
     }
 }

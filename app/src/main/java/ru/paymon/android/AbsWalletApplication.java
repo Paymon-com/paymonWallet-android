@@ -53,6 +53,7 @@ public abstract class AbsWalletApplication extends Application {
     public abstract RestoreStatus restorePaymonWallet(final File file, final String password);
     public abstract boolean backupPaymonWallet(final String path);
     public abstract BigInteger getPaymonBalance();
+    public abstract BigInteger getPaymonEthBalance();
     public abstract boolean deletePaymonWallet();
 
 
