@@ -7,6 +7,7 @@
     app:behavior_hideable="true">
 
     <FrameLayout
+        android:id="@+id/attachment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -14,13 +15,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttons_attachments">
 
-        <fragment
-            android:id="@+id/nav_attachment_fragment"
-            android:name="androidx.navigation.fragment.NavHostFragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:defaultNavHost="true"
-            app:navGraph="@navigation/attachement_navigation_graph" />
     </FrameLayout>
 
     <include
