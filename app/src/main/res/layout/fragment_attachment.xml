@@ -7,6 +7,7 @@
     app:behavior_hideable="true">
 
     <FrameLayout
+        android:id="@+id/attachment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
