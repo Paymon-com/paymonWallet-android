@@ -1,9 +1,7 @@
 package ru.paymon.android.filepicker;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 
-import ru.paymon.android.filepicker.models.FileType;
 import ru.paymon.android.filepicker.utils.FilePickerConst;
 
 /**
@@ -20,12 +18,9 @@ public class PickerManager {
     private ArrayList<String> mediaFiles;
     private ArrayList<String> docFiles;
 
-    private LinkedHashSet<FileType> fileTypes;
-
     private PickerManager() {
         mediaFiles = new ArrayList<>();
         docFiles = new ArrayList<>();
-        fileTypes = new LinkedHashSet<>();
     }
 
     public int getMaxCount() {

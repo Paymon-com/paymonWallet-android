@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +19,6 @@ import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.navigation.Navigation;
 import androidx.recyclerview.selection.SelectionTracker;
@@ -82,7 +80,7 @@ public abstract class AbsFragmentChat extends Fragment {
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (ImageButton) view.findViewById(R.id.sendButton);
         emoticonsButton = (ImageView) view.findViewById(R.id.smilesButton);
-        buttonAttachment = (Button) view.findViewById(R.id.button_attachment_test);
+        buttonAttachment = (Button) view.findViewById(R.id.button_attachment);
         toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
 
         buttonAttachment.setOnClickListener(v -> {

@@ -19,7 +19,7 @@
 
     <include
         android:id="@+id/buttons_attachments"
-        layout="@layout/fragment_chat_attachment"
+        layout="@layout/fragment_chat_buttons_attachment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"

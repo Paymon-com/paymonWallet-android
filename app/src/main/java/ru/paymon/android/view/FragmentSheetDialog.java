@@ -33,7 +33,7 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_attachment, container, false);
+        View view = inflater.inflate(R.layout.fragment_chat_attachments, container, false);
         buttonsAttachmentsInclude = (LinearLayout) view.findViewById(R.id.buttons_attachments);
 
         ImageButton imageAttachButton = (ImageButton) view.findViewById(R.id.image_chat_attachment);
