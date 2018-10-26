@@ -32,6 +32,7 @@ import java.util.Locale;
 import javax.net.ssl.HttpsURLConnection;
 
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.Config;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
@@ -215,7 +216,6 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
         Utils.stageQueue.postRunnable(() -> {
             showProgress.postValue(true);
             final String[] cryptoCurrencies = new String[]{"BTC", "ETH", "PMNT"};
-            final String[] fiatCurrencies = new String[]{"USD", "EUR", "RUB"};
             final String link = "https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,PMNT&tsyms=USD,EUR,RUB," + Currency.getInstance(Locale.getDefault()).getCurrencyCode().toUpperCase();
             final ArrayList<ExchangeRate> exchangeRatesItems = new ArrayList<>();
 
@@ -237,7 +237,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                 int id = 0;
                 for (String cryptoCurrency : cryptoCurrencies) {
                     final JSONObject cryptoObject = (JSONObject) jsonObject.get(cryptoCurrency);
-                    for (String fiatCurrency : fiatCurrencies) {
+                    for (String fiatCurrency : Config.fiatCurrencies) {
                         exchangeRatesItems.add(new ExchangeRate(++id, fiatCurrency, cryptoCurrency, String.format(Locale.US, "%.09f", cryptoObject.getDouble(fiatCurrency)).replaceAll("\\.(.*?)0+$", ".$1").replaceAll("\\.$", "")));
                     }
                 }
