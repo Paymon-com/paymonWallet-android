@@ -9,17 +9,14 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 
 public class FragmentSheetDialog extends BottomSheetDialogFragment {
@@ -27,6 +24,7 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
 
     public FragmentSheetDialog() {
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,10 +39,24 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
         ImageButton imageAttachButton = (ImageButton) view.findViewById(R.id.image_chat_attachment);
         ImageButton docAttachButton = (ImageButton) view.findViewById(R.id.document_chat_attachment);
 
-        View navControllerView = view.findViewById(R.id.nav_attachment_fragment);
-        NavController navController = Navigation.findNavController(navControllerView);
-        imageAttachButton.setOnClickListener(v -> navController.navigate(R.id.fragmentImage));
-        docAttachButton.setOnClickListener(v -> navController.navigate(R.id.fragmentDocPicker));
+        Fragment fragmentImage = new FragmentAttachmentImage();
+        Fragment fragmentDocument = new FragmentAttachmentDocPicker();
+
+        FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
+        fragmentTransaction.add(R.id.attachment_container, fragmentImage);
+        fragmentTransaction.commit();
+
+        imageAttachButton.setOnClickListener(v -> {
+                FragmentTransaction fragmentTransactionImage = getChildFragmentManager().beginTransaction();
+                fragmentTransactionImage.replace(R.id.attachment_container, fragmentImage);
+                fragmentTransactionImage.commit();
+        });
+
+        docAttachButton.setOnClickListener(v -> {
+                FragmentTransaction fragmentTransactionDocument = getChildFragmentManager().beginTransaction();
+                fragmentTransactionDocument.replace(R.id.attachment_container, fragmentDocument);
+                fragmentTransactionDocument.commit();
+        });
 
         return view;
     }
