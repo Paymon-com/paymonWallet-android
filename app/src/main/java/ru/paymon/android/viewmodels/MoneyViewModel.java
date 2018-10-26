@@ -48,6 +48,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
     private MutableLiveData<Boolean> showProgress = new MutableLiveData<>();
     private MutableLiveData<BigInteger> ethereumBalance;
     private MutableLiveData<BigInteger> paymonBalance;
+    private MutableLiveData<BigInteger> paymonEthBalance;
     private MutableLiveData<ArrayList<TransactionItem>> ethereumTransactionsData;
     private MutableLiveData<ArrayList<TransactionItem>> paymonTransactionsData;
     private MutableLiveData<Integer> maxGasPriceData = new MutableLiveData<>();
@@ -96,6 +97,13 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             paymonBalance = new MutableLiveData<>();
         loadPaymonBalanceData();
         return paymonBalance;
+    }
+
+    public LiveData<BigInteger> getPaymonEthBalanceData() {
+        if (paymonEthBalance == null)
+            paymonEthBalance = new MutableLiveData<>();
+        loadPaymonEthBalanceData();
+        return paymonEthBalance;
     }
 
     public LiveData<ArrayList<TransactionItem>> getEthereumTranscationsData() {
@@ -259,6 +267,17 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
         });
     }
 
+    private void loadPaymonEthBalanceData() {
+        Utils.stageQueue.postRunnable(() -> {
+            showProgress.postValue(true);
+            BigInteger walletBalance = application.getPaymonEthBalance();
+            if (walletBalance != null) {
+                paymonEthBalance.postValue(walletBalance);
+            }
+            showProgress.postValue(false);
+        });
+    }
+
     private void loadGasPriceData() {
         Utils.stageQueue.postRunnable(() -> {
             showProgress.postValue(true);
@@ -378,7 +397,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                     transactionItems.add(new TransactionItem(hash, status, timestamp, value, to, from, gasLimit, gasUsed, gasPrice));
                 }
 
-                ethereumTransactionsData.postValue(transactionItems);
+                paymonTransactionsData.postValue(transactionItems);
             } catch (Exception e) {
                 e.printStackTrace();
             }

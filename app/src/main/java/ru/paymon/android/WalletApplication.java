@@ -321,6 +321,17 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
+    public BigInteger getPaymonEthBalance() {
+        BigInteger balance = null;
+        try {
+            balance = paymonmWeb3j.ethGetBalance(paymonWalletCredentials.getAddress(), DefaultBlockParameterName.fromString("latest")).send().getBalance();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return balance;
+    }
+
+    @Override
     public boolean deletePaymonWallet() {
         final String FILE_PATH = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-pmnt-wallet.json";
         return new File(FILE_PATH).delete();

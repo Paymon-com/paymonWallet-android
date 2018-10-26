@@ -19,11 +19,8 @@ import ru.paymon.android.filepicker.PickerManager;
 
 public class FragmentAttachmentDocument extends FragmentAttachmentDocPicker implements FileAdapterListener {
 
-    RecyclerView recyclerView;
-
-    TextView emptyView;
-
-    private FileListAdapter fileListAdapter;
+    private RecyclerView recyclerView;
+    private TextView emptyView;
 
     public static FragmentAttachmentDocument newInstance(String fileType) {
         FragmentAttachmentDocument photoPickerFragment = new FragmentAttachmentDocument();
@@ -79,7 +76,7 @@ public class FragmentAttachmentDocument extends FragmentAttachmentDocPicker impl
             recyclerView.setVisibility(View.VISIBLE);
             emptyView.setVisibility(View.GONE);
 
-            fileListAdapter = (FileListAdapter) recyclerView.getAdapter();
+            FileListAdapter fileListAdapter = (FileListAdapter) recyclerView.getAdapter();
             if (fileListAdapter == null) {
                 fileListAdapter = new FileListAdapter(getActivity(), documents, PickerManager.getInstance().getSelectedFiles(), this);
 
