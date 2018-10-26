@@ -1,5 +1,10 @@
 package ru.paymon.android;
 
+import java.util.Arrays;
+import java.util.Currency;
+import java.util.HashSet;
+import java.util.Locale;
+
 public class Config {
     public static final boolean DEBUG = false;
     public static final boolean PRODUCTION_VERSION = true;
@@ -11,7 +16,7 @@ public class Config {
     public static final String TAG = "paymon-dbg";
     public static final String VERSION_STRING = "0.01";
 
-//        public static short PORT = 7966;
+    //        public static short PORT = 7966;
     public static short PORT = 7968;
 
     static {
@@ -40,5 +45,17 @@ public class Config {
     public static final String MESSAGES_NOTIFICATION_CHANNEL_ID = "MESSAGES_NOTIFICATION_CHANNEL_ID";
     public static final String MESSAGES_NOTIFICATION_CHANNEL_NAME = "Messages";
 
-    public static final String[] fiatCurrencies = new String[]{"USD", "EUR", "RUB"};
+    private static final HashSet<String> fiatCurrenciesSet = new HashSet<String>() {
+        {
+            add("USD");
+            add("EUR");
+            add("RUB");
+            add(Currency.getInstance(Locale.getDefault()).getCurrencyCode());
+        }
+    };
+
+    public static String[] fiatCurrencies;
+    static {
+        fiatCurrencies = Arrays.asList(fiatCurrenciesSet.toArray()).toArray(new String[fiatCurrenciesSet.toArray().length]);
+    }
 }

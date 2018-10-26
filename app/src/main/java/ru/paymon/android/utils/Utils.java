@@ -171,7 +171,7 @@ public class Utils {
             if (CLIENT_BASIC_DATE_FORMAT_IS_24H)
                 return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("HH:mm", msgDate);
             else
-                return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("hh:mm", msgDate);
+                return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("hh:mm aa", msgDate);
         else if (dayDiff > 1 || monthDiff > 0)
             pattern = "d MMM";
         else if (yearDiff != 0)
@@ -187,6 +187,7 @@ public class Utils {
 
         return (String) DateFormat.format(pattern, msgDate);
     }
+
 
     public static boolean emailCorrect(String email) {
         Matcher matcher = Pattern.compile("^[-\\w.]+@([A-z0-9][-A-z0-9]+\\.)+[A-z]{2,4}$").matcher(email);
