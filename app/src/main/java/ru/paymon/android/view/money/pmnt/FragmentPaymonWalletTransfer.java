@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +26,13 @@ import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
 
-import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
@@ -71,7 +72,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
     private int gasPrice;
     private int gasLimit = Config.GAS_LIMIT_CONTRACT_DEFAULT;
     private BigDecimal bigIntegerWeiFee;
-    private BigDecimal bigIntegerWeiAmount;
+    private BigDecimal bigIntegerGweiAmount;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -173,6 +174,12 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
                 pmntAmount = Double.parseDouble(value);
 
+                if (pmntAmount <= 0) {
+                    amountInputLayout.setError("Недопустимое значение!");
+                    fiatEqualTextView.setVisibility(View.GONE);
+                    return;
+                }
+
                 amountInputLayout.setError(null);
 
                 fiatEqualTextView.setVisibility(View.VISIBLE);
@@ -217,14 +224,14 @@ public class FragmentPaymonWalletTransfer extends Fragment {
             }
         });
 
-        paymonEthBalanceData.observe(this, balanceData->{
+        paymonEthBalanceData.observe(this, balanceData -> {
             if (balanceData != null)
                 balanceEthTextView.setText(String.format("%s ETH", Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString()));
         });
 
         paymonBalanceData.observe(this, (balanceData) -> {
             if (balanceData != null)
-                balanceTextView.setText(String.format("%s PMNT", Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.ETHER).toString()));
+                balanceTextView.setText(String.format("%s PMNT", Convert.fromWei(new BigDecimal(balanceData), Convert.Unit.GWEI).toString()));
         });
 
         maxGasPriceData.observe(getActivity(), maxGasPrice -> {
@@ -264,66 +271,67 @@ public class FragmentPaymonWalletTransfer extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                     .setMessage("Значение Gas Limit меньше 200000, это может привести к неуспешной транзакции и списанной комиссии")
                     .setCancelable(true)
-                    .setNegativeButton("Отмена", (DialogInterface dialog, int which) ->{ })
-                    .setPositiveButton("Продолжить",  (DialogInterface dialog, int which) ->send());
+                    .setNegativeButton("Отмена", (DialogInterface dialog, int which) -> {
+                    })
+                    .setPositiveButton("Продолжить", (DialogInterface dialog, int which) -> send());
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
-        }else{
+        } else {
             send();
         }
     }
 
-    private void send(){
+    private void send() {
         final String toAddress = receiverAddressEditText.getText().toString();
         final BigInteger bigIntegerBalance = moneyViewModel.getPaymonBalanceData().getValue();
         final BigInteger bigIntegerEthBalance = moneyViewModel.getPaymonEthBalanceData().getValue();
         if (bigIntegerBalance != null && bigIntegerEthBalance != null) {
-            if (bigIntegerWeiAmount.toBigInteger().compareTo(bigIntegerBalance) == 1 && bigIntegerWeiFee.toBigInteger().compareTo(bigIntegerEthBalance) == 1) {
+            if (bigIntegerGweiAmount.toBigInteger().compareTo(bigIntegerBalance) == 1 || bigIntegerWeiFee.toBigInteger().compareTo(bigIntegerEthBalance) == 1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                         .setMessage("Не достаточно средств")
                         .setCancelable(true);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             } else {
-                final BigInteger bigIntegerGasPrice = new BigDecimal(gasPrice).toBigInteger();
+                final BigInteger bigIntegerGasPrice = new BigDecimal(gasPrice).multiply(new BigDecimal(Math.pow(10, 9))).toBigInteger();
                 final BigInteger bigIntegerGasLimit = new BigDecimal(gasLimit).toBigInteger();
-                TransactionReceipt transactionReceipt = application.sendPmntContract(toAddress, bigIntegerWeiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
-
-                if(transactionReceipt!=null){
-                    final String txHash = transactionReceipt.getTransactionHash();
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
-                            .setMessage("Хэш транзакции " + txHash)
-                            .setCancelable(true);
-                    AlertDialog alertDialog = builder2.create();
-                    alertDialog.show();
-                }
+                Executors.newSingleThreadExecutor().submit(() -> {
+                    TransactionReceipt transactionReceipt = application.sendPmntContract(toAddress, bigIntegerGweiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        final String text = transactionReceipt != null ? "Хэш транзакции: " + transactionReceipt.getTransactionHash() : "Транзакцию отправить не удалось";
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
+                                .setMessage(text)
+                                .setCancelable(true);
+                        AlertDialog alertDialog = builder2.create();
+                        alertDialog.show();
+                    });
+                });
             }
         }
     }
 
     private void calculateFees() {
-        BigDecimal bigDecimalWeiGasPrice = new BigDecimal(gasPrice).multiply(new BigDecimal(Math.pow(10, 9)));
-        ethFee = Double.parseDouble(Convert.fromWei(new BigDecimal(gasLimit).multiply(bigDecimalWeiGasPrice), Convert.Unit.ETHER).toString());
+        BigDecimal bigDecimalWeiGasPrice = Convert.toWei(new BigDecimal(gasPrice), Convert.Unit.GWEI);
+        BigDecimal bigDecimalGasLimit = new BigDecimal(gasLimit);
 
-        if (gasPrice != 0 && gasLimit != 0) {
-            bigIntegerWeiFee = new BigDecimal(ethFee);
-            feeTextView.setText(String.format("%.9f ETH", ethFee));
-        } else {
-            feeTextView.setText("0 ETH");
-        }
+        bigIntegerWeiFee = bigDecimalWeiGasPrice.multiply(bigDecimalGasLimit);
+        ethFee = Double.parseDouble(Convert.fromWei(bigIntegerWeiFee, Convert.Unit.ETHER).toString());
+
+        feeTextView.setText(String.format("%.9f ETH", ethFee));
 
         if (pmntAmount != 0)
-            bigIntegerWeiAmount = new BigDecimal(pmntAmount).multiply(new BigDecimal(Math.pow(10, 18)));
+            bigIntegerGweiAmount = new BigDecimal(pmntAmount).multiply(new BigDecimal(Math.pow(10, 9)));
     }
 
     private void changeCurrency() {
+        if(bigIntegerGweiAmount == null) return;
         final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
         final List<ExchangeRate> exchangeRates = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByCryptoCurrecy(PMNT_CURRENCY_VALUE);
         for (ExchangeRate exchangeRate : exchangeRates) {
             if (exchangeRate.fiatCurrency.equals(currentFiatCurrency))
                 currentExchangeRate = exchangeRate.value;
         }
-        final String fiatEqual = WalletApplication.convertEthereumToFiat(bigIntegerWeiAmount.toBigInteger(), currentExchangeRate);
+        final String fiatEqual = WalletApplication.convertEthereumToFiat(bigIntegerGweiAmount.toBigInteger(), currentExchangeRate);
         fiatEqualTextView.setText(String.format("%s %s", fiatEqual, currentFiatCurrency));
     }
 

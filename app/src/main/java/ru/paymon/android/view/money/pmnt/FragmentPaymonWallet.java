@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.TransactionAdapter;
+import ru.paymon.android.models.EthTransactionItem;
 import ru.paymon.android.models.PmntTransactionItem;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.ItemClickSupport;
@@ -95,7 +96,7 @@ public class FragmentPaymonWallet extends Fragment {
 
 
         ItemClickSupport.addTo(transactionsRecView).setOnItemClickListener((recyclerView, position, v) -> {
-            PmntTransactionItem transactionItem = (PmntTransactionItem) transactionAdapter.transactionItems.get(position);
+            EthTransactionItem transactionItem = (EthTransactionItem) transactionAdapter.transactionItems.get(position);
 
             AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
 

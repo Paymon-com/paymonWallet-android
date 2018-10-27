@@ -176,7 +176,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                     ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, PMNT_CURRENCY_VALUE);
                     if (exchangeRate != null) {
                         String fiatBalance = WalletApplication.convertPaymonToFiat(balance, exchangeRate.value);
-                        walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, paymonWallet.balance, fiatCurrency, fiatBalance));
+                        walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, Convert.fromWei(new BigDecimal(balance), Convert.Unit.GWEI).toString(), fiatCurrency, fiatBalance));
                     } else {
                         walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, "0", fiatCurrency, "0"));
                     }
@@ -356,7 +356,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                     String to = transcationObj.getString("to");
                     String value = Convert.fromWei(transcationObj.getString("value"), Convert.Unit.ETHER).toString() + " ETH";
                     String gasLimit = transcationObj.getString("gas");
-                    String gasPrice = new BigDecimal(transcationObj.getString("gasPrice")).divide(new BigDecimal(Math.pow(10,9))).toString() + " GWEI";
+                    String gasPrice = new BigDecimal(transcationObj.getString("gasPrice")).divide(new BigDecimal(Math.pow(10, 9))).toString() + " GWEI";
                     String gasUsed = transcationObj.getString("gasUsed");
                     String status = transcationObj.getInt("txreceipt_status") == 1 ? "success" : "fail"; //TODO:String
                     transactionItems.add(new EthTransactionItem(hash, status, date, value, to, from, gasLimit, gasUsed, gasPrice));
@@ -374,7 +374,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
         Utils.stageQueue.postRunnable(() -> {
             showProgress.postValue(true);
             final String address = application.getPaymonWallet().publicAddress;
-            final String link = "http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=desc&apikey=YourApiKeyToken";
+            final String link = "http://api.etherscan.io/api?module=account&action=tokentx&address=" + address + "&startblock=0&endblock=999999999&sort=desc&apikey=YourApiKeyToken";
             final ArrayList<TransactionItem> transactionItems = new ArrayList<>();
 
             try {
@@ -400,26 +400,28 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                     String hash = transcationObj.getString("hash");
                     String from = transcationObj.getString("from");
                     String to = transcationObj.getString("to");
-                    String value = Convert.fromWei(transcationObj.getString("value"), Convert.Unit.ETHER).toString() + " ETH";
+                    String tokenSymbol = transcationObj.getString("tokenSymbol");
+                    String value = Convert.fromWei(transcationObj.getString("value"), Convert.Unit.GWEI).toString() + " PMNT";
                     String gasLimit = transcationObj.getString("gas");
-                    String gasPrice = new BigDecimal(transcationObj.getString("gasPrice")).divide(new BigDecimal(Math.pow(10,9))).toString() + " GWEI";
+                    String gasPrice = Convert.fromWei(transcationObj.getString("gasPrice"), Convert.Unit.GWEI) + " GWEI";
                     String gasUsed = transcationObj.getString("gasUsed");
-                    String status = transcationObj.getInt("txreceipt_status") == 1 ? "success" : "fail"; //TODO:String
+//                    String status = transcationObj.getInt("txreceipt_status") == 1 ? "success" : "fail"; //TODO:String
                     String data = transcationObj.getString("input");
+                    transactionItems.add(new EthTransactionItem(hash, "", date, value, to, from, gasLimit, gasUsed, gasPrice));
 
-                    try {
-                        String method = data.substring(0, 10);
-                        String toData = data.substring(10, 74);
-                        String valueData = data.substring(74);
-                        Method refMethod = TypeDecoder.class.getDeclaredMethod("decode", String.class, int.class, Class.class);
-                        refMethod.setAccessible(true);
-                        Address addressData = (Address) refMethod.invoke(null, toData, 0, Address.class);
-                        Uint256 amount = (Uint256) refMethod.invoke(null, valueData, 0, Uint256.class);
-                        String amountStr = Convert.fromWei(new BigDecimal(amount.getValue()), Convert.Unit.ETHER).toString();
-                        transactionItems.add(new PmntTransactionItem(hash, status, date, value, to, from, gasLimit, gasUsed, gasPrice, method, addressData.toString(), amountStr));
-                    }catch (Exception e){
-                        transactionItems.add(new PmntTransactionItem(hash, status, date, value, to, from, gasLimit, gasUsed, gasPrice, "", "", ""));
-                    }
+//                    try {
+//                        String method = data.substring(0, 10);
+//                        String toData = data.substring(10, 74);
+//                        String valueData = data.substring(74);
+//                        Method refMethod = TypeDecoder.class.getDeclaredMethod("decode", String.class, int.class, Class.class);
+//                        refMethod.setAccessible(true);
+//                        Address addressData = (Address) refMethod.invoke(null, toData, 0, Address.class);
+//                        Uint256 amount = (Uint256) refMethod.invoke(null, valueData, 0, Uint256.class);
+//                        String amountStr = Convert.fromWei(new BigDecimal(amount.getValue()), Convert.Unit.GWEI).toString();
+//                        transactionItems.add(new PmntTransactionItem(hash, status, date, value, to, from, gasLimit, gasUsed, gasPrice, method, addressData.toString(), amountStr));
+//                    } catch (Exception e) {
+//                        transactionItems.add(new EthTransactionItem(hash, status, date, value, to, from, gasLimit, gasUsed, gasPrice));
+//                    }
                 }
 
                 paymonTransactionsData.postValue(transactionItems);
