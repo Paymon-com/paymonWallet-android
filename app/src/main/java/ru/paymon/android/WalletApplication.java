@@ -2,24 +2,44 @@ package ru.paymon.android;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.android.volley.toolbox.Volley;
+import com.google.common.io.BaseEncoding;
 
 import org.apache.commons.io.IOUtils;
 import org.bitcoinj.core.Address;
+import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.CheckpointManager;
 import org.bitcoinj.core.Coin;
+import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionConfidence;
 import org.bitcoinj.crypto.LinuxSecureRandom;
 import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.utils.Threading;
+import org.bitcoinj.wallet.KeyChainGroup;
+import org.bitcoinj.wallet.Protos;
 import org.bitcoinj.wallet.SendRequest;
+import org.bitcoinj.wallet.UnreadableWalletException;
 import org.bitcoinj.wallet.Wallet;
+import org.bitcoinj.wallet.WalletProtobufSerializer;
+import org.spongycastle.crypto.BufferedBlockCipher;
+import org.spongycastle.crypto.CipherParameters;
+import org.spongycastle.crypto.DataLengthException;
+import org.spongycastle.crypto.InvalidCipherTextException;
+import org.spongycastle.crypto.PBEParametersGenerator;
+import org.spongycastle.crypto.engines.AESFastEngine;
+import org.spongycastle.crypto.generators.OpenSSLPBEParametersGenerator;
+import org.spongycastle.crypto.modes.CBCBlockCipher;
+import org.spongycastle.crypto.paddings.PaddedBufferedBlockCipher;
+import org.spongycastle.crypto.params.ParametersWithIV;
 import org.web3j.abi.FunctionEncoder;
 import org.web3j.abi.TypeReference;
 import org.web3j.abi.datatypes.Function;
@@ -50,29 +70,47 @@ import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
+import java.security.SecureRandom;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
+
+import javax.annotation.Nullable;
 
 import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.PaymonTokenContract;
 import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.utils.Constants;
+import ru.paymon.android.utils.Iso8601Format;
 import ru.paymon.android.utils.Utils;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
+import static org.bitcoinj.crypto.KeyCrypterScrypt.SALT_LENGTH;
 import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
 
 
@@ -111,6 +149,8 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     public void startBitcoinKit() {
+        if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null) return;
+
         kit = new WalletAppKit(Constants.NETWORK_PARAMETERS, new File(getCacheDir().getPath()), "walletappkit1-example");
 
         InputStream checkpoint = CheckpointManager.openStream(Constants.NETWORK_PARAMETERS);
@@ -157,6 +197,8 @@ public class WalletApplication extends AbsWalletApplication {
 
     @Override
     public Wallet getBitcoinWallet() {
+        if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null) return null;
+
         try {
             kit.startAsync();
             kit.awaitRunning();
@@ -246,14 +288,74 @@ public class WalletApplication extends AbsWalletApplication {
         }
     }
 
+    private static byte[] concat(final byte[] arrayA, final byte[] arrayB) {
+        final byte[] result = new byte[arrayA.length + arrayB.length];
+        System.arraycopy(arrayA, 0, result, 0, arrayA.length);
+        System.arraycopy(arrayB, 0, result, arrayA.length, arrayB.length);
+
+        return result;
+    }
+
+    private static final SecureRandom secureRandom = new SecureRandom();
+
+    private static byte[] encryptRaw(final byte[] plainTextAsBytes, final char[] password) throws IOException {
+        try {
+            // Generate salt - each encryption call has a different salt.
+            final byte[] salt = new byte[SALT_LENGTH];
+            secureRandom.nextBytes(salt);
+
+            final ParametersWithIV key = (ParametersWithIV) getAESPasswordKey(password, salt);
+
+            // The following code uses an AES cipher to encrypt the message.
+            final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(new AESFastEngine()));
+            cipher.init(true, key);
+            final byte[] encryptedBytes = new byte[cipher.getOutputSize(plainTextAsBytes.length)];
+            final int processLen = cipher.processBytes(plainTextAsBytes, 0, plainTextAsBytes.length, encryptedBytes, 0);
+            final int doFinalLen = cipher.doFinal(encryptedBytes, processLen);
+
+            // The result bytes are the SALT_LENGTH bytes followed by the encrypted bytes.
+            return concat(salt, Arrays.copyOf(encryptedBytes, processLen + doFinalLen));
+        } catch (final InvalidCipherTextException | DataLengthException x) {
+            throw new IOException("Could not encrypt bytes", x);
+        }
+    }
+
+    public static String encrypt(final byte[] plainTextAsBytes, final char[] password) throws IOException {
+        final byte[] encryptedBytes = encryptRaw(plainTextAsBytes, password);
+
+        // OpenSSL prefixes the salt bytes + encryptedBytes with Salted___ and then base64 encodes it
+        final byte[] encryptedBytesPlusSaltedText = concat(OPENSSL_SALTED_BYTES, encryptedBytes);
+
+        return BASE64_ENCRYPT.encode(encryptedBytesPlusSaltedText);
+    }
+
     @Override
     public boolean backupBitcoinWallet(final String path) {
-        try {
-            kit.wallet().saveToFile(new File(path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis()));
+        final Wallet wallet = kit.wallet();
+        final Protos.Wallet walletProto = new WalletProtobufSerializer().walletToProto(wallet);
+//        Uri targetUri = Uri.parse(path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis());
+
+        try (final Writer cipherOut = new OutputStreamWriter(new FileOutputStream(new File(path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis())), StandardCharsets.UTF_8)) {
+            final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            walletProto.writeTo(baos);
+            baos.close();
+            final byte[] plainBytes = baos.toByteArray();
+
+            cipherOut.write(encrypt(plainBytes, User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD.toCharArray()));
+            cipherOut.flush();
+
+//            final String target = uriToTarget(targetUri) != null ? uriToTarget(targetUri) : targetUri.toString();
             return true;
-        } catch (Exception e) {
+        } catch (final IOException x) {
+            x.printStackTrace();
             return false;
         }
+//        try {
+//            kit.wallet().saveToFile(new File(path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis() + ".wallet"));
+//            return true;
+//        } catch (Exception e) {
+//            return false;
+//        }
     }
 
     @Override
@@ -356,15 +458,274 @@ public class WalletApplication extends AbsWalletApplication {
         return new BigDecimal(Double.parseDouble(pmntAmount) * Double.parseDouble(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
-    @Override
-    public RestoreStatus restoreBitcoinWallet(final File file) {
+    private static final BaseEncoding BASE64_ENCRYPT = BaseEncoding.base64().withSeparator("\n", 76);
+    private static final BaseEncoding BASE64_DECRYPT = BaseEncoding.base64().withSeparator("\r\n", 76);
+    private static final String OPENSSL_SALTED_TEXT = "Salted__";
+    private static final byte[] OPENSSL_SALTED_BYTES = OPENSSL_SALTED_TEXT.getBytes(StandardCharsets.UTF_8);
+    private static final int KEY_LENGTH = 256;
+    private static final int NUMBER_OF_ITERATIONS = 1024;
+    private static final int IV_LENGTH = 128;
+    private static final int NUMBER_OF_CHARACTERS_TO_MATCH_IN_OPENSSL_MAGIC_TEXT = 10;
+    private static final String OPENSSL_MAGIC_TEXT = BASE64_ENCRYPT.encode(OPENSSL_SALTED_BYTES).substring(0, NUMBER_OF_CHARACTERS_TO_MATCH_IN_OPENSSL_MAGIC_TEXT);
+
+
+    private static CipherParameters getAESPasswordKey(final char[] password, final byte[] salt) {
+        final PBEParametersGenerator generator = new OpenSSLPBEParametersGenerator();
+        generator.init(PBEParametersGenerator.PKCS5PasswordToBytes(password), salt, NUMBER_OF_ITERATIONS);
+
+        final ParametersWithIV key = (ParametersWithIV) generator.generateDerivedParameters(KEY_LENGTH, IV_LENGTH);
+
+        return key;
+    }
+
+    private static byte[] decryptRaw(final byte[] bytesToDecode, final char[] password) throws IOException {
         try {
-            kit.wallet().loadFromFile(file);
-            return RestoreStatus.DONE;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
+            // separate the salt and bytes to decrypt
+            final byte[] salt = new byte[SALT_LENGTH];
+
+            System.arraycopy(bytesToDecode, 0, salt, 0, SALT_LENGTH);
+
+            final byte[] cipherBytes = new byte[bytesToDecode.length - SALT_LENGTH];
+            System.arraycopy(bytesToDecode, SALT_LENGTH, cipherBytes, 0, bytesToDecode.length - SALT_LENGTH);
+
+            final ParametersWithIV key = (ParametersWithIV) getAESPasswordKey(password, salt);
+
+            // decrypt the message
+            final BufferedBlockCipher cipher = new PaddedBufferedBlockCipher(new CBCBlockCipher(new AESFastEngine()));
+            cipher.init(false, key);
+
+            final byte[] decryptedBytes = new byte[cipher.getOutputSize(cipherBytes.length)];
+            final int processLen = cipher.processBytes(cipherBytes, 0, cipherBytes.length, decryptedBytes, 0);
+            final int doFinalLen = cipher.doFinal(decryptedBytes, processLen);
+
+            return Arrays.copyOf(decryptedBytes, processLen + doFinalLen);
+        } catch (final InvalidCipherTextException | DataLengthException x) {
+            throw new IOException("Could not decrypt bytes", x);
         }
+    }
+
+    public static byte[] decryptBytes(final String textToDecode, final char[] password) throws IOException {
+        final byte[] decodeTextAsBytes;
+        try {
+            decodeTextAsBytes = BASE64_DECRYPT.decode(textToDecode);
+        } catch (final IllegalArgumentException x) {
+            throw new IOException("invalid base64 encoding");
+        }
+
+        if (decodeTextAsBytes.length < OPENSSL_SALTED_BYTES.length)
+            throw new IOException("out of salt");
+
+        final byte[] cipherBytes = new byte[decodeTextAsBytes.length - OPENSSL_SALTED_BYTES.length];
+        System.arraycopy(decodeTextAsBytes, OPENSSL_SALTED_BYTES.length, cipherBytes, 0,
+                decodeTextAsBytes.length - OPENSSL_SALTED_BYTES.length);
+
+        final byte[] decryptedBytes = decryptRaw(cipherBytes, password);
+
+        return decryptedBytes;
+    }
+
+    public static final long copy(final Reader reader, final StringBuilder builder, final long maxChars)
+            throws IOException {
+        final char[] buffer = new char[256];
+        long count = 0;
+        int n = 0;
+        while (-1 != (n = reader.read(buffer))) {
+            builder.append(buffer, 0, n);
+            count += n;
+
+            if (maxChars != 0 && count > maxChars)
+                throw new IOException("Read more than the limit of " + maxChars + " characters");
+        }
+        return count;
+    }
+
+    public static Wallet restoreWalletFromProtobuf(final InputStream is, final NetworkParameters expectedNetworkParameters) throws IOException {
+        try {
+            final Wallet wallet = new WalletProtobufSerializer().readWallet(is, true, null);
+
+            if (!wallet.getParams().equals(expectedNetworkParameters))
+                throw new IOException("bad wallet backup network parameters: " + wallet.getParams().getId());
+            if (!wallet.isConsistent())
+                throw new IOException("inconsistent wallet backup");
+
+            return wallet;
+        } catch (final UnreadableWalletException x) {
+            throw new IOException("unreadable wallet", x);
+        }
+    }
+
+    public static Wallet restoreWalletFromProtobufOrBase58(final InputStream is, final NetworkParameters expectedNetworkParameters) throws IOException {
+        is.mark((int) Constants.BACKUP_MAX_CHARS);
+
+        try {
+            return restoreWalletFromProtobuf(is, expectedNetworkParameters);
+        } catch (final IOException x) {
+            try {
+                is.reset();
+                return restorePrivateKeysFromBase58(is, expectedNetworkParameters);
+            } catch (final IOException x2) {
+                throw new IOException("cannot read protobuf (" + x.getMessage() + ") or base58 (" + x2.getMessage() + ")", x);
+            }
+        }
+    }
+
+    public static List<ECKey> readKeys(final BufferedReader in, final NetworkParameters expectedNetworkParameters)
+            throws IOException {
+        try {
+            final DateFormat format = Iso8601Format.newDateTimeFormatT();
+
+            final List<ECKey> keys = new LinkedList<ECKey>();
+
+            long charCount = 0;
+            while (true) {
+                final String line = in.readLine();
+                if (line == null)
+                    break; // eof
+                charCount += line.length();
+                if (charCount > Constants.BACKUP_MAX_CHARS)
+                    throw new IOException("read more than the limit of " + Constants.BACKUP_MAX_CHARS + " characters");
+                if (line.trim().isEmpty() || line.charAt(0) == '#')
+                    continue; // skip comment
+
+                final String[] parts = line.split(" ");
+
+                final ECKey key = DumpedPrivateKey.fromBase58(expectedNetworkParameters, parts[0]).getKey();
+                key.setCreationTimeSeconds(
+                        parts.length >= 2 ? format.parse(parts[1]).getTime() / DateUtils.SECOND_IN_MILLIS : 0);
+
+                keys.add(key);
+            }
+
+            return keys;
+        } catch (final AddressFormatException | ParseException x) {
+            throw new IOException("cannot read keys", x);
+        }
+    }
+
+    public static Wallet restorePrivateKeysFromBase58(final InputStream is, final NetworkParameters expectedNetworkParameters) throws IOException {
+        final BufferedReader keyReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
+
+        // create non-HD wallet
+        final KeyChainGroup group = new KeyChainGroup(expectedNetworkParameters);
+        group.importKeys(readKeys(keyReader, expectedNetworkParameters));
+        return new Wallet(expectedNetworkParameters, group);
+    }
+
+
+    public static final FileFilter KEYS_FILE_FILTER = new FileFilter() {
+        @Override
+        public boolean accept(final File file) {
+            try (final BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
+                readKeys(reader, Constants.NETWORK_PARAMETERS);
+
+                return true;
+            } catch (final IOException x) {
+                return false;
+            }
+        }
+    };
+
+    public static final FileFilter BACKUP_FILE_FILTER = new FileFilter() {
+        @Override
+        public boolean accept(final File file) {
+            try (final InputStream is = new FileInputStream(file)) {
+                return WalletProtobufSerializer.isWallet(is);
+            } catch (final IOException x) {
+                return false;
+            }
+        }
+    };
+
+    public final static FileFilter OPENSSL_FILE_FILTER = new FileFilter() {
+        private final char[] buf = new char[OPENSSL_MAGIC_TEXT.length()];
+
+        @Override
+        public boolean accept(final File file) {
+            try (final Reader in = new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8)) {
+                if (in.read(buf) == -1)
+                    return false;
+                final String str = new String(buf);
+                if (!str.toString().equals(OPENSSL_MAGIC_TEXT))
+                    return false;
+                return true;
+            } catch (final IOException x) {
+                return false;
+            }
+        }
+    };
+
+    private Wallet restoreWalletFromEncrypted(final File file, final String password) {
+        try {
+            final BufferedReader cipherIn = new BufferedReader(
+                    new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+            final StringBuilder cipherText = new StringBuilder();
+            copy(cipherIn, cipherText, Constants.BACKUP_MAX_CHARS);
+            cipherIn.close();
+
+            final byte[] plainText = decryptBytes(cipherText.toString(), password.toCharArray());
+            final InputStream is = new ByteArrayInputStream(plainText);
+
+            return restoreWalletFromProtobufOrBase58(is, Constants.NETWORK_PARAMETERS);
+        } catch (final IOException x) {
+            x.printStackTrace();
+        }
+        return null;
+    }
+
+    @Override
+    public RestoreStatus restoreBitcoinWallet(final File file, final String password) {
+//        try {
+//            final BufferedReader cipherIn = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
+//            final StringBuilder cipherText = new StringBuilder();
+//            copy(cipherIn, cipherText, Constants.BACKUP_MAX_CHARS);
+//            cipherIn.close();
+//
+//            final byte[] plainText = decryptBytes(cipherText.toString(), password.toCharArray());
+//            final InputStream is = new ByteArrayInputStream(plainText);
+
+        Wallet wallet = null; //= restoreWalletFromProtobufOrBase58(is, Constants.NETWORK_PARAMETERS);
+
+        if (BACKUP_FILE_FILTER.accept(file)) {
+            try (final FileInputStream is1 = new FileInputStream(file)) {
+                wallet = restoreWalletFromProtobuf(is1, Constants.NETWORK_PARAMETERS);
+            } catch (final IOException x) {
+                x.printStackTrace();
+            }
+        } else if (KEYS_FILE_FILTER.accept(file)) {
+            try (final FileInputStream is1 = new FileInputStream(file)) {
+                wallet = restorePrivateKeysFromBase58(is1, Constants.NETWORK_PARAMETERS);
+            } catch (final IOException x) {
+                x.printStackTrace();
+            }
+        } else if (OPENSSL_FILE_FILTER.accept(file)) {
+            restoreWalletFromEncrypted(file, password);
+        }
+
+        kit.restoreWalletFromSeed(wallet.getKeyChainSeed());
+        kit.stopAsync();
+        kit.awaitTerminated();
+        kit.startAsync();
+        kit.awaitRunning();
+
+        return wallet != null ? RestoreStatus.DONE : RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
+//        } catch (final IOException x) {
+//            x.printStackTrace();
+//            return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
+//        }
+//        try {
+//            Wallet walletFromFile = Wallet.loadFromFile(file);
+//            kit.restoreWalletFromSeed(walletFromFile.getKeyChainSeed());
+//            kit.stopAsync();
+//            kit.awaitTerminated();
+//            kit.startAsync();
+//            kit.awaitRunning();
+////            kit.wallet().loadFromFile(file);
+//            return RestoreStatus.DONE;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
+//        }
     }
 
     @Override
