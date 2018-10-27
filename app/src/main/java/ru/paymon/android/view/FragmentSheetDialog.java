@@ -24,7 +24,7 @@ import ru.paymon.android.filepicker.PickerManager;
 
 public class FragmentSheetDialog extends BottomSheetDialogFragment {
     private LinearLayout buttonsAttachmentsInclude;
-    Button button;
+    private Button buttonAcceptOrCloseAttachment;
     float translation;
 
     public FragmentSheetDialog() {
@@ -44,9 +44,9 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
         ImageButton imageAttachButton = (ImageButton) view.findViewById(R.id.image_chat_attachment);
         ImageButton docAttachButton = (ImageButton) view.findViewById(R.id.document_chat_attachment);
 
-        button = (Button) view.findViewById(R.id.button_test_attach);
+        buttonAcceptOrCloseAttachment = (Button) view.findViewById(R.id.button_accept_or_close_attachment);
 
-        button.setOnClickListener(v -> Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show());
+        buttonAcceptOrCloseAttachment.setOnClickListener(v -> Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show());
 
         Fragment fragmentImage = new FragmentAttachmentImage();
         Fragment fragmentDocument = new FragmentAttachmentDocPicker();
@@ -93,8 +93,8 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
                 DisplayMetrics displaymetrics = new DisplayMetrics();
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
                 int screenHeight = (displaymetrics.heightPixels / 3) * 2;
-                translation = screenHeight - displaymetrics.heightPixels - (button.getHeight() / 2);
-                button.setTranslationY(translation);
+                translation = screenHeight - displaymetrics.heightPixels - (buttonAcceptOrCloseAttachment.getHeight() / 2);
+                buttonAcceptOrCloseAttachment.setTranslationY(translation);
                 bottomSheetBehavior.setPeekHeight(screenHeight);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 bottomSheetBehavior.setHideable(true);
@@ -112,7 +112,7 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
                     @Override
                     public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                         buttonsAttachmentsInclude.animate().alpha(1 - slideOffset).setDuration(0).start();
-                        button.setTranslationY(translation * (slideOffset + 1));
+                        buttonAcceptOrCloseAttachment.setTranslationY(translation - (translation * slideOffset));
                     }
                 });
                 ((View) bottomSheet.getParent()).setBackgroundColor(Color.TRANSPARENT);
