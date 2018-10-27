@@ -122,7 +122,7 @@ public class WalletApplication extends AbsWalletApplication {
     private PaymonWallet paymonWallet;
     private String ethereumWalletPath;
     private String paymonWalletPath;
-    private WalletAppKit kit;
+    private Test kit;
 
     @Override
     public void onCreate() {
@@ -151,7 +151,7 @@ public class WalletApplication extends AbsWalletApplication {
     public void startBitcoinKit() {
         if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null) return;
 
-        kit = new WalletAppKit(Constants.NETWORK_PARAMETERS, new File(getCacheDir().getPath()), "walletappkit1-example");
+        kit = new Test(Constants.NETWORK_PARAMETERS, new File(getCacheDir().getPath()), "walletappkit1-example");
 
         InputStream checkpoint = CheckpointManager.openStream(Constants.NETWORK_PARAMETERS);
         kit.setCheckpoints(checkpoint);
@@ -699,16 +699,21 @@ public class WalletApplication extends AbsWalletApplication {
                 x.printStackTrace();
             }
         } else if (OPENSSL_FILE_FILTER.accept(file)) {
-            restoreWalletFromEncrypted(file, password);
+           wallet =  restoreWalletFromEncrypted(file, password);
         }
 
-        kit.restoreWalletFromSeed(wallet.getKeyChainSeed());
-        kit.stopAsync();
-        kit.awaitTerminated();
-        kit.startAsync();
-        kit.awaitRunning();
+        Wallet resultWallet = null;
+        try {
+            resultWallet = kit.restoreWallet(wallet);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+//        kit.restoreWalletFromSeed(wallet.getKeyChainSeed());
 
-        return wallet != null ? RestoreStatus.DONE : RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
+//        kit.stopAsync();
+//        kit.awaitTerminated();
+
+        return resultWallet != null ? RestoreStatus.DONE : RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
 //        } catch (final IOException x) {
 //            x.printStackTrace();
 //            return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
