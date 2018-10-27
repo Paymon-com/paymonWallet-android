@@ -10,13 +10,12 @@ import ru.paymon.android.filepicker.utils.FilePickerConst;
 public class PickerManager {
     private static PickerManager ourInstance = new PickerManager();
     private int maxCount = FilePickerConst.DEFAULT_MAX_COUNT;
+    private ArrayList<String> mediaFiles;
+    private ArrayList<String> docFiles;
 
     public static PickerManager getInstance() {
         return ourInstance;
     }
-
-    private ArrayList<String> mediaFiles;
-    private ArrayList<String> docFiles;
 
     private PickerManager() {
         mediaFiles = new ArrayList<>();
@@ -47,6 +46,11 @@ public class PickerManager {
         } else if (type == FilePickerConst.FILE_TYPE_DOCUMENT) {
             docFiles.remove(path);
         }
+    }
+
+    public void clearSelections() {
+        mediaFiles.clear();
+        docFiles.clear();
     }
 
     public boolean shouldAdd() {

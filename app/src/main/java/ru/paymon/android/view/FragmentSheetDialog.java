@@ -18,6 +18,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import ru.paymon.android.R;
+import ru.paymon.android.filepicker.PickerManager;
 
 public class FragmentSheetDialog extends BottomSheetDialogFragment {
     private LinearLayout buttonsAttachmentsInclude;
@@ -93,6 +94,7 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
                         switch (newState) {
                             case BottomSheetBehavior.STATE_HIDDEN:
                                 dialog.dismiss();
+                                PickerManager.getInstance().clearSelections();
                                 break;
                         }
                     }
@@ -105,5 +107,11 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
                 ((View) bottomSheet.getParent()).setBackgroundColor(Color.TRANSPARENT);
             });
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        PickerManager.getInstance().clearSelections();
     }
 }
