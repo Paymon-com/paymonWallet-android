@@ -35,7 +35,7 @@ import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURREN
 public class DialogFragmentRestoreWallet extends DialogFragment {
     private String currency;
 
-    public DialogFragmentRestoreWallet setArgs(Bundle bundle){
+    public DialogFragmentRestoreWallet setArgs(Bundle bundle) {
         this.setArguments(bundle);
         return this;
     }
@@ -116,13 +116,13 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
             getDialog().cancel();
             switch (currency) {
                 case BTC_CURRENCY_VALUE:
-                    restoreBitcoinWallet(file,password);
+                    restoreBitcoinWallet(file, password);
                     break;
                 case ETH_CURRENCY_VALUE:
-                    restoreEthereumWallet(file,password);
+                    restoreEthereumWallet(file, password);
                     break;
                 case PMNT_CURRENCY_VALUE:
-                    restorePaymonWallet(file,password);
+                    restorePaymonWallet(file, password);
                     break;
 
             }
@@ -131,7 +131,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
         return view;
     }
 
-    private void restoreEthereumWallet(final File file, final String password){
+    private void restoreEthereumWallet(final File file, final String password) {
         Utils.stageQueue.postRunnable(() -> {
             AbsWalletApplication.RestoreStatus restoreStatus = ((WalletApplication) getActivity().getApplication()).restoreEthereumWallet(file, password);
             ApplicationLoader.applicationHandler.post(() -> {
@@ -153,9 +153,9 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
         });
     }
 
-    private void restoreBitcoinWallet(final File file, final String password){
+    private void restoreBitcoinWallet(final File file, final String password) {
         Utils.stageQueue.postRunnable(() -> {
-            AbsWalletApplication.RestoreStatus restoreStatus = ((WalletApplication) getActivity().getApplication()).restoreBitcoinWallet(file);
+            AbsWalletApplication.RestoreStatus restoreStatus = ((WalletApplication) getActivity().getApplication()).restoreBitcoinWallet(file, password);
             ApplicationLoader.applicationHandler.post(() -> {
                 switch (restoreStatus) {
                     case DONE:
@@ -179,7 +179,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
         });
     }
 
-    private void restorePaymonWallet(final File file, final String password){
+    private void restorePaymonWallet(final File file, final String password) {
         Utils.stageQueue.postRunnable(() -> {
             AbsWalletApplication.RestoreStatus restoreStatus = ((WalletApplication) getActivity().getApplication()).restorePaymonWallet(file, password);
             ApplicationLoader.applicationHandler.post(() -> {

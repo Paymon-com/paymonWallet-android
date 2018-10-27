@@ -33,7 +33,7 @@ public abstract class AbsWalletApplication extends Application {
     protected Credentials paymonWalletCredentials;
 
     public abstract Wallet getBitcoinWallet();
-    public abstract RestoreStatus restoreBitcoinWallet(final File file);//TODO: применить пароль при создании
+    public abstract RestoreStatus restoreBitcoinWallet(final File file, final String password);//TODO: применить пароль при создании
     public abstract boolean backupBitcoinWallet(final String path);
     public abstract Coin getBitcoinBalance();
     public abstract boolean deleteBitcoinWallet();
