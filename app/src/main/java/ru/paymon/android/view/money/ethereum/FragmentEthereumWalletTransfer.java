@@ -30,6 +30,7 @@ import org.web3j.utils.Convert;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
@@ -274,15 +275,17 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             } else {
                 final BigInteger bigIntegerGasPrice = new BigDecimal(gasPrice).toBigInteger();
                 final BigInteger bigIntegerGasLimit = new BigDecimal(gasLimit).toBigInteger();
-                EthSendTransaction ethSendTransaction = application.sendRawEthereumTx(toAddress, bigIntegerWeiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
-                if (ethSendTransaction != null) {
-                    final String txHash = ethSendTransaction.getTransactionHash();
-                    AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
-                            .setMessage("Хэш транзакции " + txHash)
-                            .setCancelable(true);
-                    AlertDialog alertDialog = builder2.create();
-                    alertDialog.show();
-                }
+                Executors.newSingleThreadExecutor().submit(() -> {
+                    EthSendTransaction ethSendTransaction = application.sendRawEthereumTx(toAddress, bigIntegerWeiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
+                    final String text = ethSendTransaction != null ? "Хэш транзакции: " + ethSendTransaction.getTransactionHash() : "Транзакцию отправить не удалось";
+                    ApplicationLoader.applicationHandler.post(() -> {
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
+                                .setMessage(text)
+                                .setCancelable(true);
+                        AlertDialog alertDialog = builder2.create();
+                        alertDialog.show();
+                    });
+                });
             }
         }
     }
@@ -307,6 +310,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     }
 
     private void changeCurrency() {
+        if (bigIntegerWeiAmount == null) return;
         final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
         final List<ExchangeRate> exchangeRates = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByCryptoCurrecy(ETH_CURRENCY_VALUE);
         for (ExchangeRate exchangeRate : exchangeRates) {

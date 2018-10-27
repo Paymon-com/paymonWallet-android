@@ -20,6 +20,12 @@ import org.bitcoinj.script.Script;
 import org.bitcoinj.utils.Threading;
 import org.bitcoinj.wallet.SendRequest;
 import org.bitcoinj.wallet.Wallet;
+import org.web3j.abi.FunctionEncoder;
+import org.web3j.abi.TypeReference;
+import org.web3j.abi.datatypes.Function;
+import org.web3j.abi.datatypes.Type;
+import org.web3j.abi.datatypes.Utf8String;
+import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.ECKeyPair;
@@ -29,6 +35,8 @@ import org.web3j.crypto.WalletUtils;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
+import org.web3j.protocol.core.RemoteCall;
+import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
@@ -37,6 +45,7 @@ import org.web3j.tx.Contract;
 import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.response.NoOpProcessor;
+import org.web3j.tx.response.PollingTransactionReceiptProcessor;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
@@ -53,6 +62,7 @@ import java.security.InvalidAlgorithmParameterException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -339,7 +349,11 @@ public class WalletApplication extends AbsWalletApplication {
 
 
     public static String convertPaymonToFiat(final BigInteger pmntAmount, final String fiatExRate) {
-        return Convert.fromWei(new BigDecimal(pmntAmount), Convert.Unit.GWEI).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
+        return Convert.fromWei(new BigDecimal(pmntAmount), Convert.Unit.ETHER).multiply(new BigDecimal(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
+    }
+
+    public static String convertPaymonToFiat(final String pmntAmount, final String fiatExRate) {
+        return new BigDecimal(Double.parseDouble(pmntAmount) * Double.parseDouble(fiatExRate)).setScale(2, ROUND_HALF_UP).toString();
     }
 
     @Override
@@ -456,18 +470,19 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public TransactionReceipt sendPmntContract(@NonNull String recipientAddress, @NonNull BigInteger pmntAmount, @NonNull BigInteger gasPrice, @NonNull BigInteger gasLimit) {
         TransactionReceiptProcessor transactionReceiptProcessor = new NoOpProcessor(paymonmWeb3j);
-        TransactionManager transactionManager = new RawTransactionManager(paymonmWeb3j, paymonWalletCredentials, ChainId.ROPSTEN, transactionReceiptProcessor);
+        TransactionManager transactionManager = new RawTransactionManager(paymonmWeb3j, paymonWalletCredentials, ChainId.MAINNET, transactionReceiptProcessor);
         PaymonTokenContract paymonTokenContract = PaymonTokenContract.load("0x81b4d08645da11374a03749ab170836e4e539767", paymonmWeb3j, transactionManager, gasPrice, gasLimit);
         TransactionReceipt transactionReceipt = null;
         try {
-            transactionReceipt = paymonTokenContract.transfer(recipientAddress, pmntAmount).sendAsync().get();
+            transactionReceipt = paymonTokenContract.transfer(recipientAddress, pmntAmount).send();
             String sTransHash = transactionReceipt.getTransactionHash();
-            System.out.println("toAccount: " + recipientAddress + " coinAmount: " + pmntAmount + " transactionhash: " + sTransHash);
+            Log.e("AAA", "toAccount: " + recipientAddress + " coinAmount: " + pmntAmount + " transactionhash: " + sTransHash);
         } catch (Exception e) {
-            System.out.println("PMNT Exception " + e.getMessage());
+            e.printStackTrace();
         }
         return transactionReceipt;
     }
+
 
     @Override
     public Transaction sendBitcoinTx(final String destinationAddress, final long satoshis, final long feePerB) {
