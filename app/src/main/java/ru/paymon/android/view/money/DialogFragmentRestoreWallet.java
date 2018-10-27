@@ -162,8 +162,8 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
                         User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = password;
                         User.saveConfig();
                         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED);
-                        Toast.makeText(getContext(), "OK", Toast.LENGTH_LONG).show();
-                        getDialog().dismiss();
+                        Toast.makeText(ApplicationLoader.applicationContext, "OK", Toast.LENGTH_LONG).show();
+//                        getDialog().dismiss();
                         break;
                     case NO_USER_ID:
                         Toast.makeText(ApplicationLoader.applicationContext, "Не удалось", Toast.LENGTH_LONG).show();
