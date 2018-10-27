@@ -1,6 +1,8 @@
 package ru.paymon.android.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,6 +11,7 @@ import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -24,6 +27,7 @@ import ru.paymon.android.filepicker.PickerManager;
 
 public class FragmentAttachmentImage extends Fragment {
     private PhotoGridAdapter photoGridAdapter;
+    private static final int CAMERA_REQUEST = 0;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,8 +53,13 @@ public class FragmentAttachmentImage extends Fragment {
         MediaStoreHelper.getPhotosDir(getActivity().getContentResolver(), mediaStoreArgs, dirs -> {
             for (FileDirectory photoDir : dirs)
                 medias.addAll(photoDir.getFiles());
-            photoGridAdapter = new PhotoGridAdapter(getContext(), Glide.with(getActivity()), medias, PickerManager.getInstance().getSelectedPhotos(), false);
+            photoGridAdapter = new PhotoGridAdapter(getContext(), Glide.with(getActivity()), medias, PickerManager.getInstance().getSelectedPhotos(), true);
             recyclerView.setAdapter(photoGridAdapter);
+
+            photoGridAdapter.setCameraListener(v -> {
+                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, CAMERA_REQUEST);
+            });
         });
 
         recyclerView.setLayoutManager(staggeredGridLayoutManager);

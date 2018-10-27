@@ -30,6 +30,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     private final RequestManager glide;
     private final boolean showCamera;
     private int imageSize;
+    private View.OnClickListener cameraOnClickListener;
 
     private final static int ITEM_TYPE_CAMERA = 100;
     private final static int ITEM_TYPE_PHOTO = 101;
@@ -72,11 +73,11 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             else
                 holder.videoIcon.setVisibility(View.GONE);
 
-            holder.itemView.setOnClickListener(v -> onItemClicked(holder));
+            holder.itemView.setOnClickListener(v -> onItemClicked(holder, media));
 
             holder.checkBox.setVisibility(View.GONE);
             holder.checkBox.setOnCheckedChangeListener(null);
-            holder.checkBox.setOnClickListener(view -> onItemClicked(holder));
+            holder.checkBox.setOnClickListener(view -> onItemClicked(holder, media));
 
             holder.checkBox.setChecked(isSelected(media));
 
@@ -97,15 +98,34 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             });
 
         } else {
+            holder.imageView.setImageResource(PickerManager.getInstance().getCameraDrawable());
             holder.checkBox.setVisibility(View.GONE);
+            holder.itemView.setOnClickListener(cameraOnClickListener);
             holder.videoIcon.setVisibility(View.GONE);
         }
     }
 
-    private void onItemClicked(PhotoViewHolder holder) {
-        if (holder.checkBox.isChecked() || PickerManager.getInstance().shouldAdd()) {
+    private void onItemClicked(PhotoViewHolder holder, Media media) {
+        if (PickerManager.getInstance().getMaxCount() == 1) {
+            PickerManager.getInstance().add(media.getPath(), FilePickerConst.FILE_TYPE_MEDIA);
+        } else if (holder.checkBox.isChecked() || PickerManager.getInstance().shouldAdd()) {
             holder.checkBox.setChecked(!holder.checkBox.isChecked(), true);
         }
+    }
+
+    private void setColumnNumber(Context context) {
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics metrics = new DisplayMetrics();
+        wm.getDefaultDisplay().getMetrics(metrics);
+        int widthPixels = metrics.widthPixels;
+        imageSize = widthPixels / 3;
+    }
+
+    @Override
+    public int getItemCount() {
+        if (showCamera)
+            return getItems().size() + 1;
+        return getItems().size();
     }
 
     @Override
@@ -116,19 +136,8 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
             return ITEM_TYPE_PHOTO;
     }
 
-    @Override
-    public int getItemCount() {
-        if (showCamera)
-            return getItems().size() + 1;
-        return getItems().size();
-    }
-
-    private void setColumnNumber(Context context) {
-        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        DisplayMetrics metrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(metrics);
-        int widthPixels = metrics.widthPixels;
-        imageSize = widthPixels / 3;
+    public void setCameraListener(View.OnClickListener onClickListener) {
+        this.cameraOnClickListener = onClickListener;
     }
 
     public class PhotoViewHolder extends RecyclerView.ViewHolder {

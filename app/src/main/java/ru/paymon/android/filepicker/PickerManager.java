@@ -2,6 +2,7 @@ package ru.paymon.android.filepicker;
 
 import java.util.ArrayList;
 
+import ru.paymon.android.R;
 import ru.paymon.android.filepicker.utils.FilePickerConst;
 
 /**
@@ -64,6 +65,10 @@ public class PickerManager {
 
     public ArrayList<String> getSelectedFiles() {
         return docFiles;
+    }
+
+    public int getCameraDrawable() {
+        return R.drawable.ic_camera;
     }
 }
 

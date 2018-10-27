@@ -14,14 +14,18 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import ru.paymon.android.R;
 import ru.paymon.android.filepicker.PickerManager;
 
 public class FragmentSheetDialog extends BottomSheetDialogFragment {
     private LinearLayout buttonsAttachmentsInclude;
+    Button button;
+    float translation;
 
     public FragmentSheetDialog() {
     }
@@ -40,6 +44,10 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
         ImageButton imageAttachButton = (ImageButton) view.findViewById(R.id.image_chat_attachment);
         ImageButton docAttachButton = (ImageButton) view.findViewById(R.id.document_chat_attachment);
 
+        button = (Button) view.findViewById(R.id.button_test_attach);
+
+        button.setOnClickListener(v -> Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show());
+
         Fragment fragmentImage = new FragmentAttachmentImage();
         Fragment fragmentDocument = new FragmentAttachmentDocPicker();
 
@@ -48,15 +56,15 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
         fragmentTransaction.commit();
 
         imageAttachButton.setOnClickListener(v -> {
-                FragmentTransaction fragmentTransactionImage = getChildFragmentManager().beginTransaction();
-                fragmentTransactionImage.replace(R.id.attachment_container, fragmentImage);
-                fragmentTransactionImage.commit();
+            FragmentTransaction fragmentTransactionImage = getChildFragmentManager().beginTransaction();
+            fragmentTransactionImage.replace(R.id.attachment_container, fragmentImage);
+            fragmentTransactionImage.commit();
         });
 
         docAttachButton.setOnClickListener(v -> {
-                FragmentTransaction fragmentTransactionDocument = getChildFragmentManager().beginTransaction();
-                fragmentTransactionDocument.replace(R.id.attachment_container, fragmentDocument);
-                fragmentTransactionDocument.commit();
+            FragmentTransaction fragmentTransactionDocument = getChildFragmentManager().beginTransaction();
+            fragmentTransactionDocument.replace(R.id.attachment_container, fragmentDocument);
+            fragmentTransactionDocument.commit();
         });
 
         return view;
@@ -85,6 +93,8 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
                 DisplayMetrics displaymetrics = new DisplayMetrics();
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
                 int screenHeight = (displaymetrics.heightPixels / 3) * 2;
+                translation = screenHeight - displaymetrics.heightPixels - (button.getHeight() / 2);
+                button.setTranslationY(translation);
                 bottomSheetBehavior.setPeekHeight(screenHeight);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 bottomSheetBehavior.setHideable(true);
@@ -102,6 +112,7 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
                     @Override
                     public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                         buttonsAttachmentsInclude.animate().alpha(1 - slideOffset).setDuration(0).start();
+                        button.setTranslationY(translation * (slideOffset + 1));
                     }
                 });
                 ((View) bottomSheet.getParent()).setBackgroundColor(Color.TRANSPARENT);
