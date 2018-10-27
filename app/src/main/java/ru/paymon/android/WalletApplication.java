@@ -249,7 +249,7 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public boolean backupBitcoinWallet(final String path) {
         try {
-            kit.wallet().saveToFile(new File(path));
+            kit.wallet().saveToFile(new File(path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis()));
             return true;
         } catch (Exception e) {
             return false;
@@ -362,6 +362,7 @@ public class WalletApplication extends AbsWalletApplication {
             kit.wallet().loadFromFile(file);
             return RestoreStatus.DONE;
         } catch (Exception e) {
+            e.printStackTrace();
             return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
         }
     }

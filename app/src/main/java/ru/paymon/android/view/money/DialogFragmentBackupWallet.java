@@ -111,7 +111,7 @@ public class DialogFragmentBackupWallet extends DialogFragment {
 
     private void backupEthereumWallet(final String path) {
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
-        boolean isBackuped = application.backupBitcoinWallet(path);
+        boolean isBackuped = application.backupEthereumWallet(path);
         if (isBackuped)
             Toast.makeText(getContext(), "Резервная копия создана", Toast.LENGTH_LONG).show();
         else
@@ -120,7 +120,7 @@ public class DialogFragmentBackupWallet extends DialogFragment {
 
     private void backupPaymonWallet(final String path) {
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
-        boolean isBackuped = application.backupBitcoinWallet(path);
+        boolean isBackuped = application.backupPaymonWallet(path);
         if (isBackuped)
             Toast.makeText(getContext(), "Резервная копия создана", Toast.LENGTH_LONG).show();
         else
