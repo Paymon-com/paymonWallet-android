@@ -203,7 +203,7 @@ public class WalletApplication extends AbsWalletApplication {
             kit.startAsync();
             kit.awaitRunning();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         if (kit.wallet().isEncrypted())
             kit.wallet().decrypt(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
