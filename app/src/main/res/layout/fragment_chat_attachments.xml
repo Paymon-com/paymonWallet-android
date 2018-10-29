@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/colorPrimary"
     app:behavior_hideable="true">
 
     <FrameLayout
@@ -13,7 +14,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button_accept_or_close_attachment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttons_attachments">
+        app:layout_constraintTop_toTopOf="@+id/buttons_attachments">
 
     </FrameLayout>
 
@@ -21,7 +22,7 @@
         android:id="@+id/buttons_attachments"
         layout="@layout/fragment_chat_buttons_attachment"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -29,9 +30,26 @@
     <Button
         android:id="@+id/button_accept_or_close_attachment"
         android:layout_width="match_parent"
-        android:layout_height="130px"
-        android:text="test"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:background="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:src="@drawable/transparent_gradient_rev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttons_attachments" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:src="@drawable/transparent_gradient"
+        app:layout_constraintBottom_toTopOf="@+id/button_accept_or_close_attachment"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

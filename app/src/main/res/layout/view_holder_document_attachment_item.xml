@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@android:color/white"
-    >
+    android:background="@color/colorPrimary">
 
     <ImageView
         android:id="@+id/file_iv"
@@ -32,9 +31,9 @@
         android:layout_toEndOf="@+id/file_iv"
         android:layout_toRightOf="@+id/file_iv"
         android:ellipsize="end"
-
-        android:maxLines="1"
-        android:textColor="@android:color/black"
+        android:fontFamily="@font/roboto_thin"
+        android:singleLine="true"
+        android:textColor="@color/white"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="@+id/file_iv"
         app:layout_constraintEnd_toStartOf="@+id/checkbox"

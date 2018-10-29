@@ -19,13 +19,16 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import ru.paymon.android.R;
 import ru.paymon.android.filepicker.PickerManager;
 
 public class FragmentSheetDialog extends BottomSheetDialogFragment {
     private LinearLayout buttonsAttachmentsInclude;
     private Button buttonAcceptOrCloseAttachment;
-    float translation;
+    private float translation;
+    private Dialog dialog;
 
     public FragmentSheetDialog() {
     }
@@ -51,6 +54,9 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
         Fragment fragmentImage = new FragmentAttachmentImage();
         Fragment fragmentDocument = new FragmentAttachmentDocPicker();
 
+        PickerManager.getInstance().mediasLiveData.observe(this, list -> checkSelectedFiles());
+        PickerManager.getInstance().filesLiveData.observe(this, list -> checkSelectedFiles());
+
         FragmentTransaction fragmentTransaction = getChildFragmentManager().beginTransaction();
         fragmentTransaction.add(R.id.attachment_container, fragmentImage);
         fragmentTransaction.commit();
@@ -59,15 +65,37 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
             FragmentTransaction fragmentTransactionImage = getChildFragmentManager().beginTransaction();
             fragmentTransactionImage.replace(R.id.attachment_container, fragmentImage);
             fragmentTransactionImage.commit();
+            PickerManager.getInstance().clearSelections();
         });
 
         docAttachButton.setOnClickListener(v -> {
             FragmentTransaction fragmentTransactionDocument = getChildFragmentManager().beginTransaction();
             fragmentTransactionDocument.replace(R.id.attachment_container, fragmentDocument);
             fragmentTransactionDocument.commit();
+            PickerManager.getInstance().clearSelections();
         });
 
+
         return view;
+    }
+
+    private void checkSelectedFiles() {
+        ArrayList<String> filesList = PickerManager.getInstance().filesLiveData.getValue();
+        ArrayList<String> mediasList = PickerManager.getInstance().mediasLiveData.getValue();
+        if (filesList == null || mediasList == null) {
+            return;
+        }
+        if (filesList.size() > 0 || mediasList.size() > 0) {
+            //TODO:кнопка Отправить
+            buttonAcceptOrCloseAttachment.setText("Прикрепить");
+            buttonAcceptOrCloseAttachment.setOnClickListener(v -> {
+
+            });
+        } else {
+            buttonAcceptOrCloseAttachment.setText("Отмена");
+            buttonAcceptOrCloseAttachment.setOnClickListener(v -> dialog.dismiss());
+            //TODO:кнопка Отмена
+        }
     }
 
     @Override
@@ -79,7 +107,7 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-        Dialog dialog = getDialog();
+        dialog = getDialog();
 
         if (dialog != null) {
             View bottomSheet = dialog.findViewById(R.id.design_bottom_sheet);
@@ -94,7 +122,7 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
                 getActivity().getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
                 int screenHeight = (displaymetrics.heightPixels / 3) * 2;
                 translation = screenHeight - displaymetrics.heightPixels - (buttonAcceptOrCloseAttachment.getHeight() / 2);
-                buttonAcceptOrCloseAttachment.setTranslationY(translation);
+                buttonAcceptOrCloseAttachment.setTranslationY(translation + 2);
                 bottomSheetBehavior.setPeekHeight(screenHeight);
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
                 bottomSheetBehavior.setHideable(true);
@@ -112,7 +140,7 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
                     @Override
                     public void onSlide(@NonNull View bottomSheet, float slideOffset) {
                         buttonsAttachmentsInclude.animate().alpha(1 - slideOffset).setDuration(0).start();
-                        buttonAcceptOrCloseAttachment.setTranslationY(translation - (translation * slideOffset));
+                        buttonAcceptOrCloseAttachment.setTranslationY(translation - (translation * slideOffset) + 2);
                     }
                 });
                 ((View) bottomSheet.getParent()).setBackgroundColor(Color.TRANSPARENT);

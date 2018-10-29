@@ -1,5 +1,6 @@
 package ru.paymon.android.view;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -69,6 +70,8 @@ public abstract class AbsFragmentChat extends Fragment {
             if (bundle.containsKey(CHAT_ID_KEY))
                 chatID = bundle.getInt(CHAT_ID_KEY);
         }
+
+        chatViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
     }
 
     @Nullable

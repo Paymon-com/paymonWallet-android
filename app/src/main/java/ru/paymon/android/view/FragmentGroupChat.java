@@ -31,8 +31,6 @@ public class FragmentGroupChat extends AbsFragmentChat {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
 
-        chatViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
-
         messagesAdapter = new GroupMessagesAdapter(new MessageDiffUtilCallback());
         chatViewModel.getMessages(chatID,true).observe(this, pagedList -> {
             messagesAdapter.submitList(pagedList);
