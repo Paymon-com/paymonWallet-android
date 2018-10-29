@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
+import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.adapters.TransactionAdapter;
@@ -28,7 +30,7 @@ import ru.paymon.android.view.money.DialogFragmentRestoreWallet;
 
 import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
 
-public class FragmentBitcoinWallet extends Fragment {
+public class FragmentBitcoinWallet extends Fragment implements NotificationManager.IListener{
     public static final String BTC_CURRENCY_VALUE = "BTC";
     private TransactionAdapter transactionAdapter;
     private TextView balanceTextView;
@@ -111,6 +113,7 @@ public class FragmentBitcoinWallet extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
         Utils.hideBottomBar(getActivity());
         balanceTextView.setText(application.getBitcoinBalance().toFriendlyString());
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
@@ -121,5 +124,13 @@ public class FragmentBitcoinWallet extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+    }
+
+    @Override
+    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
+        if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED) {
+            balanceTextView.setText(application.getBitcoinBalance().toFriendlyString());
+        }
     }
 }

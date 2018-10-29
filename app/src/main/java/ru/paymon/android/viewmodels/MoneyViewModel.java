@@ -198,7 +198,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                 });
             }
 
-            if (bitcoinWallet != null && User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null)
+            if (bitcoinWallet == null && User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null)
                 walletItems.add(new WalletItem(BTC_CURRENCY_VALUE));
 
             if (paymonWallet == null)
