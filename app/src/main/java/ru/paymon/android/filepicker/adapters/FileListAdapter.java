@@ -42,7 +42,7 @@ public class FileListAdapter extends SelectableAdapter<FileListAdapter.FileViewH
     @NotNull
     @Override
     public FileViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.view_holder_document_attachment_item, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.view_holder_attachment_document_item, parent, false);
 
         return new FileViewHolder(itemView);
     }

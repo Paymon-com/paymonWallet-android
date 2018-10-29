@@ -46,7 +46,7 @@ public class PhotoGridAdapter extends SelectableAdapter<PhotoGridAdapter.PhotoVi
     @NonNull
     @Override
     public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.view_holder_photo_attachment_item, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.view_holder_attachment_photo_item, viewGroup, false);
 
         return new PhotoViewHolder(view);
     }
