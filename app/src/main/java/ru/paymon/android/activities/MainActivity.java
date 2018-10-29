@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.navigation.NavDestination;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private LiveData<Boolean> connectionState;
     private LiveData<Boolean> networkState;
     private LiveData<Boolean> authorizationState;
+    private LiveData<Boolean> btcSyncData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         connectionState = mainViewModel.getServerConnectionState();
         networkState = mainViewModel.getNetworkConnectionState();
         authorizationState = mainViewModel.getAuthorizationState();
+        btcSyncData = mainViewModel.getBtcSync();
 
         super.onCreate(savedInstanceState);
 
@@ -80,6 +83,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         networkState.observe(this, stateObserver);
         connectionState.observe(this, stateObserver);
         authorizationState.observe(this, stateObserver);
+        btcSyncData.observe(this, state -> checkBtcSync());
     }
 
     private void checkConnection() {
@@ -87,11 +91,24 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Boolean cState = connectionState.getValue();
         Boolean aState = authorizationState.getValue();
         if (nState == null || cState == null || aState == null) return;
+        String text = getString(R.string.connecting);
+        ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
         if (nState && cState && aState)
             connectingConstraint.setVisibility(View.GONE);
         else {
             connectingConstraint.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void checkBtcSync() {
+        Boolean isBtsSync = btcSyncData.getValue();
+        if (isBtsSync == null) return;
+        String text = "BTC Sync in progress";
+        ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
+        if (isBtsSync)
+            connectingConstraint.setVisibility(View.GONE);
+        else
+            connectingConstraint.setVisibility(View.VISIBLE);
     }
 
     @Override

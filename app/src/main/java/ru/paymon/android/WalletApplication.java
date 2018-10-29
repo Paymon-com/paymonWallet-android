@@ -2,7 +2,6 @@ package ru.paymon.android;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -13,15 +12,18 @@ import com.google.common.io.BaseEncoding;
 import org.apache.commons.io.IOUtils;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
+import org.bitcoinj.core.Block;
 import org.bitcoinj.core.CheckpointManager;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
+import org.bitcoinj.core.FilteredBlock;
 import org.bitcoinj.core.NetworkParameters;
+import org.bitcoinj.core.Peer;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionConfidence;
+import org.bitcoinj.core.listeners.DownloadProgressTracker;
 import org.bitcoinj.crypto.LinuxSecureRandom;
-import org.bitcoinj.kits.WalletAppKit;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.utils.Threading;
 import org.bitcoinj.wallet.KeyChainGroup;
@@ -40,32 +42,18 @@ import org.spongycastle.crypto.generators.OpenSSLPBEParametersGenerator;
 import org.spongycastle.crypto.modes.CBCBlockCipher;
 import org.spongycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.spongycastle.crypto.params.ParametersWithIV;
-import org.web3j.abi.FunctionEncoder;
-import org.web3j.abi.TypeReference;
-import org.web3j.abi.datatypes.Function;
-import org.web3j.abi.datatypes.Type;
-import org.web3j.abi.datatypes.Utf8String;
-import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.crypto.CipherException;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
-import org.web3j.crypto.WalletUtils;
-import org.web3j.protocol.Web3j;
 import org.web3j.protocol.Web3jFactory;
 import org.web3j.protocol.core.DefaultBlockParameterName;
-import org.web3j.protocol.core.RemoteCall;
-import org.web3j.protocol.core.methods.response.EthGetTransactionCount;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.core.methods.response.TransactionReceipt;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.ChainId;
-import org.web3j.tx.Contract;
 import org.web3j.tx.RawTransactionManager;
 import org.web3j.tx.TransactionManager;
 import org.web3j.tx.response.NoOpProcessor;
-import org.web3j.tx.response.PollingTransactionReceiptProcessor;
 import org.web3j.tx.response.TransactionReceiptProcessor;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
@@ -95,7 +83,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -122,7 +110,7 @@ public class WalletApplication extends AbsWalletApplication {
     private PaymonWallet paymonWallet;
     private String ethereumWalletPath;
     private String paymonWalletPath;
-    private Test kit;
+    private WalletKit kit;
 
     @Override
     public void onCreate() {
@@ -149,14 +137,44 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     public void startBitcoinKit() {
-        if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null) return;
-
-        kit = new Test(Constants.NETWORK_PARAMETERS, new File(getCacheDir().getPath()), "walletappkit1-example");
+//        if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null) return;
+        kit = new WalletKit(Constants.NETWORK_PARAMETERS, new File(getCacheDir().getPath()), "walletappkit1-example");
 
         InputStream checkpoint = CheckpointManager.openStream(Constants.NETWORK_PARAMETERS);
         kit.setCheckpoints(checkpoint);
         kit.setAutoSave(true);
         kit.setBlockingStartup(false);
+
+        kit.setDownloadListener(new DownloadProgressTracker() {
+            @Override
+            public void onChainDownloadStarted(Peer peer, int blocksLeft) {
+                super.onChainDownloadStarted(peer, blocksLeft);
+            }
+
+            @Override
+            public void onBlocksDownloaded(Peer peer, Block block, @Nullable FilteredBlock filteredBlock, int blocksLeft) {
+                super.onBlocksDownloaded(peer, block, filteredBlock, blocksLeft);
+            }
+
+            @Override
+            protected void progress(double pct, int blocksSoFar, Date date) {
+                super.progress(pct, blocksSoFar, date);
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_PROGRESS);
+                Log.e("AAA", "QQ " + pct);
+            }
+
+            @Override
+            protected void startDownload(int blocks) {
+                super.startDownload(blocks);
+            }
+
+            @Override
+            protected void doneDownload() {
+                super.doneDownload();
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+                Log.e("AAA", "QQ fin");
+            }
+        });
 
         Log.e("AAA", "before start");
         kit.startAsync();
@@ -203,8 +221,9 @@ public class WalletApplication extends AbsWalletApplication {
             kit.startAsync();
             kit.awaitRunning();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
+
         if (kit.wallet().isEncrypted())
             kit.wallet().decrypt(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
         return kit.wallet();
@@ -675,16 +694,7 @@ public class WalletApplication extends AbsWalletApplication {
 
     @Override
     public RestoreStatus restoreBitcoinWallet(final File file, final String password) {
-//        try {
-//            final BufferedReader cipherIn = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8));
-//            final StringBuilder cipherText = new StringBuilder();
-//            copy(cipherIn, cipherText, Constants.BACKUP_MAX_CHARS);
-//            cipherIn.close();
-//
-//            final byte[] plainText = decryptBytes(cipherText.toString(), password.toCharArray());
-//            final InputStream is = new ByteArrayInputStream(plainText);
-
-        Wallet wallet = null; //= restoreWalletFromProtobufOrBase58(is, Constants.NETWORK_PARAMETERS);
+        Wallet wallet = null;
 
         if (BACKUP_FILE_FILTER.accept(file)) {
             try (final FileInputStream is1 = new FileInputStream(file)) {
@@ -708,29 +718,8 @@ public class WalletApplication extends AbsWalletApplication {
         }catch (Exception e){
             e.printStackTrace();
         }
-//        kit.restoreWalletFromSeed(wallet.getKeyChainSeed());
-
-//        kit.stopAsync();
-//        kit.awaitTerminated();
 
         return resultWallet != null ? RestoreStatus.DONE : RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
-//        } catch (final IOException x) {
-//            x.printStackTrace();
-//            return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
-//        }
-//        try {
-//            Wallet walletFromFile = Wallet.loadFromFile(file);
-//            kit.restoreWalletFromSeed(walletFromFile.getKeyChainSeed());
-//            kit.stopAsync();
-//            kit.awaitTerminated();
-//            kit.startAsync();
-//            kit.awaitRunning();
-////            kit.wallet().loadFromFile(file);
-//            return RestoreStatus.DONE;
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
-//        }
     }
 
     @Override

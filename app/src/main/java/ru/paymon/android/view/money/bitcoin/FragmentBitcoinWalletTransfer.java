@@ -182,7 +182,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
 
                 if (!Utils.verifyBTCpubKey(value)) {
                     receiverAddressInputLayout.setError("Введеное значение не является BTC адресом!");
-                }else{
+                } else {
                     receiverAddressInputLayout.setError(null);
                 }
             }
@@ -200,12 +200,14 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
     @Override
     public void onResume() {
         super.onResume();
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED);
     }
 
@@ -217,6 +219,8 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 String balance = (String) args[1];
                 balanceTextView.setText(balance + " BTC");
             }
+        } else if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED) {
+            balanceTextView.setText(application.getBitcoinBalance().toFriendlyString());
         }
     }
 

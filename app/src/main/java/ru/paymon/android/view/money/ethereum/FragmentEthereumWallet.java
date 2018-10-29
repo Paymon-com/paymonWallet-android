@@ -33,6 +33,7 @@ import ru.paymon.android.models.EthTransactionItem;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
+import ru.paymon.android.view.money.DialogFragmentBackupWallet;
 import ru.paymon.android.view.money.DialogFragmentPrivateKey;
 import ru.paymon.android.view.money.DialogFragmentPublicKey;
 import ru.paymon.android.view.money.DialogFragmentRestoreWallet;
@@ -79,7 +80,7 @@ public class FragmentEthereumWallet extends Fragment {
 
         backBtn.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         restoreBtn.setOnClickListener(v -> new DialogFragmentRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
-//        backupBtn.setOnClickListener(v -> ((WalletApplication) getActivity().getApplication()).backupEthereumWallet());//TODO: вызов вьюшки с выбором места куда бэкапить
+        backupBtn.setOnClickListener(v -> new DialogFragmentBackupWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));
         transfer.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentEthereumWalletTransfer));

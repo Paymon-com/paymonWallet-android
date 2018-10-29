@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,7 +40,7 @@ import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CUR
 import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
 import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURRENCY_VALUE;
 
-public class FragmentMoney extends Fragment {
+public class FragmentMoney extends Fragment implements NotificationManager.IListener {
     public static final String CURRENCY_KEY = "CURRENCY_KEY";
 
     private DialogProgress dialogProgress;
@@ -108,6 +109,7 @@ public class FragmentMoney extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
         Utils.showBottomBar(getActivity());
         walletsData = moneyViewModel.getWalletsData();
         exchangeRatesData = moneyViewModel.getExchangeRatesData();
@@ -116,7 +118,7 @@ public class FragmentMoney extends Fragment {
             changeCurrency();
         });
 
-        walletsData.observe(this, (walletsData) -> {
+        walletsData.observe(getActivity(), (walletsData) -> {
             cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, cryptoWalletsListener);
             walletsRecView.setAdapter(cryptoWalletsAdapter);
         });
@@ -125,6 +127,7 @@ public class FragmentMoney extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
         walletsData.removeObservers(this);
         exchangeRatesData.removeObservers(this);
     }
@@ -180,4 +183,10 @@ public class FragmentMoney extends Fragment {
         }
     };
 
+    @Override
+    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
+        if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED) {
+            walletsData = moneyViewModel.getWalletsData();
+        }
+    }
 }

@@ -140,7 +140,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
                         User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = password;
                         User.saveConfig();
                         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.ETHEREUM_WALLET_CREATED);
-                        getDialog().dismiss();
+//                        getDialog().dismiss();
                         break;
                     case NO_USER_ID:
                         break;
@@ -188,7 +188,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
                         User.CLIENT_MONEY_PAYMON_WALLET_PASSWORD = password;
                         User.saveConfig();
                         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.PAYMON_WALLET_CREATED);
-                        getDialog().dismiss();
+//                        getDialog().dismiss();
                         break;
                     case NO_USER_ID:
                         break;
