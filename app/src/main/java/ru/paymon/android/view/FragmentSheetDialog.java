@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -48,8 +47,6 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
         ImageButton docAttachButton = (ImageButton) view.findViewById(R.id.document_chat_attachment);
 
         buttonAcceptOrCloseAttachment = (Button) view.findViewById(R.id.button_accept_or_close_attachment);
-
-        buttonAcceptOrCloseAttachment.setOnClickListener(v -> Toast.makeText(getContext(), "Click", Toast.LENGTH_SHORT).show());
 
         Fragment fragmentImage = new FragmentAttachmentImage();
         Fragment fragmentDocument = new FragmentAttachmentDocPicker();
@@ -86,15 +83,13 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
             return;
         }
         if (filesList.size() > 0 || mediasList.size() > 0) {
-            //TODO:кнопка Отправить
             buttonAcceptOrCloseAttachment.setText("Прикрепить");
             buttonAcceptOrCloseAttachment.setOnClickListener(v -> {
-
+                //TODO:кнопка Отправить
             });
         } else {
             buttonAcceptOrCloseAttachment.setText("Отмена");
             buttonAcceptOrCloseAttachment.setOnClickListener(v -> dialog.dismiss());
-            //TODO:кнопка Отмена
         }
     }
 
