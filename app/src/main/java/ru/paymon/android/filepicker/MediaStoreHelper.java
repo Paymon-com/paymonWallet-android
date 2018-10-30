@@ -2,7 +2,6 @@ package ru.paymon.android.filepicker;
 
 
 import android.content.ContentResolver;
-import android.os.Bundle;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +37,7 @@ public class MediaStoreHelper {
         }
     };
 
-    public static void getPhotosDir(ContentResolver contentResolver, Bundle args, FileResultCallback<FileDirectory> resultCallback) {
+    public static void getPhotosDir(ContentResolver contentResolver, FileResultCallback<FileDirectory> resultCallback) {
         new PhotoScannerTask(contentResolver, resultCallback).execute();
     }
 
