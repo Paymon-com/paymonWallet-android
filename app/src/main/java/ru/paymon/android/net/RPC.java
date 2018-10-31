@@ -639,7 +639,7 @@ public class RPC {
     }
 
     @Entity
-    public static class Message extends Packet {
+    public static class Message extends Packet implements Parcelable {
         public Message() {
         }
 
@@ -669,6 +669,8 @@ public class RPC {
         @TypeConverters(MessageActionConverter.class)
         public MessageAction action;
 
+
+
         public static Message deserialize(SerializableData stream, int constructor, boolean exception) {
             Message result = null;
             switch (constructor) {
@@ -687,6 +689,60 @@ public class RPC {
             }
             return result;
         }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeLong(this.id);
+            dest.writeInt(this.from_id);
+            dest.writeInt(this.to_id);
+            dest.writeParcelable(this.to_peer, flags);
+            dest.writeInt(this.date);
+            dest.writeInt(this.reply_to_msg_id);
+            dest.writeString(this.text);
+            dest.writeInt(this.flags);
+            dest.writeByte(this.unread ? (byte) 1 : (byte) 0);
+            dest.writeInt(this.views);
+            dest.writeInt(this.edit_date);
+            dest.writeInt(this.itemType == null ? -1 : this.itemType.ordinal());
+            dest.writeLong(this.itemID);
+            dest.writeParcelable(this.action, flags);
+        }
+
+        protected Message(Parcel in) {
+            this.id = in.readLong();
+            this.from_id = in.readInt();
+            this.to_id = in.readInt();
+            this.to_peer = in.readParcelable(Peer.class.getClassLoader());
+            this.date = in.readInt();
+            this.reply_to_msg_id = in.readInt();
+            this.text = in.readString();
+            this.flags = in.readInt();
+            this.unread = in.readByte() != 0;
+            this.views = in.readInt();
+            this.edit_date = in.readInt();
+            int tmpItemType = in.readInt();
+            this.itemType = tmpItemType == -1 ? null : FileManager.FileType.values()[tmpItemType];
+            this.itemID = in.readLong();
+            this.action = in.readParcelable(MessageAction.class.getClassLoader());
+        }
+
+        public static final Creator<Message> CREATOR = new Creator<Message>() {
+            @Override
+            public Message createFromParcel(Parcel source) {
+                return new Message(source);
+            }
+
+            @Override
+            public Message[] newArray(int size) {
+                return new Message[size];
+            }
+        };
     }
 
     public static class Update extends Packet {
@@ -2308,7 +2364,7 @@ public class RPC {
         }
     }
 
-    public static class MessageAction extends Packet {
+    public static class MessageAction extends Packet implements Parcelable{
         public String message;
         public List<UserObject> us1ers;
 
@@ -2331,6 +2387,38 @@ public class RPC {
             }
             return result;
         }
+
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeString(this.message);
+            dest.writeTypedList(this.us1ers);
+        }
+
+        public MessageAction() {
+        }
+
+        protected MessageAction(Parcel in) {
+            this.message = in.readString();
+            this.us1ers = in.createTypedArrayList(UserObject.CREATOR);
+        }
+
+        public static final Creator<MessageAction> CREATOR = new Creator<MessageAction>() {
+            @Override
+            public MessageAction createFromParcel(Parcel source) {
+                return new MessageAction(source);
+            }
+
+            @Override
+            public MessageAction[] newArray(int size) {
+                return new MessageAction[size];
+            }
+        };
     }
 
     public static class PM_messageActionGroupCreate extends MessageAction {

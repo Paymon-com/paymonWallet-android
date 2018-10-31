@@ -7,9 +7,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.recyclerview.selection.ItemDetailsLookup;
+import ru.paymon.android.adapters.GroupMessagesAdapter;
 import ru.paymon.android.adapters.MessagesAdapter;
+import ru.paymon.android.net.RPC;
 
-public class MessageItemLookup extends ItemDetailsLookup {
+public class MessageItemLookup extends ItemDetailsLookup<RPC.Message> {
 
     private final RecyclerView recyclerView;
 
@@ -19,12 +21,14 @@ public class MessageItemLookup extends ItemDetailsLookup {
 
     @Nullable
     @Override
-    public ItemDetails getItemDetails(@NonNull MotionEvent e) {
+    public ItemDetails<RPC.Message> getItemDetails(@NonNull MotionEvent e) {
         View view = recyclerView.findChildViewUnder(e.getX(), e.getY());
         if (view != null) {
             RecyclerView.ViewHolder viewHolder = recyclerView.getChildViewHolder(view);
             if (viewHolder instanceof MessagesAdapter.BaseMessageViewHolder) {
                 return ((MessagesAdapter.BaseMessageViewHolder) viewHolder).getItemDetails();
+            } else if (viewHolder instanceof GroupMessagesAdapter.BaseMessageViewHolder){
+                return ((GroupMessagesAdapter.BaseMessageViewHolder) viewHolder).getItemDetails();
             }
         }
 

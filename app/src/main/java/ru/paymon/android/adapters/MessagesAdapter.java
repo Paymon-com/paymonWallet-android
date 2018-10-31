@@ -1,5 +1,6 @@
 package ru.paymon.android.adapters;
 
+import android.arch.paging.PagedList;
 import android.arch.paging.PagedListAdapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,6 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vanniktech.emoji.EmojiTextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.recyclerview.selection.SelectionTracker;
 import ru.paymon.android.R;
@@ -25,6 +29,7 @@ import ru.paymon.android.utils.Utils;
 
 public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapter.BaseMessageViewHolder> {
     private SelectionTracker selectionTracker;
+    public List<RPC.Message> items = new ArrayList<>();
 
     public MessagesAdapter(@NonNull DiffUtil.ItemCallback<RPC.Message> diffCallback) {
         super(diffCallback);
@@ -69,6 +74,11 @@ public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapt
     }
 
     @Override
+    public void submitList(PagedList<RPC.Message> pagedList) {
+        super.submitList(pagedList);
+    }
+
+    @Override
     public void onBindViewHolder(@NonNull BaseMessageViewHolder holder, int position) {
         RPC.Message message = getItem(position);
 
@@ -76,6 +86,9 @@ public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapt
             return;
 
         holder.bind(message);
+
+        if (selectionTracker != null)
+            holder.setActivatedState(selectionTracker.isSelected(message));
     }
 
     @Override
@@ -104,8 +117,12 @@ public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapt
         }
 
         @Override
-        public MessageItemLookup.ItemDetails getItemDetails() {
+        public MessageItemLookup.ItemDetails<RPC.Message> getItemDetails() {
             return new MessageItemDetail(getAdapterPosition(), getCurrentList().get(getAdapterPosition()));
+        }
+
+        public void setActivatedState(boolean isActivated) {
+            itemView.setActivated(isActivated);
         }
 
         abstract void bind(RPC.Message message);
@@ -123,7 +140,6 @@ public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapt
 
         @Override
         void bind(RPC.Message message) {
-            itemView.setActivated(selectionTracker.isSelected(message));
             msg.setText(message.text);
             time.setText(Utils.formatDateTime(message.date, true));
         }
@@ -141,7 +157,6 @@ public class MessagesAdapter extends PagedListAdapter<RPC.Message, MessagesAdapt
 
         @Override
         void bind(RPC.Message message) {
-            itemView.setActivated(selectionTracker.isSelected(message));
             msg.setText(message.text);
             time.setText(Utils.formatDateTime(message.date, true));
         }

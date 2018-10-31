@@ -1,12 +1,12 @@
 package ru.paymon.android.view;
 
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +20,6 @@ import com.vanniktech.emoji.EmojiEditText;
 import com.vanniktech.emoji.EmojiPopup;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import androidx.navigation.Navigation;
 import androidx.recyclerview.selection.SelectionTracker;
@@ -71,6 +70,8 @@ public abstract class AbsFragmentChat extends Fragment {
             if (bundle.containsKey(CHAT_ID_KEY))
                 chatID = bundle.getInt(CHAT_ID_KEY);
         }
+
+        chatViewModel = ViewModelProviders.of(this).get(ChatViewModel.class);
     }
 
     @Nullable
@@ -124,7 +125,7 @@ public abstract class AbsFragmentChat extends Fragment {
         toolbarViewSelected = getLayoutInflater().inflate(R.layout.toolbar_chat_selected, null);
         selectedItemCount = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_count);
         delete = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_delete);
-        delete = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_copy);
+        copy = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_copy);
         toolbarViewSelected.setVisibility(View.GONE);
 
         toolbarContainer.addView(toolbarView);
@@ -180,7 +181,7 @@ public abstract class AbsFragmentChat extends Fragment {
         super.onResume();
         Utils.hideBottomBar(getActivity());
         MessagesManager.getInstance().currentChatID = chatID;
-        loadMessages();
+//        loadMessages();
     }
 
     @Override
@@ -189,20 +190,20 @@ public abstract class AbsFragmentChat extends Fragment {
         MessagesManager.getInstance().currentChatID = 0;
     }
 
-    private void loadMessages() {
-        if (User.currentUser == null || chatID == 0) return;
-
-        RPC.PM_getChatMessages packet = new RPC.PM_getChatMessages();
-
-        packet.chatID = this instanceof FragmentChat ? new RPC.PM_peerUser(chatID) : new RPC.PM_peerGroup(chatID);
-        packet.offset = 0;
-        packet.count = 100;
-
-        NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
-            if (response == null) return;
-            final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
-            if (receivedMessages.messages.size() == 0) return;
-            MessagesManager.getInstance().putMessages(receivedMessages.messages);
-        });
-    }
+//    private void loadMessages() {
+//        if (User.currentUser == null || chatID == 0) return;
+//
+//        RPC.PM_getChatMessages packet = new RPC.PM_getChatMessages();
+//
+//        packet.chatID = this instanceof FragmentChat ? new RPC.PM_peerUser(chatID) : new RPC.PM_peerGroup(chatID);
+//        packet.offset = 0;
+//        packet.count = 100;
+//
+//        NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
+//            if (response == null) return;
+//            final RPC.PM_chat_messages receivedMessages = (RPC.PM_chat_messages) response;
+//            if (receivedMessages.messages.size() == 0) return;
+//            MessagesManager.getInstance().putMessages(receivedMessages.messages);
+//        });
+//    }
 }

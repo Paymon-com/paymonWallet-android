@@ -11,7 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import ru.paymon.android.components.CircularImageView;
+
 import com.vanniktech.emoji.EmojiTextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import androidx.recyclerview.selection.SelectionTracker;
 import ru.paymon.android.GroupsManager;
@@ -27,7 +31,8 @@ import ru.paymon.android.utils.Utils;
 
 public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMessagesAdapter.BaseMessageViewHolder> {
     private SelectionTracker selectionTracker;
-    Context context;
+    private Context context;
+    public List<RPC.Message> items = new ArrayList<>();
 
     public GroupMessagesAdapter(@NonNull DiffUtil.ItemCallback<RPC.Message> diffCallback) {
         super(diffCallback);
@@ -79,6 +84,9 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
             return;
 
         holder.bind(message);
+
+        if (selectionTracker != null)
+            holder.setActivatedState(selectionTracker.isSelected(message));
 
         if (holder instanceof GroupReceiveMessageViewHolder) {
             final GroupReceiveMessageViewHolder groupReceiveMessageViewHolder = (GroupReceiveMessageViewHolder) holder;
@@ -132,8 +140,12 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
         }
 
         @Override
-        public MessageItemLookup.ItemDetails getItemDetails() {
+        public MessageItemLookup.ItemDetails<RPC.Message> getItemDetails() {
             return new MessageItemDetail(getAdapterPosition(), getCurrentList().get(getAdapterPosition()));
+        }
+
+        public void setActivatedState(boolean isActivated) {
+            itemView.setActivated(isActivated);
         }
 
         abstract void bind(RPC.Message message);
@@ -190,7 +202,7 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
                 final int groupID = message.to_peer.group_id;
                 final RPC.Group group = GroupsManager.getInstance().getGroup(groupID);
                 final RPC.UserObject creator = UsersManager.getInstance().getUser(group.creatorID);
-                if(creator == null) return;
+                if (creator == null) return;
                 String createGroupString = String.format("%s %s \"%s\"", Utils.formatUserName(creator), context.getString(R.string.created_group), group.title);
                 msg.setText(createGroupString);
             }

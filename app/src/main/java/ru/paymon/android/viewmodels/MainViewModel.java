@@ -72,9 +72,13 @@ public class MainViewModel extends ViewModel implements NotificationManager.ILis
                 isNetworkConnected.postValue(false);
             } else if (event == NotificationManager.NotificationEvent.NETWORK_STATE_CONNECTED) {
                 isNetworkConnected.postValue(true);
-            } else if(event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_PROGRESS){
-                isBtcSync.postValue(false);
-            } else if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED){
+            } else if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_PROGRESS) {
+                double progress = (double) args[0];
+                if (progress < 100)
+                    isBtcSync.postValue(false);
+                else
+                    isBtcSync.postValue(true);
+            } else if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED) {
                 isBtcSync.postValue(true);
             }
         });

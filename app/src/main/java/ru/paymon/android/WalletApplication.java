@@ -159,7 +159,7 @@ public class WalletApplication extends AbsWalletApplication {
             @Override
             protected void progress(double pct, int blocksSoFar, Date date) {
                 super.progress(pct, blocksSoFar, date);
-                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_PROGRESS);
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_PROGRESS, pct);
                 Log.e("AAA", "QQ " + pct);
             }
 

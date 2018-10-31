@@ -100,4 +100,11 @@ public class MessagesManager {
     public void deleteMessage(RPC.Message message) {
         ApplicationLoader.db.chatMessageDao().delete(message);
     }
+
+    public void deleteMessages(List<Long> ids) {
+        for (long id:ids) {
+            final RPC.Message message = ApplicationLoader.db.chatMessageDao().getMessageByMessageId(id);
+            deleteMessage(message);
+        }
+    }
 }
