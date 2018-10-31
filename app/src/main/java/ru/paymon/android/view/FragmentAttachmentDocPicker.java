@@ -35,7 +35,7 @@ public class FragmentAttachmentDocPicker extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_attachment_document, container, false);
+        View view = inflater.inflate(R.layout.fragment_chat_attachment_document, container, false);
 
         viewPager = view.findViewById(R.id.attachment_view_pager);
         TabLayout tabLayout = view.findViewById(R.id.tabs);

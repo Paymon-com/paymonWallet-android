@@ -42,7 +42,7 @@ public class FileListAdapter extends SelectableAdapter<FileListAdapter.FileViewH
     @NotNull
     @Override
     public FileViewHolder onCreateViewHolder(@NotNull ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.item_doc_layout, parent, false);
+        View itemView = LayoutInflater.from(context).inflate(R.layout.view_holder_attachment_document_item, parent, false);
 
         return new FileViewHolder(itemView);
     }
@@ -60,13 +60,22 @@ public class FileListAdapter extends SelectableAdapter<FileListAdapter.FileViewH
 
         holder.checkBox.setChecked(isSelected(document));
 
-        holder.itemView.setBackgroundResource(
-                isSelected(document) ? R.color.gray_transparent : android.R.color.white);
+        if (isSelected(document)){
+            holder.itemView.setBackgroundResource(R.color.dark_green);
+        } else {
+            holder.itemView.setBackgroundResource(R.color.borderBlueGradientFrom);
+        }
+
         holder.checkBox.setVisibility(isSelected(document) ? View.VISIBLE : View.GONE);
 
         holder.checkBox.setOnCheckedChangeListener((checkBox, isChecked) -> {
             toggleSelection(document);
-            holder.itemView.setBackgroundResource(isChecked ? R.color.gray_transparent : android.R.color.white);
+            if (isChecked){
+                holder.itemView.setBackgroundResource(R.color.dark_green);
+            } else {
+                holder.itemView.setBackgroundResource(R.color.borderBlueGradientFrom);
+            }
+
         });
     }
 

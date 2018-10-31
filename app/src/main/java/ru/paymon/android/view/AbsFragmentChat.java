@@ -83,7 +83,7 @@ public abstract class AbsFragmentChat extends Fragment {
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (ImageButton) view.findViewById(R.id.sendButton);
         emoticonsButton = (ImageView) view.findViewById(R.id.smilesButton);
-        buttonAttachment = (Button) view.findViewById(R.id.button_attachment_test);
+        buttonAttachment = (Button) view.findViewById(R.id.button_attachment);
         toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
 
         buttonAttachment.setOnClickListener(v -> {
