@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,8 +57,17 @@ public class FragmentChat extends AbsFragmentChat {
             messagesAdapter.submitList(pagedList);
 
             ApplicationLoader.applicationHandler.postDelayed(() -> {
+                final List<RPC.Message> selectedMessages = Lists.newArrayList(selectionTracker.getSelection().iterator());
+                selectionTracker.clearSelection();
                 messagesAdapter.items.clear();
                 messagesAdapter.items.addAll(messagesAdapter.getCurrentList());
+                for (final RPC.Message message : selectedMessages) {
+                    final long mid = message.id;
+                    for (final RPC.Message msg : messagesAdapter.getCurrentList()) {
+                        if (mid == msg.id)
+                            selectionTracker.select(msg);
+                    }
+                }
             }, 200);
 
             selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
