@@ -19,7 +19,9 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Set;
 
+import ru.paymon.android.models.BtcTransactionItem;
 import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.PaymonWallet;
 
@@ -40,6 +42,7 @@ public abstract class AbsWalletApplication extends Application {
     public abstract String getBitcoinPublicAddress();
     public abstract String getBitcoinPrivateAddress();
     public abstract List<String> getAllBitcoinPublicAdresses();
+    public abstract List<BtcTransactionItem> getBitcoinTransactionHistory();
 
     public abstract boolean createEthereumWallet(final String password);
     protected abstract EthereumWallet getEthereumWallet(final String password);

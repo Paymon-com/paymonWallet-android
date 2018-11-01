@@ -59,8 +59,8 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
     private MutableLiveData<BigInteger> ethereumBalance;
     private MutableLiveData<BigInteger> paymonBalance;
     private MutableLiveData<BigInteger> paymonEthBalance;
-    private MutableLiveData<ArrayList<TransactionItem>> ethereumTransactionsData;
-    private MutableLiveData<ArrayList<TransactionItem>> paymonTransactionsData;
+    private MutableLiveData<ArrayList<EthTransactionItem>> ethereumTransactionsData;
+    private MutableLiveData<ArrayList<PmntTransactionItem>> paymonTransactionsData;
     private MutableLiveData<Integer> maxGasPriceData = new MutableLiveData<>();
     private MutableLiveData<Integer> midGasPriceData = new MutableLiveData<>();
     private final WalletApplication application;
@@ -116,14 +116,14 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
         return paymonEthBalance;
     }
 
-    public LiveData<ArrayList<TransactionItem>> getEthereumTranscationsData() {
+    public LiveData<ArrayList<EthTransactionItem>> getEthereumTranscationsData() {
         if (ethereumTransactionsData == null)
             ethereumTransactionsData = new MutableLiveData<>();
         loadEthereumTransactionsData();
         return ethereumTransactionsData;
     }
 
-    public LiveData<ArrayList<TransactionItem>> getPaymonTranscationsData() {
+    public LiveData<ArrayList<PmntTransactionItem>> getPaymonTranscationsData() {
         if (paymonTransactionsData == null)
             paymonTransactionsData = new MutableLiveData<>();
         loadPaymonTransactionsData();
@@ -329,7 +329,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             showProgress.postValue(true);
             final String address = application.getEthereumWallet().publicAddress;
             final String link = "http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=desc&apikey=YourApiKeyToken";
-            final ArrayList<TransactionItem> transactionItems = new ArrayList<>();
+            final ArrayList<EthTransactionItem> transactionItems = new ArrayList<>();
 
             try {
                 final HttpURLConnection httpsURLConnection = (HttpURLConnection) ((new URL(link).openConnection()));
@@ -375,7 +375,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             showProgress.postValue(true);
             final String address = application.getPaymonWallet().publicAddress;
             final String link = "http://api.etherscan.io/api?module=account&action=tokentx&address=" + address + "&startblock=0&endblock=999999999&sort=desc&apikey=YourApiKeyToken";
-            final ArrayList<TransactionItem> transactionItems = new ArrayList<>();
+            final ArrayList<PmntTransactionItem> transactionItems = new ArrayList<>();
 
             try {
                 final HttpURLConnection httpsURLConnection = (HttpURLConnection) ((new URL(link).openConnection()));
@@ -395,19 +395,20 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject transcationObj = jsonArray.getJSONObject(i);
+                    String tokenSymbol = transcationObj.getString("tokenSymbol");
+                    if (!tokenSymbol.equals("PMNT")) continue;
                     Long timestamp = transcationObj.getLong("timeStamp");
                     String date = (String) DateFormat.format(CLIENT_BASIC_DATE_FORMAT_IS_24H ? "d MMM yyyy HH:mm" : "d MMM yyyy hh:mm aa", new Date(timestamp * 1000));
                     String hash = transcationObj.getString("hash");
                     String from = transcationObj.getString("from");
                     String to = transcationObj.getString("to");
-                    String tokenSymbol = transcationObj.getString("tokenSymbol");
                     String value = Convert.fromWei(transcationObj.getString("value"), Convert.Unit.GWEI).toString() + " PMNT";
                     String gasLimit = transcationObj.getString("gas");
                     String gasPrice = Convert.fromWei(transcationObj.getString("gasPrice"), Convert.Unit.GWEI) + " GWEI";
                     String gasUsed = transcationObj.getString("gasUsed");
 //                    String status = transcationObj.getInt("txreceipt_status") == 1 ? "success" : "fail"; //TODO:String
-                    String data = transcationObj.getString("input");
-                    transactionItems.add(new EthTransactionItem(hash, "", date, value, to, from, gasLimit, gasUsed, gasPrice));
+//                    String data = transcationObj.getString("input");
+                    transactionItems.add(new PmntTransactionItem(hash, date, value, to, from, gasLimit, gasUsed, gasPrice));
 
 //                    try {
 //                        String method = data.substring(0, 10);

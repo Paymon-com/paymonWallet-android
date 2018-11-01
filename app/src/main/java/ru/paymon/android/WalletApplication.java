@@ -22,6 +22,8 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Peer;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionConfidence;
+import org.bitcoinj.core.TransactionInput;
+import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.core.listeners.DownloadProgressTracker;
 import org.bitcoinj.crypto.LinuxSecureRandom;
 import org.bitcoinj.script.Script;
@@ -86,10 +88,12 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executors;
 
 import javax.annotation.Nullable;
 
+import ru.paymon.android.models.BtcTransactionItem;
 import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.PaymonTokenContract;
 import ru.paymon.android.models.PaymonWallet;
@@ -99,6 +103,7 @@ import ru.paymon.android.utils.Utils;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
 import static org.bitcoinj.crypto.KeyCrypterScrypt.SALT_LENGTH;
+import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_IS_24H;
 import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
 
 
@@ -160,7 +165,6 @@ public class WalletApplication extends AbsWalletApplication {
             protected void progress(double pct, int blocksSoFar, Date date) {
                 super.progress(pct, blocksSoFar, date);
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_PROGRESS, pct);
-                Log.e("AAA", "QQ " + pct);
             }
 
             @Override
@@ -172,15 +176,11 @@ public class WalletApplication extends AbsWalletApplication {
             protected void doneDownload() {
                 super.doneDownload();
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
-                Log.e("AAA", "QQ fin");
             }
         });
 
-        Log.e("AAA", "before start");
         kit.startAsync();
-        Log.e("AAA", "after start");
         kit.awaitRunning();
-        Log.e("AAA", "after await");
 
         kit.wallet().addCoinsReceivedEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
             Log.e("AAA", "-----> coins resceived: " + tx.getHashAsString());
@@ -709,13 +709,13 @@ public class WalletApplication extends AbsWalletApplication {
                 x.printStackTrace();
             }
         } else if (OPENSSL_FILE_FILTER.accept(file)) {
-           wallet =  restoreWalletFromEncrypted(file, password);
+            wallet = restoreWalletFromEncrypted(file, password);
         }
 
         Wallet resultWallet = null;
         try {
             resultWallet = kit.restoreWallet(wallet);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -749,6 +749,22 @@ public class WalletApplication extends AbsWalletApplication {
             keysList.add(new Address(Constants.NETWORK_PARAMETERS, key.getPubKeyHash()).toBase58());
         }
         return keysList;
+    }
+
+    @Override
+    public List<BtcTransactionItem> getBitcoinTransactionHistory() {
+        final Set<Transaction> transactions = getBitcoinWallet().getTransactions(true);
+        final List<BtcTransactionItem> transactionItems = new ArrayList<>();
+        for (final Transaction transaction : transactions) {
+            final String hash = transaction.getHashAsString();
+            final String fee = String.valueOf((transaction.getInputSum().getValue() > 0 ? transaction.getInputSum().getValue() - transaction.getOutputSum().getValue() : 0));
+            final String confirmations = String.valueOf(transaction.getConfidence().getDepthInBlocks());
+            final String date = (String) android.text.format.DateFormat.format(CLIENT_BASIC_DATE_FORMAT_IS_24H ? "d MMM yyyy HH:mm" : "d MMM yyyy hh:mm aa", transaction.getUpdateTime());
+            final String value = transaction.getValue(getBitcoinWallet()).toString();
+
+            transactionItems.add(new BtcTransactionItem(hash, confirmations, date, value, fee));
+        }
+        return transactionItems;
     }
 
     @Override
