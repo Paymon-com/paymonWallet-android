@@ -53,8 +53,9 @@ public abstract class AbsFragmentChat extends Fragment {
     public ImageView backToolbar;
     public TextView participantsCountTextView;
     public TextView selectedItemCount;
-    public TextView delete;
-    public TextView copy;
+    public ImageButton delete;
+    public ImageButton copy;
+    public ImageButton clearChatSelected;
     public SelectionTracker selectionTracker;
     public ChatViewModel chatViewModel;
     public ArrayList<RPC.UserObject> groupUsers;
@@ -126,6 +127,7 @@ public abstract class AbsFragmentChat extends Fragment {
         selectedItemCount = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_count);
         delete = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_delete);
         copy = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_copy);
+        clearChatSelected = toolbarViewSelected.findViewById(R.id.toolbar_chat_selected_back);
         toolbarViewSelected.setVisibility(View.GONE);
 
         toolbarContainer.addView(toolbarView);

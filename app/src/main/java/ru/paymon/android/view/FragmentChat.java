@@ -77,7 +77,7 @@ public class FragmentChat extends AbsFragmentChat {
                     if (selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.GONE);
                         toolbarViewSelected.setVisibility(View.VISIBLE);
-                        selectedItemCount.setText(getString(R.string.selected_item_count) + ": " + selectionTracker.getSelection().size());
+                        selectedItemCount.setText(getString(R.string.selected_messages_count) + ": " + selectionTracker.getSelection().size());
                     } else if (!selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.VISIBLE);
                         toolbarViewSelected.setVisibility(View.GONE);
@@ -91,11 +91,13 @@ public class FragmentChat extends AbsFragmentChat {
             });
         });
 
+        clearChatSelected.setOnClickListener(v -> selectionTracker.clearSelection());
+
         delete.setOnClickListener(v -> {
             if (selectionTracker.hasSelection()) {
                 final ArrayList<Long> checkedMessageIDs = new ArrayList<>();
                 List<RPC.Message> selectedMessages = Lists.newArrayList(selectionTracker.getSelection().iterator());
-                for (final RPC.Message message:selectedMessages) {
+                for (final RPC.Message message : selectedMessages) {
                     checkedMessageIDs.add(message.id);
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext())

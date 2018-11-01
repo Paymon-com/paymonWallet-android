@@ -1,47 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="40dp"
+    android:layout_height="wrap_content"
     android:background="?attr/colorPrimary"
     android:orientation="horizontal"
-    android:weightSum="7"
     local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
     local:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/toolbar_chat_selected_back"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_arrow_back"
-        android:layout_weight="1"/>
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_arrow_back" />
 
     <TextView
         android:id="@+id/toolbar_chat_selected_count"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="3"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
         android:singleLine="true"
+        android:textColor="@color/white"
         android:textSize="18sp"
-        android:text="Selected item count: 0"
-        android:layout_gravity="center"/>
+        tools:text="Selected item count: 0" />
 
-    <TextView
+    <ImageButton
         android:id="@+id/toolbar_chat_selected_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="DELETE"
-        android:textSize="18sp"
-        android:textAlignment="center"
-        android:layout_gravity="center"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_delete_wallet"
+        android:textColor="@color/white" />
 
-    <TextView
+    <ImageButton
         android:id="@+id/toolbar_chat_selected_copy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="COPY"
-        android:textSize="18sp"
-        android:textAlignment="center"
-        android:layout_gravity="center"/>
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_copy"
+        android:textColor="@color/white" />
 </LinearLayout>
