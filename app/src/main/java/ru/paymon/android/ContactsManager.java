@@ -112,7 +112,7 @@
 //
 //            phones = stringBuilder.toString();
 //
-//            //TODO:реализовать на серваке эту функцию
+//
 //            RPC.PM_getUsersByPhoneNumber getUsersByPhoneNumberRequest = new RPC.PM_getUsersByPhoneNumber();
 //            getUsersByPhoneNumberRequest.phones = phones;
 //

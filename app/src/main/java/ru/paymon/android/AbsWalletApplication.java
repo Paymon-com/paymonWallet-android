@@ -19,7 +19,9 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Set;
 
+import ru.paymon.android.models.BtcTransactionItem;
 import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.PaymonWallet;
 
@@ -33,13 +35,14 @@ public abstract class AbsWalletApplication extends Application {
     protected Credentials paymonWalletCredentials;
 
     public abstract Wallet getBitcoinWallet();
-    public abstract RestoreStatus restoreBitcoinWallet(final File file, final String password);//TODO: применить пароль при создании
+    public abstract RestoreStatus restoreBitcoinWallet(final File file, final String password);
     public abstract boolean backupBitcoinWallet(final String path);
     public abstract Coin getBitcoinBalance();
     public abstract boolean deleteBitcoinWallet();
     public abstract String getBitcoinPublicAddress();
     public abstract String getBitcoinPrivateAddress();
     public abstract List<String> getAllBitcoinPublicAdresses();
+    public abstract List<BtcTransactionItem> getBitcoinTransactionHistory();
 
     public abstract boolean createEthereumWallet(final String password);
     protected abstract EthereumWallet getEthereumWallet(final String password);

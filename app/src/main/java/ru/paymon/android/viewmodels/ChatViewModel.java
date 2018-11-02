@@ -6,7 +6,7 @@ import android.arch.paging.DataSource;
 import android.arch.paging.LivePagedListBuilder;
 import android.arch.paging.PagedList;
 
-import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.MessagesManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.pagedlib.MessagesBoundaryCallback;
 
@@ -20,7 +20,7 @@ public class ChatViewModel extends ViewModel {
 
     public LiveData<PagedList<RPC.Message>> getMessages(int chatID, boolean isGroup){
 //        if(messages == null){
-            factory = ApplicationLoader.db.chatMessageDao().getMessagesByChatID(chatID);
+            factory = MessagesManager.getInstance().getMessagesByChatID(chatID);
             final PagedList.Config config = new PagedList.Config.Builder()
                     .setInitialLoadSizeHint(15)
                     .setPageSize(15)

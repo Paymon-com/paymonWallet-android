@@ -5,8 +5,10 @@ import android.util.Log;
 import java.math.BigInteger;
 
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.ExchangeRatesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.WalletApplication;
+import ru.paymon.android.room.AppDatabase;
 
 import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
 import static ru.paymon.android.view.money.ethereum.FragmentEthereumWallet.ETH_CURRENCY_VALUE;
@@ -44,7 +46,7 @@ public class NonEmptyWalletItem extends WalletItem implements NotificationManage
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
         if (event == NotificationManager.NotificationEvent.MONEY_FIAT_CURRENCY_CHANGED) {
             fiatCurrency = (String) args[0];
-            ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, cryptoCurrency);
+            ExchangeRate exchangeRate = ExchangeRatesManager.getInstance().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, cryptoCurrency);
             if(exchangeRate == null) return;
             switch (cryptoCurrency) {
                 case BTC_CURRENCY_VALUE:

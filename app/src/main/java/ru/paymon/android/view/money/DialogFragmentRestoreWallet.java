@@ -87,9 +87,9 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
             AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(getContext())
 //                    .setFilter(".*\\.json")
                     .setOpenDialogListener((fileName) -> {
+                        filePath[0] = fileName;
                         path.setVisibility(View.VISIBLE);
                         path.setText(fileName);
-                        filePath[0] = fileName;
                     });
             fileDialog.show();
         });

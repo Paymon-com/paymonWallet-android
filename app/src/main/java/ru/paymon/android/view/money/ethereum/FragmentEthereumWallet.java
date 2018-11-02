@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.R;
+import ru.paymon.android.WalletApplication;
 import ru.paymon.android.adapters.TransactionAdapter;
 import ru.paymon.android.models.EthTransactionItem;
 import ru.paymon.android.models.TransactionItem;
@@ -45,7 +46,7 @@ public class FragmentEthereumWallet extends Fragment {
     public static final String ETH_CURRENCY_VALUE = "ETH";
     private MoneyViewModel moneyViewModel;
     private LiveData<BigInteger> balanceLiveData;
-    private LiveData<ArrayList<TransactionItem>> transactionsData;
+    private LiveData<ArrayList<EthTransactionItem>> transactionsData;
     private TransactionAdapter transactionAdapter;
     private TextView balanceTextView;
     private TextView historyText;
@@ -142,7 +143,7 @@ public class FragmentEthereumWallet extends Fragment {
 
         transactionsData.observe(this, (transactionItems) -> {
             if (transactionItems == null) return;
-            transactionAdapter = new TransactionAdapter(transactionItems);
+            transactionAdapter = new TransactionAdapter(new ArrayList<>(transactionItems), ((WalletApplication) getActivity().getApplication()).getEthereumWallet().publicAddress);
             transactionsRecView.setAdapter(transactionAdapter);
             if (transactionAdapter.transactionItems.size() > 0)
                 historyText.setVisibility(View.INVISIBLE);

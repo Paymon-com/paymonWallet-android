@@ -28,11 +28,13 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
+import ru.paymon.android.ExchangeRatesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
@@ -44,6 +46,7 @@ import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.models.PmntTransactionItem;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.models.WalletItem;
+import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_IS_24H;
@@ -59,8 +62,8 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
     private MutableLiveData<BigInteger> ethereumBalance;
     private MutableLiveData<BigInteger> paymonBalance;
     private MutableLiveData<BigInteger> paymonEthBalance;
-    private MutableLiveData<ArrayList<TransactionItem>> ethereumTransactionsData;
-    private MutableLiveData<ArrayList<TransactionItem>> paymonTransactionsData;
+    private MutableLiveData<ArrayList<EthTransactionItem>> ethereumTransactionsData;
+    private MutableLiveData<ArrayList<PmntTransactionItem>> paymonTransactionsData;
     private MutableLiveData<Integer> maxGasPriceData = new MutableLiveData<>();
     private MutableLiveData<Integer> midGasPriceData = new MutableLiveData<>();
     private final WalletApplication application;
@@ -116,14 +119,14 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
         return paymonEthBalance;
     }
 
-    public LiveData<ArrayList<TransactionItem>> getEthereumTranscationsData() {
+    public LiveData<ArrayList<EthTransactionItem>> getEthereumTranscationsData() {
         if (ethereumTransactionsData == null)
             ethereumTransactionsData = new MutableLiveData<>();
         loadEthereumTransactionsData();
         return ethereumTransactionsData;
     }
 
-    public LiveData<ArrayList<TransactionItem>> getPaymonTranscationsData() {
+    public LiveData<ArrayList<PmntTransactionItem>> getPaymonTranscationsData() {
         if (paymonTransactionsData == null)
             paymonTransactionsData = new MutableLiveData<>();
         loadPaymonTransactionsData();
@@ -158,7 +161,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             if (ethereumWallet != null) {
                 BigInteger balance = application.getEthereumBalance();
                 if (balance != null) {
-                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, ETH_CURRENCY_VALUE);
+                    ExchangeRate exchangeRate = ExchangeRatesManager.getInstance().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, ETH_CURRENCY_VALUE);
                     if (exchangeRate != null) {
                         String fiatBalance = WalletApplication.convertEthereumToFiat(balance, exchangeRate.value);
                         walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, Convert.fromWei(new BigDecimal(balance), Convert.Unit.ETHER).toString(), fiatCurrency, fiatBalance));
@@ -173,7 +176,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             if (paymonWallet != null) {
                 BigInteger balance = application.getPaymonBalance();
                 if (balance != null) {
-                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, PMNT_CURRENCY_VALUE);
+                    ExchangeRate exchangeRate = ExchangeRatesManager.getInstance().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, PMNT_CURRENCY_VALUE);
                     if (exchangeRate != null) {
                         String fiatBalance = WalletApplication.convertPaymonToFiat(balance, exchangeRate.value);
                         walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, Convert.fromWei(new BigDecimal(balance), Convert.Unit.GWEI).toString(), fiatCurrency, fiatBalance));
@@ -188,7 +191,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             if (bitcoinWallet != null && User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD != null) {
                 ApplicationLoader.applicationHandler.post(() -> {
                     String balance = bitcoinWallet.getBalance().toPlainString();
-                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
+                    ExchangeRate exchangeRate = ExchangeRatesManager.getInstance().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
                     if (exchangeRate != null) {
                         String fiatBalance = WalletApplication.convertBitcoinToFiat(balance, exchangeRate.value);
                         walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, balance, fiatCurrency, fiatBalance));
@@ -243,8 +246,10 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                 }
 
                 if (exchangeRatesItems.size() > 0) {
-                    ApplicationLoader.db.exchangeRatesDao().deleteAll();
-                    ApplicationLoader.db.exchangeRatesDao().insertList(exchangeRatesItems);
+//                    Executors.newSingleThreadExecutor().submit(() -> {
+                        AppDatabase.getDatabase().exchangeRatesDao().deleteAll();
+                        AppDatabase.getDatabase().exchangeRatesDao().insertList(exchangeRatesItems);
+//                    });
                     exchangeRatesData.postValue(exchangeRatesItems);
                 }
             } catch (Exception e) {
@@ -329,7 +334,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             showProgress.postValue(true);
             final String address = application.getEthereumWallet().publicAddress;
             final String link = "http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=desc&apikey=YourApiKeyToken";
-            final ArrayList<TransactionItem> transactionItems = new ArrayList<>();
+            final ArrayList<EthTransactionItem> transactionItems = new ArrayList<>();
 
             try {
                 final HttpURLConnection httpsURLConnection = (HttpURLConnection) ((new URL(link).openConnection()));
@@ -375,7 +380,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             showProgress.postValue(true);
             final String address = application.getPaymonWallet().publicAddress;
             final String link = "http://api.etherscan.io/api?module=account&action=tokentx&address=" + address + "&startblock=0&endblock=999999999&sort=desc&apikey=YourApiKeyToken";
-            final ArrayList<TransactionItem> transactionItems = new ArrayList<>();
+            final ArrayList<PmntTransactionItem> transactionItems = new ArrayList<>();
 
             try {
                 final HttpURLConnection httpsURLConnection = (HttpURLConnection) ((new URL(link).openConnection()));
@@ -395,19 +400,18 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject transcationObj = jsonArray.getJSONObject(i);
+                    String tokenSymbol = transcationObj.getString("tokenSymbol");
+                    if (!tokenSymbol.equals("PMNT")) continue;
                     Long timestamp = transcationObj.getLong("timeStamp");
                     String date = (String) DateFormat.format(CLIENT_BASIC_DATE_FORMAT_IS_24H ? "d MMM yyyy HH:mm" : "d MMM yyyy hh:mm aa", new Date(timestamp * 1000));
                     String hash = transcationObj.getString("hash");
                     String from = transcationObj.getString("from");
                     String to = transcationObj.getString("to");
-                    String tokenSymbol = transcationObj.getString("tokenSymbol");
                     String value = Convert.fromWei(transcationObj.getString("value"), Convert.Unit.GWEI).toString() + " PMNT";
                     String gasLimit = transcationObj.getString("gas");
                     String gasPrice = Convert.fromWei(transcationObj.getString("gasPrice"), Convert.Unit.GWEI) + " GWEI";
                     String gasUsed = transcationObj.getString("gasUsed");
-//                    String status = transcationObj.getInt("txreceipt_status") == 1 ? "success" : "fail"; //TODO:String
-                    String data = transcationObj.getString("input");
-                    transactionItems.add(new EthTransactionItem(hash, "", date, value, to, from, gasLimit, gasUsed, gasPrice));
+                    transactionItems.add(new PmntTransactionItem(hash, date, value, to, from, gasLimit, gasUsed, gasPrice));
 
 //                    try {
 //                        String method = data.substring(0, 10);

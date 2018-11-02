@@ -229,6 +229,7 @@ public class NetworkManager {
                 RPC.PM_authToken packet = new RPC.PM_authToken();
                 packet.token = user.token;
                 packet.fcmToken = FcmService.token == null ? FirebaseInstanceId.getInstance().getToken() : FcmService.token;
+//                packet.fcmToken = "";
 
                 NetworkManager.getInstance().sendRequest(packet, (response, error) -> {
                     if (error != null || response == null) {

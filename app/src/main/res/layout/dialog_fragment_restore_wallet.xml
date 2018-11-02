@@ -30,11 +30,11 @@
 
         <TextView
             android:id="@+id/dialog_fragment_restore_wallet_path"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
             android:textColor="@color/white"

@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.ChatsManager;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.User;
@@ -17,6 +18,7 @@ import ru.paymon.android.UsersManager;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
 
 public class ChatsViewModel extends AndroidViewModel {
@@ -38,32 +40,32 @@ public class ChatsViewModel extends AndroidViewModel {
     }
 
     public LiveData<PagedList<ChatsItem>> getChats() {
-        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatDao().getChats(), config).build();
+        chats = new LivePagedListBuilder<>(ChatsManager.getInstance().getChats(), config).build();
         return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getGroupChats() {
-        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatDao().getChatsByChatType(true), config).build();
+        chats = new LivePagedListBuilder<>(ChatsManager.getInstance().getChatsByChatType(true), config).build();
         return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getDialogsChats() {
-        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatDao().getChatsByChatType(false), config).build();
+        chats = new LivePagedListBuilder<>(ChatsManager.getInstance().getChatsByChatType(false), config).build();
         return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getDialogsChatsBySearch(String searchQuery) {
-        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatDao().getChatsBySearch("%" + searchQuery + "%", false), config).build();
+        chats = new LivePagedListBuilder<>(ChatsManager.getInstance().getChatsBySearch("%" + searchQuery + "%", false), config).build();
         return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getGroupsChatsBySearch(String searchQuery) {
-        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatDao().getChatsBySearch("%" + searchQuery + "%", true), config).build();
+        chats = new LivePagedListBuilder<>(ChatsManager.getInstance().getChatsBySearch("%" + searchQuery + "%", true), config).build();
         return chats;
     }
 
     public LiveData<PagedList<ChatsItem>> getChatsBySearch(String searchQuery) {
-        chats = new LivePagedListBuilder<>(ApplicationLoader.db.chatDao().getChatsBySearch("%" + searchQuery + "%"), config).build();
+        chats = new LivePagedListBuilder<>(ChatsManager.getInstance().getChatsBySearch("%" + searchQuery + "%"), config).build();
         return chats;
     }
 
@@ -118,9 +120,9 @@ public class ChatsViewModel extends AndroidViewModel {
                     UsersManager.getInstance().putUsers(packet.users);
                     GroupsManager.getInstance().putGroups(packet.groups);
                     MessagesManager.getInstance().putMessages(packet.messages);
-//                    ApplicationLoader.db.chatDao().insertList(chatsItems);
-//                    ApplicationLoader.db.userDao().insertList(packet.users);
-//                    ApplicationLoader.db.groupDao().insertList(packet.groups);
+//                    AppDatabase.getDatabase().chatDao().insertList(chatsItems);
+//                    AppDatabase.getDatabase().userDao().insertList(packet.users);
+//                    AppDatabase.getDatabase().groupDao().insertList(packet.groups);
                     isChatsLoaded = true;
 //                    if (chatsItems.size() > 0)
 //                        isChatsLoaded = true;

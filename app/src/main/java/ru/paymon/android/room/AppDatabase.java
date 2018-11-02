@@ -5,6 +5,7 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.RPC;
@@ -13,11 +14,11 @@ import ru.paymon.android.net.RPC;
 public abstract class AppDatabase extends RoomDatabase {
     private static AppDatabase INSTANCE;
 
-    public static AppDatabase getDatabase(final Context context) {
+    public static AppDatabase getDatabase() {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "address_book").allowMainThreadQueries().build();
+                    INSTANCE = Room.databaseBuilder(ApplicationLoader.applicationContext, AppDatabase.class, "database").build();
                     //.addMigrations(MIGRATION_1_2)
                 }
             }

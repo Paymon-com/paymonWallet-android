@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.R;
+import ru.paymon.android.WalletApplication;
 import ru.paymon.android.adapters.TransactionAdapter;
 import ru.paymon.android.models.EthTransactionItem;
 import ru.paymon.android.models.PmntTransactionItem;
@@ -48,7 +49,7 @@ public class FragmentPaymonWallet extends Fragment {
     private TextView balanceTextView;
     private MoneyViewModel moneyViewModel;
     private LiveData<BigInteger> balanceLiveData;
-    private LiveData<ArrayList<TransactionItem>> transactionsData;
+    private LiveData<ArrayList<PmntTransactionItem>> transactionsData;
     private TransactionAdapter transactionAdapter;
     private RecyclerView transactionsRecView;
     private TextView historyText;
@@ -96,14 +97,13 @@ public class FragmentPaymonWallet extends Fragment {
 
 
         ItemClickSupport.addTo(transactionsRecView).setOnItemClickListener((recyclerView, position, v) -> {
-            EthTransactionItem transactionItem = (EthTransactionItem) transactionAdapter.transactionItems.get(position);
+            PmntTransactionItem transactionItem = (PmntTransactionItem) transactionAdapter.transactionItems.get(position);
 
             AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
 
             View dialogView = (ConstraintLayout) getLayoutInflater().inflate(R.layout.alert_dialog_custom_transaction_info, null);
 
             TextView hash = (TextView) dialogView.findViewById(R.id.ethereum_transaction_hash_alert);
-            TextView status = (TextView) dialogView.findViewById(R.id.ethereum_transaction_status_alert);
             TextView time = (TextView) dialogView.findViewById(R.id.ethereum_transaction_time_alert);
             TextView value = (TextView) dialogView.findViewById(R.id.ethereum_transaction_value_alert);
             TextView to = (TextView) dialogView.findViewById(R.id.ethereum_transaction_to_alert);
@@ -113,7 +113,6 @@ public class FragmentPaymonWallet extends Fragment {
             TextView gasPrice = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_price_alert);
 
             hash.setText(transactionItem.hash);
-            status.setText(transactionItem.status);
             time.setText(transactionItem.time);
             value.setText(transactionItem.value);
             to.setText(transactionItem.to);
@@ -146,7 +145,7 @@ public class FragmentPaymonWallet extends Fragment {
 
         transactionsData.observe(this, transactions -> {
             if (transactions == null) return;
-            transactionAdapter = new TransactionAdapter(transactions);
+            transactionAdapter = new TransactionAdapter(new ArrayList<>(transactions), ((WalletApplication) getActivity().getApplication()).getPaymonWallet().publicAddress);
             transactionsRecView.setAdapter(transactionAdapter);
             if (transactionAdapter.transactionItems.size() > 0)
                 historyText.setVisibility(View.INVISIBLE);

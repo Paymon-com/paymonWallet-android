@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
@@ -53,6 +55,33 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     public String ACTION = "ACTION_NOTIFY_BUTTON";
     private int liveTime;
 
+
+//    public static class ConnectorTask extends AsyncTask<Void, Void, Void> {
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            if (NetworkManager.getInstance().connectorService == null) {
+//                NetworkManager.getInstance().bindServices();
+//            } else if (NetworkManager.getInstance().connectionState != NetworkManager.ConnectionState.CONNECTED && !NetworkManager.getInstance().isConnected()) {
+//                NetworkManager.getInstance().connect();
+//            }
+//            try {
+//                TimeUnit.SECONDS.sleep(10);
+//                getConnection();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//        }
+//    }
+
+//    private static void getConnection() {
+//        new ConnectorTask().execute();
+//    }
 
     //region binding
     public class LocalBinder extends Binder {
@@ -97,6 +126,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+//        getConnection();
         return START_STICKY;
     }
 
@@ -129,6 +159,8 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     }
 
     private void showNotification(RPC.Message message) {
+        if(User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) return;
+
         final boolean isGroup = message.to_peer.user_id == 0;
 
         if (!isGroup && message.from_id == MessagesManager.getInstance().currentChatID)
@@ -199,9 +231,15 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         final android.app.NotificationManager notificationManager = (android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION)
+            ((android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).getNotificationChannel(Config.MESSAGES_NOTIFICATION_CHANNEL_ID).setVibrationPattern(new long[]{100, 200, 100, 300});
+            else
+                ((android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).getNotificationChannel(Config.MESSAGES_NOTIFICATION_CHANNEL_ID).setVibrationPattern(null);
+
             builder.setChannelId(Config.MESSAGES_NOTIFICATION_CHANNEL_ID);
         } else {
-            builder.setVibrate(new long[]{100, 200, 100, 300});
+            if(User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION)
+                builder.setVibrate(new long[]{100, 200, 100, 300});
             Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             builder.setSound(soundUri);
         }
@@ -266,7 +304,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     private void receivedPhotoURL(final RPC.PM_photoURL photoURL) {
         if (photoURL.peer instanceof RPC.PM_peerUser) {
             RPC.PM_peerUser peerUser = (RPC.PM_peerUser) photoURL.peer;
-//            ApplicationLoader.db.userDao().getGroupById(peerUser.user_id).photoURL.url = photoURL.url;
+//            AppDatabase.getDatabase().userDao().getGroupById(peerUser.user_id).photoURL.url = photoURL.url;
 //            UsersManager.getInstance().userContacts.get(peerUser.user_id).photoURL.url = photoURL.url;
             if (User.currentUser.id == peerUser.user_id) {
                 User.currentUser.photoURL.url = photoURL.url;

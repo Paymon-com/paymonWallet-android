@@ -16,11 +16,20 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+
+import org.bitcoinj.core.Transaction;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import androidx.navigation.Navigation;
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.adapters.TransactionAdapter;
+import ru.paymon.android.models.BtcTransactionItem;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.money.DialogFragmentBackupWallet;
@@ -30,11 +39,13 @@ import ru.paymon.android.view.money.DialogFragmentRestoreWallet;
 
 import static ru.paymon.android.view.money.FragmentMoney.CURRENCY_KEY;
 
-public class FragmentBitcoinWallet extends Fragment implements NotificationManager.IListener{
+public class FragmentBitcoinWallet extends Fragment implements NotificationManager.IListener {
     public static final String BTC_CURRENCY_VALUE = "BTC";
     private TransactionAdapter transactionAdapter;
     private TextView balanceTextView;
     private WalletApplication application;
+    private RecyclerView transactionsRecView;
+    private TextView historyText;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +59,8 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
         View view = inflater.inflate(R.layout.fragment_bitcoin_wallet, container, false);
 
         balanceTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance);
+        transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
+        historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
         ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_deposit_button);
         ImageButton transfer = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_button);
         ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_withdraw_button);
@@ -57,8 +70,6 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
 //        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_delete_btn);
         Button privateKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_public_key_button);
-        TextView historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
-        RecyclerView transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
 
         Bundle bundle = new Bundle();
         bundle.putString(CURRENCY_KEY, BTC_CURRENCY_VALUE);
@@ -119,6 +130,11 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
         animation.setDuration(700);
         balanceTextView.startAnimation(animation);
+        List<BtcTransactionItem> transactions = application.getBitcoinTransactionHistory();
+        transactionAdapter = new TransactionAdapter(new ArrayList<>(transactions));
+        transactionsRecView.setAdapter(transactionAdapter);
+        if (transactionAdapter.transactionItems.size() > 0)
+            historyText.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -130,7 +146,7 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
         if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED) {
-            balanceTextView.setText(application.getBitcoinBalance().toFriendlyString());
+            ApplicationLoader.applicationHandler.post(()->balanceTextView.setText(application.getBitcoinBalance().toFriendlyString()));
         }
     }
 }

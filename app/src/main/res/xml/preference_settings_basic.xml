@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <ListPreference
-        android:defaultValue="@string/default_sort_friends"
-        android:entries="@array/sort_friends_list"
-        android:entryValues="@array/sort_friends_list"
-        android:key="basic_sort_friends_list"
-        android:title="@string/app_sort_friends" />
+    <!--<ListPreference-->
+        <!--android:defaultValue="@string/default_sort_friends"-->
+        <!--android:entries="@array/sort_friends_list"-->
+        <!--android:entryValues="@array/sort_friends_list"-->
+        <!--android:key="basic_sort_friends_list"-->
+        <!--android:title="@string/app_sort_friends" />-->
     <ListPreference
         android:defaultValue="@string/date_format_24h"
         android:entries="@array/format_time"

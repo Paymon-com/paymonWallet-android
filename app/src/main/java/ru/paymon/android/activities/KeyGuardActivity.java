@@ -46,7 +46,7 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
             blurLockView.setTypeface(Typeface.DEFAULT);
             blurLockView.setType(Password.NUMBER, false);
             blurLockView.setLeftButton(getString(R.string.clear));
-            blurLockView.setRightButton(getString(R.string.hint));//TODO:
+            blurLockView.setRightButton(getString(R.string.hint));
             blurLockView.setOnRightButtonClickListener(() -> blurLockView.showHint());
         } else {
             blurLockView.setTitle(getString(R.string.security_enter_password));
@@ -83,7 +83,7 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public static void showCD() {
-        if (User.CLIENT_SECURITY_PASSWORD_VALUE == null || isForResult) return;
+        if (User.CLIENT_SECURITY_PASSWORD_VALUE == null) return;
         if (System.currentTimeMillis() - LAST_TIME_KEY_GUARD_SHOWED >= CD_TIME_KEY_GUARD) {
             Intent intent = new Intent(ApplicationLoader.applicationContext, KeyGuardActivity.class);
             ApplicationLoader.applicationContext.startActivity(intent);

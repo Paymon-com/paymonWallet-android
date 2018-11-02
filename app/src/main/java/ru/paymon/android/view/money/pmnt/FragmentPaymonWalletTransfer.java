@@ -37,10 +37,12 @@ import java.util.concurrent.Executors;
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
+import ru.paymon.android.ExchangeRatesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.activities.QrCodeScannerActivity;
 import ru.paymon.android.models.ExchangeRate;
+import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
@@ -326,7 +328,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
     private void changeCurrency() {
         if(bigIntegerGweiAmount == null) return;
         final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
-        final List<ExchangeRate> exchangeRates = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByCryptoCurrecy(PMNT_CURRENCY_VALUE);
+        final List<ExchangeRate> exchangeRates = ExchangeRatesManager.getInstance().getExchangeRatesByCryptoCurrency(PMNT_CURRENCY_VALUE);
         for (ExchangeRate exchangeRate : exchangeRates) {
             if (exchangeRate.fiatCurrency.equals(currentFiatCurrency))
                 currentExchangeRate = exchangeRate.value;

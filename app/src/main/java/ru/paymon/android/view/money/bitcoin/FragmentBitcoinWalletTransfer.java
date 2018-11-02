@@ -28,8 +28,8 @@ import org.bitcoinj.core.Transaction;
 import java.util.List;
 
 import androidx.navigation.Navigation;
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
+import ru.paymon.android.ExchangeRatesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
@@ -226,7 +226,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
 
     private void changeCurrency() {
         final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
-        final List<ExchangeRate> exchangeRates = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByCryptoCurrecy(BTC_CURRENCY_VALUE);
+        final List<ExchangeRate> exchangeRates = ExchangeRatesManager.getInstance().getExchangeRatesByCryptoCurrency(BTC_CURRENCY_VALUE);
         for (ExchangeRate exchangeRate : exchangeRates) {
             if (exchangeRate.fiatCurrency.equals(currentFiatCurrency))
                 currentExchangeRate = exchangeRate.value;
