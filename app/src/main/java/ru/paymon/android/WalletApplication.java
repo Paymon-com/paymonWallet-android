@@ -221,7 +221,6 @@ public class WalletApplication extends AbsWalletApplication {
             kit.startAsync();
             kit.awaitRunning();
         } catch (Exception e) {
-            e.printStackTrace();
         }
 
         if (kit.wallet().isEncrypted())
@@ -798,7 +797,7 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public RestoreStatus restorePaymonWallet(final File file, final String password) {
         final File walletFileForRestore = new File(paymonWalletPath);
-        deleteEthereumWallet();
+        deletePaymonWallet();
 
         InputStream inputStream;
         OutputStream outputStream;
