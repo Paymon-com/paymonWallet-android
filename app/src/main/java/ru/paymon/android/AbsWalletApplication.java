@@ -37,7 +37,7 @@ public abstract class AbsWalletApplication extends Application {
     public abstract Wallet getBitcoinWallet();
     public abstract RestoreStatus restoreBitcoinWallet(final File file, final String password);
     public abstract boolean backupBitcoinWallet(final String path);
-    public abstract Coin getBitcoinBalance();
+    public abstract Coin getBitcoinBalance(final Wallet.BalanceType balanceType);
     public abstract boolean deleteBitcoinWallet();
     public abstract String getBitcoinPublicAddress();
     public abstract String getBitcoinPrivateAddress();

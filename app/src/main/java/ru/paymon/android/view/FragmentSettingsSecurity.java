@@ -37,7 +37,7 @@ public class FragmentSettingsSecurity extends AbsFragmentSettings {
                 getActivity().startActivityForResult(intent, 20);
                 return false;
             }
-            passwordPreference.setEnabled(User.CLIENT_SECURITY_PASSWORD_VALUE == null && (boolean) newValue);
+            passwordPreference.setEnabled((boolean) newValue);
             return true;
         });
 

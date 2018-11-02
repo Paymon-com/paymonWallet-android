@@ -22,8 +22,6 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Peer;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionConfidence;
-import org.bitcoinj.core.TransactionInput;
-import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.core.listeners.DownloadProgressTracker;
 import org.bitcoinj.crypto.LinuxSecureRandom;
 import org.bitcoinj.script.Script;
@@ -164,7 +162,8 @@ public class WalletApplication extends AbsWalletApplication {
             @Override
             protected void progress(double pct, int blocksSoFar, Date date) {
                 super.progress(pct, blocksSoFar, date);
-                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_PROGRESS, pct);
+                Log.e("AAA", "progress " + pct);
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_PROGRESS, pct);
             }
 
             @Override
@@ -175,7 +174,7 @@ public class WalletApplication extends AbsWalletApplication {
             @Override
             protected void doneDownload() {
                 super.doneDownload();
-                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
             }
         });
 
@@ -377,8 +376,8 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    public Coin getBitcoinBalance() {
-        return getBitcoinWallet().getBalance();
+    public Coin getBitcoinBalance(final Wallet.BalanceType balanceType) {
+        return getBitcoinWallet().getBalance(balanceType);
     }
 
     @Override

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +15,6 @@ import android.widget.TextView;
 
 import com.shawnlin.numberpicker.NumberPicker;
 
-import org.web3j.utils.Convert;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +25,6 @@ import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
 import ru.paymon.android.models.ExchangeRate;
-import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.DialogProgress;
@@ -109,7 +103,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         Utils.showBottomBar(getActivity());
         walletsData = moneyViewModel.getWalletsData();
         exchangeRatesData = moneyViewModel.getExchangeRatesData();
@@ -128,7 +122,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     @Override
     public void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         walletsData.removeObservers(this);
         exchangeRatesData.removeObservers(this);
     }
@@ -186,7 +180,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-        if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED) {
+        if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED) {
             walletsData = moneyViewModel.getWalletsData();
         }
     }

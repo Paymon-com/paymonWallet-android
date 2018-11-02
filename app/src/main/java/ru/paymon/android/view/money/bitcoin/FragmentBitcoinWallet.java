@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +16,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 
-import org.bitcoinj.core.Transaction;
+import org.bitcoinj.wallet.Wallet;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
@@ -33,6 +31,7 @@ import ru.paymon.android.models.BtcTransactionItem;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.money.DialogFragmentBackupWallet;
+import ru.paymon.android.view.money.DialogFragmentDeleteWallet;
 import ru.paymon.android.view.money.DialogFragmentPrivateKey;
 import ru.paymon.android.view.money.DialogFragmentPublicKey;
 import ru.paymon.android.view.money.DialogFragmentRestoreWallet;
@@ -67,7 +66,7 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
         ImageButton backBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_back_btn);
         ImageButton restoreBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_restore_btn);
         ImageButton backupBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_backup_btn);
-//        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_delete_btn);
+        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_bitcoin_wallet_delete_btn);
         Button privateKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_public_key_button);
 
@@ -77,7 +76,7 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
         backBtn.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         restoreBtn.setOnClickListener(v -> new DialogFragmentRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
         backupBtn.setOnClickListener(v -> new DialogFragmentBackupWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
-//        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
+        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));
         transfer.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentBitcoinWalletTransfer));
 //        withdraw.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumWidthdraw.newInstance(), null));
@@ -124,9 +123,11 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
     @Override
     public void onResume() {
         super.onResume();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         Utils.hideBottomBar(getActivity());
-        balanceTextView.setText(application.getBitcoinBalance().toFriendlyString());
+        final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toPlainString();
+        final String balanceEstimated = application.getBitcoinBalance(Wallet.BalanceType.ESTIMATED).toPlainString();
+        balanceTextView.setText(balance + "(" + balanceEstimated + ") BTC");
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
         animation.setDuration(700);
         balanceTextView.startAnimation(animation);
@@ -140,13 +141,17 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
     @Override
     public void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
     }
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-        if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED) {
-            ApplicationLoader.applicationHandler.post(()->balanceTextView.setText(application.getBitcoinBalance().toFriendlyString()));
+        if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED) {
+            ApplicationLoader.applicationHandler.post(() -> {
+                final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toPlainString();
+                final String balanceEstimated = application.getBitcoinBalance(Wallet.BalanceType.ESTIMATED).toPlainString();
+                balanceTextView.setText(balance + " (" + balanceEstimated + ") BTC");
+            });
         }
     }
 }
