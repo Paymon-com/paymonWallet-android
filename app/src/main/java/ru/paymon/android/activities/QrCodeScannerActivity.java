@@ -74,10 +74,10 @@ public class QrCodeScannerActivity extends AppCompatActivity implements Activity
         }
 
         if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Snackbar.make(mainLayout, "Camera permission was granted.", Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mainLayout, R.string.camera_permission_was_granted, Snackbar.LENGTH_SHORT).show();
             initQRCodeReaderView();
         } else {
-            Snackbar.make(mainLayout, "Camera permission request was denied.", Snackbar.LENGTH_SHORT)
+            Snackbar.make(mainLayout, R.string.camera_permission_request_was_denied, Snackbar.LENGTH_SHORT)
                     .show();
         }
     }
@@ -95,16 +95,12 @@ public class QrCodeScannerActivity extends AppCompatActivity implements Activity
 
     private void requestCameraPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-            Snackbar.make(mainLayout, "Camera access is required to display the camera preview.",
-                    Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
-                @Override public void onClick(View view) {
-                    ActivityCompat.requestPermissions(QrCodeScannerActivity.this, new String[] {
+            Snackbar.make(mainLayout, R.string.camera_access_is_required,
+                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, view -> ActivityCompat.requestPermissions(QrCodeScannerActivity.this, new String[] {
                             Manifest.permission.CAMERA
-                    }, MY_PERMISSION_REQUEST_CAMERA);
-                }
-            }).show();
+                    }, MY_PERMISSION_REQUEST_CAMERA)).show();
         } else {
-            Snackbar.make(mainLayout, "Permission is not available. Requesting camera permission.",
+            Snackbar.make(mainLayout, R.string.permission_is_not_available,
                     Snackbar.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(this, new String[] {
                     Manifest.permission.CAMERA
@@ -126,41 +122,35 @@ public class QrCodeScannerActivity extends AppCompatActivity implements Activity
         qrCodeReaderView.setOnQRCodeReadListener(this);
         qrCodeReaderView.setBackCamera();
 
-        activateScanner.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        activateScanner.setOnClickListener(view -> {
 
-                if (scanIsActivated) {
-                    scanIsActivated = false;
-                    activateScanner.setImageResource(R.drawable.ic_qr_scanner_off);
-                } else {
-                    scanIsActivated = true;
-                    activateScanner.setImageResource(R.drawable.ic_qr_scanner_on);
-                }
-
-                qrCodeReaderView.setQRDecodingEnabled(scanIsActivated);
-
+            if (scanIsActivated) {
+                scanIsActivated = false;
+                activateScanner.setImageResource(R.drawable.ic_qr_scanner_off);
+            } else {
+                scanIsActivated = true;
+                activateScanner.setImageResource(R.drawable.ic_qr_scanner_on);
             }
+
+            qrCodeReaderView.setQRDecodingEnabled(scanIsActivated);
+
         });
 
-        activateFlash.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        activateFlash.setOnClickListener(view -> {
 
 
-                if (flashIsActivated) {
-                    flashIsActivated = false;
-                    activateFlash.setImageResource(R.drawable.ic_flash_off);
-                } else {
-                    flashIsActivated = true;
-                    activateFlash.setImageResource(R.drawable.ic_flash_on);
-
-                }
-
-                qrCodeReaderView.setTorchEnabled(flashIsActivated);
-
+            if (flashIsActivated) {
+                flashIsActivated = false;
+                activateFlash.setImageResource(R.drawable.ic_flash_off);
+            } else {
+                flashIsActivated = true;
+                activateFlash.setImageResource(R.drawable.ic_flash_on);
 
             }
+
+            qrCodeReaderView.setTorchEnabled(flashIsActivated);
+
+
         });
 
         qrCodeReaderView.startCamera();

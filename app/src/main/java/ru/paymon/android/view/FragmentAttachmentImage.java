@@ -79,7 +79,7 @@ public class FragmentAttachmentImage extends Fragment {
                     if (intent != null)
                         startActivityForResult(intent, ImageCaptureManager.REQUEST_TAKE_PHOTO);
                     else
-                        Toast.makeText(getActivity(), "Нет доступа к камере", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.no_access_to_camera, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

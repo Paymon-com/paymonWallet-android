@@ -2,9 +2,6 @@ package ru.paymon.android.filepicker.models;
 
 import java.io.File;
 
-/**
- * Created by droidNinja on 29/07/16.
- */
 public class Document extends BaseFile {
 
     public Document(int id, String title, String path) {

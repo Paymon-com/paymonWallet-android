@@ -83,12 +83,12 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
             return;
         }
         if (filesList.size() > 0 || mediasList.size() > 0) {
-            buttonAcceptOrCloseAttachment.setText("Прикрепить");
+            buttonAcceptOrCloseAttachment.setText(R.string.to_attach);
             buttonAcceptOrCloseAttachment.setOnClickListener(v -> {
                 //TODO:кнопка Отправить
             });
         } else {
-            buttonAcceptOrCloseAttachment.setText("Отмена");
+            buttonAcceptOrCloseAttachment.setText(R.string.button_cancel);
             buttonAcceptOrCloseAttachment.setOnClickListener(v -> dialog.dismiss());
         }
     }

@@ -115,7 +115,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdap
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
-                        Toast.makeText(ApplicationLoader.applicationContext, "oshibka", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_LONG).show();
                     });
                 }
 

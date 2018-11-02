@@ -60,17 +60,17 @@ public class FragmentGroupAddBlackList extends Fragment {
         Utils.hideBottomBar(getActivity());
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.create_group_menu, menu);
-
-        MenuItem addBlockListButton = menu.findItem(R.id.create_group_done_item);
-
-        addBlockListButton.setOnMenuItemClickListener(menuItem -> {
-            //TODO:Добавление в список заблокированных ползователей
-            return false;
-        });
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.create_group_menu, menu);
+//
+//        MenuItem addBlockListButton = menu.findItem(R.id.create_group_done_item);
+//
+//        addBlockListButton.setOnMenuItemClickListener(menuItem -> {
+//            //TODO:Добавление в список заблокированных ползователей
+//            return false;
+//        });
+//    }
 
 
 }

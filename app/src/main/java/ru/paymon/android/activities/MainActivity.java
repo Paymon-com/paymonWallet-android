@@ -103,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void checkBtcSync() {
         Boolean isBtsSync = btcSyncData.getValue();
         if (isBtsSync == null) return;
-        String text = "BTC Sync in progress";
+        String text = getString(R.string.btc_sync);
         ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
         if (isBtsSync)
             connectingConstraint.setVisibility(View.GONE);

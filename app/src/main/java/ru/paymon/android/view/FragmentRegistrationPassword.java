@@ -118,10 +118,10 @@ public class FragmentRegistrationPassword extends Fragment {
         return view;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.next_menu, menu);
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.next_menu, menu);
+//    }
 
     public void showFragmentRegistrationEmail() {
         if (passwordEditText.getText().toString().length() < 8 || !repeatPasswordEditText.getText().toString().equals(passwordEditText.getText().toString()))
