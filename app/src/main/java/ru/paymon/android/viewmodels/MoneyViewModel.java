@@ -87,7 +87,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
     public LiveData<List<ExchangeRate>> getExchangeRatesData() {
         if (exchangeRatesData == null)
             exchangeRatesData = new MutableLiveData<>();
-        loadExchangeRatesData();
+//        loadExchangeRatesData();
         return exchangeRatesData;
     }
 
@@ -150,6 +150,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
     }
 
     private void loadWalletsData() {
+        loadExchangeRatesData();
         Utils.stageQueue.postRunnable(() -> {
             showProgress.postValue(true);
             final ArrayList<WalletItem> walletItems = new ArrayList<>();

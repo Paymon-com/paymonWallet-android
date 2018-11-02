@@ -26,6 +26,8 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.viewmodels.MainViewModel;
 
+import static ru.paymon.android.activities.KeyGuardActivity.CD_TIME_KEY_GUARD;
+import static ru.paymon.android.activities.KeyGuardActivity.LAST_TIME_KEY_GUARD_SHOWED;
 import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
@@ -57,11 +59,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             return;
-        }
-
-        if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
-            Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
-            startActivity(intent);
         }
 
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
@@ -130,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 case R.id.fragmentMoney:
                     if (id == R.id.fragmentMoney)
                         return false;
-                    if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
+                    if (User.CLIENT_SECURITY_PASSWORD_VALUE != null && (System.currentTimeMillis() - LAST_TIME_KEY_GUARD_SHOWED >= CD_TIME_KEY_GUARD)) {
                         Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
                         intent.putExtra("request_code", 10);
                         startActivityForResult(intent, 10);
@@ -174,7 +171,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onResume() {
         super.onResume();
-        KeyGuardActivity.showCD();
+        if (User.CLIENT_SECURITY_PASSWORD_VALUE != null && (System.currentTimeMillis() - LAST_TIME_KEY_GUARD_SHOWED >= CD_TIME_KEY_GUARD)) {
+            Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
+            startActivity(intent);
+        }
     }
 
     @Override

@@ -114,13 +114,14 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         walletsData = moneyViewModel.getWalletsData();
         exchangeRatesData = moneyViewModel.getExchangeRatesData();
 
-        exchangeRatesData.observe(this, (exchangeRatesItems) -> {
-            changeCurrency();
-        });
+//        exchangeRatesData.observe(this, (exchangeRatesItems) -> {
+//            changeCurrency();
+//        });
 
         walletsData.observe(getActivity(), (walletsData) -> {
             cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, cryptoWalletsListener);
             walletsRecView.setAdapter(cryptoWalletsAdapter);
+            changeCurrency();
         });
     }
 
