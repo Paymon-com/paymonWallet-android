@@ -77,7 +77,7 @@ public class FragmentGroupChat extends AbsFragmentChat {
                     if (selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.GONE);
                         toolbarViewSelected.setVisibility(View.VISIBLE);
-                        selectedItemCount.setText(getString(R.string.selected_item_count) + ": " + selectionTracker.getSelection().size());
+                        selectedItemCount.setText(getString(R.string.selected_messages_count) + ": " + selectionTracker.getSelection().size());
                     } else if (!selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.VISIBLE);
                         toolbarViewSelected.setVisibility(View.GONE);
@@ -90,6 +90,8 @@ public class FragmentGroupChat extends AbsFragmentChat {
                 }
             });
         });
+
+        clearChatSelected.setOnClickListener(v -> selectionTracker.clearSelection());
 
         delete.setOnClickListener(v -> {
             if (selectionTracker.hasSelection()) {
