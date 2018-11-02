@@ -3,9 +3,6 @@ package ru.paymon.android.filepicker.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by droidNinja on 29/07/16.
- */
 public class BaseFile implements Parcelable {
     protected int id;
     protected String name;

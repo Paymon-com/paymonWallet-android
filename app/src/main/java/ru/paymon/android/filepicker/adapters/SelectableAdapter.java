@@ -32,22 +32,11 @@ public abstract class SelectableAdapter<VH extends RecyclerView.ViewHolder, T ex
         }
     }
 
-    /**
-     * Indicates if the item at position where is selected
-     *
-     * @param photo Media of the item to check
-     * @return true if the item is selected, false otherwise
-     */
     @Override
     public boolean isSelected(T photo) {
         return selectedPhotos.contains(photo);
     }
 
-    /**
-     * Toggle the selection status of the item at a given position
-     *
-     * @param photo Media of the item to toggle the selection status for
-     */
     @Override
     public void toggleSelection(T photo) {
         if (selectedPhotos.contains(photo)) {

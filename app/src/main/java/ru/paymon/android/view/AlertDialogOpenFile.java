@@ -2,7 +2,6 @@ package ru.paymon.android.view;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -15,7 +14,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -27,7 +25,6 @@ import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 public class AlertDialogOpenFile extends AlertDialog.Builder {
@@ -95,15 +92,12 @@ public class AlertDialogOpenFile extends AlertDialog.Builder {
         linearLayout.addView(listView);
         setCustomTitle(title)
                 .setView(linearLayout)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (selectedIndex > -1 && listener != null) {
-                            listener.OnSelectedFile(listView.getItemAtPosition(selectedIndex).toString());
-                        }
-                        if (listener != null && isOnlyFoldersFilter) {
-                            listener.OnSelectedFile(currentPath);
-                        }
+                .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                    if (selectedIndex > -1 && listener != null) {
+                        listener.OnSelectedFile(listView.getItemAtPosition(selectedIndex).toString());
+                    }
+                    if (listener != null && isOnlyFoldersFilter) {
+                        listener.OnSelectedFile(currentPath);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null);
@@ -117,28 +111,20 @@ public class AlertDialogOpenFile extends AlertDialog.Builder {
     }
 
     public AlertDialogOpenFile setFilter(final String filter) {
-        filenameFilter = new FilenameFilter() {
-
-            @Override
-            public boolean accept(File file, String fileName) {
-                File tempFile = new File(String.format("%s/%s", file.getPath(), fileName));
-                if (tempFile.isFile())
-                    return tempFile.getName().matches(filter);
-                return true;
-            }
+        filenameFilter = (file, fileName) -> {
+            File tempFile = new File(String.format("%s/%s", file.getPath(), fileName));
+            if (tempFile.isFile())
+                return tempFile.getName().matches(filter);
+            return true;
         };
         return this;
     }
 
     public AlertDialogOpenFile setOnlyFoldersFilter() {
         isOnlyFoldersFilter = true;
-        filenameFilter = new FilenameFilter() {
-
-            @Override
-            public boolean accept(File file, String fileName) {
-                File tempFile = new File(String.format("%s/%s", file.getPath(), fileName));
-                return tempFile.isDirectory();
-            }
+        filenameFilter = (file, fileName) -> {
+            File tempFile = new File(String.format("%s/%s", file.getPath(), fileName));
+            return tempFile.isDirectory();
         };
         return this;
     }
@@ -254,16 +240,13 @@ public class AlertDialogOpenFile extends AlertDialog.Builder {
         if(list == null)
             list = new File[]{};
         List<File> fileList = Arrays.asList(list);
-        Collections.sort(fileList, new Comparator<File>() {
-            @Override
-            public int compare(File file, File file2) {
-                if (file.isDirectory() && file2.isFile())
-                    return -1;
-                else if (file.isFile() && file2.isDirectory())
-                    return 1;
-                else
-                    return file.getPath().compareTo(file2.getPath());
-            }
+        Collections.sort(fileList, (file, file2) -> {
+            if (file.isDirectory() && file2.isFile())
+                return -1;
+            else if (file.isFile() && file2.isDirectory())
+                return 1;
+            else
+                return file.getPath().compareTo(file2.getPath());
         });
         return fileList;
     }

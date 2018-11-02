@@ -84,6 +84,13 @@
     <string name="exit">Exit</string>
     <string name="profile">Profile</string>
     <string name="enter_a_code">Enter a code</string>
+    <string name="btc_sync">BTC Sync in progress</string>
+    <string name="camera_permission_was_granted">Camera permission was granted</string>
+    <string name="camera_permission_request_was_denied">Camera permission request was denied</string>
+    <string name="camera_access_is_required">Camera access is required to display the camera preview</string>
+    <string name="permission_is_not_available">Permission is not available. Requesting camera permission</string>
+    <string name="no_access_to_camera">No access to camera</string>
+    <string name="to_attach">To attach</string>
 
     <string name="reg_name_correct">Name contains invalid characters</string>
     <string name="reg_surname_correct">Surname contains invalid characters</string>
@@ -166,16 +173,13 @@
 
     <string name="about_program_text">Paymon for Android</string>
     <string name="about_program_text_version">"version %s"</string>
-    <!--<string name="restore_wallet_dialog_replace_warning">You are about to replace the current wallet. Any coins in the current wallet will be lost if you do not have a separate backup</string>-->
-    <!--<string name="import_keys_dialog_warning">Important: Do not download private keys from questionable sources! Attackers can gain access to your funds</string>-->
-    <!--<string name="import_keys_dialog_button_import">Reestablish</string>-->
+    <string name="restore_wallet_dialog_replace_warning">You are about to replace the current wallet. Any coins in the current wallet will be lost if you do not have a separate backup</string>
+    <string name="import_keys_dialog_button_import">Reestablish</string>
     <string name="export_keys_dialog_mail_intent_failed">Archiving the wallet was an error</string>
-    <!--<string name="import_export_keys_dialog_show">Show password</string>-->
-    <!--<string name="button_ok">OK</string>-->
-    <!--<string name="button_cancel">Cancel</string>-->
-    <!--<string name="button_add">Add</string>-->
-    <!--<string name="button_share">Share</string>-->
-    <!--<string name="private_key_password">PIN</string>-->
+    <string name="button_ok">OK</string>
+    <string name="button_add">Add</string>
+    <string name="button_share">Share</string>
+    <string name="private_key_password">PIN</string>
 
     <string name="participants">Participants</string>
 
@@ -494,7 +498,6 @@
     <string name="wallet_transactions_row_warning_chain_forking">The Bitcoin network is undergoing maintenance. You\'re advised to not send or receive any coins until maintenance is finished. &lt;u&gt;More information.&lt;/u&gt;</string>
     <string name="wallet_transactions_fragment_coinbase">mined</string>
     <string name="wallet_transactions_fragment_internal">internal</string>
-    <string name="wallet_transactions_options_filter">Filter</string>
     <string name="wallet_transactions_options_filter_all">All payments</string>
     <string name="wallet_transactions_options_filter_received">Received payments</string>
     <string name="wallet_transactions_options_filter_sent">Sent payments</string>
@@ -652,7 +655,6 @@
     <string name="import_keys_dialog_title">Restore wallet</string>
     <string name="import_keys_dialog_message">Pick a wallet backup file from external storage (%s):</string>
     <string name="restore_wallet_dialog_message_empty">No wallet backup was found. Make sure it is placed in external storage (%s).</string>
-    <string name="restore_wallet_dialog_replace_warning">You are about to replace your current wallet. Any coins in the current wallet will be lost unless you\'ve got a separate backup of that.</string>
     <string name="import_keys_dialog_warning">Important: Do not load private keys from dubious sources! Others can gain control over your funds if you do.</string>
     <string name="import_keys_dialog_file_security_encrypted">password encrypted</string>
     <string name="import_keys_dialog_file_security_unencrypted">unencrypted</string>
@@ -660,7 +662,6 @@
     <string name="import_keys_dialog_file_security_internal">app-private storage</string>
     <string name="import_keys_dialog_file_created_automatic">automatic backup %s</string>
     <string name="import_keys_dialog_file_created_manual">manually backed up %s</string>
-    <string name="import_keys_dialog_button_import">Restore</string>
     <string name="restore_wallet_dialog_success">Wallet was restored.</string>
     <string name="restore_wallet_dialog_success_replay">Your wallet was successfully restored. Its balance will be determined next. This will take some time.</string>
     <string name="restore_wallet_dialog_success_encrypted">Warning: Your wallet is protected by a spending PIN. Make sure you still remember it before you receive to this wallet.</string>
@@ -779,20 +780,17 @@
     <string name="notification_channel_important_name">Important alerts</string>
     <string name="appwidget_wallet_balance_title">Bitcoin balance</string>
 
-    <!-- generic buttons -->
-    <string name="button_ok">OK</string>
+     generic buttons
     <string name="button_dismiss">Dismiss</string>
     <string name="button_cancel">Cancel</string>
     <string name="button_retry">Retry</string>
     <string name="button_help">Help</string>
-    <string name="button_add">Create wallet</string>
     <string name="button_delete">Delete</string>
     <string name="button_set">Set</string>
     <string name="button_remove">Remove</string>
     <string name="button_edit">Edit</string>
     <string name="button_copy">Copy</string>
     <string name="button_paste">Paste</string>
-    <string name="button_share">Share</string>
     <string name="button_set_as_default">Set as default</string>
     <string name="button_request_coins">Request coins</string>
     <string name="button_send_coins">Send coins</string>
@@ -801,13 +799,12 @@
     <string name="action_show_qr">Show QR code</string>
     <string name="action_browse">Browse</string>
 
-    <!-- generic strings -->
+     generic strings
     <string name="time_today">today</string>
     <string name="address_unlabeled">(unlabeled)</string>
-    <string name="private_key_password">PIN</string>
     <string name="private_key_bad_password">bad PIN!</string>
 
-    <!-- generic error messages -->
+     generic error messages
     <string name="error_io">I/O error: %s</string>
     <string name="error_parse">Parse error: %s</string>
     <string name="error_http">HTTP error %1$s:\n%2$s</string>

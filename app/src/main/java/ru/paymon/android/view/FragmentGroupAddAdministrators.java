@@ -61,15 +61,15 @@ public class FragmentGroupAddAdministrators extends Fragment {
         Utils.hideBottomBar(getActivity());
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.create_group_menu, menu);
-
-        MenuItem addAdministratorsButton = menu.findItem(R.id.create_group_done_item);
-
-        addAdministratorsButton.setOnMenuItemClickListener(menuItem -> {
-            //TODO:Добавление в список админитраторов
-            return false;
-        });
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.create_group_menu, menu);
+//
+//        MenuItem addAdministratorsButton = menu.findItem(R.id.create_group_done_item);
+//
+//        addAdministratorsButton.setOnMenuItemClickListener(menuItem -> {
+//            //TODO:Добавление в список админитраторов
+//            return false;
+//        });
+//    }
 }

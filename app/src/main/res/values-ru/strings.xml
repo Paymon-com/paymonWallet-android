@@ -74,6 +74,13 @@
     <string name="global_search">Глобальный поиск</string>
     <string name="you_did_not_choose_anyone">Вы никого не выбрали</string>
     <string name="not_specified">Не указан</string>
+    <string name="btc_sync">Выполняется синхронизация BTC</string>
+    <string name="camera_permission_was_granted">Доступ к камере был предоставлен</string>
+    <string name="camera_permission_request_was_denied">Доступ к камере был отклонен</string>
+    <string name="camera_access_is_required">Для доступа к камере требуется просмотр камеры</string>
+    <string name="permission_is_not_available">Разрешение недоступно. Запрос разрешения камеры</string>
+    <string name="no_access_to_camera">Нет доступа к камере</string>
+    <string name="to_attach">Прикрепить</string>
 
     <string name="action_settings">Настройки</string>
 
@@ -656,15 +663,12 @@
     <string name="import_keys_dialog_title">Restore wallet</string>
     <string name="import_keys_dialog_message">Pick a wallet backup file from external storage (%s):</string>
     <string name="restore_wallet_dialog_message_empty">No wallet backup was found. Make sure it is placed in external storage (%s).</string>
-    <!--<string name="restore_wallet_dialog_replace_warning">You are about to replace your current wallet. Any coins in the current wallet will be lost unless you\'ve got a separate backup of that.</string>-->
-    <!--<string name="import_keys_dialog_warning">Important: Do not load private keys from dubious sources! Others can gain control over your funds if you do.</string>-->
     <string name="import_keys_dialog_file_security_encrypted">password encrypted</string>
     <string name="import_keys_dialog_file_security_unencrypted">unencrypted</string>
     <string name="import_keys_dialog_file_security_external">external storage</string>
     <string name="import_keys_dialog_file_security_internal">app-private storage</string>
     <string name="import_keys_dialog_file_created_automatic">automatic backup %s</string>
     <string name="import_keys_dialog_file_created_manual">manually backed up %s</string>
-    <!--<string name="import_keys_dialog_button_import">Restore</string>-->
     <string name="restore_wallet_dialog_success">Wallet was restored.</string>
     <string name="restore_wallet_dialog_success_replay">Your wallet was successfully restored. Its balance will be determined next. This will take some time.</string>
     <string name="restore_wallet_dialog_success_encrypted">Warning: Your wallet is protected by a spending PIN. Make sure you still remember it before you receive to this wallet.</string>
@@ -678,8 +682,6 @@
     <string name="import_export_keys_dialog_password">password</string>
     <string name="backup_wallet_dialog_password_again">again</string>
     <string name="backup_wallet_dialog_password_mismatch">mismatch!</string>
-    <!--<string name="import_export_keys_dialog_show">Show password</string>-->
-    <!--<string name="import_export_keys_dialog_failure_title">Error</string>-->
     <string name="import_keys_intent_filter_action">Restore wallet</string>
     <string name="encrypt_keys_dialog_title">Spending PIN</string>
     <string name="encrypt_keys_dialog_message">Spending from your wallet will be protected with the chosen PIN.</string>
@@ -783,20 +785,16 @@
     <string name="notification_channel_important_name">Important alerts</string>
     <string name="appwidget_wallet_balance_title">Bitcoin balance</string>
 
-    <!-- generic buttons -->
-    <!--<string name="button_ok">OK</string>-->
+     generic buttons
     <string name="button_dismiss">Dismiss</string>
-    <!--<string name="button_cancel">Cancel</string>-->
     <string name="button_retry">Retry</string>
     <string name="button_help">Help</string>
-    <!--<string name="button_add">Add</string>-->
     <string name="button_delete">Delete</string>
     <string name="button_set">Set</string>
     <string name="button_remove">Remove</string>
     <string name="button_edit">Edit</string>
     <string name="button_copy">Copy</string>
     <string name="button_paste">Paste</string>
-    <!--<string name="button_share">Share</string>-->
     <string name="button_set_as_default">Set as default</string>
     <string name="button_request_coins">Request coins</string>
     <string name="button_send_coins">Send coins</string>
@@ -805,18 +803,15 @@
     <string name="action_show_qr">Show QR code</string>
     <string name="action_browse">Browse</string>
 
-    <!-- generic strings -->
+     generic strings
     <string name="time_today">today</string>
     <string name="address_unlabeled">(unlabeled)</string>
-    <!--<string name="private_key_password">PIN</string>-->
     <string name="private_key_bad_password">bad PIN!</string>
 
-    <!-- generic error messages -->
+     generic error messages
     <string name="error_io">I/O error: %s</string>
     <string name="error_parse">Parse error: %s</string>
     <string name="error_http">HTTP error %1$s:\n%2$s</string>
     <string name="error_bluetooth">Bluetooth error: %1$s</string>
     ////////////////////////////////////// END
-
-    /////////////////////////////////////BEGIN
 </resources>

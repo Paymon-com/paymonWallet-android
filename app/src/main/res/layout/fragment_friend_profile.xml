@@ -28,9 +28,9 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="32dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@+id/friend_profile_pers_info"
+        app:layout_constraintBottom_toBottomOf="@+id/friend_profile_photo"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/friend_profile_photo"
+        app:layout_constraintTop_toBottomOf="@+id/friend_profile_photo"
         app:srcCompat="@drawable/ic_go_chat" />
 
     <ImageButton
@@ -39,52 +39,79 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="32dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@+id/friend_profile_pers_info"
+        app:layout_constraintBottom_toBottomOf="@+id/friend_profile_photo"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/friend_profile_photo"
+        app:layout_constraintTop_toBottomOf="@+id/friend_profile_photo"
         app:srcCompat="@drawable/ic_amount" />
 
     <ImageButton
         android:id="@+id/friend_profile_bitcoin_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="32dp"
+        android:layout_marginEnd="32dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@+id/friend_profile_pers_info"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/friend_profile_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/friend_profile_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/friend_profile_photo"
         app:srcCompat="@drawable/ic_bitcoin" />
 
     <ImageButton
         android:id="@+id/friend_profile_ethereum_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="32dp"
+        android:layout_marginEnd="32dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toTopOf="@+id/friend_profile_pers_info"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/friend_profile_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/friend_profile_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/friend_profile_photo"
         app:srcCompat="@drawable/ic_ethereum" />
 
     <ImageButton
         android:id="@+id/friend_profile_menu_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="32dp"
+        android:layout_marginEnd="32dp"
         android:background="@android:color/transparent"
         android:clickable="true"
-        app:layout_constraintBottom_toTopOf="@+id/friend_profile_pers_info"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/friend_profile_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/friend_profile_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/friend_profile_photo"
         app:srcCompat="@drawable/ic_float_menu" />
 
-    <include
-        android:id="@+id/friend_profile_pers_info"
-        layout="@layout/fragment_friend_profile_contact_inform"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/personal_inf_text_view"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/contact_information"
+        android:textAllCaps="true"
+        android:textColor="@color/blue_dark"
+        android:textSize="12sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/friend_profile_photo" />
+
+    <ImageView
+        android:id="@+id/friend_profile_phone_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/personal_inf_text_view" />
+
+    <TextView
+        android:id="@+id/friend_profile_city_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="@string/email"
+        android:textColor="@color/very_dark_gray"
+        app:layout_constraintBottom_toBottomOf="@+id/friend_profile_phone_image_view"
+        app:layout_constraintStart_toEndOf="@+id/friend_profile_phone_image_view"
+        app:layout_constraintTop_toTopOf="@+id/friend_profile_phone_image_view" />
+
 
 </android.support.constraint.ConstraintLayout>
