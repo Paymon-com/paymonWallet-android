@@ -61,10 +61,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
             Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-            intent.putExtra("request_code", 10);
-            startActivityForResult(intent, 10);
-            return;
+            startActivity(intent);
         }
 
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
@@ -133,7 +130,13 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 case R.id.fragmentMoney:
                     if (id == R.id.fragmentMoney)
                         return false;
-                    Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney, null, navOptions);
+                    if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
+                        Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
+                        intent.putExtra("request_code", 10);
+                        startActivityForResult(intent, 10);
+                    }else {
+                        Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney, null, navOptions);
+                    }
                     break;
                 case R.id.fragmentMoreMenu:
                     if (id == R.id.fragmentMoreMenu)
@@ -198,5 +201,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 10){
+            if(resultCode == RESULT_OK){
+                NavOptions.Builder builder = new NavOptions.Builder();
+                NavOptions navOptions = builder.setLaunchSingleTop(true).setClearTask(true).build();
+                Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney, null, navOptions);
+            }
+        }
     }
 }

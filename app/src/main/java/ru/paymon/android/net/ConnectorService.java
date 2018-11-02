@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -22,6 +23,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
@@ -53,6 +55,33 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     public String ACTION = "ACTION_NOTIFY_BUTTON";
     private int liveTime;
 
+
+//    public static class ConnectorTask extends AsyncTask<Void, Void, Void> {
+//        @Override
+//        protected Void doInBackground(Void... params) {
+//            if (NetworkManager.getInstance().connectorService == null) {
+//                NetworkManager.getInstance().bindServices();
+//            } else if (NetworkManager.getInstance().connectionState != NetworkManager.ConnectionState.CONNECTED && !NetworkManager.getInstance().isConnected()) {
+//                NetworkManager.getInstance().connect();
+//            }
+//            try {
+//                TimeUnit.SECONDS.sleep(10);
+//                getConnection();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Void aVoid) {
+//            super.onPostExecute(aVoid);
+//        }
+//    }
+
+//    private static void getConnection() {
+//        new ConnectorTask().execute();
+//    }
 
     //region binding
     public class LocalBinder extends Binder {
@@ -97,6 +126,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+//        getConnection();
         return START_STICKY;
     }
 

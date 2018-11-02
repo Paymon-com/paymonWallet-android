@@ -46,7 +46,7 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
             blurLockView.setTypeface(Typeface.DEFAULT);
             blurLockView.setType(Password.NUMBER, false);
             blurLockView.setLeftButton(getString(R.string.clear));
-            blurLockView.setRightButton(getString(R.string.hint));//TODO:
+            blurLockView.setRightButton(getString(R.string.hint));
             blurLockView.setOnRightButtonClickListener(() -> blurLockView.showHint());
         } else {
             blurLockView.setTitle(getString(R.string.security_enter_password));
