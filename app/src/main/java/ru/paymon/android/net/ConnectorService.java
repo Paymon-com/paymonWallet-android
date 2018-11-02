@@ -159,6 +159,8 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     }
 
     private void showNotification(RPC.Message message) {
+        if(User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) return;
+
         final boolean isGroup = message.to_peer.user_id == 0;
 
         if (!isGroup && message.from_id == MessagesManager.getInstance().currentChatID)
@@ -229,9 +231,15 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         final android.app.NotificationManager notificationManager = (android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if(User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION)
+            ((android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).getNotificationChannel(Config.MESSAGES_NOTIFICATION_CHANNEL_ID).setVibrationPattern(new long[]{100, 200, 100, 300});
+            else
+                ((android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).getNotificationChannel(Config.MESSAGES_NOTIFICATION_CHANNEL_ID).setVibrationPattern(null);
+
             builder.setChannelId(Config.MESSAGES_NOTIFICATION_CHANNEL_ID);
         } else {
-            builder.setVibrate(new long[]{100, 200, 100, 300});
+            if(User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION)
+                builder.setVibrate(new long[]{100, 200, 100, 300});
             Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
             builder.setSound(soundUri);
         }

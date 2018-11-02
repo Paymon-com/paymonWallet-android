@@ -83,7 +83,7 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public static void showCD() {
-        if (User.CLIENT_SECURITY_PASSWORD_VALUE == null || isForResult) return;
+        if (User.CLIENT_SECURITY_PASSWORD_VALUE == null) return;
         if (System.currentTimeMillis() - LAST_TIME_KEY_GUARD_SHOWED >= CD_TIME_KEY_GUARD) {
             Intent intent = new Intent(ApplicationLoader.applicationContext, KeyGuardActivity.class);
             ApplicationLoader.applicationContext.startActivity(intent);

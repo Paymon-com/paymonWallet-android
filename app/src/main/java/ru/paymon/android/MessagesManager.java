@@ -74,7 +74,7 @@ public class MessagesManager {
             final RPC.Group group = GroupsManager.getInstance().getGroup(gid);
 
             if (group == null) {
-//                final RPC.PM_getGroupInfo groupInfo = new RPC.PM_getGroupInfo(gid); //TODO:дописать
+//                final RPC.PM_getGroupInfo groupInfo = new RPC.PM_getGroupInfo(gid);
 //                NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
 //                    if (response == null || error != null) return;
 //                    RPC.Group groupObject = (RPC.Group) response;

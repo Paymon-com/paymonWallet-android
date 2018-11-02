@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!--TODO:add to strings-->
     <string-array name="sort_friends_list">
         <item>@string/default_sort_friends</item>
         <item>@string/default_sort_surname</item>

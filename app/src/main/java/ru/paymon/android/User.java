@@ -28,13 +28,11 @@ public class User {
     public static final String CLIENT_MESSAGES_NOTIFY_TRANSACTIONS_SWITCH = "CLIENT_MESSAGES_NOTIFY_TRANSACTIONS_SWITCH";
     public static final String CLIENT_MESSAGES_NOTIFY_FRIENDS_INVITES_SWITCH = "CLIENT_MESSAGES_NOTIFY_FRIENDS_INVITES_SWITCH";
     public static final String CLIENT_MESSAGES_NOTIFY_GROUP_INVITES_SWITCH = "CLIENT_MESSAGES_NOTIFY_GROUP_INVITES_SWITCH";
-    public static final String CLIENT_MESSAGES_NOTIFY_SOUND_PREFERENCE = "CLIENT_MESSAGES_NOTIFY_SOUND_PREFERENCE";
     public static final String CLIENT_SECURITY_PASSWORD_ENABLED_CHECK = "CLIENT_SECURITY_PASSWORD_ENABLED_CHECK";
     public static final String CLIENT_SECURITY_PASSWORD_PREFERENCE = "CLIENT_SECURITY_PASSWORD_PREFERENCE";
     public static final String CLIENT_SECURITY_PASSWORD_VALUE_KEY = "CLIENT_SECURITY_PASSWORD_VALUE";
     public static final String CLIENT_SECURITY_PASSWORD_HINT_KEY = "CLIENT_SECURITY_PASSWORD_HINT";
 
-//    public static final String CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY = "CLIENT_MONEY_ETHEREUM_DENOMINATION_KEY";
     public static final String CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD_KEY = "CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD_KEY";
     public static final String CLIENT_MONEY_BITCOIN_WALLET_PASSWORD_KEY = "CLIENT_MONEY_BITCOIN_WALLET_PASSWORD_KEY";
     public static final String CLIENT_MONEY_PAYMON_WALLET_PASSWORD_KEY = "CLIENT_MONEY_PAYMON_WALLET_PASSWORD_KEY";
@@ -52,9 +50,7 @@ public class User {
     public static boolean CLIENT_SECURITY_PASSWORD_IS_ENABLED;
     public static String CLIENT_SECURITY_PASSWORD_VALUE;
     public static String CLIENT_SECURITY_PASSWORD_HINT;
-    public static Uri CLIENT_MESSAGES_NOTIFY_SOUND_FILE;
 
-//    public static String CLIENT_MONEY_ETHEREUM_DENOMINATION;
     public static String CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD;
     public static String CLIENT_MONEY_BITCOIN_WALLET_PASSWORD;
     public static String CLIENT_MONEY_PAYMON_WALLET_PASSWORD;
@@ -91,7 +87,6 @@ public class User {
         CLIENT_CONF_HIDE_EMAIL = clientPreferences.getBoolean(CLIENT_CONF_HIDE_EMAIL_SWITCH, false);
         CLIENT_CONF_HIDE_PHONE = clientPreferences.getBoolean(CLIENT_CONF_HIDE_PHONE_SWITCH, false);
         CLIENT_CONF_HIDE_NAME = clientPreferences.getBoolean(CLIENT_CONF_HIDE_NAME_SWITCH, false);
-        CLIENT_MESSAGES_NOTIFY_SOUND_FILE = Uri.parse(clientPreferences.getString(CLIENT_MESSAGES_NOTIFY_SOUND_PREFERENCE, ""));//TODO:default sound file uri
         CLIENT_SECURITY_PASSWORD_IS_ENABLED = clientPreferences.getBoolean(CLIENT_SECURITY_PASSWORD_ENABLED_CHECK, false);
         CLIENT_SECURITY_PASSWORD_VALUE = clientPreferences.getString(CLIENT_SECURITY_PASSWORD_VALUE_KEY, null);
         CLIENT_SECURITY_PASSWORD_HINT = clientPreferences.getString(CLIENT_SECURITY_PASSWORD_HINT_KEY, null);
@@ -136,14 +131,13 @@ public class User {
         saveConfig();
     }
 
-    public static void setDefaultConfig() { //TODO:сделать кнопку сброса к дефолтам в настройках
+    public static void setDefaultConfig() {
         SharedPreferences clientPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationLoader.applicationContext);
         SharedPreferences.Editor editor = clientPreferences.edit();
 
         editor.putString(CLIENT_BASIC_DATE_FORMAT_LIST, ApplicationLoader.applicationContext.getString(R.string.date_format_24h));
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_DONT_WORRY_SWITCH, false);
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_VIBRATION_SWITCH, true);
-        editor.putString(CLIENT_MESSAGES_NOTIFY_SOUND_PREFERENCE, "");//TODO:default sound file uri
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_NOTIFICATIONS_ENABLED_SWITCH, true);
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_TRANSACTIONS_SWITCH, true);
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_FRIENDS_INVITES_SWITCH, true);
