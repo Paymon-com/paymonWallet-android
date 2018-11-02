@@ -3,6 +3,16 @@
     <string name="app_name">Paymon</string>
     <string name="date_format_24h">24 Hour</string>
     <string name="date_format_12h">12 Hour AM/PM</string>
+    <string name="required_field">Required field!</string>
+    <string name="invalid_value">Invalid value!</string>
+    <string name="not_a_btc_address">The value entered is not a BTC address!</string>
+    <string name="not_read_qr">Could not read Qr code</string>
+    <string name="insufficient_funds">Insufficient funds</string>
+    <string name="a_low_commission">A low commission value can lead to a long transaction sending. Continue?</string>
+    <string name="continue_transaction">Continue</string>
+    <string name="transaction_hash">Transaction hash</string>
+    <string name="success">Success</string>
+    <string name="fail">Fail</string>
 
     <string name="profile_edit_failed">Changes were not saved</string>
     <string name="deletion_confirmation">Deletion confirmation</string>
