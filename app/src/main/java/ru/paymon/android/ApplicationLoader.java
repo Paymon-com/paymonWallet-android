@@ -31,7 +31,6 @@ import ru.paymon.android.utils.KeyGenerator;
 public class ApplicationLoader extends WalletApplication {
     public static volatile Context applicationContext;
     public static volatile Handler applicationHandler;
-    public static volatile AppDatabase db;
     public static RxPermission rxPermission;
 
     @SuppressWarnings("JniMissingFunction")
@@ -63,12 +62,10 @@ public class ApplicationLoader extends WalletApplication {
 
         rxPermission = RealRxPermission.getInstance(this);
 
-
         super.onCreate();
 
         Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000)).build());
         EmojiManager.install(new CustomEmojiProvider());
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "database").build();//TODO:delete allow main thread queries
 
         IntentFilter networkIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         ApplicationLoader.applicationContext.registerReceiver(new NetworkStateReceiver(), networkIntentFilter);

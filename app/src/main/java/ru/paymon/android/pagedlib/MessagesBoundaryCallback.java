@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 
 import java.util.List;
 
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
@@ -42,7 +41,7 @@ public class MessagesBoundaryCallback extends PagedList.BoundaryCallback<RPC.Mes
     public void onItemAtEndLoaded(@NonNull RPC.Message itemAtEnd) {
         super.onItemAtEndLoaded(itemAtEnd);
 
-        List<RPC.Message> messages = ApplicationLoader.db.chatMessageDao().getMessagesByChatIDList(chatID);
+        List<RPC.Message> messages = MessagesManager.getInstance().getMessagesByChatIDList(chatID);
         int offset = 0;
         for (int i = 0; i < messages.size(); i++) {
             RPC.Message message = messages.get(i);

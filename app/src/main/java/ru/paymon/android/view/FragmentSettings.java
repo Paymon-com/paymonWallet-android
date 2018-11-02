@@ -16,12 +16,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.concurrent.Executors;
+
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.net.NetworkManager;
+import ru.paymon.android.room.AppDatabase;
 
 public class FragmentSettings extends Fragment implements NavigationView.OnNavigationItemSelectedListener {
     private TextView toolbarTitle;
@@ -87,7 +91,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 break;
             case R.id.settings_exit:
                 User.clearConfig();
-                ApplicationLoader.db.clearAllTables();
+                Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().clearAllTables());
                 NetworkManager.getInstance().reconnect();
                 PackageManager packageManager = ApplicationLoader.applicationContext.getPackageManager();
                 Intent intent = packageManager.getLaunchIntentForPackage(ApplicationLoader.applicationContext.getPackageName());

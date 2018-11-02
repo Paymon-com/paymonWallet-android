@@ -40,7 +40,6 @@ public class FragmentGroupAddAdministrators extends Fragment {
 
         RecyclerView groupContactsList = (RecyclerView) view.findViewById(R.id.group_settings_add_administrators_rv);
 
-
         hintError = view.findViewById(R.id.add_administrators_l_hint_error_text_view);
         EditText editText = (EditText) view.findViewById(R.id.edit_text_add_administrators);
 

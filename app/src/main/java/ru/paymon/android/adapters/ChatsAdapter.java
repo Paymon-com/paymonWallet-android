@@ -10,11 +10,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import ru.paymon.android.ChatsManager;
 import ru.paymon.android.components.CircularImageView;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.models.ChatsItem;
+import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
 
 public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseChatsViewHolder> {
@@ -108,7 +110,7 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-                ApplicationLoader.db.chatDao().delete(chatsItem);
+                ChatsManager.getInstance().removeChat(chatsItem);
             });
         }
     }
@@ -156,7 +158,7 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-                ApplicationLoader.db.chatDao().delete(chatsItem);
+                ChatsManager.getInstance().removeChat(chatsItem);
             });
         }
     }

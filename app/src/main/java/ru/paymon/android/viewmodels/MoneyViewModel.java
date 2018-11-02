@@ -28,11 +28,13 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
+import ru.paymon.android.ExchangeRatesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
@@ -44,6 +46,7 @@ import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.models.PmntTransactionItem;
 import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.models.WalletItem;
+import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
 
 import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_IS_24H;
@@ -158,7 +161,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             if (ethereumWallet != null) {
                 BigInteger balance = application.getEthereumBalance();
                 if (balance != null) {
-                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, ETH_CURRENCY_VALUE);
+                    ExchangeRate exchangeRate = ExchangeRatesManager.getInstance().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, ETH_CURRENCY_VALUE);
                     if (exchangeRate != null) {
                         String fiatBalance = WalletApplication.convertEthereumToFiat(balance, exchangeRate.value);
                         walletItems.add(new NonEmptyWalletItem(ETH_CURRENCY_VALUE, Convert.fromWei(new BigDecimal(balance), Convert.Unit.ETHER).toString(), fiatCurrency, fiatBalance));
@@ -173,7 +176,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             if (paymonWallet != null) {
                 BigInteger balance = application.getPaymonBalance();
                 if (balance != null) {
-                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, PMNT_CURRENCY_VALUE);
+                    ExchangeRate exchangeRate = ExchangeRatesManager.getInstance().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, PMNT_CURRENCY_VALUE);
                     if (exchangeRate != null) {
                         String fiatBalance = WalletApplication.convertPaymonToFiat(balance, exchangeRate.value);
                         walletItems.add(new NonEmptyWalletItem(PMNT_CURRENCY_VALUE, Convert.fromWei(new BigDecimal(balance), Convert.Unit.GWEI).toString(), fiatCurrency, fiatBalance));
@@ -188,7 +191,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             if (bitcoinWallet != null && User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD != null) {
                 ApplicationLoader.applicationHandler.post(() -> {
                     String balance = bitcoinWallet.getBalance().toPlainString();
-                    ExchangeRate exchangeRate = ApplicationLoader.db.exchangeRatesDao().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
+                    ExchangeRate exchangeRate = ExchangeRatesManager.getInstance().getExchangeRatesByFiatAndCryptoCurrecy(fiatCurrency, BTC_CURRENCY_VALUE);
                     if (exchangeRate != null) {
                         String fiatBalance = WalletApplication.convertBitcoinToFiat(balance, exchangeRate.value);
                         walletItems.add(new NonEmptyWalletItem(BTC_CURRENCY_VALUE, balance, fiatCurrency, fiatBalance));
@@ -243,8 +246,10 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                 }
 
                 if (exchangeRatesItems.size() > 0) {
-                    ApplicationLoader.db.exchangeRatesDao().deleteAll();
-                    ApplicationLoader.db.exchangeRatesDao().insertList(exchangeRatesItems);
+//                    Executors.newSingleThreadExecutor().submit(() -> {
+                        AppDatabase.getDatabase().exchangeRatesDao().deleteAll();
+                        AppDatabase.getDatabase().exchangeRatesDao().insertList(exchangeRatesItems);
+//                    });
                     exchangeRatesData.postValue(exchangeRatesItems);
                 }
             } catch (Exception e) {
@@ -406,8 +411,6 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                     String gasLimit = transcationObj.getString("gas");
                     String gasPrice = Convert.fromWei(transcationObj.getString("gasPrice"), Convert.Unit.GWEI) + " GWEI";
                     String gasUsed = transcationObj.getString("gasUsed");
-//                    String status = transcationObj.getInt("txreceipt_status") == 1 ? "success" : "fail"; //TODO:String
-//                    String data = transcationObj.getString("input");
                     transactionItems.add(new PmntTransactionItem(hash, date, value, to, from, gasLimit, gasUsed, gasPrice));
 
 //                    try {
