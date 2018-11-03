@@ -110,7 +110,7 @@ import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CUR
 public class WalletApplication extends AbsWalletApplication {
     public static final int btcTxSize = (148 * 1) + (34 * 2) + 10;
     private static final boolean IS_TEST = true;
-    private static final String INFURA_LINK = IS_TEST ? "https://ropsten.infura.io/BAWTZQzsbBDZG6g9D0IP" : "https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP";
+    private static final String INFURA_LINK = Config.DEBUG ? "https://ropsten.infura.io/BAWTZQzsbBDZG6g9D0IP" : "https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP";
     private EthereumWallet ethereumWallet;
     private PaymonWallet paymonWallet;
     private String ethereumWalletPath;

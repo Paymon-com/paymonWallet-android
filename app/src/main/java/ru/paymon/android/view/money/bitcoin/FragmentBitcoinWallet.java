@@ -1,9 +1,12 @@
 package ru.paymon.android.view.money.bitcoin;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import java.util.List;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.Config;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
@@ -90,33 +94,19 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
         transactionsRecView.setHasFixedSize(true);
 
         ItemClickSupport.addTo(transactionsRecView).setOnItemClickListener((recyclerView, position, v) -> {
-//                TransactionItem transactionItem = ethereumTransactionAdapter.transactionItems.get(position);
-//
-//                AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
-//
-//                view = (ConstraintLayout) getLayoutInflater().inflate(R.layout.alert_dialog_custom_transaction_info, null);
-//
-//                TextView hash = (TextView) view.findViewById(R.id.ethereum_transaction_hash_alert);
-//                TextView status = (TextView) view.findViewById(R.id.ethereum_transaction_status_alert);
-//                TextView time = (TextView) view.findViewById(R.id.ethereum_transaction_time_alert);
-//                TextView value = (TextView) view.findViewById(R.id.ethereum_transaction_value_alert);
-//                TextView to = (TextView) view.findViewById(R.id.ethereum_transaction_to_alert);
-//                TextView from = (TextView) view.findViewById(R.id.ethereum_transaction_from_alert);
-//                TextView gasLimit = (TextView) view.findViewById(R.id.ethereum_transaction_gas_limit_alert);
-//                TextView gasUsed = (TextView) view.findViewById(R.id.ethereum_transaction_gas_used_alert);
-//                TextView gasPrice = (TextView) view.findViewById(R.id.ethereum_transaction_gas_price_alert);
-//
-//                hash.setText(transactionItem.hash);
-//                status.setText(transactionItem.status);
-//                time.setText(transactionItem.time);
-//                value.setText(transactionItem.value);
-//                to.setText(transactionItem.to);
-//                from.setText(transactionItem.from);
-//                gasLimit.setText(transactionItem.gasLimit);
-//                gasUsed.setText(transactionItem.gasUsed);
-//                gasPrice.setText(transactionItem.gasPrice);
-//
-//                adb.setView(view).create().show();
+            final BtcTransactionItem transactionItem = (BtcTransactionItem) transactionAdapter.transactionItems.get(position);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    .setMessage("Открыть подробней?")
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                        final String url = Config.DEBUG ? "https://live.blockcypher.com/btc-testnet/tx/" + transactionItem.hash: "https://live.blockcypher.com/btc/tx/" + transactionItem.hash;
+                        final Uri uri = Uri.parse(url);
+                        final Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
+                        startActivity(browserIntent);
+                    })
+                    .setNegativeButton(getString(R.string.button_cancel), (dialogInterface, i) -> {});
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         });
 
         return view;

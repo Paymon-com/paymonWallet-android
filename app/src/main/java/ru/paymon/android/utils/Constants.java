@@ -21,15 +21,14 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
+import ru.paymon.android.Config;
 
 /**
  * @author Andreas Schildbach
  */
 public final class Constants {
-    public static final boolean TEST = true;
-
     /** Network this wallet is on (e.g. testnet or mainnet). */
-    public static final NetworkParameters NETWORK_PARAMETERS = TEST ? TestNet3Params.get() : MainNetParams.get();
+    public static final NetworkParameters NETWORK_PARAMETERS = Config.DEBUG ? TestNet3Params.get() : MainNetParams.get();
 
     /** Bitcoinj global context. */
     public static final Context CONTEXT = new Context(NETWORK_PARAMETERS);

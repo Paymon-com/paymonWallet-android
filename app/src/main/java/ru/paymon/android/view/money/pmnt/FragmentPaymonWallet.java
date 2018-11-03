@@ -112,6 +112,11 @@ public class FragmentPaymonWallet extends Fragment {
             TextView gasLimit = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_limit_alert);
             TextView gasUsed = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_used_alert);
             TextView gasPrice = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_price_alert);
+            TextView status = (TextView) dialogView.findViewById(R.id.ethereum_transaction_status_alert);
+            TextView status2 = (TextView) dialogView.findViewById(R.id.textView6);
+
+            status.setVisibility(View.GONE);
+            status2.setVisibility(View.GONE);
 
             hash.setText(transactionItem.hash);
             time.setText(transactionItem.time);
