@@ -13,6 +13,7 @@ public class MainViewModel extends ViewModel implements NotificationManager.ILis
     private MutableLiveData<Boolean> isServerConnected = new MutableLiveData<>();
     private MutableLiveData<Boolean> isAuthorized = new MutableLiveData<>();
     private MutableLiveData<Boolean> isBtcSync = new MutableLiveData<>();
+    private MutableLiveData<Integer> btcSyncValue = new MutableLiveData<>();
 
     public LiveData<Boolean> getNetworkConnectionState() {
         if (isNetworkConnected.getValue() == null)
@@ -34,6 +35,8 @@ public class MainViewModel extends ViewModel implements NotificationManager.ILis
         return isAuthorized;
     }
 
+    public LiveData<Integer> getBtcSyncValue() { return btcSyncValue;}
+
 
     public MainViewModel() {
         super();
@@ -44,6 +47,7 @@ public class MainViewModel extends ViewModel implements NotificationManager.ILis
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_PROGRESS);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_CHAIN_STARTED);
     }
 
     @Override
@@ -56,6 +60,7 @@ public class MainViewModel extends ViewModel implements NotificationManager.ILis
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.NETWORK_STATE_DISCONNECTED);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_PROGRESS);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_CHAIN_STARTED);
     }
 
     @Override
@@ -74,12 +79,17 @@ public class MainViewModel extends ViewModel implements NotificationManager.ILis
                 isNetworkConnected.postValue(true);
             } else if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_PROGRESS) {
                 double progress = (double) args[0];
+
+                btcSyncValue.postValue((int) progress);
+
                 if (progress < 100)
                     isBtcSync.postValue(false);
                 else
                     isBtcSync.postValue(true);
             } else if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED) {
                 isBtcSync.postValue(true);
+            }else if(event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_CHAIN_STARTED){
+                isBtcSync.postValue(false);
             }
         });
     }

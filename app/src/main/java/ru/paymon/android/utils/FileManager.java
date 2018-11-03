@@ -44,7 +44,7 @@ public class FileManager {
         STICKER,
         ACTION,
         WALLET,
-        VIDEO //TODO:Сделать обработку для видео
+        VIDEO
     }
 
 //    public static class DownloadingFile {

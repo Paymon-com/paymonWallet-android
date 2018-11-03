@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private LiveData<Boolean> networkState;
     private LiveData<Boolean> authorizationState;
     private LiveData<Boolean> btcSyncData;
+    private LiveData<Integer> btcSyncValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         networkState = mainViewModel.getNetworkConnectionState();
         authorizationState = mainViewModel.getAuthorizationState();
         btcSyncData = mainViewModel.getBtcSync();
+        btcSyncValue = mainViewModel.getBtcSyncValue();
 
         super.onCreate(savedInstanceState);
 
@@ -97,8 +99,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private void checkBtcSync() {
         Boolean isBtsSync = btcSyncData.getValue();
-        if (isBtsSync == null) return;
-        String text = getString(R.string.btc_sync);
+        Integer btcSyncVal = btcSyncValue.getValue();
+        if (isBtsSync == null || btcSyncVal == null) return;
+        String text = getString(R.string.btc_sync) + " (" + btcSyncVal +"%)";
         ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
         if (isBtsSync)
             connectingConstraint.setVisibility(View.GONE);

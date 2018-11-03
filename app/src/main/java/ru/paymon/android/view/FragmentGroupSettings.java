@@ -124,7 +124,7 @@ public class FragmentGroupSettings extends Fragment {
             });
         });
 
-        if (!group.photoURL.url.isEmpty()) //TODO:observable чтоб обновлять при загрузке фотки
+        if (!group.photoURL.url.isEmpty())
             Utils.loadPhoto(group.photoURL.url, photoView);
 
         titleView.setText(group.title);
