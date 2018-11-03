@@ -118,7 +118,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 }
 
                 if (value.isEmpty()) {
-                    amountInputLayout.setError("Обязательное поле для заполнения!");
+                    amountInputLayout.setError(getText(R.string.required_field));
                     fiatEqualTextView.setVisibility(View.GONE);
                     return;
                 }
@@ -126,7 +126,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 btcAmount = Double.parseDouble(value);
 
                 if (btcAmount <= 0.00000546) {
-                    amountInputLayout.setError("Не допустимое значение!");
+                    amountInputLayout.setError(getText(R.string.invalid_value));
                     fiatEqualTextView.setVisibility(View.GONE);
                     return;
                 }
@@ -182,7 +182,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 String value = s.toString();
 
                 if (!Utils.verifyBTCpubKey(value)) {
-                    receiverAddressInputLayout.setError("Введеное значение не является BTC адресом!");
+                    receiverAddressInputLayout.setError(getText(R.string.not_a_btc_address));
                 } else {
                     receiverAddressInputLayout.setError(null);
                 }
@@ -249,7 +249,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
             }
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage("Не удалсоь считать Qr код")
+                    .setMessage(getText(R.string.not_read_qr))
                     .setCancelable(true);
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
@@ -257,7 +257,6 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
     }
 
     private void pay() {
-        //TODO:Strings
         final String toAddress = receiverAddressEditText.getText().toString();
 
         if (btcAmount <= 0.00000546 || toAddress.isEmpty() || !Utils.verifyBTCpubKey(toAddress)) {
@@ -266,7 +265,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
 
         if (totalValueBtc > application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).value) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage("Не достаточно средств")
+                    .setMessage(getText(R.string.insufficient_funds))
                     .setCancelable(true);
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
@@ -274,21 +273,21 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                .setMessage(feeSeekBar.getProgress() < 10 ? "Будьте аккуратны, низкое значение комиссии может привести к долгой отправке транзакции. Продолжить?" : "Продолжить?")
+                .setMessage(feeSeekBar.getProgress() < 10 ? getText(R.string.a_low_commission) : getText(R.string.continue_transaction) + "?")
                 .setCancelable(true)
-                .setPositiveButton("Продолжить", (DialogInterface dialog, int which) -> {
+                .setPositiveButton(getText(R.string.continue_transaction), (DialogInterface dialog, int which) -> {
                     final long btcAmountToSatoshi = (long) (btcAmount * Math.pow(10, 8));
                     Transaction transaction = application.sendBitcoinTx(toAddress, btcAmountToSatoshi, feeSeekBar.getProgress());
                     if (transaction != null) {
                         String hash = transaction.getHashAsString();
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
-                                .setMessage("Хэш транзакции " + hash)
+                                .setMessage(getText(R.string.transaction_hash) + hash)
                                 .setCancelable(true);
                         AlertDialog alertDialog = builder2.create();
                         alertDialog.show();
                     }
                 })
-                .setNegativeButton("Отмена", (DialogInterface dialog, int which) -> {
+                .setNegativeButton(getText(R.string.button_cancel), (DialogInterface dialog, int which) -> {
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

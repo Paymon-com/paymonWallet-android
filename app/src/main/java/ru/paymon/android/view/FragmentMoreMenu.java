@@ -44,33 +44,33 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         final int itemId = item.getItemId();
         switch (itemId) {
-            case R.id.more_menu_profit:
-                Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage("com.example.raing.profitbeta");
-                if (launchIntent != null) {
-                    startActivity(launchIntent);
-                } else {
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?gid=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
-                    } catch (android.content.ActivityNotFoundException e) {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?gid=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
-                    }
-                }
-                break;
-            case R.id.more_menu_invite:
-//                if (ContextCompat.checkSelfPermission(ApplicationLoader.applicationContext, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
-//                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
+//            case R.id.more_menu_profit:
+//                Intent launchIntent = getContext().getPackageManager().getLaunchIntentForPackage("com.example.raing.profitbeta");
+//                if (launchIntent != null) {
+//                    startActivity(launchIntent);
 //                } else {
-//                    ((MainActivity) getActivity()).requestAppPermissions(new String[]{Manifest.permission.READ_CONTACTS},
-//                            R.string.msg_permissions_required, READ_CONTACTS_PERMISSION);
+//                    try {
+//                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?gid=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
+//                    } catch (android.content.ActivityNotFoundException e) {
+//                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?gid=com.vkontakte.android")));//TODO:Вместо вконтактика вставить ссылку на релизнутый Profit в гугл приложении
+//                    }
 //                }
-                break;
+//                break;
+//            case R.id.more_menu_invite:
+////                if (ContextCompat.checkSelfPermission(ApplicationLoader.applicationContext, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+////                    Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentContactsInvite.newInstance(), null);
+////                } else {
+////                    ((MainActivity) getActivity()).requestAppPermissions(new String[]{Manifest.permission.READ_CONTACTS},
+////                            R.string.msg_permissions_required, READ_CONTACTS_PERMISSION);
+////                }
+//                break;
             case R.id.more_menu_faq:
                 break;
             case R.id.more_menu_settings:
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.settingsActivity);
                 break;
-            case R.id.bottom_menu_games:
-                break;
+//            case R.id.bottom_menu_games:
+//                break;
         }
 
         return true;

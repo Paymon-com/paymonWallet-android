@@ -34,11 +34,11 @@
             android:defaultValue="true"
             android:key="CLIENT_MESSAGES_NOTIFY_GROUP_INVITES_SWITCH"
             android:title="@string/group_invitations" />
-        <SwitchPreference
-            android:defaultValue="false"
-            android:enabled="false"
-            android:key="CLIENT_MESSAGES_NOTIFY_GAMES_SWITCH"
-            android:title="@string/title_games" />
+        <!--<SwitchPreference-->
+            <!--android:defaultValue="false"-->
+            <!--android:enabled="false"-->
+            <!--android:key="CLIENT_MESSAGES_NOTIFY_GAMES_SWITCH"-->
+            <!--android:title="@string/title_games" />-->
 
     </PreferenceCategory>
 </PreferenceScreen>

@@ -1,6 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">Paymon</string>
     <string name="msg_permissions_required">Пожалуйста, предоставьте разрешения</string>
+    <string name="required_field">Обязательное поле!</string>
+    <string name="invalid_value">Недопустимое значение!</string>
+    <string name="not_a_btc_address">Введенное значение не является адресом BTC!</string>
+    <string name="not_read_qr">Не удалось прочитать Qr код</string>
+    <string name="insufficient_funds">Недостаточно средств</string>
+    <string name="a_low_commission">Низкая стоимость комиссии может привести к длительной отправке транзакций. Продолжить?</string>
+    <string name="continue_transaction">Продолжить?</string>
+    <string name="transaction_hash">Хэш транзакции</string>
+    <string name="success">Успешно</string>
+    <string name="fail">Неудача</string>
 
     <string name="ok">ОК</string>
     <string name="deletion_confirmation">Подтверждение удаления</string>

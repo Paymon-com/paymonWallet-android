@@ -27,7 +27,7 @@ public class FragmentFriendProfile extends Fragment {
     private int userId;
     private ImageButton floatMenu;
     private ImageButton chatButton;
-    private ImageButton blockButton;
+//    private ImageButton blockButton;
     private ImageButton showBitcoin;
     private ImageButton showEthereum;
     private DialogProgress dialogProgress;
@@ -56,7 +56,7 @@ public class FragmentFriendProfile extends Fragment {
         backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
 
         chatButton = (ImageButton) view.findViewById(R.id.friend_profile_chat_button);
-        blockButton = (ImageButton) view.findViewById(R.id.friend_profile_block_button);
+//        blockButton = (ImageButton) view.findViewById(R.id.friend_profile_block_button);
         showBitcoin = (ImageButton) view.findViewById(R.id.friend_profile_bitcoin_button);
         showEthereum = (ImageButton) view.findViewById(R.id.friend_profile_ethereum_button);
 
@@ -108,9 +108,9 @@ public class FragmentFriendProfile extends Fragment {
                             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
                         });
 
-                        blockButton.setOnClickListener(view15 -> {
-                            //TODO:сделать реализацию кнопки для блокировки пользователя
-                        });
+//                        blockButton.setOnClickListener(view15 -> {
+//                            //TODO:сделать реализацию кнопки для блокировки пользователя
+//                        });
                     });
                 }
             });
@@ -158,9 +158,9 @@ public class FragmentFriendProfile extends Fragment {
         isFABOpen = true;
         floatMenu.animate().rotation(180);
         chatButton.animate().translationY(getResources().getDimension(R.dimen.standard_55));
-        blockButton.animate().translationY(getResources().getDimension(R.dimen.standard_105));
-        showBitcoin.animate().translationY(getResources().getDimension(R.dimen.standard_155));
-        showEthereum.animate().translationY(getResources().getDimension(R.dimen.standard_205));
+//        blockButton.animate().translationY(getResources().getDimension(R.dimen.standard_105));
+        showBitcoin.animate().translationY(getResources().getDimension(R.dimen.standard_105));
+        showEthereum.animate().translationY(getResources().getDimension(R.dimen.standard_155));
     }
 
     private void closeFABMenu() {
@@ -169,7 +169,7 @@ public class FragmentFriendProfile extends Fragment {
         chatButton.animate().translationY(0);
         showBitcoin.animate().translationY(0);
         showEthereum.animate().translationY(0);
-        blockButton.animate().translationY(0);
+//        blockButton.animate().translationY(0);
     }
 
     @Override

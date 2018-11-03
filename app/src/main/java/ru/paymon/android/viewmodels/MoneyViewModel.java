@@ -36,6 +36,7 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.ExchangeRatesManager;
 import ru.paymon.android.NotificationManager;
+import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.models.EthTransactionItem;
@@ -364,7 +365,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                     String gasLimit = transcationObj.getString("gas");
                     String gasPrice = new BigDecimal(transcationObj.getString("gasPrice")).divide(new BigDecimal(Math.pow(10, 9))).toString() + " GWEI";
                     String gasUsed = transcationObj.getString("gasUsed");
-                    String status = transcationObj.getInt("txreceipt_status") == 1 ? "success" : "fail"; //TODO:String
+                    String status = transcationObj.getInt("txreceipt_status") == 1 ? application.getApplicationContext().getString(R.string.success) : application.getApplicationContext().getString(R.string.fail);
                     transactionItems.add(new EthTransactionItem(hash, status, date, value, to, from, gasLimit, gasUsed, gasPrice));
                 }
 

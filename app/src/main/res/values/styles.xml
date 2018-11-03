@@ -13,30 +13,30 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
-    <!--<style name="AppThemeDark" parent="AppTheme">-->
-        <!--<item name="windowActionBar">false</item>-->
-        <!--<item name="windowNoTitle">true</item>-->
-        <!--<item name="android:windowFullscreen">true</item>-->
-        <!--<item name="android:windowContentOverlay">@null</item>-->
-        <!--<item name="windowActionModeOverlay">true</item>-->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
+    <!--&lt;!&ndash;<style name="AppThemeDark" parent="AppTheme">&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="windowActionBar">false</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="windowNoTitle">true</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:windowFullscreen">true</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:windowContentOverlay">@null</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="windowActionModeOverlay">true</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="colorPrimary">@color/colorPrimary</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="colorPrimaryDark">@color/colorPrimaryDark</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="colorAccent">@color/colorAccent</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:textColorPrimary">@color/blue_dark</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:textColorSecondary">@color/white</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:textCursorDrawable">@color/white</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:windowBackground">@color/colorPrimaryDark</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="actionMenuTextColor">@color/white</item>&ndash;&gt;-->
+        <!--&lt;!&ndash;<item name="android:textColor">@color/blue</item>&ndash;&gt;-->
+    <!--&lt;!&ndash;</style>&ndash;&gt;-->
+
+    <!--<style name="ToolBarStyle" parent="AppTheme">-->
         <!--<item name="android:textColorPrimary">@color/blue_dark</item>-->
         <!--<item name="android:textColorSecondary">@color/white</item>-->
         <!--<item name="android:textCursorDrawable">@color/white</item>-->
-        <!--<item name="android:windowBackground">@color/colorPrimaryDark</item>-->
+        <!--&lt;!&ndash;<item name="inputTextColor">@color/white</item>&ndash;&gt;-->
         <!--<item name="actionMenuTextColor">@color/white</item>-->
-        <!--<item name="android:textColor">@color/blue</item>-->
     <!--</style>-->
-
-    <style name="ToolBarStyle" parent="AppTheme">
-        <item name="android:textColorPrimary">@color/blue_dark</item>
-        <item name="android:textColorSecondary">@color/white</item>
-        <item name="android:textCursorDrawable">@color/white</item>
-        <!--<item name="inputTextColor">@color/white</item>-->
-        <item name="actionMenuTextColor">@color/white</item>
-    </style>
 
     <style name="TilStyle" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
@@ -47,11 +47,10 @@
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:background">@drawable/buttons_background_blue</item>
-
     </style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    
+    <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
+    <!---->
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>
