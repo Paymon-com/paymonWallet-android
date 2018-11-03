@@ -118,27 +118,29 @@ public class WalletApplication extends AbsWalletApplication {
 
     @Override
     public void onCreate() {
+//        ApplicationLoader.initStrictMode();
         super.onCreate();
 
-        new LinuxSecureRandom();
+        Executors.newSingleThreadExecutor().submit(() -> {
+            new LinuxSecureRandom();
 
-        Threading.throwOnLockCycles();
-        org.bitcoinj.core.Context.enableStrictMode();
-        org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
+            Threading.throwOnLockCycles();
+            org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
 
-        ethereumWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-eth-wallet.json";
-        paymonWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-pmnt-wallet.json";
+            ethereumWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-eth-wallet.json";
+            paymonWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-pmnt-wallet.json";
 
-        activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
-        ethereumWeb3j = Web3jFactory.build(new HttpService(INFURA_LINK));
-        ethereumRequestQueue = Volley.newRequestQueue(getApplicationContext());
+            ethereumWeb3j = Web3jFactory.build(new HttpService(INFURA_LINK));
+            ethereumRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        paymonmWeb3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP"));
-        paymonRequestQueue = Volley.newRequestQueue(getApplicationContext());
+            paymonmWeb3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP"));
+            paymonRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
-//        if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD != null)
-            Executors.newSingleThreadExecutor().submit(() -> WalletKit.getInstance().startBitcoinKit());
+            if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD != null)
+                WalletKit.getInstance().startBitcoinKit();
+        });
     }
 
     @Override

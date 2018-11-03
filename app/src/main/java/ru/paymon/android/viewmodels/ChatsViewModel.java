@@ -24,7 +24,6 @@ import ru.paymon.android.utils.Utils;
 public class ChatsViewModel extends AndroidViewModel {
     public int chatsScrollY;
     public int sortedBy = 2;
-    public boolean isChatsLoaded;
     public boolean isSearchActivated;
     public String searchText;
     private final PagedList.Config config = new PagedList.Config.Builder().setInitialLoadSizeHint(50).setPageSize(10).setEnablePlaceholders(false).build();
@@ -92,8 +91,6 @@ public class ChatsViewModel extends AndroidViewModel {
                     UsersManager.getInstance().putUsers(packet.users);
                     GroupsManager.getInstance().putGroups(packet.groups);
                     MessagesManager.getInstance().putMessages(packet.messages);
-
-                    isChatsLoaded = true;
 
                     showProgress.postValue(false);
                 });
