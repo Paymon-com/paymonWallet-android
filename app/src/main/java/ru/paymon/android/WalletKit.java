@@ -40,11 +40,6 @@ public class WalletKit extends WalletAppKit {
         return instance;
     }
 
-    public static WalletKit newInstance() {
-        instance = new WalletKit(Constants.NETWORK_PARAMETERS, new File(ApplicationLoader.applicationContext.getCacheDir().getPath()), "paymon-btc-wallet");
-        return instance;
-    }
-
     public WalletKit(NetworkParameters params, File directory, String filePrefix) {
         super(params, directory, filePrefix);
         InputStream checkpoint = CheckpointManager.openStream(Constants.NETWORK_PARAMETERS);

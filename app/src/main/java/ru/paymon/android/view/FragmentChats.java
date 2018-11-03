@@ -140,8 +140,10 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         });
 
         mainViewModel.getAuthorizationState().observe(getActivity(), (state) -> {
-            if (!chatsViewModel.isChatsLoaded)
-                chatsViewModel.updateChatsData();
+            Utils.netQueue.postRunnable(() -> {
+                if (state)
+                    chatsViewModel.updateChatsData();
+            }, 500);
         });
 
         search.setText(chatsViewModel.searchText);
