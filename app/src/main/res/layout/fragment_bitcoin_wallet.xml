@@ -27,11 +27,11 @@
             android:id="@+id/fragment_bitcoin_wallet_transfer_button"
             android:layout_width="70dp"
             android:layout_height="60dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/hexagon"
             app:layout_constraintEnd_toEndOf="@+id/fragment_bitcoin_wallet_balance"
             app:layout_constraintStart_toStartOf="@+id/fragment_bitcoin_wallet_balance"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_balance"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_balance_estimated"
             app:srcCompat="@drawable/ic_transfer" />
 
         <ImageButton
@@ -126,6 +126,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            tools:text="0.00000000000000 BTC" />
+
+        <TextView
+            android:id="@+id/fragment_bitcoin_wallet_balance_estimated"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="23sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.496"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_balance"
             tools:text="0.00000000000000 BTC" />
 
 

@@ -42,6 +42,7 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
     public static final String BTC_CURRENCY_VALUE = "BTC";
     private TransactionAdapter transactionAdapter;
     private TextView balanceTextView;
+    private TextView estimatedBalanceTextView;
     private WalletApplication application;
     private RecyclerView transactionsRecView;
     private TextView historyText;
@@ -58,6 +59,7 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
         View view = inflater.inflate(R.layout.fragment_bitcoin_wallet, container, false);
 
         balanceTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance);
+        estimatedBalanceTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_balance_estimated);
         transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
         historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
         ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_bitcoin_wallet_deposit_button);
@@ -125,12 +127,14 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
         super.onResume();
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         Utils.hideBottomBar(getActivity());
-        final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toPlainString();
-        final String balanceEstimated = application.getBitcoinBalance(Wallet.BalanceType.ESTIMATED).toPlainString();
-        balanceTextView.setText(balance + "(" + balanceEstimated + ") BTC");
+        final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toFriendlyString();
+        final String balanceEstimated = application.getBitcoinBalance(Wallet.BalanceType.ESTIMATED).toFriendlyString();
+        balanceTextView.setText("Available: " + balance);
+        estimatedBalanceTextView.setText("Estimated: " + balanceEstimated);
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
         animation.setDuration(700);
         balanceTextView.startAnimation(animation);
+        estimatedBalanceTextView.startAnimation(animation);
         List<BtcTransactionItem> transactions = application.getBitcoinTransactionHistory();
         transactionAdapter = new TransactionAdapter(new ArrayList<>(transactions));
         transactionsRecView.setAdapter(transactionAdapter);
@@ -148,9 +152,10 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
         if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED) {
             ApplicationLoader.applicationHandler.post(() -> {
-                final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toPlainString();
-                final String balanceEstimated = application.getBitcoinBalance(Wallet.BalanceType.ESTIMATED).toPlainString();
-                balanceTextView.setText(balance + " (" + balanceEstimated + ") BTC");
+                final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toFriendlyString();
+                final String balanceEstimated = application.getBitcoinBalance(Wallet.BalanceType.ESTIMATED).toFriendlyString();
+                balanceTextView.setText("Available: " + balance);
+                estimatedBalanceTextView.setText("Estimated: " + balanceEstimated);
             });
         }
     }
