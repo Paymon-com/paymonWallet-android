@@ -15,7 +15,7 @@
 //import ru.paymon.android.net.NetworkManager;
 //import ru.paymon.android.net.RPC;
 //import ru.paymon.android.utils.Utils;
-//import ru.paymon.android.view.DialogProgress;
+//import ru.paymon.android.components.DialogProgress;
 //
 //public class ContactsManager {
 //    private static final String CONTACT_ID = ContactsContract.Contacts._ID;

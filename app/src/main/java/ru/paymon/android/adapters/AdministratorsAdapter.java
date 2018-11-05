@@ -21,7 +21,7 @@
 //import ru.paymon.android.models.UserItem;
 //import ru.paymon.android.net.RPC;
 //import ru.paymon.android.utils.Utils;
-//import ru.paymon.android.view.DialogProgress;
+//import ru.paymon.android.components.DialogProgress;
 //import ru.paymon.android.view.FragmentFriendProfile;
 //
 //import static ru.paymon.android.view.FragmentChat.CHAT_ID_KEY;

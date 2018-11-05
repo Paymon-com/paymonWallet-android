@@ -23,6 +23,7 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.ContactsGlobalAdapter;
 import ru.paymon.android.components.CustomSearchView;
+import ru.paymon.android.components.DialogProgress;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.ItemClickSupport;

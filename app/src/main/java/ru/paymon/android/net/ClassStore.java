@@ -80,6 +80,7 @@ public class ClassStore {
         classStore.put(RPC.PM_restorePasswordRequestCode.svuid, RPC.PM_restorePasswordRequestCode.class);
         classStore.put(RPC.PM_getPhotosURL.svuid, RPC.PM_getPhotosURL.class);
         classStore.put(RPC.PM_photosURL.svuid, RPC.PM_photosURL.class);
+        classStore.put(RPC.PM_deleteProfilePhoto.svuid, RPC.PM_deleteProfilePhoto.class);
     }
 
     private static ClassStore store = null;

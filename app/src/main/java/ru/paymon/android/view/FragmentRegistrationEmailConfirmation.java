@@ -21,6 +21,7 @@ import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.components.DialogProgress;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;

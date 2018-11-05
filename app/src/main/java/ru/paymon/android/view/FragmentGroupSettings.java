@@ -36,6 +36,7 @@ import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.adapters.GroupSettingsAdapter;
+import ru.paymon.android.components.DialogProgress;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;

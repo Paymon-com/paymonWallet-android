@@ -11,9 +11,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
-
-import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.ArrayList;
 import java.util.Currency;
@@ -21,15 +20,14 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.navigation.Navigation;
-import ru.paymon.android.Config;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
+import ru.paymon.android.components.CustomDialogProgress;
 import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.view.DialogProgress;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
 import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
@@ -39,7 +37,7 @@ import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURREN
 public class FragmentMoney extends Fragment implements NotificationManager.IListener {
     public static final String CURRENCY_KEY = "CURRENCY_KEY";
 
-    private DialogProgress dialogProgress;
+    private CustomDialogProgress dialogProgress;
     private RecyclerView exchangeRatesRecView;
     private MoneyViewModel moneyViewModel;
     private ExchangeRatesAdapter exchangeRatesAdapter;
@@ -69,7 +67,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         TextView eurButton = (TextView) view.findViewById(R.id.fragment_money_currency_eur);
         TextView localButton = (TextView) view.findViewById(R.id.fragment_money_currency_local);
 
-        dialogProgress = new DialogProgress(getContext());
+        dialogProgress = new CustomDialogProgress(getContext(), "Exchange rates and wallets", R.drawable.circle_button);//TODO:String
         dialogProgress.setCancelable(false);
 
         exchangeRatesRecView.setHasFixedSize(true);

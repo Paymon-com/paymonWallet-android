@@ -2398,4 +2398,15 @@ public class RPC {
             stream.writeInt32(svuid);
         }
     }
+
+    public static class PM_deleteProfilePhoto  extends MessageAction {
+        public final static int svuid = 432807616;
+
+        public void readParams(SerializableData stream, boolean exception) {
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+        }
+    }
 }

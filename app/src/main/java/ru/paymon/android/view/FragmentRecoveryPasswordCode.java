@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,11 +15,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.navigation.Navigation;
-import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
-import ru.paymon.android.net.NetworkManager;
-import ru.paymon.android.net.RPC;
-import ru.paymon.android.utils.Utils;
+import ru.paymon.android.components.DialogProgress;
 
 import static ru.paymon.android.view.FragmentRecoveryPasswordEmail.PASSWORD_RECOVERY_LOGIN;
 

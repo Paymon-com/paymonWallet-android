@@ -1,4 +1,4 @@
-package ru.paymon.android.view;
+package ru.paymon.android.components;
 
 import android.app.Dialog;
 import android.content.Context;
