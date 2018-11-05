@@ -117,8 +117,8 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
         fiatCurrencyPicker.setValue(2);
 
-        gasPriceBar.setIndicatorTextFormat("Current gas price: ${PROGRESS} GWEI");
-        gasLimitBar.setIndicatorTextFormat("Current gas limit: ${PROGRESS}");
+        gasPriceBar.setIndicatorTextFormat(getString(R.string.current_gas_price) +": ${PROGRESS} GWEI");
+        gasLimitBar.setIndicatorTextFormat(getString(R.string.current_gas_limit) + ": ${PROGRESS}");
         fromAddressTextView.setText(application.getEthereumWallet().publicAddress);
 
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
@@ -143,7 +143,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 String value = s.toString();
 
                 if (!Utils.verifyETHpubKey(value)) {
-                    receiverAddressInputLayout.setError("Введеное значение не является ETH адресом!");
+                    receiverAddressInputLayout.setError(getText(R.string.not_a_eth_address));
                 } else {
                     receiverAddressInputLayout.setError(null);
                 }
@@ -169,7 +169,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 }
 
                 if (value.isEmpty()) {
-                    amountInputLayout.setError("Обязательное поле для заполнения!");
+                    amountInputLayout.setError(getText(R.string.required_field));
                     fiatEqualTextView.setVisibility(View.GONE);
                     return;
                 }
@@ -177,7 +177,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 pmntAmount = Double.parseDouble(value);
 
                 if (pmntAmount <= 0) {
-                    amountInputLayout.setError("Недопустимое значение!");
+                    amountInputLayout.setError(getText(R.string.invalid_value));
                     fiatEqualTextView.setVisibility(View.GONE);
                     return;
                 }
@@ -271,11 +271,11 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
         if (gasLimit < Config.GAS_LIMIT_CONTRACT_DEFAULT) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage("Значение Gas Limit меньше 200000, это может привести к неуспешной транзакции и списанной комиссии")
+                    .setMessage(getText(R.string.gas_is_less_than_200000))
                     .setCancelable(true)
-                    .setNegativeButton("Отмена", (DialogInterface dialog, int which) -> {
+                    .setNegativeButton(getText(R.string.button_cancel), (DialogInterface dialog, int which) -> {
                     })
-                    .setPositiveButton("Продолжить", (DialogInterface dialog, int which) -> send());
+                    .setPositiveButton(getText(R.string.continue_transaction), (DialogInterface dialog, int which) -> send());
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         } else {
@@ -290,7 +290,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         if (bigIntegerBalance != null && bigIntegerEthBalance != null) {
             if (bigIntegerGweiAmount.toBigInteger().compareTo(bigIntegerBalance) == 1 || bigIntegerWeiFee.toBigInteger().compareTo(bigIntegerEthBalance) == 1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                        .setMessage("Не достаточно средств")
+                        .setMessage(getText(R.string.insufficient_funds))
                         .setCancelable(true);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
@@ -300,7 +300,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 Executors.newSingleThreadExecutor().submit(() -> {
                     TransactionReceipt transactionReceipt = application.sendPmntContract(toAddress, bigIntegerGweiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
                     ApplicationLoader.applicationHandler.post(() -> {
-                        final String text = transactionReceipt != null ? "Хэш транзакции: " + transactionReceipt.getTransactionHash() : "Транзакцию отправить не удалось";
+                        final String text = transactionReceipt != null ? getString(R.string.transaction_hash) + ": " + transactionReceipt.getTransactionHash() : getString(R.string.transaction_failed_to_send);
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
                                 .setMessage(text)
                                 .setCancelable(true);
@@ -350,7 +350,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
             }
         } else {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext())
-                    .setMessage("Не удалсоь считать Qr код")
+                    .setMessage(getText(R.string.not_read_qr))
                     .setCancelable(true);
             android.support.v7.app.AlertDialog alertDialog = builder.create();
             alertDialog.show();

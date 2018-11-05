@@ -127,7 +127,7 @@ public class FragmentRecoveryPasswordCode extends Fragment {
         Utils.netQueue.postRunnable(() -> {
             RPC.PM_verifyPasswordRecoveryCode verifyPasswordRecoveryCode = new RPC.PM_verifyPasswordRecoveryCode();
             verifyPasswordRecoveryCode.login = login;
-            verifyPasswordRecoveryCode.code = Integer.parseInt(codeEditText.getText().toString()); //TODO: запрет ввода букв
+            verifyPasswordRecoveryCode.code = Integer.parseInt(codeEditText.getText().toString());
 
             ApplicationLoader.applicationHandler.post(dialogProgress::show);
 

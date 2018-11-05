@@ -144,7 +144,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
             public void onSeeking(SeekParams seekParams) {
                 feeSatoshis = seekParams.progress * WalletApplication.btcTxSize;
                 feeBtc = feeSatoshis / Math.pow(10, 8);
-                feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + "BTC (${PROGRESS} satoshi per byte)");
+                feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format("BTC (${PROGRESS} %s)", getString(R.string.satoshi_per_byte)));
                 totalValueBtc = feeBtc + btcAmount;
                 totalTextView.setText(String.format("%.8f BTC", totalValueBtc));
             }
@@ -163,7 +163,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         feeSeekBar.setMin(1);
         feeSeekBar.setMax(100);
         feeSeekBar.setProgress(10);
-        feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + " (${PROGRESS} satoshi per byte)");
+        feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format(" (${PROGRESS} %s)", getString(R.string.satoshi_per_byte)));
 
         receiverAddressEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -280,7 +280,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                     if (transaction != null) {
                         String hash = transaction.getHashAsString();
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
-                                .setMessage(getText(R.string.transaction_hash) + hash)
+                                .setMessage(getText(R.string.transaction_hash) + ": " + hash)
                                 .setCancelable(true);
                         AlertDialog alertDialog = builder2.create();
                         alertDialog.show();
