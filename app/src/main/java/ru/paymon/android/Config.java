@@ -49,7 +49,6 @@ public class Config {
         {
             add("USD");
             add("EUR");
-            add("RUB");
             add(Currency.getInstance(Locale.getDefault()).getCurrencyCode());
         }
     };

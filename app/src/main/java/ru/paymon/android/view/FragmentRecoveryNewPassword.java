@@ -26,19 +26,12 @@ import static ru.paymon.android.view.FragmentRecoveryPasswordCode.PASSWORD_RECOV
 import static ru.paymon.android.view.FragmentRecoveryPasswordEmail.PASSWORD_RECOVERY_LOGIN;
 
 public class FragmentRecoveryNewPassword extends Fragment {
-    private static FragmentRecoveryNewPassword instance;
     private EditText newPassword;
     private EditText repeatNewPassword;
     private DialogProgress dialogProgress;
     private TextView hintError;
     private String login;
     private String code;
-
-
-    public static synchronized FragmentRecoveryNewPassword newInstance() {
-        instance = new FragmentRecoveryNewPassword();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -132,8 +125,6 @@ public class FragmentRecoveryNewPassword extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
-//        setHasOptionsMenu(true);
     }
 
     public void recoveryPassword() {

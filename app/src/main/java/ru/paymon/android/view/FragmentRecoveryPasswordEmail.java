@@ -24,16 +24,10 @@ import ru.paymon.android.utils.Utils;
 
 public class FragmentRecoveryPasswordEmail extends Fragment {
     public static final String PASSWORD_RECOVERY_LOGIN = "login";
-    private static FragmentRecoveryPasswordEmail instance;
     private EditText emailEditText;
     private TextView hintError;
     private DialogProgress dialogProgress;
 
-    public static synchronized FragmentRecoveryPasswordEmail getInstance() {
-        if (instance == null)
-            instance = new FragmentRecoveryPasswordEmail();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,26 +83,8 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-
-        //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_password_recovery));
-//        setHasOptionsMenu(true);
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.password_recovery_send_email, menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case send:
-//                showFragmentRecoveryPasswordCode();
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
 
     public void showFragmentRecoveryPasswordCode() {
         if (emailEditText.getText().toString().isEmpty()) {

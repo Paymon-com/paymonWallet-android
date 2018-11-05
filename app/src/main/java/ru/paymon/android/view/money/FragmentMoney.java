@@ -16,7 +16,9 @@ import android.widget.TextView;
 import com.shawnlin.numberpicker.NumberPicker;
 
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.Config;
@@ -38,7 +40,6 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     public static final String CURRENCY_KEY = "CURRENCY_KEY";
 
     private DialogProgress dialogProgress;
-    private NumberPicker fiatCurrencySpinner;
     private RecyclerView exchangeRatesRecView;
     private MoneyViewModel moneyViewModel;
     private ExchangeRatesAdapter exchangeRatesAdapter;
@@ -47,7 +48,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     private LiveData<List<ExchangeRate>> exchangeRatesData;
     private LiveData<ArrayList<WalletItem>> walletsData;
     private LiveData<Boolean> showProgress;
-
+    private String currentCurrency = "USD";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,8 +64,10 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
         exchangeRatesRecView = (RecyclerView) view.findViewById(R.id.fragment_money_exchange_rates);
         walletsRecView = (RecyclerView) view.findViewById(R.id.fragment_money_wallets);
-        fiatCurrencySpinner = (NumberPicker) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_currency);
         TextView updateButton = (TextView) view.findViewById(R.id.fragment_money_update);
+        TextView usdButton = (TextView) view.findViewById(R.id.fragment_money_currency_usd);
+        TextView eurButton = (TextView) view.findViewById(R.id.fragment_money_currency_eur);
+        TextView localButton = (TextView) view.findViewById(R.id.fragment_money_currency_local);
 
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(false);
@@ -75,12 +78,24 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         walletsRecView.setHasFixedSize(true);
         walletsRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        fiatCurrencySpinner.setMinValue(1);
-        fiatCurrencySpinner.setMaxValue(Config.fiatCurrencies.length);
-        fiatCurrencySpinner.setDisplayedValues(Config.fiatCurrencies);
-        fiatCurrencySpinner.setValue(2);
+        final String localCurrency = Currency.getInstance(Locale.getDefault()).getCurrencyCode();
+        localButton.setText(localCurrency);
+        localButton.setVisibility(localCurrency.equals("USD") || localCurrency.equals("EUR") ? View.GONE : View.VISIBLE);
 
-        fiatCurrencySpinner.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
+        usdButton.setOnClickListener((v) -> {
+            currentCurrency = "USD";
+            changeCurrency();
+        });
+
+        eurButton.setOnClickListener((v) -> {
+            currentCurrency = "EUR";
+            changeCurrency();
+        });
+
+        localButton.setOnClickListener((v) -> {
+            currentCurrency = localCurrency;
+            changeCurrency();
+        });
 
         showProgress.observe(getActivity(), (flag) -> {
             if (flag == null) return;
@@ -136,7 +151,6 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     }
 
     private void changeCurrency() {
-        String currentCurrency = fiatCurrencySpinner.getDisplayedValues()[fiatCurrencySpinner.getValue() - 1];
         moneyViewModel.fiatCurrency = currentCurrency;
         List<ExchangeRate> exchangeRates = exchangeRatesData.getValue();
         if (exchangeRates == null || exchangeRates.size() <= 0)
