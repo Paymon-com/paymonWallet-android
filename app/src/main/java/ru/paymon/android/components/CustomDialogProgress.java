@@ -20,7 +20,7 @@ public class CustomDialogProgress extends Dialog {
 
     public CustomDialogProgress(final Context context, final String hint, final int resId) {
         super(context);
-        getWindow().setBackgroundDrawable(new ColorDrawable(0xFF444444));
+        getWindow().setBackgroundDrawable(new ColorDrawable(0xFF323232));
 
         View view = LayoutInflater.from(context).inflate(R.layout.dialog_custom_progress, null);
         ImageView imageView = (ImageView) view.findViewById(R.id.dialog_progress_money_image);
