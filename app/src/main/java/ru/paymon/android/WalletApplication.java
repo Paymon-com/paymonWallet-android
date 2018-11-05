@@ -14,6 +14,7 @@ import com.google.common.util.concurrent.Service;
 import org.apache.commons.io.IOUtils;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
+import org.bitcoinj.core.Base58;
 import org.bitcoinj.core.Block;
 import org.bitcoinj.core.CheckpointManager;
 import org.bitcoinj.core.Coin;
@@ -28,6 +29,7 @@ import org.bitcoinj.core.listeners.DownloadProgressTracker;
 import org.bitcoinj.crypto.LinuxSecureRandom;
 import org.bitcoinj.script.Script;
 import org.bitcoinj.utils.Threading;
+import org.bitcoinj.wallet.DeterministicSeed;
 import org.bitcoinj.wallet.KeyChainGroup;
 import org.bitcoinj.wallet.Protos;
 import org.bitcoinj.wallet.SendRequest;
@@ -45,6 +47,8 @@ import org.spongycastle.crypto.modes.CBCBlockCipher;
 import org.spongycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.spongycastle.crypto.params.ParametersWithIV;
 import org.web3j.crypto.CipherException;
+import org.web3j.crypto.Credentials;
+import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.protocol.Web3jFactory;
@@ -78,6 +82,7 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
+import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
@@ -211,6 +216,26 @@ public class WalletApplication extends AbsWalletApplication {
         }
     }
 
+    public boolean createEthereumWalletFromPrivateKey(final String privateKey, final String password) {
+        final String FILE_FOLDER = getApplicationContext().getFilesDir().getAbsolutePath();
+        deleteEthereumWallet();
+        try {
+            Credentials credentials = Credentials.create(privateKey);
+            String fileName = org.web3j.crypto.WalletUtils.generateWalletFile(password, credentials.getEcKeyPair(), new File(FILE_FOLDER), false);
+            if (fileName != null) {
+                if (!Utils.copyFile(new File(FILE_FOLDER + "/" + fileName), new File(ethereumWalletPath)))
+                    return false;
+                new File(FILE_FOLDER + "/" + fileName).delete();
+                ethereumWallet = getEthereumWallet(password);
+                return ethereumWallet != null;
+            }
+            return false;
+        } catch (CipherException | IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     @Override
     public boolean createPaymonWallet(final String password) {
         final String FILE_FOLDER = getApplicationContext().getFilesDir().getAbsolutePath();
@@ -226,6 +251,26 @@ public class WalletApplication extends AbsWalletApplication {
             }
             return false;
         } catch (CipherException | IOException | NoSuchAlgorithmException | InvalidAlgorithmParameterException | NoSuchProviderException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean createPaymonWalletFromPrivateKey(final String privateKey, final String password) {
+        final String FILE_FOLDER = getApplicationContext().getFilesDir().getAbsolutePath();
+        deleteEthereumWallet();
+        try {
+            Credentials credentials = Credentials.create(privateKey);
+            String fileName = org.web3j.crypto.WalletUtils.generateWalletFile(password, credentials.getEcKeyPair(), new File(FILE_FOLDER), false);
+            if (fileName != null) {
+                if (!Utils.copyFile(new File(FILE_FOLDER + "/" + fileName), new File(paymonWalletPath)))
+                    return false;
+                new File(FILE_FOLDER + "/" + fileName).delete();
+                paymonWallet = getPaymonWallet(password);
+                return paymonWallet != null;
+            }
+            return false;
+        } catch (CipherException | IOException e) {
             e.printStackTrace();
             return false;
         }
@@ -276,7 +321,6 @@ public class WalletApplication extends AbsWalletApplication {
     public boolean backupBitcoinWallet(final String path) {
         final Wallet wallet = WalletKit.getInstance().wallet();
         final Protos.Wallet walletProto = new WalletProtobufSerializer().walletToProto(wallet);
-//        Uri targetUri = Uri.parse(path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis());
 
         try (final Writer cipherOut = new OutputStreamWriter(new FileOutputStream(new File(path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis())), StandardCharsets.UTF_8)) {
             final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -287,18 +331,11 @@ public class WalletApplication extends AbsWalletApplication {
             cipherOut.write(encrypt(plainBytes, User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD.toCharArray()));
             cipherOut.flush();
 
-//            final String target = uriToTarget(targetUri) != null ? uriToTarget(targetUri) : targetUri.toString();
             return true;
         } catch (final IOException x) {
             x.printStackTrace();
             return false;
         }
-//        try {
-//            kit.wallet().saveToFile(new File(path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis() + ".wallet"));
-//            return true;
-//        } catch (Exception e) {
-//            return false;
-//        }
     }
 
     @Override
@@ -646,14 +683,26 @@ public class WalletApplication extends AbsWalletApplication {
         return resultWallet != null ? RestoreStatus.DONE : RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
     }
 
-    @Override
-    public boolean deleteBitcoinWallet() {
+    public RestoreStatus restoreBitcoinWalletFromPrivateKey(final String privateKey) {
+        BigInteger privKey = Base58.decodeToBigInteger(privateKey);
+        ECKey key = ECKey.fromPrivate(privKey);
+        Wallet wallet = Wallet.fromKeys(Constants.NETWORK_PARAMETERS, new ArrayList<ECKey>() {{
+            add(key);
+        }});
+
+        Wallet resultWallet = null;
         try {
-            return WalletKit.getInstance().deleteWallet();
+            resultWallet = WalletKit.getInstance().restoreWallet(wallet);
         } catch (Exception e) {
             e.printStackTrace();
-            return false;
         }
+
+        return resultWallet != null ? RestoreStatus.DONE : RestoreStatus.ERROR_DECRYPTING_WRONG_PASS;
+    }
+
+    @Override
+    public boolean deleteBitcoinWallet() {
+        return WalletKit.getInstance().deleteWallet();
     }
 
     public static String convertBitcoinToFiat(String btcAmount, String fiatExRate) {

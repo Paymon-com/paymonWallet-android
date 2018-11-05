@@ -126,7 +126,11 @@ public class WalletKit extends WalletAppKit {
     }
 
     public Wallet restoreWallet(final Wallet wallet) throws Exception {
-        shutDown();
+        try {
+            shutDown();
+        }catch (Exception e){
+
+        }
         wallet.cleanup();
         File chainFile = new File(directory, filePrefix + ".spvchain");
         chainFile.delete();
@@ -136,8 +140,12 @@ public class WalletKit extends WalletAppKit {
         return vWallet;
     }
 
-    public boolean deleteWallet() throws Exception {
-        shutDown();
+    public boolean deleteWallet()  {
+        try {
+            shutDown();
+        }catch (Exception e){
+
+        }
         File chainFile = new File(directory, filePrefix + ".spvchain");
         chainFile.delete();
         vWallet = null;

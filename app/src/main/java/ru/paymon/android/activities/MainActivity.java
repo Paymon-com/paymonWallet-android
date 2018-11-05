@@ -25,6 +25,7 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.viewmodels.MainViewModel;
 
 import static ru.paymon.android.activities.KeyGuardActivity.CD_TIME_KEY_GUARD;
@@ -90,10 +91,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         if (nState == null || cState == null || aState == null) return;
         String text = getString(R.string.connecting);
         ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
-        if (nState && cState && aState)
-            connectingConstraint.setVisibility(View.GONE);
-        else {
-            connectingConstraint.setVisibility(View.VISIBLE);
+        connectingConstraint.setVisibility(nState && cState && aState ? View.GONE : View.VISIBLE);
+        if (!cState){
+            NetworkManager.getInstance().connect();
         }
     }
 
@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Boolean isBtsSync = btcSyncData.getValue();
         Integer btcSyncVal = btcSyncValue.getValue();
         if (isBtsSync == null || btcSyncVal == null) return;
-        String text = getString(R.string.btc_sync) + " (" + btcSyncVal +"%)";
+        String text = getString(R.string.btc_sync) + " (" + btcSyncVal + "%)";
         ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
         if (isBtsSync)
             connectingConstraint.setVisibility(View.GONE);
@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                     if (User.CLIENT_SECURITY_PASSWORD_VALUE != null && (System.currentTimeMillis() - LAST_TIME_KEY_GUARD_SHOWED >= CD_TIME_KEY_GUARD)) {
                         Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
                         startActivityForResult(intent, 10);
-                    }else {
+                    } else {
                         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney, null, navOptions);
                     }
                     break;
@@ -204,8 +204,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 10){
-            if(resultCode == RESULT_OK){
+        if (requestCode == 10) {
+            if (resultCode == RESULT_OK) {
                 NavOptions.Builder builder = new NavOptions.Builder();
                 NavOptions navOptions = builder.setLaunchSingleTop(true).setClearTask(true).build();
                 Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney, null, navOptions);
