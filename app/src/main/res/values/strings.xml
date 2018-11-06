@@ -25,6 +25,8 @@
     <string name="backup_failed">Backup failed</string>
     <string name="wallet_successfully_deleted">Wallet successfully deleted</string>
     <string name="wallet_failed_to_delete">Wallet failed to delete</string>
+    <string name="usd">USD</string>
+    <string name="eur">EUR</string>
 
     <string name="profile_edit_failed">Changes were not saved</string>
     <string name="deletion_confirmation">Deletion confirmation</string>

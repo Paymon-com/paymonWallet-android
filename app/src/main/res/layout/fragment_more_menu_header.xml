@@ -2,33 +2,20 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:gid="@+gid/fragment_more_menu_header_profile_avatar_image_view"-->
-        <!--android:layout_width="40dp"-->
-        <!--android:layout_height="40dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginStart="16dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--app:layout_constraintBottom_toTopOf="@+gid/frameLayout"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent"-->
-        <!--app:srcCompat="@android:color/holo_green_dark" />-->
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <ru.paymon.android.components.CircularImageView
         android:id="@+id/fragment_more_menu_header_profile_avatar_image_view"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:src="@drawable/profile_photo_none"
-        app:civ_border_color="#EEEEEE"
+        app:civ_border_color="@color/borderBlue"
         app:civ_border_width="2dp"
-        app:civ_shadow="true"
-        app:civ_shadow_radius="0"
-        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
+        app:layout_constraintBottom_toTopOf="@+id/imageView8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -37,8 +24,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="TextView"
-        android:textColor="@color/colorPrimary"
+        tools:text="Pomelov Sergey"
+        android:textSize="20sp"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toTopOf="@+id/fragment_more_menu_header_profile_hint_text_view"
         app:layout_constraintStart_toEndOf="@+id/fragment_more_menu_header_profile_avatar_image_view"
         app:layout_constraintTop_toTopOf="@+id/fragment_more_menu_header_profile_avatar_image_view" />
@@ -49,22 +37,22 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="@string/go_to_profile"
+        android:fontFamily="@font/roboto_thin"
         android:textSize="12sp"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="@+id/fragment_more_menu_header_profile_avatar_image_view"
         app:layout_constraintStart_toEndOf="@+id/fragment_more_menu_header_profile_avatar_image_view"
         app:layout_constraintTop_toBottomOf="@+id/fragment_more_menu_header_profile_name_text_view"
         app:layout_constraintVertical_bias="0.0" />
 
-    <FrameLayout
-        android:id="@+id/frameLayout"
-        android:layout_width="0dp"
-        android:layout_height="1px"
-        android:background="@color/blue_dark"
+    <ImageView
+        android:id="@+id/imageView8"
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        android:src="@drawable/transparent_gradient_rev"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-    </FrameLayout>
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

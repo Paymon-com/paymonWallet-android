@@ -64,9 +64,9 @@ public class FragmentEthereumWallet extends Fragment {
         View view = inflater.inflate(R.layout.fragment_ethereum_wallet, container, false);
 
         balanceTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_balance);
-        ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_deposit_button);
+//        ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_deposit_button);
         ImageButton transfer = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_transfer_button);
-        ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_withdraw_button);
+//        ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_ethereum_wallet_withdraw_button);
         ImageButton backBtn = (ImageButton) view.findViewById(R.id.toolbar_ethereum_wallet_back_btn);
         ImageButton restoreBtn = (ImageButton) view.findViewById(R.id.toolbar_ethereum_wallet_restore_btn);
         ImageButton backupBtn = (ImageButton) view.findViewById(R.id.toolbar_ethereum_wallet_backup_btn);

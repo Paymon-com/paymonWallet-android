@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
 
     <include
         android:id="@+id/include3"
@@ -12,187 +13,228 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <android.support.constraint.ConstraintLayout
-        android:id="@+id/constraintLayout"
+    <ImageButton
+        android:id="@+id/toolbar_ethereum_wallet_delete_btn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:alpha="120"
-        android:background="@color/eth_color"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_delete_wallet"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/toolbar_ethereum_wallet_backup_btn"
+        app:layout_constraintTop_toBottomOf="@+id/include3" />
+
+    <ImageButton
+        android:id="@+id/toolbar_ethereum_wallet_restore_btn"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_action_restore_backup"
+        app:layout_constraintEnd_toStartOf="@+id/toolbar_ethereum_wallet_backup_btn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/include3">
+        app:layout_constraintTop_toBottomOf="@+id/include3" />
 
-        <ImageButton
-            android:id="@+id/fragment_ethereum_wallet_transfer_button"
-            android:layout_width="70dp"
-            android:layout_height="60dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/hexagon"
-            app:layout_constraintEnd_toEndOf="@+id/fragment_ethereum_wallet_balance"
-            app:layout_constraintStart_toStartOf="@+id/fragment_ethereum_wallet_balance"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_balance"
-            app:srcCompat="@drawable/ic_transfer" />
-
-        <ImageButton
-            android:id="@+id/fragment_ethereum_wallet_deposit_button"
-            android:layout_width="70dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/hexagon"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_button"
-            app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_button"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_button"
-            app:srcCompat="@drawable/ic_deposit" />
-
-        <ImageButton
-            android:id="@+id/fragment_ethereum_wallet_withdraw_button"
-            android:layout_width="70dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/hexagon"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_button"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_button"
-            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_button"
-            app:srcCompat="@drawable/ic_withdraw" />
-
-        <TextView
-            android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/deposit"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/fragment_ethereum_wallet_deposit_button"
-            app:layout_constraintStart_toStartOf="@+id/fragment_ethereum_wallet_deposit_button"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_deposit_button" />
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/title_transfer"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/fragment_ethereum_wallet_transfer_button"
-            app:layout_constraintStart_toStartOf="@+id/fragment_ethereum_wallet_transfer_button"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_button" />
-
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/withdraw"
-            android:textAllCaps="true"
-            android:textColor="@color/white"
-            android:textSize="10sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/fragment_ethereum_wallet_withdraw_button"
-            app:layout_constraintStart_toStartOf="@+id/fragment_ethereum_wallet_withdraw_button"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_withdraw_button" />
+    <ImageButton
+        android:id="@+id/toolbar_ethereum_wallet_backup_btn"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:background="@color/colorPrimary"
+        android:src="@drawable/ic_action_save_backup"
+        app:layout_constraintEnd_toStartOf="@+id/toolbar_ethereum_wallet_delete_btn"
+        app:layout_constraintStart_toEndOf="@+id/toolbar_ethereum_wallet_restore_btn"
+        app:layout_constraintTop_toBottomOf="@+id/include3" />
 
 
-        <TextView
-            android:id="@+id/fragment_ethereum_wallet_balance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:textAlignment="center"
-            android:textColor="@color/white"
-            android:textSize="23sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="0.00000000000000 ETH" />
+    <ImageButton
+        android:id="@+id/fragment_ethereum_wallet_transfer_button"
+        android:layout_width="70dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/hexagon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView18"
+        app:srcCompat="@drawable/ic_transfer" />
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/fragment_ethereum_wallet_deposit_button"-->
+            <!--android:layout_width="70dp"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:background="@drawable/hexagon"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_button"-->
+            <!--app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_button"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_button"-->
+            <!--app:srcCompat="@drawable/ic_deposit" />-->
+
+        <!--<ImageButton-->
+            <!--android:id="@+id/fragment_ethereum_wallet_withdraw_button"-->
+            <!--android:layout_width="70dp"-->
+            <!--android:layout_height="60dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:background="@drawable/hexagon"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_button"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_button"-->
+            <!--app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_button"-->
+            <!--app:srcCompat="@drawable/ic_withdraw" />-->
+
+        <!--<TextView-->
+            <!--android:id="@+id/textView10"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginBottom="16dp"-->
+            <!--android:fontFamily="sans-serif-light"-->
+            <!--android:text="@string/deposit"-->
+            <!--android:textAllCaps="true"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="10sp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="@+id/fragment_ethereum_wallet_deposit_button"-->
+            <!--app:layout_constraintStart_toStartOf="@+id/fragment_ethereum_wallet_deposit_button"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_deposit_button" />-->
+
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/roboto_thin"
+        android:text="@string/title_transfer"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="@+id/fragment_ethereum_wallet_transfer_button"
+        app:layout_constraintStart_toStartOf="@+id/fragment_ethereum_wallet_transfer_button"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_button" />
+
+        <!--<TextView-->
+            <!--android:id="@+id/textView12"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginBottom="16dp"-->
+            <!--android:fontFamily="sans-serif-light"-->
+            <!--android:text="@string/withdraw"-->
+            <!--android:textAllCaps="true"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:textSize="10sp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="@+id/fragment_ethereum_wallet_withdraw_button"-->
+            <!--app:layout_constraintStart_toStartOf="@+id/fragment_ethereum_wallet_withdraw_button"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_withdraw_button" />-->
 
 
-    </android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Available"
+        android:textColor="@color/blue_bright"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_ethereum_wallet_backup_btn" />
+
+    <TextView
+        android:id="@+id/fragment_ethereum_wallet_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:textAlignment="center"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_ethereum_wallet_backup_btn"
+        tools:text="0.00000000000000 ETH" />
 
     <Button
         android:id="@+id/fragment_ethereum_wallet_public_key_button"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_height="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/buttons_background_left_rounding"
         android:fontFamily="sans-serif-light"
         android:text="@string/public_key"
         android:textAllCaps="true"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/space3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
-
-    <Space
-        android:id="@+id/space3"
-        android:layout_width="wrap_content"
-        android:layout_height="5dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/constraintLayout" />
+        app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_button"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_private_key_button" />
 
     <Button
         android:id="@+id/fragment_ethereum_wallet_private_key_button"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
+        android:layout_height="30dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/buttons_background_left_rounding"
         android:fontFamily="sans-serif-light"
         android:text="@string/private_key"
         android:textAllCaps="true"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/space3"
-        app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
+        app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_button"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_balance" />
+
 
     <TextView
         android:id="@+id/history_transaction_is_empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:fontFamily="sans-serif-light"
+        android:fontFamily="@font/roboto_thin"
         android:text="@string/history_transaction_is_empty"
         android:textAllCaps="true"
-        android:textSize="12sp"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_private_key_button" />
+        app:layout_constraintTop_toTopOf="@+id/history_transaction_recycler_view" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/history_transaction_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_public_key_button" />
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:src="@drawable/transparent_gradient_rev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/toolbar_ethereum_wallet_backup_btn" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:src="@drawable/transparent_gradient_rev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_ethereum_wallet_backup_btn" />
 
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="8dp"
+        android:src="@drawable/transparent_gradient_rev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/history_transaction_recycler_view" />
 </android.support.constraint.ConstraintLayout>

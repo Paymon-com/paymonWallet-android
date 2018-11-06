@@ -23,6 +23,8 @@
     <string name="backup_failed">Резервную копию создать не удалось</string>
     <string name="wallet_successfully_deleted">Кошелек успешно удален</string>
     <string name="wallet_failed_to_delete">Кошелек удалить не удалось</string>
+    <string name="usd">USD</string>
+    <string name="eur">EUR</string>
 
     <string name="ok">ОК</string>
     <string name="deletion_confirmation">Подтверждение удаления</string>

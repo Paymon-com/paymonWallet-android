@@ -40,7 +40,6 @@ import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.activities.QrCodeScannerActivity;
 import ru.paymon.android.models.ExchangeRate;
-import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
@@ -103,7 +102,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_id_from);
         FloatingActionButton qrScannerButton = (FloatingActionButton) view.findViewById(R.id.fragment_ethereum_wallet_transfer_qr);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_back_image_button);
-        TextView payButton = (TextView) view.findViewById(R.id.toolbar_eth_wallet_transf_next_text_view);
+        ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_next_image_view);
         TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_ethereum_amount_input_layout);
         TextInputLayout receiverAddressInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_ethereum_receiver_address_input_layout);
 

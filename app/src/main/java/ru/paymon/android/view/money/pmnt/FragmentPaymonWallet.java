@@ -66,9 +66,9 @@ public class FragmentPaymonWallet extends Fragment {
         View view = inflater.inflate(R.layout.fragment_paymon_wallet, container, false);
 
         balanceTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_balance);
-        ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_deposit_button);
+//        ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_deposit_button);
         ImageButton transfer = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_transfer_button);
-        ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_withdraw_button);
+//        ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_withdraw_button);
         ImageButton backBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_back_btn);
         ImageButton restoreBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_restore_btn);
         ImageButton backupBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_backup_btn);

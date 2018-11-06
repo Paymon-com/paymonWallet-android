@@ -1,20 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/light_gray">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.NavigationView
         android:id="@+id/fragment_more_menu_navigation_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimary"
         app:headerLayout="@layout/fragment_more_menu_header"
-        app:itemBackground="@drawable/navigation_view_item_background"
         app:itemIconTint="@drawable/navigation_menu_item_icon_tint"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/more_menu" />
-</android.support.constraint.ConstraintLayout>
+        app:itemTextColor="@color/white"
+        app:menu="@menu/more_menu">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:src="@drawable/transparent_gradient"
+            android:layout_gravity="bottom"/>
+
+    </android.support.design.widget.NavigationView>
+
+
+</FrameLayout>

@@ -105,7 +105,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_id_from);
         FloatingActionButton qrScannerButton = (FloatingActionButton) view.findViewById(R.id.fragment_paymon_wallet_transfer_qr);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_pmnt_wallet_transf_back_image_button);
-        TextView payButton = (TextView) view.findViewById(R.id.toolbar_pmnt_wallet_transf_next_text_view);
+        ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_pmnt_wallet_transf_next_text_view);
         TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_paymon_amount_input_layout);
         TextInputLayout receiverAddressInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_paymon_receiver_address_input_layout);
 
