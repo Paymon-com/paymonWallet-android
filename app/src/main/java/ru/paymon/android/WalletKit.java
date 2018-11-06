@@ -57,7 +57,6 @@ public class WalletKit extends WalletAppKit {
 
             @Override
             public void onBlocksDownloaded(Peer peer, Block block, @Nullable FilteredBlock filteredBlock, int blocksLeft) {
-                Log.e("AAA", "blocks downloaded");
                 super.onBlocksDownloaded(peer, block, filteredBlock, blocksLeft);
             }
 
@@ -94,12 +93,12 @@ public class WalletKit extends WalletAppKit {
             @Override
             public void onChainDownloadStarted(Peer peer, int blocksLeft) {
                 Log.e("AAA", "chain download started");
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_CHAIN_STARTED);
                 super.onChainDownloadStarted(peer, blocksLeft);
             }
 
             @Override
             public void onBlocksDownloaded(Peer peer, Block block, @Nullable FilteredBlock filteredBlock, int blocksLeft) {
-                Log.e("AAA", "blocks downloaded");
                 super.onBlocksDownloaded(peer, block, filteredBlock, blocksLeft);
             }
 

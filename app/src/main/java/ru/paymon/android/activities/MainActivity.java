@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private void checkBtcSync() {
         Boolean isBtsSync = btcSyncData.getValue();
         Integer btcSyncVal = btcSyncValue.getValue();
-        if (isBtsSync == null || btcSyncVal == null) return;
-        String text = getString(R.string.btc_sync) + " (" + btcSyncVal + "%)";
+        if (isBtsSync == null) return;
+        String text = getString(R.string.btc_sync) + (btcSyncVal != null ? " (" + btcSyncVal + "%)" : " (0%)");
         ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
         if (isBtsSync)
             connectingConstraint.setVisibility(View.GONE);
