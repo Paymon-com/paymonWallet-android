@@ -40,6 +40,11 @@ public class WalletKit extends WalletAppKit {
         return instance;
     }
 
+    public static WalletKit newInstance() {
+        instance = new WalletKit(Constants.NETWORK_PARAMETERS, new File(ApplicationLoader.applicationContext.getCacheDir().getPath()), "paymon-btc-wallet");
+        return instance;
+    }
+
     public WalletKit(NetworkParameters params, File directory, String filePrefix) {
         super(params, directory, filePrefix);
         InputStream checkpoint = CheckpointManager.openStream(Constants.NETWORK_PARAMETERS);
@@ -127,7 +132,7 @@ public class WalletKit extends WalletAppKit {
     public Wallet restoreWallet(final Wallet wallet) throws Exception {
         try {
             shutDown();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         wallet.cleanup();
@@ -139,10 +144,10 @@ public class WalletKit extends WalletAppKit {
         return vWallet;
     }
 
-    public boolean deleteWallet()  {
+    public boolean deleteWallet() {
         try {
             shutDown();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
         File chainFile = new File(directory, filePrefix + ".spvchain");
@@ -181,6 +186,8 @@ public class WalletKit extends WalletAppKit {
             TransactionConfidence confidence = tx.getConfidence();
             Log.e("AAA", "new block depth: " + confidence.getDepthInBlocks());
         });
+
+        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED);
     }
 
 }

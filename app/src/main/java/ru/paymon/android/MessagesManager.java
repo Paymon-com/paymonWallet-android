@@ -136,7 +136,6 @@ public class MessagesManager {
             e.printStackTrace();
         }
         return messagesList;
-
     }
 
     public DataSource.Factory<Integer, RPC.Message> getMessagesByChatID(int cid){

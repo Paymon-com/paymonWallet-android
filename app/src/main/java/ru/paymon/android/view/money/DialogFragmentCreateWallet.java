@@ -27,6 +27,7 @@ import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURREN
 
 public class DialogFragmentCreateWallet extends DialogFragment {
     private String currency;
+    private WalletApplication application;
 
     public DialogFragmentCreateWallet setArgs(Bundle bundle) {
         this.setArguments(bundle);
@@ -42,6 +43,7 @@ public class DialogFragmentCreateWallet extends DialogFragment {
             if (!bundle.containsKey(CURRENCY_KEY)) return;
             currency = bundle.getString(CURRENCY_KEY);
         }
+        application = ((WalletApplication) getActivity().getApplication());
     }
 
     @Nullable
@@ -88,7 +90,7 @@ public class DialogFragmentCreateWallet extends DialogFragment {
             getDialog().cancel();
             Toast.makeText(getActivity(), R.string.create_wallet_dialog_hint, Toast.LENGTH_SHORT).show();
             Utils.stageQueue.postRunnable(() -> {
-                boolean isCreated = ((WalletApplication) getActivity().getApplication()).createEthereumWallet(password);
+                boolean isCreated = application.createEthereumWallet(password);
                 if (!isCreated) {
                     ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.create_ethereum_wallet_failed, Toast.LENGTH_LONG).show());
                 } else {
@@ -108,14 +110,11 @@ public class DialogFragmentCreateWallet extends DialogFragment {
     private void createBitcoinWallet(final String password) {
         if (!password.isEmpty() && password.length() >= 8) {
             getDialog().cancel();
-            if (((WalletApplication) getActivity().getApplication()).getBitcoinWallet() != null) {
-                User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = password;
-                User.saveConfig();
-                Toast.makeText(ApplicationLoader.applicationContext, R.string.bitcoin_wallet_created, Toast.LENGTH_LONG).show();
-                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED);
-            } else {
-                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.create_ethereum_wallet_failed, Toast.LENGTH_LONG).show()); //TODO: fix that string
-            }
+            application.startBitcoinKit();
+            User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = password;
+            User.saveConfig();
+            Toast.makeText(ApplicationLoader.applicationContext, R.string.bitcoin_wallet_created, Toast.LENGTH_LONG).show();
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED);
         } else {
             Toast.makeText(ApplicationLoader.applicationContext, R.string.reg_check_password_length, Toast.LENGTH_SHORT).show();
         }
@@ -126,7 +125,7 @@ public class DialogFragmentCreateWallet extends DialogFragment {
             getDialog().cancel();
             Toast.makeText(getActivity(), R.string.create_wallet_dialog_hint, Toast.LENGTH_SHORT).show();
             Utils.stageQueue.postRunnable(() -> {
-                boolean isCreated = ((WalletApplication) getActivity().getApplication()).createPaymonWallet(password);
+                boolean isCreated = application.createPaymonWallet(password);
                 if (!isCreated) {
                     ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.create_ethereum_wallet_failed, Toast.LENGTH_LONG).show()); //TODO: fix that string
                 } else {

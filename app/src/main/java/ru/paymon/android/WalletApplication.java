@@ -94,7 +94,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import javax.annotation.Nullable;
 
@@ -102,6 +104,8 @@ import ru.paymon.android.models.BtcTransactionItem;
 import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.PaymonTokenContract;
 import ru.paymon.android.models.PaymonWallet;
+import ru.paymon.android.net.RPC;
+import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Constants;
 import ru.paymon.android.utils.Iso8601Format;
 import ru.paymon.android.utils.Utils;
@@ -234,6 +238,11 @@ public class WalletApplication extends AbsWalletApplication {
             e.printStackTrace();
             return false;
         }
+    }
+
+
+    public void startBitcoinKit(){
+        WalletKit.getInstance().startBitcoinKit();
     }
 
     @Override
