@@ -26,16 +26,10 @@ import static ru.paymon.android.view.FragmentRecoveryPasswordEmail.PASSWORD_RECO
 
 public class FragmentRecoveryPasswordCode extends Fragment {
     public static final String PASSWORD_RECOVERY_CODE = "code";
-    private static FragmentRecoveryPasswordCode instance;
     private EditText codeEditText;
     private TextView hintError;
     private String login;
     private DialogProgress dialogProgress;
-
-    public static synchronized FragmentRecoveryPasswordCode newInstance() {
-        instance = new FragmentRecoveryPasswordCode();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -101,22 +95,6 @@ public class FragmentRecoveryPasswordCode extends Fragment {
         setHasOptionsMenu(true);
     }
 
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.next_menu, menu);
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//
-//        switch (item.getItemId()) {
-//            case next:
-//                showFragmentRecoveryPasswordCode();
-//                break;
-//        }
-//        return super.onOptionsItemSelected(item);
-//    }
-
     public void showFragmentRecoveryPasswordCode() {
         if (codeEditText.getText().toString().isEmpty()) {
             hintError.setText(R.string.string_code_is_empty);
@@ -124,43 +102,9 @@ public class FragmentRecoveryPasswordCode extends Fragment {
             return;
         }
 
-        Utils.netQueue.postRunnable(() -> {
-            RPC.PM_verifyPasswordRecoveryCode verifyPasswordRecoveryCode = new RPC.PM_verifyPasswordRecoveryCode();
-            verifyPasswordRecoveryCode.login = login;
-            verifyPasswordRecoveryCode.code = Integer.parseInt(codeEditText.getText().toString());
-
-            ApplicationLoader.applicationHandler.post(dialogProgress::show);
-
-            final long requestID = NetworkManager.getInstance().sendRequest(verifyPasswordRecoveryCode, (response, error) -> {
-                if (error != null || (response != null && response instanceof RPC.PM_boolFalse)) {
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        if (dialogProgress != null && dialogProgress.isShowing())
-                            dialogProgress.cancel();
-                        hintError.setText(R.string.password_recovery_failed);
-                    });
-                    return;
-                }
-
-                ApplicationLoader.applicationHandler.post(() -> {
-                    if (dialogProgress != null && dialogProgress.isShowing())
-                        dialogProgress.dismiss();
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                            .setMessage(getString(R.string.confirmation_code_verified))
-                            .setCancelable(false)
-                            .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
-                                Bundle bundle = new Bundle();
-                                bundle.putString(PASSWORD_RECOVERY_LOGIN, login);
-                                bundle.putString(PASSWORD_RECOVERY_CODE, codeEditText.getText().toString());
-                                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentRecoveryNewPassword, bundle);
-                            });
-                    AlertDialog alertDialog = builder.create();
-                    alertDialog.show();
-                });
-            });
-
-            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
-        });
+        Bundle bundle = new Bundle();
+        bundle.putString(PASSWORD_RECOVERY_LOGIN, login);
+        bundle.putString(PASSWORD_RECOVERY_CODE, codeEditText.getText().toString());
+        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentRecoveryNewPassword, bundle);
     }
-
 }

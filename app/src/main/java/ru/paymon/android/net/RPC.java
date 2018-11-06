@@ -2242,24 +2242,6 @@ public class RPC {
         }
     }
 
-    public static class PM_verifyPasswordRecoveryCode extends Packet {
-        public static int svuid = 569433023;
-
-        public String login;
-        public int code;
-
-        public void readParams(SerializableData stream, boolean exception) {
-            login = stream.readString(exception);
-            code = stream.readInt32(exception);
-        }
-
-        public void serializeToStream(SerializableData stream) {
-            stream.writeInt32(svuid);
-            stream.writeString(login);
-            stream.writeInt32(code);
-        }
-    }
-
     public static class PM_checkEmailConfirmation extends Packet {
         public static int svuid = 512435272;
 
@@ -2275,21 +2257,6 @@ public class RPC {
             stream.writeInt32(svuid);
             stream.writeString(login);
             stream.writeString(newEmail);
-        }
-    }
-
-    public static class PM_getUsersByPhoneNumber extends Packet {//TODO: в ответ приходит PM_users
-        public static int svuid = 517290247;
-
-        public String phones;
-
-        public void readParams(SerializableData stream, boolean exception) {
-            phones = stream.readString(exception);
-        }
-
-        public void serializeToStream(SerializableData stream) {
-            stream.writeInt32(svuid);
-            stream.writeString(phones);
         }
     }
 

@@ -37,6 +37,7 @@ import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.money.DialogFragmentBackupWallet;
+import ru.paymon.android.view.money.DialogFragmentDeleteWallet;
 import ru.paymon.android.view.money.DialogFragmentPrivateKey;
 import ru.paymon.android.view.money.DialogFragmentPublicKey;
 import ru.paymon.android.view.money.DialogFragmentRestoreWallet;
@@ -66,17 +67,17 @@ public class FragmentPaymonWallet extends Fragment {
         View view = inflater.inflate(R.layout.fragment_paymon_wallet, container, false);
 
         balanceTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_balance);
+        historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
+        transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
 //        ImageButton deposit = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_deposit_button);
         ImageButton transfer = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_transfer_button);
 //        ImageButton withdraw = (ImageButton) view.findViewById(R.id.fragment_paymon_wallet_withdraw_button);
         ImageButton backBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_back_btn);
         ImageButton restoreBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_restore_btn);
         ImageButton backupBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_backup_btn);
-//        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_delete_btn);
+        ImageButton deleteBtn = (ImageButton) view.findViewById(R.id.toolbar_paymon_wallet_delete_btn);
         Button privateKey = (Button) view.findViewById(R.id.fragment_paymon_wallet_private_key_button);
         Button publicKey = (Button) view.findViewById(R.id.fragment_paymon_wallet_public_key_button);
-        historyText = (TextView) view.findViewById(R.id.history_transaction_is_empty);
-        transactionsRecView = (RecyclerView) view.findViewById(R.id.history_transaction_recycler_view);
 
         Bundle bundle = new Bundle();
         bundle.putString(CURRENCY_KEY, PMNT_CURRENCY_VALUE);
@@ -84,7 +85,7 @@ public class FragmentPaymonWallet extends Fragment {
         backBtn.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         restoreBtn.setOnClickListener(v -> new DialogFragmentRestoreWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
         backupBtn.setOnClickListener(v -> new DialogFragmentBackupWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
-//        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
+        deleteBtn.setOnClickListener(v -> new DialogFragmentDeleteWallet().setArgs(bundle).show(getActivity().getSupportFragmentManager(), null));
 //        deposit.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumDeposit.newInstance(), null));
         transfer.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentPaymonWalletTransfer));
 //        withdraw.setOnClickListener(view1 -> Utils.replaceFragmentWithAnimationSlideFade(getActivity().getSupportFragmentManager(), FragmentEthereumWidthdraw.newInstance(), null));
@@ -111,6 +112,11 @@ public class FragmentPaymonWallet extends Fragment {
             TextView gasLimit = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_limit_alert);
             TextView gasUsed = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_used_alert);
             TextView gasPrice = (TextView) dialogView.findViewById(R.id.ethereum_transaction_gas_price_alert);
+            TextView status = (TextView) dialogView.findViewById(R.id.ethereum_transaction_status_alert);
+            TextView status2 = (TextView) dialogView.findViewById(R.id.textView6);
+
+            status.setVisibility(View.GONE);
+            status2.setVisibility(View.GONE);
 
             hash.setText(transactionItem.hash);
             time.setText(transactionItem.time);

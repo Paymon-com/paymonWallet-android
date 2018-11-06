@@ -39,8 +39,9 @@ public class NotificationManager {
         MONEY_FIAT_CURRENCY_CHANGED,
         MONEY_BALANCE_CHANGED,
 
-        BTC_BLOCKCHAIN_DOWNLOAD_PROGRESS,
-        BTC_BLOCKCHAIN_DOWNLOAD_FINISHED,
+        BTC_BLOCKCHAIN_SYNC_CHAIN_STARTED,
+        BTC_BLOCKCHAIN_SYNC_PROGRESS,
+        BTC_BLOCKCHAIN_SYNC_FINISHED,
     }
 
     private SparseArray<ArrayList<Object>> observers = new SparseArray<>();

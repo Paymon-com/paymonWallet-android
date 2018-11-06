@@ -13,12 +13,15 @@ import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
+import android.os.StrictMode;
 
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiManager;
 import com.vanniktech.rxpermission.RealRxPermission;
 import com.vanniktech.rxpermission.RxPermission;
+
+import java.util.concurrent.Executors;
 
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.emoji.CustomEmojiProvider;
@@ -64,34 +67,34 @@ public class ApplicationLoader extends WalletApplication {
 
         super.onCreate();
 
-        Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000)).build());
-        EmojiManager.install(new CustomEmojiProvider());
+        Executors.newSingleThreadExecutor().submit(() -> {
+            Picasso.setSingletonInstance(new Picasso.Builder(this).downloader(new OkHttp3Downloader(getCacheDir(), 500000000)).build());
+            EmojiManager.install(new CustomEmojiProvider());
 
-        IntentFilter networkIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
-        ApplicationLoader.applicationContext.registerReceiver(new NetworkStateReceiver(), networkIntentFilter);
+            IntentFilter networkIntentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+            ApplicationLoader.applicationContext.registerReceiver(new NetworkStateReceiver(), networkIntentFilter);
 
-        KeyGenerator.getInstance();
-        native_init(Config.HOST, Config.PORT, Config.VERSION);
+            KeyGenerator.getInstance();
+            native_init(Config.HOST, Config.PORT, Config.VERSION);
 
-//        if(isConnectorServiceRunning())
-//            stopService(new Intent(applicationContext, ConnectorService.class));
-        startService(new Intent(applicationContext, ConnectorService.class));
-        NetworkManager.getInstance().bindServices();
+            startService(new Intent(applicationContext, ConnectorService.class));
+            NetworkManager.getInstance().bindServices();
+        });
     }
 
-//    private static StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
+    //    private static StrictMode.ThreadPolicy old = StrictMode.getThreadPolicy();
 //
-//    public static void initStrictMode() {
-//        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
-//                .detectDiskReads()
-//                .detectDiskReads()
-//                .detectNetwork()
-//                .detectAll()
-//                .penaltyLog()
-//                .penaltyDeath()
-//                .build();
-//        StrictMode.setThreadPolicy(policy);
-//    }
+    public static void initStrictMode() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder()
+                .detectDiskReads()
+                .detectDiskReads()
+                .detectNetwork()
+                .detectAll()
+                .penaltyLog()
+                .penaltyDeath()
+                .build();
+        StrictMode.setThreadPolicy(policy);
+    }
 //
 //    public static void setOldStrictMode() {
 //        StrictMode.setThreadPolicy(old);

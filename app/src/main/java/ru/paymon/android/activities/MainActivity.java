@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private LiveData<Boolean> networkState;
     private LiveData<Boolean> authorizationState;
     private LiveData<Boolean> btcSyncData;
+    private LiveData<Integer> btcSyncValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         networkState = mainViewModel.getNetworkConnectionState();
         authorizationState = mainViewModel.getAuthorizationState();
         btcSyncData = mainViewModel.getBtcSync();
+        btcSyncValue = mainViewModel.getBtcSyncValue();
 
         super.onCreate(savedInstanceState);
 
@@ -96,8 +99,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     private void checkBtcSync() {
         Boolean isBtsSync = btcSyncData.getValue();
-        if (isBtsSync == null) return;
-        String text = getString(R.string.btc_sync);
+        Integer btcSyncVal = btcSyncValue.getValue();
+        if (isBtsSync == null || btcSyncVal == null) return;
+        String text = getString(R.string.btc_sync) + " (" + btcSyncVal +"%)";
         ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
         if (isBtsSync)
             connectingConstraint.setVisibility(View.GONE);
@@ -129,7 +133,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                         return false;
                     if (User.CLIENT_SECURITY_PASSWORD_VALUE != null && (System.currentTimeMillis() - LAST_TIME_KEY_GUARD_SHOWED >= CD_TIME_KEY_GUARD)) {
                         Intent intent = new Intent(getApplicationContext(), KeyGuardActivity.class);
-                        intent.putExtra("request_code", 10);
                         startActivityForResult(intent, 10);
                     }else {
                         Navigation.findNavController(this, R.id.nav_host_fragment).navigate(R.id.fragmentMoney, null, navOptions);

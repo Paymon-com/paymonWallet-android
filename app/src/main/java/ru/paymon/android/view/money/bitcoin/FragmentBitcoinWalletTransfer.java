@@ -24,6 +24,7 @@ import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
 
 import org.bitcoinj.core.Transaction;
+import org.bitcoinj.wallet.Wallet;
 
 import java.util.List;
 
@@ -88,13 +89,13 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         fiatCurrencyPicker.setValue(2);
 
         final String fromAddress = application.getBitcoinPublicAddress();
-        final String balance = application.getBitcoinBalance().toPlainString();
+        final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toPlainString();
 
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         payButton.setOnClickListener(v -> pay());
 
         fromAddressTextView.setText(fromAddress);
-        balanceTextView.setText(balance + " BTC");
+        balanceTextView.setText(balance +" BTC");
 
         amountEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -200,14 +201,14 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
     @Override
     public void onResume() {
         super.onResume();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED);
     }
 
@@ -219,8 +220,8 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 String balance = (String) args[1];
                 balanceTextView.setText(balance + " BTC");
             }
-        } else if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED) {
-            balanceTextView.setText(application.getBitcoinBalance().toFriendlyString());
+        } else if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED) {
+            balanceTextView.setText(application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toFriendlyString());
         }
     }
 
@@ -262,7 +263,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
             return;
         }
 
-        if (totalValueBtc > application.getBitcoinBalance().value) {
+        if (totalValueBtc > application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).value) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                     .setMessage(getText(R.string.insufficient_funds))
                     .setCancelable(true);

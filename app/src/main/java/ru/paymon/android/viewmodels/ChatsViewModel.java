@@ -24,7 +24,6 @@ import ru.paymon.android.utils.Utils;
 public class ChatsViewModel extends AndroidViewModel {
     public int chatsScrollY;
     public int sortedBy = 2;
-    public boolean isChatsLoaded;
     public boolean isSearchActivated;
     public String searchText;
     private final PagedList.Config config = new PagedList.Config.Builder().setInitialLoadSizeHint(50).setPageSize(10).setEnablePlaceholders(false).build();
@@ -69,7 +68,6 @@ public class ChatsViewModel extends AndroidViewModel {
         return chats;
     }
 
-
     public LiveData<Boolean> getProgressState() {
         return showProgress;
     }
@@ -90,42 +88,9 @@ public class ChatsViewModel extends AndroidViewModel {
 
                     final RPC.PM_chatsAndMessages packet = (RPC.PM_chatsAndMessages) response;
 
-
-//                    final ArrayList<ChatsItem> chatsItems = new ArrayList<>();
-//                    final SparseArray<RPC.Message> usersMessagesMap = new SparseArray<>();
-//                    final SparseArray<RPC.Message> groupsMessagesMap = new SparseArray<>();
-//                    final SparseArray<RPC.UserObject> usersMap = new SparseArray<>();
-//                    for (final RPC.Message msg : packet.messages) {
-//                        if (msg.to_peer instanceof RPC.PM_peerUser)
-//                            usersMessagesMap.put(msg.to_id, msg);
-//                        else
-//                            groupsMessagesMap.put(msg.to_id, msg);
-//                    }
-
-//                    for (final RPC.UserObject usr : packet.users) {
-//                        usersMap.put(usr.id, usr);
-//                        final RPC.Message msg = usersMessagesMap.get(usr.id);
-//                        if (msg == null) continue;
-//                        chatsItems.add(new ChatsItem(usr.id, usr.photoURL, Utils.formatUserName(usr), msg.text, msg.date, msg.itemType));
-//                    }
-//
-//                    for (final RPC.Group grp : packet.groups) {
-//                        UsersManager.getInstance().putUsers(grp.users);
-//                        final RPC.Message msg = groupsMessagesMap.get(grp.id);
-//                        if (msg == null) continue;
-//                        final RPC.UserObject lastUsr = usersMap.get(msg.from_id);
-//                        chatsItems.add(new ChatsItem(grp.id, grp.photoURL, grp.title, msg.text, msg.date, msg.itemType, lastUsr == null ? null : lastUsr.photoURL));
-//                    }
-
                     UsersManager.getInstance().putUsers(packet.users);
                     GroupsManager.getInstance().putGroups(packet.groups);
                     MessagesManager.getInstance().putMessages(packet.messages);
-//                    AppDatabase.getDatabase().chatDao().insertList(chatsItems);
-//                    AppDatabase.getDatabase().userDao().insertList(packet.users);
-//                    AppDatabase.getDatabase().groupDao().insertList(packet.groups);
-                    isChatsLoaded = true;
-//                    if (chatsItems.size() > 0)
-//                        isChatsLoaded = true;
 
                     showProgress.postValue(false);
                 });

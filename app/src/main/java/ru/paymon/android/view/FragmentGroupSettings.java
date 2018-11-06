@@ -124,7 +124,7 @@ public class FragmentGroupSettings extends Fragment {
             });
         });
 
-        if (!group.photoURL.url.isEmpty()) //TODO:observable чтоб обновлять при загрузке фотки
+        if (!group.photoURL.url.isEmpty())
             Utils.loadPhoto(group.photoURL.url, photoView);
 
         titleView.setText(group.title);
@@ -275,12 +275,14 @@ public class FragmentGroupSettings extends Fragment {
                                 @Override
                                 public void onFinish() {
                                     Log.e(Config.TAG, "Group photoURL successfully uploaded");
-                                    ApplicationLoader.applicationHandler.post(() -> {
+                                    ApplicationLoader.applicationHandler.postDelayed(() -> {
                                         if (dialogProgress != null && dialogProgress.isShowing())
                                             dialogProgress.dismiss();
-                                        if (!group.photoURL.url.isEmpty())
+                                        if (!group.photoURL.url.isEmpty()) {
+                                            group = GroupsManager.getInstance().getGroup(group.id);
                                             Utils.loadPhoto(group.photoURL.url, photoView);
-                                    });
+                                        }
+                                    }, 500);
                                 }
 
                                 @Override

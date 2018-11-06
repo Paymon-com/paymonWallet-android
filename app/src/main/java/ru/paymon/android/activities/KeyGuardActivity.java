@@ -24,14 +24,11 @@ import ru.paymon.android.User;
 public class KeyGuardActivity extends AppCompatActivity implements View.OnClickListener, BlurLockView.OnPasswordInputListener {
     public static long LAST_TIME_KEY_GUARD_SHOWED;
     public static long CD_TIME_KEY_GUARD = 60 * 1000;
-    private static boolean isForResult = true;
     private BlurLockView blurLockView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        isForResult = getIntent().getIntExtra("request_code", 0) == 10;
-
         super.onCreate(savedInstanceState);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);

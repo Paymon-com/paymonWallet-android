@@ -8,21 +8,17 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.shawnlin.numberpicker.NumberPicker;
 
-import org.web3j.utils.Convert;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.Config;
@@ -31,7 +27,6 @@ import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
 import ru.paymon.android.models.ExchangeRate;
-import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.DialogProgress;
@@ -45,7 +40,6 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     public static final String CURRENCY_KEY = "CURRENCY_KEY";
 
     private DialogProgress dialogProgress;
-    private NumberPicker fiatCurrencySpinner;
     private RecyclerView exchangeRatesRecView;
     private MoneyViewModel moneyViewModel;
     private ExchangeRatesAdapter exchangeRatesAdapter;
@@ -54,7 +48,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     private LiveData<List<ExchangeRate>> exchangeRatesData;
     private LiveData<ArrayList<WalletItem>> walletsData;
     private LiveData<Boolean> showProgress;
-
+    private String currentCurrency = "USD";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,8 +64,10 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
         exchangeRatesRecView = (RecyclerView) view.findViewById(R.id.fragment_money_exchange_rates);
         walletsRecView = (RecyclerView) view.findViewById(R.id.fragment_money_wallets);
-        fiatCurrencySpinner = (NumberPicker) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_currency);
-        Button updateButton = (Button) view.findViewById(R.id.fragment_money_update);
+        TextView updateButton = (TextView) view.findViewById(R.id.fragment_money_update);
+        TextView usdButton = (TextView) view.findViewById(R.id.fragment_money_currency_usd);
+        TextView eurButton = (TextView) view.findViewById(R.id.fragment_money_currency_eur);
+        TextView localButton = (TextView) view.findViewById(R.id.fragment_money_currency_local);
 
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(false);
@@ -82,12 +78,24 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         walletsRecView.setHasFixedSize(true);
         walletsRecView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        fiatCurrencySpinner.setMinValue(1);
-        fiatCurrencySpinner.setMaxValue(Config.fiatCurrencies.length);
-        fiatCurrencySpinner.setDisplayedValues(Config.fiatCurrencies);
-        fiatCurrencySpinner.setValue(2);
+        final String localCurrency = Currency.getInstance(Locale.getDefault()).getCurrencyCode();
+        localButton.setText(localCurrency);
+        localButton.setVisibility(localCurrency.equals("USD") || localCurrency.equals("EUR") ? View.GONE : View.VISIBLE);
 
-        fiatCurrencySpinner.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
+        usdButton.setOnClickListener((v) -> {
+            currentCurrency = "USD";
+            changeCurrency();
+        });
+
+        eurButton.setOnClickListener((v) -> {
+            currentCurrency = "EUR";
+            changeCurrency();
+        });
+
+        localButton.setOnClickListener((v) -> {
+            currentCurrency = localCurrency;
+            changeCurrency();
+        });
 
         showProgress.observe(getActivity(), (flag) -> {
             if (flag == null) return;
@@ -110,7 +118,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     @Override
     public void onResume() {
         super.onResume();
-        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         Utils.showBottomBar(getActivity());
         walletsData = moneyViewModel.getWalletsData();
         exchangeRatesData = moneyViewModel.getExchangeRatesData();
@@ -129,7 +137,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     @Override
     public void onPause() {
         super.onPause();
-        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         walletsData.removeObservers(this);
         exchangeRatesData.removeObservers(this);
     }
@@ -143,7 +151,6 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     }
 
     private void changeCurrency() {
-        String currentCurrency = fiatCurrencySpinner.getDisplayedValues()[fiatCurrencySpinner.getValue() - 1];
         moneyViewModel.fiatCurrency = currentCurrency;
         List<ExchangeRate> exchangeRates = exchangeRatesData.getValue();
         if (exchangeRates == null || exchangeRates.size() <= 0)
@@ -187,7 +194,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
     @Override
     public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
-        if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED) {
+        if (event == NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED) {
             walletsData = moneyViewModel.getWalletsData();
         }
     }

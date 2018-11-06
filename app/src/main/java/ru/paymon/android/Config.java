@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Locale;
 
 public class Config {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     public static final boolean PRODUCTION_VERSION = true;
     public static final boolean TEST_BITCOIN = false;
 
@@ -49,7 +49,6 @@ public class Config {
         {
             add("USD");
             add("EUR");
-            add("RUB");
             add(Currency.getInstance(Locale.getDefault()).getCurrencyCode());
         }
     };

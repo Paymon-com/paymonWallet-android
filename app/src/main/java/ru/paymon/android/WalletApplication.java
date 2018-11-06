@@ -2,12 +2,14 @@ package ru.paymon.android;
 
 import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.Log;
 
 import com.android.volley.toolbox.Volley;
 import com.google.common.io.BaseEncoding;
+import com.google.common.util.concurrent.Service;
 
 import org.apache.commons.io.IOUtils;
 import org.bitcoinj.core.Address;
@@ -22,8 +24,6 @@ import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.core.Peer;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.core.TransactionConfidence;
-import org.bitcoinj.core.TransactionInput;
-import org.bitcoinj.core.TransactionOutput;
 import org.bitcoinj.core.listeners.DownloadProgressTracker;
 import org.bitcoinj.crypto.LinuxSecureRandom;
 import org.bitcoinj.script.Script;
@@ -109,123 +109,48 @@ import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CUR
 
 public class WalletApplication extends AbsWalletApplication {
     public static final int btcTxSize = (148 * 1) + (34 * 2) + 10;
-    private static final boolean IS_TEST = true;
-    private static final String INFURA_LINK = IS_TEST ? "https://ropsten.infura.io/BAWTZQzsbBDZG6g9D0IP" : "https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP";
+    private static final String INFURA_LINK = Config.DEBUG ? "https://ropsten.infura.io/BAWTZQzsbBDZG6g9D0IP" : "https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP";
     private EthereumWallet ethereumWallet;
     private PaymonWallet paymonWallet;
     private String ethereumWalletPath;
     private String paymonWalletPath;
-    private WalletKit kit;
 
     @Override
     public void onCreate() {
-        new LinuxSecureRandom();
-
-        Threading.throwOnLockCycles();
-        org.bitcoinj.core.Context.enableStrictMode();
-        org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
-
-        Executors.newSingleThreadExecutor().submit(() -> startBitcoinKit());
-
+//        ApplicationLoader.initStrictMode();
         super.onCreate();
 
-        ethereumWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-eth-wallet.json";
-        paymonWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-pmnt-wallet.json";
+        Executors.newSingleThreadExecutor().submit(() -> {
+            new LinuxSecureRandom();
 
-        activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
+            Threading.throwOnLockCycles();
+            org.bitcoinj.core.Context.propagate(Constants.CONTEXT);
 
-        ethereumWeb3j = Web3jFactory.build(new HttpService(INFURA_LINK));
-        ethereumRequestQueue = Volley.newRequestQueue(getApplicationContext());
+            ethereumWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-eth-wallet.json";
+            paymonWalletPath = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-pmnt-wallet.json";
 
-        paymonmWeb3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP"));
-        paymonRequestQueue = Volley.newRequestQueue(getApplicationContext());
-    }
+            activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
 
-    public void startBitcoinKit() {
-//        if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null) return;
-        kit = new WalletKit(Constants.NETWORK_PARAMETERS, new File(getCacheDir().getPath()), "walletappkit1-example");
+            ethereumWeb3j = Web3jFactory.build(new HttpService(INFURA_LINK));
+            ethereumRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        InputStream checkpoint = CheckpointManager.openStream(Constants.NETWORK_PARAMETERS);
-        kit.setCheckpoints(checkpoint);
-        kit.setAutoSave(true);
-        kit.setBlockingStartup(false);
+            paymonmWeb3j = Web3jFactory.build(new HttpService("https://mainnet.infura.io/BAWTZQzsbBDZG6g9D0IP"));
+            paymonRequestQueue = Volley.newRequestQueue(getApplicationContext());
 
-        kit.setDownloadListener(new DownloadProgressTracker() {
-            @Override
-            public void onChainDownloadStarted(Peer peer, int blocksLeft) {
-                super.onChainDownloadStarted(peer, blocksLeft);
-            }
-
-            @Override
-            public void onBlocksDownloaded(Peer peer, Block block, @Nullable FilteredBlock filteredBlock, int blocksLeft) {
-                super.onBlocksDownloaded(peer, block, filteredBlock, blocksLeft);
-            }
-
-            @Override
-            protected void progress(double pct, int blocksSoFar, Date date) {
-                super.progress(pct, blocksSoFar, date);
-                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_PROGRESS, pct);
-            }
-
-            @Override
-            protected void startDownload(int blocks) {
-                super.startDownload(blocks);
-            }
-
-            @Override
-            protected void doneDownload() {
-                super.doneDownload();
-                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_DOWNLOAD_FINISHED);
-            }
+            if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD != null)
+                WalletKit.getInstance().startBitcoinKit();
         });
-
-        kit.startAsync();
-        kit.awaitRunning();
-
-        kit.wallet().addCoinsReceivedEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
-            Log.e("AAA", "-----> coins resceived: " + tx.getHashAsString());
-            Log.e("AAA", "received: " + tx.getValue(wallet));
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, kit.wallet().getBalance().toPlainString());
-        });
-
-        kit.wallet().addCoinsSentEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
-            Log.e("AAA", "coins sent");
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, kit.wallet().getBalance().toPlainString());
-        });
-
-        kit.wallet().addKeyChainEventListener((List<ECKey> keys) -> {
-            Log.e("AAA", "new key added");
-        });
-
-        kit.wallet().addScriptsChangeEventListener((Wallet wallet, List<Script> scripts, boolean isAddingScripts) -> {
-            Log.e("AAA", "new script added");
-        });
-
-        kit.wallet().addTransactionConfidenceEventListener((Wallet wallet, Transaction tx) -> {
-            Log.e("AAA", "-----> confidence changed: " + tx.getHashAsString());
-            TransactionConfidence confidence = tx.getConfidence();
-            Log.e("AAA", "new block depth: " + confidence.getDepthInBlocks());
-        });
-
-        // Make sure to properly shut down all the running services when you manually want to stop the kit. The WalletAppKit registers a runtime ShutdownHook so we actually do not need to worry about that when our application is stopping.
-        //Log.e("AAA", "shutting down again");
-        //kit.stopAsync();
-        //kit.awaitTerminated();
     }
 
     @Override
     public Wallet getBitcoinWallet() {
-        if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null) return null;
+        if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null || WalletKit.getInstance().state() != Service.State.RUNNING)
+            return null;
 
-        try {
-            kit.startAsync();
-            kit.awaitRunning();
-        } catch (Exception e) {
-        }
+        if (WalletKit.getInstance().wallet().isEncrypted())
+            WalletKit.getInstance().wallet().decrypt(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
 
-        if (kit.wallet().isEncrypted())
-            kit.wallet().decrypt(User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD);
-        return kit.wallet();
+        return WalletKit.getInstance().wallet();
     }
 
     public EthereumWallet getEthereumWallet() {
@@ -349,7 +274,7 @@ public class WalletApplication extends AbsWalletApplication {
 
     @Override
     public boolean backupBitcoinWallet(final String path) {
-        final Wallet wallet = kit.wallet();
+        final Wallet wallet = WalletKit.getInstance().wallet();
         final Protos.Wallet walletProto = new WalletProtobufSerializer().walletToProto(wallet);
 //        Uri targetUri = Uri.parse(path + "/" + "paymon-btc-wallet_backup_" + System.currentTimeMillis());
 
@@ -377,8 +302,8 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    public Coin getBitcoinBalance() {
-        return getBitcoinWallet().getBalance();
+    public Coin getBitcoinBalance(final Wallet.BalanceType balanceType) {
+        return getBitcoinWallet().getBalance(balanceType);
     }
 
     @Override
@@ -713,7 +638,7 @@ public class WalletApplication extends AbsWalletApplication {
 
         Wallet resultWallet = null;
         try {
-            resultWallet = kit.restoreWallet(wallet);
+            resultWallet = WalletKit.getInstance().restoreWallet(wallet);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -723,7 +648,12 @@ public class WalletApplication extends AbsWalletApplication {
 
     @Override
     public boolean deleteBitcoinWallet() {
-        return false;
+        try {
+            return WalletKit.getInstance().deleteWallet();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     public static String convertBitcoinToFiat(String btcAmount, String fiatExRate) {
@@ -869,7 +799,7 @@ public class WalletApplication extends AbsWalletApplication {
 
         Wallet.SendResult sendResult = null;
         try {
-            sendResult = getBitcoinWallet().sendCoins(kit.peerGroup(), request1);
+            sendResult = getBitcoinWallet().sendCoins(WalletKit.getInstance().peerGroup(), request1);
         } catch (Exception e) {
             e.printStackTrace();
         }
