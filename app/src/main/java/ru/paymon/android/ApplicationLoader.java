@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.StrictMode;
 
+import com.crashlytics.android.Crashlytics;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 import com.vanniktech.emoji.EmojiManager;
@@ -23,6 +24,8 @@ import com.vanniktech.rxpermission.RxPermission;
 
 import java.util.concurrent.Executors;
 
+import cat.ereza.logcatreporter.LogcatReporter;
+import io.fabric.sdk.android.Fabric;
 import ru.paymon.android.broadcastreceivers.NetworkStateReceiver;
 import ru.paymon.android.emoji.CustomEmojiProvider;
 import ru.paymon.android.net.ConnectorService;
@@ -45,6 +48,9 @@ public class ApplicationLoader extends WalletApplication {
 
     @Override
     public void onCreate() {
+        Fabric.with(this, new Crashlytics());
+        LogcatReporter.install();
+
         applicationContext = getApplicationContext();
         applicationHandler = new Handler(applicationContext.getMainLooper());
 

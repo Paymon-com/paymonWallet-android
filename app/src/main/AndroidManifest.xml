@@ -27,6 +27,10 @@
         tools:replace="android:icon">
         <!--large heap TODO:подумать -->
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0e02fa650989467abfe4262f6269c2af9886853b" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="${applicationId}.provider"
@@ -123,9 +127,5 @@
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
-
-        <service
-            android:name=".gateway.bitcoin.service.BlockchainService"
-            android:exported="false" />
     </application>
 </manifest>
