@@ -55,9 +55,18 @@ public class FragmentGroupChat extends AbsFragmentChat {
         chatViewModel.getMessages(chatID, false).observe(this, pagedList -> {
             messagesAdapter.submitList(pagedList);
 
-            ApplicationLoader.applicationHandler.postDelayed(() -> {
+            ApplicationLoader.applicationHandler.postDelayed(() -> { //TODO: переехать на androidx paging там появился callback Для submitlist
+                final List<RPC.Message> selectedMessages = Lists.newArrayList(selectionTracker.getSelection().iterator());
+                selectionTracker.clearSelection();
                 messagesAdapter.items.clear();
                 messagesAdapter.items.addAll(messagesAdapter.getCurrentList());
+                for (final RPC.Message message : selectedMessages) {
+                    final long mid = message.id;
+                    for (final RPC.Message msg : messagesAdapter.getCurrentList()) {
+                        if (mid == msg.id)
+                            selectionTracker.select(msg);
+                    }
+                }
             }, 200);
 
             selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
