@@ -34,6 +34,10 @@ public class ChatsManager {
         Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().chatDao().delete(chatsItem));
     }
 
+    public void removeAllChats(){
+        Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().chatDao().deleteAll());
+    }
+
     public DataSource.Factory<Integer, ChatsItem> getChats() {
         Callable<DataSource.Factory<Integer, ChatsItem>> callable = new Callable<DataSource.Factory<Integer, ChatsItem>>() {
             @Override
@@ -108,5 +112,24 @@ public class ChatsManager {
             e.printStackTrace();
         }
         return chats;
+    }
+
+    public ChatsItem getChatByChatID(int cid) {
+        Callable<ChatsItem> callable = new Callable<ChatsItem>() {
+            @Override
+            public ChatsItem call() {
+                return AppDatabase.getDatabase().chatDao().getChatByChatID(cid);
+            }
+        };
+
+        Future<ChatsItem> future = Executors.newSingleThreadExecutor().submit(callable);
+
+        ChatsItem chat = null;
+        try {
+            chat = future.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return chat;
     }
 }

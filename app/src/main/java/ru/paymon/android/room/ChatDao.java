@@ -26,6 +26,9 @@ public interface ChatDao {
     @Delete
     void delete(ChatsItem chatsItem);
 
+    @Query("DELETE FROM ChatsItem")
+    void deleteAll();
+
     @Query("SELECT * FROM ChatsItem ORDER BY time DESC")
     DataSource.Factory<Integer, ChatsItem> getChats();
 

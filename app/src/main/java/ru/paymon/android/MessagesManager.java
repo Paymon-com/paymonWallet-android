@@ -53,7 +53,7 @@ public class MessagesManager {
                         if (response == null || error != null) return;
                         final RPC.UserObject userObject = (RPC.UserObject) response;
                         UsersManager.getInstance().putUser(userObject);
-                        ChatsItem chatsItem = AppDatabase.getDatabase().chatDao().getChatByChatID(-cid);
+                        ChatsItem chatsItem = ChatsManager.getInstance().getChatByChatID(-cid);
                         if (chatsItem == null) {
                             chatsItem = new ChatsItem(cid, userObject.photoURL, Utils.formatUserName(userObject), message.text, message.date, message.itemType);
                         } else {
@@ -62,10 +62,10 @@ public class MessagesManager {
                             chatsItem.photoURL = userObject.photoURL;
                             chatsItem.time = message.date;
                         }
-                        AppDatabase.getDatabase().chatDao().insert(chatsItem);
+                        ChatsManager.getInstance().putChat(chatsItem);
                     });
                 } else {
-                    ChatsItem chatsItem = AppDatabase.getDatabase().chatDao().getChatByChatID(-cid);
+                    ChatsItem chatsItem = ChatsManager.getInstance().getChatByChatID(-cid);
                     if (chatsItem == null) {
                         chatsItem = new ChatsItem(cid, user.photoURL, Utils.formatUserName(user), message.text, message.date, message.itemType);
                     } else {
@@ -74,7 +74,7 @@ public class MessagesManager {
                         chatsItem.photoURL = user.photoURL;
                         chatsItem.time = message.date;
                     }
-                    AppDatabase.getDatabase().chatDao().insert(chatsItem);
+                    ChatsManager.getInstance().putChat(chatsItem);
                 }
             } else {
                 final int gid = message.to_peer.group_id;
@@ -88,12 +88,12 @@ public class MessagesManager {
 //                    AppDatabase.getDatabase().groupDao().insert(groupObject);
 //                    RPC.UserObject lastMsgUser = AppDatabase.getDatabase().userDao().getUserById(message.from_id);
 //                    ChatsItem newChatsItem = new ChatsItem(gid, groupObject.photoURL, groupObject.title, message.text, message.date, message.itemType, lastMsgUser.photoURL);
-//                    AppDatabase.getDatabase().chatDao().insert(newChatsItem);
+//                    ChatsManager.getInstance().getChatByChatID.putChat(newChatsItem);
 //                });
                 } else {
                     final RPC.UserObject lastMsgUser = UsersManager.getInstance().getUser(message.from_id);
                     final ChatsItem newChatsItem = new ChatsItem(gid, group.photoURL, group.title, message.text, message.date, message.itemType, lastMsgUser.photoURL);
-                    AppDatabase.getDatabase().chatDao().insert(newChatsItem);
+                    ChatsManager.getInstance().putChat(newChatsItem);
                 }
             }
         });
