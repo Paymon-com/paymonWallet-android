@@ -88,10 +88,6 @@ public class ChatsViewModel extends AndroidViewModel {
 
                     final RPC.PM_chatsAndMessages packet = (RPC.PM_chatsAndMessages) response;
 
-                    for (RPC.Group gr:packet.groups) {
-                        Log.e("AAA", gr.title);
-                    }
-
                     ChatsManager.getInstance().removeAllChats(); //TODO:после написания синхронизатора удалить
 
                     UsersManager.getInstance().putUsers(packet.users);
