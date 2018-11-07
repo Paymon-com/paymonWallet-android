@@ -20,7 +20,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:queryHint="@string/search_contacts"
-        app:searchIcon="@drawable/search_white" />
+        app:searchIcon="@drawable/search" />
 
     <ImageView
         android:id="@+id/fragment_contacts_image_imageView"
