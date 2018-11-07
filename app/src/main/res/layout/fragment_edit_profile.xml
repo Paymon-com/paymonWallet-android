@@ -98,6 +98,7 @@
             android:fontFamily="sans-serif-light"
             android:layout_marginTop="8dp"
             android:hint="@string/name"
+            android:importantForAutofill="noExcludeDescendants"
             android:inputType="textCapSentences"
             android:singleLine="true"
             android:textColor="@color/white" />
@@ -120,6 +121,7 @@
             android:layout_height="wrap_content"
             android:background="@color/bg_dialog_title"
             android:layout_marginTop="8dp"
+            android:importantForAutofill="noExcludeDescendants"
             android:fontFamily="sans-serif-light"
             android:hint="@string/surname"
             android:inputType="textCapSentences"
@@ -158,6 +160,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="sans-serif-light"
             android:background="@color/bg_dialog_title"
+            android:importantForAutofill="noExcludeDescendants"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
             android:singleLine="true"

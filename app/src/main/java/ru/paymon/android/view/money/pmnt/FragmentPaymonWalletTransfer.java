@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shawnlin.numberpicker.NumberPicker;
@@ -103,7 +104,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         feeTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_network_fee_value);
         fiatEqualTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_fiat_eq);
         TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_id_from);
-        FloatingActionButton qrScannerButton = (FloatingActionButton) view.findViewById(R.id.fragment_paymon_wallet_transfer_qr);
+        ImageView qrScannerButton = (ImageView) view.findViewById(R.id.fragment_paymon_wallet_transfer_qr);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_pmnt_wallet_transf_back_image_button);
         ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_pmnt_wallet_transf_next_text_view);
         TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_paymon_amount_input_layout);

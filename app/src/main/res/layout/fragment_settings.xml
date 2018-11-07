@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <android.support.design.widget.NavigationView
         android:id="@+id/fragment_settings_navigation_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:itemTextColor="@color/white"
         android:background="@color/colorPrimary"
         app:itemIconTint="@drawable/navigation_menu_item_icon_tint"
+        app:itemTextAppearance="@style/NavigationDrawerStyle"
+        app:itemTextColor="@color/white"
         app:menu="@menu/settings_menu" />
 </FrameLayout>

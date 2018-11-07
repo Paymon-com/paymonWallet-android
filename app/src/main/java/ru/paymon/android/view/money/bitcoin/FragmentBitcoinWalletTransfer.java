@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shawnlin.numberpicker.NumberPicker;
@@ -75,7 +76,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         feeSeekBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_gas_limit_slider);
         EditText amountEditText = (EditText) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_amount);
         TextView totalTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_total_value);
-        FloatingActionButton qrScannerButton = (FloatingActionButton) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_qr);
+        ImageView qrScannerButton = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_qr);
         TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_id_from);
         ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_btc_wallet_transf_next_text_view);
         TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_bitcoin_amount_input_layout);

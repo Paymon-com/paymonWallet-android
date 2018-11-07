@@ -12,6 +12,7 @@
         app:headerLayout="@layout/fragment_more_menu_header"
         app:itemIconTint="@drawable/navigation_menu_item_icon_tint"
         app:itemTextColor="@color/white"
+        app:itemTextAppearance="@style/NavigationDrawerStyle"
         app:menu="@menu/more_menu">
 
         <ImageView

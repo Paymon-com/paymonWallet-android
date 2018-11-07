@@ -74,7 +74,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
             case BTC:
                 NonEmptyWalletItem btcWalletItem = (NonEmptyWalletItem) walletItem;
                 WalletViewHolder walletViewHolder = (WalletViewHolder) holder;
-                walletViewHolder.icon.setImageResource(R.drawable.ic_bitcoin);
+                walletViewHolder.icon.setImageResource(R.drawable.bitcoin);
                 walletViewHolder.fiatCurrency.setText(btcWalletItem.fiatCurrency);
                 walletViewHolder.fiatBalance.setText(btcWalletItem.fiatBalance);
                 walletViewHolder.cryptoCurrency.setText(btcWalletItem.cryptoCurrency);
@@ -84,7 +84,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
             case ETH:
                 NonEmptyWalletItem ethWalletItem = (NonEmptyWalletItem) walletItem;
                 walletViewHolder = (WalletViewHolder) holder;
-                walletViewHolder.icon.setImageResource(R.drawable.ic_ethereum);
+                walletViewHolder.icon.setImageResource(R.drawable.etherium);
                 walletViewHolder.fiatCurrency.setText(ethWalletItem.fiatCurrency);
                 walletViewHolder.fiatBalance.setText(ethWalletItem.fiatBalance);
                 walletViewHolder.cryptoCurrency.setText(ethWalletItem.cryptoCurrency);
@@ -94,7 +94,7 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
             case PMNT:
                 NonEmptyWalletItem pmntWalletItem = (NonEmptyWalletItem) walletItem;
                 walletViewHolder = (WalletViewHolder) holder;
-                walletViewHolder.icon.setImageResource(R.drawable.ic_pmnt);
+                walletViewHolder.icon.setImageResource(R.drawable.paymon);
                 walletViewHolder.fiatCurrency.setText(pmntWalletItem.fiatCurrency);
                 walletViewHolder.fiatBalance.setText(pmntWalletItem.fiatBalance);
                 walletViewHolder.cryptoCurrency.setText(pmntWalletItem.cryptoCurrency);
@@ -103,17 +103,17 @@ public class CryptoWalletsAdapter extends RecyclerView.Adapter<RecyclerView.View
                 break;
             case EMPTY_BTC:
                 EmptyWalletViewHolder emptyWallet = (EmptyWalletViewHolder) holder;
-                emptyWallet.icon.setImageResource(R.drawable.ic_bitcoin);
+                emptyWallet.icon.setImageResource(R.drawable.bitcoin);
                 emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick(BTC_CURRENCY_VALUE));
                 break;
             case EMPTY_ETH:
                 emptyWallet = (EmptyWalletViewHolder) holder;
-                emptyWallet.icon.setImageResource(R.drawable.ic_ethereum);
+                emptyWallet.icon.setImageResource(R.drawable.etherium);
                 emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick(ETH_CURRENCY_VALUE));
                 break;
             case EMPTY_PMNT:
                 emptyWallet = (EmptyWalletViewHolder) holder;
-                emptyWallet.icon.setImageResource(R.drawable.ic_pmnt);
+                emptyWallet.icon.setImageResource(R.drawable.paymon);
                 emptyWallet.create.setOnClickListener(view -> iOnItemClickListener.onCreateClick(PMNT_CURRENCY_VALUE));
                 break;
         }

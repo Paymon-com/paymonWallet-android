@@ -86,7 +86,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="2dp"
-            android:textAlignment="center"
             app:layout_constraintEnd_toStartOf="@+id/fragment_bitcoin_wallet_transfer_fiat_eq"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView29">
@@ -106,8 +105,7 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView28" />
+                app:layout_constraintStart_toStartOf="parent" />
         </android.support.design.widget.TextInputLayout>
 
         <TextView
@@ -223,17 +221,17 @@
             app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_receiver_address_input_layout" />
 
 
-        <android.support.design.widget.FloatingActionButton
+        <ImageView
             android:id="@+id/fragment_bitcoin_wallet_transfer_qr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView37"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/fragment_bitcoin_receiver_address_input_layout"
-            app:srcCompat="@drawable/ic_qrcode" />
+            app:srcCompat="@drawable/qr" />
 
         <TextView
             android:id="@+id/textView29"
@@ -251,11 +249,11 @@
 
         <ImageView
             android:id="@+id/fragment_bitcoin_wallet_transfer_image"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/ic_bitcoin"
+            app:srcCompat="@drawable/bitcoin"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
@@ -271,7 +269,8 @@
             app:layout_constraintBottom_toTopOf="@+id/fragment_bitcoin_wallet_transfer_id_from"
             app:layout_constraintEnd_toStartOf="@+id/fragment_bitcoin_wallet_transfer_balance"
             app:layout_constraintStart_toEndOf="@+id/fragment_bitcoin_wallet_transfer_image"
-            app:layout_constraintTop_toTopOf="@+id/fragment_bitcoin_wallet_transfer_image" />
+            app:layout_constraintTop_toTopOf="@+id/fragment_bitcoin_wallet_transfer_image"
+            app:layout_constraintVertical_chainStyle="packed" />
 
 
         <TextView

@@ -18,7 +18,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"
-        android:src="@drawable/ic_delete_wallet"
+        app:srcCompat="@drawable/delete"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/toolbar_bitcoin_wallet_backup_btn"
         app:layout_constraintTop_toBottomOf="@+id/include3" />
@@ -35,12 +35,35 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar_bitcoin_wallet_backup_btn" />
 
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:text="Estimated balance"
+        android:textColor="@color/blue_bright"
+        android:textSize="17sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+    <TextView
+        android:id="@+id/fragment_bitcoin_wallet_balance_estimated"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_balance" />
+
     <ImageButton
         android:id="@+id/toolbar_bitcoin_wallet_restore_btn"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"
-        android:src="@drawable/ic_action_restore_backup"
+        app:srcCompat="@drawable/reload"
         app:layout_constraintEnd_toStartOf="@+id/toolbar_bitcoin_wallet_backup_btn"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/include3" />
@@ -50,7 +73,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/colorPrimary"
-        android:src="@drawable/ic_action_save_backup"
+        app:srcCompat="@drawable/download"
         app:layout_constraintEnd_toStartOf="@+id/toolbar_bitcoin_wallet_delete_btn"
         app:layout_constraintStart_toEndOf="@+id/toolbar_bitcoin_wallet_restore_btn"
         app:layout_constraintTop_toBottomOf="@+id/include3" />
@@ -59,13 +82,13 @@
     <ImageButton
         android:id="@+id/fragment_bitcoin_wallet_transfer_button"
         android:layout_width="70dp"
-        android:layout_height="60dp"
-        android:layout_marginStart="16dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/hexagon"
+        android:background="@color/colorPrimary"
+        app:srcCompat="@drawable/transfer_hexagon"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView19"
-        app:srcCompat="@drawable/ic_transfer" />
+        app:layout_constraintTop_toBottomOf="@+id/textView18" />
 
         <!--<ImageButton-->
             <!--android:id="@+id/fragment_bitcoin_wallet_deposit_button"-->
@@ -162,13 +185,15 @@
         android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/buttons_background_left_rounding"
         android:fontFamily="sans-serif-light"
         android:text="@string/public_key"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/textView11"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/fragment_bitcoin_wallet_transfer_button"
         app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_private_key_button" />
@@ -179,16 +204,17 @@
         android:layout_width="0dp"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/buttons_background_left_rounding"
         android:fontFamily="sans-serif-light"
         android:text="@string/private_key"
         android:textAllCaps="true"
         android:textColor="@color/white"
         android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/fragment_bitcoin_wallet_public_key_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/fragment_bitcoin_wallet_transfer_button"
-        app:layout_constraintTop_toBottomOf="@+id/fragment_bitcoin_wallet_balance" />
+        app:layout_constraintTop_toTopOf="@+id/fragment_bitcoin_wallet_transfer_button" />
 
 
     <TextView

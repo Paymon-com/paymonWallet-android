@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.shawnlin.numberpicker.NumberPicker;
@@ -65,9 +66,9 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         exchangeRatesRecView = (RecyclerView) view.findViewById(R.id.fragment_money_exchange_rates);
         walletsRecView = (RecyclerView) view.findViewById(R.id.fragment_money_wallets);
         TextView updateButton = (TextView) view.findViewById(R.id.fragment_money_update);
-        TextView usdButton = (TextView) view.findViewById(R.id.fragment_money_currency_usd);
-        TextView eurButton = (TextView) view.findViewById(R.id.fragment_money_currency_eur);
-        TextView localButton = (TextView) view.findViewById(R.id.fragment_money_currency_local);
+        Button usdButton = (Button) view.findViewById(R.id.fragment_money_currency_usd);
+        Button eurButton = (Button) view.findViewById(R.id.fragment_money_currency_eur);
+        Button localButton = (Button) view.findViewById(R.id.fragment_money_currency_local);
 
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(false);

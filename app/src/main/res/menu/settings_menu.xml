@@ -5,15 +5,15 @@
         <menu>
             <item
                 android:id="@+id/settings_notifications"
-                android:icon="@drawable/ic_settings_notifications"
+                android:icon="@drawable/notification"
                 android:title="@string/settings_notifications" />
             <item
                 android:id="@+id/settings_basic"
-                android:icon="@drawable/ic_settings_basic"
+                android:icon="@drawable/settings_basic"
                 android:title="@string/settings_basic" />
             <item
                 android:id="@+id/settings_security"
-                android:icon="@drawable/ic_settings_security"
+                android:icon="@drawable/security"
                 android:title="@string/settings_security" />
         </menu>
     </item>
@@ -22,15 +22,15 @@
         <menu>
             <item
                 android:id="@+id/settings_reset_settings"
-                android:icon="@drawable/ic_settings_about_program"
+                android:icon="@drawable/warning"
                 android:title="@string/reset_settings" />
             <item
                 android:id="@+id/settings_about_programm"
-                android:icon="@drawable/ic_settings_about_program"
+                android:icon="@drawable/warning"
                 android:title="@string/settings_about_programm" />
             <item
                 android:id="@+id/settings_exit"
-                android:icon="@drawable/ic_settings_exit"
+                android:icon="@drawable/exit"
                 android:title="@string/exit" />
         </menu>
     </item>
