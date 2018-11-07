@@ -67,7 +67,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         TextView eurButton = (TextView) view.findViewById(R.id.fragment_money_currency_eur);
         TextView localButton = (TextView) view.findViewById(R.id.fragment_money_currency_local);
 
-        dialogProgress = new CustomDialogProgress(getContext(), "Exchange rates and wallets", R.drawable.circle_button);//TODO:String
+        dialogProgress = new CustomDialogProgress(getContext(), "Exchange rates and wallets", R.drawable.cryptocurrency);//TODO:String
         dialogProgress.setCancelable(false);
 
         exchangeRatesRecView.setHasFixedSize(true);
