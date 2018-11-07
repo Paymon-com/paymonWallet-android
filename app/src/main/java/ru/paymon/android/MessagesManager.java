@@ -79,6 +79,9 @@ public class MessagesManager {
             } else {
                 final int gid = message.to_peer.group_id;
                 final RPC.Group group = GroupsManager.getInstance().getGroup(gid);
+                final RPC.UserObject creator = UsersManager.getInstance().getUser(group.creatorID);
+                if (creator == null) return;
+                final String text = message.action instanceof RPC.PM_messageActionGroupCreate ? String.format("%s %s \"%s\"", Utils.formatUserName(creator), ApplicationLoader.applicationContext.getString(R.string.created_group), group.title) : message.text;
 
                 if (group == null) {
 //                final RPC.PM_getGroupInfo groupInfo = new RPC.PM_getGroupInfo(gid);
@@ -87,12 +90,12 @@ public class MessagesManager {
 //                    RPC.Group groupObject = (RPC.Group) response;
 //                    AppDatabase.getDatabase().groupDao().insert(groupObject);
 //                    RPC.UserObject lastMsgUser = AppDatabase.getDatabase().userDao().getUserById(message.from_id);
-//                    ChatsItem newChatsItem = new ChatsItem(gid, groupObject.photoURL, groupObject.title, message.text, message.date, message.itemType, lastMsgUser.photoURL);
+//                    ChatsItem newChatsItem = new ChatsItem(gid, groupObject.photoURL, groupObject.title, text, message.date, message.itemType, lastMsgUser.photoURL);
 //                    ChatsManager.getInstance().getChatByChatID.putChat(newChatsItem);
 //                });
                 } else {
                     final RPC.UserObject lastMsgUser = UsersManager.getInstance().getUser(message.from_id);
-                    final ChatsItem newChatsItem = new ChatsItem(gid, group.photoURL, group.title, message.text, message.date, message.itemType, lastMsgUser.photoURL);
+                    final ChatsItem newChatsItem = new ChatsItem(gid, group.photoURL, group.title, text, message.date, message.itemType, lastMsgUser.photoURL);
                     ChatsManager.getInstance().putChat(newChatsItem);
                 }
             }

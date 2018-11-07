@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
@@ -120,14 +121,14 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdap
                 }
 
                 if (response instanceof RPC.PM_boolTrue) {
-                    RPC.UserObject userToRemove = UsersManager.getInstance().getUser(removeParticipant.userID);
-                    group.users.remove(userToRemove);
-
-                    for (UserItem item : list) {
-                        if (item.uid == userToRemove.id)
-                            list.remove(item);
-                    }
+                    group.users.remove((Integer)removeParticipant.userID);
                     GroupsManager.getInstance().putGroup(group);
+
+                    list.clear();
+                    for (Integer uid : group.users) {
+                        final RPC.UserObject user = UsersManager.getInstance().getUser(uid);
+                        list.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
+                    }
                 }
                 ApplicationLoader.applicationHandler.post(() -> {
                     if (dialogProgress != null && dialogProgress.isShowing())
