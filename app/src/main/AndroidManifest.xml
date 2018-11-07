@@ -79,7 +79,8 @@
             android:name=".activities.KeyGuardActivity" />
 
         <activity
-            android:name=".activities.SettingsActivity" />
+            android:name=".activities.SettingsActivity"
+            android:theme="@style/AppThemeSettingsActivity"/>
 
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat"/>

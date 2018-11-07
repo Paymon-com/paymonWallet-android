@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -33,6 +34,17 @@ public class ExchangeRatesAdapter extends RecyclerView.Adapter<RecyclerView.View
         ExchangeRatesViewHolder exchangeRatesViewHolder = (ExchangeRatesViewHolder) holder;
         exchangeRatesViewHolder.cryptoCurrency.setText(exchangeRatesItem.cryptoCurrency);
         exchangeRatesViewHolder.fiatAmount.setText(String.format("%s %s", exchangeRatesItem.value, exchangeRatesItem.fiatCurrency));
+        switch (exchangeRatesItem.cryptoCurrency){
+            case "BTC":
+                exchangeRatesViewHolder.icon.setImageResource(R.drawable.bitcoin_chart);
+                break;
+            case "ETH":
+                exchangeRatesViewHolder.icon.setImageResource(R.drawable.ethereum_chart);
+                break;
+            case "PMNT":
+                exchangeRatesViewHolder.icon.setImageResource(R.drawable.paymon_chart);
+                break;
+        }
     }
 
     @Override
@@ -41,11 +53,13 @@ public class ExchangeRatesAdapter extends RecyclerView.Adapter<RecyclerView.View
     }
 
     class ExchangeRatesViewHolder extends RecyclerView.ViewHolder {
+        public final ImageView icon;
         public final TextView cryptoCurrency;
         public final TextView fiatAmount;
 
         public ExchangeRatesViewHolder(View itemView) {
             super(itemView);
+            icon = itemView.findViewById(R.id.currency_rate_image_view);
             cryptoCurrency = itemView.findViewById(R.id.crypto_currency);
             fiatAmount = itemView.findViewById(R.id.fiat_amount);
         }

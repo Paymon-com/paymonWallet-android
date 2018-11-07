@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.shawnlin.numberpicker.NumberPicker;
@@ -75,9 +76,9 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         feeSeekBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_gas_limit_slider);
         EditText amountEditText = (EditText) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_amount);
         TextView totalTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_total_value);
-        FloatingActionButton qrScannerButton = (FloatingActionButton) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_qr);
+        ImageView qrScannerButton = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_qr);
         TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_id_from);
-        TextView payButton = (TextView) view.findViewById(R.id.toolbar_btc_wallet_transf_next_text_view);
+        ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_btc_wallet_transf_next_text_view);
         TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_bitcoin_amount_input_layout);
         TextInputLayout receiverAddressInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_bitcoin_receiver_address_input_layout);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_btc_wallet_transf_back_image_button);
@@ -145,7 +146,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
             public void onSeeking(SeekParams seekParams) {
                 feeSatoshis = seekParams.progress * WalletApplication.btcTxSize;
                 feeBtc = feeSatoshis / Math.pow(10, 8);
-                feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + "BTC (${PROGRESS} satoshi per byte)");
+                feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format("BTC (${PROGRESS} %s)", getString(R.string.satoshi_per_byte)));
                 totalValueBtc = feeBtc + btcAmount;
                 totalTextView.setText(String.format("%.8f BTC", totalValueBtc));
             }
@@ -164,7 +165,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         feeSeekBar.setMin(1);
         feeSeekBar.setMax(100);
         feeSeekBar.setProgress(10);
-        feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + " (${PROGRESS} satoshi per byte)");
+        feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format(" (${PROGRESS} %s)", getString(R.string.satoshi_per_byte)));
 
         receiverAddressEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -281,7 +282,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                     if (transaction != null) {
                         String hash = transaction.getHashAsString();
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
-                                .setMessage(getText(R.string.transaction_hash) + hash)
+                                .setMessage(getText(R.string.transaction_hash) + ": " + hash)
                                 .setCancelable(true);
                         AlertDialog alertDialog = builder2.create();
                         alertDialog.show();

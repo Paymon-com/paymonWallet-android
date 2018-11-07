@@ -67,9 +67,9 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                         if (isDeleted) {
                             User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = null;
                             User.saveConfig();
-                            Toast.makeText(getContext(), "Кошелек успешно удален", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.wallet_successfully_deleted, Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(), "Кошелек удалить не удалось", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.wallet_failed_to_delete, Toast.LENGTH_LONG).show();
                         }
 
                         Utils.hideKeyboard(view);
@@ -92,9 +92,9 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                         if (isDeleted) {
                             User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = null;
                             User.saveConfig();
-                            Toast.makeText(getContext(), "Кошелек успешно удален", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.wallet_successfully_deleted, Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(), "Кошелек удалить не удалось", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.wallet_failed_to_delete, Toast.LENGTH_LONG).show();
                         }
                         Utils.hideKeyboard(view);
                         getDialog().dismiss();
@@ -116,9 +116,9 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                         if (isDeleted) {
                             User.CLIENT_MONEY_PAYMON_WALLET_PASSWORD = null;
                             User.saveConfig();
-                            Toast.makeText(getContext(), "Кошелек успешно удален", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.wallet_successfully_deleted, Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(), "Кошелек удалить не удалось", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.wallet_failed_to_delete, Toast.LENGTH_LONG).show();
                         }
 
                         Utils.hideKeyboard(view);

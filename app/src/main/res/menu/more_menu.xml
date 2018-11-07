@@ -10,13 +10,13 @@
         <!--android:icon="@drawable/ic_invite_friends"-->
         <!--android:title="@string/title_invite_fiends" />-->
     <item
-        android:id="@+id/more_menu_faq"
-        android:icon="@drawable/ic_menu_faq"
-        android:title="@string/title_faq" />
-    <item
         android:id="@+id/more_menu_settings"
-        android:icon="@drawable/ic_menu_settings"
+        android:icon="@drawable/settings"
         android:title="@string/title_settings" />
+    <item
+        android:id="@+id/more_menu_faq"
+        android:icon="@drawable/faq"
+        android:title="@string/title_faq" />
     <!--<item-->
         <!--android:id="@+id/bottom_menu_games"-->
         <!--android:icon="@drawable/ic_menu_games"-->

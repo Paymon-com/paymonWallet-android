@@ -11,6 +11,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,14 +133,14 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
                         }
                     }
 
-                    @Override
-                    public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-                        buttonsAttachmentsInclude.animate().alpha(1 - slideOffset).setDuration(0).start();
-                        buttonAcceptOrCloseAttachment.setTranslationY(translation - (translation * slideOffset) + 2);
-                    }
+                        @Override
+                        public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+                            buttonsAttachmentsInclude.animate().alpha(1 - slideOffset).setDuration(0).start();
+                            buttonAcceptOrCloseAttachment.setTranslationY(translation - (translation * slideOffset) + 2);
+                        }
+                    });
+                    ((View) bottomSheet.getParent()).setBackgroundColor(Color.TRANSPARENT);
                 });
-                ((View) bottomSheet.getParent()).setBackgroundColor(Color.TRANSPARENT);
-            });
         }
     }
 

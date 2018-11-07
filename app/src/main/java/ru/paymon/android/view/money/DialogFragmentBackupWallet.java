@@ -104,26 +104,26 @@ public class DialogFragmentBackupWallet extends DialogFragment {
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
         boolean isBackuped = application.backupBitcoinWallet(path);
         if (isBackuped)
-            Toast.makeText(getContext(), "Резервная копия создана", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.backup_created, Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(getContext(), "Резервную копию создать не удалось", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
     }
 
     private void backupEthereumWallet(final String path) {
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
         boolean isBackuped = application.backupEthereumWallet(path);
         if (isBackuped)
-            Toast.makeText(getContext(), "Резервная копия создана", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.backup_created, Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(getContext(), "Резервную копию создать не удалось", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
     }
 
     private void backupPaymonWallet(final String path) {
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
         boolean isBackuped = application.backupPaymonWallet(path);
         if (isBackuped)
-            Toast.makeText(getContext(), "Резервная копия создана", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.backup_created, Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(getContext(), "Резервную копию создать не удалось", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
     }
 }

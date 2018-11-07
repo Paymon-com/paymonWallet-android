@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    android:background="@color/colorPrimary">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -18,256 +17,294 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/fragment_ethereum_wallet_transfer_address_layout"
+        <Button
+            android:id="@+id/button5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/eth_color"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:background="@color/bg_dialog_title"
+            android:text="@string/eur"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/button3"
+            app:layout_constraintStart_toEndOf="@+id/button6"
+            app:layout_constraintTop_toBottomOf="@+id/include_toolbar_ethereum_wallet_transfer" />
+
+        <ImageView
+            android:id="@+id/imageView18"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:background="@color/bg_dialog_title"
+            app:layout_constraintEnd_toEndOf="@+id/button6"
+            app:layout_constraintStart_toStartOf="@+id/button6"
+            app:layout_constraintTop_toBottomOf="@+id/button6" />
+
+        <ImageView
+            android:id="@+id/imageView19"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:src="@color/blue_bright"
+            app:layout_constraintEnd_toEndOf="@+id/button5"
+            app:layout_constraintStart_toStartOf="@+id/button5"
+            app:layout_constraintTop_toBottomOf="@+id/button5" />
+
+        <ImageView
+            android:id="@+id/imageView20"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:background="@color/bg_dialog_title"
+            app:layout_constraintEnd_toEndOf="@+id/button3"
+            app:layout_constraintStart_toStartOf="@+id/button3"
+            app:layout_constraintTop_toBottomOf="@+id/button3" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_dialog_title"
+            android:text="@string/usd"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toStartOf="@+id/button5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_amount_layout">
+            app:layout_constraintTop_toBottomOf="@+id/include_toolbar_ethereum_wallet_transfer" />
 
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@color/bg_dialog_title"
+            android:text="rub"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button5"
+            app:layout_constraintTop_toBottomOf="@+id/include_toolbar_ethereum_wallet_transfer" />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/fragment_ethereum_receiver_address_input_layout"
+        <!--<TextView-->
+        <!--android:id="@+id/textView28"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="24dp"-->
+        <!--android:fontFamily="sans-serif-light"-->
+        <!--android:text="@string/amount"-->
+        <!--android:textAllCaps="true"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="16sp"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--tools:layout_editor_absoluteY="123dp" />-->
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/fragment_ethereum_amount_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_fiat_eq"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView25">
+
+            <EditText
+                android:id="@+id/fragment_ethereum_wallet_transfer_amount"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView1">
-
-                <EditText
-                    android:id="@+id/fragment_ethereum_wallet_transfer_receiver_address"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/black_light"
-                    android:fontFamily="sans-serif-light"
-                    android:gravity="center"
-                    android:maxLength="42"
-                    android:maxLines="1"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="8dp"
-                    android:paddingRight="16dp"
-                    android:paddingBottom="8dp"
-                    android:singleLine="true"
-                    android:textAllCaps="false"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/address_of_the_recipient"
+                android:layout_marginTop="4dp"
+                android:background="@color/colorPrimary"
+                android:hint="Введите сумму"
+                android:inputType="numberDecimal"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:singleLine="true"
                 android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="18sp" />
+        </android.support.design.widget.TextInputLayout>
 
-            <TextView
-                android:id="@+id/textView37"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="4dp"
-                android:layout_marginBottom="8dp"
-                android:fontFamily="sans-serif-light"
-                android:paddingBottom="24dp"
-                android:text="@string/universal_transfer_address_title"
-                android:textAlignment="center"
-                android:textSize="16sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_receiver_address_input_layout" />
-
-        </android.support.constraint.ConstraintLayout>
-
-        <android.support.constraint.ConstraintLayout
-            android:id="@+id/fragment_ethereum_wallet_transfer_amount_layout"
+        <TextView
+            android:id="@+id/fragment_ethereum_wallet_transfer_fiat_eq"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/eth_color"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="end"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_amount_input_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_amount_input_layout" />
+
+
+        <com.warkiz.widget.IndicatorStayLayout
+            android:id="@+id/indilayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/include_toolbar_ethereum_wallet_transfer">
+            app:layout_constraintTop_toBottomOf="@+id/imageView23">
 
-
-            <TextView
-                android:id="@+id/fragment_ethereum_wallet_transfer_fiat_eq"
+            <com.warkiz.widget.IndicatorSeekBar
+                android:id="@+id/fragment_ethereum_wallet_transfer_gas_price_slider"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAlignment="center"
-                android:textSize="23sp"
-                android:visibility="gone"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_amount_input_layout" />
+                app:isb_indicator_color="@color/blue_bright"
+                app:isb_thumb_color="@color/blue_bright"
+                app:isb_track_progress_color="@color/blue_bright" />
+        </com.warkiz.widget.IndicatorStayLayout>
 
-            <com.shawnlin.numberpicker.NumberPicker
-                android:id="@+id/fragment_ethereum_wallet_transfer_fiat_currency"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_centerInParent="true"
+        <com.warkiz.widget.IndicatorStayLayout
+            android:id="@+id/indilayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/indilayout1">
+
+            <com.warkiz.widget.IndicatorSeekBar
+                android:id="@+id/fragment_ethereum_wallet_transfer_gas_limit_slider"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:isb_indicator_color="@color/blue_bright"
+                app:isb_thumb_color="@color/blue_bright"
+                app:isb_track_progress_color="@color/blue_bright" />
+        </com.warkiz.widget.IndicatorStayLayout>
+
+        <TextView
+            android:id="@+id/label_network_fee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto_thin"
+            android:text="network fee"
+            android:textAllCaps="true"
+            android:textAppearance="?android:textAppearanceListItem"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/indilayout2" />
+
+        <TextView
+            android:id="@+id/fragment_ethereum_wallet_transfer_network_fee_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="end"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/label_network_fee"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/label_network_fee"
+            app:layout_constraintTop_toTopOf="@+id/label_network_fee"
+            tools:text="0.0027 ETH" />
+
+        <TextView
+            android:id="@+id/label_network_fee1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto_thin"
+            android:text="total"
+            android:textAllCaps="true"
+            android:textAppearance="?android:textAppearanceListItem"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView24" />
+
+        <TextView
+            android:id="@+id/fragment_ethereum_wallet_transfer_total_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_thin"
+            android:gravity="end"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/label_network_fee1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/label_network_fee1"
+            app:layout_constraintTop_toTopOf="@+id/label_network_fee1"
+            tools:text="0.0027 ETH" />
+
+        <!--<TextView-->
+        <!--android:id="@+id/textView1"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:fontFamily="sans-serif-light"-->
+        <!--android:text="@string/address_of_the_recipient"-->
+        <!--android:textAllCaps="true"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="16sp"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/imageView21" />-->
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/fragment_ethereum_receiver_address_input_layout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_qr"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView21">
+
+            <EditText
+                android:id="@+id/fragment_ethereum_wallet_transfer_receiver_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_fiat_eq"
-                app:np_dividerColor="@color/colorPrimary"
-                app:np_orientation="horizontal"
-                app:np_selectedTextColor="@color/colorPrimary"
-                app:np_textColor="@color/colorPrimary" />
-
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/fragment_ethereum_amount_input_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textAlignment="center"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView28">
-
-                <EditText
-                    android:id="@+id/fragment_ethereum_wallet_transfer_amount"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:background="@color/black_light"
-                    android:fontFamily="sans-serif-light"
-                    android:gravity="center"
-                    android:inputType="numberDecimal"
-                    android:maxLength="16"
-                    android:maxLines="1"
-                    android:paddingTop="8dp"
-                    android:paddingBottom="8dp"
-                    android:singleLine="true"
-                    android:textAlignment="center"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
-            </android.support.design.widget.TextInputLayout>
-
-
-            <TextView
-                android:id="@+id/textView28"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif-light"
-                android:text="@string/amount"
-                android:textAllCaps="true"
+                android:background="@color/colorPrimary"
+                android:hint="Введите адрес получателя"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:singleLine="true"
+                android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="18sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="4dp"
-                android:orientation="vertical"
-                android:padding="2dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_fiat_currency">
+        </android.support.design.widget.TextInputLayout>
 
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/textView37"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/roboto_thin"
+            android:paddingBottom="24dp"
+            android:text="@string/universal_transfer_address_title"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_qr"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_receiver_address_input_layout" />
 
-                    <com.warkiz.widget.IndicatorStayLayout
-                        android:id="@+id/indilayout1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent">
 
-                        <com.warkiz.widget.IndicatorSeekBar
-                            android:id="@+id/fragment_ethereum_wallet_transfer_gas_price_slider"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
-                    </com.warkiz.widget.IndicatorStayLayout>
-                </android.support.constraint.ConstraintLayout>
-
-                <com.warkiz.widget.IndicatorStayLayout
-                    android:id="@+id/indilayout2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginBottom="4dp">
-
-                    <com.warkiz.widget.IndicatorSeekBar
-                        android:id="@+id/fragment_ethereum_wallet_transfer_gas_limit_slider"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </com.warkiz.widget.IndicatorStayLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="2dp">
-
-                    <TextView
-                        android:id="@+id/label_network_fee"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:text="network fee"
-                        android:textAppearance="?android:textAppearanceListItem" />
-
-                    <TextView
-                        android:id="@+id/fragment_ethereum_wallet_transfer_network_fee_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="--"
-                        tools:text="0.0027 ETH" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingTop="2dp">
-
-                    <TextView
-                        android:id="@+id/label_network_fee1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:text="total"
-                        android:textAppearance="?android:textAppearanceListItem" />
-
-                    <TextView
-                        android:id="@+id/fragment_ethereum_wallet_transfer_total_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
-                        android:text="--"
-                        tools:text="0.0027 ETH" />
-                </RelativeLayout>
-            </LinearLayout>
-
-        </android.support.constraint.ConstraintLayout>
+        <ImageView
+            android:id="@+id/fragment_ethereum_wallet_transfer_qr"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView37"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_receiver_address_input_layout"
+            app:srcCompat="@drawable/qr" />
 
         <TextView
             android:id="@+id/textView29"
@@ -275,25 +312,23 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/roboto_thin"
             android:text="@string/deposit_account"
             android:textAllCaps="true"
+            android:textColor="@color/white"
             android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_address_layout" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView22" />
 
         <ImageView
             android:id="@+id/fragment_ethereum_wallet_transfer_image"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp"
-            android:src="@drawable/ic_ethereum"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:src="@drawable/etherium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView29"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintTop_toBottomOf="@+id/textView29" />
 
         <TextView
             android:id="@+id/fragment_ethereum_wallet_transfer_title_from"
@@ -301,24 +336,30 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
+            android:fontFamily="@font/roboto_thin"
             android:text="@string/title_ethereum_wallet"
             android:textColor="@color/eth_color"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/fragment_ethereum_wallet_transfer_id_from"
+            app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_balance"
             app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_image"
-            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_image" />
+            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_image"
+            app:layout_constraintVertical_chainStyle="packed" />
+
 
         <TextView
             android:id="@+id/fragment_ethereum_wallet_transfer_id_from"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:maxLines="1"
+            android:layout_marginEnd="16dp"
+            android:fontFamily="@font/roboto_thin"
             android:singleLine="true"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_image"
-            app:layout_constraintEnd_toStartOf="@+id/fragment_ethereum_wallet_transfer_balance"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_image" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/fragment_ethereum_wallet_transfer_image"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_title_from" />
+
 
         <TextView
             android:id="@+id/fragment_ethereum_wallet_transfer_balance"
@@ -326,20 +367,102 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:singleLine="true"
-            android:textColor="@color/rub_color"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_id_from"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_title_from"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_id_from" />
+            app:layout_constraintTop_toTopOf="@+id/fragment_ethereum_wallet_transfer_title_from" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fragment_ethereum_wallet_transfer_qr"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_ethereum_wallet_transfer_address_layout"
+
+        <com.shawnlin.numberpicker.NumberPicker
+            android:id="@+id/fragment_ethereum_wallet_transfer_fiat_currency"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="4dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_address_layout"
-            app:srcCompat="@drawable/ic_qrcode" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_fiat_eq"
+            app:np_dividerColor="@color/colorPrimary"
+            app:np_orientation="horizontal"
+            app:np_selectedTextColor="@color/colorPrimary"
+            app:np_textColor="@color/colorPrimary" />
+
+
+        <ImageView
+            android:id="@+id/imageView21"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/transparent_gradient_rev"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_network_fee1" />
+
+
+        <ImageView
+            android:id="@+id/imageView22"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/transparent_gradient_rev"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView37" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginTop="16dp"
+            android:src="@drawable/transparent_gradient_rev"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_wallet_transfer_image" />
+
+
+        <ImageView
+            android:id="@+id/imageView25"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:src="@drawable/transparent_gradient_rev"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView19" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:src="@drawable/transparent_gradient_rev"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/button5" />
+
+        <ImageView
+            android:id="@+id/imageView23"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@color/black_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_ethereum_amount_input_layout" />
+
+        <ImageView
+            android:id="@+id/imageView24"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:src="@color/black_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_network_fee" />
 
     </android.support.constraint.ConstraintLayout>
+
 </ScrollView>

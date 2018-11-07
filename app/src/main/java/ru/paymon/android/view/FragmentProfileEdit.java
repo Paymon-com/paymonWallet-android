@@ -57,7 +57,7 @@ public class FragmentProfileEdit extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_profile, container, false);
 
         avatar = (CircularImageView) view.findViewById(R.id.profile_update_photo);
-        TextView changeAvatar = (TextView) view.findViewById(R.id.change_foto);
+        Button changeAvatar = (Button) view.findViewById(R.id.change_foto);
         TextInputEditText firstName = (TextInputEditText) view.findViewById(R.id.profile_update_name);
         TextInputEditText lastName = (TextInputEditText) view.findViewById(R.id.profile_update_surname);
         EditText email = (EditText) view.findViewById(R.id.profile_update_email);

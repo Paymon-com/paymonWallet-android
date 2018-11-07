@@ -13,6 +13,22 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
+    <style name="AppThemeSettingsActivity" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:fontFamily">@font/roboto_thin</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorPrimary">@color/blue_bright</item>
+        <item name="android:textColorSecondary">@color/blue_bright</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:editTextColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+
     <!--&lt;!&ndash;<style name="AppThemeDark" parent="AppTheme">&ndash;&gt;-->
         <!--&lt;!&ndash;<item name="windowActionBar">false</item>&ndash;&gt;-->
         <!--&lt;!&ndash;<item name="windowNoTitle">true</item>&ndash;&gt;-->
@@ -41,6 +57,11 @@
     <style name="TilStyle" parent="TextAppearance.AppCompat">
         <item name="android:textSize">18sp</item>
         <item name="colorAccent">@color/colorPrimary</item>
+    </style>
+
+    <style name="NavigationDrawerStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:fontFamily">@font/roboto_thin</item>
     </style>
 
     <style name="PaymonButtonBlue" parent="Base.Widget.AppCompat.Button">
