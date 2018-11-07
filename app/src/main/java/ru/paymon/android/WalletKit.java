@@ -56,8 +56,8 @@ public class WalletKit extends WalletAppKit {
             @Override
             public void onChainDownloadStarted(Peer peer, int blocksLeft) {
                 Log.e("AAA", "chain download started");
-                super.onChainDownloadStarted(peer, blocksLeft);
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_CHAIN_STARTED);
+                super.onChainDownloadStarted(peer, blocksLeft);
             }
 
             @Override
@@ -81,8 +81,8 @@ public class WalletKit extends WalletAppKit {
             @Override
             protected void doneDownload() {
                 Log.e("AAA", "download done");
-                super.doneDownload();
                 NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
+                super.doneDownload();
             }
         });
     }

@@ -101,12 +101,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Boolean isBtsSync = btcSyncData.getValue();
         Integer btcSyncVal = btcSyncValue.getValue();
         if (isBtsSync == null) return;
-        String text = getString(R.string.btc_sync) + (btcSyncVal != null ? " (" + btcSyncVal + "%)" : " (0%)");
+        String text = getString(R.string.btc_sync) + (btcSyncVal != null ? " (" + btcSyncVal + "%)" : "");
         ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
-        if (isBtsSync)
-            connectingConstraint.setVisibility(View.GONE);
-        else
-            connectingConstraint.setVisibility(View.VISIBLE);
+        connectingConstraint.setVisibility(isBtsSync ? View.GONE : View.VISIBLE);
     }
 
     @Override
