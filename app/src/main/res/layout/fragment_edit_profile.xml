@@ -65,18 +65,37 @@
     <Button
         android:id="@+id/change_foto"
         android:layout_width="0dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_marginStart="16dp"
+        android:background="@drawable/buttons_background_left_rounding"
         android:fontFamily="sans-serif-light"
         android:text="@string/change_photo"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/delete_photo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/profile_update_photo"
+        app:layout_constraintTop_toTopOf="@+id/profile_update_photo"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/delete_photo"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/buttons_background_left_rounding"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/delete_photo"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="@+id/profile_update_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_update_photo"
-        app:layout_constraintTop_toTopOf="@+id/profile_update_photo"/>
+        app:layout_constraintTop_toBottomOf="@+id/change_foto" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/fragment_update_profile_name_til"
