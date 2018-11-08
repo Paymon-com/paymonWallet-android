@@ -138,6 +138,7 @@ public class FragmentPaymonWallet extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
         balanceLiveData = moneyViewModel.getPaymonBalanceData();
         transactionsData = moneyViewModel.getPaymonTranscationsData();
         balanceLiveData.observe(this, value -> {

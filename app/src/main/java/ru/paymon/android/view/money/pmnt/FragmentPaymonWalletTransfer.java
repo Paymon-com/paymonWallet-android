@@ -107,8 +107,6 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         ImageView qrScannerButton = (ImageView) view.findViewById(R.id.fragment_paymon_wallet_transfer_qr);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_pmnt_wallet_transf_back_image_button);
         ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_pmnt_wallet_transf_next_text_view);
-        TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_paymon_amount_input_layout);
-        TextInputLayout receiverAddressInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_paymon_receiver_address_input_layout);
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
@@ -144,9 +142,9 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 String value = s.toString();
 
                 if (!Utils.verifyETHpubKey(value)) {
-                    receiverAddressInputLayout.setError(getText(R.string.not_a_eth_address));
+                    receiverAddressEditText.setError(getText(R.string.not_a_eth_address));
                 } else {
-                    receiverAddressInputLayout.setError(null);
+                    receiverAddressEditText.setError(null);
                 }
             }
         });
@@ -170,20 +168,20 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 }
 
                 if (value.isEmpty()) {
-                    amountInputLayout.setError(getText(R.string.required_field));
-                    fiatEqualTextView.setVisibility(View.GONE);
+                    amountEditText.setError(getText(R.string.required_field));
+                    fiatEqualTextView.setVisibility(View.INVISIBLE);
                     return;
                 }
 
                 pmntAmount = Double.parseDouble(value);
 
                 if (pmntAmount <= 0) {
-                    amountInputLayout.setError(getText(R.string.invalid_value));
-                    fiatEqualTextView.setVisibility(View.GONE);
+                    amountEditText.setError(getText(R.string.invalid_value));
+                    fiatEqualTextView.setVisibility(View.INVISIBLE);
                     return;
                 }
 
-                amountInputLayout.setError(null);
+                amountEditText.setError(null);
 
                 fiatEqualTextView.setVisibility(View.VISIBLE);
                 calculateFees();

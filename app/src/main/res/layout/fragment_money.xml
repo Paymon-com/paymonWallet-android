@@ -60,7 +60,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView17"
+            android:id="@+id/fragment_money_currency_usd_backlight"
             android:layout_width="0dp"
             android:layout_height="3dp"
             android:background="@color/blue_bright"
@@ -80,6 +80,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/fragment_money_currency_eur_backlight"
             android:layout_width="0dp"
             android:layout_height="3dp"
             android:background="@color/colorPrimary"
@@ -99,6 +100,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/fragment_money_currency_local_backlight"
             android:layout_width="0dp"
             android:layout_height="3dp"
             android:background="@color/colorPrimary"
@@ -152,7 +154,7 @@
             android:src="@drawable/transparent_gradient_rev"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView17" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_money_currency_usd_backlight" />
 
         <ImageView
             android:id="@+id/imageView14"
