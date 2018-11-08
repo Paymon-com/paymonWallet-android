@@ -117,10 +117,11 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
         super.onResume();
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         Utils.hideBottomBar(getActivity());
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
         final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toFriendlyString();
         final String balanceEstimated = application.getBitcoinBalance(Wallet.BalanceType.ESTIMATED).toFriendlyString();
-        balanceTextView.setText("Available: " + balance);
-        estimatedBalanceTextView.setText("Estimated: " + balanceEstimated);
+        balanceTextView.setText(balance);
+        estimatedBalanceTextView.setText(balanceEstimated);
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
         animation.setDuration(700);
         balanceTextView.startAnimation(animation);
@@ -144,8 +145,8 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
             ApplicationLoader.applicationHandler.post(() -> {
                 final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toFriendlyString();
                 final String balanceEstimated = application.getBitcoinBalance(Wallet.BalanceType.ESTIMATED).toFriendlyString();
-                balanceTextView.setText("Available: " + balance);
-                estimatedBalanceTextView.setText("Estimated: " + balanceEstimated);
+                balanceTextView.setText(balance);
+                estimatedBalanceTextView.setText(balanceEstimated);
             });
         }
     }

@@ -104,8 +104,6 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         ImageView qrScannerButton = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_qr);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_back_image_button);
         ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_next_image_view);
-        TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_ethereum_amount_input_layout);
-        TextInputLayout receiverAddressInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_ethereum_receiver_address_input_layout);
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
@@ -141,9 +139,9 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                 String value = s.toString();
 
                 if (!Utils.verifyETHpubKey(value)) {
-                    receiverAddressInputLayout.setError(getText(R.string.not_a_eth_address));
+                    receiverAddressEditText.setError(getText(R.string.not_a_eth_address));
                 } else {
-                    receiverAddressInputLayout.setError(null);
+                    receiverAddressEditText.setError(null);
                 }
             }
         });
@@ -167,14 +165,14 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                 }
 
                 if (value.isEmpty()) {
-                    amountInputLayout.setError(getText(R.string.required_field));
-                    fiatEqualTextView.setVisibility(View.GONE);
+                    amountEditText.setError(getText(R.string.required_field));
+                    fiatEqualTextView.setVisibility(View.INVISIBLE);
                     return;
                 }
 
                 ethAmount = Double.parseDouble(value);
 
-                amountInputLayout.setError(null);
+                amountEditText.setError(null);
 
                 fiatEqualTextView.setVisibility(View.VISIBLE);
                 calculateFees();

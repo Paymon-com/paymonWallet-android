@@ -79,8 +79,6 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         ImageView qrScannerButton = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_qr);
         TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_id_from);
         ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_btc_wallet_transf_next_text_view);
-        TextInputLayout amountInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_bitcoin_amount_input_layout);
-        TextInputLayout receiverAddressInputLayout = (TextInputLayout) view.findViewById(R.id.fragment_bitcoin_receiver_address_input_layout);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_btc_wallet_transf_back_image_button);
 
         fiatCurrencyPicker.setMinValue(1);
@@ -119,20 +117,20 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 }
 
                 if (value.isEmpty()) {
-                    amountInputLayout.setError(getText(R.string.required_field));
-                    fiatEqualTextView.setVisibility(View.GONE);
+                    amountEditText.setError(getText(R.string.required_field));
+                    fiatEqualTextView.setVisibility(View.INVISIBLE);
                     return;
                 }
 
                 btcAmount = Double.parseDouble(value);
 
                 if (btcAmount <= 0.00000546) {
-                    amountInputLayout.setError(getText(R.string.invalid_value));
-                    fiatEqualTextView.setVisibility(View.GONE);
+                    amountEditText.setError(getText(R.string.invalid_value));
+                    fiatEqualTextView.setVisibility(View.INVISIBLE);
                     return;
                 }
 
-                amountInputLayout.setError(null);
+                amountEditText.setError(null);
 
                 changeCurrency();
                 fiatEqualTextView.setVisibility(View.VISIBLE);
@@ -183,9 +181,9 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 String value = s.toString();
 
                 if (!Utils.verifyBTCpubKey(value)) {
-                    receiverAddressInputLayout.setError(getText(R.string.not_a_btc_address));
+                    receiverAddressEditText.setError(getText(R.string.not_a_btc_address));
                 } else {
-                    receiverAddressInputLayout.setError(null);
+                    receiverAddressEditText.setError(null);
                 }
             }
         });

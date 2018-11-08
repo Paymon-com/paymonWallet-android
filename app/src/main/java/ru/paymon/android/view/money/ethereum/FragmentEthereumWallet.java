@@ -131,6 +131,7 @@ public class FragmentEthereumWallet extends Fragment {
     public void onResume() {
         super.onResume();
         Utils.hideBottomBar(getActivity());
+        Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
         balanceLiveData = moneyViewModel.getEthereumBalanceData();
         transactionsData = moneyViewModel.getEthereumTranscationsData();
         balanceLiveData.observe(this, value -> {

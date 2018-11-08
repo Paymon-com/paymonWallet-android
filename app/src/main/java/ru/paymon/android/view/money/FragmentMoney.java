@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -67,6 +68,9 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         Button usdButton = (Button) view.findViewById(R.id.fragment_money_currency_usd);
         Button eurButton = (Button) view.findViewById(R.id.fragment_money_currency_eur);
         Button localButton = (Button) view.findViewById(R.id.fragment_money_currency_local);
+        ImageView usdBacklight = (ImageView) view.findViewById(R.id.fragment_money_currency_usd_backlight);
+        ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_money_currency_eur_backlight);
+        ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_money_currency_local_backlight);
 
         dialogProgress = new CustomDialogProgress(getContext(), "Exchange rates and wallets", R.drawable.cryptocurrency);//TODO:String
         dialogProgress.setCancelable(false);
@@ -83,16 +87,25 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
 
         usdButton.setOnClickListener((v) -> {
             currentCurrency = "USD";
+            usdBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+            eurBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            localBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             changeCurrency();
         });
 
         eurButton.setOnClickListener((v) -> {
             currentCurrency = "EUR";
+            usdBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            eurBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+            localBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             changeCurrency();
         });
 
         localButton.setOnClickListener((v) -> {
             currentCurrency = localCurrency;
+            usdBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            eurBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            localBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
             changeCurrency();
         });
 
