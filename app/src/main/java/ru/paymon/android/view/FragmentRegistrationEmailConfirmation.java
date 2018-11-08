@@ -165,12 +165,6 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
                     if (response instanceof RPC.PM_boolTrue) {
                         User.currentUser.confirmed = true;
                         User.saveConfig();
-
-//                            ApplicationLoader.applicationHandler.post(() -> {
-//                                Intent mainActivityIntent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
-//                                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                startActivity(mainActivityIntent);
-//                            });
                         NavOptions navOptions = new NavOptions.Builder().setClearTask(true).build();
                         Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.mainActivity, null, navOptions);
                     }

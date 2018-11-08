@@ -5,10 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.text.method.PasswordTransformationMethod;
+import android.text.method.TransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import ru.paymon.android.R;
@@ -23,6 +28,7 @@ import static ru.paymon.android.view.money.pmnt.FragmentPaymonWallet.PMNT_CURREN
 
 public class DialogFragmentBackupWallet extends DialogFragment {
     private String currency;
+    private WalletApplication application;
 
     public DialogFragmentBackupWallet setArgs(Bundle bundle) {
         this.setArguments(bundle);
@@ -38,6 +44,8 @@ public class DialogFragmentBackupWallet extends DialogFragment {
             if (!bundle.containsKey(CURRENCY_KEY)) return;
             currency = bundle.getString(CURRENCY_KEY);
         }
+
+        application = ((WalletApplication) getActivity().getApplication());
     }
 
 
@@ -60,22 +68,31 @@ public class DialogFragmentBackupWallet extends DialogFragment {
 
         final Button openExplorerButton = (Button) view.findViewById(R.id.dialog_fragment_backup_wallet_from_explorer_button);
         final Button backupButton = (Button) view.findViewById(R.id.dialog_fragment_backup_wallet_import_button);
+        final EditText passwordEditText = (EditText) view.findViewById(R.id.dialog_fragment_backup_wallet_pass);
+        final TextView path = (TextView) view.findViewById(R.id.dialog_fragment_backup_wallet_path);
+        final CheckBox showPass = (CheckBox) view.findViewById(R.id.dialog_fragment_backup_wallet_check);
 
-        final String[] paths = new String[1];
+        showPass.setOnCheckedChangeListener((compoundButton, isChecked) -> {
+            final TransformationMethod transformationMethod = isChecked ? null : PasswordTransformationMethod.getInstance();
+            passwordEditText.setTransformationMethod(transformationMethod);
+        });
+
+        final String[] filePath = new String[1];
+        path.setVisibility(View.GONE);
 
         openExplorerButton.setOnClickListener((view1) -> {
             AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(getContext())
                     .setOnlyFoldersFilter()
                     .setOpenDialogListener((fileName) -> {
-                        paths[0] = fileName;
+                        filePath[0] = fileName;
+                        path.setVisibility(View.VISIBLE);
+                        path.setText(fileName);
                     });
             fileDialog.show();
         });
 
         backupButton.setOnClickListener((view1 -> {
-            final String path = paths[0];
-
-            if (path == null) {
+            if (filePath[0] == null) {
                 Toast.makeText(getContext(), R.string.backup_file_not_selected, Toast.LENGTH_LONG).show();
                 return;
             }
@@ -83,16 +100,17 @@ public class DialogFragmentBackupWallet extends DialogFragment {
             Utils.hideKeyboard(view);
             getDialog().dismiss();
             getDialog().cancel();
+            final String password = passwordEditText.getText().toString();
 
             switch (currency) {
                 case BTC_CURRENCY_VALUE:
-                    backupBitcoinWallet(path);
+                    backupBitcoinWallet(filePath[0], password);
                     break;
                 case ETH_CURRENCY_VALUE:
-                    backupEthereumWallet(path);
+                    backupEthereumWallet(filePath[0], password);
                     break;
                 case PMNT_CURRENCY_VALUE:
-                    backupPaymonWallet(path);
+                    backupPaymonWallet(filePath[0], password);
                     break;
             }
         }));
@@ -100,27 +118,24 @@ public class DialogFragmentBackupWallet extends DialogFragment {
         return view;
     }
 
-    private void backupBitcoinWallet(final String path) {
-        WalletApplication application = ((WalletApplication) getActivity().getApplication());
-        boolean isBackuped = application.backupBitcoinWallet(path);
+    private void backupBitcoinWallet(final String path, final String password) {
+        boolean isBackuped = application.backupBitcoinWallet(path, password);
         if (isBackuped)
             Toast.makeText(getContext(), R.string.backup_created, Toast.LENGTH_LONG).show();
         else
             Toast.makeText(getContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
     }
 
-    private void backupEthereumWallet(final String path) {
-        WalletApplication application = ((WalletApplication) getActivity().getApplication());
-        boolean isBackuped = application.backupEthereumWallet(path);
+    private void backupEthereumWallet(final String path, final String password) {
+        boolean isBackuped = application.backupEthereumWallet(path, password);
         if (isBackuped)
             Toast.makeText(getContext(), R.string.backup_created, Toast.LENGTH_LONG).show();
         else
             Toast.makeText(getContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
     }
 
-    private void backupPaymonWallet(final String path) {
-        WalletApplication application = ((WalletApplication) getActivity().getApplication());
-        boolean isBackuped = application.backupPaymonWallet(path);
+    private void backupPaymonWallet(final String path, final String password) {
+        boolean isBackuped = application.backupPaymonWallet(path, password);
         if (isBackuped)
             Toast.makeText(getContext(), R.string.backup_created, Toast.LENGTH_LONG).show();
         else

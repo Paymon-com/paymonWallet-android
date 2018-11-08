@@ -69,9 +69,9 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
                 break;
         }
 
-        final EditText passwordEditText = (EditText) view.findViewById(R.id.dialog_fragment_restore_wallet_pass);
         final Button openExplorerButton = (Button) view.findViewById(R.id.dialog_fragment_restore_wallet_from_explorer_button);
         final Button restoreButton = (Button) view.findViewById(R.id.dialog_fragment_restore_wallet_import_button);
+        final EditText passwordEditText = (EditText) view.findViewById(R.id.dialog_fragment_restore_wallet_pass);
         final TextView path = (TextView) view.findViewById(R.id.dialog_fragment_restore_wallet_path);
         final CheckBox showPass = (CheckBox) view.findViewById(R.id.dialog_fragment_restore_wallet_check);
 
@@ -85,7 +85,6 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
 
         openExplorerButton.setOnClickListener((view1) -> {
             AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(getContext())
-//                    .setFilter(".*\\.json")
                     .setOpenDialogListener((fileName) -> {
                         filePath[0] = fileName;
                         path.setVisibility(View.VISIBLE);
