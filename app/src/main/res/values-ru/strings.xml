@@ -25,7 +25,7 @@
     <string name="wallet_failed_to_delete">Кошелек удалить не удалось</string>
     <string name="usd">USD</string>
     <string name="eur">EUR</string>
-    <string name="delete_photo">Удалить Фото</string>
+    <string name="delete_photo">Удалить фото</string>
 
     <string name="ok">ОК</string>
     <string name="deletion_confirmation">Подтверждение удаления</string>
