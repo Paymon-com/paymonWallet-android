@@ -63,7 +63,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
     private IndicatorSeekBar gasPriceBar;
     private IndicatorSeekBar gasLimitBar;
     private EditText receiverAddressEditText;
-    private NumberPicker fiatCurrencyPicker;
+//    private NumberPicker fiatCurrencyPicker;
     private TextView fiatEqualTextView;
 
     private WalletApplication application;
@@ -78,6 +78,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
     private int gasPrice;
     private int gasLimit = Config.GAS_LIMIT_CONTRACT_DEFAULT;
     private BigDecimal bigIntegerWeiFee;
+    private BigDecimal bigIntegerWeiAmount;
     private BigDecimal bigIntegerGweiAmount;
     private String currentCurrency = "USD";
 
@@ -100,7 +101,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
         receiverAddressEditText = (EditText) view.findViewById(R.id.fragment_paymon_wallet_transfer_receiver_address);
         amountEditText = (EditText) view.findViewById(R.id.fragment_paymon_wallet_transfer_amount);
-        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_paymon_wallet_transfer_fiat_currency);
+//        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_paymon_wallet_transfer_fiat_currency);
         balanceTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_balance);
         balanceEthTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_eth_balance);
         gasPriceBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_paymon_wallet_transfer_gas_price_slider);
@@ -120,20 +121,20 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
-        fiatCurrencyPicker.setMinValue(1);
-        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
-        fiatCurrencyPicker.setDisplayedValues(Config.fiatCurrencies);
-        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
-        fiatCurrencyPicker.setValue(2);
+//        fiatCurrencyPicker.setMinValue(1);
+//        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
+//        fiatCurrencyPicker.setDisplayedValues(Config.fiatCurrencies);
+//        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
+//        fiatCurrencyPicker.setValue(2);
 
         gasPriceBar.setIndicatorTextFormat(getString(R.string.current_gas_price) +": ${PROGRESS} GWEI");
         gasLimitBar.setIndicatorTextFormat(getString(R.string.current_gas_limit) + ": ${PROGRESS}");
-        fromAddressTextView.setText(application.getEthereumWallet().publicAddress);
+        fromAddressTextView.setText(application.getPaymonWallet().publicAddress);
 
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         payButton.setOnClickListener(v -> pay());
 
-        final String fromAddress = application.getEthereumWallet().publicAddress;
+        final String fromAddress = application.getPaymonWallet().publicAddress;
         fromAddressTextView.setText(fromAddress);
 
         final String localCurrency = Currency.getInstance(Locale.getDefault()).getCurrencyCode();
@@ -357,8 +358,10 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
         feeTextView.setText(String.format("%.9f ETH", ethFee));
 
-        if (pmntAmount != 0)
+        if (pmntAmount != 0){
             bigIntegerGweiAmount = new BigDecimal(pmntAmount).multiply(new BigDecimal(Math.pow(10, 9)));
+            bigIntegerWeiAmount = new BigDecimal(pmntAmount).multiply(new BigDecimal(Math.pow(10, 18)));
+        }
     }
 
     private void changeCurrency() {
@@ -369,7 +372,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
             if (exchangeRate.fiatCurrency.equals(currentCurrency))
                 currentExchangeRate = exchangeRate.value;
         }
-        final String fiatEqual = WalletApplication.convertEthereumToFiat(bigIntegerGweiAmount.toBigInteger(), currentExchangeRate);
+        final String fiatEqual = WalletApplication.convertPaymonToFiat(bigIntegerWeiAmount.toBigInteger(), currentExchangeRate);
         fiatEqualTextView.setText(String.format("%s %s", fiatEqual, currentCurrency));
     }
 
