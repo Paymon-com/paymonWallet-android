@@ -29,7 +29,7 @@ public class FragmentRegistrationEmail extends Fragment {
     private String login;
     private String password;
     private EditText emailEditText;
-    private EditText promocodeEditText;
+//    private EditText promocodeEditText;
     private TextView hintError;
     private DialogProgress dialogProgress;
 
@@ -61,7 +61,7 @@ public class FragmentRegistrationEmail extends Fragment {
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
         emailEditText = view.findViewById(R.id.registration_email_edit_text);
-        promocodeEditText = view.findViewById(R.id.registration_promocode_edit_text);
+//        promocodeEditText = view.findViewById(R.id.registration_promocode_edit_text);
         TextView agreementTextView = view.findViewById(R.id.registration_email_agreement_text_view);
         TextView privacyPolicyTextView = view.findViewById(R.id.registration_email_privacy_policy_text_view);
         hintError = view.findViewById(R.id.registration_email_hint_error_text_view);
@@ -116,7 +116,7 @@ public class FragmentRegistrationEmail extends Fragment {
             packet.walletKey = "0000000000000000000000000000000000";
             packet.walletBytes = new byte[32];
             packet.email = emailEditText.getText().toString().trim();
-            packet.inviteCode = promocodeEditText.getText().toString().trim().toLowerCase();
+//            packet.inviteCode = promocodeEditText.getText().toString().trim().toLowerCase();
 
             ApplicationLoader.applicationHandler.post(dialogProgress::show);
 

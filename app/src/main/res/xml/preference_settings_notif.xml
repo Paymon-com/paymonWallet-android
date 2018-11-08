@@ -19,26 +19,4 @@
             android:title="@string/settings_notifications" />
 
     </PreferenceCategory>
-    <PreferenceCategory
-        android:key="MESSAGES_OTHER_NOTIFICATION_CATEGORY"
-        android:title="@string/notif_other">
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="CLIENT_MESSAGES_NOTIFY_TRANSACTIONS_SWITCH"
-            android:title="@string/notif_transactions" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="CLIENT_MESSAGES_NOTIFY_FRIENDS_INVITES_SWITCH"
-            android:title="@string/friend_requests" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="CLIENT_MESSAGES_NOTIFY_GROUP_INVITES_SWITCH"
-            android:title="@string/group_invitations" />
-        <!--<SwitchPreference-->
-            <!--android:defaultValue="false"-->
-            <!--android:enabled="false"-->
-            <!--android:key="CLIENT_MESSAGES_NOTIFY_GAMES_SWITCH"-->
-            <!--android:title="@string/title_games" />-->
-
-    </PreferenceCategory>
 </PreferenceScreen>

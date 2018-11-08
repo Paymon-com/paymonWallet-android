@@ -80,13 +80,14 @@
 
         <ImageView
             android:id="@+id/group_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toTopOf="@+id/chats_item_last_msg_avatar"
             app:layout_constraintStart_toEndOf="@+id/chats_item_avatar"
             app:layout_constraintTop_toTopOf="@+id/chats_item_avatar"
-            app:srcCompat="@drawable/ic_group_identificator" />
+            app:layout_constraintVertical_chainStyle="packed"
+            app:srcCompat="@drawable/group" />
 
         <TextView
             android:id="@+id/chats_item_name"
@@ -131,6 +132,16 @@
             app:layout_constraintBottom_toBottomOf="@+id/chats_item_avatar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/chats_item_avatar" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@color/black_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 </com.daimajia.swipe.SwipeLayout>

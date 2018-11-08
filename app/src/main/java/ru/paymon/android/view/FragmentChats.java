@@ -81,7 +81,6 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         chatsAllRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         chatsAllRecyclerView.setLayoutManager(linearLayoutManager);
-        chatsAllRecyclerView.addItemDecoration(new DividerItemDecoration(chatsAllRecyclerView.getContext(), linearLayoutManager.getOrientation()));
 
         ItemClickSupport.addTo(chatsAllRecyclerView).setOnItemClickListener((recyclerView, position, v) -> {
             if (chatsAdapter.getCurrentList() == null) return;
