@@ -13,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 
 import androidx.navigation.Navigation;
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.ChatsAdapter;
@@ -212,7 +214,6 @@ public class FragmentChats extends Fragment implements SwipeRefreshLayout.OnRefr
         Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.item_animation_fall_down);
         animation.setDuration(500);
         chatsAllRecyclerView.startAnimation(animation);
-
 
         allChatsItemLiveData.observe(getActivity(), pagedList -> {
             chatsAdapter.submitList(pagedList);

@@ -30,14 +30,14 @@ public class GroupsManager {
     }
 
     public void putGroup(RPC.Group group) {
-        Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().groupDao().insert(group));
+        AppDatabase.dbQueue.postRunnable(() -> {
+            AppDatabase.getDatabase().groupDao().insert(group);
+        });
     }
 
     public void putGroups(List<RPC.Group> groups) {
-        Executors.newSingleThreadExecutor().submit(() -> {
-            for (RPC.Group group : groups)
-                AppDatabase.getDatabase().groupDao().insert(group);
-        });
+        for (RPC.Group group : groups)
+            AppDatabase.getDatabase().groupDao().insert(group);
     }
 
     public RPC.Group getGroup(int gid) {

@@ -159,92 +159,96 @@ public class ConnectorService extends Service implements NotificationManager.ILi
     }
 
     private void showNotification(RPC.Message message) {
-        if (User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) return;
-
-        final boolean isGroup = message.to_peer.user_id == 0;
-
-        if (!isGroup && message.from_id == MessagesManager.getInstance().currentChatID)
-            return;
-
-        if (isGroup && message.to_peer.group_id == MessagesManager.getInstance().currentChatID)
-            return;
-
-        final int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
-
-        final Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(INTENT_ACTION_OPEN_CHAT, true);
-        intent.putExtra(IS_GROUP, isGroup);
-        intent.putExtra(CHAT_ID_KEY, cid);
-        final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
-
-        String text = "";
-        if (message instanceof RPC.PM_message) {
-            text = message.text;
-        } else if (message instanceof RPC.PM_messageItem) {
-            switch (message.itemType) {
-                case PHOTO:
-                    text = "Photo";
-                    break;
-                case STICKER:
-                    text = "Sticker";
-                    break;
-                case ACTION:
-                    text = "Action";
-                    break;
-                default:
-                    text = "Item";
-            }
-        }
-
-        final RPC.UserObject user = UsersManager.getInstance().getUser(message.from_id);
-
-        Bitmap bmp;
         try {
-            bmp = Picasso.get().load(user.photoURL.url).get();
+            if (User.CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY) return;
+
+            final boolean isGroup = message.to_peer.user_id == 0;
+
+            if (!isGroup && message.from_id == MessagesManager.getInstance().currentChatID)
+                return;
+
+            if (isGroup && message.to_peer.group_id == MessagesManager.getInstance().currentChatID)
+                return;
+
+            final int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
+
+            final Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.putExtra(INTENT_ACTION_OPEN_CHAT, true);
+            intent.putExtra(IS_GROUP, isGroup);
+            intent.putExtra(CHAT_ID_KEY, cid);
+            final PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+
+            String text = "";
+            if (message instanceof RPC.PM_message) {
+                text = message.text;
+            } else if (message instanceof RPC.PM_messageItem) {
+                switch (message.itemType) {
+                    case PHOTO:
+                        text = "Photo";
+                        break;
+                    case STICKER:
+                        text = "Sticker";
+                        break;
+                    case ACTION:
+                        text = "Action";
+                        break;
+                    default:
+                        text = "Item";
+                }
+            }
+
+            final RPC.UserObject user = UsersManager.getInstance().getUser(message.from_id);
+
+            Bitmap bmp;
+            try {
+                bmp = Picasso.get().load(user.photoURL.url).get();
+            } catch (Exception e) {
+                bmp = BitmapFactory.decodeResource(getResources(), R.drawable.profile_photo_none);
+            }
+
+            final Notification.Builder builder = new Notification.Builder(this)
+                    .setAutoCancel(true)
+                    .setWhen(System.currentTimeMillis())
+                    .setTicker(getString(R.string.message))
+                    .setContentText(text)
+                    .setLargeIcon(bmp);
+
+            if (!isGroup) {
+                final String title = Utils.formatUserName(user);
+
+                builder.setContentIntent(pendingIntent)
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setContentTitle(title);
+            } else {
+                final RPC.Group group = GroupsManager.getInstance().getGroup(message.to_peer.group_id);
+                final String title = GroupsManager.getInstance().getGroup(group.id).title;
+
+                builder.setContentIntent(pendingIntent)
+                        .setSmallIcon(R.drawable.ic_notification)
+                        .setContentTitle(title);
+            }
+
+            final android.app.NotificationManager notificationManager = (android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION)
+                    ((android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).getNotificationChannel(Config.MESSAGES_NOTIFICATION_CHANNEL_ID).setVibrationPattern(new long[]{100, 200, 100, 300});
+                else
+                    ((android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).getNotificationChannel(Config.MESSAGES_NOTIFICATION_CHANNEL_ID).setVibrationPattern(null);
+
+                builder.setChannelId(Config.MESSAGES_NOTIFICATION_CHANNEL_ID);
+            } else {
+                if (User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION)
+                    builder.setVibrate(new long[]{100, 200, 100, 300});
+                Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                builder.setSound(soundUri);
+            }
+
+            notificationManager.notify(message.from_id, builder.build());
         } catch (Exception e) {
-            bmp = BitmapFactory.decodeResource(getResources(), R.drawable.profile_photo_none);
+            e.printStackTrace();
         }
-
-        final Notification.Builder builder = new Notification.Builder(this)
-                .setAutoCancel(true)
-                .setWhen(System.currentTimeMillis())
-                .setTicker(getString(R.string.message))
-                .setContentText(text)
-                .setLargeIcon(bmp);
-
-        if (!isGroup) {
-            final String title = Utils.formatUserName(user);
-
-            builder.setContentIntent(pendingIntent)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setContentTitle(title);
-        } else {
-            final RPC.Group group = GroupsManager.getInstance().getGroup(message.to_peer.group_id);
-            final String title = GroupsManager.getInstance().getGroup(group.id).title;
-
-            builder.setContentIntent(pendingIntent)
-                    .setSmallIcon(R.drawable.ic_notification)
-                    .setContentTitle(title);
-        }
-
-        final android.app.NotificationManager notificationManager = (android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            if (User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION)
-                ((android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).getNotificationChannel(Config.MESSAGES_NOTIFICATION_CHANNEL_ID).setVibrationPattern(new long[]{100, 200, 100, 300});
-            else
-                ((android.app.NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE)).getNotificationChannel(Config.MESSAGES_NOTIFICATION_CHANNEL_ID).setVibrationPattern(null);
-
-            builder.setChannelId(Config.MESSAGES_NOTIFICATION_CHANNEL_ID);
-        } else {
-            if (User.CLIENT_MESSAGES_NOTIFY_IS_VIBRATION)
-                builder.setVibrate(new long[]{100, 200, 100, 300});
-            Uri soundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-            builder.setSound(soundUri);
-        }
-
-        notificationManager.notify(message.from_id, builder.build());
     }
 
     public long sendRequest(final Packet packet) {

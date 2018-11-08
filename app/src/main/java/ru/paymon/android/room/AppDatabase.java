@@ -5,13 +5,19 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.RPC;
+import ru.paymon.android.utils.DispatchQueue;
 
 @Database(entities = {RPC.Message.class, ChatsItem.class, RPC.UserObject.class, RPC.Group.class,  ExchangeRate.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
+    public static DispatchQueue dbQueue = new DispatchQueue("dbQueue");
     private static AppDatabase INSTANCE;
 
     public static AppDatabase getDatabase() {

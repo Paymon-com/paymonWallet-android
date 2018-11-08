@@ -1,6 +1,7 @@
 package ru.paymon.android;
 
 import android.arch.paging.DataSource;
+import android.util.Log;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -39,7 +40,7 @@ public class MessagesManager {
 
 
     public void putMessage(final RPC.Message message) {
-        Executors.newSingleThreadExecutor().submit(() -> {
+        AppDatabase.dbQueue.postRunnable(() -> {
             AppDatabase.getDatabase().chatMessageDao().insert(message);
             boolean isGroup = !(message.to_peer instanceof RPC.PM_peerUser);
 
@@ -82,7 +83,6 @@ public class MessagesManager {
                 final RPC.UserObject creator = UsersManager.getInstance().getUser(group.creatorID);
                 if (creator == null) return;
                 final String text = message.action instanceof RPC.PM_messageActionGroupCreate ? String.format("%s %s \"%s\"", Utils.formatUserName(creator), ApplicationLoader.applicationContext.getString(R.string.created_group), group.title) : message.text;
-
                 if (group == null) {
 //                final RPC.PM_getGroupInfo groupInfo = new RPC.PM_getGroupInfo(gid);
 //                NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
@@ -103,23 +103,19 @@ public class MessagesManager {
     }
 
     public void putMessages(List<RPC.Message> messageList) {
-        Executors.newSingleThreadExecutor().submit(() -> {
-            for (RPC.Message message : messageList)
-                putMessage(message);
-        });
+        for (RPC.Message message : messageList)
+            putMessage(message);
     }
 
     public void deleteMessage(RPC.Message message) {
-        Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().chatMessageDao().delete(message));
+        AppDatabase.dbQueue.postRunnable(()-> AppDatabase.getDatabase().chatMessageDao().delete(message));
     }
 
     public void deleteMessages(List<Long> ids) {
-        Executors.newSingleThreadExecutor().submit(() -> {
-            for (long id : ids) {
-                final RPC.Message message = AppDatabase.getDatabase().chatMessageDao().getMessageByMessageId(id);
-                deleteMessage(message);
-            }
-        });
+        for (long id : ids) {
+            final RPC.Message message = AppDatabase.getDatabase().chatMessageDao().getMessageByMessageId(id);
+            deleteMessage(message);
+        }
     }
 
     public List<RPC.Message> getMessagesByChatIDList(int cid){

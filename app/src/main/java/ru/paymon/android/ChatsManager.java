@@ -27,15 +27,15 @@ public class ChatsManager {
     }
 
     public void putChat(ChatsItem chatsItem) {
-        Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().chatDao().insert(chatsItem));
+        AppDatabase.dbQueue.postRunnable(() -> AppDatabase.getDatabase().chatDao().insert(chatsItem));
     }
 
     public void removeChat(ChatsItem chatsItem) {
-        Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().chatDao().delete(chatsItem));
+        AppDatabase.dbQueue.postRunnable(() -> AppDatabase.getDatabase().chatDao().delete(chatsItem));
     }
 
-    public void removeAllChats(){
-        Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().chatDao().deleteAll());
+    public void removeAllChats() {
+        AppDatabase.dbQueue.postRunnable(() -> AppDatabase.getDatabase().chatDao().deleteAll());
     }
 
     public DataSource.Factory<Integer, ChatsItem> getChats() {

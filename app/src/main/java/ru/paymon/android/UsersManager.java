@@ -26,7 +26,7 @@ public class UsersManager {
 
 
     public void putUser(RPC.UserObject user) {
-        Executors.newSingleThreadExecutor().submit(() -> {
+        AppDatabase.dbQueue.postRunnable(() -> {
             if (user instanceof RPC.PM_userFull) {
                 AppDatabase.getDatabase().userDao().insert(user);
             } else if (user instanceof RPC.PM_user) {
@@ -45,12 +45,9 @@ public class UsersManager {
         });
     }
 
-    public void putUsers(List<RPC.UserObject> userObjects){
-        Executors.newSingleThreadExecutor().submit(() -> {
-            for (RPC.UserObject user : userObjects) {
-                putUser(user);
-            }
-        });
+    public void putUsers(List<RPC.UserObject> userObjects) {
+        for (RPC.UserObject user : userObjects)
+            putUser(user);
     }
 
     public RPC.UserObject getUser(int uid) {

@@ -9,6 +9,11 @@ import android.arch.paging.PagedList;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.ChatsManager;
 import ru.paymon.android.GroupsManager;
