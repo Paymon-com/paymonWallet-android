@@ -4,11 +4,14 @@ import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import com.daimajia.swipe.SwipeLayout;
 
 import ru.paymon.android.ChatsManager;
 import ru.paymon.android.components.CircularImageView;
@@ -16,6 +19,8 @@ import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.models.ChatsItem;
+import ru.paymon.android.net.NetworkManager;
+import ru.paymon.android.net.RPC;
 import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
 
@@ -79,6 +84,7 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
         private final TextView time;
         private final TextView msg;
         private final TextView name;
+        private final SwipeLayout swipe;
 
         ChatsViewHolder(View itemView) {
             super(itemView);
@@ -86,31 +92,38 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time = (TextView) itemView.findViewById(R.id.chats_item_time);
             msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
             name = (TextView) itemView.findViewById(R.id.chats_item_name);
+            swipe = (SwipeLayout) itemView.findViewById(R.id.swipe);
         }
 
         @Override
         void bind(ChatsItem chatsItem) {
-            final String nameString = chatsItem.name;
-            final String lastMessageText = chatsItem.lastMessageText;
+            final String nameString = chatsItem.name != null ? chatsItem.name : "";
+            final String lastMessageText = chatsItem.lastMessageText != null ? chatsItem.lastMessageText : "";
             final String avatarPhotoURL = chatsItem.photoURL.url;
 
             if (!avatarPhotoURL.isEmpty())
                 Utils.loadPhoto(avatarPhotoURL, avatar);
 
-            if (nameString != null && !nameString.isEmpty())
-                name.setText(nameString);
-            else
-                name.setText("");
-
-            if (lastMessageText != null && !lastMessageText.isEmpty())
-                msg.setText(lastMessageText);
-            else
-                msg.setText("");
-
+            name.setText(nameString);
+            msg.setText(lastMessageText);
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-                ChatsManager.getInstance().removeChat(chatsItem);
+                Utils.netQueue.postRunnable(() -> {
+                    final RPC.PM_deleteChat groupInfo = new RPC.PM_deleteChat(new RPC.PM_peerUser(chatsItem.chatID));
+                    NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
+                        if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
+                            ApplicationLoader.applicationHandler.post(() -> {
+                                swipe.close(true);
+                            });
+                            return; //TODO:не удалось и закрытие свайпа
+                        }
+
+                        if (response instanceof RPC.PM_boolTrue) {
+                            ChatsManager.getInstance().removeChat(chatsItem);
+                        }
+                    });
+                });
             });
         }
     }
@@ -121,6 +134,7 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
         private final TextView time;
         private final TextView msg;
         private final TextView name;
+        private final SwipeLayout swipe;
 
         GroupChatsViewHolder(View itemView) {
             super(itemView);
@@ -129,14 +143,14 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time = (TextView) itemView.findViewById(R.id.chats_item_time);
             msg = (TextView) itemView.findViewById(R.id.chats_item_msg);
             name = (TextView) itemView.findViewById(R.id.chats_item_name);
+            swipe = (SwipeLayout) itemView.findViewById(R.id.swipe);
         }
 
         @Override
         void bind(ChatsItem chatsItem) {
-            final String nameString = chatsItem.name;
-            final String lastMessageText = chatsItem.lastMessageText;
+            final String nameString = chatsItem.name != null ? chatsItem.name : "";
+            final String lastMessageText = chatsItem.lastMessageText != null ? chatsItem.lastMessageText : "";
             final String avatarPhotoURL = chatsItem.photoURL.url;
-
             final String lastMessagePhotoURL = chatsItem.lastMsgPhotoURL == null ? "" : chatsItem.lastMsgPhotoURL.url;
 
             if (!avatarPhotoURL.isEmpty())
@@ -145,20 +159,26 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             if (!lastMessagePhotoURL.isEmpty())
                 Utils.loadPhoto(lastMessagePhotoURL, lastMshPhoto);
 
-            if (nameString != null && !nameString.isEmpty())
-                name.setText(nameString);
-            else
-                name.setText("");
-
-            if (lastMessageText != null && !lastMessageText.isEmpty())
-                msg.setText(lastMessageText);
-            else
-                msg.setText("");
-
+            name.setText(nameString);
+            msg.setText(lastMessageText);
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-                ChatsManager.getInstance().removeChat(chatsItem);
+                Utils.netQueue.postRunnable(() -> {
+                    final RPC.PM_deleteChat deleteChat = new RPC.PM_deleteChat(new RPC.PM_peerGroup(chatsItem.chatID));
+                    NetworkManager.getInstance().sendRequest(deleteChat, (response, error) -> {
+                        if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
+                            ApplicationLoader.applicationHandler.post(() -> {
+                                swipe.close(true);
+                            });
+                            return; //TODO:не удалось и закрытие свайпа
+                        }
+
+                        if (response instanceof RPC.PM_boolTrue) {
+                            ChatsManager.getInstance().removeChat(chatsItem);
+                        }
+                    });
+                });
             });
         }
     }
