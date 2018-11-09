@@ -191,23 +191,20 @@ public class ChatsManager {
                 freshChats.add(chatsItem);
             }
 
-            if (cachedChats.size() > 0) {
-                for (final ChatsItem cachedChatsItem : cachedChats) {
-                    boolean found = false;
-                    for (final ChatsItem freshChatItem : freshChats) {
-                        if (cachedChatsItem.id == freshChatItem.id) {
-                            putChat(freshChatItem);
-                            found = true;
-                            break;
-                        }
+            for (final ChatsItem cachedChatsItem : cachedChats) {
+                boolean found = false;
+                for (final ChatsItem freshChatItem : freshChats) {
+                    if (cachedChatsItem.id == freshChatItem.id) {
+                        found = true;
+                        break;
                     }
-                    if (!found)
-                        removeChat(cachedChatsItem);
                 }
-            }else{
-                for (final ChatsItem freshChatItem : freshChats)
-                    putChat(freshChatItem);
+                if (!found)
+                    removeChat(cachedChatsItem);
             }
+
+            for (final ChatsItem freshChatItem : freshChats)
+                putChat(freshChatItem);
         });
     }
 }
