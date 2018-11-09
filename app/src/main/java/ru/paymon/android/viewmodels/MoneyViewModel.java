@@ -249,8 +249,8 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
 
                 if (exchangeRatesItems.size() > 0) {
 //                    Executors.newSingleThreadExecutor().submit(() -> {
-                        AppDatabase.getDatabase().exchangeRatesDao().deleteAll();
-                        AppDatabase.getDatabase().exchangeRatesDao().insertList(exchangeRatesItems);
+                    AppDatabase.getDatabase().exchangeRatesDao().deleteAll();
+                    AppDatabase.getDatabase().exchangeRatesDao().insertList(exchangeRatesItems);
 //                    });
                     exchangeRatesData.postValue(exchangeRatesItems);
                 }

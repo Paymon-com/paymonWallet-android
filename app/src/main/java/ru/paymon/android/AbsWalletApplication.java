@@ -36,7 +36,7 @@ public abstract class AbsWalletApplication extends Application {
 
     public abstract Wallet getBitcoinWallet();
     public abstract RestoreStatus restoreBitcoinWallet(final File file, final String password);
-    public abstract boolean backupBitcoinWallet(final String path);
+    public abstract boolean backupBitcoinWallet(final String path, final String password);
     public abstract Coin getBitcoinBalance(final Wallet.BalanceType balanceType);
     public abstract boolean deleteBitcoinWallet();
     public abstract String getBitcoinPublicAddress();
@@ -47,14 +47,14 @@ public abstract class AbsWalletApplication extends Application {
     public abstract boolean createEthereumWallet(final String password);
     protected abstract EthereumWallet getEthereumWallet(final String password);
     public abstract RestoreStatus restoreEthereumWallet(final File file, final String password);
-    public abstract boolean backupEthereumWallet(final String path);
+    public abstract boolean backupEthereumWallet(final String path, final String password);
     public abstract BigInteger getEthereumBalance();
     public abstract boolean deleteEthereumWallet();
 
     public abstract boolean createPaymonWallet(final String password);
     protected abstract PaymonWallet getPaymonWallet(final String password);
     public abstract RestoreStatus restorePaymonWallet(final File file, final String password);
-    public abstract boolean backupPaymonWallet(final String path);
+    public abstract boolean backupPaymonWallet(final String path, final String password);
     public abstract BigInteger getPaymonBalance();
     public abstract BigInteger getPaymonEthBalance();
     public abstract boolean deletePaymonWallet();

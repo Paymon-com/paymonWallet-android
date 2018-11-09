@@ -627,17 +627,6 @@ public class RPC {
         }
     }
 
-    public static class PM_resendEmail extends Packet {
-        public static int svuid = 682727075;
-
-        public void readParams(SerializableData stream, boolean exception) {
-        }
-
-        public void serializeToStream(SerializableData stream) {
-            stream.writeInt32(svuid);
-        }
-    }
-
     @Entity
     public static class Message extends Packet implements Parcelable {
         public Message() {
@@ -2242,20 +2231,17 @@ public class RPC {
         }
     }
 
-    public static class PM_checkEmailConfirmation extends Packet {
-        public static int svuid = 512435272;
+    public static class PM_resendEmail extends Packet {
+        public static int svuid = 682727075;
 
-        public String login;
         public String newEmail;
 
         public void readParams(SerializableData stream, boolean exception) {
-            login = stream.readString(exception);
             newEmail = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
             stream.writeInt32(svuid);
-            stream.writeString(login);
             stream.writeString(newEmail);
         }
     }

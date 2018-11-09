@@ -1,5 +1,6 @@
 package ru.paymon.android.view;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -9,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextThemeWrapper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +19,24 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.components.DialogProgress;
+import ru.paymon.android.firebase.FcmService;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
+import static ru.paymon.android.Config.TAG;
 import static ru.paymon.android.utils.Utils.emailCorrect;
 
-public class FragmentRegistrationEmailConfirmation extends Fragment {
+public class FragmentRegistrationEmailConfirmation extends Fragment implements NotificationManager.IListener {
     private boolean isSendingAvailable = true;
     private EditText email;
     private TextView hintError;
@@ -110,12 +117,14 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.userAuthorized);
         email.setText(User.currentUser.email);
     }
 
     @Override
     public void onPause() {
         super.onPause();
+        NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.userAuthorized);
         Utils.hideKeyboard(getActivity().getWindow().getDecorView().getRootView());
     }
 
@@ -124,56 +133,55 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
 
         if (isSendingAvailable) {
             isSendingAvailable = false;
+            NetworkManager.getInstance().reconnect();
+            timer.start();
+        }
+    }
 
-            Utils.netQueue.postRunnable(() -> {
+
+    @Override
+    public void didReceivedNotification(NotificationManager.NotificationEvent event, Object... args) {
+        if (event == NotificationManager.NotificationEvent.userAuthorized) {
+            if (User.currentUser.confirmed) {
+                NavOptions navOptions = new NavOptions.Builder().setClearTask(true).build();
+                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.mainActivity, null, navOptions);
+            } else {
                 ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
-                RPC.PM_checkEmailConfirmation checkEmailRequest = new RPC.PM_checkEmailConfirmation();
-                checkEmailRequest.login = User.currentUser.login;
+                RPC.PM_resendEmail checkEmailRequest = new RPC.PM_resendEmail();
                 checkEmailRequest.newEmail = email.getText().toString();
 
-                final long requestID = NetworkManager.getInstance().sendRequest(checkEmailRequest, (response, error) -> {
-                    if (error != null) {
+                final long requestID = NetworkManager.getInstance().sendRequest(checkEmailRequest, (r, e) -> {
+                    if (e != null) {
                         ApplicationLoader.applicationHandler.post(() -> {
                             if (dialogProgress != null && dialogProgress.isShowing())
                                 dialogProgress.cancel();
                         });
-                        switch (error.code) {
-                            case 1:
-                                ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.login_or_email_is_empty));
-                                break;
-                            case 2:
-                                ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.error_in_email));
-                                break;
-                            case 3:
-                                ApplicationLoader.applicationHandler.post(() -> hintError.setText(R.string.registration_email_used));
-                                break;
-                        }
                         return;
                     }
 
-                    if (response instanceof RPC.PM_boolFalse) {
+                    if (r instanceof RPC.PM_boolFalse) {
                         ApplicationLoader.applicationHandler.post(() -> {
                             hintError.setText("");
                             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                     .setMessage(getString(R.string.confirmation_code_was_sent))
-                                    .setCancelable(false);
+                                    .setCancelable(true)
+                                    .setPositiveButton(getString(R.string.ok), (DialogInterface dialog, int which) -> {});
                             AlertDialog alertDialog = builder.create();
                             alertDialog.show();
                         });
                     }
 
-                    if (response instanceof RPC.PM_boolTrue) {
-                        User.currentUser.confirmed = true;
-                        User.saveConfig();
-
-//                            ApplicationLoader.applicationHandler.post(() -> {
-//                                Intent mainActivityIntent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
-//                                mainActivityIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-//                                startActivity(mainActivityIntent);
-//                            });
-                        NavOptions navOptions = new NavOptions.Builder().setClearTask(true).build();
-                        Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.mainActivity, null, navOptions);
+                    if (r instanceof RPC.PM_boolTrue) {
+                        ApplicationLoader.applicationHandler.post(() -> {
+                            hintError.setText("");
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                    .setMessage(getString(R.string.confirmation_code_was_sent))
+                                    .setCancelable(true)
+                                    .setPositiveButton(getString(R.string.ok), (DialogInterface dialog, int which) -> {});
+                            AlertDialog alertDialog = builder.create();
+                            alertDialog.show();
+                        });
                     }
 
                     ApplicationLoader.applicationHandler.post(() -> {
@@ -186,9 +194,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment {
                     dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false));
                     timer.start();
                 });
-            });
+            }
         }
     }
-
-
 }

@@ -59,9 +59,21 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_restore_wallet, null);
 
+        switch (currency) {
+            case BTC_CURRENCY_VALUE:
+                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
+                break;
+            case ETH_CURRENCY_VALUE:
+                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
+                break;
+            case PMNT_CURRENCY_VALUE:
+                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
+                break;
+        }
+
+        final Button openExplorerButton = (Button) view.findViewById(R.id.dialog_fragment_restore_wallet_from_explorer_button);
+        final Button restoreButton = (Button) view.findViewById(R.id.dialog_fragment_restore_wallet_import_button);
         final EditText passwordEditText = (EditText) view.findViewById(R.id.dialog_fragment_restore_wallet_pass);
-        final ConstraintLayout openExplorerButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_restore_wallet_from_explorer_button);
-        final ConstraintLayout restoreButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_restore_wallet_import_button);
         final TextView path = (TextView) view.findViewById(R.id.dialog_fragment_restore_wallet_path);
         final CheckBox showPass = (CheckBox) view.findViewById(R.id.dialog_fragment_restore_wallet_check);
 
@@ -74,8 +86,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
         path.setVisibility(View.GONE);
 
         openExplorerButton.setOnClickListener((view1) -> {
-            AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
-//                    .setFilter(".*\\.json")
+            AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(getContext())
                     .setOpenDialogListener((fileName) -> {
                         filePath[0] = fileName;
                         path.setVisibility(View.VISIBLE);
