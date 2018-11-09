@@ -56,20 +56,8 @@ public class DialogFragmentBackupWallet extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_backup_wallet, null);
 
-        switch (currency) {
-            case BTC_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
-                break;
-            case ETH_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
-                break;
-            case PMNT_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
-                break;
-        }
-
-        final Button openExplorerButton = (Button) view.findViewById(R.id.dialog_fragment_backup_wallet_from_explorer_button);
-        final Button backupButton = (Button) view.findViewById(R.id.dialog_fragment_backup_wallet_import_button);
+        final ConstraintLayout openExplorerButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_backup_wallet_from_explorer_button);
+        final ConstraintLayout backupButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_backup_wallet_import_button);
         final EditText passwordEditText = (EditText) view.findViewById(R.id.dialog_fragment_backup_wallet_pass);
         final TextView path = (TextView) view.findViewById(R.id.dialog_fragment_backup_wallet_path);
         final CheckBox showPass = (CheckBox) view.findViewById(R.id.dialog_fragment_backup_wallet_check);
