@@ -3,6 +3,7 @@ package ru.paymon.android.view.money;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -51,20 +52,9 @@ public class DialogFragmentCreateWallet extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_create_wallet, null);
 
-        switch (currency) {
-            case BTC_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
-                break;
-            case ETH_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
-                break;
-            case PMNT_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
-                break;
-        }
 
         EditText passwordEditText = (EditText) view.findViewById(R.id.dialog_fragment_create_wallet_pass);
-        Button createButton = (Button) view.findViewById(R.id.dialog_fragment_create_wallet_create_button);
+        ConstraintLayout createButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_create_wallet_create_button);
 
         createButton.setOnClickListener((view1) -> {
             final String password = passwordEditText.getText().toString();

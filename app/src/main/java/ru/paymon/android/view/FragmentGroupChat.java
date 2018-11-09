@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -109,7 +110,7 @@ public class FragmentGroupChat extends AbsFragmentChat {
                 for (final RPC.Message message:selectedMessages) {
                     checkedMessageIDs.add(message.id);
                 }
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                         .setTitle(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
                         .setCancelable(false)
                         .setNegativeButton(getContext().getString(R.string.button_cancel), (dialogInterface, i) -> {

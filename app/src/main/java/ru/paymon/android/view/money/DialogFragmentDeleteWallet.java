@@ -3,6 +3,9 @@ package ru.paymon.android.view.money;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -49,15 +52,14 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_with_edit, null);
 
         TextView hint = (TextView) view.findViewById(R.id.dialog_fragment_with_edit_title);
-        Button okButton = (Button) view.findViewById(R.id.dialog_fragment_with_edit_ok);
-        Button cancelButton = (Button) view.findViewById(R.id.dialog_fragment_with_edit_cancel);
+        ConstraintLayout okButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_with_edit_ok);
+        ConstraintLayout cancelButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_with_edit_cancel);
         EditText editText = (EditText) view.findViewById(R.id.dialog_fragment_with_edit_edit_text);
 
         hint.setText(R.string.delete_wallet_dialog_hint);
 
         switch (currency) {
             case ETH_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
 
                 okButton.setOnClickListener(view1 -> {
                     final String password = editText.getText().toString().trim();
@@ -82,7 +84,6 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                 });
                 break;
             case BTC_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
 
                 okButton.setOnClickListener(view1 -> {
                     final String password = editText.getText().toString().trim();
@@ -106,7 +107,6 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                 });
                 break;
             case PMNT_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
 
                 okButton.setOnClickListener(view1 -> {
                     final String password = editText.getText().toString().trim();

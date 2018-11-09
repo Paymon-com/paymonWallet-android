@@ -38,7 +38,7 @@
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
         android:background="@color/colorPrimary"
-        android:src="@drawable/ic_cup"
+        local:srcCompat="@drawable/garbage"
         android:textColor="@color/white" />
 
     <ImageButton
@@ -49,6 +49,6 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@color/colorPrimary"
-        android:src="@drawable/ic_copy"
+        local:srcCompat="@drawable/copy"
         android:textColor="@color/white" />
 </LinearLayout>

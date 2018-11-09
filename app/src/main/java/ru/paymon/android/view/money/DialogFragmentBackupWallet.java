@@ -3,8 +3,10 @@ package ru.paymon.android.view.money;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.ContextCompat;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,13 +60,13 @@ public class DialogFragmentBackupWallet extends DialogFragment {
                 break;
         }
 
-        final Button openExplorerButton = (Button) view.findViewById(R.id.dialog_fragment_backup_wallet_from_explorer_button);
-        final Button backupButton = (Button) view.findViewById(R.id.dialog_fragment_backup_wallet_import_button);
+        final ConstraintLayout openExplorerButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_backup_wallet_from_explorer_button);
+        final ConstraintLayout backupButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_backup_wallet_import_button);
 
         final String[] paths = new String[1];
 
         openExplorerButton.setOnClickListener((view1) -> {
-            AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(getContext())
+            AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setOnlyFoldersFilter()
                     .setOpenDialogListener((fileName) -> {
                         paths[0] = fileName;

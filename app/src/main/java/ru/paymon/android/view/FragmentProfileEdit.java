@@ -9,6 +9,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -165,7 +166,7 @@ public class FragmentProfileEdit extends Fragment {
                             if (dialogProgress != null && dialogProgress.isShowing())
                                 dialogProgress.cancel();
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                     .setMessage(getString(R.string.profile_edit_failed))
                                     .setCancelable(false);
                             AlertDialog alertDialog = builder.create();
@@ -179,7 +180,7 @@ public class FragmentProfileEdit extends Fragment {
                         User.saveConfig();
 
                         ApplicationLoader.applicationHandler.post(() -> {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                     .setMessage(getString(R.string.profile_edit_success))
                                     .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                                     })
@@ -226,7 +227,7 @@ public class FragmentProfileEdit extends Fragment {
                                 if (dialogProgress != null && dialogProgress.isShowing())
                                     dialogProgress.cancel();
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                         .setMessage(R.string.photo_upload_failed)
                                         .setCancelable(true);
                                 AlertDialog alertDialog = builder.create();

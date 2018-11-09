@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -114,7 +115,7 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
                     if (dialogProgress != null && dialogProgress.isShowing())
                         dialogProgress.dismiss();
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                             .setMessage(getString(R.string.confirmation_code_was_sent))
                             .setCancelable(false)
                             .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {

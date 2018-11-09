@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
     android:scrollbars="none">
 
     <android.support.constraint.ConstraintLayout
@@ -11,22 +12,135 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/dialog_fragment_restore_wallet_from_explorer_button"
-            android:layout_width="300dp"
-            android:layout_height="35dp"
+        <ImageView
+            android:id="@+id/imageView42"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/background_button_wallet_view_white"
-            android:fontFamily="sans-serif-light"
-            android:paddingLeft="8dp"
-            android:paddingRight="8dp"
-            android:text="@string/download_from_explorer"
-            android:textColor="@color/white"
+            android:src="@color/black_light"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_from_explorer_button" />
+
+        <ImageView
+            android:id="@+id/imageView41"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:src="@color/black_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_hint3" />
+
+        <!--<Button-->
+            <!--android:id="@+id/dialog_fragment_restore_wallet_from_explorer_button"-->
+            <!--android:layout_width="300dp"-->
+            <!--android:layout_height="35dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:background="@drawable/background_button_wallet_view_white"-->
+            <!--android:fontFamily="sans-serif-light"-->
+            <!--android:paddingLeft="8dp"-->
+            <!--android:paddingRight="8dp"-->
+            <!--android:text="@string/download_from_explorer"-->
+            <!--android:textColor="@color/white"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.0"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--tools:layout_editor_absoluteY="103dp" />-->
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/dialog_fragment_restore_wallet_from_explorer_button"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/download_from_explorer"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView36"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView36"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView23"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/download_from_explorer" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/dialog_fragment_restore_wallet_import_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView41">
+
+
+            <TextView
+                android:id="@+id/textView24"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/import_keys_dialog_button_import"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/imageView40"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/imageView40"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textView24"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/restore" />
+
+        </android.support.constraint.ConstraintLayout>
 
         <TextView
             android:id="@+id/dialog_fragment_restore_wallet_path"
@@ -35,12 +149,13 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/roboto_thin"
             android:gravity="center"
             android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_from_explorer_button" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView42" />
 
         <TextView
             android:id="@+id/dialog_fragment_restore_wallet_hint1"
@@ -49,12 +164,13 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/roboto_thin"
             android:text="@string/restor_from_backup_password_title"
+            android:textColor="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_pass" />
+            app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
 
         <CheckBox
             android:id="@+id/dialog_fragment_restore_wallet_check"
@@ -83,7 +199,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/roboto_thin"
+            android:textColor="@color/white"
             android:text="@string/restore_wallet_dialog_replace_warning"
             android:textSize="@dimen/font_size_small"
             app:layout_constraintEnd_toEndOf="parent"
@@ -97,52 +214,69 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="sans-serif-light"
+            android:fontFamily="@font/roboto_thin"
+            android:textColor="@color/white"
             android:text="@string/import_keys_dialog_warning"
             android:textSize="@dimen/font_size_small"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_hint2" />
 
-        <FrameLayout
-            android:id="@+id/frame"
+        <!--<Button-->
+            <!--android:id="@+id/dialog_fragment_restore_wallet_import_button"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginEnd="16dp"-->
+            <!--android:background="@android:color/transparent"-->
+            <!--android:fontFamily="sans-serif-light"-->
+            <!--android:text="@string/import_keys_dialog_button_import"-->
+            <!--android:textColor="@color/white"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--tools:layout_editor_absoluteY="522dp" />-->
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/textInputLayout"
             android:layout_width="0dp"
-            android:layout_height="1px"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:background="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_hint3">
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_path">
 
-        </FrameLayout>
+            <EditText
+                android:id="@+id/dialog_fragment_restore_wallet_pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="16dp"
+                android:background="@color/bg_dialog_title"
+                android:hint="Введите пароль"
+                android:inputType="textPassword"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:singleLine="true"
+                android:textAllCaps="true"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </android.support.design.widget.TextInputLayout>
 
-        <Button
-            android:id="@+id/dialog_fragment_restore_wallet_import_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:background="@android:color/transparent"
-            android:fontFamily="sans-serif-light"
-            android:text="@string/import_keys_dialog_button_import"
-            android:textColor="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/frame" />
-
-        <EditText
-            android:id="@+id/dialog_fragment_restore_wallet_pass"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:background="@color/white_light"
-            android:fontFamily="sans-serif-light"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:padding="8dp"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_path" />
+        <!--<EditText-->
+            <!--android:id="@+id/dialog_fragment_restore_wallet_pass"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:background="@color/white_light"-->
+            <!--android:fontFamily="sans-serif-light"-->
+            <!--android:hint="@string/password"-->
+            <!--android:inputType="textPassword"-->
+            <!--android:padding="8dp"-->
+            <!--android:textAlignment="center"-->
+            <!--android:textColor="@color/black"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--tools:layout_editor_absoluteY="86dp" />-->
 
     </android.support.constraint.ConstraintLayout>
 

@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -303,7 +304,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         final BigInteger bigIntegerBalance = moneyViewModel.getEthereumBalanceData().getValue();
         if (bigIntegerBalance != null) {
             if (bigIntegerWeiTotal.toBigInteger().compareTo(bigIntegerBalance) == 1) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                         .setMessage(getText(R.string.insufficient_funds))
                         .setCancelable(true);
                 AlertDialog alertDialog = builder.create();
@@ -315,7 +316,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                     EthSendTransaction ethSendTransaction = application.sendRawEthereumTx(toAddress, bigIntegerWeiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
                     final String text = ethSendTransaction != null ? getString(R.string.transaction_hash) + ": " + ethSendTransaction.getTransactionHash() : getString(R.string.transaction_failed_to_send);
                     ApplicationLoader.applicationHandler.post(() -> {
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                 .setMessage(text)
                                 .setCancelable(true);
                         AlertDialog alertDialog = builder2.create();
@@ -369,7 +370,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                 }
             }
         } else {
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext())
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setMessage(getText(R.string.not_read_qr))
                     .setCancelable(true);
             android.support.v7.app.AlertDialog alertDialog = builder.create();

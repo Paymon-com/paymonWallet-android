@@ -3,6 +3,7 @@ package ru.paymon.android.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdap
 
             removeButton.setOnClickListener((view) ->
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(itemView.getContext(), R.style.AlertDialogCustom));
                 builder.setTitle(R.string.deletion_confirmation)
                         .setMessage(R.string.delete_participants)
                         .setCancelable(true).setPositiveButton(R.string.yes, (dialogInterface, i) -> deleteParticipant(userItem)).setNegativeButton(R.string.no, (dialogInterface, i) -> {

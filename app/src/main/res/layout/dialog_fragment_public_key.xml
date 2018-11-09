@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:background="@color/eth_color"
+    android:background="@color/colorPrimary"
     android:orientation="vertical">
 
     <ImageView
@@ -24,10 +25,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-light"
+        android:layout_marginEnd="16dp"
+        android:fontFamily="@font/roboto_thin"
         android:textAlignment="center"
         android:textColor="@color/white"
         android:textSize="14sp"
@@ -35,29 +36,76 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_public_key_image" />
 
-    <Button
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/dialog_fragment_public_key_button"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/button_share"
-        android:textAlignment="center"
-        android:textColor="@color/white"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frame" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView49">
 
-    <FrameLayout
-        android:id="@+id/frame"
+        <TextView
+            android:id="@+id/textView26"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/button_share"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/imageView48"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView48"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView26"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/share" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/imageView49"
         android:layout_width="0dp"
-        android:layout_height="1px"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:background="@color/white"
+        android:layout_marginEnd="8dp"
+        android:src="@color/black_light"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_public_key_address">
+        app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_public_key_address" />
 
-    </FrameLayout>
+    <!--<Button-->
+        <!--android:id="@+id/dialog_fragment_public_key_button"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:fontFamily="sans-serif-light"-->
+        <!--android:text="@string/button_share"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@color/white"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintHorizontal_bias="0.0"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--tools:layout_editor_absoluteY="355dp" />-->
 
 </android.support.constraint.ConstraintLayout>
