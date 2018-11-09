@@ -1,5 +1,7 @@
 package ru.paymon.android.view;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,6 +27,8 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.pagedlib.MessageDiffUtilCallback;
 import ru.paymon.android.selection.MessageItemKeyProvider;
 import ru.paymon.android.selection.MessageItemLookup;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 
 public class FragmentGroupChat extends AbsFragmentChat {
@@ -134,6 +138,18 @@ public class FragmentGroupChat extends AbsFragmentChat {
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
+        });
+
+        copy.setOnClickListener(v->{
+            final ArrayList<RPC.Message> selectedMessages = Lists.newArrayList(selectionTracker.getSelection().iterator());
+            final StringBuilder copiedMessages = new StringBuilder();
+            for (final RPC.Message msg:selectedMessages) {
+                copiedMessages.append(msg.text + "\n");
+            }
+            ClipboardManager clipboard = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService(CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Copied messages", copiedMessages.toString());
+            clipboard.setPrimaryClip(clip);
+            selectionTracker.clearSelection();
         });
 
         return view;

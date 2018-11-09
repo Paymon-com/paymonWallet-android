@@ -1,6 +1,7 @@
 package ru.paymon.android.view;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import ru.paymon.android.components.CircularImageView;
+
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.vanniktech.rxpermission.Permission;
@@ -58,6 +60,7 @@ public class FragmentProfileEdit extends Fragment {
 
         avatar = (CircularImageView) view.findViewById(R.id.profile_update_photo);
         Button changeAvatar = (Button) view.findViewById(R.id.change_foto);
+        Button deleteAvatar = (Button) view.findViewById(R.id.delete_photo);
         TextInputEditText firstName = (TextInputEditText) view.findViewById(R.id.profile_update_name);
         TextInputEditText lastName = (TextInputEditText) view.findViewById(R.id.profile_update_surname);
         EditText email = (EditText) view.findViewById(R.id.profile_update_email);
@@ -78,6 +81,47 @@ public class FragmentProfileEdit extends Fragment {
         firstName.setText(User.currentUser.first_name);
         lastName.setText(User.currentUser.last_name);
         email.setText(User.currentUser.email != null ? User.currentUser.email : "");
+
+        deleteAvatar.setOnClickListener(v -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                    .setMessage(getString(R.string.confirmation_code_was_sent)) //TODO:String Вы уверены?
+                    .setCancelable(true)
+                    .setPositiveButton(getString(R.string.ok), (DialogInterface dialog1, int which) -> {
+                        Utils.netQueue.postRunnable(() -> {
+                            RPC.PM_deleteProfilePhoto deleteProfilePhoto = new RPC.PM_deleteProfilePhoto();
+
+                            ApplicationLoader.applicationHandler.post(dialogProgress::show);
+
+                            final long requestID = NetworkManager.getInstance().sendRequest(deleteProfilePhoto, (response, error) -> {
+                                if (error != null || response instanceof RPC.PM_boolFalse) {
+                                    ApplicationLoader.applicationHandler.post(() -> {
+                                        if (dialogProgress != null && dialogProgress.isShowing())
+                                            dialogProgress.cancel();
+                                    });
+                                    return;
+                                }
+
+                                if (response instanceof RPC.PM_boolTrue) {
+                                    ApplicationLoader.applicationHandler.post(() -> {
+                                        User.currentUser.photoURL.url = "https://storage.googleapis.com/paymon_file_storage/user_avatar/56479a11742a01b02895ffe399d48f6aa6e3f254b49770c36a803663109be4d833f1e06595738a0e1c2230c59b3ac706aabe7209f1238bf1ccd55fa06d0a6242.jpg";
+                                        Utils.loadPhoto(User.currentUser.photoURL.url, avatar);
+                                    });
+                                }
+
+                                ApplicationLoader.applicationHandler.post(() -> {
+                                    if (dialogProgress != null && dialogProgress.isShowing())
+                                        dialogProgress.dismiss();
+                                });
+                            });
+
+                            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
+                        });
+                    })
+                    .setNegativeButton(getString(R.string.button_cancel), (DialogInterface dialog, int which) -> {
+                    });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        });
 
         View.OnClickListener avatarListener = (v) -> {
             ApplicationLoader.rxPermission
@@ -154,7 +198,7 @@ public class FragmentProfileEdit extends Fragment {
                 user.first_name = firstName.getText().toString();
                 user.last_name = lastName.getText().toString();
                 user.email = email.getText().toString();
-                user.isEmailHidden= hideEmailSwitch.isChecked();
+                user.isEmailHidden = hideEmailSwitch.isChecked();
 
 
                 ApplicationLoader.applicationHandler.post(dialogProgress::show);

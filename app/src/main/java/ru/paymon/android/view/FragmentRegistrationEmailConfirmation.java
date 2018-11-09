@@ -163,7 +163,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
                         ApplicationLoader.applicationHandler.post(() -> {
                             hintError.setText("");
                             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                    .setMessage(getString(R.string.confirmation_code_was_sent))
+                                    .setMessage(getString(R.string.confirmation_code_was_sent)) //TODO:String send failed
                                     .setCancelable(true)
                                     .setPositiveButton(getString(R.string.ok), (DialogInterface dialog, int which) -> {});
                             AlertDialog alertDialog = builder.create();

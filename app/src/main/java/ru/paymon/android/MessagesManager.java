@@ -39,51 +39,52 @@ public class MessagesManager {
     }
 
 
-    public void putMessage(final RPC.Message message) {
-        AppDatabase.dbQueue.postRunnable(() -> {
-            AppDatabase.getDatabase().chatMessageDao().insert(message);
-            boolean isGroup = !(message.to_peer instanceof RPC.PM_peerUser);
-
-            if (!isGroup) {
-                final int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
-                final RPC.UserObject user = UsersManager.getInstance().getUser(cid);
-
-                if (user == null) {
-                    final RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo(cid);
-                    NetworkManager.getInstance().sendRequest(userInfo, (response, error) -> {
-                        if (response == null || error != null) return;
-                        final RPC.UserObject userObject = (RPC.UserObject) response;
-                        UsersManager.getInstance().putUser(userObject);
-                        ChatsItem chatsItem = ChatsManager.getInstance().getChatByChatID(-cid);
-                        if (chatsItem == null) {
-                            chatsItem = new ChatsItem(cid, userObject.photoURL, Utils.formatUserName(userObject), message.text, message.date, message.itemType);
-                        } else {
-                            chatsItem.fileType = message.itemType;
-                            chatsItem.lastMessageText = message.text;
-                            chatsItem.photoURL = userObject.photoURL;
-                            chatsItem.time = message.date;
-                        }
-                        ChatsManager.getInstance().putChat(chatsItem);
-                    });
-                } else {
-                    ChatsItem chatsItem = ChatsManager.getInstance().getChatByChatID(-cid);
-                    if (chatsItem == null) {
-                        chatsItem = new ChatsItem(cid, user.photoURL, Utils.formatUserName(user), message.text, message.date, message.itemType);
-                    } else {
-                        chatsItem.fileType = message.itemType;
-                        chatsItem.lastMessageText = message.text;
-                        chatsItem.photoURL = user.photoURL;
-                        chatsItem.time = message.date;
-                    }
-                    ChatsManager.getInstance().putChat(chatsItem);
-                }
-            } else {
-                final int gid = message.to_peer.group_id;
-                final RPC.Group group = GroupsManager.getInstance().getGroup(gid);
-                final RPC.UserObject creator = UsersManager.getInstance().getUser(group.creatorID);
-                if (creator == null) return;
-                final String text = message.action instanceof RPC.PM_messageActionGroupCreate ? String.format("%s %s \"%s\"", Utils.formatUserName(creator), ApplicationLoader.applicationContext.getString(R.string.created_group), group.title) : message.text;
-                if (group == null) {
+//    public void putMessage(final RPC.Message message) {
+//        AppDatabase.dbQueue.postRunnable(() -> {
+//            AppDatabase.getDatabase().chatMessageDao().insert(message);
+//            boolean isGroup = !(message.to_peer instanceof RPC.PM_peerUser);
+//
+//            ChatsItem chatsItem;
+//            if (!isGroup) {
+//                final int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
+//                final RPC.UserObject user = UsersManager.getInstance().getUser(cid);
+//
+//                if (user == null) {
+//                    final RPC.PM_getUserInfo userInfo = new RPC.PM_getUserInfo(cid);
+//                    NetworkManager.getInstance().sendRequest(userInfo, (response, error) -> {
+//                        if (response == null || error != null) return;
+//                        final RPC.UserObject userObject = (RPC.UserObject) response;
+//                        UsersManager.getInstance().putUser(userObject);
+//                        ChatsItem chatsItem = ChatsManager.getInstance().getChatByChatID(-cid);
+//                        if (chatsItem == null) {
+//                            chatsItem = new ChatsItem(cid, userObject.photoURL, Utils.formatUserName(userObject), message.text, message.date, message.itemType);
+//                        } else {
+//                            chatsItem.fileType = message.itemType;
+//                            chatsItem.lastMessageText = message.text;
+//                            chatsItem.photoURL = userObject.photoURL;
+//                            chatsItem.time = message.date;
+//                        }
+//                        ChatsManager.getInstance().putChat(chatsItem);
+//                    });
+//                } else {
+//                chatsItem = ChatsManager.getInstance().getChatByChatID(-cid);
+//                if (chatsItem == null) {
+//                    chatsItem = new ChatsItem(cid, user.photoURL, Utils.formatUserName(user), message.text, message.date, message.itemType);
+//                } else {
+//                    chatsItem.fileType = message.itemType;
+//                    chatsItem.lastMessageText = message.text;
+//                    chatsItem.photoURL = user.photoURL;
+//                    chatsItem.time = message.date;
+//                }
+//                    ChatsManager.getInstance().putChat(chatsItem);
+//                }
+//            } else {
+//                final int gid = message.to_peer.group_id;
+//                final RPC.Group group = GroupsManager.getInstance().getGroup(gid);
+//                final RPC.UserObject creator = UsersManager.getInstance().getUser(group.creatorID);
+//                if (creator == null) return;
+//                final String text = message.action instanceof RPC.PM_messageActionGroupCreate ? String.format("%s %s \"%s\"", Utils.formatUserName(creator), ApplicationLoader.applicationContext.getString(R.string.created_group), group.title) : message.text;
+//                if (group == null) {
 //                final RPC.PM_getGroupInfo groupInfo = new RPC.PM_getGroupInfo(gid);
 //                NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
 //                    if (response == null || error != null) return;
@@ -93,12 +94,45 @@ public class MessagesManager {
 //                    ChatsItem newChatsItem = new ChatsItem(gid, groupObject.photoURL, groupObject.title, text, message.date, message.itemType, lastMsgUser.photoURL);
 //                    ChatsManager.getInstance().getChatByChatID.putChat(newChatsItem);
 //                });
+//                } else {
+//                final RPC.UserObject lastMsgUser = UsersManager.getInstance().getUser(message.from_id);
+//                chatsItem = new ChatsItem(gid, group.photoURL, group.title, text, message.date, message.itemType, lastMsgUser.photoURL);
+//                    ChatsManager.getInstance().putChat(chatsItem);
+//                }
+//            }
+//
+//            ChatsManager.getInstance().putChat(chatsItem);
+//        });
+//    }
+
+    public void putMessage(final RPC.Message message) {
+        AppDatabase.dbQueue.postRunnable(() -> {
+            AppDatabase.getDatabase().chatMessageDao().insert(message);
+            boolean isGroup = !(message.to_peer instanceof RPC.PM_peerUser);
+
+            ChatsItem chatsItem;
+            if (!isGroup) {
+                final int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
+                final RPC.UserObject user = UsersManager.getInstance().getUser(cid);
+                chatsItem = ChatsManager.getInstance().getChatByChatID(-cid);
+                if (chatsItem == null) {
+                    chatsItem = new ChatsItem(cid, user.photoURL, Utils.formatUserName(user), message.text, message.date, message.itemType);
                 } else {
-                    final RPC.UserObject lastMsgUser = UsersManager.getInstance().getUser(message.from_id);
-                    final ChatsItem newChatsItem = new ChatsItem(gid, group.photoURL, group.title, text, message.date, message.itemType, lastMsgUser.photoURL);
-                    ChatsManager.getInstance().putChat(newChatsItem);
+                    chatsItem.fileType = message.itemType;
+                    chatsItem.lastMessageText = message.text;
+                    chatsItem.photoURL = user.photoURL;
+                    chatsItem.time = message.date;
                 }
+            } else {
+                final int gid = message.to_peer.group_id;
+                final RPC.Group group = GroupsManager.getInstance().getGroup(gid);
+                final RPC.UserObject creator = UsersManager.getInstance().getUser(group.creatorID);
+                final String text = message.action instanceof RPC.PM_messageActionGroupCreate ? String.format("%s %s \"%s\"", Utils.formatUserName(creator), ApplicationLoader.applicationContext.getString(R.string.created_group), group.title) : message.text;
+                final RPC.UserObject lastMsgUser = UsersManager.getInstance().getUser(message.from_id);
+                chatsItem = new ChatsItem(gid, group.photoURL, group.title, text, message.date, message.itemType, lastMsgUser.photoURL);
             }
+
+            ChatsManager.getInstance().putChat(chatsItem);
         });
     }
 
@@ -108,7 +142,7 @@ public class MessagesManager {
     }
 
     public void deleteMessage(RPC.Message message) {
-        AppDatabase.dbQueue.postRunnable(()-> AppDatabase.getDatabase().chatMessageDao().delete(message));
+        AppDatabase.dbQueue.postRunnable(() -> AppDatabase.getDatabase().chatMessageDao().delete(message));
     }
 
     public void deleteMessages(List<Long> ids) {
@@ -118,7 +152,7 @@ public class MessagesManager {
         }
     }
 
-    public List<RPC.Message> getMessagesByChatIDList(int cid){
+    public List<RPC.Message> getMessagesByChatIDList(int cid) {
         Callable<List<RPC.Message>> callable = new Callable<List<RPC.Message>>() {
             @Override
             public List<RPC.Message> call() {
@@ -137,17 +171,17 @@ public class MessagesManager {
         return messagesList;
     }
 
-    public DataSource.Factory<Integer, RPC.Message> getMessagesByChatID(int cid){
-        Callable<DataSource.Factory<Integer,RPC.Message>> callable = new Callable<DataSource.Factory<Integer,RPC.Message>>() {
+    public DataSource.Factory<Integer, RPC.Message> getMessagesByChatID(int cid) {
+        Callable<DataSource.Factory<Integer, RPC.Message>> callable = new Callable<DataSource.Factory<Integer, RPC.Message>>() {
             @Override
-            public DataSource.Factory<Integer,RPC.Message> call() {
+            public DataSource.Factory<Integer, RPC.Message> call() {
                 return AppDatabase.getDatabase().chatMessageDao().getMessagesByChatID(cid);
             }
         };
 
-        Future<DataSource.Factory<Integer,RPC.Message>> future = Executors.newSingleThreadExecutor().submit(callable);
+        Future<DataSource.Factory<Integer, RPC.Message>> future = Executors.newSingleThreadExecutor().submit(callable);
 
-        DataSource.Factory<Integer,RPC.Message> user = null;
+        DataSource.Factory<Integer, RPC.Message> user = null;
         try {
             user = future.get();
         } catch (Exception e) {

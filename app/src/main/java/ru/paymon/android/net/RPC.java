@@ -2385,7 +2385,7 @@ public class RPC {
         }
     }
 
-    public static class PM_deleteProfilePhoto  extends MessageAction {
+    public static class PM_deleteProfilePhoto  extends Packet {
         public final static int svuid = 432807616;
 
         public void readParams(SerializableData stream, boolean exception) {
