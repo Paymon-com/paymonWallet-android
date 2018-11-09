@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -32,7 +33,9 @@ import org.web3j.utils.Convert;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 
 import androidx.navigation.Navigation;
@@ -60,7 +63,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
     private IndicatorSeekBar gasPriceBar;
     private IndicatorSeekBar gasLimitBar;
     private EditText receiverAddressEditText;
-    private NumberPicker fiatCurrencyPicker;
+//    private NumberPicker fiatCurrencyPicker;
     private TextView fiatEqualTextView;
 
     private WalletApplication application;
@@ -75,7 +78,9 @@ public class FragmentPaymonWalletTransfer extends Fragment {
     private int gasPrice;
     private int gasLimit = Config.GAS_LIMIT_CONTRACT_DEFAULT;
     private BigDecimal bigIntegerWeiFee;
+    private BigDecimal bigIntegerWeiAmount;
     private BigDecimal bigIntegerGweiAmount;
+    private String currentCurrency = "USD";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -96,7 +101,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
         receiverAddressEditText = (EditText) view.findViewById(R.id.fragment_paymon_wallet_transfer_receiver_address);
         amountEditText = (EditText) view.findViewById(R.id.fragment_paymon_wallet_transfer_amount);
-        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_paymon_wallet_transfer_fiat_currency);
+//        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_paymon_wallet_transfer_fiat_currency);
         balanceTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_balance);
         balanceEthTextView = (TextView) view.findViewById(R.id.fragment_paymon_wallet_transfer_eth_balance);
         gasPriceBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_paymon_wallet_transfer_gas_price_slider);
@@ -107,24 +112,60 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         ImageView qrScannerButton = (ImageView) view.findViewById(R.id.fragment_paymon_wallet_transfer_qr);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_pmnt_wallet_transf_back_image_button);
         ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_pmnt_wallet_transf_next_text_view);
+        Button usdButton = (Button) view.findViewById(R.id.fragment_paymon_wallet_usd);
+        Button eurButton = (Button) view.findViewById(R.id.fragment_paymon_wallet_eur);
+        Button localButton = (Button) view.findViewById(R.id.fragment_paymon_wallet_local);
+        ImageView usdBacklight = (ImageView) view.findViewById(R.id.fragment_paymon_wallet_usd_backlight);
+        ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_paymon_wallet_eur_backlight);
+        ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_paymon_wallet_local_backlight);
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
-        fiatCurrencyPicker.setMinValue(1);
-        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
-        fiatCurrencyPicker.setDisplayedValues(Config.fiatCurrencies);
-        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
-        fiatCurrencyPicker.setValue(2);
+//        fiatCurrencyPicker.setMinValue(1);
+//        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
+//        fiatCurrencyPicker.setDisplayedValues(Config.fiatCurrencies);
+//        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
+//        fiatCurrencyPicker.setValue(2);
 
         gasPriceBar.setIndicatorTextFormat(getString(R.string.current_gas_price) +": ${PROGRESS} GWEI");
         gasLimitBar.setIndicatorTextFormat(getString(R.string.current_gas_limit) + ": ${PROGRESS}");
-        fromAddressTextView.setText(application.getEthereumWallet().publicAddress);
+        fromAddressTextView.setText(application.getPaymonWallet().publicAddress);
 
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         payButton.setOnClickListener(v -> pay());
 
-        final String fromAddress = application.getEthereumWallet().publicAddress;
+        final String fromAddress = application.getPaymonWallet().publicAddress;
         fromAddressTextView.setText(fromAddress);
+
+        final String localCurrency = Currency.getInstance(Locale.getDefault()).getCurrencyCode();
+        localButton.setText(localCurrency);
+        localButton.setVisibility(localCurrency.equals("USD") || localCurrency.equals("EUR") ? View.GONE : View.VISIBLE);
+
+        changeCurrency();
+
+        usdButton.setOnClickListener(v -> {
+            currentCurrency = "USD";
+            usdBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+            eurBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            localBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            changeCurrency();
+        });
+
+        eurButton.setOnClickListener(v -> {
+            currentCurrency = "EUR";
+            usdBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            eurBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+            localBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            changeCurrency();
+        });
+
+        localButton.setOnClickListener(v -> {
+            currentCurrency = localCurrency;
+            usdBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            eurBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            localBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+            changeCurrency();
+        });
 
         receiverAddressEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -169,7 +210,6 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
                 if (value.isEmpty()) {
                     amountEditText.setError(getText(R.string.required_field));
-                    fiatEqualTextView.setVisibility(View.INVISIBLE);
                     return;
                 }
 
@@ -177,13 +217,11 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
                 if (pmntAmount <= 0) {
                     amountEditText.setError(getText(R.string.invalid_value));
-                    fiatEqualTextView.setVisibility(View.INVISIBLE);
                     return;
                 }
 
                 amountEditText.setError(null);
 
-                fiatEqualTextView.setVisibility(View.VISIBLE);
                 calculateFees();
                 changeCurrency();
             }
@@ -320,20 +358,22 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
         feeTextView.setText(String.format("%.9f ETH", ethFee));
 
-        if (pmntAmount != 0)
+        if (pmntAmount != 0){
             bigIntegerGweiAmount = new BigDecimal(pmntAmount).multiply(new BigDecimal(Math.pow(10, 9)));
+            bigIntegerWeiAmount = new BigDecimal(pmntAmount).multiply(new BigDecimal(Math.pow(10, 18)));
+        }
     }
 
     private void changeCurrency() {
         if(bigIntegerGweiAmount == null) return;
-        final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
+//        final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
         final List<ExchangeRate> exchangeRates = ExchangeRatesManager.getInstance().getExchangeRatesByCryptoCurrency(PMNT_CURRENCY_VALUE);
         for (ExchangeRate exchangeRate : exchangeRates) {
-            if (exchangeRate.fiatCurrency.equals(currentFiatCurrency))
+            if (exchangeRate.fiatCurrency.equals(currentCurrency))
                 currentExchangeRate = exchangeRate.value;
         }
-        final String fiatEqual = WalletApplication.convertEthereumToFiat(bigIntegerGweiAmount.toBigInteger(), currentExchangeRate);
-        fiatEqualTextView.setText(String.format("%s %s", fiatEqual, currentFiatCurrency));
+        final String fiatEqual = WalletApplication.convertPaymonToFiat(bigIntegerWeiAmount.toBigInteger(), currentExchangeRate);
+        fiatEqualTextView.setText(String.format("%s %s", fiatEqual, currentCurrency));
     }
 
     @Override

@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,7 +28,9 @@ import com.warkiz.widget.SeekParams;
 import org.bitcoinj.core.Transaction;
 import org.bitcoinj.wallet.Wallet;
 
+import java.util.Currency;
 import java.util.List;
+import java.util.Locale;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.Config;
@@ -47,7 +50,7 @@ import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CUR
 public class FragmentBitcoinWalletTransfer extends Fragment implements NotificationManager.IListener {
     private WalletApplication application;
     private String currentExchangeRate;
-    private NumberPicker fiatCurrencyPicker;
+//    private NumberPicker fiatCurrencyPicker;
     private TextView fiatEqualTextView;
     private TextView balanceTextView;
     private EditText receiverAddressEditText;
@@ -56,6 +59,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
     private long feeSatoshis;
     private Double feeBtc;
     private double totalValueBtc;
+    private String currentCurrency = "USD";
 
 
     @Override
@@ -69,7 +73,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_bitcoin_wallet_transfer, container, false);
 
-        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_currency);
+//        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_currency);
         receiverAddressEditText = (EditText) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_receiver_address);
         balanceTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_balance);
         fiatEqualTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_eq);
@@ -80,18 +84,55 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_id_from);
         ImageButton payButton = (ImageButton) view.findViewById(R.id.toolbar_btc_wallet_transf_next_text_view);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_btc_wallet_transf_back_image_button);
+        Button usdButton = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_usd);
+        Button eurButton = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_eur);
+        Button localButton = (Button) view.findViewById(R.id.fragment_bitcoin_wallet_local);
+        ImageView usdBacklight = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_usd_backlight);
+        ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_eur_backlight);
+        ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_local_backlight);
 
-        fiatCurrencyPicker.setMinValue(1);
-        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
-        fiatCurrencyPicker.setDisplayedValues(Config.fiatCurrencies);
-        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
-        fiatCurrencyPicker.setValue(2);
+//        fiatCurrencyPicker.setMinValue(1);
+//        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
+//        fiatCurrencyPicker.setDisplayedValues(Config.fiatCurrencies);
+//        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
+//        fiatCurrencyPicker.setValue(2);
 
         final String fromAddress = application.getBitcoinPublicAddress();
         final String balance = application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).toPlainString();
 
+        final String localCurrency = Currency.getInstance(Locale.getDefault()).getCurrencyCode();
+        localButton.setText(localCurrency);
+        localButton.setVisibility(localCurrency.equals("USD") || localCurrency.equals("EUR") ? View.GONE : View.VISIBLE);
+
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         payButton.setOnClickListener(v -> pay());
+
+        changeCurrency();
+
+        usdButton.setOnClickListener(v -> {
+            currentCurrency = "USD";
+            usdBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+            eurBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            localBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            changeCurrency();
+        });
+
+
+        eurButton.setOnClickListener(v -> {
+            currentCurrency = "EUR";
+            usdBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            eurBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+            localBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            changeCurrency();
+        });
+
+        localButton.setOnClickListener(v -> {
+            currentCurrency = localCurrency;
+            usdBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            eurBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
+            localBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
+            changeCurrency();
+        });
 
         fromAddressTextView.setText(fromAddress);
         balanceTextView.setText(balance +" BTC");
@@ -118,7 +159,6 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
 
                 if (value.isEmpty()) {
                     amountEditText.setError(getText(R.string.required_field));
-                    fiatEqualTextView.setVisibility(View.INVISIBLE);
                     return;
                 }
 
@@ -126,14 +166,12 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
 
                 if (btcAmount <= 0.00000546) {
                     amountEditText.setError(getText(R.string.invalid_value));
-                    fiatEqualTextView.setVisibility(View.INVISIBLE);
                     return;
                 }
 
                 amountEditText.setError(null);
 
                 changeCurrency();
-                fiatEqualTextView.setVisibility(View.VISIBLE);
                 totalValueBtc = feeBtc + btcAmount;
                 totalTextView.setText(String.format("%.8f BTC", totalValueBtc));
             }
@@ -225,14 +263,14 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
     }
 
     private void changeCurrency() {
-        final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
+//        final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
         final List<ExchangeRate> exchangeRates = ExchangeRatesManager.getInstance().getExchangeRatesByCryptoCurrency(BTC_CURRENCY_VALUE);
         for (ExchangeRate exchangeRate : exchangeRates) {
-            if (exchangeRate.fiatCurrency.equals(currentFiatCurrency))
+            if (exchangeRate.fiatCurrency.equals(currentCurrency))
                 currentExchangeRate = exchangeRate.value;
         }
         final String fiatEqual = WalletApplication.convertBitcoinToFiat(String.valueOf(btcAmount), currentExchangeRate);
-        fiatEqualTextView.setText(String.format("%s %s", fiatEqual, currentFiatCurrency));
+        fiatEqualTextView.setText(String.format("%s %s", fiatEqual, currentCurrency));
     }
 
     @Override
