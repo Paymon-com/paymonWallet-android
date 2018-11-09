@@ -312,7 +312,8 @@ public class NetworkManager {
     }
 
     public long sendRequest(final Packet packet, final Packet.OnResponseListener onComplete, final long messageID) {
-        if(connectionState != ConnectionState.CONNECTED || networkState != NetworkState.CONNECTED) return -1;
+        if(connectionState != ConnectionState.CONNECTED || networkState != NetworkState.CONNECTED)
+            return -1;
 
         WaitingRequest request = new WaitingRequest();
         request.packet = packet;

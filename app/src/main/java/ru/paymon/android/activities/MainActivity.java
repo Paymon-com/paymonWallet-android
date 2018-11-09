@@ -55,15 +55,15 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_main);
-        connectingConstraint = findViewById(R.id.connecting_constraint);
-
         if (!User.currentUser.confirmed) {
             Intent intent = new Intent(getApplicationContext(), EmailConfirmationActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
             return;
         }
+
+        setContentView(R.layout.activity_main);
+        connectingConstraint = findViewById(R.id.connecting_constraint);
 
         final BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation_view);
         bottomNavigationView.setOnNavigationItemSelectedListener(this);

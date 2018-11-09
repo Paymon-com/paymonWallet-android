@@ -124,6 +124,16 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
             }
         });
 
+        walletsData = moneyViewModel.getWalletsData();
+        exchangeRatesData = moneyViewModel.getExchangeRatesData();
+
+        walletsData.observe(getActivity(), (walletsData) -> {
+            if(walletsData == null) return;
+            cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, cryptoWalletsListener);
+            walletsRecView.setAdapter(cryptoWalletsAdapter);
+            changeCurrency();
+        });
+
         return view;
     }
 
@@ -132,26 +142,12 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         super.onResume();
         NotificationManager.getInstance().addObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         Utils.showBottomBar(getActivity());
-        walletsData = moneyViewModel.getWalletsData();
-        exchangeRatesData = moneyViewModel.getExchangeRatesData();
-
-//        exchangeRatesData.observe(this, (exchangeRatesItems) -> {
-//            changeCurrency();
-//        });
-
-        walletsData.observe(getActivity(), (walletsData) -> {
-            cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, cryptoWalletsListener);
-            walletsRecView.setAdapter(cryptoWalletsAdapter);
-            changeCurrency();
-        });
     }
 
     @Override
     public void onPause() {
         super.onPause();
         NotificationManager.getInstance().removeObserver(this, NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
-        walletsData.removeObservers(this);
-        exchangeRatesData.removeObservers(this);
     }
 
     private void showProgress() {

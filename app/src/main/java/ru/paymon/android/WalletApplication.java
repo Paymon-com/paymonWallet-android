@@ -242,7 +242,7 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
 
-    public void startBitcoinKit(){
+    public void startBitcoinKit() {
         WalletKit.getInstance().startBitcoinKit();
     }
 
@@ -364,7 +364,7 @@ public class WalletApplication extends AbsWalletApplication {
 //        }
         try {
             WalletUtils.generateWalletFile(password, ethereumWalletCredentials.getEcKeyPair(), new File(path), false);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -386,7 +386,12 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public boolean deleteEthereumWallet() {
         final String FILE_PATH = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-eth-wallet.json";
-        return new File(FILE_PATH).delete();
+        boolean isDeleted = new File(FILE_PATH).delete();
+        if (isDeleted) {
+            ethereumWalletCredentials = null;
+            ethereumWallet = null;
+        }
+        return isDeleted;
     }
 
     public static String convertEthereumToFiat(final BigInteger weiAmount, final String fiatExRate) {
@@ -400,7 +405,7 @@ public class WalletApplication extends AbsWalletApplication {
     }
 
     @Override
-    public boolean backupPaymonWallet(final String path , final String password) {
+    public boolean backupPaymonWallet(final String path, final String password) {
         //        final String BACKUP_FILE_PATH = path + "/" + "paymon-pmnt-wallet_backup_" + System.currentTimeMillis() + ".json";
 //        File walletFile = new File(paymonWalletPath);
 //        File backupFile = new File(BACKUP_FILE_PATH);
@@ -412,7 +417,7 @@ public class WalletApplication extends AbsWalletApplication {
 
         try {
             WalletUtils.generateWalletFile(password, paymonWalletCredentials.getEcKeyPair(), new File(path), false);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -448,7 +453,12 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public boolean deletePaymonWallet() {
         final String FILE_PATH = getApplicationContext().getFilesDir().getAbsolutePath() + "/" + "paymon-pmnt-wallet.json";
-        return new File(FILE_PATH).delete();
+        boolean isDeleted = new File(FILE_PATH).delete();
+        if (isDeleted) {
+            paymonWalletCredentials = null;
+            paymonWallet = null;
+        }
+        return isDeleted;
     }
 
 
