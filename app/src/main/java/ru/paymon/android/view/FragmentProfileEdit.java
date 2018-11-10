@@ -82,7 +82,7 @@ public class FragmentProfileEdit extends Fragment {
         email.setText(User.currentUser.email != null ? User.currentUser.email : "");
 
         deleteAvatar.setOnClickListener(v -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setMessage(getString(R.string.other_are_you_sure))
                     .setCancelable(true)
                     .setPositiveButton(getString(R.string.other_ok), (DialogInterface dialog1, int which) -> {

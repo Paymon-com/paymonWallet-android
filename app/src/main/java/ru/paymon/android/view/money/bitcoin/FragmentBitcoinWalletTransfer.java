@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -281,7 +282,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 }
             }
         } else {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setMessage(getText(R.string.wallet_could_not_read_qr))
                     .setCancelable(true);
             AlertDialog alertDialog = builder.create();
@@ -297,7 +298,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         }
 
         if (totalValueBtc > application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).value) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setMessage(getText(R.string.wallet_insufficient_funds))
                     .setCancelable(true);
             AlertDialog alertDialog = builder.create();
@@ -305,7 +306,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
             return;
         }
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                 .setMessage(feeSeekBar.getProgress() < 10 ? getText(R.string.wallet_a_low_commission) : getText(R.string.other_agree) + "?")
                 .setCancelable(true)
                 .setPositiveButton(getText(R.string.other_agree), (DialogInterface dialog, int which) -> {
@@ -313,7 +314,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                     Transaction transaction = application.sendBitcoinTx(toAddress, btcAmountToSatoshi, feeSeekBar.getProgress());
                     if (transaction != null) {
                         String hash = transaction.getHashAsString();
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                 .setMessage(getText(R.string.wallet_hash) + ": " + hash)
                                 .setCancelable(true);
                         AlertDialog alertDialog = builder2.create();

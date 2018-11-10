@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +98,7 @@ public class FragmentEthereumWallet extends Fragment {
         ItemClickSupport.addTo(transactionsRecView).setOnItemClickListener((recyclerView, position, v) -> {
             EthTransactionItem transactionItem = (EthTransactionItem) transactionAdapter.transactionItems.get(position);
 
-            AlertDialog.Builder adb = new AlertDialog.Builder(getContext());
+            AlertDialog.Builder adb = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
 
             View dialogView = (ConstraintLayout) getLayoutInflater().inflate(R.layout.alert_dialog_custom_transaction_info, null);
 

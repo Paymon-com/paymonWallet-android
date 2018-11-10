@@ -370,10 +370,10 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                 }
             }
         } else {
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setMessage(getText(R.string.wallet_could_not_read_qr))
                     .setCancelable(true);
-            android.support.v7.app.AlertDialog alertDialog = builder.create();
+            AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
     }

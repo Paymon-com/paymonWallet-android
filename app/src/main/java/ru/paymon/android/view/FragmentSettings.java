@@ -78,10 +78,10 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 break;
             case R.id.settings_reset_settings:
                 AlertDialog.Builder builderAlertReset = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
-                builderAlertReset.setMessage("Сбросить настройки профиля?").setPositiveButton(R.string.yes, (dialog, which) -> {//TODO:Дообавить в стринги
+                builderAlertReset.setMessage("Сбросить настройки профиля?").setPositiveButton(R.string.other_yes, (dialog, which) -> {//TODO:Дообавить в стринги
                     User.setDefaultConfig();
                     Toast.makeText(new ContextThemeWrapper(getContext(), R.style.ToastCustom), R.string.settings_reset, Toast.LENGTH_SHORT).show();
-                }).setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+                }).setNegativeButton(R.string.other_no, (dialog, which) -> dialog.cancel());
                 builderAlertReset.create().show();
                 break;
             case R.id.settings_about_programm:
@@ -95,7 +95,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 break;
             case R.id.settings_exit:
                 AlertDialog.Builder builderAlertExit = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
-                builderAlertExit.setMessage("Выйти из профиля?").setPositiveButton(R.string.yes, (dialog, which) -> {//TODO:Дообавить в стринги
+                builderAlertExit.setMessage("Выйти из профиля?").setPositiveButton(R.string.other_yes, (dialog, which) -> {//TODO:Дообавить в стринги
                     User.clearConfig();
                     Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().clearAllTables());
                     NetworkManager.getInstance().reconnect();
@@ -104,7 +104,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                     ComponentName componentName = intent.getComponent();
                     Intent mainIntent = Intent.makeRestartActivityTask(componentName);
                     ApplicationLoader.applicationContext.startActivity(mainIntent);
-                }).setNegativeButton(R.string.no, (dialog, which) -> dialog.cancel());
+                }).setNegativeButton(R.string.other_no, (dialog, which) -> dialog.cancel());
                 builderAlertExit.create().show();
                 break;
         }

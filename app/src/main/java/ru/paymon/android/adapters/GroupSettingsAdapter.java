@@ -91,8 +91,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdap
             removeButton.setOnClickListener((view) ->
             {
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(itemView.getContext(), R.style.AlertDialogCustom));
-                builder.setTitle(R.string.group_chat_settings_delete_confirmation)
-                        .setMessage(R.string.group_chat_settings_delete_participants)
+                builder.setMessage(R.string.group_chat_settings_delete_participants)
                         .setCancelable(true).setPositiveButton(R.string.other_yes, (dialogInterface, i) -> deleteParticipant(userItem)).setNegativeButton(R.string.other_no, (dialogInterface, i) -> {
                 });
 
