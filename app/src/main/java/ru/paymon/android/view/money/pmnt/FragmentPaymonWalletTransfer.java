@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -302,7 +303,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         }
 
         if (gasLimit < Config.GAS_LIMIT_CONTRACT_DEFAULT) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setMessage(getText(R.string.wallet_a_low_gas_limit))
                     .setCancelable(true)
                     .setNegativeButton(getText(R.string.other_cancel), (DialogInterface dialog, int which) -> {
@@ -321,7 +322,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         final BigInteger bigIntegerEthBalance = moneyViewModel.getPaymonEthBalanceData().getValue();
         if (bigIntegerBalance != null && bigIntegerEthBalance != null) {
             if (bigIntegerGweiAmount.toBigInteger().compareTo(bigIntegerBalance) == 1 || bigIntegerWeiFee.toBigInteger().compareTo(bigIntegerEthBalance) == 1) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                         .setMessage(getText(R.string.wallet_insufficient_funds))
                         .setCancelable(true);
                 AlertDialog alertDialog = builder.create();
@@ -333,7 +334,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                     TransactionReceipt transactionReceipt = application.sendPmntContract(toAddress, bigIntegerGweiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
                     ApplicationLoader.applicationHandler.post(() -> {
                         final String text = transactionReceipt != null ? getString(R.string.wallet_hash) + ": " + transactionReceipt.getTransactionHash() : getString(R.string.other_fail);
-                        AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
+                        AlertDialog.Builder builder2 = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                 .setMessage(text)
                                 .setCancelable(true);
                         AlertDialog alertDialog = builder2.create();
@@ -383,7 +384,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 }
             }
         } else {
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext())
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setMessage(getText(R.string.wallet_could_not_read_qr))
                     .setCancelable(true);
             android.support.v7.app.AlertDialog alertDialog = builder.create();

@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,8 +95,8 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
 
         ItemClickSupport.addTo(transactionsRecView).setOnItemClickListener((recyclerView, position, v) -> {
             final BtcTransactionItem transactionItem = (BtcTransactionItem) transactionAdapter.transactionItems.get(position);
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage(ApplicationLoader.applicationContext.getString(R.string.other_details))
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+                    .setMessage("Открыть подробней?")
                     .setCancelable(false)
                     .setPositiveButton(getString(R.string.other_ok), (dialogInterface, i) -> {
                         final String url = Config.DEBUG ? "https://live.blockcypher.com/btc-testnet/tx/" + transactionItem.hash: "https://live.blockcypher.com/btc/tx/" + transactionItem.hash;

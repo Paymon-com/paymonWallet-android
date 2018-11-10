@@ -3,11 +3,11 @@ package ru.paymon.android.view;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -55,8 +55,8 @@ public class DialogFragmentCreateGroup extends DialogFragment {
         View view = inflater.inflate(R.layout.dialog_fragment_create_group, container);
 
         title = (EditText) view.findViewById(R.id.dialog_fragment_with_edit_edit_text);
-        Button buttonCancel = (Button) view.findViewById(R.id.dialog_fragment_with_edit_cancel);
-        Button buttonAgree = (Button) view.findViewById(R.id.dialog_fragment_with_edit_ok);
+        ConstraintLayout buttonCancel = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_with_edit_cancel);
+        ConstraintLayout buttonAgree = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_with_edit_ok);
 
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);

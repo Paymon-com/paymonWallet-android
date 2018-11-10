@@ -28,7 +28,7 @@
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="65dp"
                 android:orientation="horizontal"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
@@ -122,7 +122,7 @@
         android:id="@+id/element_chat_filter"
         layout="@layout/element_chat_filter"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

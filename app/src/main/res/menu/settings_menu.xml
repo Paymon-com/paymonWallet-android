@@ -13,7 +13,7 @@
                 android:title="@string/settings_basic" />
             <item
                 android:id="@+id/settings_security"
-                android:icon="@drawable/security"
+                android:icon="@drawable/security_settings"
                 android:title="@string/settings_security" />
         </menu>
     </item>
@@ -26,7 +26,7 @@
                 android:title="@string/settings_reset" />
             <item
                 android:id="@+id/settings_about_programm"
-                android:icon="@drawable/warning"
+                android:icon="@drawable/question"
                 android:title="@string/settings_about" />
             <item
                 android:id="@+id/settings_exit"

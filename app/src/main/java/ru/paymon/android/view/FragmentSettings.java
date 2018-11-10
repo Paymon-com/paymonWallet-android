@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -76,8 +77,12 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentSettingsSecurity);
                 break;
             case R.id.settings_reset_settings:
-                User.setDefaultConfig();
-                Toast.makeText(getContext(), R.string.settings_reset, Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder builderAlertReset = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+                builderAlertReset.setMessage(getString(R.string.settings_reset) + "?").setPositiveButton(R.string.other_yes, (dialog, which) -> {
+                    User.setDefaultConfig();
+                    Toast.makeText(new ContextThemeWrapper(getContext(), R.style.ToastCustom), R.string.settings_reset, Toast.LENGTH_SHORT).show();
+                }).setNegativeButton(R.string.other_no, (dialog, which) -> dialog.cancel());
+                builderAlertReset.create().show();
                 break;
             case R.id.settings_about_programm:
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -89,14 +94,18 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 alert.show();
                 break;
             case R.id.settings_exit:
-                User.clearConfig();
-                Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().clearAllTables());
-                NetworkManager.getInstance().reconnect();
-                PackageManager packageManager = ApplicationLoader.applicationContext.getPackageManager();
-                Intent intent = packageManager.getLaunchIntentForPackage(ApplicationLoader.applicationContext.getPackageName());
-                ComponentName componentName = intent.getComponent();
-                Intent mainIntent = Intent.makeRestartActivityTask(componentName);
-                ApplicationLoader.applicationContext.startActivity(mainIntent);
+                AlertDialog.Builder builderAlertExit = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+                builderAlertExit.setMessage(getString(R.string.settings_exit) + "?").setPositiveButton(R.string.other_yes, (dialog, which) -> {
+                    User.clearConfig();
+                    Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().clearAllTables());
+                    NetworkManager.getInstance().reconnect();
+                    PackageManager packageManager = ApplicationLoader.applicationContext.getPackageManager();
+                    Intent intent = packageManager.getLaunchIntentForPackage(ApplicationLoader.applicationContext.getPackageName());
+                    ComponentName componentName = intent.getComponent();
+                    Intent mainIntent = Intent.makeRestartActivityTask(componentName);
+                    ApplicationLoader.applicationContext.startActivity(mainIntent);
+                }).setNegativeButton(R.string.other_no, (dialog, which) -> dialog.cancel());
+                builderAlertExit.create().show();
                 break;
         }
 
