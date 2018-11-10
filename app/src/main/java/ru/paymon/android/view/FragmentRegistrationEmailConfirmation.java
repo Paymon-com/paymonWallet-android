@@ -175,7 +175,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
                     if (r instanceof RPC.PM_boolTrue) {
                         ApplicationLoader.applicationHandler.post(() -> {
                             hintError.setText("");
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                     .setMessage(getString(R.string.confirmation_code_was_sent))
                                     .setCancelable(true)
                                     .setPositiveButton(getString(R.string.ok), (DialogInterface dialog, int which) -> {});

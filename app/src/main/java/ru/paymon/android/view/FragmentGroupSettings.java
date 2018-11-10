@@ -215,7 +215,7 @@ public class FragmentGroupSettings extends Fragment {
         Button leaveGroup = (Button) view.findViewById(R.id.group_settings_leave_group);
         leaveGroup.setOnClickListener(view13 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
-            builder.setTitle(R.string.leave_group).setMessage(R.string.are_you_sure).setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+            builder.setMessage(R.string.are_you_sure).setPositiveButton(R.string.yes, (dialogInterface, i) -> {
 
             }).setNegativeButton(R.string.no, (dialogInterface, i) -> dialogInterface.cancel());
             builder.create().show();
@@ -263,10 +263,10 @@ public class FragmentGroupSettings extends Fragment {
                                 if (dialogProgress != null && dialogProgress.isShowing())
                                     dialogProgress.cancel();
 
-                                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                         .setMessage(R.string.photo_upload_failed)
                                         .setCancelable(true);
-                                android.support.v7.app.AlertDialog alertDialog = builder.create();
+                                AlertDialog alertDialog = builder.create();
                                 alertDialog.show();
                             });
                             return;

@@ -111,7 +111,7 @@ public class FragmentGroupChat extends AbsFragmentChat {
                     checkedMessageIDs.add(message.id);
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
-                        .setTitle(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
+                        .setMessage(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
                         .setCancelable(false)
                         .setNegativeButton(getContext().getString(R.string.button_cancel), (dialogInterface, i) -> {
                         })
