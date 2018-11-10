@@ -65,15 +65,15 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <!--<Button-->
-                <!--android:id="@+id/button_attachment"-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_marginEnd="8dp"-->
-                <!--android:text="test"-->
-                <!--android:textAllCaps="false"-->
-                <!--app:layout_constraintBottom_toBottomOf="parent"-->
-                <!--app:layout_constraintEnd_toEndOf="@+id/input_edit_text"-->
-                <!--app:layout_constraintTop_toTopOf="parent" />-->
+            <!--android:id="@+id/button_attachment"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:text="test"-->
+            <!--android:textAllCaps="false"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintEnd_toEndOf="@+id/input_edit_text"-->
+            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
             <com.vanniktech.emoji.EmojiEditText
                 android:id="@+id/input_edit_text"
@@ -86,7 +86,7 @@
                 android:layout_toStartOf="@+id/smilesButton"
                 android:background="@drawable/background_msg_write"
                 android:fontFamily="@font/roboto_thin"
-                android:hint="@string/default_input_hint"
+                android:hint="@string/chat_message_hint"
                 android:imeOptions="actionSend"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLines="3"
@@ -142,13 +142,13 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/footer_for_emoticons"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@android:color/transparent"
-            android:orientation="vertical"
-            android:visibility="gone" />
+        <!--<LinearLayout-->
+        <!--android:id="@+id/footer_for_emoticons"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:orientation="vertical"-->
+        <!--android:visibility="gone" />-->
 
     </android.support.constraint.ConstraintLayout>
 

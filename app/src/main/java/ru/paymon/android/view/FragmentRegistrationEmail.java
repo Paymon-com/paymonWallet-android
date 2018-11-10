@@ -95,7 +95,7 @@ public class FragmentRegistrationEmail extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!emailCorrect(emailEditText.getText().toString()))
-                    hintError.setText(R.string.reg_check_email);
+                    hintError.setText(R.string.sign_up_email_error);
                 else
                     hintError.setText("");
             }
@@ -125,7 +125,7 @@ public class FragmentRegistrationEmail extends Fragment {
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
-                        hintError.setText(R.string.registration_email_used);
+                        hintError.setText(R.string.sign_up_email_error2);
                     });
                     return;
                 }

@@ -4,14 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
-import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,18 +45,15 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_with_edit, null);
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_delete_wallet, null);
 
         TextView hint = (TextView) view.findViewById(R.id.dialog_fragment_with_edit_title);
         ConstraintLayout okButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_with_edit_ok);
         ConstraintLayout cancelButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_with_edit_cancel);
         EditText editText = (EditText) view.findViewById(R.id.dialog_fragment_with_edit_edit_text);
 
-        hint.setText(R.string.delete_wallet_dialog_hint);
-
         switch (currency) {
             case ETH_CURRENCY_VALUE:
-
                 okButton.setOnClickListener(view1 -> {
                     final String password = editText.getText().toString().trim();
 
@@ -69,9 +62,9 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                         if (isDeleted) {
                             User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = null;
                             User.saveConfig();
-                            Toast.makeText(getContext(), R.string.wallet_successfully_deleted, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.other_success, Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(), R.string.wallet_failed_to_delete, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.other_fail, Toast.LENGTH_LONG).show();
                         }
 
                         Utils.hideKeyboard(view);
@@ -79,12 +72,11 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                         getDialog().cancel();
                         getActivity().onBackPressed();
                     } else {
-                        Toast.makeText(getActivity(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.keyguard_wrong_password, Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
             case BTC_CURRENCY_VALUE:
-
                 okButton.setOnClickListener(view1 -> {
                     final String password = editText.getText().toString().trim();
 
@@ -93,21 +85,20 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                         if (isDeleted) {
                             User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = null;
                             User.saveConfig();
-                            Toast.makeText(getContext(), R.string.wallet_successfully_deleted, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.other_success, Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(), R.string.wallet_failed_to_delete, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.other_fail, Toast.LENGTH_LONG).show();
                         }
                         Utils.hideKeyboard(view);
                         getDialog().dismiss();
                         getDialog().cancel();
                         getActivity().onBackPressed();
                     } else {
-                        Toast.makeText(getActivity(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.keyguard_wrong_password, Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;
             case PMNT_CURRENCY_VALUE:
-
                 okButton.setOnClickListener(view1 -> {
                     final String password = editText.getText().toString().trim();
 
@@ -116,9 +107,9 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                         if (isDeleted) {
                             User.CLIENT_MONEY_PAYMON_WALLET_PASSWORD = null;
                             User.saveConfig();
-                            Toast.makeText(getContext(), R.string.wallet_successfully_deleted, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.other_success, Toast.LENGTH_LONG).show();
                         } else {
-                            Toast.makeText(getContext(), R.string.wallet_failed_to_delete, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), R.string.other_fail, Toast.LENGTH_LONG).show();
                         }
 
                         Utils.hideKeyboard(view);
@@ -126,7 +117,7 @@ public class DialogFragmentDeleteWallet extends DialogFragment {
                         getDialog().cancel();
                         getActivity().onBackPressed();
                     } else {
-                        Toast.makeText(getActivity(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.keyguard_wrong_password, Toast.LENGTH_SHORT).show();
                     }
                 });
                 break;

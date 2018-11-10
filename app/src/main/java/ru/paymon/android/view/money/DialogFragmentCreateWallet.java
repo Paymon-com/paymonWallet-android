@@ -5,15 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import ru.paymon.android.AbsWalletApplication;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
@@ -78,57 +75,58 @@ public class DialogFragmentCreateWallet extends DialogFragment {
     private void createEthereumWallet(final String password) {
         if (!password.isEmpty() && password.length() >= 8) {
             getDialog().cancel();
-            Toast.makeText(getActivity(), R.string.create_wallet_dialog_hint, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.wallet_create_hint, Toast.LENGTH_SHORT).show();
             Utils.stageQueue.postRunnable(() -> {
                 boolean isCreated = application.createEthereumWallet(password);
                 if (!isCreated) {
-                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.create_ethereum_wallet_failed, Toast.LENGTH_LONG).show());
+                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.other_fail, Toast.LENGTH_LONG).show());
                 } else {
                     User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = password;
                     User.saveConfig();
                     ApplicationLoader.applicationHandler.post(() -> {
-                        Toast.makeText(ApplicationLoader.applicationContext, R.string.ethereum_wallet_created, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.other_success, Toast.LENGTH_LONG).show();
                         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.ETHEREUM_WALLET_CREATED);
                     });
                 }
             });
         } else {
-            Toast.makeText(ApplicationLoader.applicationContext, R.string.reg_check_password_length, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ApplicationLoader.applicationContext, R.string.sign_up_password_error, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void createBitcoinWallet(final String password) {
         if (!password.isEmpty() && password.length() >= 8) {
             getDialog().cancel();
+            Toast.makeText(getActivity(), R.string.wallet_create_hint, Toast.LENGTH_SHORT).show();
             application.startBitcoinKit();
             User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = password;
             User.saveConfig();
-            Toast.makeText(ApplicationLoader.applicationContext, R.string.bitcoin_wallet_created, Toast.LENGTH_LONG).show();
+            Toast.makeText(ApplicationLoader.applicationContext, R.string.other_success, Toast.LENGTH_LONG).show();
             NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED);
         } else {
-            Toast.makeText(ApplicationLoader.applicationContext, R.string.reg_check_password_length, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ApplicationLoader.applicationContext, R.string.sign_up_password_error, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void createPaymonWallet(final String password) {
         if (!password.isEmpty() && password.length() >= 8) {
             getDialog().cancel();
-            Toast.makeText(getActivity(), R.string.create_wallet_dialog_hint, Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.wallet_create_hint, Toast.LENGTH_SHORT).show();
             Utils.stageQueue.postRunnable(() -> {
                 boolean isCreated = application.createPaymonWallet(password);
                 if (!isCreated) {
-                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.create_ethereum_wallet_failed, Toast.LENGTH_LONG).show()); //TODO: fix that string
+                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.other_fail, Toast.LENGTH_LONG).show());
                 } else {
                     User.CLIENT_MONEY_PAYMON_WALLET_PASSWORD = password;
                     User.saveConfig();
                     ApplicationLoader.applicationHandler.post(() -> {
-                        Toast.makeText(ApplicationLoader.applicationContext, R.string.paymon_wallet_created, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.other_success, Toast.LENGTH_LONG).show();
                         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.PAYMON_WALLET_CREATED);
                     });
                 }
             });
         } else {
-            Toast.makeText(ApplicationLoader.applicationContext, R.string.reg_check_password_length, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ApplicationLoader.applicationContext, R.string.sign_up_password_error, Toast.LENGTH_SHORT).show();
         }
     }
 }

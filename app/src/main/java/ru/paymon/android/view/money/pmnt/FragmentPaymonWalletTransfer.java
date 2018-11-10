@@ -7,13 +7,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.shawnlin.numberpicker.NumberPicker;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
@@ -46,7 +42,6 @@ import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.activities.QrCodeScannerActivity;
 import ru.paymon.android.models.ExchangeRate;
-import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.viewmodels.MoneyViewModel;
 
@@ -127,8 +122,8 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 //        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
 //        fiatCurrencyPicker.setValue(2);
 
-        gasPriceBar.setIndicatorTextFormat(getString(R.string.current_gas_price) +": ${PROGRESS} GWEI");
-        gasLimitBar.setIndicatorTextFormat(getString(R.string.current_gas_limit) + ": ${PROGRESS}");
+        gasPriceBar.setIndicatorTextFormat(getString(R.string.wallet_transfer_fee_eth_gas_price) + ": ${PROGRESS} GWEI");
+        gasLimitBar.setIndicatorTextFormat(getString(R.string.wallet_transfer_fee_eth_gas_limit) + ": ${PROGRESS}");
         fromAddressTextView.setText(application.getPaymonWallet().publicAddress);
 
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
@@ -183,7 +178,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 String value = s.toString();
 
                 if (!Utils.verifyETHpubKey(value)) {
-                    receiverAddressEditText.setError(getText(R.string.not_a_eth_address));
+                    receiverAddressEditText.setError(getText(R.string.wallet_not_a_eth_address));
                 } else {
                     receiverAddressEditText.setError(null);
                 }
@@ -209,14 +204,14 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 }
 
                 if (value.isEmpty()) {
-                    amountEditText.setError(getText(R.string.required_field));
+                    amountEditText.setError(getText(R.string.other_required_field));
                     return;
                 }
 
                 pmntAmount = Double.parseDouble(value);
 
                 if (pmntAmount <= 0) {
-                    amountEditText.setError(getText(R.string.invalid_value));
+                    amountEditText.setError(getText(R.string.other_invalid_value));
                     return;
                 }
 
@@ -308,11 +303,11 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
         if (gasLimit < Config.GAS_LIMIT_CONTRACT_DEFAULT) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage(getText(R.string.gas_is_less_than_200000))
+                    .setMessage(getText(R.string.wallet_a_low_gas_limit))
                     .setCancelable(true)
-                    .setNegativeButton(getText(R.string.button_cancel), (DialogInterface dialog, int which) -> {
+                    .setNegativeButton(getText(R.string.other_cancel), (DialogInterface dialog, int which) -> {
                     })
-                    .setPositiveButton(getText(R.string.continue_transaction), (DialogInterface dialog, int which) -> send());
+                    .setPositiveButton(getText(R.string.other_agree), (DialogInterface dialog, int which) -> send());
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         } else {
@@ -327,7 +322,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         if (bigIntegerBalance != null && bigIntegerEthBalance != null) {
             if (bigIntegerGweiAmount.toBigInteger().compareTo(bigIntegerBalance) == 1 || bigIntegerWeiFee.toBigInteger().compareTo(bigIntegerEthBalance) == 1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                        .setMessage(getText(R.string.insufficient_funds))
+                        .setMessage(getText(R.string.wallet_insufficient_funds))
                         .setCancelable(true);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
@@ -337,7 +332,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
                 Executors.newSingleThreadExecutor().submit(() -> {
                     TransactionReceipt transactionReceipt = application.sendPmntContract(toAddress, bigIntegerGweiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
                     ApplicationLoader.applicationHandler.post(() -> {
-                        final String text = transactionReceipt != null ? getString(R.string.transaction_hash) + ": " + transactionReceipt.getTransactionHash() : getString(R.string.transaction_failed_to_send);
+                        final String text = transactionReceipt != null ? getString(R.string.wallet_hash) + ": " + transactionReceipt.getTransactionHash() : getString(R.string.other_fail);
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
                                 .setMessage(text)
                                 .setCancelable(true);
@@ -389,7 +384,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
             }
         } else {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext())
-                    .setMessage(getText(R.string.not_read_qr))
+                    .setMessage(getText(R.string.wallet_could_not_read_qr))
                     .setCancelable(true);
             android.support.v7.app.AlertDialog alertDialog = builder.create();
             alertDialog.show();

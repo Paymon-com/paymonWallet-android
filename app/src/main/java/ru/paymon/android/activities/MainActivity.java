@@ -2,7 +2,6 @@ package ru.paymon.android.activities;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
-import android.arch.lifecycle.ViewModelProvider;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -21,8 +19,6 @@ import android.widget.Toast;
 import androidx.navigation.NavDestination;
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
-import ru.paymon.android.ApplicationLoader;
-import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.net.NetworkManager;
@@ -89,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Boolean cState = connectionState.getValue();
         Boolean aState = authorizationState.getValue();
         if (nState == null || cState == null || aState == null) return;
-        String text = getString(R.string.connecting);
+        String text = getString(R.string.other_connecting);
         ((TextView) connectingConstraint.findViewById(R.id.textView3)).setText(text);
         connectingConstraint.setVisibility(nState && cState && aState ? View.GONE : View.VISIBLE);
         if (!cState){
@@ -158,7 +154,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 if (lastTimeBackPressed + 2000 > System.currentTimeMillis()) {
                     System.exit(0);
                 } else {
-                    Toast.makeText(getBaseContext(), R.string.double_tap_to_close_the_app, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getBaseContext(), R.string.other_double_tap_to_close, Toast.LENGTH_LONG).show();
                 }
                 lastTimeBackPressed = System.currentTimeMillis();
             } else {

@@ -121,8 +121,8 @@ public class FragmentEthereumWalletTransfer extends Fragment {
 //        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
 //        fiatCurrencyPicker.setValue(2);
 
-        gasPriceBar.setIndicatorTextFormat(getString(R.string.current_gas_price) + ": ${PROGRESS} GWEI");
-        gasLimitBar.setIndicatorTextFormat(getString(R.string.current_gas_limit) + ": ${PROGRESS}");
+        gasPriceBar.setIndicatorTextFormat(getString(R.string.wallet_transfer_fee_eth_gas_price) + ": ${PROGRESS} GWEI");
+        gasLimitBar.setIndicatorTextFormat(getString(R.string.wallet_transfer_fee_eth_gas_limit) + ": ${PROGRESS}");
         fromAddressTextView.setText(application.getEthereumWallet().publicAddress);
 
         final String localCurrency = Currency.getInstance(Locale.getDefault()).getCurrencyCode();
@@ -178,7 +178,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                 String value = s.toString();
 
                 if (!Utils.verifyETHpubKey(value)) {
-                    receiverAddressEditText.setError(getText(R.string.not_a_eth_address));
+                    receiverAddressEditText.setError(getText(R.string.wallet_not_a_eth_address));
                 } else {
                     receiverAddressEditText.setError(null);
                 }
@@ -204,7 +204,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                 }
 
                 if (value.isEmpty()) {
-                    amountEditText.setError(getText(R.string.required_field));
+                    amountEditText.setError(getText(R.string.other_required_field));
                     return;
                 }
 
@@ -305,7 +305,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         if (bigIntegerBalance != null) {
             if (bigIntegerWeiTotal.toBigInteger().compareTo(bigIntegerBalance) == 1) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
-                        .setMessage(getText(R.string.insufficient_funds))
+                        .setMessage(getText(R.string.wallet_insufficient_funds))
                         .setCancelable(true);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
@@ -314,7 +314,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
                 final BigInteger bigIntegerGasLimit = new BigDecimal(gasLimit).toBigInteger();
                 Executors.newSingleThreadExecutor().submit(() -> {
                     EthSendTransaction ethSendTransaction = application.sendRawEthereumTx(toAddress, bigIntegerWeiAmount.toBigInteger(), bigIntegerGasPrice, bigIntegerGasLimit);
-                    final String text = ethSendTransaction != null ? getString(R.string.transaction_hash) + ": " + ethSendTransaction.getTransactionHash() : getString(R.string.transaction_failed_to_send);
+                    final String text = ethSendTransaction != null ? getString(R.string.wallet_hash) + ": " + ethSendTransaction.getTransactionHash() : getString(R.string.other_fail);
                     ApplicationLoader.applicationHandler.post(() -> {
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                 .setMessage(text)
@@ -371,7 +371,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
             }
         } else {
             android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
-                    .setMessage(getText(R.string.not_read_qr))
+                    .setMessage(getText(R.string.wallet_could_not_read_qr))
                     .setCancelable(true);
             android.support.v7.app.AlertDialog alertDialog = builder.create();
             alertDialog.show();

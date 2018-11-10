@@ -659,7 +659,6 @@ public class RPC {
         public MessageAction action;
 
 
-
         public static Message deserialize(SerializableData stream, int constructor, boolean exception) {
             Message result = null;
             switch (constructor) {
@@ -2068,6 +2067,10 @@ public class RPC {
 
         public Peer peer;
 
+        public PM_deleteChat(final Peer peer) {
+            this.peer = peer;
+        }
+
         public void readParams(SerializableData stream, boolean exception) {
             peer = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
         }
@@ -2317,7 +2320,7 @@ public class RPC {
         }
     }
 
-    public static class MessageAction extends Packet implements Parcelable{
+    public static class MessageAction extends Packet implements Parcelable {
         public String message;
         public List<UserObject> us1ers;
 
@@ -2385,7 +2388,7 @@ public class RPC {
         }
     }
 
-    public static class PM_deleteProfilePhoto  extends MessageAction {
+    public static class PM_deleteProfilePhoto extends Packet {
         public final static int svuid = 432807616;
 
         public void readParams(SerializableData stream, boolean exception) {

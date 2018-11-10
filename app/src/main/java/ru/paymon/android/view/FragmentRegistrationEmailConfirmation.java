@@ -10,7 +10,6 @@ import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.ContextThemeWrapper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
 import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
@@ -28,12 +25,10 @@ import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.components.DialogProgress;
-import ru.paymon.android.firebase.FcmService;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
-import static ru.paymon.android.Config.TAG;
 import static ru.paymon.android.utils.Utils.emailCorrect;
 
 public class FragmentRegistrationEmailConfirmation extends Fragment implements NotificationManager.IListener {
@@ -91,7 +86,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
             @Override
             public void afterTextChanged(Editable s) {
                 if (!emailCorrect(email.getText().toString())) {
-                    hintError.setText(R.string.reg_check_email);
+                    hintError.setText(R.string.sign_up_email_error);
                 } else {
                     hintError.setText("");
                 }
@@ -101,7 +96,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
         timer = new CountDownTimer(30000, 1000) {
             @Override
             public void onTick(long l) {
-                time.setText(getString(R.string.time_to_next_dispatch) + ": " + android.text.format.DateFormat.format("mm:ss", l).toString());
+                time.setText(getString(R.string.email_confirmation_time) + " " + android.text.format.DateFormat.format("mm:ss", l).toString());
             }
 
             @Override
@@ -164,9 +159,10 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
                         ApplicationLoader.applicationHandler.post(() -> {
                             hintError.setText("");
                             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
-                                    .setMessage(getString(R.string.confirmation_code_was_sent))
+                                    .setMessage(getString(R.string.recovery_password_sent_error))
                                     .setCancelable(true)
-                                    .setPositiveButton(getString(R.string.ok), (DialogInterface dialog, int which) -> {});
+                                    .setPositiveButton(getString(R.string.other_ok), (DialogInterface dialog, int which) -> {
+                                    });
                             AlertDialog alertDialog = builder.create();
                             alertDialog.show();
                         });
@@ -175,10 +171,11 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
                     if (r instanceof RPC.PM_boolTrue) {
                         ApplicationLoader.applicationHandler.post(() -> {
                             hintError.setText("");
-                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
-                                    .setMessage(getString(R.string.confirmation_code_was_sent))
+                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
+                                    .setMessage(getString(R.string.recovery_password_sent))
                                     .setCancelable(true)
-                                    .setPositiveButton(getString(R.string.ok), (DialogInterface dialog, int which) -> {});
+                                    .setPositiveButton(getString(R.string.other_ok), (DialogInterface dialog, int which) -> {
+                                    });
                             AlertDialog alertDialog = builder.create();
                             alertDialog.show();
                         });

@@ -7,9 +7,9 @@
         <!--android:key="basic_sort_friends_list"-->
         <!--android:title="@string/app_sort_friends" />-->
     <ListPreference
-        android:defaultValue="@string/date_format_24h"
+        android:defaultValue="@string/settings_basic_24h"
         android:entries="@array/format_time"
         android:entryValues="@array/format_time"
         android:key="CLIENT_BASIC_DATE_FORMAT_LIST"
-        android:title="@string/format_time" />
+        android:title="@string/settings_basic_format_time" />
 </PreferenceScreen>

@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-
 import org.bitcoinj.wallet.Wallet;
 
 import java.util.ArrayList;
@@ -98,13 +97,14 @@ public class FragmentBitcoinWallet extends Fragment implements NotificationManag
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
                     .setMessage("Открыть подробней?")
                     .setCancelable(false)
-                    .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                    .setPositiveButton(getString(R.string.other_ok), (dialogInterface, i) -> {
                         final String url = Config.DEBUG ? "https://live.blockcypher.com/btc-testnet/tx/" + transactionItem.hash: "https://live.blockcypher.com/btc/tx/" + transactionItem.hash;
                         final Uri uri = Uri.parse(url);
                         final Intent browserIntent = new Intent(Intent.ACTION_VIEW, uri);
                         startActivity(browserIntent);
                     })
-                    .setNegativeButton(getString(R.string.button_cancel), (dialogInterface, i) -> {});
+                    .setNegativeButton(getString(R.string.other_cancel), (dialogInterface, i) -> {
+                    });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         });

@@ -44,7 +44,6 @@ import ru.paymon.android.net.RPC;
 
 import static android.content.Context.CLIPBOARD_SERVICE;
 import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_IS_24H;
-import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_LIST;
 
 public class Utils {
     public static volatile DispatchQueue netQueue = new DispatchQueue("netQueue");
@@ -169,9 +168,9 @@ public class Utils {
             pattern = "HH:mm";
         else if (dayDiff == 1 && monthDiff == 0)
             if (CLIENT_BASIC_DATE_FORMAT_IS_24H)
-                return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("HH:mm", msgDate);
+                return ApplicationLoader.applicationContext.getString(R.string.other_yesterday) + " " + DateFormat.format("HH:mm", msgDate);
             else
-                return ApplicationLoader.applicationContext.getString(R.string.msg_time) + " " + DateFormat.format("hh:mm aa", msgDate);
+                return ApplicationLoader.applicationContext.getString(R.string.other_yesterday) + " " + DateFormat.format("hh:mm aa", msgDate);
         else if (dayDiff > 1 || monthDiff > 0)
             pattern = "d MMM";
         else if (yearDiff != 0)
@@ -204,7 +203,7 @@ public class Utils {
         ClipboardManager clipboard = (ClipboardManager) fragmentActivity.getSystemService(CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("Copied Text", text);
         clipboard.setPrimaryClip(clip);
-        Toast.makeText(fragmentActivity, fragmentActivity.getString(R.string.text_is_copied), Toast.LENGTH_SHORT).show();
+        Toast.makeText(fragmentActivity, fragmentActivity.getString(R.string.other_text_is_copied), Toast.LENGTH_SHORT).show();
     }
 
     public static void replaceFragmentWithAnimationFade(FragmentManager fragmentManager, Fragment fragment, String tag) {

@@ -93,7 +93,7 @@ public class FragmentRecoveryPasswordCode extends Fragment {
 
     public void showFragmentRecoveryPasswordCode() {
         if (codeEditText.getText().toString().isEmpty()) {
-            hintError.setText(R.string.string_code_is_empty);
+            hintError.setText(R.string.recovery_password_code_empty);
             codeEditText.requestFocus();
             return;
         }

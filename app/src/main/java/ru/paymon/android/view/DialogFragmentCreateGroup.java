@@ -84,7 +84,7 @@ public class DialogFragmentCreateGroup extends DialogFragment {
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
-                        Toast toast = Toast.makeText(getContext(),R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getContext(), R.string.other_error, Toast.LENGTH_SHORT);
                         toast.show();
                     });
                     return;

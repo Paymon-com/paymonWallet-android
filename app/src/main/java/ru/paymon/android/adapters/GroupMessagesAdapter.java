@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import ru.paymon.android.components.CircularImageView;
-
 import com.vanniktech.emoji.EmojiTextView;
 
 import java.util.ArrayList;
@@ -22,6 +20,7 @@ import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.selection.MessageItemDetail;
 import ru.paymon.android.selection.MessageItemLookup;
@@ -203,7 +202,7 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
                 final RPC.Group group = GroupsManager.getInstance().getGroup(groupID);
                 final RPC.UserObject creator = UsersManager.getInstance().getUser(group.creatorID);
                 if (creator == null) return;
-                String createGroupString = String.format("%s %s \"%s\"", Utils.formatUserName(creator), context.getString(R.string.created_group), group.title);
+                String createGroupString = String.format("%s %s \"%s\"", Utils.formatUserName(creator), context.getString(R.string.chat_message_created_group), group.title);
                 msg.setText(createGroupString);
             }
         }

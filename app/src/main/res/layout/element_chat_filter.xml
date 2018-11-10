@@ -27,7 +27,7 @@
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
             android:fontFamily="@font/roboto_thin"
-            android:text="@string/title_dialogs"
+            android:text="@string/chats_filter_dialogs"
             android:textAllCaps="false"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent" />
@@ -53,7 +53,7 @@
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
             android:fontFamily="@font/roboto_thin"
-            android:text="@string/title_chats"
+            android:text="@string/chats_filter_chats"
             android:textAllCaps="false"
             android:textColor="@color/white" />
     </LinearLayout>
@@ -78,7 +78,7 @@
             android:layout_gravity="center"
             android:background="@color/colorPrimary"
             android:fontFamily="@font/roboto_thin"
-            android:text="@string/groups"
+            android:text="@string/chats_filter_groups"
             android:textAllCaps="false"
             android:textColor="@color/white" />
     </LinearLayout>

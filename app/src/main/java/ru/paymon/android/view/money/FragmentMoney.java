@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.navigation.Navigation;
+import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
@@ -72,7 +72,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_money_currency_eur_backlight);
         ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_money_currency_local_backlight);
 
-        dialogProgress = new CustomDialogProgress(getContext(), "Exchange rates and wallets", R.drawable.cryptocurrency);//TODO:String
+        dialogProgress = new CustomDialogProgress(getContext(), ApplicationLoader.applicationContext.getString(R.string.wallet_loader), R.drawable.cryptocurrency);
         dialogProgress.setCancelable(false);
 
         exchangeRatesRecView.setHasFixedSize(true);

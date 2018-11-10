@@ -253,10 +253,10 @@ public class BlurLockView extends FrameLayout
     private String hint;
 
     public void showHint() {
-//        if (User.CLIENT_SECURITY_PASSWORD_HINT != null)
-//            Toast.makeText(ApplicationLoader.applicationContext, "Ваша подсказка : " + User.CLIENT_SECURITY_PASSWORD_HINT, Toast.LENGTH_SHORT).show(); //TODO:string
-//        else
-//            Toast.makeText(ApplicationLoader.applicationContext, "У вас нет подсказки!", Toast.LENGTH_SHORT).show(); //TODO:string
+        if (User.CLIENT_SECURITY_PASSWORD_HINT != null)
+            Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.keyguard_hint) + ": " + User.CLIENT_SECURITY_PASSWORD_HINT, Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.keyguard_hint_empty), Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -391,7 +391,7 @@ public class BlurLockView extends FrameLayout
         if (inputedString == null || inputedString.isEmpty()) return;
 
         if (User.CLIENT_SECURITY_PASSWORD_VALUE == null && notConfirmedPassword == null) {
-            setTitle("Повторите желаемый пароль");//TODO:string
+            setTitle(ApplicationLoader.applicationContext.getString(R.string.sign_up_password_repeat));
             setTypeface(Typeface.DEFAULT);
             setType(Password.NUMBER, false);
             notConfirmedPassword = inputedString;
@@ -402,7 +402,7 @@ public class BlurLockView extends FrameLayout
             }
         } else if (User.CLIENT_SECURITY_PASSWORD_VALUE == null && notConfirmedPassword != null && confirmedPassword == null) {
             if (inputedString.equals(notConfirmedPassword)) {
-                setTitle("Введите подсказку");//TODO:string
+                setTitle(ApplicationLoader.applicationContext.getString(R.string.keyguard_hint_enter));
                 setTypeface(Typeface.DEFAULT);
                 setType(Password.TEXT, false);
                 confirmedPassword = notConfirmedPassword;
@@ -412,7 +412,7 @@ public class BlurLockView extends FrameLayout
                     indicator.clear();
                 }
             } else {
-                Toast.makeText(getContext(), "Пароли не совпадают!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), ApplicationLoader.applicationContext.getString(R.string.sign_up_password_repeat_error), Toast.LENGTH_LONG).show();
             }
         } else if (User.CLIENT_SECURITY_PASSWORD_VALUE == null && confirmedPassword != null && hint == null) {
             hint = inputedString.isEmpty() ? "" : inputedString;

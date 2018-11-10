@@ -2,16 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="CLIENT_SECURITY_CATEGORY"
-        android:title="@string/security_app">
+        android:title="@string/settings_security_app">
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="CLIENT_SECURITY_PASSWORD_ENABLED_CHECK"
-            android:summary="@string/security_password_protect_summary"
-            android:title="@string/security_password_protect" />
+            android:summary="@string/settings_security_summary"
+            android:title="@string/settings_security_pass" />
         <Preference
             android:enabled="false"
             android:key="CLIENT_SECURITY_PASSWORD_PREFERENCE"
-            android:title="@string/security_enter_password" />
+            android:title="@string/wallet_backup_enter_password" />
     </PreferenceCategory>
     <!--<PreferenceCategory-->
     <!--android:title="@string/security_chat"-->

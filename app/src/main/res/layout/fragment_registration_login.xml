@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <include
         android:id="@+id/include5"
-        layout="@layout/toolbar_registration_login" />
+        layout="@layout/toolbar_registration_login"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <TextView
@@ -19,7 +20,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:fontFamily="sans-serif-light"
-        android:text="@string/registration_login_hint"
+        android:text="@string/sign_up_login_hint"
         android:textAlignment="center"
         android:textColor="@color/blue_dark"
         android:textSize="12sp"
@@ -36,7 +37,7 @@
         android:background="@color/white_light"
         android:ems="10"
         android:fontFamily="sans-serif-light"
-        android:hint="@string/login"
+        android:hint="@string/sign_up_login"
         android:inputType="textCapSentences|textPersonName"
         android:maxLength="20"
         android:maxLines="1"

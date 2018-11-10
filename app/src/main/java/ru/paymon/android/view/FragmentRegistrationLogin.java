@@ -69,7 +69,7 @@ public class FragmentRegistrationLogin extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (!loginCorrect(loginEditText.getText().toString())) {
-                    hintError.setText(R.string.reg_check_login_correct);
+                    hintError.setText(R.string.sign_up_login_error);
                 } else {
                     hintError.setText("");
                 }

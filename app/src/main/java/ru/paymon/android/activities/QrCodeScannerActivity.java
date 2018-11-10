@@ -74,10 +74,10 @@ public class QrCodeScannerActivity extends AppCompatActivity implements Activity
         }
 
         if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Snackbar.make(mainLayout, R.string.camera_permission_was_granted, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(mainLayout, R.string.qr_scanner_camera_permission_was_granted, Snackbar.LENGTH_SHORT).show();
             initQRCodeReaderView();
         } else {
-            Snackbar.make(mainLayout, R.string.camera_permission_request_was_denied, Snackbar.LENGTH_SHORT)
+            Snackbar.make(mainLayout, R.string.qr_scanner_camera_permission_request_was_denied, Snackbar.LENGTH_SHORT)
                     .show();
         }
     }
@@ -95,12 +95,12 @@ public class QrCodeScannerActivity extends AppCompatActivity implements Activity
 
     private void requestCameraPermission() {
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.CAMERA)) {
-            Snackbar.make(mainLayout, R.string.camera_access_is_required,
-                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.ok, view -> ActivityCompat.requestPermissions(QrCodeScannerActivity.this, new String[] {
+            Snackbar.make(mainLayout, R.string.qr_scanner_camera_access_is_required,
+                    Snackbar.LENGTH_INDEFINITE).setAction(R.string.other_ok, view -> ActivityCompat.requestPermissions(QrCodeScannerActivity.this, new String[]{
                             Manifest.permission.CAMERA
                     }, MY_PERMISSION_REQUEST_CAMERA)).show();
         } else {
-            Snackbar.make(mainLayout, R.string.permission_is_not_available,
+            Snackbar.make(mainLayout, R.string.qr_scanner_permission_is_not_available,
                     Snackbar.LENGTH_SHORT).show();
             ActivityCompat.requestPermissions(this, new String[] {
                     Manifest.permission.CAMERA

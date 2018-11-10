@@ -115,7 +115,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:fontFamily="@font/roboto_thin"
-        android:text="@string/contact_information"
+        android:text="@string/user_profile_contact_information"
         android:textAllCaps="true"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"

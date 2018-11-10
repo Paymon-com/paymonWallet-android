@@ -11,7 +11,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,12 +83,12 @@ public class FragmentSheetDialog extends BottomSheetDialogFragment {
             return;
         }
         if (filesList.size() > 0 || mediasList.size() > 0) {
-            buttonAcceptOrCloseAttachment.setText(R.string.to_attach);
+            buttonAcceptOrCloseAttachment.setText(R.string.file_picker_attach);
             buttonAcceptOrCloseAttachment.setOnClickListener(v -> {
                 //TODO:кнопка Отправить
             });
         } else {
-            buttonAcceptOrCloseAttachment.setText(R.string.button_cancel);
+            buttonAcceptOrCloseAttachment.setText(R.string.other_cancel);
             buttonAcceptOrCloseAttachment.setOnClickListener(v -> dialog.dismiss());
         }
     }

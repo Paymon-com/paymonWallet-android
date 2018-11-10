@@ -40,4 +40,10 @@ public interface ChatDao {
 
     @Query("SELECT * FROM ChatsItem WHERE id = :cid")
     ChatsItem getChatByChatID(int cid);
+
+    @Query("SELECT * FROM ChatsItem")
+    List<ChatsItem> getChatsList();
+
+    @Query("DELETE FROM ChatsItem WHERE id=:cid")
+    void deleteChatByID(int cid);
 }

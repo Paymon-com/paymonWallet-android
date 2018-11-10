@@ -16,7 +16,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto_thin"
         android:textColor="@color/white"
-        android:text="@string/registration_password_hint"
+        android:text="@string/sign_up_password_hint"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -29,7 +29,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/wallet_create_title"
+        android:text="@string/wallets_create"
         android:textColor="@color/white"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -51,23 +51,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/white"
-            android:hint="@string/password"
+            android:hint="@string/wallet_backup_enter_password"
             android:inputType="textPassword"
             android:textSize="20sp"
             tools:targetApi="lollipop" />
     </android.support.design.widget.TextInputLayout>
 
     <!--<Button-->
-        <!--android:id="@+id/dialog_fragment_create_wallet_create_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginEnd="36dp"-->
-        <!--android:background="@android:color/transparent"-->
-        <!--android:fontFamily="sans-serif-light"-->
-        <!--android:text="@string/create_button"-->
-        <!--android:textColor="@color/white"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--tools:layout_editor_absoluteY="324dp" />-->
+    <!--android:id="@+id/dialog_fragment_create_wallet_create_button"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginEnd="36dp"-->
+    <!--android:background="@android:color/transparent"-->
+    <!--android:fontFamily="sans-serif-light"-->
+    <!--android:text="@string/create_button"-->
+    <!--android:textColor="@color/white"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--tools:layout_editor_absoluteY="324dp" />-->
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/dialog_fragment_create_wallet_create_button"
@@ -90,7 +90,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:text="@string/create_button"
+            android:text="@string/other_ok"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/imageView46"

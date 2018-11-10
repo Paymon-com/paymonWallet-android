@@ -5,14 +5,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -83,7 +81,7 @@ public class DialogFragmentBackupWallet extends DialogFragment {
 
         backupButton.setOnClickListener((view1 -> {
             if (filePath[0] == null) {
-                Toast.makeText(getContext(), R.string.backup_file_not_selected, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.wallet_backup_file_not_selected, Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -111,24 +109,24 @@ public class DialogFragmentBackupWallet extends DialogFragment {
     private void backupBitcoinWallet(final String path, final String password) {
         boolean isBackuped = application.backupBitcoinWallet(path, password);
         if (isBackuped)
-            Toast.makeText(getContext(), R.string.backup_created, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.other_success, Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(getContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.other_fail, Toast.LENGTH_LONG).show();
     }
 
     private void backupEthereumWallet(final String path, final String password) {
         boolean isBackuped = application.backupEthereumWallet(path, password);
         if (isBackuped)
-            Toast.makeText(getContext(), R.string.backup_created, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.other_success, Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(getContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.other_fail, Toast.LENGTH_LONG).show();
     }
 
     private void backupPaymonWallet(final String path, final String password) {
         boolean isBackuped = application.backupPaymonWallet(path, password);
         if (isBackuped)
-            Toast.makeText(getContext(), R.string.backup_created, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.other_success, Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(getContext(), R.string.backup_failed, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), R.string.other_fail, Toast.LENGTH_LONG).show();
     }
 }

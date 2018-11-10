@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/title_settings">
+    <item android:title="@string/more_menu_settings">
         <menu>
             <item
                 android:id="@+id/settings_notifications"
@@ -23,15 +23,15 @@
             <item
                 android:id="@+id/settings_reset_settings"
                 android:icon="@drawable/warning"
-                android:title="@string/reset_settings" />
+                android:title="@string/settings_reset" />
             <item
                 android:id="@+id/settings_about_programm"
                 android:icon="@drawable/warning"
-                android:title="@string/settings_about_programm" />
+                android:title="@string/settings_about" />
             <item
                 android:id="@+id/settings_exit"
                 android:icon="@drawable/exit"
-                android:title="@string/exit" />
+                android:title="@string/settings_exit" />
         </menu>
     </item>
 

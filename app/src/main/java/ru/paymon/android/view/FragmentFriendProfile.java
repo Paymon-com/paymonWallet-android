@@ -11,12 +11,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ru.paymon.android.components.CircularImageView;
-
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.components.DialogProgress;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -98,7 +97,7 @@ public class FragmentFriendProfile extends Fragment {
                         if (user.email != null && !user.email.isEmpty())
                             friendProfileCity.setText(user.email);
                         else
-                            friendProfileCity.setText(R.string.not_specified);
+                            friendProfileCity.setText(R.string.user_profile_not_specified);
 
                         if (!user.photoURL.url.isEmpty())
                             Utils.loadPhoto(user.photoURL.url, avatar);

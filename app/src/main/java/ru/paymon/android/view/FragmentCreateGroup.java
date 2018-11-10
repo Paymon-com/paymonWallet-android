@@ -65,7 +65,7 @@ public class FragmentCreateGroup extends Fragment {
                     arrayList.add(user);
             }
             if (arrayList.size() <= 0) {
-                Toast.makeText(getContext(), R.string.no_one_selected, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.create_group_error, Toast.LENGTH_LONG).show();
                 return;
             }
             Bundle bundle = new Bundle();

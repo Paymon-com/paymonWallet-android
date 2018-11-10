@@ -7,11 +7,9 @@ import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ShareCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -83,7 +81,7 @@ public class DialogFragmentPublicKey extends DialogFragment {
             final ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(getActivity());
             builder.setType("text/plain");
             builder.setText(pubKey);
-            builder.setChooserTitle(R.string.bitmap_fragment_share);
+            builder.setChooserTitle(R.string.other_share);
             builder.startChooser();
         });
 

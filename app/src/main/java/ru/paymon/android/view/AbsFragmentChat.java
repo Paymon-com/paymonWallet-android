@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,7 +43,7 @@ public abstract class AbsFragmentChat extends Fragment {
     public EmojiEditText messageInput;
     public ImageButton sendButton;
     public ImageView emoticonsButton;
-//    public Button buttonAttachment;
+    //    public Button buttonAttachment;
     public LinearLayout toolbarContainer;
     public View toolbarView;
     public View toolbarViewSelected;
@@ -116,7 +115,7 @@ public abstract class AbsFragmentChat extends Fragment {
             groupUsers = GroupsManager.getInstance().getGroupUsers(chatID);
             if (group != null) {
                 chatTitleTextView.setText(group.title);
-                participantsCountTextView.setText(String.format("%s: %d", getString(R.string.participants), ((FragmentGroupChat) this).groupUsers.size()));
+                participantsCountTextView.setText(String.format("%s: %d", getString(R.string.group_chat_participants), ((FragmentGroupChat) this).groupUsers.size()));
                 if (!group.photoURL.url.isEmpty())
                     Utils.loadPhoto(group.photoURL.url, toolbarAvatar);
             }

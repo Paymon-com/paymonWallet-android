@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true">
 
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar_authorization" />
+        layout="@layout/toolbar_authorization"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/forgot_password"
@@ -19,7 +20,7 @@
         android:fontFamily="sans-serif-light"
         android:paddingBottom="8dp"
         android:paddingTop="8dp"
-        android:text="@string/forgot_password"
+        android:text="@string/sign_in_hint2"
         android:textAllCaps="false"
         android:textColor="@color/white"
         android:textSize="12sp"
@@ -35,7 +36,7 @@
         android:background="@color/white_light"
         android:ems="10"
         android:fontFamily="sans-serif-light"
-        android:hint="@string/email_or_login"
+        android:hint="@string/sign_in_email_or_login"
         android:inputType="textPersonName"
         android:maxLength="128"
         android:maxLines="1"
@@ -58,7 +59,7 @@
         android:background="@color/blue_light"
         android:ems="10"
         android:fontFamily="sans-serif-light"
-        android:hint="@string/password"
+        android:hint="@string/sign_in_password"
         android:inputType="textPassword"
         android:maxLength="256"
         android:maxLines="1"

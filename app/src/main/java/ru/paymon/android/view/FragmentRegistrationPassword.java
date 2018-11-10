@@ -7,8 +7,6 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -86,7 +84,7 @@ public class FragmentRegistrationPassword extends Fragment {
                 String text = editable.toString();
 
                 if (text.length() < 8)
-                    hintError.setText(R.string.reg_check_password_length);
+                    hintError.setText(R.string.sign_up_password_error);
                 else
                     hintError.setText("");
             }
@@ -108,7 +106,7 @@ public class FragmentRegistrationPassword extends Fragment {
                 String text = s.toString();
 
                 if (!text.equals(passwordEditText.getText().toString())) {
-                    hintError.setText(R.string.error_incorrect_double_password);
+                    hintError.setText(R.string.sign_up_password_repeat_error);
                 } else {
                     hintError.setText("");
                 }

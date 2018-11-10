@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:queryHint="@string/search_contacts"
+        app:queryHint="@string/contacts_search_hint"
         app:searchIcon="@drawable/search" />
 
     <ImageView
@@ -43,7 +43,7 @@
         android:layout_marginTop="8dp"
         android:fontFamily="@font/roboto_thin"
         android:gravity="center"
-        android:text="@string/search_for_contacts"
+        android:text="@string/contacts_empty_hint"
         android:textColor="@color/gray_dim"
         android:textSize="21sp"
         app:layout_constraintBottom_toBottomOf="parent"

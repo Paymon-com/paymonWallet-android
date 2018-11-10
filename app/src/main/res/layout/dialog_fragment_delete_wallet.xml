@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:background="@color/colorPrimary"
     android:layout_height="wrap_content">
@@ -15,6 +14,7 @@
         android:layout_marginEnd="16dp"
         android:fontFamily="@font/roboto_thin"
         android:textColor="@color/white"
+        android:text="@string/wallet_remove_hint"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:background="@color/bg_dialog_title"
-            android:hint="Введите пароль"
+            android:hint="@string/wallet_backup_enter_password"
             android:inputType="textPassword"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
@@ -48,24 +48,24 @@
     </android.support.design.widget.TextInputLayout>
 
     <!--<EditText-->
-        <!--android:id="@+id/dialog_fragment_with_edit_edit_text"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:background="@color/blue_light"-->
-        <!--android:ems="10"-->
-        <!--android:fontFamily="sans-serif-light"-->
-        <!--android:inputType="textPassword"-->
-        <!--android:maxLength="128"-->
-        <!--android:maxLines="1"-->
-        <!--android:paddingLeft="16dp"-->
-        <!--android:paddingTop="8dp"-->
-        <!--android:paddingRight="16dp"-->
-        <!--android:paddingBottom="8dp"-->
-        <!--android:textAlignment="center"-->
-        <!--android:textColor="@color/colorPrimary"-->
-        <!--app:layout_constraintEnd_toEndOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--tools:layout_editor_absoluteY="43dp" />-->
+    <!--android:id="@+id/dialog_fragment_with_edit_edit_text"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/blue_light"-->
+    <!--android:ems="10"-->
+    <!--android:fontFamily="sans-serif-light"-->
+    <!--android:inputType="textPassword"-->
+    <!--android:maxLength="128"-->
+    <!--android:maxLines="1"-->
+    <!--android:paddingLeft="16dp"-->
+    <!--android:paddingTop="8dp"-->
+    <!--android:paddingRight="16dp"-->
+    <!--android:paddingBottom="8dp"-->
+    <!--android:textAlignment="center"-->
+    <!--android:textColor="@color/colorPrimary"-->
+    <!--app:layout_constraintEnd_toEndOf="parent"-->
+    <!--app:layout_constraintStart_toStartOf="parent"-->
+    <!--tools:layout_editor_absoluteY="43dp" />-->
 
 
     <android.support.constraint.ConstraintLayout
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:text="@string/agree"
+            android:text="@string/other_agree"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/imageView18"
             app:layout_constraintEnd_toStartOf="@+id/imageView18"
@@ -136,7 +136,7 @@
             android:id="@+id/dialog_fragment_with_edit_cancel_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/button_cancel"
+            android:text="@string/other_cancel"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/imageView17"
             app:layout_constraintEnd_toStartOf="@+id/imageView17"

@@ -1,10 +1,11 @@
 package ru.paymon.android.view;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,8 @@ import ru.paymon.android.pagedlib.MessageDiffUtilCallback;
 import ru.paymon.android.selection.MessageItemKeyProvider;
 import ru.paymon.android.selection.MessageItemLookup;
 import ru.paymon.android.utils.Utils;
+
+import static android.content.Context.CLIPBOARD_SERVICE;
 
 public class FragmentChat extends AbsFragmentChat {
     private MessagesAdapter messagesAdapter;
@@ -88,7 +91,7 @@ public class FragmentChat extends AbsFragmentChat {
                     if (selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.GONE);
                         toolbarViewSelected.setVisibility(View.VISIBLE);
-                        selectedItemCount.setText(getString(R.string.selected_messages_count) + ": " + selectionTracker.getSelection().size());
+                        selectedItemCount.setText(getString(R.string.chat_message_selected) + " " + selectionTracker.getSelection().size());
                     } else if (!selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.VISIBLE);
                         toolbarViewSelected.setVisibility(View.GONE);
@@ -112,17 +115,17 @@ public class FragmentChat extends AbsFragmentChat {
                     checkedMessageIDs.add(message.id);
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
-                        .setMessage(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
+                        .setTitle(ApplicationLoader.applicationContext.getString(R.string.chat_message_delete))
                         .setCancelable(false)
-                        .setNegativeButton(getContext().getString(R.string.button_cancel), (dialogInterface, i) -> {
+                        .setNegativeButton(getContext().getString(R.string.other_cancel), (dialogInterface, i) -> {
                         })
-                        .setPositiveButton(getContext().getString(R.string.button_ok), (dialogInterface, i) -> {
+                        .setPositiveButton(getContext().getString(R.string.other_ok), (dialogInterface, i) -> {
                             RPC.PM_deleteDialogMessages request = new RPC.PM_deleteDialogMessages();
                             request.messageIDs.addAll(checkedMessageIDs);
 
                             NetworkManager.getInstance().sendRequest(request, (response, error) -> {
                                 if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
-                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.unable_to_delete_messages, Toast.LENGTH_SHORT).show());
+                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.chat_message_delete_fail, Toast.LENGTH_SHORT).show());
                                     return;
                                 }
 
@@ -136,6 +139,18 @@ public class FragmentChat extends AbsFragmentChat {
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
             }
+        });
+
+        copy.setOnClickListener(v->{
+            final ArrayList<RPC.Message> selectedMessages = Lists.newArrayList(selectionTracker.getSelection().iterator());
+            final StringBuilder copiedMessages = new StringBuilder();
+            for (final RPC.Message msg:selectedMessages) {
+                copiedMessages.append(msg.text + "\n");
+            }
+            ClipboardManager clipboard = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService(CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("Copied messages", copiedMessages.toString());
+            clipboard.setPrimaryClip(clip);
+            selectionTracker.clearSelection();
         });
 
         return view;

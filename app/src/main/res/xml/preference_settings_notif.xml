@@ -2,16 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <PreferenceCategory
         android:key="MESSAGES_NOTIFICATION_CATEGORY"
-        android:title="@string/notif_messages">
+        android:title="@string/settings_notifications_messages">
         <SwitchPreference
             android:defaultValue="false"
             android:key="CLIENT_MESSAGES_NOTIFY_DONT_WORRY_SWITCH"
-            android:title="@string/notif_do_not_disturb" />
+            android:title="@string/settings_notifications_dnd" />
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="CLIENT_MESSAGES_NOTIFY_VIBRATION_SWITCH"
-            android:title="@string/notif_vibration" />
+            android:title="@string/settings_notifications_vibration" />
 
         <SwitchPreference
             android:defaultValue="true"
