@@ -124,6 +124,7 @@
     <string name="wallet_history_transaction_is_empty">Transaction history is empty</string>
     <string name="wallet_hash">Hash</string>
     <string name="wallet_value">Value</string>
+    <string name="wallet_confirmation">Confirmations</string>
     <string name="wallet_status">Status</string>
     <string name="wallet_time">Time</string>
     <string name="wallet_from">From</string>
@@ -190,6 +191,7 @@
     <string name="other_insufficient_rights">Insufficient rights</string>
     <string name="other_required_field">Required field!</string>
     <string name="other_invalid_value">Invalid value!</string>
+    <string name="other_details">Open the details?</string>
 
     <string name="eur">EUR</string>
     <string name="usd">USD</string>
