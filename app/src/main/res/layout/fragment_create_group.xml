@@ -16,16 +16,16 @@
 
     <EditText
         android:id="@+id/edit_text_create_chats"
-        android:nextFocusLeft="@id/edit_text_create_chats"
-        android:nextFocusUp="@id/edit_text_create_chats"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@color/bg_dialog_title"
         android:fontFamily="@font/roboto_thin"
         android:gravity="center"
         android:hint="@string/contacts_search_hint"
+        android:nextFocusLeft="@id/edit_text_create_chats"
+        android:nextFocusUp="@id/edit_text_create_chats"
         android:selectAllOnFocus="false"
         android:singleLine="true"
         android:textColor="@color/white"
@@ -74,7 +74,7 @@
     <Button
         android:id="@+id/toolbar_next_btn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:background="@color/colorPrimary"
         android:text="@string/other_ok"
         android:textAllCaps="false"

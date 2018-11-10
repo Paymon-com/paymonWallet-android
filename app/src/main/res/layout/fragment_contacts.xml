@@ -24,8 +24,8 @@
 
     <ImageView
         android:id="@+id/fragment_contacts_image_imageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="8dp"

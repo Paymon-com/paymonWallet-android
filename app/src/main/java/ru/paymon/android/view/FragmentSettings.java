@@ -78,7 +78,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 break;
             case R.id.settings_reset_settings:
                 AlertDialog.Builder builderAlertReset = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
-                builderAlertReset.setMessage("Сбросить настройки профиля?").setPositiveButton(R.string.other_yes, (dialog, which) -> {//TODO:Дообавить в стринги
+                builderAlertReset.setMessage(getString(R.string.settings_reset) + "?").setPositiveButton(R.string.other_yes, (dialog, which) -> {
                     User.setDefaultConfig();
                     Toast.makeText(new ContextThemeWrapper(getContext(), R.style.ToastCustom), R.string.settings_reset, Toast.LENGTH_SHORT).show();
                 }).setNegativeButton(R.string.other_no, (dialog, which) -> dialog.cancel());
@@ -95,7 +95,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 break;
             case R.id.settings_exit:
                 AlertDialog.Builder builderAlertExit = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
-                builderAlertExit.setMessage("Выйти из профиля?").setPositiveButton(R.string.other_yes, (dialog, which) -> {//TODO:Дообавить в стринги
+                builderAlertExit.setMessage(getString(R.string.settings_exit) + "?").setPositiveButton(R.string.other_yes, (dialog, which) -> {
                     User.clearConfig();
                     Executors.newSingleThreadExecutor().submit(() -> AppDatabase.getDatabase().clearAllTables());
                     NetworkManager.getInstance().reconnect();

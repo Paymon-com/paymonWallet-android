@@ -7,7 +7,7 @@
     <Button
         android:id="@+id/fragment_start_auth_button"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="55dp"
         android:layout_marginTop="4dp"
         android:background="@color/blue_light"
         android:fontFamily="sans-serif-light"
@@ -21,9 +21,9 @@
     <Button
         android:id="@+id/fragment_start_registration_button"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_height="55dp"
         android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:background="@color/white_light"
         android:fontFamily="sans-serif-light"
         android:text="@string/sign_up"
