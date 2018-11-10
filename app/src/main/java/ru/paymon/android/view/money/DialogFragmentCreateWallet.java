@@ -115,7 +115,7 @@ public class DialogFragmentCreateWallet extends DialogFragment {
             Utils.stageQueue.postRunnable(() -> {
                 boolean isCreated = application.createPaymonWallet(password);
                 if (!isCreated) {
-                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.other_fail, Toast.LENGTH_LONG).show()); //TODO: fix that string
+                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, R.string.other_fail, Toast.LENGTH_LONG).show());
                 } else {
                     User.CLIENT_MONEY_PAYMON_WALLET_PASSWORD = password;
                     User.saveConfig();

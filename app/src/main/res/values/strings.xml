@@ -164,6 +164,7 @@
     <string name="wallet_a_low_commission">A low commission value can lead to a long transaction sending. Continue?</string>
     <string name="wallet_a_low_gas_limit">The value of the gas is less than 200000, this may lead to an unsuccessful transaction and commission charged</string>
     <string name="wallet_create_hint">The operation may take several minutes. Please wait…</string>
+    <string name="wallet_loader">Exchange rates and wallets</string>
 
     <string name="about_program">Paymon for android</string>
     <string name="about_program_version">Version </string>
@@ -198,8 +199,11 @@
     <string name="error_spamming">Слишком много запросов, попробуйте снова</string>
 
     <string name="btc_sync">BTC Sync in progress</string>
+
     <string name="keyguard_clear">Clear</string>
     <string name="keyguard_hint">Hint</string>
+    <string name="keyguard_hint_enter">Enter your hint</string>
+    <string name="keyguard_hint_empty">Your hint is empty</string>
     <string name="keyguard_wrong_password">Wrong password</string>
 
     <string name="loading_one">"Load.  "</string>

@@ -4,24 +4,22 @@ import android.arch.paging.PagedListAdapter;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 
-import ru.paymon.android.ChatsManager;
-import ru.paymon.android.components.CircularImageView;
-
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.ChatsManager;
 import ru.paymon.android.R;
+import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
-import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
 
 public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseChatsViewHolder> {
@@ -115,8 +113,9 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
                         if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
                             ApplicationLoader.applicationHandler.post(() -> {
                                 swipe.close(true);
+                                Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
                             });
-                            return; //TODO:не удалось и закрытие свайпа
+                            return;
                         }
 
                         if (response instanceof RPC.PM_boolTrue) {
