@@ -324,10 +324,12 @@ public class NetworkManager {
             request.messageID = messageID;
 
         waitingRequests.offer(request);
-        if (connectorService != null && connectorService.requestsMap != null)
+        if (connectorService != null && connectorService.requestsMap != null) {
             processRequest();
-        else
+        }else {
             Log.e(TAG, "sendRequest: failed " + packet.toString() + ", connector==" + connectorService);
+
+        }
         return request.messageID;
     }
 

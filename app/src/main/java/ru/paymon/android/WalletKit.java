@@ -1,6 +1,5 @@
 package ru.paymon.android;
 
-import android.app.ActivityManager;
 import android.util.Log;
 
 import org.bitcoinj.core.Block;
@@ -26,7 +25,6 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import ru.paymon.android.utils.Constants;
-import ru.paymon.android.utils.DispatchQueue;
 
 import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
 

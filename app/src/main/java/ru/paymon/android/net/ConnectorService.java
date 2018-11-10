@@ -329,7 +329,6 @@ public class ConnectorService extends Service implements NotificationManager.ILi
         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.didEstablishedSecuredConnection);
     }
 
-    // TODO: сделать возможным передачу сообщения вместе с ошибкой
     public void processServerResponse(Packet packet, long messageID) {
         lastKeepAlive = System.currentTimeMillis() / 1000L;
         RPC.PM_error error = null;
@@ -357,7 +356,6 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 NetworkManager.getInstance().reconnect();
             } else if (error.code == ERROR_AUTH_TOKEN) {
                 Log.e(Config.TAG, "ERROR_AUTH_TOKEN, auth");
-                // FIXME: logout
                 NetworkManager.getInstance().authByToken();
             } else if (error.code == ERROR_AUTH) {
 //                Looper.prepare();
@@ -449,7 +447,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             Log.d(Config.TAG, "onConnectionDataReceived: " + i + " " + b);
             if (length < i || !b) {
                 Log.e(Config.TAG, "Can't decrypt packet");
-                NetworkManager.getInstance().reconnect(); //TODO:!!!
+                NetworkManager.getInstance().reconnect();
                 return;
             }
 

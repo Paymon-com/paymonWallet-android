@@ -1,499 +1,115 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">Paymon</string>
-    <string name="date_format_24h">24 Hour</string>
-    <string name="date_format_12h">12 Hour AM/PM</string>
 
-    <string name="required_field">Required field!</string>
-    <string name="invalid_value">Invalid value!</string>
-    <string name="not_a_btc_address">The value entered is not a BTC address!</string>
-    <string name="not_a_eth_address">The value entered is not a ETH address!</string>
-    <string name="not_read_qr">Could not read Qr code</string>
-    <string name="insufficient_funds">Insufficient funds</string>
-    <string name="a_low_commission">A low commission value can lead to a long transaction sending. Continue?</string>
-    <string name="continue_transaction">Continue?</string>
-    <string name="transaction_hash">Transaction hash</string>
-    <string name="success">Success</string>
-    <string name="fail">Fail</string>
-    <string name="transaction_failed_to_send">Transaction failed to send</string>
-    <string name="current_gas_price">Current gas price</string>
-    <string name="current_gas_limit">Current gas limit</string>
-    <string name="satoshi_per_byte">satoshi per byte</string>
-    <string name="time_stamp">Timestamp</string>
-    <string name="gas_is_less_than_200000">The value of the gas is less than 200000, this may lead to an unsuccessful transaction and commission charged</string>
-    <string name="backup_created">Backup created</string>
-    <string name="backup_failed">Backup failed</string>
-    <string name="wallet_successfully_deleted">Wallet successfully deleted</string>
-    <string name="wallet_failed_to_delete">Wallet failed to delete</string>
-    <string name="usd">USD</string>
-    <string name="eur">EUR</string>
-    <string name="delete_photo">Delete photo</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_hint">Already have an acount?</string>
 
-    <string name="profile_edit_failed">Changes were not saved</string>
-    <string name="deletion_confirmation">Deletion confirmation</string>
-    <string name="delete_participants">Do you want to delete a participant?</string>
-    <string name="profile_edit_success">Profile successfully changed</string>
-    <string name="reg_phone_correct">Check if the entered phone number is correct</string>
-    <string name="pick_image_intent_text">Please Select</string>
-    <string name="select_the_recipient">Select a recipient</string>
-    <string name="change">Change</string>
-    <string name="confirmation_email">Confirmation_email</string>
-    <string name="permissions">The application requires permissions: …</string>
-    <string name="hide_email">Hide E-mail</string>
-    <string name="hide_phone">Hide phone number</string>
-    <string name="hide_username">Hide username</string>
-    <string name="reset_settings">Reset settings</string>
-    <string name="settings_reset">Settings reset</string>
-    <string name="double_tap_to_close_the_app">Double tap to close the app</string>
-    <string name="ethereum_remittance">Ethereum remittance</string>
-    <string name="bitcoin_remittance">Bitcoin remittance</string>
-    <string name="paymon_remittance">Paymon remittance</string>
-    <string name="no_files_found">No Files Found</string>
+    <string name="sign_up_login">Login</string>
+    <string name="sign_up_login_hint">Login can contain only Latin characters and numbers. Must be at least 3 characters.</string>
+    <string name="sign_up_login_error">Login contains invalid characters</string>
+    <string name="sign_up_password">Password</string>
+    <string name="sign_up_password_repeat">Repeat password</string>
+    <string name="sign_up_password_hint">Password must be at least 8 characters</string>
+    <string name="sign_up_password_error">Password is too short</string>
+    <string name="sign_up_password_repeat_error">Passwords do not match</string>
+    <string name="sign_up_email">E-mail</string>
+    <string name="sign_up_email_hint">You will receive a registration confirmation in your mailbox</string>
+    <string name="sign_up_email_error">Enter the correct e-mail</string>
+    <string name="sign_up_agreement">Agreement</string>
+    <string name="sign_up_privacy_policy">Privacy Policy</string>
 
-    <string name="keyguard_title">Enter password</string>
+    <string name="sign_in_email_or_password">E-mail or Login</string>
+    <string name="sign_in_password">Password</string>
+    <string name="sign_in_hint2">Forgot your password?</string>
 
-    <string name="title_chats">Chats</string>
-    <string name="yes">Yes</string>
-    <string name="clear">Clear</string>
-    <string name="hint">Hint</string>
-    <string name="created_group">created a group</string>
-    <string name="no_one_selected">No one selected</string>
-    <string name="selected_item_count">Selected item count</string>
-    <string name="insufficient_rights">Insufficient rights</string>
-    <string name="time_to_next_dispatch">Time to next dispatch</string>
+    <string name="chats_search_hint">Search chats</string>
+    <string name="chats_filter_dialogs">Conversations</string>
+    <string name="chats_filter_chats">Chats</string>
+    <string name="chats_filter_groups">Groups</string>
 
-    <string name="friend_requests">Friend requests</string>
+    <string name="chat_message_hint">Type your message</string>
 
-    <string name="the_balance_of_the_ethereum_wallet_could_not_be_updated">The balance of the Ethereum wallet could not be updated</string>
+    <string name="group_chat_settings_add">Add Participants</string>
+    <string name="group_chat_settings_leave">Leave Group</string>
 
-    <string name="error_in_email">Error in E-mail</string>
-    <string name="photo_upload_failed">Photo failed to upload</string>
+    <string name="user_profile_cotact_information">Contact Information</string>
+    <string name="user_profile_not_specified">Not specified</string>
 
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="administrators">Administrators</string>
-    <string name="leave_group">Leave group</string>
-    <string name="black_list">Black list</string>
-    <string name="no">No</string>
-    <string name="login_or_email_is_empty">Login or E-mail is empty</string>
-    <string name="create_ethereum_wallet_failed">Create an Ethereum wallet failed</string>
-    <string name="ethereum_wallet_created">Ethereum wallet created</string>
-    <string name="bitcoin_wallet_created">Bitcoin wallet created</string>
-    <string name="paymon_wallet_created">Paymon wallet created</string>
+    <string name="contacts_search_hint">Search</string>
+    <string name="contacts_empty_hint">You can search for contacts here</string>
 
-    <string name="default_denomination_value_eth">2 decimal places</string>
-    <string name="money_denomination_auto">Autoformat</string>
-    <string name="money_denomination_8">8 decimal places</string>
-    <string name="money_denomination_6">6 decimal places</string>
-    <string name="money_denomination_4">4 decimal places</string>
-    <string name="money_denomination_2">2 decimal places</string>
-    <string name="backup_file_not_selected">The file of the purse backup was not selected</string>
-    <string name="you_can_not_delete_someone_messages">you can not delete someone messages</string>
-    <string name="unable_to_delete_messages">Could not delete messages</string>
-    <string name="delete_for_everyone">Delete for all</string>
-    <string name="twosome">Twosome</string>
-    <string name="groups">Groups</string>
-    <string name="global_search">Global search</string>
-    <string name="you_did_not_choose_anyone">You did not choose anyone</string>
-    <string name="not_specified">Not specified</string>
+    <string name="more_menu_go_profile">Go to Profile</string>
+    <string name="more_menu_faq">FAQ</string>
+    <string name="more_menu_settings">Settings</string>
 
-    <string name="msg_permissions_required">Please provide permissions</string>
-
-    <string name="ok">ОК</string>
-    <string name="title_more">More</string>
-    <string name="title_contacts">Contacts</string>
-    <string name="title_money">Money</string>
-    <string name="title_transfer">Transfer</string>
-    <string name="title_withdraw">Withdrawal of funds</string>
-    <string name="title_games">Games</string>
-    <string name="title_settings">Settings</string>
-    <string name="title_faq">FAQ</string>
-    <string name="exit">Exit</string>
-    <string name="profile">Profile</string>
-    <string name="enter_a_code">Enter a code</string>
-    <string name="btc_sync">BTC Sync in progress</string>
-    <string name="camera_permission_was_granted">Camera permission was granted</string>
-    <string name="camera_permission_request_was_denied">Camera permission request was denied</string>
-    <string name="camera_access_is_required">Camera access is required to display the camera preview</string>
-    <string name="permission_is_not_available">Permission is not available. Requesting camera permission</string>
-    <string name="no_access_to_camera">No access to camera</string>
-    <string name="to_attach">To attach</string>
-
-    <string name="reg_name_correct">Name contains invalid characters</string>
-    <string name="reg_surname_correct">Surname contains invalid characters</string>
-    <string name="reg_check_login">Enter your login</string>
-    <string name="reg_check_password">Enter your password</string>
-    <string name="reg_check_login_correct">Login contains invalid characters</string>
-    <string name="reg_check_password_length">The password is too short</string>
-    <string name="check_connected_to_server">No connection to the server</string>
-
-    <string name="update_profile">Edit profile</string>
-
-    <string name="authorization">Authorization</string>
-
-    <string name="action_settings">Settings</string>
-
-    <string name="error_incorrect_double_password">Passwords do not match</string>
-
-    <string name="default_input_hint">Enter your message</string>
-
-    <string name="sign_up_auth">Sign Up</string>
-    <string name="login">Login</string>
-    <string name="password">Password</string>
-    <string name="name">Name</string>
-    <string name="surname">Surname</string>
-    <string name="repeat_password">Repeat password</string>
-    <string name="phone_number">Phone number</string>
-    <string name="city">City</string>
-    <string name="country">Country</string>
-    <string name="agreement">Agreement</string>
-    <string name="privacy_policy2">Privacy Policy</string>
-    <string name="sign_in">Sign in</string>
-
-    <string name="save_button">Save</string>
-    <string name="message">Message</string>
-    <string name="connecting">Connecting</string>
-    <string name="contact_information">Contact information</string>
-    <string name="personal_information">Personal information</string>
-    <string name="personalization">Personalization</string>
-    <string name="change_photo">Change photo</string>
-    <string name="status">Status</string>
-    <string name="bday">Date of Birth</string>
-    <string name="email">E-mail</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
-
-    <string name="deposit">Deposit</string>
-    <string name="withdraw">Withdraw</string>
-    <string name="rub">RUB</string>
-    <string name="btc">BTC</string>
-    <string name="pmnt">PMNT</string>
+    <string name="edit_profile_change_photo">Change photo</string>
+    <string name="edit_profile_name">Name</string>
+    <string name="edit_profile_surname">Surname</string>
+    <string name="edit_profile_contact_information">Contact Information</string>
+    <string name="edit_profile_email">E-mail</string>
+    <string name="edit_profile_email_hide">Hide your e-mail?</string>
+    <string name="edit_profile_email_save">Save</string>
 
     <string name="settings_notifications">Notifications</string>
-    <string name="settings_basic">Basic</string>
+    <string name="settings_basic">General</string>
     <string name="settings_security">Security</string>
-    <string name="settings_other">Other</string>
-    <string name="settings_about_programm">About program</string>
-    <string name="group_invitations">Group invitations</string>
+    <string name="settings_reset">Reset settings</string>
+    <string name="settings_about">About the program</string>
+    <string name="settings_exit">Log Out</string>
+    <string name="settings_notifications_dnd">Do Not Disturb</string>
+    <string name="settings_notifications_vibration">Vibrate</string>
+    <string name="settings_notifications_notifications">Notifications</string>
+    <string name="settings_basic_format_time">Time Format </string>
+    <string name="settings_basic_12h">12-Hour AM/PM</string>
+    <string name="settings_basic_24h">24-Hour</string>
 
-    <string name="notif_messages">Messages</string>
-    <string name="notif_do_not_disturb">Do not disturb</string>
-    <string name="notif_sound">Sound</string>
-    <string name="notif_vibration">Vibration</string>
-    <string name="notif_other">Other</string>
-    <string name="notif_transactions">Transactions</string>
-    <string name="enter_your_email">Enter your E-mail</string>
+    <string name="email_confirmation">Email Confirmation</string>
+    <string name="email_confirmation_hint">Confirm your email to continue. If you do not see the message in your inbox, please check the spam folder.</string>
+    <string name="email_confirmation_error">Enter the correct e-mail</string>
 
-    <string name="app_sort_friends">Sort friends list</string>
+    <string name="wallets_create">Create Wallet</string>
+    <string name="wallets_update">Update</string>
+    <string name="wallets_ex_rates">Exchange Rates</string>
+    <string name="wallet_available">Available</string>
+    <string name="wallet_estimated">Estimated</string>
+    <string name="wallet_transfer">Transfer</string>
+    <string name="wallet_private_address">Private key</string>
+    <string name="wallet_public_address">Public Key</string>
+    <string name="wallet_hash">Hash</string>
+    <string name="wallet_value">Value</string>
+    <string name="wallet_status">Status</string>
+    <string name="wallet_time">Time</string>
+    <string name="wallet_from">From</string>
+    <string name="wallet_to">To</string>
+    <string name="wallet_gas_limit">Gas Limit</string>
+    <string name="wallet_gas_price">Gas Price</string>
+    <string name="wallet_used_gas">Used Gas</string>
+    <string name="wallet_private_address_hint">You can use this key to restore your wallet. Do not share your private key with anyone.</string>
+    <string name="wallet_share">Share</string>
+    <string name="wallet_restore_button_download">Restore from</string>
+    <string name="wallet_restore_password">Password</string>
+    <string name="wallet_restore_hint">Enter the password that you specified when creating the backup</string>
+    <string name="wallet_show_password">Show Password</string>
+    <string name="wallet_restore_hint2">You are about to replace your current wallet. Any coins in the current wallet will be lost unless you have a separate backup.</string>
+    <string name="wallet_restore_hint3">Important: Do not load private keys from questionable sources! Others can gain control over your fund if you do.</string>
+    <string name="wallet_restore_button_restore">Restore</string>
+    <string name="wallet_backup_button_select">Backup to</string>
+    <string name="wallet_backup_hint">Enter a password to protect your wallet backup</string>
+    <string name="wallet_backup_button_backup">Back Up</string>
+    <string name="wallet_remove_hint">Before you delete your wallet, it is recommended that you create a backup or you will lose all your money</string>
+    <string name="wallet_cancel">Cancel</string>
+    <string name="wallet_agree">Agree</string>
+    <string name="wallet_transfer_btc">Bitcoin Transfer</string>
+    <string name="wallet_transfer_sum">Enter Value</string>
+    <string name="wallet_transfer_total">Total</string>
+    <string name="wallet_transfer_receiver">Enter Recipient\'s Wallet Address</string>
+    <string name="wallet_transfer_receiver_hint">Enter the wallet address you want to transfer money to or use the Qr scanner</string>
+    <string name="wallet_transfer_deposit_acc">Deposit Account</string>
+    <string name="wallet_transfer_fee_btc">Fee: 0.0000001 (10 satoshi per byte)</string>
+    <string name="wallet_transfer_fee_eth_gas_price">Current Gas Price: 8 GWEI</string>
+    <string name="wallet_transfer_fee_eth_gas_limit">Current Gas Limit: 21,000</string>
+    <string name="wallet_transfer_fee_total">Commission</string>
 
-    <string name="security_app">Application security</string>
-    <string name="security_password_protect">Security Password</string>
-    <string name="security_enter_password">Enter password</string>
-    <string name="security_password_protect_summary">Set a password when you sign in to the app</string>
-    <string name="search">Search</string>
-
-    <string name="default_sort_friends">By name</string>
-    <string name="default_sound">Notice</string>
-    <string name="default_sort_surname">By surname</string>
-    <string name="default_sort_date">By date added</string>
-    <string name="confidentiality">Confidentiality</string>
-
-    <string name="about_program_text">Paymon for Android</string>
-    <string name="about_program_text_version">"version %s"</string>
-    <string name="export_keys_dialog_mail_intent_failed">Archiving the wallet was an error</string>
-
-    <string name="participants">Participants</string>
-
-    <string name="agreement_txt">
-\n
-1. Общие положения \n
-2. Определения \n
-3. Права пользователей\n
-4. Политика конфиденциальности и безопасности\n
-5. Принятие риска, ограничение ответственности и возмещения\n
-6. Ответственность за общение в Paymon с третьими лицами\n
-7. Создание кошелька\n
-8. Услуги Paymon\n
-9. Комиссия \n
-10. Прекращение услуг\n
-11. Ограничения\n
-12. Права на интеллектуальную собственность\n
-13. Обратная связь\n
-14. Форс мажоры\n
-15. Соглашение\n
-\n
-Последнее обновление:  15 июня 2017\n
-\n
-Сайт/мобильное приложение и связанные с ним услуги осуществляет компания Paymon. Вы признаете, что любое использование этого веб-сайта, мобильного приложения  и любое использование наших услуг, осуществляется в соответствии с настоящими условиями предоставления услуг. Так же вы понимаете, что в первую очередь за свою безопасность вы отвечаете сами. Ни в коем случае не предоставляйте никому свой пароль и логин.\n
-        \n
-1. Общие положения\n
-1.1. Мы оставляем за собой право изменять эти правила в любое время по своему усмотрению. Любой такой изменения в отношении вашего использования услуг вступают в силу с момента их опубликования на Сайт. Если вы предоставили нам свой адрес электронной почты, мы сообщим вам по электронной почте изменений в эти условия. \n
-1.2. Это ваша ответственность, внимательно читайте условия в каждом пункте. Ваше дальнейшее использование услуг означает Ваше согласие на принятие условий в данном пользовательском соглашении.\n
-\n
-2. Определения\n
-2.1. Все употребления "наш", " мы " означает Paymon  -
-Российская Федерация имеющий зарегистрированный адрес город Екатеринбург, дом 29, офис 508\n
-2.2. Все употребления  "Вы", "Ваш" или "Пользователь" означает лицо или лица, использующие приложение Paymon или web сайт www.paymon.ru .\n
-2.3. "Услуги" означает любую возможность, предоставленную нами через сайт или мобильное приложение в любом местном применении (персональный компьютер или иное), включая, без ограничения, услуги кошелек или данные блокчейн, , но исключая API служб, которые регулируются отдельным соглашением. \n
-2.4. Общение включает в себя общение по электронной почте, а так же посредствам встроенной системы Paymon./n
-2.5. ‘Форс-мажор означает любое событие вне разумного контроля системы Блокчейн и компании Paymon, в том числе, но не ограничиваясь, наводнениями, экстраординарными метеорологическими условиями, землетрясениями или другими стихийными бедствиями, пожары, войны, восстания, бунты, трудовые споры, ДТП, действий правительства, связи, сбоя питания или оборудования или программного сбоя.\n
-        \n
-3. Право\n
-
-3.1. Если вы используете услуги от имени юридического лица, Вы также подтверждаете и гарантируете, что: юридическое лицо является действительным и оно работает в соответствии с  законами юрисдикции и территориального ограничениями своей страны.\n
-3.2  Данные условия и пользование сайтом/мобильным приложением  и услугами Paymon регулируются и толкуются в соответствии с законодательством Российской Федерации.  Спор, возникающий с оспариванием данных условий, или с использованием сайта/мобильного приложения будет решаться исключительно в суде Российской Федерации\n
-\n
-4. Политика конфиденциальности и безопасности\n
-4.1. Пожалуйста, смотрите нашу политику конфиденциальности. В разделе «Политика Конфиденциальности»\n
-4.2. Мы стараемся принимать все разумные меры для защиты вашей личной информации. Однако мы не можем гарантировать безопасность любой информации, которую вы предоставляете онлайн. Вы принимаете присущие риски безопасности, предоставление информации и общение в Интернете и не будете возлагать на нас ответственность за любое нарушение безопасности, если это связано с нашей халатностью.\n
-\n
-        5. Принятие риска, ограничение ответственности и возмещения\n
-5.1. Вы соглашаетесь и признаете, что существуют риски, связанные с использованием Интернет Биткоин-кошелька, в том числе, риск выхода из строя оборудования, риск сбоя программного обеспечения и Интернет-соединения, риск распространения вредоносных программ, и риск того, что третьи лица могут получить несанкционированный доступ к информации, хранящейся в вашем Кошельке. Вы соглашаетесь и признаете, что Paymon  не будет нести ответственность за любые сбои связи, сбои, ошибки, искажения или задержки .\n
-5.2. Мы не будем нести ответственность за любые потери и не несем никакой ответственности перед вами за любое неправильное использование наших услуг, включая:\n
-5.2.1 Ошибки пользователя, такие как пароли, неправильно созданные транзакции, или опечатки Биткоин-адресов;\n
-5.2.2. Сбой сервера или потеря данных;\n
-5.2.3. Несанкционированный доступ к приложениям;\n
-5.2.4. Любые несанкционированные действия третьих лиц, включая без ограничения использование вирусов, фишинг, брутфорса или другие средства нападения на сайт или сервисы. \n
-5.3. Мы не даем никаких гарантий, что сайт или сервер  будет работать бесперебойно, или что дефекты будут исправлены. Мы не будем нести ответственность за любые потери любого рода.\n
-\n
-        6. Ответственность за  общение в Paymon с  третьими лицами\n
-6.1. Используя наш сервис, Вы можете просмотреть содержание или использования услуг, предоставляемых третьими сторонами, в том числе ссылки на веб-страницы и услуги таких лиц (“материалы третьих сторон”). Мы не одобряем и не принимаем любой контент третьих лиц и не несем никакой ответственности за Контент третьих лиц, включая, без ограничения, материалы, которые могут ввести в заблуждение, оскорбить вас. Кроме того, ваши отношения или переписка с третьими лицами исключительно между Вами и третьими лицами. Мы не несем ответственности за любые потери или ущерб любого рода, понесенные в результате таких отношений, и вы понимаете, что ваши взаимодействия с третьими сторонами, на свой страх и риск.\n
-\n
-        7.Создание кошелька\n
-7.1. Вам не нужно использовать blockchain кошелек. В момент регистрации в Paymon за вами регистрируется кошелёк и присваивается уникальный номер.\n
-7.2. Мы рекомендуем вам не пропускать стадию ввода дополнительного пароля и обязательно его ввести, это защитит вас в случае кражи телефона или взлома системы.\n
-7.3. Когда вы привязываете сторонние кошельки мы настоятельно рекомендуем использовать кошельки к которым у вас есть полное доверие, в случае пропажи средств со сторонних кошельков Администрация Paymon ответственности не несёт.\n
-7.4. Вы соглашаетесь и признаете, что вы берете на себя ответственность за все действия, которые происходят под управлением вами вашего кошелька и принимаете все риски любого санкционированного или несанкционированного доступа к Вашему кошельку, в максимальной степени, разрешенной законом.\n
-\n
-        8. Услуги Paymon\n
-8.1. Формирование и хранение адреса крипт-кошельков и зашифрованные закрытые ключи хранятся на локальном устройстве и по возможности вы можете предоставить защиту по средствам серверов Paymon это  облегчает передачу данных о транзакциях в сети bitcoin и прочих и не требуют загрузки или установки связанных с сетевым программным обеспечением .\n
-8.2. Когда вы создаете кошелек, Сервисы создания и хранения криптографических паролей сразу шифруют ваш кошелёк, данные которые используются для отправки и получения биткоинов и других криптовалют через сеть bitcoin и через сеть Paymon  зашифрованы и максимально защищены. Частный Ключ однозначно совпадает с адресом Кошелька и должен быть использован для перевода криптовалют.\n
-8.3. Вы несетё полную ответственность за обеспечение безопасности вашего закрытого ключа и резервного копирования. Вы должны держать ваш адрес Кошелька, резервное копирование и закрытый ключ в надежности. Невыполнение этого требования может привести к потере контроля криптовалют , привязанных к кошельку.\n
-8.3. Компания Paymon не получает и не хранит Ваш кошелек и пароль, ни незашифрованные ключи и адреса. Поэтому мы не можем помочь вам с восстановление кошелька и восстановлением пароля. Наши услуги предоставляют вам инструменты, чтобы помочь вам вспомнить или восстановить пароль, в том числе предоставляя возможность задавать подсказки для пароля, но службы не могут создать новый пароль для Вашего кошелька. Вы несете единоличную ответственность  за запоминание пароля кошелька. Компания Paymon можете предоставить и помочь вам с утерей пароля и восстановлением его, если вы сделали максимальный уровень защиты и предоставили нам свои данные.\n
-8.4. Для того, чтобы транзакция была завершена, все предлагаемые Биткойн-транзакции и т.п.  должны быть подтверждены  и зарегистрированы в Блокчейн системе.  Биткоин Сеть и т.п.  управляется децентрализованной  сетью независимых третьих сторон. Блокчейн не имеет  контроля над сетью bitcoin и, следовательно, не может обеспечить гарантию что любые детали сделки будут подтверждены через Сеть bitcoin. Вы признаете и соглашаетесь, что детали сделки вы передаете через услуги Paymon продукты которой на базе системы BlockChain и любая ваша сделка  может быть не завершена, или может быть существенно  задержана Биткоин сетью.\n
-8.5. Хранение и передача Биткоинов и прочих криптовалюты. является нематериальным, цифровым активом. Они существуют только в силу ответственности и спроса пользователей  сети bitcoin и т.п.\n
-8.6.Любая передача прав собственности, которая может, повлечь за собой сбой перевода криптовалют,  и сбой  записи децентрализованной книги запрещена. Мы не гарантируем, что служба может осуществить передачу прав собственности или право управления  криптовалютными транзакциями. \n
-8.7. В настоящих условиях запрещено создание  партнерств, совместных предприятий, агентств или попечительств, вы и Блокчейн будучи по отношению друг к другу являетесь независимыми подрядчиками. \n
-8.8. Вы заявляете и гарантируете, что любая информация, которую вы предоставляете с помощью услуг является точной и полной. Вы соглашаетесь и признаете, что Блокчейн не несет ответственности за любые ошибки или упущения, которые вы делаете с любого кошелька и различных криптовалют инициированные через услуги Paymon, например, если вы опечатались в Адресе Кошелька или иным образом предоставили неверную информацию. Мы настоятельно рекомендуем вам внимательно изучить все детали сделки до завершения их через Услуги Paymon. \n
-8.9. Никаких Отмен или изменений. После того как детали сделки были представлены в сеть  Paymon и систему blockchain  мы ничем не сможем помочь вам, чтобы отменить транзакции или в противном случае измените ваши детали сделки. Блокчейн не контролирует Биткоин Сети  и прочие криптовалюты и не имеет возможности облегчить любую отмену или изменение запроса. \n
-\n
-9. Комиссия\n
-9.1.  Компания Paymon создаёт кошелек бесплатно. Блокчейн система в настоящее время не взимает сборы для любых услуг, однако мы оставляем за собой право сделать это в будущем, а в таком случае любые сборы будут отображаться перед тем как вы используете любую услугу в которой может взиматься плата.\n
-9.2. Майнинг Биткоинов и прочих криптовалют. Система майнинга не имеет никакого отношения к  продуктам Paymon, мы лишь облегчаем перевод и конвертацию криптовалют.\n
-\n
-        10.Прекращение услуг\n
-10.1. Мы можем, по нашему усмотрению и без затрат для вас, с или без предварительного уведомления и в любое время изменить или прекратить, временно или постоянно, любую часть наших услуг. Вы несете полную ответственность за хранение и резервное копирование любого кошелька Адреса  и закрытого ключа пары, которые сохраняют в вашем локальном устройстве.\n
-10.2. Мы можем приостановить или прекратить Ваш доступ к услугам по своему усмотрению, немедленно и без предварительного уведомления, а также удалить или деактивировать ваш кошелек и всю связанную с ним информацию и файлы.\n
-\n
-        11. Ограничения\n
-11.1. Получая доступ и используя услуги Paymon, вы соглашаетесь, что не будете совершать каких-либо противоправных действий, и что вы несете полную ответственность за свои действия при пользовании нашими услугами. Без ограничения общего смысла вышесказанного, Вы подтверждаете, что не будете: \n
-11.1.1. Использовать наши услуги любым способом, который может помешать, нарушить, негативно повлиять или препятствовать другим пользователям в полной мере пользоваться нашими услугами, или что может повредить, отключить, перегрузить или нарушить функционирование нашего сервиса ; \n
-11.1.2. Использовать услуги Paymon для оплаты, поддержки или иным образом участвовать в любой незаконной деятельности, включая, мошенничество, отмывание денег, или террористической деятельности, а так же иной деятельности запрещённой законом в юрисдикции которой вы находитесь. \n
-11.1.3. Использование или попытка использования чужого Кошелька без авторизации; \n
-11.1.4. Пытаться обойти какие-либо методы фильтрации Контента, который мы используем, или совершать попытки получить доступ к любому сервису или области наших услуг;\n
-11.1.5. Распространять услуги любых вирусов, троянских программ, червей, логических бомб или других вредных материалов; \n
-11.1.6. Развивать какие-либо сторонние приложения, которые взаимодействуют с нашими услугами без нашего предварительного письменного согласия; \n
-11.1.7. Предоставлять ложную, неточную или вводящую в заблуждение информацию;\n
-11.1.8. Поощрять или побуждать третьих лиц к участию в любой деятельности запрещено в этом разделе.\n
-\n
-        12. Права на интеллектуальную собственность\n
-12.1. Если иное не указано, и все права на интеллектуальную собственность на веб-сайте и  любой контент, предоставляемый в связи с нашими услугами, являются собственностью Paymon или наших лицензиаров и поставщиков и защищены соответствующими законами об интеллектуальной собственности. Мы не даем никаких  лицензий на использование и содержания сайта и мобильного приложения. \n
-12.2. Вы принимаете и подтверждаете, что материалы, содержащиеся на веб-сайте и мобильном приложении, предоставляются для вашего личного, законного, некоммерческого использования. Вы далее признаёте, что любое другое использование материалов с сайта строго запрещено и вы согласны с данной формулировкой. \n
-12.3. Вы обязуетесь сохранять все авторские права и другие уведомления о правах собственности, содержащиеся в материале, и контенте сайта и мобильном приложении.\n
-12.4. Вы не можете продавать или изменять материал сайта или воспроизводить, демонстрировать, публично  распространять или иным образом использовать материалы для любых общественных или коммерческих целей. Использование материалов на других сайтах или на файлообменниках или похожих сервисах для любых целей запрещено. \n
-12.5. Вы не можете копировать любой материал или контент, содержащийся на сайте и в мобильном приложении  без нашего предварительного письменного разрешения. Любые права, не предоставленные нами на использование материала, содержащиеся на сайте, принадлежат Paymon в полном объеме.\n
-\n
-13. Обратная связь\n
-13.1. Мы рады любым комментариям и замечаниям с вашей стороны, а так же нуждаемся в новых идеях по улучшению работы сервисов Paymon. Все ваши отзывы вы можете направлять через форму обратной связи на сайте или через мобильные приложения, а так же направив письмо на почту press@paymon.ru\n
-\n
-        14.Форс мажоры\n
-
-14.1. Если по причине каких-либо форс-мажорных обстоятельств, вы или Блокчейн система задерживается или предотвращает ваши действия, то такая задержка или невыполнение не считается нарушением настоящих Условий.\n
-\n
-        15. Соглашение\n
-15.1. Эти условия представляют собой полное соглашение между вами и Paymon. Эти условия отменяют и заменяют собой все предыдущие договоренности и соглашения между вами и  Paymon и Блокчейн системой . Вы не можете передавать свои права или обязательства по настоящим условиям без предварительного письменного согласия.\n
-\n
-С уважением, Администрация Paymon.\n
-</string>
-
-    <string name="privacy_polycy_txt">
-        \n
-1. Общие положения\n
-2. Условия пользования сайтом и мобильным приложением\n
-3. Меры по защите информации о Пользователях/n
-4. Удаление данных\
-5. Обработка информации Paymon\n
-6. Права и обязанности пользователей\n
-7. Ограничения действия правил\n
-8. Обратная связь\n
-\n
-
-1. Общие положения\n
-Используя мобильное приложение и сайт, вы выражаете свое согласие с данной политикой. Paymon оставляет за собой право вносить изменения в данную политику в любое время. Любые изменения будут опубликованы, так что бы вы всегда знали, какую информацию мы собираем, как мы ее используем и при каких обстоятельствах мы ее раскрываем.\n
-1.1. Настоящие Правила являются официальным документом Общества с ограниченной ответственностью «Paymon», расположенного по адресу, Екатеринбург, ул.Малышева, д.29, офис 508, (далее – Администрация Сайта), и определяют порядок обработки и защиты информации о физических лицах, пользующихся услугами интернет-сайта http://www.paymon.ru /  и мобильным приложением  Paymon.\n
-1.2. Целью настоящих Правил является обеспечение надлежащей защиты информации о пользователях, в том числе их персональных данных, от несанкционированного доступа и разглашения.\n
-1.3. Отношения, связанные со сбором, хранением, распространением и защитой информации о пользователях Сайта и мобильного приложения, регулируются настоящими Правилами, иными официальными документами Администрации Сайта и действующим законодательством Российской Федерации.\n
-1.4. Настоящие Условия могут быть изменены компанией Paymon без какого-либо специального уведомления, новая редакция Условий вступает в силу с момента ее размещения в сети Интернет по указанному в настоящем абзаце адресу, если иное не предусмотрено новой редакцией Условий. Действующая редакция Условий всегда находится на странице по адресу: http://www.paymon.ru/\n
-1.5. Настоящие Правила разработаны и используются в соответствии с Правилами пользования сайтом paymon.ru и мобильным приложением Paymon. В случае наличия противоречий между настоящими Правилами и иными официальными документами Администрации Сайта и мобильного приложения применению подлежат настоящие Правила.\n
-1.7. В случае несогласия Пользователя с условиями настоящих Правил использование Сайта и сервисов Paymon должно быть немедленно прекращено.\n
-1.8. В случае если компанией Paymon были внесены какие-либо изменения в настоящие Условия, в порядке, предусмотренном п. 1.7. настоящих Условий, с которыми Пользователь не согласен, он обязан прекратить использование Сервиса.\n
-1.9. Все существующие на данный момент функции Сервиса, а также любое развитие их и/или добавление новых является предметом настоящих Условий.\n
-\n
-2. Условия пользования Сайтом и мобильным приложением\n
-2.1. Оказывая услуги по использованию Сайта, мобильного приложения и его сервисов (далее – Услуги Сайта и мобильного приложения), Администрация Сайта, действуя разумно и добросовестно, считает, что Пользователь:\n
- - Обладает всеми необходимыми правами, позволяющими ему осуществлять регистрацию и использовать настоящий Сайт и мобильное приложение;/n
- - Указывает достоверную информацию о себе в объемах, необходимых для пользования Услугами мобильного приложения и Сайта/n
- -Осознает, что некоторые виды информации, переданные им другим Пользователям, не могут быть удалены самим Пользователем;\n
- -Ознакомлен с настоящими Правилами, выражает свое согласие с ними и принимает на себя указанные в них права и обязанности.\n
-2.2. Администрация Сайта не проверяет достоверность получаемой (собираемой) информации о пользователях, за исключением случаев, когда такая проверка необходима в целях исполнения Администрацией Сайта обязательств перед пользователем.\n
-2.3. Данные, предоставленные компании Paymon хранятся в соответствии с действующим законодательством в безопасных местах. Компания Paymon добилась того, что соответствующие стандарты безопасности находятся в сохранности, конфиденциальности и безопасности данных. В отношении субъектов данных пользователей сайта и мобильных приложений , Paymon, где требуется, регистрируется с соответствующих национальных защита данных / органы защиты информации. Компания Paymon также гарантирует, что данные хранятся в соответствии с требованиями национального законодательства государства.\n
-        \n
-3. Меры по защите информации пользователей \n
-3.1. Администрация Сайта и мобильного приложения принимает технические и организационно-правовые меры в целях обеспечения защиты персональных данных Пользователя от неправомерного или случайного доступа к ним, уничтожения, изменения, блокирования, копирования, распространения, а также от иных неправомерных действий.\n
-3.2. Для авторизации доступа к Сайту используется логин (адрес электронной почты или введённые данные при регистрации) и пароль Пользователя. Ответственность за сохранность данной информации несет Пользователь. Пользователь не вправе передавать собственный логин и пароль третьим лицам, а также обязан предпринимать меры по обеспечению их конфиденциальности.\n
-3.3. В целях обеспечения более надежной защиты информации о Пользователях Администрация Сайта использует систему привязки страницы к почтовому адресу. Пользователь в случае утраты логина или пароля может восстановить доступ к странице с помощью обращения в службу технической поддержки и заполнения формы на сайте www.paymon.ru/ .  В целях снижения вероятности использования третьими лицами данных Пользователей и для отсылки спама от их имен.  Если ввод логина и пароля Пользователя осуществляется с использованием непривычного для данного Пользователя сервера (в частности, сервера иностранного государства), Администрация Сайта может заблокировать вход на персональную страницу Пользователя. Доступ происходит при помощи сообщения на ранее указанный почтовый ящик с требованием подтвердить вход. Пользователя. После  подтверждения происходит  доступ к сервисам Paymon 3.4. Пользователь вправе получать информацию о том, в какое время и с каких устройств производилась авторизация на его персональную страницу, с помощью запроса в техническую поддержку\n
-\n
-4. Удаление данных\n
-4.1  Если Вы хотите удалить свой аккаунт, пожалуйста, зайдите в свой профиль: Настройки – управление учётной записью – удаление профиля – ввод пароля.  Удаление аккаунта повлечет за собой удаление всех сообщений, групп и контактов.\n
-4.2  Когда Вы удаляете сообщение из истории, оно всё же остается на сервере — в истории сообщений Вашего собеседника. Когда и он удалит его из истории, оно удалится навсегда.\n
-Девиз Paymon – будь свободным, поэтому мы ценим свободу общения.
-4.3 При удалении персональных данных (иной пользовательской информации) с персональной страницы Пользователя или удалении персональной страницы Пользователя с Сайта или мобильного приложения, информация о Пользователе, скопированная другими Пользователями или хранящаяся на страницах других Пользователей, сохраняется.\n
-\n
-5. Обработка персональных данных\n
-
-5.1. Хранение и использование персональных данных.\n
-Персональные данные пользователей хранятся исключительно на электронных носителях и обрабатываются с использованием автоматизированных систем, за исключением случаев, когда неавтоматизированная обработка персональных данных необходима в связи с исполнением требований законодательства.
-5.2. Передача персональных данных\n
-Персональные данные Пользователей не передаются каким-либо третьим лицам, за исключением случаев, прямо предусмотренных настоящими Правилами.
-При указании пользователя или при наличии согласия пользователя возможна передача персональных данных пользователя третьим лицам.
-Предоставление персональных данных Пользователей по запросу государственных органов (органов местного самоуправления) осуществляется в порядке, предусмотренном законодательством находящимся по месту регистрации компании Paymon.
-5.3. Размещая информацию на персональной странице, в том числе свои персональные данные, Пользователь осознает и соглашается с тем, что указанная информация может быть доступна другим пользователям сети Интернет с учетом особенностей архитектуры и функционала мобильного приложения. Пользователь самостоятельно определяет режим конфиденциальности и условия доступа к информации. Администрация Сайта принимает технические и организационные меры по обеспечению функционирования соответствующего инструментария Сайта и мобильного приложения.\n
-
-5.4. Персональную информацию Пользователя Paymon обрабатывает в следующих целях:\n
-5.4.1. Идентификация стороны в рамках Сервисов, соглашений и договоров с компанией Paymon;\n
-5.4.2. Предоставление Пользователю персонализированных Сервисов и исполнение соглашений и договоров;\n
-5.4.3. Связь с Пользователем, в том числе направление уведомлений, запросов и информации, касающихся использования Сервисов, исполнения соглашений и договоров, а также обработка запросов и заявок от Пользователя;\n
-5.4.4. Улучшение качества Сервисов, удобства их использования, разработка новых Сервисов;\n
-5.4.5. Проведение статистических и иных исследований на основе обезличенных данных.\n
-\n
-        6. Права и обязанности пользователей\n
-6.1. Пользователи вправе:\n
-6.1.1.  Осуществлять свободный и бесплатный доступ к информации о себе, посредством загрузки своих персональных данных на Сайте и в мобильном приложение  с использованием логина и пароля;\n
-6.1.2. самостоятельно вносить изменения и исправления в информацию о себе на персональной странице Пользователя на Сайте и мобильном приложение , при условии, что такие изменения и исправления содержат актуальную и достоверную информацию;\n
-6.1.3. удалять информацию о себе со своей персональной страницы в мобильном приложении;\n
-6.1.4. требовать от Администрации Сайта уточнения своих персональных данных, их блокирования или уничтожения в случае, если такие данные являются неполными, устаревшими, недостоверными, незаконно полученными или не являются необходимыми для заявленной цели обработки и если невозможно самостоятельно выполнить действия.\n
-6.1.5. на основании запроса получать от Администрации Сайта информацию, касающуюся обработки его персональных данных.\n
-\n
-        7. Ограничение действия правил.\n
-7.1.  Компания Paymon имеет право вносить изменения в настоящую Политику конфиденциальности. При внесении изменений в актуальной редакции указывается дата последнего обновления. Новая редакция Политики вступает в силу с момента ее размещения.\n
-7.2. К настоящей Политике и отношениям между Пользователем и сервисами Paymon, возникающим в связи с применением Политики конфиденциальности, подлежит применению право Российской Федерации.\n
-7.3. Действие настоящих Правил не распространяется на действия и интернет-ресурсы третьих лиц. \n
-7.4 Администрация Сайта не несет ответственности за действия третьих лиц, получивших в результате использования Интернета или Услуг Сайта и мобильного приложения доступ к информации о Пользователе. Администрация Сайта рекомендует Пользователям ответственно подходить к решению вопроса об объеме информации о себе, размещаемой на Сайте. \n
-\n
-8.Обратная связь\n
-Любые вопросы по поводу данной политики, сбора, использования и раскрытия персональных данных Блокчейн  или доступ к вашим личным данным, которые требуются по закону и  подлежащая раскрытию информация должна быть направлена на privacy@paymon.ru .
-    </string>
-    <string name="back_to_reg">Back to registration</string>
-    <string name="registration_login_hint">Login can only contain Latin characters and numbers. Length at least 3 characters</string>
-    <string name="next">Next</string>
-    <string name="registration_password_hint">The password must be at least 8 characters in length</string>
-    <string name="registration_email">You will receive a confirmation of your registration to your mailbox</string>
-    <string name="reg_check_email">Enter correct mail</string>
-    <string name="password_recovery_email">To recover your password, enter your email address or username</string>
-    <string name="email_confirmation_hint">To continue, you must confirm your email. It is possible that the message will be sent to the spam folder</string>
-    <string name="registration_email_used">This email or login is already in use</string>
-
-    <string name="create_group">Create group</string>
-    <string name="group_creation">Group creation</string>
-    <string name="search_friend">Search your friend</string>
-    <string name="search_chats">Search chats</string>
-    <string name="title_dialogs">Dialogs</string>
-    <string name="search_contacts">Search contacts</string>
-    <string name="search_for_contacts">Here you can search for contacts</string>
-    <string name="done">Done</string>
-    <string name="enter_group_title">Enter group name</string>
-    <string name="agree">Agree</string>
-    <string name="add_participants">Add participants</string>
-    <string name="you_do_not_have_any_messages_yet">You do not have any messages yet</string>
-    <string name="backup_wallet_menu_item_title">Create a backup copy</string>
-    <string name="restore_backup_wallet_menu_item_title">Restore a backup copy</string>
-    <string name="auth_wrong_login_or_password">Wrong login or password</string>
-    <string name="error_spamming">Too many requests, try again</string>
-    <string name="eth">ETH</string>
-    <string name="wallet_create_title">Create a password for your wallet. The operation may take several minutes</string>
-    <string name="title_ethereum_wallet">Ethereum wallet</string>
-    <string name="title_bitcoin_wallet">Bitcoin wallet</string>
-    <string name="title_paymon_wallet">Paymon wallet</string>
-    <string name="create_wallet_dialog_hint">The operation may take several minutes. Please wait…</string>
-    <string name="ethereum_wallet_is_loaded_hint">Ethereum wallet is loading, please wait…</string>
-    <string name="universal_transfer_address_title">Enter the address to which you want to transfer money or use the scanner</string>
-    <string name="create_button">Create</string>
-    <string name="delete_wallet">Delete wallet</string>
-    <string name="delete_wallet_dialog_hint">Before you delete your wallet, it is recommended to make a backup or you will lose all your money</string>
-    <string name="wrong_password">Incorrect password</string>
-    <string name="right_file_system">No access rights to the file system</string>
-    <string name="download_from_explorer">Download from Explorer</string>
-    <string name="restor_from_backup_password_title">Enter the password that you specified when creating the backup</string>
-    <string name="restore_wallet_success">Your wallet was successfully restored</string>
-    <string name="restore_wallet_not_success">Wallet was not restored</string>
-    <string name="restore_wallet_not_success_error_file">Fault when creating a file</string>
-
-    <string name="title_invite_fiends">Invite friends</string>
-    <string name="title_invite_unreg_contacts">Invite</string>
-    <string name="title_invite_reg_contacts">Invite</string>
-    <string name="promotional_code">Invitation code (optional)</string>
-    <string name="already_have_an_account">Do you already have an account?</string>
-
-    <string name="invite_information_count">Number of guests:</string>
-    <string name="invite_registered">Registered</string>
-    <string name="invite_unregistered">Unregistered</string>
-    <string name="selected_messages_count">Selected</string>
-    <string name="text_is_copied">Text copied to clipboard</string>
-    <string name="icons_from">Icons from icons8.com</string>
-    <string name="replay_button">Reply</string>
-    <string name="forgot_password">Forgot your password?</string>
-    <string name="email_or_login">E-mail or Login</string>
-    <string name="enter_verification_code">Enter the verification code we sent you by email</string>
-    <string name="confirmation_code">Confirmation code</string>
-    <string name="new_password">New password</string>
-    <string name="enter_new_password_hint">Enter your new password</string>
-    <string name="password_recovery_failed">Incorrect code</string>
-    <string name="send">Send</string>
-    <string name="string_is_empty">The field is empty. Enter your email or login</string>
-    <string name="confirmation_code_was_sent">A confirmation code has been sent to your email. Use it to recover your password</string>
-    <string name="confirmation_code_verified">The code is correct, enter the new password</string>
-    <string name="string_code_is_empty">"Field blank: Enter confirmation code"</string>
-    <string name="password_was_changed">Password was successfully changed</string>
-    <string name="private_key">Private key</string>
-    <string name="public_key">Public key</string>
-    <string name="dont_share_your_key">You can use this key to restore your wallet. Do not share your private key with anyone</string>
-    <string name="history_transaction_is_empty">Transaction history is empty</string>
-    <string name="update">Update</string>
-    <string name="loading_one">"Load.  "</string>
-    <string name="loading_two">"Load.. "</string>
-    <string name="loading_three">Load…</string>
-    <string name="amount">Amount</string>
-    <string name="deposit_account">Deposit account</string>
-    <string name="address_of_the_recipient">Address of the recipient</string>
-    <string name="input_login">Enter login</string>
-    <string name="profit_title">Profit</string>
-    <string name="hi">Hi</string>
-    <string name="msg_time">Yesterday</string>
-    <string name="want_delete_message">Are you sure you want to delete the messages?</string>
-    <string name="sticker">Sticker</string>
-
-    <string name="go_to_profile">Go to profile</string>
-
-    <string name="format_time">Format time</string>
-
-    <string name="restore_wallet_dialog_replace_warning">You are about to replace your current wallet. Any coins in the current wallet will be lost unless you\'ve got a separate backup of that.</string>
-    <string name="import_keys_dialog_warning">Important: Do not load private keys from dubious sources! Others can gain control over your funds if you do.</string>
-
-    <string name="import_keys_dialog_button_import">Restore</string> <string name="export_keys_dialog_button_export">Back up</string>
-    <string name="import_export_keys_dialog_show">Show password</string>
-    <string name="import_export_keys_dialog_failure_title">Error</string><string name="bitmap_fragment_share">Share…</string>
-    <string name="button_ok">OK</string>
-    <string name="button_cancel">Cancel</string>
-    <string name="button_add">Create wallet</string>
-    <string name="button_share">Share</string>
-    <string name="private_key_password">PIN</string>
 </resources>
