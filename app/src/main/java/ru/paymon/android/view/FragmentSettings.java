@@ -23,7 +23,6 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
-import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.room.AppDatabase;
 
@@ -51,7 +50,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
     @Override
     public void onResume() {
         super.onResume();
-        toolbarTitle.setText(R.string.title_settings);
+        toolbarTitle.setText(R.string.more_menu_settings);
     }
 
     @Override
@@ -84,7 +83,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
                 final View aboutProgramDialog = layoutInflater.inflate(R.layout.about_program_dialog, null);
-                ((TextView) aboutProgramDialog.findViewById(R.id.about_version)).setText(String.format(getString(R.string.about_program_text_version), Config.VERSION_STRING).replace('"', ' '));
+                ((TextView) aboutProgramDialog.findViewById(R.id.about_version)).setText(getString(R.string.about_program_version) + Config.VERSION_STRING);
                 builder.setView(aboutProgramDialog);
                 AlertDialog alert = builder.create();
                 alert.show();

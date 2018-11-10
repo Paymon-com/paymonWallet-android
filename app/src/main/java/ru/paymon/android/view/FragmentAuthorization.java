@@ -72,18 +72,18 @@ public class FragmentAuthorization extends Fragment {
                 final String password = passView.getText().toString().trim();
 
                 if (login.isEmpty()) {
-                    Toast.makeText(getContext(), getString(R.string.reg_check_login), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.sign_up_login_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (password.isEmpty()) {
-                    Toast.makeText(getContext(), getString(R.string.reg_check_password), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.sign_up_password_error), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 auth(login, password);
             } else {
-                Toast.makeText(getContext(), R.string.check_connected_to_server, Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.other_connection_error, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -103,12 +103,12 @@ public class FragmentAuthorization extends Fragment {
                         String password = passView.getText().toString().trim();
 
                         if (login.equals("")) {
-                            Toast.makeText(getContext(), getString(R.string.reg_check_login), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.sign_up_login_error), Toast.LENGTH_SHORT).show();
                             return false;
                         }
 
                         if (password.equals("")) {
-                            Toast.makeText(getContext(), getString(R.string.reg_check_password), Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), getString(R.string.sign_up_password_error), Toast.LENGTH_SHORT).show();
                             return false;
                         }
 

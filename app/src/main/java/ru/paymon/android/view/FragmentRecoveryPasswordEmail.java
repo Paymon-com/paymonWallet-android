@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +90,7 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
 
     public void showFragmentRecoveryPasswordCode() {
         if (emailEditText.getText().toString().isEmpty()) {
-            hintError.setText(R.string.string_is_empty);
+            hintError.setText(R.string.sign_up_email_error);
             emailEditText.requestFocus();
             return;
         }
@@ -105,7 +106,7 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
-                        hintError.setText(R.string.password_recovery_failed);
+                        hintError.setText(R.string.recovery_password_error);
                     });
                     return;
                 }
@@ -114,10 +115,10 @@ public class FragmentRecoveryPasswordEmail extends Fragment {
                     if (dialogProgress != null && dialogProgress.isShowing())
                         dialogProgress.dismiss();
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                            .setMessage(getString(R.string.confirmation_code_was_sent))
+                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+                            .setMessage(getString(R.string.recovery_password_sent))
                             .setCancelable(false)
-                            .setPositiveButton(getString(R.string.ok), (dialogInterface, i) -> {
+                            .setPositiveButton(getString(R.string.other_ok), (dialogInterface, i) -> {
                                 Bundle bundle = new Bundle();
                                 bundle.putString(PASSWORD_RECOVERY_LOGIN, emailEditText.getText().toString());
                                 Navigation.findNavController(getActivity(),R.id.nav_host_fragment).navigate(R.id.fragmentRecoveryPasswordCode, bundle);

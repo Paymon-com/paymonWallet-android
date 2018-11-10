@@ -10,7 +10,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Handler;
@@ -23,7 +22,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
@@ -210,7 +208,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             final Notification.Builder builder = new Notification.Builder(this)
                     .setAutoCancel(true)
                     .setWhen(System.currentTimeMillis())
-                    .setTicker(getString(R.string.message))
+                    .setTicker(getString(R.string.other_message))
                     .setContentText(text)
                     .setLargeIcon(bmp);
 
@@ -359,7 +357,7 @@ public class ConnectorService extends Service implements NotificationManager.ILi
                 NetworkManager.getInstance().authByToken();
             } else if (error.code == ERROR_AUTH) {
 //                Looper.prepare();
-                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.auth_wrong_login_or_password), Toast.LENGTH_LONG).show());
+                ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.error_auth_wrong_login_or_password), Toast.LENGTH_LONG).show());
             } else if (error.code == ERROR_SPAMMING) {
 //                Looper.prepare();
                 ApplicationLoader.applicationHandler.post(() -> Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.error_spamming), Toast.LENGTH_LONG).show());

@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
-import ru.paymon.android.components.CircularImageView;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -36,6 +35,7 @@ import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.adapters.GroupSettingsAdapter;
+import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.components.DialogProgress;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
@@ -119,7 +119,7 @@ public class FragmentGroupSettings extends Fragment {
                                 .setMinCropWindowSize(Config.minAvatarSize, Config.minAvatarSize)
                                 .start(getContext(), FragmentGroupSettings.this);
                     } else {
-                        Toast.makeText(getContext(), R.string.insufficient_rights, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), R.string.other_insufficient_rights, Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -150,8 +150,7 @@ public class FragmentGroupSettings extends Fragment {
                             ApplicationLoader.applicationHandler.post(() -> {
                                 if (dialogProgress != null && dialogProgress.isShowing())
                                     dialogProgress.cancel();
-                                Toast toast = Toast.makeText(getContext(),
-                                        getString(R.string.enter_group_title), Toast.LENGTH_SHORT);
+                                Toast toast = Toast.makeText(getContext(), getString(R.string.create_group_title), Toast.LENGTH_SHORT);
                                 toast.show();
                             });
                             return;
@@ -213,10 +212,10 @@ public class FragmentGroupSettings extends Fragment {
 
         Button leaveGroup = (Button) view.findViewById(R.id.group_settings_leave_group);
         leaveGroup.setOnClickListener(view13 -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            builder.setTitle(R.string.leave_group).setMessage(R.string.are_you_sure).setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+            builder.setTitle(R.string.group_chat_settings_leave).setMessage(R.string.other_are_you_sure).setPositiveButton(R.string.other_yes, (dialogInterface, i) -> {
 
-            }).setNegativeButton(R.string.no, (dialogInterface, i) -> dialogInterface.cancel());
+            }).setNegativeButton(R.string.other_no, (dialogInterface, i) -> dialogInterface.cancel());
             builder.create().show();
         });
 
@@ -262,8 +261,8 @@ public class FragmentGroupSettings extends Fragment {
                                 if (dialogProgress != null && dialogProgress.isShowing())
                                     dialogProgress.cancel();
 
-                                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getContext())
-                                        .setMessage(R.string.photo_upload_failed)
+                                android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+                                        .setMessage(R.string.other_photo_upload_failed)
                                         .setCancelable(true);
                                 android.support.v7.app.AlertDialog alertDialog = builder.create();
                                 alertDialog.show();

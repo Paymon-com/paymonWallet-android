@@ -19,14 +19,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import ru.paymon.android.R;
-import ru.paymon.android.filepicker.ImageCaptureManager;
-import ru.paymon.android.filepicker.adapters.PhotoGridAdapter;
-import ru.paymon.android.filepicker.models.BaseFile;
 import ru.paymon.android.filepicker.FileDirectory;
-import ru.paymon.android.filepicker.models.Media;
-import ru.paymon.android.filepicker.utils.FilePickerConst;
+import ru.paymon.android.filepicker.ImageCaptureManager;
 import ru.paymon.android.filepicker.MediaStoreHelper;
 import ru.paymon.android.filepicker.PickerManager;
+import ru.paymon.android.filepicker.adapters.PhotoGridAdapter;
+import ru.paymon.android.filepicker.models.BaseFile;
+import ru.paymon.android.filepicker.models.Media;
+import ru.paymon.android.filepicker.utils.FilePickerConst;
 
 import static ru.paymon.android.filepicker.utils.FilePickerConst.FILE_TYPE_MEDIA;
 
@@ -79,7 +79,7 @@ public class FragmentAttachmentImage extends Fragment {
                     if (intent != null)
                         startActivityForResult(intent, ImageCaptureManager.REQUEST_TAKE_PHOTO);
                     else
-                        Toast.makeText(getActivity(), R.string.no_access_to_camera, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), R.string.qr_scanner_no_access_to_camera, Toast.LENGTH_SHORT).show();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

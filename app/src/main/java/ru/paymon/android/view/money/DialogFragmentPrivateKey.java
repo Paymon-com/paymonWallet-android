@@ -3,12 +3,11 @@ package ru.paymon.android.view.money;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import ru.paymon.android.R;
@@ -46,22 +45,19 @@ public class DialogFragmentPrivateKey extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_private_key, null);
 
         TextView privateKey = (TextView) view.findViewById(R.id.dialog_fragment_private_key_address);
-        Button button = (Button) view.findViewById(R.id.dialog_fragment_private_key_button);
+        ConstraintLayout button = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_private_key_button);
 
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
 
         String privateKeyStr = "";
         switch (currency) {
             case ETH_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
                  privateKeyStr = application.getEthereumWallet().privateAddress;
                 break;
             case BTC_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
                 privateKeyStr = application.getBitcoinPrivateAddress();
                 break;
             case PMNT_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
                 privateKeyStr = application.getPaymonWallet().privateAddress;
                 break;
         }

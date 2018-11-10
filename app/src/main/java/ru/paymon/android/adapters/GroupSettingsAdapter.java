@@ -3,6 +3,7 @@ package ru.paymon.android.adapters;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 
 import ru.paymon.android.ApplicationLoader;
@@ -19,11 +19,11 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
 import ru.paymon.android.components.CircularImageView;
+import ru.paymon.android.components.DialogProgress;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
-import ru.paymon.android.components.DialogProgress;
 
 
 public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdapter.GroupsSettingsViewHolder> {
@@ -90,10 +90,10 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdap
 
             removeButton.setOnClickListener((view) ->
             {
-                AlertDialog.Builder builder = new AlertDialog.Builder(itemView.getContext());
-                builder.setTitle(R.string.deletion_confirmation)
-                        .setMessage(R.string.delete_participants)
-                        .setCancelable(true).setPositiveButton(R.string.yes, (dialogInterface, i) -> deleteParticipant(userItem)).setNegativeButton(R.string.no, (dialogInterface, i) -> {
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(itemView.getContext(), R.style.AlertDialogCustom));
+                builder.setTitle(R.string.group_chat_settings_delete_confirmation)
+                        .setMessage(R.string.group_chat_settings_delete_participants)
+                        .setCancelable(true).setPositiveButton(R.string.other_yes, (dialogInterface, i) -> deleteParticipant(userItem)).setNegativeButton(R.string.other_no, (dialogInterface, i) -> {
                 });
 
                 AlertDialog alert = builder.create();
@@ -116,7 +116,7 @@ public class GroupSettingsAdapter extends RecyclerView.Adapter<GroupSettingsAdap
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
-                        Toast.makeText(ApplicationLoader.applicationContext, R.string.import_export_keys_dialog_failure_title, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.other_error, Toast.LENGTH_LONG).show();
                     });
                 }
 

@@ -50,7 +50,7 @@ public class FragmentSettingsBasic extends AbsFragmentSettings implements Shared
             if (prefIndex >= 0) {
                 String value = listPreference.getEntries()[prefIndex].toString();
                 preference.setSummary(value);
-                User.CLIENT_BASIC_DATE_FORMAT_IS_24H = value.equals(ApplicationLoader.applicationContext.getString(R.string.date_format_24h));
+                User.CLIENT_BASIC_DATE_FORMAT_IS_24H = value.equals(ApplicationLoader.applicationContext.getString(R.string.settings_basic_24h));
             }
         }
     }

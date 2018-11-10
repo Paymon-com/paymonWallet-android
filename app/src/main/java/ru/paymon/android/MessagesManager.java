@@ -1,7 +1,6 @@
 package ru.paymon.android;
 
 import android.arch.paging.DataSource;
-import android.util.Log;
 
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -10,7 +9,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ru.paymon.android.models.ChatsItem;
-import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
@@ -128,7 +126,7 @@ public class MessagesManager {
                     final int gid = message.to_peer.group_id;
                     final RPC.Group group = GroupsManager.getInstance().getGroup(gid);
                     final RPC.UserObject creator = UsersManager.getInstance().getUser(group.creatorID);
-                    final String text = message.action instanceof RPC.PM_messageActionGroupCreate ? String.format("%s %s \"%s\"", Utils.formatUserName(creator), ApplicationLoader.applicationContext.getString(R.string.created_group), group.title) : message.text;
+                    final String text = message.action instanceof RPC.PM_messageActionGroupCreate ? String.format("%s %s \"%s\"", Utils.formatUserName(creator), ApplicationLoader.applicationContext.getString(R.string.chat_message_created_group), group.title) : message.text;
                     final RPC.UserObject lastMsgUser = UsersManager.getInstance().getUser(message.from_id);
                     chatsItem = new ChatsItem(gid, group.photoURL, group.title, text, message.date, message.itemType, lastMsgUser.photoURL);
                 }

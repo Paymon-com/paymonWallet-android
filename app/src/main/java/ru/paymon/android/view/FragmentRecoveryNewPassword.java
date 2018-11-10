@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +92,7 @@ public class FragmentRecoveryNewPassword extends Fragment {
                 }
 
                 if (editable.toString().length() < 8) {
-                    hintError.setText(R.string.reg_check_password_length);
+                    hintError.setText(R.string.sign_up_password_hint);
                     return;
                 } else {
                     hintError.setText("");
@@ -113,7 +114,7 @@ public class FragmentRecoveryNewPassword extends Fragment {
             @Override
             public void afterTextChanged(Editable editable) {
                 if (!editable.toString().equals(newPassword.getText().toString())) {
-                    hintError.setText(R.string.error_incorrect_double_password);
+                    hintError.setText(R.string.sign_up_password_repeat_error);
                 } else {
                     hintError.setText("");
                 }
@@ -145,7 +146,7 @@ public class FragmentRecoveryNewPassword extends Fragment {
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
-                        hintError.setText(R.string.password_recovery_failed);
+                        hintError.setText(R.string.recovery_password_error);
                     });
                     return;
                 }
@@ -154,10 +155,10 @@ public class FragmentRecoveryNewPassword extends Fragment {
                     if (dialogProgress != null && dialogProgress.isShowing())
                         dialogProgress.dismiss();
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                            .setMessage(getString(R.string.password_was_changed))
+                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+                            .setMessage(getString(R.string.recovery_password_success))
                             .setCancelable(false)
-                            .setPositiveButton(getString(R.string.ok), (dialogInterface, i) ->
+                            .setPositiveButton(getString(R.string.other_ok), (dialogInterface, i) ->
                                     Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentStart)
                             );
                     AlertDialog alertDialog = builder.create();

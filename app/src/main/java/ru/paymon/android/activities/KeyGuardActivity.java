@@ -5,7 +5,6 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -40,19 +39,19 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
         blurLockView = (BlurLockView) findViewById(R.id.blurlockview);
 
         if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
-            blurLockView.setTitle(getString(R.string.security_enter_password));
+            blurLockView.setTitle(getString(R.string.wallet_backup_enter_password));
             blurLockView.setTypeface(Typeface.DEFAULT);
             blurLockView.setType(Password.NUMBER, false);
-            blurLockView.setLeftButton(getString(R.string.clear));
-            blurLockView.setRightButton(getString(R.string.hint));
+            blurLockView.setLeftButton(getString(R.string.keyguard_clear));
+            blurLockView.setRightButton(getString(R.string.keyguard_hint));
             blurLockView.setOnRightButtonClickListener(() -> blurLockView.showHint());
         } else {
-            blurLockView.setTitle(getString(R.string.security_enter_password));
+            blurLockView.setTitle(getString(R.string.wallet_backup_enter_password));
             blurLockView.setPasswordLength(10);
             blurLockView.setTypeface(Typeface.DEFAULT);
             blurLockView.setType(Password.NUMBER, false);
-            blurLockView.setRightButton(getString(R.string.ok));
-            blurLockView.setLeftButton(getString(R.string.clear));
+            blurLockView.setRightButton(getString(R.string.other_ok));
+            blurLockView.setLeftButton(getString(R.string.keyguard_clear));
         }
 
         blurLockView.setOnPasswordInputListener(this);
@@ -120,7 +119,7 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void incorrect(String inputPassword) {
-        Toast.makeText(getApplicationContext(), R.string.wrong_password, Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), R.string.keyguard_wrong_password, Toast.LENGTH_SHORT).show();
     }
 
     @Override

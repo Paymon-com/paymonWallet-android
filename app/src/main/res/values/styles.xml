@@ -10,7 +10,14 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:editTextColor">@color/white</item>
         <item name="android:textColorHint">@color/white</item>
+        <item name="background">@color/colorPrimary</item>
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
+    </style>
+
+    <style name="AlertDialogCustom" parent="AppTheme">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:textColor">@color/blue_bright</item>
+        <item name="android:textColorPrimary">@color/white</item>
     </style>
 
     <style name="AppThemeSettingsActivity" parent="Theme.AppCompat.Light.NoActionBar">

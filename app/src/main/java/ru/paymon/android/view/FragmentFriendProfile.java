@@ -11,12 +11,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ru.paymon.android.components.CircularImageView;
-
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.components.DialogProgress;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -29,8 +28,8 @@ public class FragmentFriendProfile extends Fragment {
     private ImageButton floatMenu;
     private ImageButton chatButton;
 //    private ImageButton blockButton;
-    private ImageButton showBitcoin;
-    private ImageButton showEthereum;
+//    private ImageButton showBitcoin;
+//    private ImageButton showEthereum;
     private DialogProgress dialogProgress;
     private boolean isFABOpen = false;
 
@@ -58,11 +57,11 @@ public class FragmentFriendProfile extends Fragment {
 
         chatButton = (ImageButton) view.findViewById(R.id.friend_profile_chat_button);
 //        blockButton = (ImageButton) view.findViewById(R.id.friend_profile_block_button);
-        showBitcoin = (ImageButton) view.findViewById(R.id.friend_profile_bitcoin_button);
-        showEthereum = (ImageButton) view.findViewById(R.id.friend_profile_ethereum_button);
+//        showBitcoin = (ImageButton) view.findViewById(R.id.friend_profile_bitcoin_button);
+//        showEthereum = (ImageButton) view.findViewById(R.id.friend_profile_ethereum_button);
 
-        showEthereum.setVisibility(View.GONE);
-        showBitcoin.setVisibility(View.GONE);
+//        showEthereum.setVisibility(View.GONE);
+//        showBitcoin.setVisibility(View.GONE);
 
         floatMenu = (ImageButton) view.findViewById(R.id.friend_profile_menu_button);
         TextView friendProfileCity = (TextView) view.findViewById(R.id.friend_profile_city_text_view);
@@ -98,7 +97,7 @@ public class FragmentFriendProfile extends Fragment {
                         if (user.email != null && !user.email.isEmpty())
                             friendProfileCity.setText(user.email);
                         else
-                            friendProfileCity.setText(R.string.not_specified);
+                            friendProfileCity.setText(R.string.user_profile_not_specified);
 
                         if (!user.photoURL.url.isEmpty())
                             Utils.loadPhoto(user.photoURL.url, avatar);
@@ -124,10 +123,10 @@ public class FragmentFriendProfile extends Fragment {
                     final RPC.PM_BTC_setWalletKey walletKeyBtc = (RPC.PM_BTC_setWalletKey) response;
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (walletKeyBtc.walletKey != null && !walletKeyBtc.walletKey.isEmpty()) {
-                            showBitcoin.setVisibility(View.VISIBLE);
-                            showBitcoin.setOnClickListener(view13 -> {
-                                //TODO:сделать часть с переходом на его биток
-                            });
+//                            showBitcoin.setVisibility(View.VISIBLE);
+//                            showBitcoin.setOnClickListener(view13 -> {
+//                                //TODO:сделать часть с переходом на его биток
+//                            });
                         }
                     });
                 }
@@ -141,10 +140,10 @@ public class FragmentFriendProfile extends Fragment {
                     final RPC.PM_ETH_setWalletKey walletKeyEth = (RPC.PM_ETH_setWalletKey) response;
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (walletKeyEth.walletKey != null && !walletKeyEth.walletKey.isEmpty()) {
-                            showEthereum.setVisibility(View.VISIBLE);
-                            showEthereum.setOnClickListener(view14 -> {
-                                //TODO:сделать часть перехода на его эфир
-                            });
+//                            showEthereum.setVisibility(View.VISIBLE);
+//                            showEthereum.setOnClickListener(view14 -> {
+//                                //TODO:сделать часть перехода на его эфир
+//                            });
                         }
                     });
                 }
@@ -158,18 +157,18 @@ public class FragmentFriendProfile extends Fragment {
     private void showFABMenu() {
         isFABOpen = true;
         floatMenu.animate().rotation(180);
-        chatButton.animate().translationY(getResources().getDimension(R.dimen.standard_55));
+        chatButton.animate().translationY(getResources().getDimension(R.dimen.standard_65));
 //        blockButton.animate().translationY(getResources().getDimension(R.dimen.standard_105));
-        showBitcoin.animate().translationY(getResources().getDimension(R.dimen.standard_110));
-        showEthereum.animate().translationY(getResources().getDimension(R.dimen.standard_160));
+//        showBitcoin.animate().translationY(getResources().getDimension(R.dimen.standard_110));
+//        showEthereum.animate().translationY(getResources().getDimension(R.dimen.standard_160));
     }
 
     private void closeFABMenu() {
         isFABOpen = false;
         floatMenu.animate().rotation(0);
         chatButton.animate().translationY(0);
-        showBitcoin.animate().translationY(0);
-        showEthereum.animate().translationY(0);
+//        showBitcoin.animate().translationY(0);
+//        showEthereum.animate().translationY(0);
 //        blockButton.animate().translationY(0);
     }
 

@@ -1,215 +1,222 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="ExtraTranslation">
     <string name="app_name">Paymon</string>
-    <string name="date_format_24h">24 Hour</string>
-    <string name="date_format_12h">12 Hour AM/PM</string>
 
-    <string name="required_field">Required field!</string>
-    <string name="invalid_value">Invalid value!</string>
-    <string name="not_a_btc_address">The value entered is not a BTC address!</string>
-    <string name="not_a_eth_address">The value entered is not a ETH address!</string>
-    <string name="not_read_qr">Could not read Qr code</string>
-    <string name="insufficient_funds">Insufficient funds</string>
-    <string name="a_low_commission">A low commission value can lead to a long transaction sending. Continue?</string>
-    <string name="continue_transaction">Continue</string>
-    <string name="transaction_hash">Transaction hash</string>
-    <string name="success">Success</string>
-    <string name="fail">Fail</string>
-    <string name="transaction_failed_to_send">Transaction failed to send</string>
-    <string name="current_gas_price">Current gas price</string>
-    <string name="current_gas_limit">Current gas limit</string>
-    <string name="satoshi_per_byte">satoshi per byte</string>
-    <string name="time_stamp">Timestamp</string>
-    <string name="gas_is_less_than_200000">The value of the gas is less than 200000, this may lead to an unsuccessful transaction and commission charged</string>
-    <string name="backup_created">Backup created</string>
-    <string name="backup_failed">Backup failed</string>
-    <string name="wallet_successfully_deleted">Wallet successfully deleted</string>
-    <string name="wallet_failed_to_delete">Wallet failed to delete</string>
-    <string name="usd">USD</string>
-    <string name="eur">EUR</string>
-    <string name="delete_photo">Delete photo</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="sign_in">Sign In</string>
+    <string name="sign_in_hint">Already have an account?</string>
 
-    <string name="profile_edit_failed">Changes were not saved</string>
-    <string name="deletion_confirmation">Deletion confirmation</string>
-    <string name="delete_participants">Do you want to delete a participant?</string>
-    <string name="profile_edit_success">Profile successfully changed</string>
-    <string name="reg_phone_correct">Check if the entered phone number is correct</string>
-    <string name="pick_image_intent_text">Please Select</string>
-    <string name="select_the_recipient">Select a recipient</string>
-    <string name="change">Change</string>
-    <string name="confirmation_email">Confirmation_email</string>
-    <string name="permissions">The application requires permissions: …</string>
-    <string name="hide_email">Hide E-mail</string>
-    <string name="hide_phone">Hide phone number</string>
-    <string name="hide_username">Hide username</string>
-    <string name="reset_settings">Reset settings</string>
-    <string name="settings_reset">Settings reset</string>
-    <string name="double_tap_to_close_the_app">Double tap to close the app</string>
-    <string name="ethereum_remittance">Ethereum remittance</string>
-    <string name="bitcoin_remittance">Bitcoin remittance</string>
-    <string name="paymon_remittance">Paymon remittance</string>
-    <string name="no_files_found">No Files Found</string>
+    <string name="sign_up_login">Login</string>
+    <string name="sign_up_login_hint">Login can contain only Latin characters and numbers. Must be at least 3 characters.</string>
+    <string name="sign_up_login_error">Login contains invalid characters</string>
+    <string name="sign_up_password">Password</string>
+    <string name="sign_up_password_repeat">Repeat password</string>
+    <string name="sign_up_password_hint">Password must be at least 8 characters</string>
+    <string name="sign_up_password_error">Password is too short</string>
+    <string name="sign_up_password_repeat_error">Passwords do not match</string>
+    <string name="sign_up_email">E-mail</string>
+    <string name="sign_up_email_hint">You will receive a registration confirmation in your mailbox</string>
+    <string name="sign_up_email_error">Enter the correct e-mail</string>
+    <string name="sign_up_email_error2">This email or login is already in use</string>
+    <string name="sign_up_agreement">Agreement</string>
+    <string name="sign_up_privacy_policy">Privacy Policy</string>
 
-    <string name="keyguard_title">Enter password</string>
-
-    <string name="title_chats">Chats</string>
-    <string name="yes">Yes</string>
-    <string name="clear">Clear</string>
-    <string name="hint">Hint</string>
-    <string name="created_group">created a group</string>
-    <string name="no_one_selected">No one selected</string>
-    <string name="insufficient_rights">Insufficient rights</string>
-    <string name="time_to_next_dispatch">Time to next dispatch</string>
-
-    <string name="friend_requests">Friend requests</string>
-
-    <string name="the_balance_of_the_ethereum_wallet_could_not_be_updated">The balance of the Ethereum wallet could not be updated</string>
-
-    <string name="error_in_email">Error in E-mail</string>
-    <string name="photo_upload_failed">Photo failed to upload</string>
-
-    <string name="are_you_sure">Are you sure?</string>
-    <string name="administrators">Administrators</string>
-    <string name="leave_group">Leave group</string>
-    <string name="black_list">Black list</string>
-    <string name="no">No</string>
-    <string name="login_or_email_is_empty">Login or E-mail is empty</string>
-    <string name="create_ethereum_wallet_failed">Create an Ethereum wallet failed</string>
-    <string name="ethereum_wallet_created">Ethereum wallet created</string>
-    <string name="bitcoin_wallet_created">Bitcoin wallet created</string>
-    <string name="paymon_wallet_created">Paymon wallet created</string>
-
-    <string name="default_denomination_value_eth">2 decimal places</string>
-    <string name="money_denomination_auto">Autoformat</string>
-    <string name="money_denomination_8">8 decimal places</string>
-    <string name="money_denomination_6">6 decimal places</string>
-    <string name="money_denomination_4">4 decimal places</string>
-    <string name="money_denomination_2">2 decimal places</string>
-    <string name="backup_file_not_selected">The file of the purse backup was not selected</string>
-    <string name="you_can_not_delete_someone_messages">you can not delete someone messages</string>
-    <string name="unable_to_delete_messages">Could not delete messages</string>
-    <string name="delete_for_everyone">Delete for all</string>
-    <string name="twosome">Twosome</string>
-    <string name="groups">Groups</string>
-    <string name="global_search">Global search</string>
-    <string name="you_did_not_choose_anyone">You did not choose anyone</string>
-    <string name="not_specified">Not specified</string>
-
-    <string name="msg_permissions_required">Please provide permissions</string>
-
-    <string name="ok">ОК</string>
-    <string name="title_more">More</string>
-    <string name="title_contacts">Contacts</string>
-    <string name="title_money">Money</string>
-    <string name="title_transfer">Transfer</string>
-    <string name="title_withdraw">Withdrawal of funds</string>
-    <string name="title_games">Games</string>
-    <string name="title_settings">Settings</string>
-    <string name="title_faq">FAQ</string>
-    <string name="exit">Exit</string>
-    <string name="profile">Profile</string>
-    <string name="enter_a_code">Enter a code</string>
-    <string name="btc_sync">BTC Sync in progress</string>
-    <string name="camera_permission_was_granted">Camera permission was granted</string>
-    <string name="camera_permission_request_was_denied">Camera permission request was denied</string>
-    <string name="camera_access_is_required">Camera access is required to display the camera preview</string>
-    <string name="permission_is_not_available">Permission is not available. Requesting camera permission</string>
-    <string name="no_access_to_camera">No access to camera</string>
-    <string name="to_attach">To attach</string>
-
-    <string name="reg_name_correct">Name contains invalid characters</string>
-    <string name="reg_surname_correct">Surname contains invalid characters</string>
-    <string name="reg_check_login">Enter your login</string>
-    <string name="reg_check_password">Enter your password</string>
-    <string name="reg_check_login_correct">Login contains invalid characters</string>
-    <string name="reg_check_password_length">The password is too short</string>
-    <string name="check_connected_to_server">No connection to the server</string>
-
-    <string name="update_profile">Edit profile</string>
-
-    <string name="authorization">Authorization</string>
-
-    <string name="action_settings">Settings</string>
-
-    <string name="error_incorrect_double_password">Passwords do not match</string>
-
-    <string name="default_input_hint">Enter your message</string>
-
-    <string name="sign_up_auth">Sign Up</string>
-    <string name="login">Login</string>
-    <string name="password">Password</string>
-    <string name="name">Name</string>
-    <string name="surname">Surname</string>
-    <string name="repeat_password">Repeat password</string>
-    <string name="phone_number">Phone number</string>
-    <string name="city">City</string>
-    <string name="country">Country</string>
     <string name="agreement">Agreement</string>
-    <string name="privacy_policy2">Privacy Policy</string>
-    <string name="sign_in">Sign in</string>
-    <string name="selected_item_count">Selected item count</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
-    <string name="save_button">Save</string>
-    <string name="message">Message</string>
-    <string name="connecting">Connecting</string>
-    <string name="contact_information">Contact information</string>
-    <string name="personal_information">Personal information</string>
-    <string name="personalization">Personalization</string>
-    <string name="change_photo">Change photo</string>
-    <string name="status">Status</string>
-    <string name="bday">Date of Birth</string>
-    <string name="email">E-mail</string>
-    <string name="male">Male</string>
-    <string name="female">Female</string>
+    <string name="sign_in_email_or_login">E-mail or Login</string>
+    <string name="sign_in_password">Password</string>
+    <string name="sign_in_hint2">Forgot your password?</string>
 
-    <string name="deposit">Deposit</string>
-    <string name="withdraw">Withdraw</string>
-    <string name="rub">RUB</string>
-    <string name="btc">BTC</string>
-    <string name="pmnt">PMNT</string>
+    <string name="recovery_password_hint">Enter the verification code we sent you by email</string>
+    <string name="recovery_password_code">Confirmation code</string>
+    <string name="recovery_password_email">To recover your password, enter your email address or username</string>
+    <string name="recovery_password_new_password">Enter your new password</string>
+    <string name="recovery_password_error">Incorrect code</string>
+    <string name="recovery_password_sent">A confirmation code has been sent to your email. Use it to recover your password</string>
+    <string name="recovery_password_sent_error">Sending failed</string>
+    <string name="recovery_password_code_empty">Field blank: Enter confirmation code</string>
+    <string name="recovery_password_success">Password was successfully changed</string>
 
-    <string name="settings_notifications">Notifications</string>
-    <string name="settings_basic">Basic</string>
-    <string name="settings_security">Security</string>
+    <string name="chats_search_hint">Search chats</string>
+    <string name="chats_filter_dialogs">Conversations</string>
+    <string name="chats_filter_chats">Chats</string>
+    <string name="chats_filter_groups">Groups</string>
+
+    <string name="create_group">Create group</string>
+    <string name="create_group_title">Enter group name</string>
+    <string name="create_group_error">No one selected</string>
+
+    <string name="chat_message_hint">Type your message</string>
+    <string name="chat_message_created_group">created a group</string>
+    <string name="chat_message_delete">Delete selected messages?</string>
+    <string name="chat_message_delete_fail">Delete messages failed</string>
+    <string name="chat_message_selected">Selected:</string>
+
+    <string name="group_chat_participants">Participants:</string>
+    <string name="group_chat_settings">Group settings</string>
+    <string name="group_chat_settings_chat">Chat:</string>
+    <string name="group_chat_settings_add">Add Participants</string>
+    <string name="group_chat_settings_leave">Leave Group</string>
+    <string name="group_chat_settings_delete_confirmation">Deletion confirmation</string>
+    <string name="group_chat_settings_delete_participants">Do you want to delete a participant?</string>
+
+    <string name="user_profile">User profile</string>
+    <string name="user_profile_contact_information">Contact Information</string>
+    <string name="user_profile_not_specified">Not specified</string>
+
+    <string name="contacts_search_hint">Search</string>
+    <string name="contacts_empty_hint">You can search for contacts here</string>
+
+    <string name="more_menu_go_profile">Go to Profile</string>
+    <string name="more_menu_faq">FAQ</string>
+    <string name="more_menu_settings">Settings</string>
+
+    <string name="edit_profile">Edit profile</string>
+    <string name="edit_profile_change_photo">Change photo</string>
+    <string name="edit_profile_delete_photo">Delete photo</string>
+    <string name="edit_profile_name">Name</string>
+    <string name="edit_profile_surname">Surname</string>
+    <string name="edit_profile_contact_information">Contact Information</string>
+    <string name="edit_profile_email">E-mail</string>
+    <string name="edit_profile_email_hide">Hide your e-mail?</string>
+    <string name="edit_profile_email_save">Save</string>
+    <string name="edit_profile_name_error">Name contains invalid characters</string>
+    <string name="edit_profile_surname_error">Surname contains invalid characters</string>
+    <string name="edit_profile_email_error">Email contains invalid characters</string>
+    <string name="edit_profile_save_failed">Changes were not saved</string>
+    <string name="edit_profile_save_success">Profile successfully changed</string>
+
     <string name="settings_other">Other</string>
-    <string name="settings_about_programm">About program</string>
-    <string name="group_invitations">Group invitations</string>
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_basic">General</string>
+    <string name="settings_security">Security</string>
+    <string name="settings_reset">Reset settings</string>
+    <string name="settings_about">About the program</string>
+    <string name="settings_exit">Log Out</string>
+    <string name="settings_notifications_messages">Messages</string>
+    <string name="settings_notifications_dnd">Do Not Disturb</string>
+    <string name="settings_notifications_vibration">Vibrate</string>
+    <string name="settings_notifications_notifications">Notifications</string>
+    <string name="settings_basic_format_time">Time Format </string>
+    <string name="settings_basic_12h">12-Hour AM/PM</string>
+    <string name="settings_basic_24h">24-Hour</string>
+    <string name="settings_security_app">Application security</string>
+    <string name="settings_security_summary">Set a password when you sign in to the app</string>
+    <string name="settings_security_pass">Security Password</string>
 
-    <string name="notif_messages">Messages</string>
-    <string name="notif_do_not_disturb">Do not disturb</string>
-    <string name="notif_sound">Sound</string>
-    <string name="notif_vibration">Vibration</string>
-    <string name="notif_other">Other</string>
-    <string name="notif_transactions">Transactions</string>
-    <string name="enter_your_email">Enter your E-mail</string>
+    <string name="email_confirmation">Email Confirmation</string>
+    <string name="email_confirmation_hint">Confirm your email to continue. If you do not see the message in your inbox, please check the spam folder.</string>
+    <string name="email_confirmation_error">Enter the correct e-mail</string>
+    <string name="email_confirmation_time">Time to next dispatch:</string>
 
-    <string name="app_sort_friends">Sort friends list</string>
+    <string name="wallet_ethereum_wallet">Ethereum кошелек</string>
+    <string name="wallet_bitcoin_wallet">Bitcoin кошелек</string>
+    <string name="wallet_paymon_wallet">Paymon кошелек</string>
+    <string name="wallets_create">Create Wallet</string>
+    <string name="wallets_update">Update</string>
+    <string name="wallets_ex_rates">Exchange Rates</string>
+    <string name="wallet_available">Available</string>
+    <string name="wallet_estimated">Estimated</string>
+    <string name="wallet_transfer">Transfer</string>
+    <string name="wallet_private_address">Private key</string>
+    <string name="wallet_public_address">Public Key</string>
+    <string name="wallet_history_transaction_is_empty">Transaction history is empty</string>
+    <string name="wallet_hash">Hash</string>
+    <string name="wallet_value">Value</string>
+    <string name="wallet_status">Status</string>
+    <string name="wallet_time">Time</string>
+    <string name="wallet_from">From</string>
+    <string name="wallet_to">To</string>
+    <string name="wallet_gas_limit">Gas Limit</string>
+    <string name="wallet_gas_price">Gas Price</string>
+    <string name="wallet_used_gas">Used Gas</string>
+    <string name="wallet_private_address_hint">You can use this key to restore your wallet. Do not share your private key with anyone.</string>
+    <string name="wallet_restore_button_download">Restore from</string>
+    <string name="wallet_restore_password">Password</string>
+    <string name="wallet_restore_hint">Enter the password that you specified when creating the backup</string>
+    <string name="wallet_show_password">Show Password</string>
+    <string name="wallet_restore">Restore Wallet</string>
+    <string name="wallet_restore_hint2">You are about to replace your current wallet. Any coins in the current wallet will be lost unless you have a separate backup.</string>
+    <string name="wallet_restore_hint3">Important: Do not load private keys from questionable sources! Others can gain control over your fund if you do.</string>
+    <string name="wallet_restore_button_restore">Restore</string>
+    <string name="wallet_backup_button_select">Backup to</string>
+    <string name="wallet_backup_hint">Enter a password to protect your wallet backup</string>
+    <string name="wallet_backup_file_not_selected">The file of the purse backup was not selected</string>
+    <string name="wallet_backup_enter_password">Enter password</string>
+    <string name="wallet_backup_button_backup">Back Up</string>
+    <string name="wallet_remove_hint">Before you delete your wallet, it is recommended that you create a backup or you will lose all your money</string>
+    <string name="wallet_transfer_btc">Bitcoin Transfer</string>
+    <string name="wallet_transfer_sum">Enter Value</string>
+    <string name="wallet_transfer_total">Total</string>
+    <string name="wallet_transfer_receiver">Enter Recipient\'s Wallet Address</string>
+    <string name="wallet_transfer_receiver_hint">Enter the wallet address you want to transfer money to or use the Qr scanner</string>
+    <string name="wallet_transfer_deposit_acc">Deposit Account</string>
+    <string name="wallet_transfer_fee_btc">Fee: 0.0000001 (10 satoshi per byte)</string>
+    <string name="wallet_transfer_fee_eth_gas_price">Current Gas Price: 8 GWEI</string>
+    <string name="wallet_transfer_fee_eth_gas_limit">Current Gas Limit: 21,000</string>
+    <string name="wallet_transfer_fee_total">Commission</string>
+    <string name="wallet_satoshi_per_byte">satoshi per byte</string>
+    <string name="wallet_not_a_btc_address">The value entered is not a BTC address!</string>
+    <string name="wallet_not_a_eth_address">The value entered is not a ETH address!</string>
+    <string name="wallet_could_not_read_qr">Could not read Qr code</string>
+    <string name="wallet_insufficient_funds">Insufficient funds</string>
+    <string name="wallet_a_low_commission">A low commission value can lead to a long transaction sending. Continue?</string>
+    <string name="wallet_a_low_gas_limit">The value of the gas is less than 200000, this may lead to an unsuccessful transaction and commission charged</string>
+    <string name="wallet_create_hint">The operation may take several minutes. Please wait…</string>
 
-    <string name="security_app">Application security</string>
-    <string name="security_password_protect">Security Password</string>
-    <string name="security_enter_password">Enter password</string>
-    <string name="security_password_protect_summary">Set a password when you sign in to the app</string>
-    <string name="search">Search</string>
+    <string name="about_program">Paymon for android</string>
+    <string name="about_program_version">Version </string>
 
-    <string name="default_sort_friends">By name</string>
-    <string name="default_sound">Notice</string>
-    <string name="default_sort_surname">By surname</string>
-    <string name="default_sort_date">By date added</string>
-    <string name="confidentiality">Confidentiality</string>
+    <string name="other_connecting">Connecting</string>
+    <string name="other_back_to_reg">Back to registration</string>
+    <string name="other_cancel">Cancel</string>
+    <string name="other_agree">Agree</string>
+    <string name="other_ok">OK</string>
+    <string name="other_yes">Yes</string>
+    <string name="other_no">No</string>
+    <string name="other_share">Share</string>
+    <string name="other_double_tap_to_close">Double tap to close the app</string>
+    <string name="other_success">Success</string>
+    <string name="other_fail">Fail</string>
+    <string name="other_error">Error</string>
+    <string name="other_message">Message</string>
+    <string name="other_yesterday">Yesterday</string>
+    <string name="other_text_is_copied">Text copied to clipboard</string>
+    <string name="other_connection_error">No connection to the server</string>
+    <string name="other_are_you_sure">Are you sure?</string>
+    <string name="other_photo_upload_failed">Photo failed to upload</string>
+    <string name="other_insufficient_rights">Insufficient rights</string>
+    <string name="other_required_field">Required field!</string>
+    <string name="other_invalid_value">Invalid value!</string>
 
-    <string name="about_program_text">Paymon for Android</string>
-    <string name="about_program_text_version">"version %s"</string>
-    <string name="restore_wallet_dialog_replace_warning">You are about to replace the current wallet. Any coins in the current wallet will be lost if you do not have a separate backup</string>
-    <string name="import_keys_dialog_button_import">Reestablish</string>
-    <string name="export_keys_dialog_mail_intent_failed">Archiving the wallet was an error</string>
-    <string name="button_ok">OK</string>
-    <string name="button_add">Add</string>
-    <string name="button_share">Share</string>
-    <string name="private_key_password">PIN</string>
+    <string name="eur">EUR</string>
+    <string name="usd">USD</string>
+    <string name="rub">RUB</string>
 
-    <string name="participants">Participants</string>
+    <string name="error_auth_wrong_login_or_password">Неверный логин или пароль</string>
+    <string name="error_spamming">Слишком много запросов, попробуйте снова</string>
 
-    <string name="agreement_txt">
+    <string name="btc_sync">BTC Sync in progress</string>
+    <string name="keyguard_clear">Clear</string>
+    <string name="keyguard_hint">Hint</string>
+    <string name="keyguard_wrong_password">Wrong password</string>
+
+    <string name="loading_one">"Load.  "</string>
+    <string name="loading_two">"Load.. "</string>
+    <string name="loading_three">Load…</string>
+
+    <string name="qr_scanner_camera_permission_was_granted">Camera permission was granted</string>
+    <string name="qr_scanner_camera_permission_request_was_denied">Camera permission request was denied</string>
+    <string name="qr_scanner_camera_access_is_required">Camera access is required to display the camera preview</string>
+    <string name="qr_scanner_permission_is_not_available">Permission is not available. Requesting camera permission</string>
+    <string name="qr_scanner_no_access_to_camera">No access to camera</string>
+
+    <string name="file_picker_no_files_found">Files not found</string>
+    <string name="file_picker_attach">To attach</string>
+
+
+    <string name="other_agreements">
 \n
 1. Общие положения \n
 2. Определения \n
@@ -321,7 +328,7 @@
 С уважением, Администрация Paymon.\n
 </string>
 
-    <string name="privacy_polycy_txt">
+    <string name="other_privacy_policy">
         \n
 1. Общие положения\n
 2. Условия пользования сайтом и мобильным приложением\n
@@ -398,102 +405,4 @@
 8.Обратная связь\n
 Любые вопросы по поводу данной политики, сбора, использования и раскрытия персональных данных Блокчейн  или доступ к вашим личным данным, которые требуются по закону и  подлежащая раскрытию информация должна быть направлена на privacy@paymon.ru .
     </string>
-    <string name="back_to_reg">Back to registration</string>
-    <string name="registration_login_hint">Login can only contain Latin characters and numbers. Length at least 3 characters</string>
-    <string name="next">Next</string>
-    <string name="registration_password_hint">The password must be at least 8 characters in length</string>
-    <string name="registration_email">You will receive a confirmation of your registration to your mailbox</string>
-    <string name="reg_check_email">Enter correct mail</string>
-    <string name="password_recovery_email">To recover your password, enter your email address or username</string>
-    <string name="email_confirmation_hint">To continue, you must confirm your email. It is possible that the message will be sent to the spam folder</string>
-    <string name="registration_email_used">This email or login is already in use</string>
-
-    <string name="create_group">Create group</string>
-    <string name="group_creation">Group creation</string>
-    <string name="search_friend">Search your friend</string>
-    <string name="search_chats">Search chats</string>
-    <string name="title_dialogs">Dialogs</string>
-    <string name="search_contacts">Search contacts</string>
-    <string name="search_for_contacts">Here you can search for contacts</string>
-    <string name="done">Done</string>
-    <string name="enter_group_title">Enter group name</string>
-    <string name="agree">Agree</string>
-    <string name="add_participants">Add participants</string>
-    <string name="you_do_not_have_any_messages_yet">You do not have any messages yet</string>
-    <string name="backup_wallet_menu_item_title">Create a backup copy</string>
-    <string name="restore_backup_wallet_menu_item_title">Restore a backup copy</string>
-    <string name="auth_wrong_login_or_password">Wrong login or password</string>
-    <string name="error_spamming">Too many requests, try again</string>
-    <string name="eth">ETH</string>
-    <string name="wallet_create_title">Create a password for your wallet. The operation may take several minutes</string>
-    <string name="title_ethereum_wallet">Ethereum wallet</string>
-    <string name="title_bitcoin_wallet">Bitcoin wallet</string>
-    <string name="title_paymon_wallet">Paymon wallet</string>
-    <string name="create_wallet_dialog_hint">The operation may take several minutes. Please wait…</string>
-    <string name="ethereum_wallet_is_loaded_hint">Ethereum wallet is loading, please wait…</string>
-    <string name="universal_transfer_address_title">Enter the address to which you want to transfer money or use the scanner</string>
-    <string name="create_button">Create</string>
-    <string name="delete_wallet">Delete wallet</string>
-    <string name="delete_wallet_dialog_hint">Before you delete your wallet, it is recommended to make a backup or you will lose all your money</string>
-    <string name="wrong_password">Incorrect password</string>
-    <string name="right_file_system">No access rights to the file system</string>
-    <string name="download_from_explorer">Download from Explorer</string>
-    <string name="restor_from_backup_password_title">Enter the password that you specified when creating the backup</string>
-    <string name="restore_wallet_success">Your wallet was successfully restored</string>
-    <string name="restore_wallet_not_success">Wallet was not restored</string>
-    <string name="restore_wallet_not_success_error_file">Fault when creating a file</string>
-
-    <string name="title_invite_fiends">Invite friends</string>
-    <string name="title_invite_unreg_contacts">Invite</string>
-    <string name="title_invite_reg_contacts">Invite</string>
-    <string name="promotional_code">Invitation code (optional)</string>
-    <string name="already_have_an_account">Do you already have an account?</string>
-
-    <string name="invite_information_count">Number of guests:</string>
-    <string name="invite_registered">Registered</string>
-    <string name="invite_unregistered">Unregistered</string>
-    <string name="selected_messages_count">Selected</string>
-    <string name="text_is_copied">Text copied to clipboard</string>
-    <string name="icons_from">Icons from icons8.com</string>
-    <string name="replay_button">Reply</string>
-    <string name="forgot_password">Forgot your password?</string>
-    <string name="email_or_login">E-mail or Login</string>
-    <string name="enter_verification_code">Enter the verification code we sent you by email</string>
-    <string name="confirmation_code">Confirmation code</string>
-    <string name="new_password">New password</string>
-    <string name="enter_new_password_hint">Enter your new password</string>
-    <string name="password_recovery_failed">Incorrect code</string>
-    <string name="send">Send</string>
-    <string name="string_is_empty">The field is empty. Enter your email or login</string>
-    <string name="confirmation_code_was_sent">A confirmation code has been sent to your email. Use it to recover your password</string>
-    <string name="confirmation_code_verified">The code is correct, enter the new password</string>
-    <string name="string_code_is_empty">"Field blank: Enter confirmation code"</string>
-    <string name="password_was_changed">Password was successfully changed</string>
-    <string name="private_key">Private key</string>
-    <string name="public_key">Public key</string>
-    <string name="dont_share_your_key">You can use this key to restore your wallet. Do not share your private key with anyone</string>
-    <string name="history_transaction_is_empty">Transaction history is empty</string>
-    <string name="update">Update</string>
-    <string name="loading_one">"Load.  "</string>
-    <string name="loading_two">"Load.. "</string>
-    <string name="loading_three">Load…</string>
-    <string name="amount">Amount</string>
-    <string name="deposit_account">Deposit account</string>
-    <string name="address_of_the_recipient">Address of the recipient</string>
-    <string name="input_login">Enter login</string>
-    <string name="profit_title">Profit</string>
-    <string name="hi">Hi</string>
-    <string name="msg_time">Yesterday</string>
-    <string name="want_delete_message">Are you sure you want to delete the messages?</string>
-    <string name="sticker">Sticker</string>
-
-    <string name="go_to_profile">Go to profile</string>
-
-    <string name="format_time">Format time</string>
-
-    <string name="import_keys_dialog_warning">Important: Do not load private keys from dubious sources! Others can gain control over your funds if you do.</string>
-    <string name="export_keys_dialog_button_export">Back up</string>
-    <string name="import_export_keys_dialog_show">Show password</string>
-    <string name="import_export_keys_dialog_failure_title">Error</string><string name="bitmap_fragment_share">Share…</string>
-    <string name="button_cancel">Cancel</string>
 </resources>

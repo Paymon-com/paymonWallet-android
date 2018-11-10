@@ -2,7 +2,6 @@ package ru.paymon.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.util.Base64;
 
@@ -77,7 +76,7 @@ public class User {
         }
 
         SharedPreferences clientPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationLoader.applicationContext);
-        CLIENT_BASIC_DATE_FORMAT_IS_24H = clientPreferences.getString(CLIENT_BASIC_DATE_FORMAT_LIST, ApplicationLoader.applicationContext.getString(R.string.date_format_24h)).equals(ApplicationLoader.applicationContext.getString(R.string.date_format_24h));
+        CLIENT_BASIC_DATE_FORMAT_IS_24H = clientPreferences.getString(CLIENT_BASIC_DATE_FORMAT_LIST, ApplicationLoader.applicationContext.getString(R.string.settings_basic_24h)).equals(ApplicationLoader.applicationContext.getString(R.string.settings_basic_24h));
         CLIENT_MESSAGES_NOTIFY_IS_DONT_WORRY = clientPreferences.getBoolean(CLIENT_MESSAGES_NOTIFY_DONT_WORRY_SWITCH, false);
         CLIENT_MESSAGES_NOTIFY_IS_VIBRATION = clientPreferences.getBoolean(CLIENT_MESSAGES_NOTIFY_VIBRATION_SWITCH, true);
         CLIENT_MESSAGES_NOTIFY_NOTIFICATIONS_IS_ENABLED = clientPreferences.getBoolean(CLIENT_MESSAGES_NOTIFY_NOTIFICATIONS_ENABLED_SWITCH, true);
@@ -138,7 +137,7 @@ public class User {
         SharedPreferences clientPreferences = PreferenceManager.getDefaultSharedPreferences(ApplicationLoader.applicationContext);
         SharedPreferences.Editor editor = clientPreferences.edit();
 
-        editor.putString(CLIENT_BASIC_DATE_FORMAT_LIST, ApplicationLoader.applicationContext.getString(R.string.date_format_24h));
+        editor.putString(CLIENT_BASIC_DATE_FORMAT_LIST, ApplicationLoader.applicationContext.getString(R.string.settings_basic_24h));
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_DONT_WORRY_SWITCH, false);
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_VIBRATION_SWITCH, true);
         editor.putBoolean(CLIENT_MESSAGES_NOTIFY_NOTIFICATIONS_ENABLED_SWITCH, true);

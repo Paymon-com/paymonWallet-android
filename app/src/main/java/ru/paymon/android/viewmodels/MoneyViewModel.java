@@ -6,19 +6,14 @@ import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.MutableLiveData;
 import android.support.annotation.NonNull;
 import android.text.format.DateFormat;
-import android.util.Log;
 
 import org.bitcoinj.wallet.Wallet;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.web3j.abi.TypeDecoder;
-import org.web3j.abi.datatypes.Address;
-import org.web3j.abi.datatypes.generated.Uint256;
 import org.web3j.utils.Convert;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.lang.reflect.Method;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.net.HttpURLConnection;
@@ -28,7 +23,6 @@ import java.util.Currency;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Executors;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -40,12 +34,11 @@ import ru.paymon.android.R;
 import ru.paymon.android.User;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.models.EthTransactionItem;
-import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.models.EthereumWallet;
+import ru.paymon.android.models.ExchangeRate;
 import ru.paymon.android.models.NonEmptyWalletItem;
 import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.models.PmntTransactionItem;
-import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.models.WalletItem;
 import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Utils;
@@ -365,7 +358,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                     String gasLimit = transcationObj.getString("gas");
                     String gasPrice = new BigDecimal(transcationObj.getString("gasPrice")).divide(new BigDecimal(Math.pow(10, 9))).toString() + " GWEI";
                     String gasUsed = transcationObj.getString("gasUsed");
-                    String status = transcationObj.getInt("txreceipt_status") == 1 ? application.getApplicationContext().getString(R.string.success) : application.getApplicationContext().getString(R.string.fail);
+                    String status = transcationObj.getInt("txreceipt_status") == 1 ? application.getApplicationContext().getString(R.string.other_success) : application.getApplicationContext().getString(R.string.other_fail);
                     transactionItems.add(new EthTransactionItem(hash, status, date, value, to, from, gasLimit, gasUsed, gasPrice));
                 }
 

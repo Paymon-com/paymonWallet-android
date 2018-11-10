@@ -101,8 +101,7 @@ public class FragmentGroupAddParticipants extends Fragment {
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
-                        Toast toast = Toast.makeText(getContext(),
-                                getString(R.string.you_did_not_choose_anyone), Toast.LENGTH_SHORT);
+                        Toast toast = Toast.makeText(getContext(), getString(R.string.create_group_error), Toast.LENGTH_SHORT);
                         toast.show();
                     });
                     return;

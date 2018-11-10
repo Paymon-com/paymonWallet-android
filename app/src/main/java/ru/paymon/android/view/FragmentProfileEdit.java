@@ -10,6 +10,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,10 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import ru.paymon.android.components.CircularImageView;
 
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
@@ -33,6 +31,7 @@ import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.Config;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.components.DialogProgress;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -84,9 +83,9 @@ public class FragmentProfileEdit extends Fragment {
 
         deleteAvatar.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage(getString(R.string.confirmation_code_was_sent)) //TODO:String Вы уверены?
+                    .setMessage(getString(R.string.other_are_you_sure))
                     .setCancelable(true)
-                    .setPositiveButton(getString(R.string.ok), (DialogInterface dialog1, int which) -> {
+                    .setPositiveButton(getString(R.string.other_ok), (DialogInterface dialog1, int which) -> {
                         Utils.netQueue.postRunnable(() -> {
                             RPC.PM_deleteProfilePhoto deleteProfilePhoto = new RPC.PM_deleteProfilePhoto();
 
@@ -117,7 +116,7 @@ public class FragmentProfileEdit extends Fragment {
                             ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
                         });
                     })
-                    .setNegativeButton(getString(R.string.button_cancel), (DialogInterface dialog, int which) -> {
+                    .setNegativeButton(getString(R.string.other_cancel), (DialogInterface dialog, int which) -> {
                     });
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
@@ -165,7 +164,7 @@ public class FragmentProfileEdit extends Fragment {
                                 .setMinCropWindowSize(Config.minAvatarSize, Config.minAvatarSize)
                                 .start(getContext(), FragmentProfileEdit.this);
                     } else {
-                        Toast.makeText(getContext(), R.string.insufficient_rights, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), R.string.other_insufficient_rights, Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -176,19 +175,19 @@ public class FragmentProfileEdit extends Fragment {
 
         saveButton.setOnClickListener((v) -> {
             if (!Utils.nameCorrect(firstName.getText().toString())) {
-                Toast.makeText(getActivity(), getString(R.string.reg_name_correct), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.edit_profile_name_error), Toast.LENGTH_SHORT).show();
                 firstName.requestFocus();
                 return;
             }
 
             if (!Utils.nameCorrect(lastName.getText().toString())) {
-                Toast.makeText(getActivity(), getString(R.string.reg_surname_correct), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.edit_profile_surname_error), Toast.LENGTH_SHORT).show();
                 lastName.requestFocus();
                 return;
             }
 
             if (!Utils.emailCorrect(email.getText().toString())) {
-                Toast.makeText(getActivity(), getString(R.string.reg_check_email), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getString(R.string.edit_profile_email_error), Toast.LENGTH_SHORT).show();
                 email.requestFocus();
                 return;
             }
@@ -209,8 +208,8 @@ public class FragmentProfileEdit extends Fragment {
                             if (dialogProgress != null && dialogProgress.isShowing())
                                 dialogProgress.cancel();
 
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                    .setMessage(getString(R.string.profile_edit_failed))
+                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+                                    .setMessage(getString(R.string.edit_profile_save_failed))
                                     .setCancelable(false);
                             AlertDialog alertDialog = builder.create();
                             alertDialog.show();
@@ -223,9 +222,9 @@ public class FragmentProfileEdit extends Fragment {
                         User.saveConfig();
 
                         ApplicationLoader.applicationHandler.post(() -> {
-                            AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                    .setMessage(getString(R.string.profile_edit_success))
-                                    .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+                                    .setMessage(getString(R.string.edit_profile_save_success))
+                                    .setPositiveButton(R.string.other_ok, (dialogInterface, i) -> {
                                     })
                                     .setCancelable(true);
                             AlertDialog alertDialog = builder.create();
@@ -270,8 +269,8 @@ public class FragmentProfileEdit extends Fragment {
                                 if (dialogProgress != null && dialogProgress.isShowing())
                                     dialogProgress.cancel();
 
-                                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                                        .setMessage(R.string.photo_upload_failed)
+                                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+                                        .setMessage(R.string.other_photo_upload_failed)
                                         .setCancelable(true);
                                 AlertDialog alertDialog = builder.create();
                                 alertDialog.show();

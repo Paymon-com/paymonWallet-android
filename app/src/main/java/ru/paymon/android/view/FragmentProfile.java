@@ -10,11 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ru.paymon.android.components.CircularImageView;
-
 import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.utils.Utils;
 
 public class FragmentProfile extends Fragment {
@@ -48,7 +47,7 @@ public class FragmentProfile extends Fragment {
         if (User.currentUser.email != null && !User.currentUser.email.equals(""))
             email.setText(User.currentUser.email);
         else
-            email.setText(R.string.not_specified);
+            email.setText(R.string.user_profile_not_specified);
 
         return view;
     }

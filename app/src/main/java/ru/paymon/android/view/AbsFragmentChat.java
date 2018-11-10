@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,7 +43,7 @@ public abstract class AbsFragmentChat extends Fragment {
     public EmojiEditText messageInput;
     public ImageButton sendButton;
     public ImageView emoticonsButton;
-    public Button buttonAttachment;
+    //    public Button buttonAttachment;
     public LinearLayout toolbarContainer;
     public View toolbarView;
     public View toolbarViewSelected;
@@ -84,13 +83,13 @@ public abstract class AbsFragmentChat extends Fragment {
         messagesRecyclerView = (RecyclerView) view.findViewById(R.id.chat_recview);
         sendButton = (ImageButton) view.findViewById(R.id.sendButton);
         emoticonsButton = (ImageView) view.findViewById(R.id.smilesButton);
-        buttonAttachment = (Button) view.findViewById(R.id.button_attachment);
+//        buttonAttachment = (Button) view.findViewById(R.id.button_attachment);
         toolbarContainer = (LinearLayout) view.findViewById(R.id.toolbar_container);
 
-        buttonAttachment.setOnClickListener(v -> {
-            FragmentSheetDialog fragmentSheetDialog = new FragmentSheetDialog();
-            fragmentSheetDialog.show(getChildFragmentManager(), null);
-        });
+//        buttonAttachment.setOnClickListener(v -> {
+//            FragmentSheetDialog fragmentSheetDialog = new FragmentSheetDialog();
+//            fragmentSheetDialog.show(getChildFragmentManager(), null);
+//        });
 
         final Bundle bundle = new Bundle();
         bundle.putInt(CHAT_ID_KEY, chatID);
@@ -116,7 +115,7 @@ public abstract class AbsFragmentChat extends Fragment {
             groupUsers = GroupsManager.getInstance().getGroupUsers(chatID);
             if (group != null) {
                 chatTitleTextView.setText(group.title);
-                participantsCountTextView.setText(String.format("%s: %d", getString(R.string.participants), ((FragmentGroupChat) this).groupUsers.size()));
+                participantsCountTextView.setText(String.format("%s: %d", getString(R.string.group_chat_participants), ((FragmentGroupChat) this).groupUsers.size()));
                 if (!group.photoURL.url.isEmpty())
                     Utils.loadPhoto(group.photoURL.url, toolbarAvatar);
             }

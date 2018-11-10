@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -20,7 +18,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.shawnlin.numberpicker.NumberPicker;
 import com.warkiz.widget.IndicatorSeekBar;
 import com.warkiz.widget.OnSeekChangeListener;
 import com.warkiz.widget.SeekParams;
@@ -33,7 +30,6 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.navigation.Navigation;
-import ru.paymon.android.Config;
 import ru.paymon.android.ExchangeRatesManager;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
@@ -158,14 +154,14 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 }
 
                 if (value.isEmpty()) {
-                    amountEditText.setError(getText(R.string.required_field));
+                    amountEditText.setError(getText(R.string.other_required_field));
                     return;
                 }
 
                 btcAmount = Double.parseDouble(value);
 
                 if (btcAmount <= 0.00000546) {
-                    amountEditText.setError(getText(R.string.invalid_value));
+                    amountEditText.setError(getText(R.string.other_invalid_value));
                     return;
                 }
 
@@ -182,7 +178,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
             public void onSeeking(SeekParams seekParams) {
                 feeSatoshis = seekParams.progress * WalletApplication.btcTxSize;
                 feeBtc = feeSatoshis / Math.pow(10, 8);
-                feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format("BTC (${PROGRESS} %s)", getString(R.string.satoshi_per_byte)));
+                feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format("BTC (${PROGRESS} %s)", getString(R.string.wallet_satoshi_per_byte)));
                 totalValueBtc = feeBtc + btcAmount;
                 totalTextView.setText(String.format("%.8f BTC", totalValueBtc));
             }
@@ -201,7 +197,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         feeSeekBar.setMin(1);
         feeSeekBar.setMax(100);
         feeSeekBar.setProgress(10);
-        feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format(" (${PROGRESS} %s)", getString(R.string.satoshi_per_byte)));
+        feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format(" (${PROGRESS} %s)", getString(R.string.wallet_satoshi_per_byte)));
 
         receiverAddressEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -219,7 +215,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
                 String value = s.toString();
 
                 if (!Utils.verifyBTCpubKey(value)) {
-                    receiverAddressEditText.setError(getText(R.string.not_a_btc_address));
+                    receiverAddressEditText.setError(getText(R.string.wallet_not_a_btc_address));
                 } else {
                     receiverAddressEditText.setError(null);
                 }
@@ -286,7 +282,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
             }
         } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage(getText(R.string.not_read_qr))
+                    .setMessage(getText(R.string.wallet_could_not_read_qr))
                     .setCancelable(true);
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
@@ -302,7 +298,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
 
         if (totalValueBtc > application.getBitcoinBalance(Wallet.BalanceType.AVAILABLE_SPENDABLE).value) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                    .setMessage(getText(R.string.insufficient_funds))
+                    .setMessage(getText(R.string.wallet_insufficient_funds))
                     .setCancelable(true);
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
@@ -310,21 +306,21 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                .setMessage(feeSeekBar.getProgress() < 10 ? getText(R.string.a_low_commission) : getText(R.string.continue_transaction) + "?")
+                .setMessage(feeSeekBar.getProgress() < 10 ? getText(R.string.wallet_a_low_commission) : getText(R.string.other_agree) + "?")
                 .setCancelable(true)
-                .setPositiveButton(getText(R.string.continue_transaction), (DialogInterface dialog, int which) -> {
+                .setPositiveButton(getText(R.string.other_agree), (DialogInterface dialog, int which) -> {
                     final long btcAmountToSatoshi = (long) (btcAmount * Math.pow(10, 8));
                     Transaction transaction = application.sendBitcoinTx(toAddress, btcAmountToSatoshi, feeSeekBar.getProgress());
                     if (transaction != null) {
                         String hash = transaction.getHashAsString();
                         AlertDialog.Builder builder2 = new AlertDialog.Builder(getContext())
-                                .setMessage(getText(R.string.transaction_hash) + ": " + hash)
+                                .setMessage(getText(R.string.wallet_hash) + ": " + hash)
                                 .setCancelable(true);
                         AlertDialog alertDialog = builder2.create();
                         alertDialog.show();
                     }
                 })
-                .setNegativeButton(getText(R.string.button_cancel), (DialogInterface dialog, int which) -> {
+                .setNegativeButton(getText(R.string.other_cancel), (DialogInterface dialog, int which) -> {
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();

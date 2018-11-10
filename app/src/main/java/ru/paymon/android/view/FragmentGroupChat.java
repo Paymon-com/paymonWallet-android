@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,7 +91,7 @@ public class FragmentGroupChat extends AbsFragmentChat {
                     if (selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.GONE);
                         toolbarViewSelected.setVisibility(View.VISIBLE);
-                        selectedItemCount.setText(getString(R.string.selected_messages_count) + ": " + selectionTracker.getSelection().size());
+                        selectedItemCount.setText(getString(R.string.chat_message_selected) + " " + selectionTracker.getSelection().size());
                     } else if (!selectionTracker.hasSelection()) {
                         toolbarView.setVisibility(View.VISIBLE);
                         toolbarViewSelected.setVisibility(View.GONE);
@@ -113,18 +114,18 @@ public class FragmentGroupChat extends AbsFragmentChat {
                 for (final RPC.Message message:selectedMessages) {
                     checkedMessageIDs.add(message.id);
                 }
-                AlertDialog.Builder builder = new AlertDialog.Builder(getContext())
-                        .setTitle(ApplicationLoader.applicationContext.getString(R.string.want_delete_message))
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
+                        .setTitle(ApplicationLoader.applicationContext.getString(R.string.chat_message_delete))
                         .setCancelable(false)
-                        .setNegativeButton(getContext().getString(R.string.button_cancel), (dialogInterface, i) -> {
+                        .setNegativeButton(getContext().getString(R.string.other_cancel), (dialogInterface, i) -> {
                         })
-                        .setPositiveButton(getContext().getString(R.string.button_ok), (dialogInterface, i) -> {
+                        .setPositiveButton(getContext().getString(R.string.other_ok), (dialogInterface, i) -> {
                             RPC.PM_deleteGroupMessages request = new RPC.PM_deleteGroupMessages();
                             request.messageIDs.addAll(checkedMessageIDs);
 
                             NetworkManager.getInstance().sendRequest(request, (response, error) -> {
                                 if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
-                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.unable_to_delete_messages, Toast.LENGTH_SHORT).show());
+                                    ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.chat_message_delete_fail, Toast.LENGTH_SHORT).show());
                                     return;
                                 }
 

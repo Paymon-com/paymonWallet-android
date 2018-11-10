@@ -3,14 +3,14 @@ package ru.paymon.android.view.money;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.content.ContextCompat;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -57,20 +57,8 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         final View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_restore_wallet, null);
 
-        switch (currency) {
-            case BTC_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
-                break;
-            case ETH_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
-                break;
-            case PMNT_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
-                break;
-        }
-
-        final Button openExplorerButton = (Button) view.findViewById(R.id.dialog_fragment_restore_wallet_from_explorer_button);
-        final Button restoreButton = (Button) view.findViewById(R.id.dialog_fragment_restore_wallet_import_button);
+        final ConstraintLayout openExplorerButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_restore_wallet_from_explorer_button);
+        final ConstraintLayout restoreButton = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_restore_wallet_import_button);
         final EditText passwordEditText = (EditText) view.findViewById(R.id.dialog_fragment_restore_wallet_pass);
         final TextView path = (TextView) view.findViewById(R.id.dialog_fragment_restore_wallet_path);
         final CheckBox showPass = (CheckBox) view.findViewById(R.id.dialog_fragment_restore_wallet_check);
@@ -84,7 +72,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
         path.setVisibility(View.GONE);
 
         openExplorerButton.setOnClickListener((view1) -> {
-            AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(getContext())
+            AlertDialogOpenFile fileDialog = new AlertDialogOpenFile(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setOpenDialogListener((fileName) -> {
                         filePath[0] = fileName;
                         path.setVisibility(View.VISIBLE);
@@ -96,12 +84,12 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
         restoreButton.setOnClickListener((view1 -> {
             String password = passwordEditText.getText().toString().trim();
             if (password.isEmpty() || password.length() < 8) {
-                Toast.makeText(getContext(), R.string.reg_check_password_length, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.sign_up_password_error, Toast.LENGTH_LONG).show();
                 return;
             }
 
             if (filePath[0] == null) {
-                Toast.makeText(getContext(), R.string.backup_file_not_selected, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), R.string.wallet_backup_file_not_selected, Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -109,7 +97,7 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
 
             final File file = new File(filePath[0]);
 
-            Toast.makeText(ApplicationLoader.applicationContext, R.string.ethereum_wallet_is_loaded_hint, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ApplicationLoader.applicationContext, R.string.wallet_create_hint, Toast.LENGTH_SHORT).show();
             passwordEditText.setText(null);
 
             getDialog().cancel();
@@ -161,17 +149,17 @@ public class DialogFragmentRestoreWallet extends DialogFragment {
                         User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = password;
                         User.saveConfig();
                         NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED);
-                        Toast.makeText(ApplicationLoader.applicationContext, R.string.ok, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.other_ok, Toast.LENGTH_LONG).show();
 //                        getDialog().dismiss();
                         break;
                     case NO_USER_ID:
-                        Toast.makeText(ApplicationLoader.applicationContext, R.string.fail, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.other_fail, Toast.LENGTH_LONG).show();
                         break;
                     case ERROR_CREATE_FILE:
-                        Toast.makeText(ApplicationLoader.applicationContext, R.string.fail, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.other_fail, Toast.LENGTH_LONG).show();
                         break;
                     case ERROR_DECRYPTING_WRONG_PASS:
-                        Toast.makeText(ApplicationLoader.applicationContext, R.string.fail, Toast.LENGTH_LONG).show();
+                        Toast.makeText(ApplicationLoader.applicationContext, R.string.other_fail, Toast.LENGTH_LONG).show();
                         break;
                 }
             });

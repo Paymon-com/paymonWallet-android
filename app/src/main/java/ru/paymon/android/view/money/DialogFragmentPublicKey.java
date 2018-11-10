@@ -4,13 +4,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.ShareCompat;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,7 +48,7 @@ public class DialogFragmentPublicKey extends DialogFragment {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.dialog_fragment_public_key, null);
 
         TextView publicKey = (TextView) view.findViewById(R.id.dialog_fragment_public_key_address);
-        Button button = (Button) view.findViewById(R.id.dialog_fragment_public_key_button);
+        ConstraintLayout button = (ConstraintLayout) view.findViewById(R.id.dialog_fragment_public_key_button);
         ImageView qr = (ImageView) view.findViewById(R.id.dialog_fragment_public_key_image);
 
         WalletApplication application = ((WalletApplication) getActivity().getApplication());
@@ -57,15 +56,12 @@ public class DialogFragmentPublicKey extends DialogFragment {
         String publicKeyStr = "";
         switch (currency) {
             case ETH_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.eth_color));
                 publicKeyStr = application.getEthereumWallet().publicAddress;
                 break;
             case BTC_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.btc_color));
                 publicKeyStr = application.getBitcoinPublicAddress();
                 break;
             case PMNT_CURRENCY_VALUE:
-                view.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.pmnt_color));
                 publicKeyStr = application.getPaymonWallet().publicAddress;
                 break;
         }
@@ -85,7 +81,7 @@ public class DialogFragmentPublicKey extends DialogFragment {
             final ShareCompat.IntentBuilder builder = ShareCompat.IntentBuilder.from(getActivity());
             builder.setType("text/plain");
             builder.setText(pubKey);
-            builder.setChooserTitle(R.string.bitmap_fragment_share);
+            builder.setChooserTitle(R.string.other_share);
             builder.startChooser();
         });
 
