@@ -123,6 +123,7 @@
     <string name="wallet_history_transaction_is_empty">История транзакций пуста</string>
     <string name="wallet_hash">Хэш</string>
     <string name="wallet_value">Значение</string>
+    <string name="wallet_confirmation">Подтверждений</string>
     <string name="wallet_status">Состояние</string>
     <string name="wallet_time">Время</string>
     <string name="wallet_from">От</string>
@@ -189,6 +190,7 @@
     <string name="other_insufficient_rights">Недостаточно прав</string>
     <string name="other_required_field">Обязательное поле!</string>
     <string name="other_invalid_value">Недопустимое значение!</string>
+    <string name="other_details">Открыть подробней?</string>
 
     <string name="eur">EUR</string>
     <string name="usd">USD</string>
