@@ -155,6 +155,7 @@ public class ChatsManager {
         return chat;
     }
 
+
     public void removeWasteChats(final List<RPC.Message> messages) {
         AppDatabase.dbQueue.postRunnable(() -> {
             final List<ChatsItem> cachedChats = getChatsList();
