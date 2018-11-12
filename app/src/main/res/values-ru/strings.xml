@@ -42,6 +42,7 @@
     <string name="chats_filter_chats">Чаты</string>
     <string name="chats_filter_groups">Группы</string>
     <string name="chats_message_delete_chat">Удалить чат?</string>
+    <string name="chats_message_delete_chat_history">Очистить историю сообщений?</string>
     <string name="chats_message_delete_chat_group">Если вы удалите чат, вы автоматически его покините. Удалить?</string>
 
     <string name="create_group">Создать группу</string>

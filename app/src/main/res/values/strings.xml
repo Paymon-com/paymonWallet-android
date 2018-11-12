@@ -55,6 +55,7 @@
     <string name="chat_message_delete">Delete selected messages?</string>
     <string name="chat_message_delete_fail">Delete messages failed</string>
     <string name="chat_message_selected">Selected:</string>
+    <string name="chats_message_delete_chat_history">Clear message history?</string>
 
     <string name="group_chat_participants">Participants:</string>
     <string name="group_chat_settings">Group settings</string>
