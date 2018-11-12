@@ -1,7 +1,6 @@
 package ru.paymon.android.view;
 
 import android.annotation.SuppressLint;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceCategory;
@@ -48,10 +47,7 @@ public abstract class AbsFragmentSettings extends PreferenceFragmentCompat {
         int childCount = viewGroup.getChildCount();
         for (int i = 0; i < childCount; i++) {
             setZeroPaddingToLayoutChildren(viewGroup.getChildAt(i));
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
-                viewGroup.setPaddingRelative(0, viewGroup.getPaddingTop(), viewGroup.getPaddingEnd(), viewGroup.getPaddingBottom());
-            else
-                viewGroup.setPadding(0, viewGroup.getPaddingTop(), viewGroup.getPaddingRight(), viewGroup.getPaddingBottom());
+            viewGroup.setPaddingRelative(0, viewGroup.getPaddingTop(), viewGroup.getPaddingEnd(), viewGroup.getPaddingBottom());
         }
     }
 }

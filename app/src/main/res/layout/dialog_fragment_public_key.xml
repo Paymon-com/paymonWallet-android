@@ -93,18 +93,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_public_key_address" />
 
-    <!--<Button-->
-    <!--android:id="@+id/dialog_fragment_public_key_button"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--android:fontFamily="sans-serif-light"-->
-    <!--android:text="@string/button_share"-->
-    <!--android:textAlignment="center"-->
-    <!--android:textColor="@color/white"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintHorizontal_bias="0.0"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--tools:layout_editor_absoluteY="355dp" />-->
-
 </android.support.constraint.ConstraintLayout>

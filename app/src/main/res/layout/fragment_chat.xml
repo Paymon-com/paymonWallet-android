@@ -49,12 +49,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <!--<android.support.v7.widget.RecyclerView-->
-        <!--android:id="@+id/recViewAttachments"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content" />-->
-        <!--</LinearLayout>-->
-
         <android.support.constraint.ConstraintLayout
             android:id="@+id/chat_rl"
             android:layout_width="match_parent"
@@ -63,17 +57,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
-
-            <!--<Button-->
-            <!--android:id="@+id/button_attachment"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_marginEnd="8dp"-->
-            <!--android:text="test"-->
-            <!--android:textAllCaps="false"-->
-            <!--app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--app:layout_constraintEnd_toEndOf="@+id/input_edit_text"-->
-            <!--app:layout_constraintTop_toTopOf="parent" />-->
 
             <com.vanniktech.emoji.EmojiEditText
                 android:id="@+id/input_edit_text"
@@ -104,7 +87,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/sendButton"
                 app:layout_constraintStart_toEndOf="@+id/smilesButton"
                 app:layout_constraintTop_toTopOf="parent" />
-            <!--emojicon:emojiconSize="28sp"-->
 
             <ImageView
                 android:id="@+id/smilesButton"
@@ -120,7 +102,6 @@
                 app:layout_constraintEnd_toStartOf="@+id/input_edit_text"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
-            <!--android:background="@drawable/ic_smile"-->
 
             <ImageButton
                 android:id="@+id/sendButton"
@@ -141,15 +122,5 @@
 
 
         </android.support.constraint.ConstraintLayout>
-
-        <!--<LinearLayout-->
-        <!--android:id="@+id/footer_for_emoticons"-->
-        <!--android:layout_width="0dp"-->
-        <!--android:layout_height="0dp"-->
-        <!--android:background="@android:color/transparent"-->
-        <!--android:orientation="vertical"-->
-        <!--android:visibility="gone" />-->
-
     </android.support.constraint.ConstraintLayout>
-
 </android.support.design.widget.CoordinatorLayout>

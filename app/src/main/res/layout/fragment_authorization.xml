@@ -73,7 +73,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_authorization" />
 
-
-
-
 </android.support.constraint.ConstraintLayout>

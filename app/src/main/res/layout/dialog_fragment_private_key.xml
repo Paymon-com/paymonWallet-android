@@ -48,19 +48,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_private_key_hint" />
 
-    <!--<Button-->
-    <!--android:id="@+id/dialog_fragment_private_key_button"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--android:fontFamily="sans-serif-light"-->
-    <!--android:text="@string/ok"-->
-    <!--android:textSize="12sp"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintHorizontal_bias="1.0"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--tools:layout_editor_absoluteY="261dp" />-->
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/dialog_fragment_private_key_button"
         android:layout_width="0dp"
@@ -102,7 +89,6 @@
             app:layout_constraintStart_toEndOf="@+id/textView27"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/to_accept" />
-
 
     </android.support.constraint.ConstraintLayout>
 

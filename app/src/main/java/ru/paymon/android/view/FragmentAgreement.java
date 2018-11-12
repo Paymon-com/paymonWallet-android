@@ -13,12 +13,6 @@ import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 
 public class FragmentAgreement extends Fragment {
-    private static FragmentAgreement instance;
-
-    public static synchronized FragmentAgreement newInstance() {
-        instance = new FragmentAgreement();
-        return instance;
-    }
 
     @Nullable
     @Override

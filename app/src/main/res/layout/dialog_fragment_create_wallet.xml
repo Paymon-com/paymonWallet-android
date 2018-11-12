@@ -57,18 +57,6 @@
             tools:targetApi="lollipop" />
     </android.support.design.widget.TextInputLayout>
 
-    <!--<Button-->
-    <!--android:id="@+id/dialog_fragment_create_wallet_create_button"-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:layout_marginEnd="36dp"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--android:fontFamily="sans-serif-light"-->
-    <!--android:text="@string/create_button"-->
-    <!--android:textColor="@color/white"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--tools:layout_editor_absoluteY="324dp" />-->
-
     <android.support.constraint.ConstraintLayout
         android:id="@+id/dialog_fragment_create_wallet_create_button"
         android:layout_width="0dp"

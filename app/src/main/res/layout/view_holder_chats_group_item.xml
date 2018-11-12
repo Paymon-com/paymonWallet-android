@@ -42,8 +42,7 @@
             android:textColor="#FF5534" />
     </LinearLayout>
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/main_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -96,7 +95,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:singleLine="true"
-            android:text="Sergey Pomelov"
+            android:text="Name Surname"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="@+id/group_icon"
@@ -112,7 +111,7 @@
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/roboto_thin"
             android:singleLine="true"
-            android:text="Go drink please!"
+            android:text="text"
             android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/chats_item_last_msg_avatar"
             app:layout_constraintEnd_toStartOf="@+id/chats_item_time"

@@ -86,7 +86,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         localButton.setVisibility(localCurrency.equals("USD") || localCurrency.equals("EUR") ? View.GONE : View.VISIBLE);
 
         usdButton.setOnClickListener((v) -> {
-            currentCurrency = "USD";
+            currentCurrency = getString(R.string.usd);
             usdBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
             eurBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             localBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -94,7 +94,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         });
 
         eurButton.setOnClickListener((v) -> {
-            currentCurrency = "EUR";
+            currentCurrency = getString(R.string.eur);
             usdBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             eurBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
             localBacklight.setBackgroundColor(getResources().getColor(R.color.colorPrimary));

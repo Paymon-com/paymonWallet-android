@@ -22,20 +22,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <!--<ru.paymon.android.components.CircleImageView-->
-        <!--android:gid="@+gid/cell_group_participant_photo"-->
-        <!--android:layout_width="60dp"-->
-        <!--android:layout_height="60dp"-->
-        <!--android:layout_gravity="center"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginStart="16dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-
-
     <TextView
         android:id="@+id/cell_group_participant_name"
         android:layout_width="0dp"

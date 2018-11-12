@@ -40,8 +40,6 @@ import ru.paymon.android.utils.Utils;
 
 import static android.app.Activity.RESULT_OK;
 
-//import ru.paymon.android.utils.ImagePicker;
-
 
 public class FragmentProfileEdit extends Fragment {
     private DialogProgress dialogProgress;
