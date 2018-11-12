@@ -17,20 +17,17 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:backgroundTint="@color/white"
-            android:buttonTint="@color/white"
-            android:checked="false"
+            android:button="@drawable/selector_rombus"
             android:fontFamily="sans-serif-light"
+            android:paddingStart="8dp"
             android:text="@string/wallet_show_password"
             android:textColor="@color/white"
             android:textColorLink="@color/white"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_backup_wallet_hint"
-            tools:targetApi="lollipop" />
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_backup_wallet_hint" />
 
         <TextView
             android:id="@+id/dialog_fragment_backup_wallet_hint"
@@ -192,7 +189,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:src="@color/black_light"
             app:layout_constraintEnd_toEndOf="parent"

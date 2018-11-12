@@ -160,10 +160,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
-            android:backgroundTint="@color/white"
-            android:buttonTint="@color/white"
+            android:button="@drawable/selector_rombus"
+            android:paddingStart="8dp"
             android:checked="false"
             android:fontFamily="sans-serif-light"
             android:text="@string/wallet_show_password"
@@ -172,15 +172,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_hint1"
-            tools:targetApi="lollipop" />
+            app:layout_constraintTop_toBottomOf="@+id/dialog_fragment_restore_wallet_hint1" />
 
         <TextView
             android:id="@+id/dialog_fragment_restore_wallet_hint2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/roboto_thin"
             android:text="@string/wallet_restore_hint2"

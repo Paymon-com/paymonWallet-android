@@ -1,7 +1,9 @@
 package ru.paymon.android.adapters;
 
+import android.app.Activity;
 import android.arch.paging.PagedListAdapter;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.util.DiffUtil;
@@ -10,18 +12,21 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 
+import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.ChatsManager;
 import ru.paymon.android.R;
 import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.net.NetworkManager;
+import ru.paymon.android.net.Packet;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
@@ -72,11 +77,11 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
     }
 
     public abstract static class BaseChatsViewHolder extends RecyclerView.ViewHolder {
-        public final ImageButton delete;
+        public final Button delete;
 
         private BaseChatsViewHolder(View itemView) {
             super(itemView);
-            delete = (ImageButton) itemView.findViewById(R.id.delete);
+            delete = (Button) itemView.findViewById(R.id.delete);
         }
 
         abstract void bind(ChatsItem chatsItem);
@@ -112,28 +117,65 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom))
-                        .setMessage(context.getText(R.string.chats_message_delete_chat))
-                        .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> {
-                            final RPC.PM_clearChat request = new RPC.PM_clearChat(new RPC.PM_peerUser(chatsItem.chatID));
-                            NetworkManager.getInstance().sendRequest(request, (response, error) -> {
-                                if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
-                                    ApplicationLoader.applicationHandler.post(() -> {
-                                        swipe.close(true);
-                                        Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
-                                    });
-                                    return;
-                                }
 
-                                if (response instanceof RPC.PM_boolTrue) {
-                                    ChatsManager.getInstance().removeChat(chatsItem);
-                                }
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                LayoutInflater layoutInflater = LayoutInflater.from(context);
+                final View clearChatDialog = layoutInflater.inflate(R.layout.alert_dialog_custom_clear_chat_history, null);
+                Button buttonNo = (Button) clearChatDialog.findViewById(R.id.alert_dialog_custom_clear_history_button_no);
+                Button buttonYes = (Button) clearChatDialog.findViewById(R.id.alert_dialog_custom_clear_history_button_yes);
+                CheckBox checkBoxClearHistory = (CheckBox) clearChatDialog.findViewById(R.id.alert_dialog_custom_clear_history_check_box);
+                builder.setView(clearChatDialog);
+                AlertDialog dialog = builder.create();
+                dialog.show();
+
+                buttonNo.setOnClickListener(v12 -> {
+                    dialog.dismiss();
+                });
+
+                buttonYes.setOnClickListener(v1 -> Utils.netQueue.postRunnable(() -> {
+                    Packet request = null;
+                    final RPC.Peer peer = new RPC.PM_peerUser(chatsItem.chatID);
+                    if(checkBoxClearHistory.isChecked())
+                        request = new RPC.PM_deleteChat(peer);
+                    else
+                        request = new RPC.PM_leaveChat(peer);
+
+                    NetworkManager.getInstance().sendRequest(request, (response, error) -> {
+                        if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
+                            ApplicationLoader.applicationHandler.post(() -> {
+                                swipe.close(true);
+                                Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
                             });
-                        })).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> {
-                            dialog.cancel();
-                            swipe.close(true);
-                        });
-                builder.create().show();
+                            return;
+                        }
+
+                        if (response instanceof RPC.PM_boolTrue) {
+                            ChatsManager.getInstance().removeChat(chatsItem);
+                        }
+                    });
+                }));
+
+
+//                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom))
+//                        .setTitle(context.getText(R.string.chats_message_delete_chat))
+//                        .setMultiChoiceItems(checkClearHistory, mCheckedItems, (dialog, which, isChecked) -> mCheckedItems[which] = isChecked)
+//                        .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> {
+//                            final RPC.PM_leaveChat groupInfo = new RPC.PM_leaveChat(new RPC.PM_peerUser(chatsItem.chatID));
+//                            NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
+//                                if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
+//                                    ApplicationLoader.applicationHandler.post(() -> {
+//                                        swipe.close(true);
+//                                        Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
+//                                    });
+//                                    return;
+//                                }
+//
+//                                if (response instanceof RPC.PM_boolTrue) {
+//                                    ChatsManager.getInstance().removeChat(chatsItem);
+//                                }
+//                            });
+//                        })).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> dialog.cancel());
+//                builder.create().show();
             });
         }
     }
@@ -174,28 +216,24 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
+
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom))
                         .setMessage(context.getText(R.string.chats_message_delete_chat_group))
-                        .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> {
-                            Utils.netQueue.postRunnable(() -> {
-                                final RPC.PM_clearChat deleteChat = new RPC.PM_clearChat(new RPC.PM_peerGroup(chatsItem.chatID));
-                                NetworkManager.getInstance().sendRequest(deleteChat, (response, error) -> {
-                                    if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
-                                        ApplicationLoader.applicationHandler.post(() -> {
-                                            swipe.close(true);
-                                            Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
-                                        });
-                                    }
+                        .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> Utils.netQueue.postRunnable(() -> {
+                            final RPC.PM_deleteChat deleteChat = new RPC.PM_deleteChat(new RPC.PM_peerGroup(chatsItem.chatID));
+                            NetworkManager.getInstance().sendRequest(deleteChat, (response, error) -> {
+                                if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
+                                    ApplicationLoader.applicationHandler.post(() -> {
+                                        swipe.close(true);
+                                        Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
+                                    });
+                                }
 
-                                    if (response instanceof RPC.PM_boolTrue) {
-                                        ChatsManager.getInstance().removeChat(chatsItem);
-                                    }
-                                });
+                                if (response instanceof RPC.PM_boolTrue) {
+                                    ChatsManager.getInstance().removeChat(chatsItem);
+                                }
                             });
-                        })).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> {
-                            dialog.cancel();
-                            swipe.close(true);
-                        });
+                        }))).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> dialog.cancel());
                 builder.create().show();
 
             });

@@ -299,6 +299,10 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         final String toAddress = receiverAddressEditText.getText().toString();
 
         if (toAddress.isEmpty() || !Utils.verifyETHpubKey(toAddress)) {
+            AlertDialog.Builder builderAlert = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+            builderAlert.setMessage(getString(R.string.wallet_fields_incorrect))
+                    .setPositiveButton(R.string.other_ok, (dialog, which) -> dialog.cancel());
+            builderAlert.create().show();
             return;
         }
 
@@ -387,7 +391,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                     .setMessage(getText(R.string.wallet_could_not_read_qr))
                     .setCancelable(true);
-            android.support.v7.app.AlertDialog alertDialog = builder.create();
+            AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
     }
