@@ -12,7 +12,10 @@
         tools:layout="@layout/fragment_authorization" >
         <action
             android:id="@+id/action_fragmentAuthorization_to_mainActivity"
-            app:destination="@id/mainActivity" />
+            app:destination="@id/mainActivity"
+            app:launchSingleTop="true"
+            app:popUpTo="@+id/mainActivity"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_fragmentAuthorization_to_fragmentRecoveryPasswordEmail"
             app:destination="@id/fragmentRecoveryPasswordEmail" />
