@@ -13,10 +13,10 @@
         android:id="@+id/more_menu_settings"
         android:icon="@drawable/settings"
         android:title="@string/more_menu_settings" />
-    <item
-        android:id="@+id/more_menu_faq"
-        android:icon="@drawable/faq"
-        android:title="@string/more_menu_faq" />
+    <!--<item-->
+        <!--android:id="@+id/more_menu_faq"-->
+        <!--android:icon="@drawable/faq"-->
+        <!--android:title="@string/more_menu_faq" />-->
     <!--<item-->
         <!--android:id="@+id/bottom_menu_games"-->
         <!--android:icon="@drawable/ic_menu_games"-->

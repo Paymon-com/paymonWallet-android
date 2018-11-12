@@ -64,8 +64,8 @@ public class FragmentMoreMenu extends Fragment implements NavigationView.OnNavig
 ////                            R.string.msg_permissions_required, READ_CONTACTS_PERMISSION);
 ////                }
 //                break;
-            case R.id.more_menu_faq:
-                break;
+//            case R.id.more_menu_faq:
+//                break;
             case R.id.more_menu_settings:
                 Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.settingsActivity);
                 break;

@@ -59,7 +59,7 @@ public class FragmentRegistrationPassword extends Fragment {
         backButton.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
         acceptButton.setOnClickListener(v -> showFragmentRegistrationEmail());
 
-        passwordEditText.requestFocus();
+//        passwordEditText.requestFocus();
 
         repeatPasswordEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_NEXT || i == EditorInfo.IME_ACTION_DONE) {

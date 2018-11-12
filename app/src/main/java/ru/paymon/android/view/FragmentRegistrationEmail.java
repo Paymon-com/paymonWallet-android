@@ -62,8 +62,8 @@ public class FragmentRegistrationEmail extends Fragment {
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
         emailEditText = view.findViewById(R.id.registration_email_edit_text);
 //        promocodeEditText = view.findViewById(R.id.registration_promocode_edit_text);
-        TextView agreementTextView = view.findViewById(R.id.registration_email_agreement_text_view);
-        TextView privacyPolicyTextView = view.findViewById(R.id.registration_email_privacy_policy_text_view);
+//        TextView agreementTextView = view.findViewById(R.id.registration_email_agreement_text_view);
+//        TextView privacyPolicyTextView = view.findViewById(R.id.registration_email_privacy_policy_text_view);
         hintError = view.findViewById(R.id.registration_email_hint_error_text_view);
 
         backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
@@ -72,15 +72,15 @@ public class FragmentRegistrationEmail extends Fragment {
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
-        agreementTextView.setOnClickListener(v -> {
-            Utils.hideKeyboard(v);
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentAgreement);
-        });
+//        agreementTextView.setOnClickListener(v -> {
+//            Utils.hideKeyboard(v);
+//            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentAgreement);
+//        });
 
-        privacyPolicyTextView.setOnClickListener(v -> {
-            Utils.hideKeyboard(v);
-            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentPrivacyPolicy);
-        });
+//        privacyPolicyTextView.setOnClickListener(v -> {
+//            Utils.hideKeyboard(v);
+//            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentPrivacyPolicy);
+//        });
 
         emailEditText.addTextChangedListener(new TextWatcher() {
             @Override
