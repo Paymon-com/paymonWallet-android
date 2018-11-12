@@ -216,7 +216,7 @@ public class FragmentGroupSettings extends Fragment {
         leaveGroup.setOnClickListener(view13 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
             builder.setMessage(R.string.other_are_you_sure).setPositiveButton(R.string.other_yes, (dialogInterface, i) -> {
-                RPC.PM_deleteChat request = new RPC.PM_deleteChat(new RPC.PM_peerGroup(chatID));
+                RPC.PM_clearChat request = new RPC.PM_clearChat(new RPC.PM_peerGroup(chatID));
 
                 NetworkManager.getInstance().sendRequest(request, (response, error) -> {
                     if (error != null || response == null || response instanceof RPC.PM_boolFalse) {

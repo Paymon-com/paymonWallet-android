@@ -20,8 +20,8 @@ public interface ChatMessageDao {
     @Query("SELECT * FROM message WHERE to_id = :cid ORDER BY date DESC LIMIT 1")
     RPC.Message getLastMessageByChatID(int cid);
 
-    @Query("SELECT * FROM message WHERE id = :id")
-    RPC.Message getMessageByChatID(int id);
+    @Query("DELETE FROM message WHERE to_id = :cid")
+    void deleteMessageByChatID(int cid);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertList(List<RPC.Message> messageList);

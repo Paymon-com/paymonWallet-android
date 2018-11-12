@@ -34,7 +34,10 @@ public class ChatsManager {
     }
 
     public void removeChat(ChatsItem chatsItem) {
-        AppDatabase.dbQueue.postRunnable(() -> AppDatabase.getDatabase().chatDao().delete(chatsItem));
+        AppDatabase.dbQueue.postRunnable(() -> {
+            AppDatabase.getDatabase().chatDao().delete(chatsItem);
+            AppDatabase.getDatabase().chatMessageDao().deleteMessageByChatID(chatsItem.chatID);
+        });
     }
 
     public void removeAllChats() {

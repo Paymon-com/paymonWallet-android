@@ -115,8 +115,8 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom))
                         .setMessage(context.getText(R.string.chats_message_delete_chat))
                         .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> {
-                            final RPC.PM_leaveChat groupInfo = new RPC.PM_leaveChat(new RPC.PM_peerUser(chatsItem.chatID));
-                            NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
+                            final RPC.PM_clearChat request = new RPC.PM_clearChat(new RPC.PM_peerUser(chatsItem.chatID));
+                            NetworkManager.getInstance().sendRequest(request, (response, error) -> {
                                 if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
                                     ApplicationLoader.applicationHandler.post(() -> {
                                         swipe.close(true);
@@ -178,7 +178,7 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
                         .setMessage(context.getText(R.string.chats_message_delete_chat_group))
                         .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> {
                             Utils.netQueue.postRunnable(() -> {
-                                final RPC.PM_deleteChat deleteChat = new RPC.PM_deleteChat(new RPC.PM_peerGroup(chatsItem.chatID));
+                                final RPC.PM_clearChat deleteChat = new RPC.PM_clearChat(new RPC.PM_peerGroup(chatsItem.chatID));
                                 NetworkManager.getInstance().sendRequest(deleteChat, (response, error) -> {
                                     if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
                                         ApplicationLoader.applicationHandler.post(() -> {
