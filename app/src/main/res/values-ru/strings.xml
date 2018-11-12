@@ -112,9 +112,9 @@
     <string name="email_confirmation_error">Введите корректный e-mail</string>
     <string name="email_confirmation_time">Время до следующей отправки:</string>
 
-    <string name="wallet_ethereum_wallet">Ethereum wallet</string>
-    <string name="wallet_bitcoin_wallet">Bitcoin wallet</string>
-    <string name="wallet_paymon_wallet">Paymon wallet</string>
+    <string name="wallet_ethereum_wallet">Ethereum кошелек</string>
+    <string name="wallet_bitcoin_wallet">Bitcoin кошелек</string>
+    <string name="wallet_paymon_wallet">Paymon кошелек</string>
     <string name="wallets_create">Создать кошелек</string>
     <string name="wallets_update">Обновить</string>
     <string name="wallets_ex_rates">Курсы валют</string>

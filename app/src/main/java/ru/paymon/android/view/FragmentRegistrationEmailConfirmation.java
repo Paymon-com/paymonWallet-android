@@ -54,7 +54,13 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
         ImageButton backToolbar = (ImageButton) view.findViewById(R.id.toolbar_back_btn);
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
-        backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
+        backToolbar.setOnClickListener(v -> {
+            User.currentUser = null;
+            User.saveConfig();
+            NavOptions.Builder builder = new NavOptions.Builder();
+            NavOptions navOptions = builder.setLaunchSingleTop(true).setClearTask(true).build();
+            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentStart, null, navOptions);
+        });
         acceptToolbar.setOnClickListener(v -> confirmRegistration());
 
         //Utils.setActionBarWithTitle(getActivity(), getString(R.string.title_confirmation));

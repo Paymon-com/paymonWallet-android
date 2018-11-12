@@ -94,6 +94,8 @@ public class FragmentGroupSettings extends Fragment {
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
 
+        leaveGroup.setVisibility(User.currentUser.id == group.creatorID ? View.GONE : View.VISIBLE);
+
         photoView.setOnClickListener(v -> {
             ApplicationLoader.rxPermission
                     .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,

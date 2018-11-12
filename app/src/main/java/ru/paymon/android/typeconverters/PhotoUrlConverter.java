@@ -35,7 +35,7 @@ public class PhotoUrlConverter {
 
     @TypeConverter
     public static String toString(RPC.PM_photoURL photoURL) {
-        if (photoURL == null)
+        if (photoURL == null || photoURL.peer == null)
             return "";
         else
             return photoURL.url + ";" + photoURL.peer.user_id + ";" + photoURL.peer.group_id + ";" + photoURL.peer.channel_id;
