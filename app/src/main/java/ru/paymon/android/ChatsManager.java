@@ -165,6 +165,7 @@ public class ChatsManager {
             final List<ChatsItem> freshChats = new ArrayList<>();
 
             for (RPC.Message message : messages) {
+                if (message == null) continue;
                 AppDatabase.getDatabase().chatMessageDao().insert(message);
                 boolean isGroup = !(message.to_peer instanceof RPC.PM_peerUser);
 
@@ -172,15 +173,15 @@ public class ChatsManager {
                 if (!isGroup) {
                     final int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
                     final RPC.UserObject user = UsersManager.getInstance().getUser(cid);
-                    chatsItem = ChatsManager.getInstance().getChatByChatID(-cid);
-                    if (chatsItem == null) {
-                        chatsItem = new ChatsItem(cid, user.photoURL, Utils.formatUserName(user), message.text, message.date, message.itemType);
-                    } else {
-                        chatsItem.fileType = message.itemType;
-                        chatsItem.lastMessageText = message.text;
-                        chatsItem.photoURL = user.photoURL;
-                        chatsItem.time = message.date;
-                    }
+//                    chatsItem = ChatsManager.getInstance().getChatByChatID(-cid);
+//                    if (chatsItem == null) {
+                    chatsItem = new ChatsItem(cid, user.photoURL, Utils.formatUserName(user), message.text, message.date, message.itemType);
+//                    } else {
+//                        chatsItem.fileType = message.itemType;
+//                        chatsItem.lastMessageText = message.text;
+//                        chatsItem.photoURL = user.photoURL;
+//                        chatsItem.time = message.date;
+//                    }
                 } else {
                     final int gid = message.to_peer.group_id;
                     final RPC.Group group = GroupsManager.getInstance().getGroup(gid);

@@ -365,7 +365,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
     }
 
     private void changeCurrency() {
-        if(bigIntegerGweiAmount == null) return;
+        if (bigIntegerGweiAmount == null || bigIntegerWeiAmount == null) return;
 //        final String currentFiatCurrency = fiatCurrencyPicker.getDisplayedValues()[fiatCurrencyPicker.getValue() - 1];
         final List<ExchangeRate> exchangeRates = ExchangeRatesManager.getInstance().getExchangeRatesByCryptoCurrency(PMNT_CURRENCY_VALUE);
         for (ExchangeRate exchangeRate : exchangeRates) {
