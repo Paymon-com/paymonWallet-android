@@ -1,5 +1,6 @@
 package ru.paymon.android.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +20,7 @@ import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
 import ru.paymon.android.User;
+import ru.paymon.android.activities.MainActivity;
 import ru.paymon.android.components.DialogProgress;
 import ru.paymon.android.firebase.FcmService;
 import ru.paymon.android.net.NetworkManager;
@@ -156,7 +158,14 @@ public class FragmentAuthorization extends Fragment {
                 User.saveConfig();
                 User.loadConfig();
                 NetworkManager.getInstance().setAuthorized(true);
-                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.mainActivity);
+                ApplicationLoader.applicationHandler.post(() -> {
+                    Intent intent = new Intent(ApplicationLoader.applicationContext, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    startActivity(intent);
+//                    NavOptions.Builder builder = new NavOptions.Builder();
+//                    NavOptions navOptions = builder.setLaunchSingleTop(true).setClearTask(true).build();
+//                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.mainActivity, null, navOptions);
+                });
             });
 
             ApplicationLoader.applicationHandler.post(() -> dialog.setOnDismissListener((dialogInterface) -> NetworkManager.getInstance().cancelRequest(msgID, false)));
