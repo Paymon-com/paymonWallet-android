@@ -220,7 +220,6 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
             try {
                 final HttpsURLConnection httpsURLConnection = (HttpsURLConnection) ((new URL(link).openConnection()));
                 httpsURLConnection.setConnectTimeout(20000);
-                httpsURLConnection.setDoOutput(true);
                 httpsURLConnection.connect();
                 final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
                 final StringBuilder stringBuilder = new StringBuilder();
@@ -241,10 +240,8 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
                 }
 
                 if (exchangeRatesItems.size() > 0) {
-//                    Executors.newSingleThreadExecutor().submit(() -> {
                     AppDatabase.getDatabase().exchangeRatesDao().deleteAll();
                     AppDatabase.getDatabase().exchangeRatesDao().insertList(exchangeRatesItems);
-//                    });
                     exchangeRatesData.postValue(exchangeRatesItems);
                 }
             } catch (Exception e) {
@@ -328,7 +325,7 @@ public class MoneyViewModel extends AndroidViewModel implements NotificationMana
         Utils.stageQueue.postRunnable(() -> {
             showProgress.postValue(true);
             final String address = application.getEthereumWallet().publicAddress;
-            final String link = "http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=desc&apikey=YourApiKeyToken";
+            final String link = !Config.DEBUG ? "http://api.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=desc&apikey=YourApiKeyToken" : "https://api-ropsten.etherscan.io/api?module=account&action=txlist&address=" + address + "&startblock=0&endblock=99999999&sort=desc&apikey=YourApiKeyToken";
             final ArrayList<EthTransactionItem> transactionItems = new ArrayList<>();
 
             try {

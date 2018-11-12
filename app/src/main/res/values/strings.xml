@@ -45,7 +45,6 @@
     <string name="chats_message_delete_chat">Delete chat?</string>
     <string name="chats_message_delete_chat_group">If you delete the chat, you will automatically leave it. Delete?</string>
 
-
     <string name="create_group">Create group</string>
     <string name="create_group_title">Enter group name</string>
     <string name="create_group_error">No one selected</string>

@@ -70,7 +70,7 @@ public class ClassStore {
         classStore.put(RPC.PM_ETH_txInfo.svuid, RPC.PM_ETH_txInfo.class);
         classStore.put(RPC.PM_ETH_walletInfo.svuid, RPC.PM_ETH_walletInfo.class);
         classStore.put(RPC.PM_postReferal.svuid, RPC.PM_postReferal.class);
-        classStore.put(RPC.PM_deleteChat.svuid, RPC.PM_deleteChat.class);
+        classStore.put(RPC.PM_clearChat.svuid, RPC.PM_clearChat.class);
         classStore.put(RPC.PM_leaveChat.svuid, RPC.PM_leaveChat.class);
         classStore.put(RPC.PM_deleteChatMessages.svuid, RPC.PM_deleteChatMessages.class);
         classStore.put(RPC.PM_deleteDialogMessages.svuid, RPC.PM_deleteDialogMessages.class);

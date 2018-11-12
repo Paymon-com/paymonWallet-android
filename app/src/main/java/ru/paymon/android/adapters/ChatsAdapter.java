@@ -1,9 +1,7 @@
 package ru.paymon.android.adapters;
 
-import android.app.Activity;
 import android.arch.paging.PagedListAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.util.DiffUtil;
@@ -14,12 +12,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.swipe.SwipeLayout;
 
-import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.ChatsManager;
 import ru.paymon.android.R;
@@ -77,11 +75,11 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
     }
 
     public abstract static class BaseChatsViewHolder extends RecyclerView.ViewHolder {
-        public final Button delete;
+        public final ImageButton delete;
 
         private BaseChatsViewHolder(View itemView) {
             super(itemView);
-            delete = (Button) itemView.findViewById(R.id.delete);
+            delete = (ImageButton) itemView.findViewById(R.id.delete);
         }
 
         abstract void bind(ChatsItem chatsItem);
@@ -130,13 +128,16 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
 
                 buttonNo.setOnClickListener(v12 -> {
                     dialog.dismiss();
+                    swipe.close(true);
                 });
 
                 buttonYes.setOnClickListener(v1 -> Utils.netQueue.postRunnable(() -> {
+                    dialog.dismiss();
+                    swipe.close(true);
                     Packet request = null;
                     final RPC.Peer peer = new RPC.PM_peerUser(chatsItem.chatID);
-                    if(checkBoxClearHistory.isChecked())
-                        request = new RPC.PM_deleteChat(peer);
+                    if (checkBoxClearHistory.isChecked())
+                        request = new RPC.PM_clearChat(peer);
                     else
                         request = new RPC.PM_leaveChat(peer);
 
@@ -220,7 +221,7 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom))
                         .setMessage(context.getText(R.string.chats_message_delete_chat_group))
                         .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> Utils.netQueue.postRunnable(() -> {
-                            final RPC.PM_deleteChat deleteChat = new RPC.PM_deleteChat(new RPC.PM_peerGroup(chatsItem.chatID));
+                            final RPC.PM_clearChat deleteChat = new RPC.PM_clearChat(new RPC.PM_peerGroup(chatsItem.chatID));
                             NetworkManager.getInstance().sendRequest(deleteChat, (response, error) -> {
                                 if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
                                     ApplicationLoader.applicationHandler.post(() -> {
@@ -233,7 +234,10 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
                                     ChatsManager.getInstance().removeChat(chatsItem);
                                 }
                             });
-                        }))).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> dialog.cancel());
+                        }))).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> {
+                            swipe.close(true);
+                            dialog.cancel();
+                        });
                 builder.create().show();
 
             });

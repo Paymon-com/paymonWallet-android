@@ -2062,12 +2062,12 @@ public class RPC {
         }
     }
 
-    public static class PM_deleteChat extends Packet {
+    public static class PM_clearChat extends Packet {
         public static int svuid = 523847389;
 
         public Peer peer;
 
-        public PM_deleteChat(final Peer peer) {
+        public PM_clearChat(final Peer peer) {
             this.peer = peer;
         }
 
