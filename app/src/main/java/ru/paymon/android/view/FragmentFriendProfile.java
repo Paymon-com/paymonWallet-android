@@ -116,39 +116,39 @@ public class FragmentFriendProfile extends Fragment {
             });
             ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestID, false)));
 
-            RPC.PM_BTC_getWalletKey getWalletKeyBtc = new RPC.PM_BTC_getWalletKey();
-            getWalletKeyBtc.uid = userId;
-            final long requestIDBtc = NetworkManager.getInstance().sendRequest(getWalletKeyBtc, (response, error) -> {
-                if (response != null) {
-                    final RPC.PM_BTC_setWalletKey walletKeyBtc = (RPC.PM_BTC_setWalletKey) response;
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        if (walletKeyBtc.walletKey != null && !walletKeyBtc.walletKey.isEmpty()) {
-//                            showBitcoin.setVisibility(View.VISIBLE);
-//                            showBitcoin.setOnClickListener(view13 -> {
-//                                //TODO:сделать часть с переходом на его биток
-//                            });
-                        }
-                    });
-                }
-            });
-            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestIDBtc, false)));
-
-            RPC.PM_ETH_getWalletKey getWalletKeyEth = new RPC.PM_ETH_getWalletKey();
-            getWalletKeyEth.uid = userId;
-            final long requestIDEth = NetworkManager.getInstance().sendRequest(getWalletKeyEth, (response, error) -> {
-                if (response != null) {
-                    final RPC.PM_ETH_setWalletKey walletKeyEth = (RPC.PM_ETH_setWalletKey) response;
-                    ApplicationLoader.applicationHandler.post(() -> {
-                        if (walletKeyEth.walletKey != null && !walletKeyEth.walletKey.isEmpty()) {
-//                            showEthereum.setVisibility(View.VISIBLE);
-//                            showEthereum.setOnClickListener(view14 -> {
-//                                //TODO:сделать часть перехода на его эфир
-//                            });
-                        }
-                    });
-                }
-            });
-            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestIDEth, false)));
+//            RPC.PM_BTC_getWalletKey getWalletKeyBtc = new RPC.PM_BTC_getWalletKey();
+//            getWalletKeyBtc.uid = userId;
+//            final long requestIDBtc = NetworkManager.getInstance().sendRequest(getWalletKeyBtc, (response, error) -> {
+//                if (response != null) {
+//                    final RPC.PM_BTC_setWalletKey walletKeyBtc = (RPC.PM_BTC_setWalletKey) response;
+//                    ApplicationLoader.applicationHandler.post(() -> {
+//                        if (walletKeyBtc.walletKey != null && !walletKeyBtc.walletKey.isEmpty()) {
+////                            showBitcoin.setVisibility(View.VISIBLE);
+////                            showBitcoin.setOnClickListener(view13 -> {
+////                                //TODO:сделать часть с переходом на его биток
+////                            });
+//                        }
+//                    });
+//                }
+//            });
+//            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestIDBtc, false)));
+//
+//            RPC.PM_ETH_getWalletKey getWalletKeyEth = new RPC.PM_ETH_getWalletKey();
+//            getWalletKeyEth.uid = userId;
+//            final long requestIDEth = NetworkManager.getInstance().sendRequest(getWalletKeyEth, (response, error) -> {
+//                if (response != null) {
+//                    final RPC.PM_ETH_setWalletKey walletKeyEth = (RPC.PM_ETH_setWalletKey) response;
+//                    ApplicationLoader.applicationHandler.post(() -> {
+//                        if (walletKeyEth.walletKey != null && !walletKeyEth.walletKey.isEmpty()) {
+////                            showEthereum.setVisibility(View.VISIBLE);
+////                            showEthereum.setOnClickListener(view14 -> {
+////                                //TODO:сделать часть перехода на его эфир
+////                            });
+//                        }
+//                    });
+//                }
+//            });
+//            ApplicationLoader.applicationHandler.post(() -> dialogProgress.setOnDismissListener((dialog) -> NetworkManager.getInstance().cancelRequest(requestIDEth, false)));
         });
 
         return view;
