@@ -167,6 +167,7 @@
     <string name="wallet_a_low_gas_limit">Стоимость газа составляет менее 200000, что может привести к неудачной транзакции и снятой комиссии</string>
     <string name="wallet_create_hint">Операция может занять несколько минут. Пожулайста, подождите…</string>
     <string name="wallet_loader">Курсы валют и кошельки</string>
+    <string name="wallet_fields_incorrect">Некоторые поля заполнены некорректно</string>
 
     <string name="about_program">Paymon для android</string>
     <string name="about_program_version">Версия </string>

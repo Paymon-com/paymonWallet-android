@@ -298,6 +298,10 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         final String toAddress = receiverAddressEditText.getText().toString();
 
         if (toAddress.isEmpty() || !Utils.verifyETHpubKey(toAddress)) {
+            AlertDialog.Builder builderAlert = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+            builderAlert.setMessage(getString(R.string.wallet_fields_incorrect))
+                    .setPositiveButton(R.string.other_ok, (dialog, which) -> dialog.cancel());
+            builderAlert.create().show();
             return;
         }
 

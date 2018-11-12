@@ -294,6 +294,10 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         final String toAddress = receiverAddressEditText.getText().toString();
 
         if (btcAmount <= 0.00000546 || toAddress.isEmpty() || !Utils.verifyBTCpubKey(toAddress)) {
+            AlertDialog.Builder builderAlert = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
+            builderAlert.setMessage(getString(R.string.wallet_fields_incorrect))
+                    .setPositiveButton(R.string.other_ok, (dialog, which) -> dialog.cancel());
+            builderAlert.create().show();
             return;
         }
 
