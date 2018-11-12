@@ -26,10 +26,12 @@ import com.vanniktech.rxpermission.Permission;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 import ru.paymon.android.ApplicationLoader;
+import ru.paymon.android.ChatsManager;
 import ru.paymon.android.Config;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
@@ -37,6 +39,7 @@ import ru.paymon.android.User;
 import ru.paymon.android.adapters.GroupSettingsAdapter;
 import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.components.DialogProgress;
+import ru.paymon.android.models.ChatsItem;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -79,13 +82,14 @@ public class FragmentGroupSettings extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_group_settings, container, false);
 
+        photoView = (CircularImageView) view.findViewById(R.id.group_settings_photo);
+        titleView = (EditText) view.findViewById(R.id.group_settings_title);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
+        Button leaveGroup = (Button) view.findViewById(R.id.group_settings_leave_group);
+        RecyclerView contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
+        Button addParticipants = (Button) view.findViewById(R.id.group_settings_add);
 
         backToolbar.setOnClickListener(v -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
-
-        titleView = (EditText) view.findViewById(R.id.group_settings_title);
-        RecyclerView contactsList = (RecyclerView) view.findViewById(R.id.group_settings_participants_rv);
-        photoView = (CircularImageView) view.findViewById(R.id.group_settings_photo);
 
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
@@ -173,7 +177,6 @@ public class FragmentGroupSettings extends Fragment {
         contactsList.setHasFixedSize(true);
         contactsList.setLayoutManager(llm);
 
-        Button addParticipants = (Button) view.findViewById(R.id.group_settings_add);
         addParticipants.setOnClickListener(view1 -> {
             final Bundle bundle = new Bundle();
             bundle.putInt(CHAT_ID_KEY, chatID);
@@ -210,11 +213,27 @@ public class FragmentGroupSettings extends Fragment {
 //            builder.show();
 //        });
 
-        Button leaveGroup = (Button) view.findViewById(R.id.group_settings_leave_group);
         leaveGroup.setOnClickListener(view13 -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
             builder.setMessage(R.string.other_are_you_sure).setPositiveButton(R.string.other_yes, (dialogInterface, i) -> {
+                RPC.PM_deleteChat request = new RPC.PM_deleteChat(new RPC.PM_peerGroup(chatID));
 
+                NetworkManager.getInstance().sendRequest(request, (response, error) -> {
+                    if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
+                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.other_fail, Toast.LENGTH_SHORT).show());
+                        return;
+                    }
+
+                    if (response instanceof RPC.PM_boolTrue) {
+                        ChatsItem chatsItem = ChatsManager.getInstance().getChatByChatID(chatID);
+                        ChatsManager.getInstance().removeChat(chatsItem);
+                        ApplicationLoader.applicationHandler.post(() -> {
+                            NavOptions.Builder builder1 = new NavOptions.Builder();
+                            NavOptions navOptions = builder1.setLaunchSingleTop(true).setClearTask(true).build();
+                            Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChats, null, navOptions);
+                        });
+                    }
+                });
             }).setNegativeButton(R.string.other_no, (dialogInterface, i) -> dialogInterface.cancel());
             builder.create().show();
         });

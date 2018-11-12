@@ -1,7 +1,6 @@
 package ru.paymon.android.view.money.ethereum;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,7 +31,6 @@ import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.adapters.TransactionAdapter;
 import ru.paymon.android.models.EthTransactionItem;
-import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.money.DialogFragmentBackupWallet;

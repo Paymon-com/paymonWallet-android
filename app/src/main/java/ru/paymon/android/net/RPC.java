@@ -2081,6 +2081,69 @@ public class RPC {
         }
     }
 
+    public static class PM_leaveChat extends Packet {
+        public static int svuid = 98277145;
+
+        public Peer peer;
+
+        public PM_leaveChat(final Peer peer) {
+            this.peer = peer;
+        }
+
+        public void readParams(SerializableData stream, boolean exception) {
+            peer = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            peer.serializeToStream(stream);
+        }
+    }
+
+    public static class PM_deleteChatMessages extends Packet {
+        public static int svuid = 287571712;
+
+        public ArrayList<Long> messageIDs = new ArrayList<>();
+        public Peer peer;
+
+        public PM_deleteChatMessages(final Peer peer, final ArrayList<Long> messagesIds) {
+            this.peer = peer;
+            this.messageIDs = messagesIds;
+        }
+
+        public void readParams(SerializableData stream, boolean exception) {
+            peer = Peer.PMdeserialize(stream, stream.readInt32(exception), exception);
+            if (peer == null)
+                return;
+            int magic = stream.readInt32(exception);
+            if (magic != SVUID_ARRAY) {
+                if (exception) {
+                    throw new RuntimeException(String.format("wrong Vector magic, got %x", magic));
+                }
+                return;
+            }
+            int count = stream.readInt32(exception);
+            for (int i = 0; i < count; i++) {
+                long mid = stream.readInt64(exception);
+                if (exception) {
+                    return;
+                }
+                messageIDs.add(mid);
+            }
+        }
+
+        public void serializeToStream(SerializableData stream) {
+            stream.writeInt32(svuid);
+            peer.serializeToStream(stream);
+            stream.writeInt32(SVUID_ARRAY);
+            int count = messageIDs.size();
+            stream.writeInt32(count);
+            for (int i = 0; i < count; i++) {
+                stream.writeInt64(messageIDs.get(i));
+            }
+        }
+    }
+
     public static class PM_deleteDialogMessages extends Packet {
         public static int svuid = 357613531;
 

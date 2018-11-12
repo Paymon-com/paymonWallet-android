@@ -88,7 +88,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
                 final View aboutProgramDialog = layoutInflater.inflate(R.layout.about_program_dialog, null);
-                ((TextView) aboutProgramDialog.findViewById(R.id.about_version)).setText(getString(R.string.about_program_version) + Config.VERSION_STRING);
+                ((TextView) aboutProgramDialog.findViewById(R.id.about_version)).setText(getString(R.string.about_program_version) + " " + Config.VERSION_STRING);
                 builder.setView(aboutProgramDialog);
                 AlertDialog alert = builder.create();
                 alert.show();

@@ -58,51 +58,55 @@ public class FragmentChat extends AbsFragmentChat {
         messagesAdapter.setSelectionTracker(selectionTracker);
 
         chatViewModel.getMessages(chatID, false).observe(this, pagedList -> {
-            messagesAdapter.submitList(pagedList);
+            try { //TODO удалить после переезда на либу
+                messagesAdapter.submitList(pagedList);
 
-            ApplicationLoader.applicationHandler.postDelayed(() -> { //TODO: переехать на androidx paging там появился callback Для submitlist
-                final List<RPC.Message> selectedMessages = Lists.newArrayList(selectionTracker.getSelection().iterator());
-                selectionTracker.clearSelection();
-                messagesAdapter.items.clear();
-                messagesAdapter.items.addAll(messagesAdapter.getCurrentList());
-                for (final RPC.Message message : selectedMessages) {
-                    final long mid = message.id;
-                    for (final RPC.Message msg : messagesAdapter.getCurrentList()) {
-                        if (mid == msg.id)
-                            selectionTracker.select(msg);
+                ApplicationLoader.applicationHandler.postDelayed(() -> { //TODO: переехать на androidx paging там появился callback Для submitlist
+                    final List<RPC.Message> selectedMessages = Lists.newArrayList(selectionTracker.getSelection().iterator());
+                    selectionTracker.clearSelection();
+                    messagesAdapter.items.clear();
+                    messagesAdapter.items.addAll(messagesAdapter.getCurrentList());
+                    for (final RPC.Message message : selectedMessages) {
+                        final long mid = message.id;
+                        for (final RPC.Message msg : messagesAdapter.getCurrentList()) {
+                            if (mid == msg.id)
+                                selectionTracker.select(msg);
+                        }
                     }
-                }
-            }, 200);
+                }, 200);
 
-            selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
-                @Override
-                public void onItemStateChanged(@NonNull Object key, boolean selected) {
-                    super.onItemStateChanged(key, selected);
-                }
-
-                @Override
-                public void onSelectionRefresh() {
-                    super.onSelectionRefresh();
-                }
-
-                @Override
-                public void onSelectionChanged() {
-                    super.onSelectionChanged();
-                    if (selectionTracker.hasSelection()) {
-                        toolbarView.setVisibility(View.GONE);
-                        toolbarViewSelected.setVisibility(View.VISIBLE);
-                        selectedItemCount.setText(getString(R.string.chat_message_selected) + " " + selectionTracker.getSelection().size());
-                    } else if (!selectionTracker.hasSelection()) {
-                        toolbarView.setVisibility(View.VISIBLE);
-                        toolbarViewSelected.setVisibility(View.GONE);
+                selectionTracker.addObserver(new SelectionTracker.SelectionObserver() {
+                    @Override
+                    public void onItemStateChanged(@NonNull Object key, boolean selected) {
+                        super.onItemStateChanged(key, selected);
                     }
-                }
 
-                @Override
-                public void onSelectionRestored() {
-                    super.onSelectionRestored();
-                }
-            });
+                    @Override
+                    public void onSelectionRefresh() {
+                        super.onSelectionRefresh();
+                    }
+
+                    @Override
+                    public void onSelectionChanged() {
+                        super.onSelectionChanged();
+                        if (selectionTracker.hasSelection()) {
+                            toolbarView.setVisibility(View.GONE);
+                            toolbarViewSelected.setVisibility(View.VISIBLE);
+                            selectedItemCount.setText(getString(R.string.chat_message_selected) + " " + selectionTracker.getSelection().size());
+                        } else if (!selectionTracker.hasSelection()) {
+                            toolbarView.setVisibility(View.VISIBLE);
+                            toolbarViewSelected.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onSelectionRestored() {
+                        super.onSelectionRestored();
+                    }
+                });
+            } catch (Exception e) {
+
+            }
         });
 
         clearChatSelected.setOnClickListener(v -> selectionTracker.clearSelection());
@@ -141,10 +145,10 @@ public class FragmentChat extends AbsFragmentChat {
             }
         });
 
-        copy.setOnClickListener(v->{
+        copy.setOnClickListener(v -> {
             final ArrayList<RPC.Message> selectedMessages = Lists.newArrayList(selectionTracker.getSelection().iterator());
             final StringBuilder copiedMessages = new StringBuilder();
-            for (final RPC.Message msg:selectedMessages) {
+            for (final RPC.Message msg : selectedMessages) {
                 copiedMessages.append(msg.text + "\n");
             }
             ClipboardManager clipboard = (ClipboardManager) ApplicationLoader.applicationContext.getSystemService(CLIPBOARD_SERVICE);

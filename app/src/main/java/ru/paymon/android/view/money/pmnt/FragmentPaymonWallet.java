@@ -1,7 +1,6 @@
 package ru.paymon.android.view.money.pmnt;
 
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,9 +30,7 @@ import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 import ru.paymon.android.WalletApplication;
 import ru.paymon.android.adapters.TransactionAdapter;
-import ru.paymon.android.models.EthTransactionItem;
 import ru.paymon.android.models.PmntTransactionItem;
-import ru.paymon.android.models.TransactionItem;
 import ru.paymon.android.utils.ItemClickSupport;
 import ru.paymon.android.utils.Utils;
 import ru.paymon.android.view.money.DialogFragmentBackupWallet;

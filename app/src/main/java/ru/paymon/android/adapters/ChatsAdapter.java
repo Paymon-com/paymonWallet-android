@@ -107,8 +107,10 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
+
+                //TODO:AlertDialog точно ли он хочет удалить диалог?
                 Utils.netQueue.postRunnable(() -> {
-                    final RPC.PM_deleteChat groupInfo = new RPC.PM_deleteChat(new RPC.PM_peerUser(chatsItem.chatID));
+                    final RPC.PM_leaveChat groupInfo = new RPC.PM_leaveChat(new RPC.PM_peerUser(chatsItem.chatID));
                     NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
                         if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
                             ApplicationLoader.applicationHandler.post(() -> {
@@ -163,14 +165,16 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
+                //TODO:AlertDialog точно ли он хочет удалить диалог? а также предупредить если удалит, то он этим выйдет из группы
+
                 Utils.netQueue.postRunnable(() -> {
                     final RPC.PM_deleteChat deleteChat = new RPC.PM_deleteChat(new RPC.PM_peerGroup(chatsItem.chatID));
                     NetworkManager.getInstance().sendRequest(deleteChat, (response, error) -> {
                         if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
                             ApplicationLoader.applicationHandler.post(() -> {
                                 swipe.close(true);
+                                Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
                             });
-                            return; //TODO:не удалось и закрытие свайпа
                         }
 
                         if (response instanceof RPC.PM_boolTrue) {
