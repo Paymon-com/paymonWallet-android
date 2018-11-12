@@ -121,8 +121,8 @@ public class FragmentEthereumWalletTransfer extends Fragment {
 //        fiatCurrencyPicker.setOnValueChangedListener((NumberPicker picker, int oldVal, int newVal) -> changeCurrency());
 //        fiatCurrencyPicker.setValue(2);
 
-        gasPriceBar.setIndicatorTextFormat(getString(R.string.wallet_transfer_fee_eth_gas_price) + ": ${PROGRESS} GWEI");
-        gasLimitBar.setIndicatorTextFormat(getString(R.string.wallet_transfer_fee_eth_gas_limit) + ": ${PROGRESS}");
+        gasPriceBar.setIndicatorTextFormat(getString(R.string.wallet_transfer_fee_eth_gas_price) + " ${PROGRESS} GWEI");
+        gasLimitBar.setIndicatorTextFormat(getString(R.string.wallet_transfer_fee_eth_gas_limit) + " ${PROGRESS}");
         fromAddressTextView.setText(application.getEthereumWallet().publicAddress);
 
         final String localCurrency = Currency.getInstance(Locale.getDefault()).getCurrencyCode();
@@ -136,7 +136,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         payButton.setOnClickListener(v -> pay());
 
         usdButton.setOnClickListener(v -> {
-            currentCurrency = "USD";
+            currentCurrency = getString(R.string.usd);
             usdBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
             eurBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
             localBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
@@ -144,7 +144,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         });
 
         eurButton.setOnClickListener(v -> {
-            currentCurrency = "EUR";
+            currentCurrency = getString(R.string.eur);
             usdBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
             eurBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
             localBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));

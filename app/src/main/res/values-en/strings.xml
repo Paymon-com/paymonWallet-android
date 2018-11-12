@@ -110,9 +110,9 @@
     <string name="email_confirmation_error">Enter the correct e-mail</string>
     <string name="email_confirmation_time">Time to next dispatch:</string>
 
-    <string name="wallet_ethereum_wallet">Ethereum кошелек</string>
-    <string name="wallet_bitcoin_wallet">Bitcoin кошелек</string>
-    <string name="wallet_paymon_wallet">Paymon кошелек</string>
+    <string name="wallet_ethereum_wallet">Ethereum wallet</string>
+    <string name="wallet_bitcoin_wallet">Bitcoin wallet</string>
+    <string name="wallet_paymon_wallet">Paymon wallet</string>
     <string name="wallets_create">Create Wallet</string>
     <string name="wallets_update">Update</string>
     <string name="wallets_ex_rates">Exchange Rates</string>
@@ -153,9 +153,9 @@
     <string name="wallet_transfer_receiver">Enter Recipient\'s Wallet Address</string>
     <string name="wallet_transfer_receiver_hint">Enter the wallet address you want to transfer money to or use the Qr scanner</string>
     <string name="wallet_transfer_deposit_acc">Deposit Account</string>
-    <string name="wallet_transfer_fee_btc">Fee: 0.0000001 (10 satoshi per byte)</string>
-    <string name="wallet_transfer_fee_eth_gas_price">Current Gas Price: 8 GWEI</string>
-    <string name="wallet_transfer_fee_eth_gas_limit">Current Gas Limit: 21,000</string>
+    <string name="wallet_transfer_fee_btc">Fee:</string>
+    <string name="wallet_transfer_fee_eth_gas_price">Current Gas Price:</string>
+    <string name="wallet_transfer_fee_eth_gas_limit">Current Gas Limit:</string>
     <string name="wallet_transfer_fee_total">Commission</string>
     <string name="wallet_satoshi_per_byte">satoshi per byte</string>
     <string name="wallet_not_a_btc_address">The value entered is not a BTC address!</string>

@@ -152,9 +152,9 @@
     <string name="wallet_transfer_receiver">Введите адрес получателя</string>
     <string name="wallet_transfer_receiver_hint">Введите адрес, на который вы хотите отправить деньги или используйте Qr сканнер</string>
     <string name="wallet_transfer_deposit_acc">Депозитный счет</string>
-    <string name="wallet_transfer_fee_btc">Пошлина: 0.0000001 (10 сатоши за байт)</string>
-    <string name="wallet_transfer_fee_eth_gas_price">Текущая цена за Gas: 8 GWEI</string>
-    <string name="wallet_transfer_fee_eth_gas_limit">Текущий Gas лимит: 21000</string>
+    <string name="wallet_transfer_fee_btc">Комиссия:</string>
+    <string name="wallet_transfer_fee_eth_gas_price">Текущая цена за Gas:</string>
+    <string name="wallet_transfer_fee_eth_gas_limit">Текущий Gas лимит:</string>
     <string name="wallet_transfer_fee_total">Комиссия </string>
     <string name="wallet_satoshi_per_byte">сатоши за байт</string>
     <string name="wallet_not_a_btc_address">Введенное значение не является адресом BTC!</string>

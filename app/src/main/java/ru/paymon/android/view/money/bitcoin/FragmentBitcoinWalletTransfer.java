@@ -107,7 +107,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         changeCurrency();
 
         usdButton.setOnClickListener(v -> {
-            currentCurrency = "USD";
+            currentCurrency = getString(R.string.usd);
             usdBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
             eurBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
             localBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
@@ -116,7 +116,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
 
 
         eurButton.setOnClickListener(v -> {
-            currentCurrency = "EUR";
+            currentCurrency = getString(R.string.eur);
             usdBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
             eurBacklight.setBackgroundColor(getResources().getColor(R.color.blue_bright));
             localBacklight.setBackgroundColor(getResources().getColor(R.color.bg_dialog_title));
@@ -179,7 +179,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
             public void onSeeking(SeekParams seekParams) {
                 feeSatoshis = seekParams.progress * WalletApplication.btcTxSize;
                 feeBtc = feeSatoshis / Math.pow(10, 8);
-                feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format("BTC (${PROGRESS} %s)", getString(R.string.wallet_satoshi_per_byte)));
+                feeSeekBar.setIndicatorTextFormat(String.format("%s %.8f", getString(R.string.wallet_transfer_fee_btc), feeBtc) + String.format("BTC (${PROGRESS} %s)", getString(R.string.wallet_satoshi_per_byte)));
                 totalValueBtc = feeBtc + btcAmount;
                 totalTextView.setText(String.format("%.8f BTC", totalValueBtc));
             }
@@ -198,7 +198,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         feeSeekBar.setMin(1);
         feeSeekBar.setMax(100);
         feeSeekBar.setProgress(10);
-        feeSeekBar.setIndicatorTextFormat(String.format("Fee: %.8f", feeBtc) + String.format(" (${PROGRESS} %s)", getString(R.string.wallet_satoshi_per_byte)));
+        feeSeekBar.setIndicatorTextFormat(String.format("%s %.8f", getString(R.string.wallet_transfer_fee_btc), feeBtc) + String.format(" (${PROGRESS} %s)", getString(R.string.wallet_satoshi_per_byte)));
 
         receiverAddressEditText.addTextChangedListener(new TextWatcher() {
             @Override
