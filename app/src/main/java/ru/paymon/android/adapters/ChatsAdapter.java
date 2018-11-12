@@ -1,9 +1,13 @@
 package ru.paymon.android.adapters;
 
 import android.arch.paging.PagedListAdapter;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +27,7 @@ import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
 
 public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseChatsViewHolder> {
+    private Context context;
 
     public ChatsAdapter(@NonNull DiffUtil.ItemCallback<ChatsItem> diffCallback) {
         super(diffCallback);
@@ -37,6 +42,7 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
     public BaseChatsViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         BaseChatsViewHolder vh = null;
         ViewTypes viewTypes = ViewTypes.values()[viewType];
+        context = viewGroup.getContext();
         switch (viewTypes) {
             case ITEM:
                 View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.view_holder_chats_item, viewGroup, false);
@@ -108,23 +114,25 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
 
             delete.setOnClickListener(v -> {
 
-                //TODO:AlertDialog точно ли он хочет удалить диалог?
-                Utils.netQueue.postRunnable(() -> {
-                    final RPC.PM_leaveChat groupInfo = new RPC.PM_leaveChat(new RPC.PM_peerUser(chatsItem.chatID));
-                    NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
-                        if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
-                            ApplicationLoader.applicationHandler.post(() -> {
-                                swipe.close(true);
-                                Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
-                            });
-                            return;
-                        }
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom))
+                        .setMessage(context.getText(R.string.chats_message_delete_chat))
+                        .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> {
+                            final RPC.PM_leaveChat groupInfo = new RPC.PM_leaveChat(new RPC.PM_peerUser(chatsItem.chatID));
+                            NetworkManager.getInstance().sendRequest(groupInfo, (response, error) -> {
+                                if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
+                                    ApplicationLoader.applicationHandler.post(() -> {
+                                        swipe.close(true);
+                                        Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
+                                    });
+                                    return;
+                                }
 
-                        if (response instanceof RPC.PM_boolTrue) {
-                            ChatsManager.getInstance().removeChat(chatsItem);
-                        }
-                    });
-                });
+                                if (response instanceof RPC.PM_boolTrue) {
+                                    ChatsManager.getInstance().removeChat(chatsItem);
+                                }
+                            });
+                        })).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> dialog.cancel());
+                builder.create().show();
             });
         }
     }
@@ -165,23 +173,28 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-                //TODO:AlertDialog точно ли он хочет удалить диалог? а также предупредить если удалит, то он этим выйдет из группы
 
-                Utils.netQueue.postRunnable(() -> {
-                    final RPC.PM_deleteChat deleteChat = new RPC.PM_deleteChat(new RPC.PM_peerGroup(chatsItem.chatID));
-                    NetworkManager.getInstance().sendRequest(deleteChat, (response, error) -> {
-                        if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
-                            ApplicationLoader.applicationHandler.post(() -> {
-                                swipe.close(true);
-                                Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom))
+                        .setMessage(context.getText(R.string.chats_message_delete_chat_group))
+                        .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> {
+                            Utils.netQueue.postRunnable(() -> {
+                                final RPC.PM_deleteChat deleteChat = new RPC.PM_deleteChat(new RPC.PM_peerGroup(chatsItem.chatID));
+                                NetworkManager.getInstance().sendRequest(deleteChat, (response, error) -> {
+                                    if (response == null || error != null || response instanceof RPC.PM_boolFalse) {
+                                        ApplicationLoader.applicationHandler.post(() -> {
+                                            swipe.close(true);
+                                            Toast.makeText(ApplicationLoader.applicationContext, ApplicationLoader.applicationContext.getString(R.string.other_fail), Toast.LENGTH_LONG).show();
+                                        });
+                                    }
+
+                                    if (response instanceof RPC.PM_boolTrue) {
+                                        ChatsManager.getInstance().removeChat(chatsItem);
+                                    }
+                                });
                             });
-                        }
+                        })).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> dialog.cancel());
+                builder.create().show();
 
-                        if (response instanceof RPC.PM_boolTrue) {
-                            ChatsManager.getInstance().removeChat(chatsItem);
-                        }
-                    });
-                });
             });
         }
     }
