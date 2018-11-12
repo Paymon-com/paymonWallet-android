@@ -2,7 +2,6 @@ package ru.paymon.android;
 
 import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -15,21 +14,13 @@ import org.apache.commons.io.IOUtils;
 import org.bitcoinj.core.Address;
 import org.bitcoinj.core.AddressFormatException;
 import org.bitcoinj.core.Base58;
-import org.bitcoinj.core.Block;
-import org.bitcoinj.core.CheckpointManager;
 import org.bitcoinj.core.Coin;
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
-import org.bitcoinj.core.FilteredBlock;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Peer;
 import org.bitcoinj.core.Transaction;
-import org.bitcoinj.core.TransactionConfidence;
-import org.bitcoinj.core.listeners.DownloadProgressTracker;
 import org.bitcoinj.crypto.LinuxSecureRandom;
-import org.bitcoinj.script.Script;
 import org.bitcoinj.utils.Threading;
-import org.bitcoinj.wallet.DeterministicSeed;
 import org.bitcoinj.wallet.KeyChainGroup;
 import org.bitcoinj.wallet.Protos;
 import org.bitcoinj.wallet.SendRequest;
@@ -48,7 +39,6 @@ import org.spongycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.spongycastle.crypto.params.ParametersWithIV;
 import org.web3j.crypto.CipherException;
 import org.web3j.crypto.Credentials;
-import org.web3j.crypto.ECKeyPair;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
 import org.web3j.crypto.WalletUtils;
@@ -83,7 +73,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
-import java.security.KeyPair;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
@@ -91,22 +80,15 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-import javax.annotation.Nullable;
 
 import ru.paymon.android.models.BtcTransactionItem;
 import ru.paymon.android.models.EthereumWallet;
 import ru.paymon.android.models.PaymonTokenContract;
 import ru.paymon.android.models.PaymonWallet;
-import ru.paymon.android.net.RPC;
-import ru.paymon.android.room.AppDatabase;
 import ru.paymon.android.utils.Constants;
 import ru.paymon.android.utils.Iso8601Format;
 import ru.paymon.android.utils.Utils;
@@ -114,7 +96,6 @@ import ru.paymon.android.utils.Utils;
 import static java.math.BigDecimal.ROUND_HALF_UP;
 import static org.bitcoinj.crypto.KeyCrypterScrypt.SALT_LENGTH;
 import static ru.paymon.android.User.CLIENT_BASIC_DATE_FORMAT_IS_24H;
-import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CURRENCY_VALUE;
 
 
 public class WalletApplication extends AbsWalletApplication {
@@ -249,7 +230,7 @@ public class WalletApplication extends AbsWalletApplication {
     @Override
     public boolean createPaymonWallet(final String password) {
         final String FILE_FOLDER = getApplicationContext().getFilesDir().getAbsolutePath();
-        deleteEthereumWallet();
+        deletePaymonWallet();
         try {
             String fileName = org.web3j.crypto.WalletUtils.generateNewWalletFile(password, new File(FILE_FOLDER), false);
             if (fileName != null) {

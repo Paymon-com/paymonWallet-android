@@ -144,6 +144,8 @@ public class WalletKit extends WalletAppKit {
 
     public boolean deleteWallet() {
         try {
+            stopAsync();
+            awaitTerminated();
             shutDown();
         } catch (Exception e) {
 
