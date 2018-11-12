@@ -12,12 +12,6 @@ import androidx.navigation.Navigation;
 import ru.paymon.android.R;
 
 public class FragmentPrivacyPolicy extends Fragment {
-    private static FragmentPrivacyPolicy instance;
-
-    public static synchronized FragmentPrivacyPolicy newInstance() {
-        instance = new FragmentPrivacyPolicy();
-        return instance;
-    }
 
     @Nullable
     @Override

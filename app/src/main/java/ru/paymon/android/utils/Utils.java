@@ -3,18 +3,9 @@ package ru.paymon.android.utils;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.graphics.Point;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -50,11 +41,6 @@ public class Utils {
     public static volatile DispatchQueue stageQueue = new DispatchQueue("stageQueue");
     private final static char[] hexArray = "0123456789ABCDEF".toCharArray();
 
-    public static boolean usingHardwareInput;
-    public static float density = 1;
-    public static Point displaySize = new Point();
-    public static DisplayMetrics displayMetrics = new DisplayMetrics();
-//    public static double maxSize;
 
     public static boolean copyFile(File source, File dest) {
         InputStream is = null;
@@ -102,57 +88,6 @@ public class Utils {
         }
         return username;
     }
-
-//    public static void checkDisplaySize(Context context, Configuration newConfiguration) {
-//        try {
-//            density = context.getResources().getDisplayMetrics().density;
-//            Configuration configuration = newConfiguration;
-//            if (configuration == null) {
-//                configuration = context.getResources().getConfiguration();
-//            }
-//            usingHardwareInput = configuration.keyboard != Configuration.KEYBOARD_NOKEYS && configuration.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO;
-//            WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-//            if (manager != null) {
-//                Display display = manager.getDefaultDisplay();
-//                if (display != null) {
-//                    display.getMetrics(displayMetrics);
-//                    display.getSize(displaySize);
-//                }
-//            }
-//            if (configuration.screenWidthDp != Configuration.SCREEN_WIDTH_DP_UNDEFINED) {
-//                int newSize = (int) Math.ceil(configuration.screenWidthDp * density);
-//                if (Math.abs(displaySize.x - newSize) > 3) {
-//                    displaySize.x = newSize;
-//                }
-//            }
-//            if (configuration.screenHeightDp != Configuration.SCREEN_HEIGHT_DP_UNDEFINED) {
-//                int newSize = (int) Math.ceil(configuration.screenHeightDp * density);
-//                if (Math.abs(displaySize.y - newSize) > 3) {
-//                    displaySize.y = newSize;
-//                }
-//            }
-//            Log.d("payon-dbg", "display size = " + displaySize.x + " " + displaySize.y + " " + displayMetrics.xdpi + "x" + displayMetrics.ydpi);
-//        } catch (Exception e) {
-//            Log.e("payon-dbg", e.getMessage());
-//        }
-//    }
-
-//    public static int getAvailableTextLength(Paint textPaint, String text) {
-//        Rect bounds = new Rect();
-//        textPaint.getTextBounds(text, 0, text.length(), bounds);
-//        int width = bounds.width();
-//        int availableLength = 0;
-//        if (width > maxSize) {
-//            width = 0;
-//            while (width < maxSize) {
-//                availableLength++;
-//                textPaint.getTextBounds(text, 0, availableLength, bounds);
-//                width = bounds.width();
-//            }
-//            return availableLength;
-//        }
-//        return text.length();
-//    }
 
     public static String formatDateTime(long timestamp, boolean inChat) {
         final Date now = new Date(System.currentTimeMillis());
@@ -206,14 +141,6 @@ public class Utils {
         Toast.makeText(fragmentActivity, fragmentActivity.getString(R.string.other_text_is_copied), Toast.LENGTH_SHORT).show();
     }
 
-    public static void replaceFragmentWithAnimationFade(FragmentManager fragmentManager, Fragment fragment, String tag) {
-        final FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.setCustomAnimations(R.animator.fade_to_up, R.animator.fade_to_back);
-        fragmentTransaction.replace(R.id.container, fragment);
-        fragmentTransaction.addToBackStack(tag);
-        fragmentTransaction.commit();
-    }
-
     public static byte[] hexStringToBytes(String s) {
         int len = s.length();
         // safe for leading zero
@@ -239,14 +166,6 @@ public class Utils {
         return new String(hexChars);
     }
 
-    public static boolean isNetworkConnected(final Context context) {
-        ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-
-        return networkInfo != null && networkInfo.isConnectedOrConnecting();
-    }
-
     public static void hideKeyboard(View view) {
         if (view == null) return;
 
@@ -259,45 +178,6 @@ public class Utils {
             Log.e(Config.TAG, e.getMessage());
         }
     }
-
-//    public static void setActionBarWithTitle(FragmentActivity activity, String title) {
-//        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
-//        if (supportActionBar != null) {
-//            supportActionBar.setTitle(title);
-//            supportActionBar.setDisplayShowCustomEnabled(false);
-//            supportActionBar.setDisplayShowTitleEnabled(true);
-//            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_SHOW_TITLE);
-//            final android.support.v7.widget.Toolbar toolbar = activity.findViewById(R.gid.toolbar);
-//            toolbar.setNavigationIcon(null);
-//            supportActionBar.show();
-//        }
-//    }
-
-    public static void setActionBarWithCustomView(FragmentActivity activity, View customView) {
-        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayShowCustomEnabled(false);
-            supportActionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME | ActionBar.DISPLAY_HOME_AS_UP);
-            supportActionBar.setCustomView(customView);
-            supportActionBar.setDisplayShowCustomEnabled(true);
-            supportActionBar.show();
-        }
-    }
-
-    public static void hideActionBar(FragmentActivity activity) {
-        ActionBar supportActionBar = ((AppCompatActivity) activity).getSupportActionBar();
-        if (supportActionBar != null)
-            supportActionBar.hide();
-    }
-
-//    public static void setArrowBackInToolbar(FragmentActivity fragmentActivity) {
-//        final android.support.v7.widget.Toolbar toolbar = fragmentActivity.findViewById(R.gid.toolbar);
-//        toolbar.setNavigationIcon(R.drawable.ic_arrow_back);
-//        toolbar.setNavigationOnClickListener(v -> {
-//            Utils.hideKeyboard(v);
-//            fragmentActivity.getSupportFragmentManager().popBackStack();
-//        });
-//    }
 
     public static void hideBottomBar(FragmentActivity fragmentActivity) {
         final BottomNavigationView bottomNavigationView = fragmentActivity.findViewById(R.id.bottom_navigation_view);

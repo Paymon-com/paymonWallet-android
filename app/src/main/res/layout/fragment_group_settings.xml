@@ -50,19 +50,6 @@
         app:layout_constraintStart_toEndOf="@+id/textView20"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-    <!--<ru.paymon.android.components.CircleImageView-->
-    <!--android:gid="@+gid/group_settings_photo"-->
-    <!--android:layout_width="80dp"-->
-    <!--android:layout_height="80dp"-->
-    <!--android:layout_gravity="end"-->
-    <!--android:layout_marginEnd="8dp"-->
-    <!--android:layout_marginStart="8dp"-->
-    <!--android:layout_marginTop="8dp"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"-->
-    <!--app:srcCompat="@drawable/circle_button" />-->
-
     <ru.paymon.android.components.CircularImageView
         android:id="@+id/group_settings_photo"
         android:layout_width="100dp"
@@ -94,32 +81,6 @@
         app:layout_constraintStart_toEndOf="@+id/group_settings_photo"
         app:layout_constraintTop_toTopOf="@+id/group_settings_photo" />
 
-    <!--<Button-->
-    <!--android:id="@+id/group_settings_black_list"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="40dp"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--android:fontFamily="sans-serif-light"-->
-    <!--android:text="@string/black_list"-->
-    <!--android:textColor="@color/blue_dark"-->
-    <!--android:textSize="12sp"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/group_settings_add" />-->
-
-    <!--<Button-->
-    <!--android:id="@+id/group_settings_administrators"-->
-    <!--android:layout_width="0dp"-->
-    <!--android:layout_height="40dp"-->
-    <!--android:background="@android:color/transparent"-->
-    <!--android:fontFamily="sans-serif-light"-->
-    <!--android:text="@string/administrators"-->
-    <!--android:textColor="@color/blue_dark"-->
-    <!--android:textSize="12sp"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/group_settings_black_list" />-->
-
     <Button
         android:id="@+id/group_settings_leave_group"
         android:layout_width="0dp"
@@ -136,8 +97,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/group_settings_photo"
         app:layout_constraintTop_toBottomOf="@+id/group_settings_add" />
-
-    <!--style="@style/My.Widget.Button.Borderless.Small"-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/group_settings_participants_rv"

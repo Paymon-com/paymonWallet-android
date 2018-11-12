@@ -11,7 +11,7 @@
         android:id="@+id/wallet_icon"
         android:layout_width="70dp"
         android:layout_height="70dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -62,7 +62,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/wallet_icon"
         app:layout_constraintStart_toStartOf="@+id/wallet_crypto_balance"
         app:layout_constraintTop_toBottomOf="@+id/wallet_crypto_balance"
-        tools:text="@string/btc" />
+        tools:text="BTC" />
 
 
     <TextView

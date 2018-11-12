@@ -207,6 +207,7 @@
 
     <string name="keyguard_clear">Clear</string>
     <string name="keyguard_hint">Hint</string>
+    <string name="keyguard_password">Input password</string>
     <string name="keyguard_hint_enter">Enter your hint</string>
     <string name="keyguard_hint_empty">Your hint is empty</string>
     <string name="keyguard_wrong_password">Wrong password</string>
@@ -223,6 +224,10 @@
 
     <string name="file_picker_no_files_found">Files not found</string>
     <string name="file_picker_attach">To attach</string>
+
+    <string name="notification_type_photo">Photo</string>
+    <string name="notification_type_sticker">Sticker</string>
+    <string name="notification_type_file">File</string>
 
 
     <string name="other_agreements">

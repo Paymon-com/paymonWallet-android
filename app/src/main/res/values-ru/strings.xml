@@ -205,6 +205,7 @@
 
     <string name="keyguard_clear">Очистить</string>
     <string name="keyguard_hint">Подсказка</string>
+    <string name="keyguard_password">Введите пароль</string>
     <string name="keyguard_hint_enter">Введите вашу подсказку</string>
     <string name="keyguard_hint_empty">У вас нет подсказки</string>
     <string name="keyguard_wrong_password">Неверный пароль</string>
@@ -221,6 +222,10 @@
 
     <string name="file_picker_no_files_found">Файлы не найдены</string>
     <string name="file_picker_attach">Прикрепить</string>
+
+    <string name="notification_type_photo">Фотография</string>
+    <string name="notification_type_sticker">Стикер</string>
+    <string name="notification_type_file">Файл</string>
 
 
     <string name="other_agreements">

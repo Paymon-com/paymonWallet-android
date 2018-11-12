@@ -183,16 +183,16 @@ public class ConnectorService extends Service implements NotificationManager.ILi
             } else if (message instanceof RPC.PM_messageItem) {
                 switch (message.itemType) {
                     case PHOTO:
-                        text = "Photo";
+                        text = getString(R.string.notification_type_photo);
                         break;
                     case STICKER:
-                        text = "Sticker";
+                        text = getString(R.string.notification_type_sticker);
                         break;
                     case ACTION:
                         text = "Action";
                         break;
                     default:
-                        text = "Item";
+                        text = getString(R.string.notification_type_file);
                 }
             }
 

@@ -30,7 +30,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:singleLine="true"
-        android:text="Sergey Pomelov"
+        android:text="Name Surname"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/create_user_photo"
