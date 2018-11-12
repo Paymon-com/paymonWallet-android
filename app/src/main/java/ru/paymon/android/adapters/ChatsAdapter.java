@@ -2,7 +2,6 @@ package ru.paymon.android.adapters;
 
 import android.arch.paging.PagedListAdapter;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.util.DiffUtil;
@@ -11,7 +10,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,11 +72,11 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
     }
 
     public abstract static class BaseChatsViewHolder extends RecyclerView.ViewHolder {
-        public final Button delete;
+        public final ImageButton delete;
 
         private BaseChatsViewHolder(View itemView) {
             super(itemView);
-            delete = (Button) itemView.findViewById(R.id.delete);
+            delete = (ImageButton) itemView.findViewById(R.id.delete);
         }
 
         abstract void bind(ChatsItem chatsItem);
@@ -113,7 +112,6 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom))
                         .setMessage(context.getText(R.string.chats_message_delete_chat))
                         .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> {
@@ -131,7 +129,10 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
                                     ChatsManager.getInstance().removeChat(chatsItem);
                                 }
                             });
-                        })).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> dialog.cancel());
+                        })).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> {
+                            dialog.cancel();
+                            swipe.close(true);
+                        });
                 builder.create().show();
             });
         }
@@ -173,7 +174,6 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
 
             delete.setOnClickListener(v -> {
-
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(context, R.style.AlertDialogCustom))
                         .setMessage(context.getText(R.string.chats_message_delete_chat_group))
                         .setPositiveButton(context.getText(R.string.other_yes), (dialog, which) -> Utils.netQueue.postRunnable(() -> {
@@ -192,7 +192,10 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
                                     }
                                 });
                             });
-                        })).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> dialog.cancel());
+                        })).setNegativeButton(context.getText(R.string.other_no), (dialog, which) -> {
+                            dialog.cancel();
+                            swipe.close(true);
+                        });
                 builder.create().show();
 
             });
