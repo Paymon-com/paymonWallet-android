@@ -27,6 +27,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import ru.paymon.android.R;
+
 public class SwipeLayout extends FrameLayout {
     @Deprecated
     public static final int EMPTY_LAYOUT = -1;
@@ -86,13 +88,13 @@ public class SwipeLayout extends FrameLayout {
         mDragHelper = ViewDragHelper.create(this, mDragHelperCallback);
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
-        TypedArray a = context.obtainStyledAttributes(attrs, com.daimajia.swipe.R.styleable.SwipeLayout);
-        int dragEdgeChoices = a.getInt(com.daimajia.swipe.R.styleable.SwipeLayout_drag_edge, DRAG_RIGHT);
-        mEdgeSwipesOffset[DragEdge.Left.ordinal()] = a.getDimension(com.daimajia.swipe.R.styleable.SwipeLayout_leftEdgeSwipeOffset, 0);
-        mEdgeSwipesOffset[DragEdge.Right.ordinal()] = a.getDimension(com.daimajia.swipe.R.styleable.SwipeLayout_rightEdgeSwipeOffset, 0);
-        mEdgeSwipesOffset[DragEdge.Top.ordinal()] = a.getDimension(com.daimajia.swipe.R.styleable.SwipeLayout_topEdgeSwipeOffset, 0);
-        mEdgeSwipesOffset[DragEdge.Bottom.ordinal()] = a.getDimension(com.daimajia.swipe.R.styleable.SwipeLayout_bottomEdgeSwipeOffset, 0);
-        setClickToClose(a.getBoolean(com.daimajia.swipe.R.styleable.SwipeLayout_clickToClose, mClickToClose));
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SwipeLayout);
+        int dragEdgeChoices = a.getInt(R.styleable.SwipeLayout_drag_edge, DRAG_RIGHT);
+        mEdgeSwipesOffset[DragEdge.Left.ordinal()] = a.getDimension(R.styleable.SwipeLayout_leftEdgeSwipeOffset, 0);
+        mEdgeSwipesOffset[DragEdge.Right.ordinal()] = a.getDimension(R.styleable.SwipeLayout_rightEdgeSwipeOffset, 0);
+        mEdgeSwipesOffset[DragEdge.Top.ordinal()] = a.getDimension(R.styleable.SwipeLayout_topEdgeSwipeOffset, 0);
+        mEdgeSwipesOffset[DragEdge.Bottom.ordinal()] = a.getDimension(R.styleable.SwipeLayout_bottomEdgeSwipeOffset, 0);
+        setClickToClose(a.getBoolean(R.styleable.SwipeLayout_clickToClose, mClickToClose));
 
         if ((dragEdgeChoices & DRAG_LEFT) == DRAG_LEFT) {
             mDragEdges.put(DragEdge.Left, null);
@@ -106,7 +108,7 @@ public class SwipeLayout extends FrameLayout {
         if ((dragEdgeChoices & DRAG_BOTTOM) == DRAG_BOTTOM) {
             mDragEdges.put(DragEdge.Bottom, null);
         }
-        int ordinal = a.getInt(com.daimajia.swipe.R.styleable.SwipeLayout_show_mode, ShowMode.PullOut.ordinal());
+        int ordinal = a.getInt(R.styleable.SwipeLayout_show_mode, ShowMode.PullOut.ordinal());
         mShowMode = ShowMode.values()[ordinal];
         a.recycle();
 
