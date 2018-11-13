@@ -116,7 +116,7 @@ public abstract class AbsFragmentChat extends Fragment {
             if (group != null) {
                 chatTitleTextView.setText(group.title);
                 participantsCountTextView.setText(String.format("%s %d", getString(R.string.group_chat_participants), ((FragmentGroupChat) this).groupUsers.size()));
-                if (!group.photoURL.url.isEmpty())
+                if (group.photoURL != null && !group.photoURL.url.isEmpty())
                     Utils.loadPhoto(group.photoURL.url, toolbarAvatar);
             }
             toolbarView.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentGroupSettings, bundle));
