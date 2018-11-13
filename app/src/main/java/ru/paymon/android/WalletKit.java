@@ -130,15 +130,16 @@ public class WalletKit extends WalletAppKit {
     public Wallet restoreWallet(final Wallet wallet) throws Exception {
         try {
             shutDown();
+            wallet.cleanup();
+            File chainFile = new File(directory, filePrefix + ".spvchain");
+            chainFile.delete();
+            vWalletFile = new File(directory, filePrefix + ".wallet");
+            wallet.saveToFile(vWalletFile);
+            startUp();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
-        wallet.cleanup();
-        File chainFile = new File(directory, filePrefix + ".spvchain");
-        chainFile.delete();
-        vWalletFile = new File(directory, filePrefix + ".wallet");
-        wallet.saveToFile(vWalletFile);
-        startUp();
+
         return vWallet;
     }
 
@@ -160,35 +161,40 @@ public class WalletKit extends WalletAppKit {
     public void startBitcoinKit() {
         if (isRunning()) return;
 
-        startAsync();
-        awaitRunning();
+        try {
+            startAsync();
+            awaitRunning();
 
-        wallet().addCoinsReceivedEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
-            Log.e("AAA", "-----> coins received: " + tx.getHashAsString());
-            Log.e("AAA", "received: " + tx.getValue(wallet));
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, wallet().getBalance().toPlainString());
-        });
 
-        wallet().addCoinsSentEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
-            Log.e("AAA", "coins sent");
-            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, wallet().getBalance().toPlainString());
-        });
+            wallet().addCoinsReceivedEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
+                Log.e("AAA", "-----> coins received: " + tx.getHashAsString());
+                Log.e("AAA", "received: " + tx.getValue(wallet));
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, wallet().getBalance().toPlainString());
+            });
 
-        wallet().addKeyChainEventListener((List<ECKey> keys) -> {
-            Log.e("AAA", "new key added");
-        });
+            wallet().addCoinsSentEventListener((Wallet wallet, Transaction tx, Coin prevBalance, Coin newBalance) -> {
+                Log.e("AAA", "coins sent");
+                NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.MONEY_BALANCE_CHANGED, BTC_CURRENCY_VALUE, wallet().getBalance().toPlainString());
+            });
 
-        wallet().addScriptsChangeEventListener((Wallet wallet, List<Script> scripts, boolean isAddingScripts) -> {
-            Log.e("AAA", "new script added");
-        });
+            wallet().addKeyChainEventListener((List<ECKey> keys) -> {
+                Log.e("AAA", "new key added");
+            });
 
-        wallet().addTransactionConfidenceEventListener((Wallet wallet, Transaction tx) -> {
-            Log.e("AAA", "-----> confidence changed: " + tx.getHashAsString());
-            TransactionConfidence confidence = tx.getConfidence();
-            Log.e("AAA", "new block depth: " + confidence.getDepthInBlocks());
-        });
+            wallet().addScriptsChangeEventListener((Wallet wallet, List<Script> scripts, boolean isAddingScripts) -> {
+                Log.e("AAA", "new script added");
+            });
 
-        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED);
+            wallet().addTransactionConfidenceEventListener((Wallet wallet, Transaction tx) -> {
+                Log.e("AAA", "-----> confidence changed: " + tx.getHashAsString());
+                TransactionConfidence confidence = tx.getConfidence();
+                Log.e("AAA", "new block depth: " + confidence.getDepthInBlocks());
+            });
+
+            NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BITCOIN_WALLET_CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

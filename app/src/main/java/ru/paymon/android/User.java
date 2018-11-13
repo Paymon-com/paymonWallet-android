@@ -127,9 +127,9 @@ public class User {
 
     public static void clearConfig() {
         currentUser = null;
-        CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = null;
-        CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = null;
-        CLIENT_MONEY_PAYMON_WALLET_PASSWORD = null;
+//        CLIENT_MONEY_BITCOIN_WALLET_PASSWORD = null;
+//        CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD = null;
+//        CLIENT_MONEY_PAYMON_WALLET_PASSWORD = null;
         saveConfig();
     }
 
