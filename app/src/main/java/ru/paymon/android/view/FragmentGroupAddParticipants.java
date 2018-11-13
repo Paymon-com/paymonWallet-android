@@ -77,6 +77,15 @@ public class FragmentGroupAddParticipants extends Fragment {
             addGroupList = new ArrayList<>();
             for (ChatsItem chatItem : chatsItems) {
                 int id = chatItem.chatID;
+                boolean flag = false;
+                for (final Integer uid : group.users) {
+                    if (id == uid) {
+                        flag = true;
+                        break;
+                    }
+                }
+                if (flag)
+                    continue;
                 RPC.UserObject user = UsersManager.getInstance().getUser(id);
                 if (group.users.contains(user)) continue;
                 addGroupList.add(new UserItem(user.id, Utils.formatUserName(user), user.photoURL));
@@ -96,13 +105,17 @@ public class FragmentGroupAddParticipants extends Fragment {
                 addParticipantsRequest.userIDs.add(user.uid);
             }
 
+            if (addParticipantsRequest.userIDs.size() <= 0) {
+                Toast.makeText(getContext(), getString(R.string.create_group_error), Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             final long requestID = NetworkManager.getInstance().sendRequest(addParticipantsRequest, (response, error) -> {
                 if (error != null || response == null || response instanceof RPC.PM_boolFalse) {
                     ApplicationLoader.applicationHandler.post(() -> {
                         if (dialogProgress != null && dialogProgress.isShowing())
                             dialogProgress.cancel();
-                        Toast toast = Toast.makeText(getContext(), getString(R.string.create_group_error), Toast.LENGTH_SHORT);
-                        toast.show();
+                        Toast.makeText(getContext(), getString(R.string.other_fail), Toast.LENGTH_SHORT).show();
                     });
                     return;
                 }

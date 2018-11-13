@@ -58,7 +58,7 @@ public class FragmentGroupChat extends AbsFragmentChat {
         ).build();
         messagesAdapter.setSelectionTracker(selectionTracker);
 
-        chatViewModel.getMessages(chatID, false).observe(this, pagedList -> {
+        chatViewModel.getMessages(chatID, true).observe(this, pagedList -> {
             try { //TODO удалить после переезда на либу
                 messagesAdapter.submitList(pagedList);
 
