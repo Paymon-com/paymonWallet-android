@@ -234,306 +234,306 @@
 
 
     <string name="other_agreements">
-/nBefore installing the application or using any of Paymon’s goods, please read the privacy policy and user agreement below.
-/n
-/n1. General Provisions
-/n
-/n1.1. We reserve the right to change these rules at any time at our discretion. Any available access to your access. If you provided us with your email address, we will notify you by email of changes to these conditions.
-/n
-/n1.2. It is your responsibility to read the conditions in each paragraph carefully. Your continued use of the services signifies your consent to the conditions in this user agreement.
-/n
-/n1.3. The Site and the Content included on the Site are owned by LLC Paymon. The contents of the Site cannot be copied, published, reproduced, transmitted or disseminated in any way, or placed on the global internet without the prior written consent of the Site Administration.
-/n
-/nThe content of the Site is protected by copyright, trademark law, the unfair competition law other and intellectual property rights.
-/n
-/n2. Definitions
-/n
-/n2.1. All uses of "our" and "we" refer to the Paymon team based in Yekaterinburg, at Gogolya St., building 25, office 17.
-/n
-/n2.2 All uses of "You", "Your" or "User" refer to a person or persons using the Paymon application, Paymon products or the website www.paymon.org.
-/n
-/n2.3. "Services" refers to any opportunity provided by us through the site or mobile application in any local application (personal computer or otherwise), including, without limitation, wallet or data blockchain services, but excluding API services, which are governed by a separate agreement.
-/n
-/n2.4. Communication includes communication via e-mail and the built-in Paymon system.
-/n
-/n2.5. "Force Majeure” refers to any event outside the reasonable control of the blockchain system and Paymon, including but not limited to: floods, extraordinary meteorological conditions, earthquakes or other natural disasters; fires; wars; insurrections; riots; labor disputes; traffic accidents; government actions; communications, power or equipment failure; or software malfunction.
-/n
-/n2.6. Paymon’s products are goods created by the Paymon team. These are websites with the domain paymon.org and mobile apps with the name Paymon.
-/n
-/n3. Rights
-/n
-/n3.1. If you use services on behalf of a legal entity, you also acknowledge and guarantee that: the legal entity is valid, and it operates in accordance with the laws of the jurisdiction and the territorial restrictions of its country.
-/n
-/n3.2 These terms, conditions, and use of the Paymon website/mobile application and services are governed and interpreted in accordance with the laws of the Russian Federation. Any dispute that arises in challenge
-/n
-/nof these conditions or the use of the site/mobile application will be decided exclusively in the court of the Russian Federation.
-/n
-/n4. Privacy and Security Policy
-/n
-/n4.1. Please see our privacy policy in the section "Privacy Policy"
-/n
-/n4.2. We try to take all reasonable measures to protect your personal information. However, we cannot guarantee the security of the information you provide online. You accept the inherent security risks of providing information and communicating on the internet, and will not hold us responsible for any breach of security due to our negligence.
-/n
-/n5. Acceptance of Risk, Liability Restrictions, and Compensation
-/n
-/n5.1. You agree and acknowledge that there are risks associated with using an internet Bitcoin wallet, including the risk of equipment failure, the risk of software and internet connection failure, the risk of the spread of malicious programs, and the risk of third parties potentially receiving unauthorized access to information stored in your Wallet. You agree and acknowledge that Paymon will not be liable for any connection failures, general failures, errors, glitches or transaction delays.
-/n
-/n5.2. We will not be liable for any losses and are not responsible for any misuse of our services, including:
-/n
-/n5.2.1 User errors, such as passwords, incorrectly generated transactions, or Bitcoin address errors;
-/n
-/n5.2.2. Server failure or data loss;
-/n
-/n5.2.3. Unauthorized access to applications;
-/n
-/n5.2.4. Any unauthorized actions by third parties, including but not limited to the use of viruses, phishing, brute force or other means of attacking the site or services.
-/n
-/n5.3. We do not give any guarantees that the site or server will work smoothly, or that defects will be corrected. We will not be held responsible for any losses of any kind.
-/n
-/n6. Responsibility for communication with Paymon with third parties
-/n
-/n6.1. While using our service, you can view the content or use services provided by third parties, including links to web pages and the services of these parties ("third party materials"). We do not approve or accept any third-party content and assume no responsibility for Third-Party Content, including but not limited to materials that may mislead or offend you. In addition, your relationship or correspondence with third parties is exclusively between you and those third parties. We are not responsible for any loss or damage of any kind incurred as a result of such a relationship, and you understand that your interactions with third parties are at your own risk.
-/n
-/n7. Creating a wallet
-/n
-/n7.1. You do not need to use a blockchain wallet. At the time of registration at Paymon, a wallet is registered to you and a unique number is assigned.
-/n
-/n7.2. We recommend that you do not skip the additional password step and be sure to enter it, as this will protect you if your phone is stolen or the system is compromised.
-/n
-/n7.3. When you connect third-party wallets, we strongly recommend using wallets in which you have full confidence. Paymon administration does not bear responsibility in the event of loss of funds by third-party wallets.
-/n
-/n7.4. You agree and acknowledge that you assume responsibility for all actions that occur while your wallet is under your management and accept all risks of any authorized or unauthorized access to your wallet, to the fullest extent permitted by law.
-/n
-/n8. Paymon Services
-/n
-/n8.1. The creation and storage of crypto-wallet addresses and encrypted private keys are stored on the local device and, if possible, you can provide protection through Paymon servers. This facilitates the transfer of data on transactions in the bitcoin network and others, and does not require downloading or installing software that is connected to the network.
-/n
-/n8.2. When you create a wallet, the creation and storage of cryptographic passwords immediately encrypt your wallet. The data used to send and receive bitcoins and other crypto-currencies through the bitcoin network and the Paymon network are encrypted and maximally protected. The private key uniquely coincides with the Wallet’s address and should be used to transfer cryptocurrencies.
-/n
-/n8.3. You are solely responsible for ensuring the security of your private key and backup. You must keep your Wallet address, backup and private key secure. Failure to do so may result in the loss of control of the cryptocurrencies tied to the wallet.
-/n
-/n8.4. Paymon does not receive or store your wallet and password, nor unencrypted keys and addresses. Therefore, we cannot help you with the recovery of your wallet and password. Our services provide you with tools to help you remember or recover the password, including the ability to set password hints, but the services cannot create a new password for your wallet. You are solely responsible for remembering your wallet password. Paymon can provide and help you with the loss of your password and restore it if you have set the maximum level of protection and provided us with your data.
-/n
-/n8.5. All proposed Bitcoin transactions, etc. must be confirmed and registered in the blockchain system for the transactions to be completed. Bitcoin Network, etc. is managed by a decentralized network of independent third parties. Blockchain does not have control over the bitcoin network and therefore cannot provide a guarantee that any details of the transaction will be confirmed through the Bitcoin Network. You acknowledge and agree that the details of the transaction you transfer through the services of Paymon products based on the Blockсhain system and any of your transactions may not be completed or may be significantly delayed by the Bitcoin network.
-/n
-/n8.6. Storage and transfer of Bitcoins and other cryptocurrencies are an intangible, digital asset. They exist due only to the responsibility and demand of the users of the bitcoin network, etc.
-/n
-/n8.7. Any transfer of property rights that may lead to the failure of the cryptocurrency transfer or the failure to record a decentralized book is prohibited. We do not guarantee that the service can transfer ownership rights or the right to manage cryptocurrency transactions.
-/n
-/n8.8. Under the present conditions, the creation of partnerships, joint ventures, agencies or guardianships is prohibited, you and Blockchain are independent contractors in relation to one another.
-/n
-/n8.9. You represent and warrant that any information you provide through the services is accurate and complete. You agree and acknowledge that Blockchain is not responsible for any errors or omissions that
-/n
-/nyou make from any wallet and various cryptocurrencies initiated through Paymon's services. For example, if you mistyped the Wallet Address or otherwise provided incorrect information.
-/n
-/n9. The Commission
-/n
-/n9.1. Paymon creates a wallet for free. The blockchain system currently charges a small percentage of the transactions, but we reserve the right to do so in the future, in which case any fees will be displayed before you use any service where fees may be charged.
-/n
-/n9.2. Mining Bitcoins and other crypto-currencies. The system of mining has nothing to do with Paymon products, we just facilitate the translation and conversion of crypto currency.
-/n
-/n10. Termination of services
-/n
-/n10.1. We can, at our discretion and without cost to you, "with" or "without" prior notice and at any time, modify or terminate, temporarily or permanently, any part of our services. You are solely responsible for storing and backing up any wallet addresses and private keys
-/n
-/n10.2. We can suspend or terminate your access to services at our discretion, immediately and without prior notice, and delete or deactivate your wallet and all associated information and files.
-/n
-/n11. Restrictions
-/n
-/n11.1. By accessing and using Paymon's services, you agree that you will not commit any unlawful acts and that you are fully responsible for your actions while using our services. Without limiting the generality of the foregoing, you acknowledge that you will not:
-/n
-/n11.1.1. Use our services in any way that may interfere, disrupt, adversely affect or prevent other users from fully utilizing our services, or that may damage, disable, overload or disrupt the operation of our service;
-/n
-/n11.1.2. Use Paymon's services to pay, support, or otherwise participate in any illegal activity, including fraud, money laundering, or terrorist activities, as well as other activities prohibited by law in the jurisdiction in which you are located;
-/n
-/n11.1.3. Use or attempt to use someone else's Wallet without authorization;
-/n
-/n11.1.4. Attempt to bypass any methods of filtering the Content that we use, or attempt to access any service or area of our services;
-/n
-/n11.1.5. Distribute the services of viruses, Trojans, worms, logic bombs or other harmful materials;
-/n
-/n11.1.6. Develop any third-party applications that interact with our services without our prior written consent;
-/n
-/n11.1.7. Provide false, inaccurate or misleading information;
-/n
-/n11.1.8. Encourage or induce third parties to participate in any activity prohibited in this section.
-/n
-/n12. Intellectual Property Rights
-/n
-/n12.1. Unless otherwise indicated, all intellectual property rights on the website and any content provided in connection with our services are the property of Paymon or our licensors and suppliers, and are protected by applicable intellectual property laws. We do not give any licenses for their use or for content of the site and mobile application.
-/n
-/n12.2. You accept and acknowledge that the materials contained on the website and mobile application are provided for your personal, legal, non-commercial use. You further acknowledge that any other use of materials from the site is strictly prohibited and you agree with this wording.
-/n
-/n12.3. You agree to retain all copyrights and other proprietary notices contained in the material, site content and mobile application.
-/n
-/n12.4. You cannot sell or modify site material or reproduce, display, publicly distribute or otherwise use the materials for any public or commercial purpose. The use of materials on other sites, file sharing services or similar services for any purpose is prohibited.
-/n
-/n12.5. You cannot copy any material or content contained on the site or mobile application without our prior written permission. Any rights not granted by us to use the material contained on the site belong to Paymon in full.
-/n
-/n13. Feedback
-/n
-/n13.1. We welcome any comments and comments on your part. We also need new ideas for improving the performance of Paymon services. All feedback can be sent through the feedback form on the site or through mobile applications, as well as by sending an email to: press@paymon.org
-/n
-/n14. Force Majeure
-/n
-/n14.1. If, due to any unforeseeable circumstances, you or the blockchain account system is delayed or your actions are prevented, such delays or non-performance shall not be considered a violation of these Terms.
-/n
-/n15. Agreement
-/n
-/n15.1. These terms represent the entire agreement between you and Paymon. These conditions cancel and replace all previous agreements and agreements between you and Paymon and the Blockchain System. You cannot transfer your rights or obligations under these conditions without prior written consent.
-/n
-/nSincerely,
-/n
-/nPaymon Administration
-        /n
+\nBefore installing the application or using any of Paymon’s goods, please read the privacy policy and user agreement below.
+\n
+\n1. General Provisions
+\n
+\n1.1. We reserve the right to change these rules at any time at our discretion. Any available access to your access. If you provided us with your email address, we will notify you by email of changes to these conditions.
+\n
+\n1.2. It is your responsibility to read the conditions in each paragraph carefully. Your continued use of the services signifies your consent to the conditions in this user agreement.
+\n
+\n1.3. The Site and the Content included on the Site are owned by LLC Paymon. The contents of the Site cannot be copied, published, reproduced, transmitted or disseminated in any way, or placed on the global internet without the prior written consent of the Site Administration.
+\n
+\nThe content of the Site is protected by copyright, trademark law, the unfair competition law other and intellectual property rights.
+\n
+\n2. Definitions
+\n
+\n2.1. All uses of "our" and "we" refer to the Paymon team based in Yekaterinburg, at Gogolya St., building 25, office 17.
+\n
+\n2.2 All uses of "You", "Your" or "User" refer to a person or persons using the Paymon application, Paymon products or the website www.paymon.org.
+\n
+\n2.3. "Services" refers to any opportunity provided by us through the site or mobile application in any local application (personal computer or otherwise), including, without limitation, wallet or data blockchain services, but excluding API services, which are governed by a separate agreement.
+\n
+\n2.4. Communication includes communication via e-mail and the built-in Paymon system.
+\n
+\n2.5. "Force Majeure” refers to any event outside the reasonable control of the blockchain system and Paymon, including but not limited to: floods, extraordinary meteorological conditions, earthquakes or other natural disasters; fires; wars; insurrections; riots; labor disputes; traffic accidents; government actions; communications, power or equipment failure; or software malfunction.
+\n
+\n2.6. Paymon’s products are goods created by the Paymon team. These are websites with the domain paymon.org and mobile apps with the name Paymon.
+\n
+\n3. Rights
+\n
+\n3.1. If you use services on behalf of a legal entity, you also acknowledge and guarantee that: the legal entity is valid, and it operates in accordance with the laws of the jurisdiction and the territorial restrictions of its country.
+\n
+\n3.2 These terms, conditions, and use of the Paymon website\mobile application and services are governed and interpreted in accordance with the laws of the Russian Federation. Any dispute that arises in challenge
+\n
+\nof these conditions or the use of the site\mobile application will be decided exclusively in the court of the Russian Federation.
+\n
+\n4. Privacy and Security Policy
+\n
+\n4.1. Please see our privacy policy in the section "Privacy Policy"
+\n
+\n4.2. We try to take all reasonable measures to protect your personal information. However, we cannot guarantee the security of the information you provide online. You accept the inherent security risks of providing information and communicating on the internet, and will not hold us responsible for any breach of security due to our negligence.
+\n
+\n5. Acceptance of Risk, Liability Restrictions, and Compensation
+\n
+\n5.1. You agree and acknowledge that there are risks associated with using an internet Bitcoin wallet, including the risk of equipment failure, the risk of software and internet connection failure, the risk of the spread of malicious programs, and the risk of third parties potentially receiving unauthorized access to information stored in your Wallet. You agree and acknowledge that Paymon will not be liable for any connection failures, general failures, errors, glitches or transaction delays.
+\n
+\n5.2. We will not be liable for any losses and are not responsible for any misuse of our services, including:
+\n
+\n5.2.1 User errors, such as passwords, incorrectly generated transactions, or Bitcoin address errors;
+\n
+\n5.2.2. Server failure or data loss;
+\n
+\n5.2.3. Unauthorized access to applications;
+\n
+\n5.2.4. Any unauthorized actions by third parties, including but not limited to the use of viruses, phishing, brute force or other means of attacking the site or services.
+\n
+\n5.3. We do not give any guarantees that the site or server will work smoothly, or that defects will be corrected. We will not be held responsible for any losses of any kind.
+\n
+\n6. Responsibility for communication with Paymon with third parties
+\n
+\n6.1. While using our service, you can view the content or use services provided by third parties, including links to web pages and the services of these parties ("third party materials"). We do not approve or accept any third-party content and assume no responsibility for Third-Party Content, including but not limited to materials that may mislead or offend you. In addition, your relationship or correspondence with third parties is exclusively between you and those third parties. We are not responsible for any loss or damage of any kind incurred as a result of such a relationship, and you understand that your interactions with third parties are at your own risk.
+\n
+\n7. Creating a wallet
+\n
+\n7.1. You do not need to use a blockchain wallet. At the time of registration at Paymon, a wallet is registered to you and a unique number is assigned.
+\n
+\n7.2. We recommend that you do not skip the additional password step and be sure to enter it, as this will protect you if your phone is stolen or the system is compromised.
+\n
+\n7.3. When you connect third-party wallets, we strongly recommend using wallets in which you have full confidence. Paymon administration does not bear responsibility in the event of loss of funds by third-party wallets.
+\n
+\n7.4. You agree and acknowledge that you assume responsibility for all actions that occur while your wallet is under your management and accept all risks of any authorized or unauthorized access to your wallet, to the fullest extent permitted by law.
+\n
+\n8. Paymon Services
+\n
+\n8.1. The creation and storage of crypto-wallet addresses and encrypted private keys are stored on the local device and, if possible, you can provide protection through Paymon servers. This facilitates the transfer of data on transactions in the bitcoin network and others, and does not require downloading or installing software that is connected to the network.
+\n
+\n8.2. When you create a wallet, the creation and storage of cryptographic passwords immediately encrypt your wallet. The data used to send and receive bitcoins and other crypto-currencies through the bitcoin network and the Paymon network are encrypted and maximally protected. The private key uniquely coincides with the Wallet’s address and should be used to transfer cryptocurrencies.
+\n
+\n8.3. You are solely responsible for ensuring the security of your private key and backup. You must keep your Wallet address, backup and private key secure. Failure to do so may result in the loss of control of the cryptocurrencies tied to the wallet.
+\n
+\n8.4. Paymon does not receive or store your wallet and password, nor unencrypted keys and addresses. Therefore, we cannot help you with the recovery of your wallet and password. Our services provide you with tools to help you remember or recover the password, including the ability to set password hints, but the services cannot create a new password for your wallet. You are solely responsible for remembering your wallet password. Paymon can provide and help you with the loss of your password and restore it if you have set the maximum level of protection and provided us with your data.
+\n
+\n8.5. All proposed Bitcoin transactions, etc. must be confirmed and registered in the blockchain system for the transactions to be completed. Bitcoin Network, etc. is managed by a decentralized network of independent third parties. Blockchain does not have control over the bitcoin network and therefore cannot provide a guarantee that any details of the transaction will be confirmed through the Bitcoin Network. You acknowledge and agree that the details of the transaction you transfer through the services of Paymon products based on the Blockсhain system and any of your transactions may not be completed or may be significantly delayed by the Bitcoin network.
+\n
+\n8.6. Storage and transfer of Bitcoins and other cryptocurrencies are an intangible, digital asset. They exist due only to the responsibility and demand of the users of the bitcoin network, etc.
+\n
+\n8.7. Any transfer of property rights that may lead to the failure of the cryptocurrency transfer or the failure to record a decentralized book is prohibited. We do not guarantee that the service can transfer ownership rights or the right to manage cryptocurrency transactions.
+\n
+\n8.8. Under the present conditions, the creation of partnerships, joint ventures, agencies or guardianships is prohibited, you and Blockchain are independent contractors in relation to one another.
+\n
+\n8.9. You represent and warrant that any information you provide through the services is accurate and complete. You agree and acknowledge that Blockchain is not responsible for any errors or omissions that
+\n
+\nyou make from any wallet and various cryptocurrencies initiated through Paymon's services. For example, if you mistyped the Wallet Address or otherwise provided incorrect information.
+\n
+\n9. The Commission
+\n
+\n9.1. Paymon creates a wallet for free. The blockchain system currently charges a small percentage of the transactions, but we reserve the right to do so in the future, in which case any fees will be displayed before you use any service where fees may be charged.
+\n
+\n9.2. Mining Bitcoins and other crypto-currencies. The system of mining has nothing to do with Paymon products, we just facilitate the translation and conversion of crypto currency.
+\n
+\n10. Termination of services
+\n
+\n10.1. We can, at our discretion and without cost to you, "with" or "without" prior notice and at any time, modify or terminate, temporarily or permanently, any part of our services. You are solely responsible for storing and backing up any wallet addresses and private keys
+\n
+\n10.2. We can suspend or terminate your access to services at our discretion, immediately and without prior notice, and delete or deactivate your wallet and all associated information and files.
+\n
+\n11. Restrictions
+\n
+\n11.1. By accessing and using Paymon's services, you agree that you will not commit any unlawful acts and that you are fully responsible for your actions while using our services. Without limiting the generality of the foregoing, you acknowledge that you will not:
+\n
+\n11.1.1. Use our services in any way that may interfere, disrupt, adversely affect or prevent other users from fully utilizing our services, or that may damage, disable, overload or disrupt the operation of our service;
+\n
+\n11.1.2. Use Paymon's services to pay, support, or otherwise participate in any illegal activity, including fraud, money laundering, or terrorist activities, as well as other activities prohibited by law in the jurisdiction in which you are located;
+\n
+\n11.1.3. Use or attempt to use someone else's Wallet without authorization;
+\n
+\n11.1.4. Attempt to bypass any methods of filtering the Content that we use, or attempt to access any service or area of our services;
+\n
+\n11.1.5. Distribute the services of viruses, Trojans, worms, logic bombs or other harmful materials;
+\n
+\n11.1.6. Develop any third-party applications that interact with our services without our prior written consent;
+\n
+\n11.1.7. Provide false, inaccurate or misleading information;
+\n
+\n11.1.8. Encourage or induce third parties to participate in any activity prohibited in this section.
+\n
+\n12. Intellectual Property Rights
+\n
+\n12.1. Unless otherwise indicated, all intellectual property rights on the website and any content provided in connection with our services are the property of Paymon or our licensors and suppliers, and are protected by applicable intellectual property laws. We do not give any licenses for their use or for content of the site and mobile application.
+\n
+\n12.2. You accept and acknowledge that the materials contained on the website and mobile application are provided for your personal, legal, non-commercial use. You further acknowledge that any other use of materials from the site is strictly prohibited and you agree with this wording.
+\n
+\n12.3. You agree to retain all copyrights and other proprietary notices contained in the material, site content and mobile application.
+\n
+\n12.4. You cannot sell or modify site material or reproduce, display, publicly distribute or otherwise use the materials for any public or commercial purpose. The use of materials on other sites, file sharing services or similar services for any purpose is prohibited.
+\n
+\n12.5. You cannot copy any material or content contained on the site or mobile application without our prior written permission. Any rights not granted by us to use the material contained on the site belong to Paymon in full.
+\n
+\n13. Feedback
+\n
+\n13.1. We welcome any comments and comments on your part. We also need new ideas for improving the performance of Paymon services. All feedback can be sent through the feedback form on the site or through mobile applications, as well as by sending an email to: press@paymon.org
+\n
+\n14. Force Majeure
+\n
+\n14.1. If, due to any unforeseeable circumstances, you or the blockchain account system is delayed or your actions are prevented, such delays or non-performance shall not be considered a violation of these Terms.
+\n
+\n15. Agreement
+\n
+\n15.1. These terms represent the entire agreement between you and Paymon. These conditions cancel and replace all previous agreements and agreements between you and Paymon and the Blockchain System. You cannot transfer your rights or obligations under these conditions without prior written consent.
+\n
+\nSincerely,
+\n
+\nPaymon Administration
+        \n
 </string>
 
     <string name="other_privacy_policy">
-/nBefore installing the application or using any Paymon products, please read the privacy policy and user agreement below.
-/n
-/n1. General Provisions
-/n
-/n1.1. This privacy policy (hereinafter referred to as the “Privacy Policy” or “Policy”) applies to all information that Paymon may receive about the User during a visit to the Website https://paymon.org/. If the user does not agree with any of the terms of this Policy, the User must refuse to visit the site.
-/n
-/n1.2. We reserve the right to change these rules at any time at our discretion. Any available access to your access. If you provided us with your email address, we will notify you by email of changes to these conditions.
-/n
-/n1.3. It is your responsibility to read the conditions in each paragraph carefully. Your continued use of the services signifies your consent to the conditions in this user agreement.
-/n
-/n2. Definitions
-/n
-/n2.1. All uses of "our", "we", and “Contractor” refer to the Paymon team based in Yekaterinburg, at Gogolya St., building 25, office 17.
-/n
-/n2.2 All uses of "You", "Your" or "User" refer to the person or persons using the Paymon application, Paymon products or the website at www.paymon.org.
-/n
-/n2.3. "Services" refers to any opportunity provided by us through the site or mobile application in any local application (personal computer or otherwise), including, without limitation, wallet or data blockage services, but excluding API services, which are governed by a separate agreement.
-/n
-/n2.4. Communication includes communication via e-mail and the built-in Paymon system.
-/n
-/n2.5. "Force Majeure” refers to any event outside the reasonable control of the blockchain system and Paymon, including but not limited to: floods, extraordinary meteorological conditions, earthquakes or other natural disasters; fires; wars; insurrections; riots; labor disputes; traffic accidents; government actions; communications, power, or equipment failure; or software malfunction.
-/n
-/n2.6. Paymon’s products are goods created by the Paymon team. These are websites with the domain paymon.org and mobile apps with the name Paymon.
-/n
-/n2.7. Personal user data is the following data:
-/n
-/n2.7.1. Personal data that the User provides about himself by using the site, mobile application and other Paymon products. Any use of the Site functionality by the User with the purpose of sending personal data to the Contractor's (Paymon’s) address signifies full and unconditional acceptance of this Agreement.
-/n
-/n2.7.2. Data transferred automatically via software installed on the user's device (in particular, via the IP address, cookies, time of site pages access and the addresses of the pages visited).
-/n
-/nPaymon is not responsible for personal information processing by third-party sites the User may visit by clicking on links posted on the site.
-/n
-/n3. Terms of Use for the Site, mobile application and Paymon products
-/n
-/n3.1. By providing services for Site use, the mobile application and its services (hereinafter referred to as the Site and mobile application services), the Site Administration, acting reasonably and in good faith, believes that the User:
-/n
-/n3.1.1. Has all the necessary rights to allow him/her to register for and use this Website, the mobile application and Paymon products;
-/n
-/n3.1.2. Has disclosed accurate information about his/herself to the extent required to use the Mobile Application and Site Services.
-/n
-/n3.1.3. Recognizes that the User cannot delete certain types of information transferred to other Users;
-/n
-/n3.1.4. Has read and understood these Rules, expresses agreement with them and assumes the rights and responsibilities addressed within.
-/n
-/n3.2. The Site Administration does not verify the accuracy of received (collected) information about users, except for cases when such verification is necessary in order to fulfill the obligations of the Site Administration to the User.
-/n
-/n3.3. The data provided to Paymon is kept in accordance with the applicable law in secure locations. Paymon has ensured that the relevant security standards are safe, confidential and secure. Regarding the subjects of data of site and mobile application users, Paymon, where required, is registered with the relevant national data protection / information protection authorities. Paymon also guarantees that data is stored in accordance with the requirements of the national legislation of the state.
-/n
-/n4. Measures to protect information about Users
-/n
-/n4.1. The Administration of the Site and mobile application takes technical, organizational, and legal measures to ensure the protection of the User's personal data from unauthorized or accidental access, destruction, modification, blocking, copying, distribution, as well as other illegal actions.
-/n
-/n4.2. A login (e-mail address or data entered at registration) and the User's password are used to authorize access to the Site. The User is responsible for the safety of this information. The User does not have the right to transfer their own login and password to third parties and must take measures to ensure their confidentiality.
-/n
-/n4.3. In order to provide more reliable protection for User information, the Site Administration uses a system of binding pages to the User’s mailing address. In the event of a loss of login or password, the User can restore access to the page by contacting technical support and filling out the form on the site www.paymon.org/. To reduce the likelihood of third parties using the User’s data or sending spam from their name, the Site Administration can block the entry to the User's personal page if the User's login and password are entered using a server unusual for the User (a foreign country server). Access occurs by means of a message to and mailbox, specified earlier, with the requirement to confirm the User’s entry User. After confirmation, access to Paymon becomes available.
-/n
-/n4.4. The User has the right to receive information about when and from which devices authorization was granted to the User’s personal page, and can do so by requesting technical support.
-/n
-/n4.5. In the event of the loss or disclosure of the User’s personal data, Paymon shall not be liable if this data:
-/n
-/n- Became public domain before their loss or disclosure
-/n
-/n- Became public with the consent of the User
-/n
-/n- Was obtained by a third party before it was obtained by Paymon
-/n
-/n5. Data Removal
-/n
-/n5.1 If you want to delete your account, please go to your profile: Settings - account management - delete profile - enter password. Deleting an account will delete all messages, groups and contacts.
-/n
-/n5.2 When you delete a message from your history, it remains on the server, in the history of the messages of your interlocutor. When the interlocutor also removes it from their history, it will be deleted forever. Paymon’s motto is “be free”, so we value the freedom of communication.
-/n
-/n5.3 When you delete personal data (another’s user information) from the User's personal page or delete the User's personal page from the Site or mobile application, User information copied by other Users or stored on other User pages is saved.
-/n
-/n6. Personal Information Processing
-/n
-/n6.1. Storage and use of personal data.
-/n
-/nUser Personal Data is stored exclusively in electronic media and processed using automated systems, except for cases when manual processing of personal data is necessary to comply with legal requirements.
-/n
-/n6.2. Transfer of User Personal Data.
-/n
-/nUser Personal Data is non-transferrable to any third party, except for those instances directly outlined in these Rules.
-/n
-/nPaymon has the right to transfer the User's personal information to third parties in the following instances:
-/n
-/n- The User has independently consented to such actions
-/n
-/n- The transfer is necessary to complete the User's application. The acquirer is also obligated to comply with the terms of this Policy in relation to the personal information he / she has received.
-/n
-/n- To ensure the legal protection of the rights and legitimate interests of Paymon or third parties in cases where the User violates this Policy.
-/n
-/nGranting access to User personal data at the request of state bodies (local self-government bodies) is carried out according to the procedure provided by the legislation at Paymon’s location of registration.
-/n
-/n6.3. By posting information on a personal page, including personal data, the User is aware and agrees that the specified information may be available to other internet users due to the architecture and functionality of the mobile application. The User him/herself determines the privacy settings and conditions for access to information. The Site Administration takes technical and organizational measures to ensure the relevant Site and the mobile application tools are functioning.
-/n
-/n6.4. Paymon processes Personal User information for the following purposes:
-/n
-/n6.4.1. To identify the party for Services, agreements and contracts with Paymon;
-/n
-/n6.4.2. To provide Personalized Services to the User and fulfill agreements and contracts;
-/n
-/n6.4.3. To communicate with the User, which includes sending notifications, requests and information regarding the use of Services; agreement and contract fulfillment; and User request and application processing;
-/n
-/n6.4.4. To improve the quality of Services, ease of use, and development of new Services;
-/n
-/n6.4.5. To carry out statistical and other studies based on anonymized data.
-/n
-/n7. Rights and Responsibilities of Users
-/n
-/n7.1. Users are entitled to:
-/n
-/n7.1.1. Open and free access to information about themselves using a login and password;
-/n
-/n7.1.2. Freely make changes and corrections to information about themselves on the User's personal page on the Site and mobile application, if these changes and corrections contain up-to-date and accurate information;
-/n
-/n7.1.3. Delete information about themselves from their personal page in the mobile application;
-/n
-/n7.1.4. Demand Paymon Administration to update, block it or destroy their personal data if such data is incomplete, outdated, inaccurate, illegally obtained or unnecessary for the stated processing purpose and if it is impossible for the User to carry out these actions independently;
-/n
-/n7.1.5. Receive information upon inquiry from the Site Administration concerning the processing of their personal data.
-/n
-/n8. Limitation of these Rules
-/n
-/n8.1. Paymon has the right to make changes to this Privacy Policy without notifying the user. The date of the last update is indicated when making changes to the current version. The new version of the Policy takes effect from the moment of its publication. The user is responsible for monitoring updates to this Policy.
-/n
-/n8.2. This Policy and the relationship between the User and Paymon's services that may arise during the application of this Privacy Policy are subject to the law of the Russian Federation.
-/n
-/n8.3. The present Rules do not apply to actions and Internet resources of third parties.
-/n
-/n8.4 The Paymon administration is not responsible for the actions of third parties who, as a result of using the Services of the Site or mobile application, have access to information about the User. The Site Administration recommends that Users take a responsible approach to the issue of the amount of personal information published in Paymon.
-/n
-/n8.5. Paymon processes Users' personal information without any time restrictions and by any legal means.
-/n
-/n9. Feedback
-/n
-/n9.1. Any questions about this policy; the collection, use and disclosure of personal data; blockchain; access to your personal data required by law; or information subject to disclosure should be sent to press@paymon.org.
-/n
-/nIn the event of disputes arising from this Policy, the User is obliged to present a claim to Paymon by sending it to the address press@paymon.org
-/n
-/n9.2. Paymon shall, within 30 calendar days from the receipt of this claim, review it and notify the User of the results of the review. In the absence of the possibility for a dispute settlement between the User and Paymon in pre-trial proceedings, the dispute shall be referred to the court at the location of LLC Paymon.
-/n
-/nSincerely,
-/n
-/nPaymon Administration
-        /n
+\nBefore installing the application or using any Paymon products, please read the privacy policy and user agreement below.
+\n
+\n1. General Provisions
+\n
+\n1.1. This privacy policy (hereinafter referred to as the “Privacy Policy” or “Policy”) applies to all information that Paymon may receive about the User during a visit to the Website https:\\paymon.org\. If the user does not agree with any of the terms of this Policy, the User must refuse to visit the site.
+\n
+\n1.2. We reserve the right to change these rules at any time at our discretion. Any available access to your access. If you provided us with your email address, we will notify you by email of changes to these conditions.
+\n
+\n1.3. It is your responsibility to read the conditions in each paragraph carefully. Your continued use of the services signifies your consent to the conditions in this user agreement.
+\n
+\n2. Definitions
+\n
+\n2.1. All uses of "our", "we", and “Contractor” refer to the Paymon team based in Yekaterinburg, at Gogolya St., building 25, office 17.
+\n
+\n2.2 All uses of "You", "Your" or "User" refer to the person or persons using the Paymon application, Paymon products or the website at www.paymon.org.
+\n
+\n2.3. "Services" refers to any opportunity provided by us through the site or mobile application in any local application (personal computer or otherwise), including, without limitation, wallet or data blockage services, but excluding API services, which are governed by a separate agreement.
+\n
+\n2.4. Communication includes communication via e-mail and the built-in Paymon system.
+\n
+\n2.5. "Force Majeure” refers to any event outside the reasonable control of the blockchain system and Paymon, including but not limited to: floods, extraordinary meteorological conditions, earthquakes or other natural disasters; fires; wars; insurrections; riots; labor disputes; traffic accidents; government actions; communications, power, or equipment failure; or software malfunction.
+\n
+\n2.6. Paymon’s products are goods created by the Paymon team. These are websites with the domain paymon.org and mobile apps with the name Paymon.
+\n
+\n2.7. Personal user data is the following data:
+\n
+\n2.7.1. Personal data that the User provides about himself by using the site, mobile application and other Paymon products. Any use of the Site functionality by the User with the purpose of sending personal data to the Contractor's (Paymon’s) address signifies full and unconditional acceptance of this Agreement.
+\n
+\n2.7.2. Data transferred automatically via software installed on the user's device (in particular, via the IP address, cookies, time of site pages access and the addresses of the pages visited).
+\n
+\nPaymon is not responsible for personal information processing by third-party sites the User may visit by clicking on links posted on the site.
+\n
+\n3. Terms of Use for the Site, mobile application and Paymon products
+\n
+\n3.1. By providing services for Site use, the mobile application and its services (hereinafter referred to as the Site and mobile application services), the Site Administration, acting reasonably and in good faith, believes that the User:
+\n
+\n3.1.1. Has all the necessary rights to allow him\her to register for and use this Website, the mobile application and Paymon products;
+\n
+\n3.1.2. Has disclosed accurate information about his\herself to the extent required to use the Mobile Application and Site Services.
+\n
+\n3.1.3. Recognizes that the User cannot delete certain types of information transferred to other Users;
+\n
+\n3.1.4. Has read and understood these Rules, expresses agreement with them and assumes the rights and responsibilities addressed within.
+\n
+\n3.2. The Site Administration does not verify the accuracy of received (collected) information about users, except for cases when such verification is necessary in order to fulfill the obligations of the Site Administration to the User.
+\n
+\n3.3. The data provided to Paymon is kept in accordance with the applicable law in secure locations. Paymon has ensured that the relevant security standards are safe, confidential and secure. Regarding the subjects of data of site and mobile application users, Paymon, where required, is registered with the relevant national data protection \ information protection authorities. Paymon also guarantees that data is stored in accordance with the requirements of the national legislation of the state.
+\n
+\n4. Measures to protect information about Users
+\n
+\n4.1. The Administration of the Site and mobile application takes technical, organizational, and legal measures to ensure the protection of the User's personal data from unauthorized or accidental access, destruction, modification, blocking, copying, distribution, as well as other illegal actions.
+\n
+\n4.2. A login (e-mail address or data entered at registration) and the User's password are used to authorize access to the Site. The User is responsible for the safety of this information. The User does not have the right to transfer their own login and password to third parties and must take measures to ensure their confidentiality.
+\n
+\n4.3. In order to provide more reliable protection for User information, the Site Administration uses a system of binding pages to the User’s mailing address. In the event of a loss of login or password, the User can restore access to the page by contacting technical support and filling out the form on the site www.paymon.org\. To reduce the likelihood of third parties using the User’s data or sending spam from their name, the Site Administration can block the entry to the User's personal page if the User's login and password are entered using a server unusual for the User (a foreign country server). Access occurs by means of a message to and mailbox, specified earlier, with the requirement to confirm the User’s entry User. After confirmation, access to Paymon becomes available.
+\n
+\n4.4. The User has the right to receive information about when and from which devices authorization was granted to the User’s personal page, and can do so by requesting technical support.
+\n
+\n4.5. In the event of the loss or disclosure of the User’s personal data, Paymon shall not be liable if this data:
+\n
+\n- Became public domain before their loss or disclosure
+\n
+\n- Became public with the consent of the User
+\n
+\n- Was obtained by a third party before it was obtained by Paymon
+\n
+\n5. Data Removal
+\n
+\n5.1 If you want to delete your account, please go to your profile: Settings - account management - delete profile - enter password. Deleting an account will delete all messages, groups and contacts.
+\n
+\n5.2 When you delete a message from your history, it remains on the server, in the history of the messages of your interlocutor. When the interlocutor also removes it from their history, it will be deleted forever. Paymon’s motto is “be free”, so we value the freedom of communication.
+\n
+\n5.3 When you delete personal data (another’s user information) from the User's personal page or delete the User's personal page from the Site or mobile application, User information copied by other Users or stored on other User pages is saved.
+\n
+\n6. Personal Information Processing
+\n
+\n6.1. Storage and use of personal data.
+\n
+\nUser Personal Data is stored exclusively in electronic media and processed using automated systems, except for cases when manual processing of personal data is necessary to comply with legal requirements.
+\n
+\n6.2. Transfer of User Personal Data.
+\n
+\nUser Personal Data is non-transferrable to any third party, except for those instances directly outlined in these Rules.
+\n
+\nPaymon has the right to transfer the User's personal information to third parties in the following instances:
+\n
+\n- The User has independently consented to such actions
+\n
+\n- The transfer is necessary to complete the User's application. The acquirer is also obligated to comply with the terms of this Policy in relation to the personal information he \ she has received.
+\n
+\n- To ensure the legal protection of the rights and legitimate interests of Paymon or third parties in cases where the User violates this Policy.
+\n
+\nGranting access to User personal data at the request of state bodies (local self-government bodies) is carried out according to the procedure provided by the legislation at Paymon’s location of registration.
+\n
+\n6.3. By posting information on a personal page, including personal data, the User is aware and agrees that the specified information may be available to other internet users due to the architecture and functionality of the mobile application. The User him\herself determines the privacy settings and conditions for access to information. The Site Administration takes technical and organizational measures to ensure the relevant Site and the mobile application tools are functioning.
+\n
+\n6.4. Paymon processes Personal User information for the following purposes:
+\n
+\n6.4.1. To identify the party for Services, agreements and contracts with Paymon;
+\n
+\n6.4.2. To provide Personalized Services to the User and fulfill agreements and contracts;
+\n
+\n6.4.3. To communicate with the User, which includes sending notifications, requests and information regarding the use of Services; agreement and contract fulfillment; and User request and application processing;
+\n
+\n6.4.4. To improve the quality of Services, ease of use, and development of new Services;
+\n
+\n6.4.5. To carry out statistical and other studies based on anonymized data.
+\n
+\n7. Rights and Responsibilities of Users
+\n
+\n7.1. Users are entitled to:
+\n
+\n7.1.1. Open and free access to information about themselves using a login and password;
+\n
+\n7.1.2. Freely make changes and corrections to information about themselves on the User's personal page on the Site and mobile application, if these changes and corrections contain up-to-date and accurate information;
+\n
+\n7.1.3. Delete information about themselves from their personal page in the mobile application;
+\n
+\n7.1.4. Demand Paymon Administration to update, block it or destroy their personal data if such data is incomplete, outdated, inaccurate, illegally obtained or unnecessary for the stated processing purpose and if it is impossible for the User to carry out these actions independently;
+\n
+\n7.1.5. Receive information upon inquiry from the Site Administration concerning the processing of their personal data.
+\n
+\n8. Limitation of these Rules
+\n
+\n8.1. Paymon has the right to make changes to this Privacy Policy without notifying the user. The date of the last update is indicated when making changes to the current version. The new version of the Policy takes effect from the moment of its publication. The user is responsible for monitoring updates to this Policy.
+\n
+\n8.2. This Policy and the relationship between the User and Paymon's services that may arise during the application of this Privacy Policy are subject to the law of the Russian Federation.
+\n
+\n8.3. The present Rules do not apply to actions and Internet resources of third parties.
+\n
+\n8.4 The Paymon administration is not responsible for the actions of third parties who, as a result of using the Services of the Site or mobile application, have access to information about the User. The Site Administration recommends that Users take a responsible approach to the issue of the amount of personal information published in Paymon.
+\n
+\n8.5. Paymon processes Users' personal information without any time restrictions and by any legal means.
+\n
+\n9. Feedback
+\n
+\n9.1. Any questions about this policy; the collection, use and disclosure of personal data; blockchain; access to your personal data required by law; or information subject to disclosure should be sent to press@paymon.org.
+\n
+\nIn the event of disputes arising from this Policy, the User is obliged to present a claim to Paymon by sending it to the address press@paymon.org
+\n
+\n9.2. Paymon shall, within 30 calendar days from the receipt of this claim, review it and notify the User of the results of the review. In the absence of the possibility for a dispute settlement between the User and Paymon in pre-trial proceedings, the dispute shall be referred to the court at the location of LLC Paymon.
+\n
+\nSincerely,
+\n
+\nPaymon Administration
+        \n
     </string>
 </resources>
