@@ -16,7 +16,7 @@ buildscript {
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "ru.paymon.android"
+        applicationId "ru.paymon.android.release"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 55
