@@ -19,7 +19,7 @@
         android:nextFocusLeft="@id/edit_text_add_participants"
         android:nextFocusUp="@id/edit_text_add_participants"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="35dp"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp"
         android:background="@color/bg_dialog_title"
