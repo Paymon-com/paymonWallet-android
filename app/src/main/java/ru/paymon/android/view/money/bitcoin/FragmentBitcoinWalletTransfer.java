@@ -1,5 +1,6 @@
 package ru.paymon.android.view.money.bitcoin;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +14,8 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -48,7 +51,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
     private WalletApplication application;
     private String currentExchangeRate;
 //    private NumberPicker fiatCurrencyPicker;
-    private TextView fiatEqualTextView;
+private EditText fiatEqualTextView;
     private TextView balanceTextView;
     private EditText receiverAddressEditText;
     private IndicatorSeekBar feeSeekBar;
@@ -73,7 +76,7 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
 //        fiatCurrencyPicker = (NumberPicker) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_currency);
         receiverAddressEditText = (EditText) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_receiver_address);
         balanceTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_balance);
-        fiatEqualTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_eq);
+        fiatEqualTextView = (EditText) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_fiat_eq);
         feeSeekBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_gas_limit_slider);
         EditText amountEditText = (EditText) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_amount);
         TextView totalTextView = (TextView) view.findViewById(R.id.fragment_bitcoin_wallet_transfer_total_value);
@@ -88,7 +91,15 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_eur_backlight);
         ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_local_backlight);
 
-        amountEditText.requestFocus();
+        fiatEqualTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                amountEditText.requestFocus();
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(amountEditText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
 
 //        fiatCurrencyPicker.setMinValue(1);
 //        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);

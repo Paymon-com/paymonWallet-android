@@ -2,6 +2,7 @@ package ru.paymon.android.view.money.ethereum;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,6 +15,8 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -58,8 +61,8 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     private IndicatorSeekBar gasPriceBar;
     private IndicatorSeekBar gasLimitBar;
     private EditText receiverAddressEditText;
-//    private NumberPicker fiatCurrencyPicker;
-    private TextView fiatEqualTextView;
+    //    private NumberPicker fiatCurrencyPicker;
+    private EditText fiatEqualTextView;
 
     private WalletApplication application;
     private MoneyViewModel moneyViewModel;
@@ -101,7 +104,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         gasLimitBar = (IndicatorSeekBar) view.findViewById(R.id.fragment_ethereum_wallet_transfer_gas_limit_slider);
         feeTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_network_fee_value);
         totalTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_total_value);
-        fiatEqualTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_eq);
+        fiatEqualTextView = (EditText) view.findViewById(R.id.fragment_ethereum_wallet_transfer_fiat_eq);
         TextView fromAddressTextView = (TextView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_id_from);
         ImageView qrScannerButton = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_transfer_qr);
         ImageButton backButton = (ImageButton) view.findViewById(R.id.toolbar_eth_wallet_transf_back_image_button);
@@ -113,7 +116,16 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_eur_backlight);
         ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_local_backlight);
 
-        amountEditText.requestFocus();
+        fiatEqualTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                amountEditText.requestFocus();
+                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+                InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputManager.showSoftInput(amountEditText, InputMethodManager.SHOW_IMPLICIT);
+            }
+        });
+
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
