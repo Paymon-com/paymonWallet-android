@@ -8,33 +8,30 @@
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/switchConversation"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:textSize="18sp"
+        android:fontFamily="@font/roboto_thin"
         android:text="@string/chats_filter_dialogs"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView55"
-        app:layout_constraintHorizontal_chainStyle="packed"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/switchGroup"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
-        android:textSize="18sp"
+        android:fontFamily="@font/roboto_thin"
         android:text="@string/chats_filter_groups"
         android:textColor="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView55"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,8 +44,8 @@
         android:layout_marginEnd="8dp"
         android:src="@color/black_light"
         app:layout_constraintBottom_toBottomOf="@+id/switchConversation"
-        app:layout_constraintEnd_toStartOf="@+id/switchGroup"
-        app:layout_constraintStart_toEndOf="@+id/switchConversation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/switchConversation" />
 
 </android.support.constraint.ConstraintLayout>
