@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:262323478669:android:ccce3836d52923c2",
         "android_client_info": {
-          "package_name": "ru.paymon.android"
+          "package_name": "ru.paymon.android.release"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "262323478669-akgvb37era832205p6gd3rbtv8a2noj5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "ru.paymon.android",
+            "package_name": "ru.paymon.android.release",
             "certificate_hash": "9d4ef33bf35d9f33e7e0570a6d0844551c959ca7"
           }
         },
