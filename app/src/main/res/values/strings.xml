@@ -215,9 +215,9 @@
     <string name="keyguard_hint_empty">Your hint is empty</string>
     <string name="keyguard_wrong_password">Wrong password</string>
 
-    <string name="loading_one">"Load.  "</string>
-    <string name="loading_two">"Load.. "</string>
-    <string name="loading_three">Load…</string>
+    <string name="loading_one">"Loading.  "</string>
+    <string name="loading_two">"Loading.. "</string>
+    <string name="loading_three">Loading…</string>
 
     <string name="qr_scanner_camera_permission_was_granted">Camera permission was granted</string>
     <string name="qr_scanner_camera_permission_request_was_denied">Camera permission request was denied</string>

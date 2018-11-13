@@ -1,5 +1,6 @@
 package ru.paymon.android.view.money;
 
+import android.Manifest;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
@@ -14,6 +15,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.vanniktech.rxpermission.Permission;
 
 import java.util.ArrayList;
 import java.util.Currency;
@@ -21,6 +25,8 @@ import java.util.List;
 import java.util.Locale;
 
 import androidx.navigation.Navigation;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
@@ -53,6 +59,35 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ApplicationLoader.rxPermission
+                .requestEach(Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE).subscribe(new Observer<Permission>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(Permission permission) {
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+                if (ApplicationLoader.rxPermission.isGranted(Manifest.permission.READ_EXTERNAL_STORAGE) && ApplicationLoader.rxPermission.isGranted(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                } else {
+                    Toast.makeText(ApplicationLoader.applicationContext, getString(R.string.other_insufficient_rights), Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack();
+                }
+            }
+        });
+
         moneyViewModel = ViewModelProviders.of(getActivity()).get(MoneyViewModel.class);
         showProgress = moneyViewModel.getProgressState();
     }
