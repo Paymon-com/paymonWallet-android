@@ -8,19 +8,22 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
-import ru.paymon.android.components.CircularImageView;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import ru.paymon.android.R;
+import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.models.UserItem;
 import ru.paymon.android.utils.Utils;
 
 public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.ViewHolder> {
     public ArrayList<UserItem> list;
+    public Map<Integer, UserItem> checkedMap;
 
     public CreateGroupAdapter(ArrayList<UserItem> list) {
         this.list = list;
+        checkedMap = new HashMap<>();
     }
 
     @NonNull
@@ -70,7 +73,7 @@ public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.
             }
 
             name.setText(userItem.name);
-            checkBox.setChecked(userItem.checked);
+            checkBox.setChecked(checkedMap.containsKey(userItem.uid));
 
             if (!userItem.photo.url.isEmpty())
                 Utils.loadPhoto(userItem.photo.url, photo);
@@ -78,9 +81,19 @@ public class CreateGroupAdapter extends RecyclerView.Adapter<CreateGroupAdapter.
             View.OnClickListener clickListener = (view) -> {
                 checkBox.setChecked(!checkBox.isChecked());
                 userItem.checked = checkBox.isChecked();
+                if (checkBox.isChecked())
+                    checkedMap.put(userItem.uid, userItem);
+                else
+                    checkedMap.remove(userItem.uid);
             };
 
-            checkBox.setOnCheckedChangeListener((v, isChecked) -> userItem.checked = checkBox.isChecked());
+            checkBox.setOnCheckedChangeListener((v, isChecked) -> {
+                userItem.checked = checkBox.isChecked();
+                if (checkBox.isChecked())
+                    checkedMap.put(userItem.uid, userItem);
+                else
+                    checkedMap.remove(userItem.uid);
+            });
             photo.setOnClickListener(clickListener);
             name.setOnClickListener(clickListener);
         }

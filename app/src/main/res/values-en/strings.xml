@@ -53,6 +53,7 @@
     <string name="chat_message_created_group">created a group</string>
     <string name="chat_message_delete">Delete selected messages?</string>
     <string name="chat_message_delete_fail">Delete messages failed</string>
+    <string name="chat_message_delete_fail2">You can not delete other people\'s messages.</string>
     <string name="chat_message_selected">Selected:</string>
     <string name="chats_message_delete_chat_history">Clear message history?</string>
 
@@ -112,6 +113,7 @@
     <string name="email_confirmation_hint">Confirm your email to continue. If you do not see the message in your inbox, please check the spam folder.</string>
     <string name="email_confirmation_error">Enter the correct e-mail</string>
     <string name="email_confirmation_time">Time to next dispatch:</string>
+    <string name="email_confirmation_sent">An email has been sent to your email</string>
 
     <string name="wallet_ethereum_wallet">Ethereum wallet</string>
     <string name="wallet_bitcoin_wallet">Bitcoin wallet</string>

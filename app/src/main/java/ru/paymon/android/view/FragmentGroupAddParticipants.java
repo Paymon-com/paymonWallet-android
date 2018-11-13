@@ -91,9 +91,9 @@ public class FragmentGroupAddParticipants extends Fragment {
 
             RPC.PM_group_addParticipants addParticipantsRequest = new RPC.PM_group_addParticipants();
             addParticipantsRequest.id = chatID;
-            for (UserItem createGroupItem : adapter.list) {
-                if (createGroupItem.checked)
-                    addParticipantsRequest.userIDs.add(createGroupItem.uid);
+            for (Integer uid : adapter.checkedMap.keySet()) {
+                final UserItem user = adapter.checkedMap.get(uid);
+                addParticipantsRequest.userIDs.add(user.uid);
             }
 
             final long requestID = NetworkManager.getInstance().sendRequest(addParticipantsRequest, (response, error) -> {

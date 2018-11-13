@@ -11,6 +11,7 @@ import android.graphics.Point;
 import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -86,6 +87,7 @@ public class BlurLockView extends FrameLayout
         // number password
         LayoutInflater.from(getContext()).inflate(R.layout.number_blur_lock_view, this, true);
 
+        hintTextView = (TextView) findViewById(R.id.hint);
         bigButtonViews = new BigButtonView[10];
         bigButtonViews[0] = (BigButtonView) findViewById(R.id.button_0);
         bigButtonViews[1] = (BigButtonView) findViewById(R.id.button_1);
@@ -264,7 +266,11 @@ public class BlurLockView extends FrameLayout
      *
      * @param smoothly Smoothly or not.
      */
+    private TextView hintTextView;
+
     private void showText(boolean smoothly) {
+        inputedString = "";
+        hintTextView.setText("");
         if (animationIsPlaying) return;
         animationIsPlaying = true;
         if (smoothly) {
@@ -393,7 +399,7 @@ public class BlurLockView extends FrameLayout
         if (User.CLIENT_SECURITY_PASSWORD_VALUE == null && notConfirmedPassword == null) {
             setTitle(ApplicationLoader.applicationContext.getString(R.string.sign_up_password_repeat));
             setTypeface(Typeface.DEFAULT);
-            setType(Password.NUMBER, false);
+            setType(Password.NUMBER, true);
             notConfirmedPassword = inputedString;
             setPasswordLength(notConfirmedPassword.length());
             if (passwordStack.size() > 0) {
@@ -404,7 +410,7 @@ public class BlurLockView extends FrameLayout
             if (inputedString.equals(notConfirmedPassword)) {
                 setTitle(ApplicationLoader.applicationContext.getString(R.string.keyguard_hint_enter));
                 setTypeface(Typeface.DEFAULT);
-                setType(Password.TEXT, false);
+                setType(Password.TEXT, true);
                 confirmedPassword = notConfirmedPassword;
                 setPasswordLength(10);
                 if (passwordStack.size() > 0) {
@@ -439,6 +445,10 @@ public class BlurLockView extends FrameLayout
             nowPassword.append(s);
         }
         inputedString = nowPassword.toString();
+        if (hintTextView != null) {
+            hintTextView.setText(inputedString);
+            Log.e("AAA", inputedString);
+        }
 
         if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
             if (correctPassword.equals(inputedString)) {

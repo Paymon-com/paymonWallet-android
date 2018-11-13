@@ -2,6 +2,7 @@ package ru.paymon.android.adapters;
 
 import android.arch.paging.PagedListAdapter;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +16,7 @@ import com.vanniktech.emoji.EmojiTextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.navigation.Navigation;
 import androidx.recyclerview.selection.SelectionTracker;
 import ru.paymon.android.GroupsManager;
 import ru.paymon.android.R;
@@ -27,6 +29,8 @@ import ru.paymon.android.selection.MessageItemLookup;
 import ru.paymon.android.selection.ViewHolderWithDetails;
 import ru.paymon.android.utils.FileManager;
 import ru.paymon.android.utils.Utils;
+
+import static ru.paymon.android.view.AbsFragmentChat.CHAT_ID_KEY;
 
 public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMessagesAdapter.BaseMessageViewHolder> {
     private SelectionTracker selectionTracker;
@@ -183,6 +187,10 @@ public class GroupMessagesAdapter extends PagedListAdapter<RPC.Message, GroupMes
         void bind(RPC.Message message) {
             msg.setText(message.text);
             time.setText(Utils.formatDateTime(message.date, true));
+            final Bundle bundle = new Bundle();
+            final int cid = message.from_id == User.currentUser.id ? message.to_peer.user_id : message.from_id;
+            bundle.putInt(CHAT_ID_KEY, cid);
+            avatar.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.fragmentFriendProfile, bundle));
         }
     }
 
