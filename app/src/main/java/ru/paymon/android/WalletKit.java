@@ -148,11 +148,12 @@ public class WalletKit extends WalletAppKit {
             awaitTerminated();
             shutDown();
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         File chainFile = new File(directory, filePrefix + ".spvchain");
         chainFile.delete();
         vWallet = null;
+        NotificationManager.getInstance().postNotificationName(NotificationManager.NotificationEvent.BTC_BLOCKCHAIN_SYNC_FINISHED);
         return vWalletFile.delete();
     }
 

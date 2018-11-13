@@ -41,7 +41,7 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
         if (User.CLIENT_SECURITY_PASSWORD_VALUE != null) {
             blurLockView.setTitle(getString(R.string.wallet_backup_enter_password));
             blurLockView.setTypeface(Typeface.DEFAULT);
-            blurLockView.setType(Password.NUMBER, false);
+            blurLockView.setType(Password.NUMBER, true);
             blurLockView.setLeftButton(getString(R.string.keyguard_clear));
             blurLockView.setRightButton(getString(R.string.keyguard_hint));
             blurLockView.setOnRightButtonClickListener(() -> blurLockView.showHint());
@@ -49,7 +49,7 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
             blurLockView.setTitle(getString(R.string.wallet_backup_enter_password));
             blurLockView.setPasswordLength(10);
             blurLockView.setTypeface(Typeface.DEFAULT);
-            blurLockView.setType(Password.NUMBER, false);
+            blurLockView.setType(Password.NUMBER, true);
             blurLockView.setRightButton(getString(R.string.other_ok));
             blurLockView.setLeftButton(getString(R.string.keyguard_clear));
         }
@@ -59,6 +59,9 @@ public class KeyGuardActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
+        if (User.CLIENT_SECURITY_PASSWORD_VALUE == null) {
+            super.onBackPressed();
+        }
     }
 
     @Override

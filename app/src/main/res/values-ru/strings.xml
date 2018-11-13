@@ -53,6 +53,7 @@
     <string name="chat_message_created_group">создал группу</string>
     <string name="chat_message_delete">Вы действительно хотите удалить выбранные сообщения?</string>
     <string name="chat_message_delete_fail">Удалить сообщения не удалось</string>
+    <string name="chat_message_delete_fail2">Вы не можете удалять чужие сообщения</string>
     <string name="chat_message_selected">Выбрано:</string>
 
     <string name="group_chat_participants">Участники:</string>
@@ -111,6 +112,7 @@
     <string name="email_confirmation_hint">Для продолжения необходимо подтвердить ваш e-mail. Возможно, письмо попало в спам.</string>
     <string name="email_confirmation_error">Введите корректный e-mail</string>
     <string name="email_confirmation_time">Время до следующей отправки:</string>
+    <string name="email_confirmation_sent">На ваш e-mail отправлено пиьсмо</string>
 
     <string name="wallet_ethereum_wallet">Ethereum кошелек</string>
     <string name="wallet_bitcoin_wallet">Bitcoin кошелек</string>

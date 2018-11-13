@@ -178,7 +178,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
                         ApplicationLoader.applicationHandler.post(() -> {
                             hintError.setText("");
                             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
-                                    .setMessage(getString(R.string.recovery_password_sent))
+                                    .setMessage(getString(R.string.email_confirmation_sent))
                                     .setCancelable(true)
                                     .setPositiveButton(getString(R.string.other_ok), (DialogInterface dialog, int which) -> {
                                     });

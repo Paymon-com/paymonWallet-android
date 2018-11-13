@@ -60,9 +60,9 @@ public class FragmentCreateGroup extends Fragment {
 
         acceptButton.setOnClickListener(v -> {
             ArrayList<UserItem> arrayList = new ArrayList<>();
-            for (UserItem user : adapter.list) {
-                if (user.checked)
-                    arrayList.add(user);
+            for (Integer uid : adapter.checkedMap.keySet()) {
+                final UserItem user = adapter.checkedMap.get(uid);
+                arrayList.add(user);
             }
             if (arrayList.size() <= 0) {
                 Toast.makeText(getContext(), R.string.create_group_error, Toast.LENGTH_LONG).show();
