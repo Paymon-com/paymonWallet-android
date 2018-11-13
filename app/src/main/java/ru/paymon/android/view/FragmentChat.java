@@ -22,6 +22,7 @@ import androidx.recyclerview.selection.StorageStrategy;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.MessagesManager;
 import ru.paymon.android.R;
+import ru.paymon.android.User;
 import ru.paymon.android.adapters.MessagesAdapter;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
@@ -116,6 +117,11 @@ public class FragmentChat extends AbsFragmentChat {
                 final ArrayList<Long> checkedMessageIDs = new ArrayList<>();
                 List<RPC.Message> selectedMessages = Lists.newArrayList(selectionTracker.getSelection().iterator());
                 for (final RPC.Message message : selectedMessages) {
+                    if (message.from_id != User.currentUser.id) {
+                        ApplicationLoader.applicationHandler.post(() -> Toast.makeText(getContext(), R.string.chat_message_delete_fail2, Toast.LENGTH_SHORT).show());
+                        selectionTracker.clearSelection();
+                        return;
+                    }
                     checkedMessageIDs.add(message.id);
                 }
                 AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
