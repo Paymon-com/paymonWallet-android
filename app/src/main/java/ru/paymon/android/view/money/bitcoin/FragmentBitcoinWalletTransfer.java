@@ -88,6 +88,8 @@ public class FragmentBitcoinWalletTransfer extends Fragment implements Notificat
         ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_eur_backlight);
         ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_bitcoin_wallet_local_backlight);
 
+        amountEditText.requestFocus();
+
 //        fiatCurrencyPicker.setMinValue(1);
 //        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
 //        fiatCurrencyPicker.setDisplayedValues(Config.fiatCurrencies);

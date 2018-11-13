@@ -117,6 +117,8 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
+        amountEditText.requestFocus();
+
 //        fiatCurrencyPicker.setMinValue(1);
 //        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
 //        fiatCurrencyPicker.setDisplayedValues(Config.fiatCurrencies);

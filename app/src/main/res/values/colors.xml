@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#323232</color>
     <color name="colorPrimaryDark">#282828</color>
-    <color name="colorAccent">@color/blue_dark</color>
+    <color name="colorAccent">@color/blue_bright</color>
 
     <!--<color name="chat_background">#efefef</color>-->
     <color name="nav_clicker">#00ffffff</color>

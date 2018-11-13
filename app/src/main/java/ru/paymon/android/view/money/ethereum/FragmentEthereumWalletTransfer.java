@@ -113,6 +113,8 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_eur_backlight);
         ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_local_backlight);
 
+        amountEditText.requestFocus();
+
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
 //        fiatCurrencyPicker.setMinValue(1);
