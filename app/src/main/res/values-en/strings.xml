@@ -385,6 +385,7 @@
 \nSincerely,
 \n
 \nPaymon Administration
+        \n
 </string>
 
     <string name="other_privacy_policy">
@@ -533,5 +534,6 @@
 \nSincerely,
 \n
 \nPaymon Administration
+        \n
     </string>
 </resources>

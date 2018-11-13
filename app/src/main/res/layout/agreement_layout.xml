@@ -1,33 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
     <Button
         android:id="@+id/agreement_back_to_registration_button"
-        style="@style/PaymonButtonBlue"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:fontFamily="sans-serif-light"
+        android:background="@color/bg_dialog_title"
         android:text="@string/other_back_to_reg"
-        android:textColor="@color/white"
+        android:textColor="@color/blue_bright"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/agreement_back_to_registration_button"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -42,6 +44,16 @@
             android:fontFamily="sans-serif-light"
             android:text="@string/other_agreements"
             android:textColor="@color/white" />
+
+
     </ScrollView>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/scrollView2"
+        android:src="@drawable/transparent_gradient"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </android.support.constraint.ConstraintLayout>
