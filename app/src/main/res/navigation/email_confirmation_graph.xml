@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_fragmentRegistrationEmailConfirmation_to_mainActivity"
             app:destination="@id/mainActivity" />
+        <action
+            android:id="@+id/action_fragmentRegistrationEmailConfirmation_to_fragmentStart2"
+            app:destination="@id/fragmentStart" />
     </fragment>
 
     <activity
@@ -20,4 +23,9 @@
         android:name="ru.paymon.android.activities.MainActivity"
         android:label="mainActivity"
         tools:layout="@layout/activity_main" />
+    <fragment
+        android:id="@+id/fragmentStart"
+        android:name="ru.paymon.android.view.FragmentStart"
+        android:label="fragment_start"
+        tools:layout="@layout/fragment_start" />
 </navigation>
