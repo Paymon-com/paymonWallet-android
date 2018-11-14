@@ -417,7 +417,7 @@
             android:layout_marginTop="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_paymon_wallet_transfer_fiat_eq"
+            app:layout_constraintTop_toBottomOf="@+id/fragment_paymon_amount_input_layout2"
             app:np_dividerColor="@color/colorPrimary"
             app:np_orientation="horizontal"
             app:np_selectedTextColor="@color/colorPrimary"
