@@ -116,14 +116,11 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_eur_backlight);
         ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_local_backlight);
 
-        fiatEqualTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
+        fiatEqualTextView.setOnClickListener((v) -> {
                 amountEditText.requestFocus();
                 getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
                 InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputManager.showSoftInput(amountEditText, InputMethodManager.SHOW_IMPLICIT);
-            }
         });
 
 

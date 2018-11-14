@@ -120,14 +120,11 @@ public class FragmentPaymonWalletTransfer extends Fragment {
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 
-        fiatEqualTextView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                amountEditText.requestFocus();
-                getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-                InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.showSoftInput(amountEditText, InputMethodManager.SHOW_IMPLICIT);
-            }
+        fiatEqualTextView.setOnClickListener((v) -> {
+            amountEditText.requestFocus();
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+            InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.showSoftInput(amountEditText, InputMethodManager.SHOW_IMPLICIT);
         });
 //        fiatCurrencyPicker.setMinValue(1);
 //        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);

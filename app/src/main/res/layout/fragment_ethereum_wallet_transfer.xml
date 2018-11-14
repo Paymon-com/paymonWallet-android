@@ -120,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@color/colorPrimary"
+                android:focusable="false"
                 android:inputType="numberDecimal"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"

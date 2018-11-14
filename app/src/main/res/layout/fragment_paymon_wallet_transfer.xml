@@ -122,6 +122,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:background="@color/colorPrimary"
+                android:focusable="false"
                 android:inputType="numberDecimal"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
@@ -164,7 +165,7 @@
                 android:layout_height="wrap_content"
                 app:isb_indicator_color="@color/blue_bright"
                 app:isb_thumb_color="@color/blue_bright"
-                app:isb_track_progress_color="@color/blue_bright"/>
+                app:isb_track_progress_color="@color/blue_bright" />
         </com.warkiz.widget.IndicatorStayLayout>
 
         <com.warkiz.widget.IndicatorStayLayout
@@ -184,7 +185,7 @@
                 android:layout_height="wrap_content"
                 app:isb_indicator_color="@color/blue_bright"
                 app:isb_thumb_color="@color/blue_bright"
-                app:isb_track_progress_color="@color/blue_bright"/>
+                app:isb_track_progress_color="@color/blue_bright" />
         </com.warkiz.widget.IndicatorStayLayout>
 
         <TextView
@@ -195,10 +196,10 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/roboto_thin"
-            android:textColor="@color/white"
             android:text="@string/wallet_transfer_fee_total"
             android:textAllCaps="true"
             android:textAppearance="?android:textAppearanceListItem"
+            android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/indilayout2" />
 
@@ -283,8 +284,8 @@
             android:fontFamily="@font/roboto_thin"
             android:text="@string/wallet_transfer_deposit_acc"
             android:textAllCaps="true"
-            android:textSize="16sp"
             android:textColor="@color/white"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView33" />
 
@@ -294,9 +295,9 @@
             android:layout_height="70dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            app:srcCompat="@drawable/paymon"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView29" />
+            app:layout_constraintTop_toBottomOf="@+id/textView29"
+            app:srcCompat="@drawable/paymon" />
 
         <TextView
             android:id="@+id/fragment_paymon_wallet_transfer_title_from"
@@ -319,8 +320,8 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:fontFamily="@font/roboto_thin"
-            android:textColor="@color/white"
             android:singleLine="true"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="@+id/fragment_paymon_wallet_transfer_image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fragment_paymon_wallet_transfer_image"
@@ -413,8 +414,8 @@
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_centerInParent="true"
-            android:visibility="gone"
             android:layout_marginTop="4dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment_paymon_amount_input_layout2"
