@@ -172,7 +172,7 @@
     <string name="wallet_create_hint">The operation may take several minutes. Please wait…</string>
     <string name="wallet_loader">Exchange rates and wallets</string>
     <string name="wallet_fields_incorrect">Some fields are incorrect</string>
-    <string name="wallet_familiarize">Familiarize</string>
+    <string name="wallet_faq">Open</string>
 
     <string name="about_program">Paymon for android</string>
     <string name="about_program_version">Version </string>

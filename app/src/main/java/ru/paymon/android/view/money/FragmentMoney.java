@@ -105,6 +105,7 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         Button usdButton = (Button) view.findViewById(R.id.fragment_money_currency_usd);
         Button eurButton = (Button) view.findViewById(R.id.fragment_money_currency_eur);
         Button localButton = (Button) view.findViewById(R.id.fragment_money_currency_local);
+        Button faqButton = (Button) view.findViewById(R.id.fragment_money_faq_button);
         ImageView usdBacklight = (ImageView) view.findViewById(R.id.fragment_money_currency_usd_backlight);
         ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_money_currency_eur_backlight);
         ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_money_currency_local_backlight);
@@ -172,21 +173,27 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         });
 
         if (User.CLIENT_MONEY_FIRST_TIME) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-            final View clearChatDialog = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_money_first_time, null);
-            Button buttonAccept = (Button) clearChatDialog.findViewById(R.id.agree);
-            builder.setView(clearChatDialog).setCancelable(false);
-            AlertDialog dialog = builder.create();
-            dialog.show();
-
-            buttonAccept.setOnClickListener(v -> {
-                dialog.dismiss();
-                User.CLIENT_MONEY_FIRST_TIME = false;
-                User.saveConfig();
-            });
+            showFAQ();
         }
 
+        faqButton.setOnClickListener(v -> showFAQ());
+
         return view;
+    }
+
+    private void showFAQ() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        final View clearChatDialog = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_money_first_time, null);
+        Button buttonAccept = (Button) clearChatDialog.findViewById(R.id.agree);
+        builder.setView(clearChatDialog).setCancelable(false);
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
+        buttonAccept.setOnClickListener(v -> {
+            dialog.dismiss();
+            User.CLIENT_MONEY_FIRST_TIME = false;
+            User.saveConfig();
+        });
     }
 
     @Override
