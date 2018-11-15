@@ -138,6 +138,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/imageView58"
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:src="@drawable/transparent_gradient"
@@ -163,7 +164,7 @@
             android:src="@drawable/transparent_gradient_rev"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_money_wallets" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_money_faq_button" />
 
         <ImageView
             android:id="@+id/imageView15"
@@ -196,7 +197,7 @@
             android:textAllCaps="true"
             android:textColor="@color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView57" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_money_wallets" />
 
         <Button
             android:id="@+id/fragment_money_faq_button"
