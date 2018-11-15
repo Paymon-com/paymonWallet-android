@@ -171,6 +171,7 @@
     <string name="wallet_create_hint">Операция может занять несколько минут. Пожулайста, подождите…</string>
     <string name="wallet_loader">Курсы валют и кошельки</string>
     <string name="wallet_fields_incorrect">Некоторые поля заполнены некорректно</string>
+    <string name="wallet_familiarize">Ознакомиться</string>
 
     <string name="about_program">Paymon для android</string>
     <string name="about_program_version">Версия </string>
