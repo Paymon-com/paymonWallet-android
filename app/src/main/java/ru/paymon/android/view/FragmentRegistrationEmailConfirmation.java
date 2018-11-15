@@ -55,6 +55,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
         ImageButton acceptToolbar = (ImageButton) view.findViewById(R.id.toolbar_next_btn);
 
         backToolbar.setOnClickListener(v -> {
+            timer.cancel();
             User.currentUser = null;
             User.saveConfig();
             NavOptions.Builder builder = new NavOptions.Builder();
@@ -102,7 +103,7 @@ public class FragmentRegistrationEmailConfirmation extends Fragment implements N
         timer = new CountDownTimer(30000, 1000) {
             @Override
             public void onTick(long l) {
-                time.setText(getString(R.string.email_confirmation_time) + " " + android.text.format.DateFormat.format("mm:ss", l).toString());
+                time.setText(ApplicationLoader.applicationContext.getString(R.string.email_confirmation_time) + " " + android.text.format.DateFormat.format("mm:ss", l).toString());
             }
 
             @Override

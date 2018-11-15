@@ -536,4 +536,14 @@
 \nPaymon Administration
         \n
     </string>
+
+    <string name="money_faq">
+\nPlease, read and follow all directions carefully before continuing.
+\n
+\nWallets are stored on your phone only. DO NOT FORGET to make a backup of your wallet when you delete/recover/create your wallet, delete the Paymon app, or clear the app data. Otherwise, you will lose your funds.
+\n
+\nSave the password you entered to create your new wallet or the backup of an existing wallet. Without the password, you cannot recover your wallet from the backup!
+\n
+\nTo use a Bitcoin wallet after creation/recovery, you must wait until it has synchronized with the blockchain. You will see a progress bar during this operation. You cannot fully use your BTC wallet without completing this process.    </string>
+    \n
 </resources>

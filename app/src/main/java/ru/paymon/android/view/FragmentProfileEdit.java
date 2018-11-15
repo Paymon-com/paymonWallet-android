@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -58,8 +57,8 @@ public class FragmentProfileEdit extends Fragment {
         avatar = (CircularImageView) view.findViewById(R.id.profile_update_photo);
         Button changeAvatar = (Button) view.findViewById(R.id.change_foto);
         Button deleteAvatar = (Button) view.findViewById(R.id.delete_photo);
-        TextInputEditText firstName = (TextInputEditText) view.findViewById(R.id.profile_update_name);
-        TextInputEditText lastName = (TextInputEditText) view.findViewById(R.id.profile_update_surname);
+        EditText firstName = (EditText) view.findViewById(R.id.profile_update_name);
+        EditText lastName = (EditText) view.findViewById(R.id.profile_update_surname);
         EditText email = (EditText) view.findViewById(R.id.profile_update_email);
         Button saveButton = (Button) view.findViewById(R.id.profile_update_save_button);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);

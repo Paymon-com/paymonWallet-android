@@ -54,10 +54,10 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="16dp"
-        app:civ_border_color="@color/borderBlue"
-        app:civ_border_width="2dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/profile_photo_none"
+        app:civ_border_color="@color/borderBlue"
+        app:civ_border_width="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:srcCompat="@drawable/profile_photo_none" />
@@ -70,8 +70,8 @@
         android:background="@drawable/buttons_background_left_rounding"
         android:fontFamily="sans-serif-light"
         android:text="@string/edit_profile_change_photo"
-        android:textSize="12sp"
         android:textColor="@color/white"
+        android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/delete_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -88,8 +88,8 @@
         android:background="@drawable/buttons_background_left_rounding"
         android:fontFamily="sans-serif-light"
         android:text="@string/edit_profile_delete_photo"
-        android:textSize="12sp"
         android:textColor="@color/white"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="@+id/profile_update_photo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/profile_update_photo"
@@ -107,13 +107,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_update_photo">
 
-        <android.support.design.widget.TextInputEditText
+        <EditText
             android:id="@+id/profile_update_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/bg_dialog_title"
             android:fontFamily="sans-serif-light"
-            android:layout_marginTop="8dp"
             android:hint="@string/edit_profile_name"
             android:importantForAutofill="noExcludeDescendants"
             android:inputType="textCapSentences"
@@ -132,15 +131,14 @@
         app:layout_constraintStart_toEndOf="@+id/fragment_update_profile_name_til"
         app:layout_constraintTop_toBottomOf="@+id/profile_update_photo">
 
-        <android.support.design.widget.TextInputEditText
+        <EditText
             android:id="@+id/profile_update_surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/bg_dialog_title"
-            android:layout_marginTop="8dp"
-            android:importantForAutofill="noExcludeDescendants"
             android:fontFamily="sans-serif-light"
             android:hint="@string/edit_profile_surname"
+            android:importantForAutofill="noExcludeDescendants"
             android:inputType="textCapSentences"
             android:singleLine="true"
             android:textColor="@color/white" />
@@ -175,13 +173,13 @@
             android:id="@+id/profile_update_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
             android:background="@color/bg_dialog_title"
-            android:importantForAutofill="noExcludeDescendants"
+            android:fontFamily="sans-serif-light"
             android:hint="@string/edit_profile_email"
+            android:importantForAutofill="noExcludeDescendants"
             android:inputType="textEmailAddress"
             android:singleLine="true"
-            android:textColor="@color/white"/>
+            android:textColor="@color/white" />
     </android.support.design.widget.TextInputLayout>
 
     <TextView
@@ -211,8 +209,8 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:text="@string/edit_profile_email_save"
-        android:textColor="@color/blue_bright"
         android:textAllCaps="false"
+        android:textColor="@color/blue_bright"
         android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

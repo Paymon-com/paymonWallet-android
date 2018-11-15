@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -30,6 +31,7 @@ import io.reactivex.disposables.Disposable;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.NotificationManager;
 import ru.paymon.android.R;
+import ru.paymon.android.User;
 import ru.paymon.android.adapters.CryptoWalletsAdapter;
 import ru.paymon.android.adapters.ExchangeRatesAdapter;
 import ru.paymon.android.components.CustomDialogProgress;
@@ -163,11 +165,26 @@ public class FragmentMoney extends Fragment implements NotificationManager.IList
         exchangeRatesData = moneyViewModel.getExchangeRatesData();
 
         walletsData.observe(getActivity(), (walletsData) -> {
-            if(walletsData == null) return;
+            if (walletsData == null) return;
             cryptoWalletsAdapter = new CryptoWalletsAdapter(walletsData, cryptoWalletsListener);
             walletsRecView.setAdapter(cryptoWalletsAdapter);
             changeCurrency();
         });
+
+        if (User.CLIENT_MONEY_FIRST_TIME) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            final View clearChatDialog = LayoutInflater.from(getContext()).inflate(R.layout.alert_dialog_money_first_time, null);
+            Button buttonAccept = (Button) clearChatDialog.findViewById(R.id.agree);
+            builder.setView(clearChatDialog).setCancelable(false);
+            AlertDialog dialog = builder.create();
+            dialog.show();
+
+            buttonAccept.setOnClickListener(v -> {
+                dialog.dismiss();
+                User.CLIENT_MONEY_FIRST_TIME = false;
+                User.saveConfig();
+            });
+        }
 
         return view;
     }
