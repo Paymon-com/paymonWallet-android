@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/scroll_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -176,6 +177,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
         <ImageView
+            android:id="@+id/imageView57"
             android:layout_width="match_parent"
             android:layout_height="8dp"
             android:layout_marginTop="8dp"
@@ -183,6 +185,34 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/fragment_money_exchange_rates" />
+
+        <TextView
+            android:id="@+id/textView32"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/roboto_thin"
+            android:text="@string/more_menu_faq"
+            android:textAllCaps="true"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView57" />
+
+        <Button
+            android:id="@+id/fragment_money_faq_button"
+            android:layout_width="0dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="64dp"
+            android:background="@drawable/buttons_background_left_rounding"
+            android:fontFamily="sans-serif-light"
+            android:text="Ознакомиться"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/textView32"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/textView32"
+            app:layout_constraintTop_toTopOf="@+id/textView32" />
 
         <TextSwitcher
             android:id="@+id/fragment_money_loader"
