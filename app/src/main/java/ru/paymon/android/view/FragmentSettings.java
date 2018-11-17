@@ -80,7 +80,7 @@ public class FragmentSettings extends Fragment implements NavigationView.OnNavig
                 AlertDialog.Builder builderAlertReset = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom));
                 builderAlertReset.setMessage(getString(R.string.settings_reset) + "?").setPositiveButton(R.string.other_yes, (dialog, which) -> {
                     User.setDefaultConfig();
-                    Toast.makeText(new ContextThemeWrapper(getContext(), R.style.ToastCustom), R.string.settings_reset, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.settings_reset_toast, Toast.LENGTH_SHORT).show();
                 }).setNegativeButton(R.string.other_no, (dialog, which) -> dialog.cancel());
                 builderAlertReset.create().show();
                 break;

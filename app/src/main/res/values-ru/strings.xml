@@ -95,6 +95,7 @@
     <string name="settings_basic">Основные</string>
     <string name="settings_security">Безопасность</string>
     <string name="settings_reset">Сбросить настройки</string>
+    <string name="settings_reset_toast">Настройки сброшены</string>
     <string name="settings_about">О программе</string>
     <string name="settings_exit">Выход</string>
     <string name="settings_notifications_messages">Сообщения</string>

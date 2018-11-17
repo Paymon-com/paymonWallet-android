@@ -96,6 +96,7 @@
     <string name="settings_basic">General</string>
     <string name="settings_security">Security</string>
     <string name="settings_reset">Reset settings</string>
+    <string name="settings_reset_toast">Settings reset</string>
     <string name="settings_about">About the program</string>
     <string name="settings_exit">Log Out</string>
     <string name="settings_notifications_messages">Messages</string>
