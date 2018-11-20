@@ -14,13 +14,6 @@ import ru.paymon.android.R;
 
 
 public class FragmentStart extends Fragment {
-    private static FragmentStart instance;
-
-    public static synchronized FragmentStart getInstance() {
-        if (instance == null)
-            instance = new FragmentStart();
-        return instance;
-    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

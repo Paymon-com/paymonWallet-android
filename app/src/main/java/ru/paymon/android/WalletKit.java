@@ -130,11 +130,15 @@ public class WalletKit extends WalletAppKit {
     public Wallet restoreWallet(final Wallet wallet) throws Exception {
         try {
             shutDown();
-            wallet.cleanup();
-            File chainFile = new File(directory, filePrefix + ".spvchain");
-            chainFile.delete();
-            vWalletFile = new File(directory, filePrefix + ".wallet");
-            wallet.saveToFile(vWalletFile);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        wallet.cleanup();
+        File chainFile = new File(directory, filePrefix + ".spvchain");
+        chainFile.delete();
+        vWalletFile = new File(directory, filePrefix + ".wallet");
+        wallet.saveToFile(vWalletFile);
+        try {
             startUp();
         } catch (Exception e) {
             e.printStackTrace();

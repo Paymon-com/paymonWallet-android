@@ -26,6 +26,7 @@ android {
         multiDexEnabled true
         renderscriptSupportModeEnabled true
         vectorDrawables.useSupportLibrary = true
+        manifestPlaceholders = [auth0Domain: "@string/com_auth0_domain", auth0Scheme: "demo"]
 
         externalNativeBuild {
             cmake {
@@ -142,6 +143,8 @@ dependencies {
         annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     }
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation 'com.auth0.android:auth0:1.14.1'
 }
 repositories {
     mavenCentral()
