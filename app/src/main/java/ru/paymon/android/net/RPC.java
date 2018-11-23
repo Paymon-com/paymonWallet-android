@@ -161,6 +161,8 @@ public class RPC {
         public PM_photoURL photoURL;
         public boolean confirmed;
         public boolean isEmailHidden;
+        public String btcAddress = "";
+        public String ethAddress = "";
 
         public UserObject() {
         }
@@ -324,6 +326,8 @@ public class RPC {
             photoURL = new RPC.PM_photoURL();
             photoURL.readParams(stream, exception);
             confirmed = stream.readBool(exception);
+//            btcAddress = stream.readString(exception);
+//            ethAddress = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
@@ -339,6 +343,8 @@ public class RPC {
             }
             photoURL.serializeToStream(stream);
             stream.writeBool(confirmed);
+//            stream.writeString(btcAddress);
+//            stream.writeString(ethAddress);
         }
     }
 
@@ -378,6 +384,8 @@ public class RPC {
             photoURL = new RPC.PM_photoURL();
             photoURL.readParams(stream, exception);
             confirmed = stream.readBool(exception);
+//            btcAddress = stream.readString(exception);
+//            ethAddress = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
@@ -392,6 +400,8 @@ public class RPC {
             stream.writeByteArray(token);
             photoURL.serializeToStream(stream);
             stream.writeBool(confirmed);
+//            stream.writeString(btcAddress);
+//            stream.writeString(ethAddress);
         }
     }
 
