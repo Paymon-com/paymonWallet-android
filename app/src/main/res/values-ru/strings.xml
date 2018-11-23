@@ -206,8 +206,8 @@
     <string name="usd">USD</string>
     <string name="rub">RUB</string>
 
-    <string name="error_auth_wrong_login_or_password">Wrong login or password</string>
-    <string name="error_spamming">Too many requests, try again</string>
+    <string name="error_auth_wrong_login_or_password">Не верный логин или пароль</string>
+    <string name="error_spamming">Слишком много запросов, повторите попытку позже</string>
 
     <string name="btc_sync">Выполняется синхронизация BTC</string>
 
