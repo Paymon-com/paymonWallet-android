@@ -222,7 +222,9 @@ public class FragmentProfileEdit extends Fragment {
                 user.last_name = lastName.getText().toString();
                 user.email = email.getText().toString();
                 user.isEmailHidden = hideEmailSwitch.isChecked();
-
+                user.btcAddress = publicAddressBTC.getText().toString();
+                user.ethAddress = publicAddressETH.getText().toString();
+                user.pmntAddress = publicAddressPMNT.getText().toString();
 
                 ApplicationLoader.applicationHandler.post(dialogProgress::show);
 
