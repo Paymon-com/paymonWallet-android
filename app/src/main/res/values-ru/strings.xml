@@ -81,6 +81,7 @@
     <string name="edit_profile_name">Имя</string>
     <string name="edit_profile_surname">Фамилия</string>
     <string name="edit_profile_contact_information">Контактная информация</string>
+    <string name="edit_profile_wallets_information">Информация о кошельках</string>
     <string name="edit_profile_email">E-mail</string>
     <string name="edit_profile_email_hide">Скрыть e-mail?</string>
     <string name="edit_profile_email_save">Сохранить</string>
@@ -116,7 +117,9 @@
     <string name="email_confirmation_sent">На ваш e-mail отправлено пиьсмо</string>
 
     <string name="wallet_ethereum_wallet">Ethereum кошелек</string>
+    <string name="wallet_ethereum_public_address">Публичный адрес Ethereum</string>
     <string name="wallet_bitcoin_wallet">Bitcoin кошелек</string>
+    <string name="wallet_bitcoin_public_address">Публичный адрес Bitcoin</string>
     <string name="wallet_paymon_wallet">Paymon кошелек</string>
     <string name="wallets_create">Создать кошелек</string>
     <string name="wallets_update">Обновить</string>
