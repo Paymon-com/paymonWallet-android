@@ -8,20 +8,13 @@ import java.util.Locale;
 public class Config {
     public static final boolean DEBUG = false;
 
-    public static String HOST;
-    public static String HOST_ALT;
+    public static String HOST = "91.226.80.26";
+    public static short PORT = 66;
 
     public static final String TAG = "paymon-dbg";
     public static final String VERSION_STRING = "1.00";
+    public static final int VERSION = 0x1_1;
 
-    public static short PORT = 7968;
-
-    static {
-        HOST = "91.226.80.26";
-        HOST_ALT = "91.226.80.26";
-    }
-
-    public static final int VERSION = 0x1_08b;
 
     public static final int GAS_PRICE_DEFAULT = 40;
     public static final int GAS_LIMIT_DEFAULT = 21000;
