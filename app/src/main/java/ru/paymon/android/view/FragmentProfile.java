@@ -33,6 +33,9 @@ public class FragmentProfile extends Fragment {
         TextView name = (TextView) view.findViewById(R.id.name_profile_text_view);
         TextView email = (TextView) view.findViewById(R.id.profile_email_text_view);
         TextView login = (TextView) view.findViewById(R.id.login_profile_text_view);
+        TextView publicAddressBTC = (TextView) view.findViewById(R.id.fragment_profile_public_btc_address_text_view);
+        TextView publicAddressETH = (TextView) view.findViewById(R.id.fragment_profile_public_eth_address_text_view);
+        TextView publicAddressPMNT = (TextView) view.findViewById(R.id.fragment_profile_public_pmnt_address_text_view);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
 
         backToolbar.setOnClickListener(view1 -> Navigation.findNavController(getActivity(), R.id.nav_host_fragment).popBackStack());
@@ -40,6 +43,15 @@ public class FragmentProfile extends Fragment {
 
         name.setText(Utils.formatUserName(User.currentUser));
         login.setText(String.format("@%s", User.currentUser.login));
+
+        if (publicAddressBTC.getText().toString().isEmpty())
+            publicAddressBTC.setText(R.string.user_profile_not_specified);
+
+        if (publicAddressETH.getText().toString().isEmpty())
+            publicAddressETH.setText(R.string.user_profile_not_specified);
+
+        if (publicAddressPMNT.getText().toString().isEmpty())
+            publicAddressPMNT.setText(R.string.user_profile_not_specified);
 
         if (!User.currentUser.photoURL.url.isEmpty())
             Utils.loadPhoto(User.currentUser.photoURL.url, avatar);

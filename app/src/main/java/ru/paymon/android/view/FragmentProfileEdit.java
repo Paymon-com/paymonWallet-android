@@ -60,6 +60,9 @@ public class FragmentProfileEdit extends Fragment {
         EditText firstName = (EditText) view.findViewById(R.id.profile_update_name);
         EditText lastName = (EditText) view.findViewById(R.id.profile_update_surname);
         EditText email = (EditText) view.findViewById(R.id.profile_update_email);
+        EditText publicAddressBTC = (EditText) view.findViewById(R.id.profile_update_public_btc_address);
+        EditText publicAddressETH = (EditText) view.findViewById(R.id.profile_update_public_eth_address);
+        EditText publicAddressPMNT = (EditText) view.findViewById(R.id.profile_update_public_pmnt_address);
         Button saveButton = (Button) view.findViewById(R.id.profile_update_save_button);
         ImageView backToolbar = (ImageView) view.findViewById(R.id.toolbar_back_btn);
         Switch hideEmailSwitch = (Switch) view.findViewById(R.id.switch_hide_email);
@@ -187,6 +190,30 @@ public class FragmentProfileEdit extends Fragment {
                 Toast.makeText(getActivity(), getString(R.string.edit_profile_email_error), Toast.LENGTH_SHORT).show();
                 email.requestFocus();
                 return;
+            }
+
+            if (!publicAddressBTC.getText().toString().isEmpty()) {
+                if (!Utils.verifyBTCpubKey(publicAddressBTC.getText().toString())) {
+                    Toast.makeText(getActivity(), getString(R.string.edit_profile_public_btc_error), Toast.LENGTH_SHORT).show();
+                    publicAddressBTC.requestFocus();
+                    return;
+                }
+            }
+
+            if (!publicAddressETH.getText().toString().isEmpty()) {
+                if (!Utils.verifyBTCpubKey(publicAddressETH.getText().toString())) {
+                    Toast.makeText(getActivity(), getString(R.string.edit_profile_public_eth_error), Toast.LENGTH_SHORT).show();
+                    publicAddressETH.requestFocus();
+                    return;
+                }
+            }
+
+            if (!publicAddressPMNT.getText().toString().isEmpty()) {
+                if (!Utils.verifyBTCpubKey(publicAddressPMNT.getText().toString())) {
+                    Toast.makeText(getActivity(), getString(R.string.edit_profile_public_pmnt_error), Toast.LENGTH_SHORT).show();
+                    publicAddressPMNT.requestFocus();
+                    return;
+                }
             }
 
             Utils.netQueue.postRunnable(() -> {

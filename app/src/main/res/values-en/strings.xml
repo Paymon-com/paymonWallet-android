@@ -91,6 +91,9 @@
     <string name="edit_profile_name_error">Name contains invalid characters</string>
     <string name="edit_profile_surname_error">Surname contains invalid characters</string>
     <string name="edit_profile_email_error">Email contains invalid characters</string>
+    <string name="edit_profile_public_btc_error">Bitcoin public address contains invalid characters</string>
+    <string name="edit_profile_public_eth_error">Ethereum public address contains invalid characters</string>
+    <string name="edit_profile_public_pmnt_error">Paymon public address contains invalid characters</string>
     <string name="edit_profile_save_failed">Changes were not saved</string>
     <string name="edit_profile_save_success">Profile successfully changed</string>
 

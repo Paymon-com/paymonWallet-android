@@ -89,6 +89,9 @@
     <string name="edit_profile_email_save">Сохранить</string>
     <string name="edit_profile_name_error">Имя содержит недопустимые символы</string>
     <string name="edit_profile_surname_error">Фамилия содержит недопустимые символы</string>
+    <string name="edit_profile_public_btc_error">Публиынй адрес Bitcoin содержит недопустимые символы</string>
+    <string name="edit_profile_public_eth_error">Публиынй адрес Ethereum содержит недопустимые символы</string>
+    <string name="edit_profile_public_pmnt_error">Публиынй адрес Paymon содержит недопустимые символы</string>
     <string name="edit_profile_email_error">E-mail содержит недопустимые символы</string>
     <string name="edit_profile_save_failed">Изменения не сохранены</string>
     <string name="edit_profile_save_success">Профиль успешно изменен</string>
