@@ -122,6 +122,7 @@
     <string name="wallet_bitcoin_wallet">Bitcoin wallet</string>
     <string name="wallet_bitcoin_public_address">Bitcoin public address</string>
     <string name="wallet_paymon_wallet">Paymon wallet</string>
+    <string name="wallet_paymon_public_address">Paymon public address</string>
     <string name="wallets_create">Create Wallet</string>
     <string name="wallets_update">Update</string>
     <string name="wallets_ex_rates">Exchange Rates</string>

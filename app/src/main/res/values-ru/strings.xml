@@ -121,6 +121,7 @@
     <string name="wallet_bitcoin_wallet">Bitcoin кошелек</string>
     <string name="wallet_bitcoin_public_address">Публичный адрес Bitcoin</string>
     <string name="wallet_paymon_wallet">Paymon кошелек</string>
+    <string name="wallet_paymon_public_address">Публичный адрес Paymon</string>
     <string name="wallets_create">Создать кошелек</string>
     <string name="wallets_update">Обновить</string>
     <string name="wallets_ex_rates">Курсы валют</string>
