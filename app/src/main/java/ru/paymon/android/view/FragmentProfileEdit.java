@@ -201,7 +201,7 @@ public class FragmentProfileEdit extends Fragment {
             }
 
             if (!publicAddressETH.getText().toString().isEmpty()) {
-                if (!Utils.verifyBTCpubKey(publicAddressETH.getText().toString())) {
+                if (!Utils.verifyETHpubKey(publicAddressETH.getText().toString())) {
                     Toast.makeText(getActivity(), getString(R.string.edit_profile_public_eth_error), Toast.LENGTH_SHORT).show();
                     publicAddressETH.requestFocus();
                     return;
@@ -209,7 +209,7 @@ public class FragmentProfileEdit extends Fragment {
             }
 
             if (!publicAddressPMNT.getText().toString().isEmpty()) {
-                if (!Utils.verifyBTCpubKey(publicAddressPMNT.getText().toString())) {
+                if (!Utils.verifyETHpubKey(publicAddressPMNT.getText().toString())) {
                     Toast.makeText(getActivity(), getString(R.string.edit_profile_public_pmnt_error), Toast.LENGTH_SHORT).show();
                     publicAddressPMNT.requestFocus();
                     return;
