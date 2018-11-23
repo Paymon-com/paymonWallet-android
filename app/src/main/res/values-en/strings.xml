@@ -84,6 +84,7 @@
     <string name="edit_profile_name">Name</string>
     <string name="edit_profile_surname">Surname</string>
     <string name="edit_profile_contact_information">Contact Information</string>
+    <string name="edit_profile_wallets_information">Wallets information</string>
     <string name="edit_profile_email">E-mail</string>
     <string name="edit_profile_email_hide">Hide your e-mail?</string>
     <string name="edit_profile_email_save">Save</string>
@@ -119,8 +120,11 @@
     <string name="email_confirmation_sent">An email has been sent to your email</string>
 
     <string name="wallet_ethereum_wallet">Ethereum wallet</string>
+    <string name="wallet_ethereum_public_address">Ethereum public address</string>
     <string name="wallet_bitcoin_wallet">Bitcoin wallet</string>
+    <string name="wallet_bitcoin_public_address">Bitcoin public address</string>
     <string name="wallet_paymon_wallet">Paymon wallet</string>
+    <string name="wallet_paymon_public_address">Paymon public address</string>
     <string name="wallets_create">Create Wallet</string>
     <string name="wallets_update">Update</string>
     <string name="wallets_ex_rates">Exchange Rates</string>

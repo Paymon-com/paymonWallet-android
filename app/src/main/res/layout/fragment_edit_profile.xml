@@ -46,8 +46,7 @@
         android:layout_height="8dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/transparent_gradient_rev"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5"
-        tools:layout_editor_absoluteX="-15dp" />
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
 
     <ru.paymon.android.components.CircularImageView
         android:id="@+id/profile_update_photo"
@@ -102,7 +101,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:theme="@style/TilStyle"
         app:layout_constraintEnd_toStartOf="@+id/textInputLayout2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_update_photo">
@@ -111,6 +109,9 @@
             android:id="@+id/profile_update_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:background="@color/bg_dialog_title"
             android:fontFamily="sans-serif-light"
             android:hint="@string/edit_profile_name"
@@ -126,7 +127,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:theme="@style/TilStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/fragment_update_profile_name_til"
         app:layout_constraintTop_toBottomOf="@+id/profile_update_photo">
@@ -135,6 +135,9 @@
             android:id="@+id/profile_update_surname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:background="@color/bg_dialog_title"
             android:fontFamily="sans-serif-light"
             android:hint="@string/edit_profile_surname"
@@ -164,7 +167,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:theme="@style/TilStyle"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_update_contact_info">
@@ -173,6 +175,9 @@
             android:id="@+id/profile_update_email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
             android:background="@color/bg_dialog_title"
             android:fontFamily="sans-serif-light"
             android:hint="@string/edit_profile_email"
@@ -181,6 +186,111 @@
             android:singleLine="true"
             android:textColor="@color/white" />
     </android.support.design.widget.TextInputLayout>
+
+    <TextView
+        android:id="@+id/textView33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/roboto_thin"
+        android:text="@string/edit_profile_wallets_information"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView12" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout10"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView33">
+
+        <EditText
+            android:id="@+id/profile_update_public_btc_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@color/bg_dialog_title"
+            android:fontFamily="sans-serif-light"
+            android:hint="@string/wallet_bitcoin_public_address"
+            android:importantForAutofill="noExcludeDescendants"
+            android:singleLine="true"
+            android:textColor="@color/white" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout11"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout10">
+
+        <EditText
+            android:id="@+id/profile_update_public_eth_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:background="@color/bg_dialog_title"
+            android:fontFamily="sans-serif-light"
+            android:hint="@string/wallet_ethereum_public_address"
+            android:importantForAutofill="noExcludeDescendants"
+            android:singleLine="true"
+            android:textColor="@color/white" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/textInputLayout12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout11">
+
+        <EditText
+            android:id="@+id/profile_update_public_pmnt_address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@color/bg_dialog_title"
+            android:fontFamily="sans-serif-light"
+            android:hint="@string/wallet_paymon_public_address"
+            android:importantForAutofill="noExcludeDescendants"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:singleLine="true"
+            android:textColor="@color/white" />
+    </android.support.design.widget.TextInputLayout>
+
+    <ImageView
+        android:id="@+id/imageView59"
+        android:layout_width="0dp"
+        android:layout_height="8dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/transparent_gradient_rev"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textInputLayout12" />
 
     <TextView
         android:id="@+id/textView13"
@@ -192,7 +302,7 @@
         android:textColor="@color/white"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView12" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView59" />
 
     <Switch
         android:id="@+id/switch_hide_email"
