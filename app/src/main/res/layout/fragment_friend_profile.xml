@@ -67,13 +67,26 @@
         app:layout_constraintTop_toBottomOf="@+id/friend_profile_avatar_image_view" />
 
     <ImageButton
+        android:id="@+id/friend_profile_pmnt_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@android:color/transparent"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@+id/friend_profile_bitcoin_button"
+        app:layout_constraintEnd_toEndOf="@+id/friend_profile_bitcoin_button"
+        app:layout_constraintStart_toStartOf="@+id/friend_profile_bitcoin_button"
+        app:layout_constraintTop_toTopOf="@+id/friend_profile_bitcoin_button"
+        app:srcCompat="@drawable/paymon" />
+
+    <ImageButton
         android:id="@+id/friend_profile_bitcoin_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
         android:background="@android:color/transparent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/friend_profile_ethereum_button"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/friend_profile_ethereum_button"
+        app:layout_constraintStart_toStartOf="@+id/friend_profile_ethereum_button"
         app:layout_constraintTop_toTopOf="@+id/friend_profile_ethereum_button"
         app:srcCompat="@drawable/bitcoin" />
 
@@ -81,10 +94,11 @@
         android:id="@+id/friend_profile_ethereum_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
         android:background="@android:color/transparent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/friend_profile_chat_button"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/friend_profile_chat_button"
+        app:layout_constraintStart_toStartOf="@+id/friend_profile_chat_button"
         app:layout_constraintTop_toTopOf="@+id/friend_profile_chat_button"
         app:srcCompat="@drawable/etherium" />
 
@@ -92,11 +106,11 @@
         android:id="@+id/friend_profile_chat_button"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginEnd="32dp"
         android:background="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView35"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageView35"
+        app:layout_constraintBottom_toBottomOf="@+id/friend_profile_menu_button"
+        app:layout_constraintEnd_toEndOf="@+id/friend_profile_menu_button"
+        app:layout_constraintStart_toStartOf="@+id/friend_profile_menu_button"
+        app:layout_constraintTop_toTopOf="@+id/friend_profile_menu_button"
         app:srcCompat="@drawable/chat" />
 
     <ImageButton

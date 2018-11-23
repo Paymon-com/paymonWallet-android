@@ -163,6 +163,7 @@ public class RPC {
         public boolean isEmailHidden;
         public String btcAddress = "";
         public String ethAddress = "";
+        public String pmntAddress = "";
 
         public UserObject() {
         }
@@ -328,6 +329,7 @@ public class RPC {
             confirmed = stream.readBool(exception);
 //            btcAddress = stream.readString(exception);
 //            ethAddress = stream.readString(exception);
+//            pmntAddress = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
@@ -345,6 +347,7 @@ public class RPC {
             stream.writeBool(confirmed);
 //            stream.writeString(btcAddress);
 //            stream.writeString(ethAddress);
+//            stream.writeString(pmntAddress);
         }
     }
 
@@ -386,6 +389,7 @@ public class RPC {
             confirmed = stream.readBool(exception);
 //            btcAddress = stream.readString(exception);
 //            ethAddress = stream.readString(exception);
+//            pmntAddress = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
@@ -402,6 +406,7 @@ public class RPC {
             stream.writeBool(confirmed);
 //            stream.writeString(btcAddress);
 //            stream.writeString(ethAddress);
+//            stream.writeString(pmntAddress);
         }
     }
 

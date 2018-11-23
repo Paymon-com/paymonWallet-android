@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,7 @@ public class FragmentFriendProfile extends Fragment {
     //    private ImageButton blockButton;
     private ImageButton btcButton;
     private ImageButton ethButton;
+    private ImageButton pmntButton;
     private DialogProgress dialogProgress;
     private boolean isFABOpen = false;
     private RPC.PM_userFull user;
@@ -60,9 +62,7 @@ public class FragmentFriendProfile extends Fragment {
 //        blockButton = (ImageButton) view.findViewById(R.id.friend_profile_block_button);
         btcButton = (ImageButton) view.findViewById(R.id.friend_profile_bitcoin_button);
         ethButton = (ImageButton) view.findViewById(R.id.friend_profile_ethereum_button);
-
-        ethButton.setVisibility(View.GONE);
-        btcButton.setVisibility(View.GONE);
+        pmntButton = (ImageButton) view.findViewById(R.id.friend_profile_pmnt_button);
 
         floatMenu = (ImageButton) view.findViewById(R.id.friend_profile_menu_button);
         TextView friendProfileCity = (TextView) view.findViewById(R.id.friend_profile_city_text_view);
@@ -103,9 +103,7 @@ public class FragmentFriendProfile extends Fragment {
                             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
                         });
 
-                        floatMenu.setOnClickListener(view1 -> {
-                            showFABMenu(!isFABOpen);
-                        });
+                        floatMenu.setOnClickListener(view1 -> showFABMenu(!isFABOpen));
 
 //                        blockButton.setOnClickListener(view15 -> {
 //                            //TODO:сделать реализацию кнопки для блокировки пользователя
@@ -123,21 +121,24 @@ public class FragmentFriendProfile extends Fragment {
     private void showFABMenu(boolean flag) {
         isFABOpen = flag;
         if (flag) {
+            btcButton.setVisibility(!user.btcAddress.isEmpty() ? View.VISIBLE : View.GONE);
+            ethButton.setVisibility(!user.ethAddress.isEmpty() ? View.VISIBLE : View.GONE);
+            pmntButton.setVisibility(!user.pmntAddress.isEmpty() ? View.VISIBLE : View.GONE);
             floatMenu.animate().rotation(180);
-            chatButton.animate().translationY(getResources().getDimension(R.dimen.standard_55));
-            if (!user.btcAddress.isEmpty() && !user.ethAddress.isEmpty()) {
-                btcButton.setVisibility(View.VISIBLE);
-                ethButton.setVisibility(View.VISIBLE);
-                btcButton.animate().translationY(getResources().getDimension(R.dimen.standard_110));
-                ethButton.animate().translationY(getResources().getDimension(R.dimen.standard_165));
-            } else if (!user.btcAddress.isEmpty()) {
-                btcButton.setVisibility(View.VISIBLE);
-                ethButton.setVisibility(View.GONE);
-                btcButton.animate().translationY(getResources().getDimension(R.dimen.standard_110));
-            } else if (!user.ethAddress.isEmpty()) {
-                btcButton.setVisibility(View.GONE);
-                ethButton.setVisibility(View.VISIBLE);
-                ethButton.animate().translationY(getResources().getDimension(R.dimen.standard_110));
+            float dp55 = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 55f, getResources().getDisplayMetrics());
+            float currentDP = dp55;
+            chatButton.animate().translationY(currentDP);
+            if (!user.btcAddress.isEmpty()) {
+                currentDP += dp55;
+                btcButton.animate().translationY(currentDP);
+            }
+            if (!user.ethAddress.isEmpty()) {
+                currentDP += dp55;
+                ethButton.animate().translationY(currentDP);
+            }
+            if (!user.pmntAddress.isEmpty()) {
+                currentDP += dp55;
+                pmntButton.animate().translationY(currentDP);
             }
 //        blockButton.animate().translationY(getResources().getDimension(R.dimen.standard_220));
         } else {
@@ -145,6 +146,7 @@ public class FragmentFriendProfile extends Fragment {
             chatButton.animate().translationY(0);
             btcButton.animate().translationY(0);
             ethButton.animate().translationY(0);
+            pmntButton.animate().translationY(0);
             //        blockButton.animate().translationY(0);
         }
     }

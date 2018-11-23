@@ -18,11 +18,6 @@
     <!--<dimen name="scan_laser_width">4dp</dimen>-->
     <!--<dimen name="scan_dot_size">8dp</dimen>-->
 
-    <dimen name="standard_55">55dp</dimen>
-    <dimen name="standard_110">110dp</dimen>
-    <dimen name="standard_165">165dp</dimen>
-    <dimen name="standard_220">220dp</dimen>
-	<!---->
 	<dimen name="button_margin">15dp</dimen>
 
 </resources>
