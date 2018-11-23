@@ -80,6 +80,7 @@ public class FragmentPaymonWalletTransfer extends Fragment {
     private BigDecimal bigIntegerWeiAmount;
     private BigDecimal bigIntegerGweiAmount;
     private String currentCurrency = "USD";
+    private String pubAddress;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,6 +92,12 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         moneyViewModel.updateMidAndMaxGasPriceData();
         midGasPriceData = moneyViewModel.getMidGasPriceData();
         maxGasPriceData = moneyViewModel.getMaxGasPriceData();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            if (bundle.containsKey("address")) {
+                pubAddress = bundle.getString("address");
+            }
+        }
     }
 
     @Nullable
@@ -117,6 +124,8 @@ public class FragmentPaymonWalletTransfer extends Fragment {
         ImageView usdBacklight = (ImageView) view.findViewById(R.id.fragment_paymon_wallet_usd_backlight);
         ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_paymon_wallet_eur_backlight);
         ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_paymon_wallet_local_backlight);
+
+        receiverAddressEditText.setText(pubAddress);
 
         WalletApplication application = (WalletApplication) getActivity().getApplication();
 

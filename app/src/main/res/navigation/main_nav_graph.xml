@@ -95,6 +95,15 @@
         <action
             android:id="@+id/action_fragmentProfile_to_fragmentChat"
             app:destination="@id/fragmentChat" />
+        <action
+            android:id="@+id/action_fragmentFriendProfile_to_fragmentEthereumWalletTransfer"
+            app:destination="@id/fragmentEthereumWalletTransfer" />
+        <action
+            android:id="@+id/action_fragmentFriendProfile_to_fragmentPaymonWalletTransfer"
+            app:destination="@id/fragmentPaymonWalletTransfer" />
+        <action
+            android:id="@+id/action_fragmentFriendProfile_to_fragmentBitcoinWalletTransfer"
+            app:destination="@id/fragmentBitcoinWalletTransfer" />
     </fragment>
     <fragment
         android:id="@+id/fragmentProfile"

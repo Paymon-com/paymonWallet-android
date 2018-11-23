@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Locale;
 
 public class Config {
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
 
     public static String HOST = "91.226.80.26";
     public static short PORT = 7968;
@@ -14,7 +14,6 @@ public class Config {
     public static final String TAG = "paymon-dbg";
     public static final String VERSION_STRING = "1.00";
     public static final int VERSION = 0x1_1;
-
 
     public static final int GAS_PRICE_DEFAULT = 40;
     public static final int GAS_LIMIT_DEFAULT = 21000;

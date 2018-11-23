@@ -50,8 +50,8 @@ import static ru.paymon.android.view.money.bitcoin.FragmentBitcoinWallet.BTC_CUR
 public class FragmentBitcoinWalletTransfer extends Fragment implements NotificationManager.IListener {
     private WalletApplication application;
     private String currentExchangeRate;
-//    private NumberPicker fiatCurrencyPicker;
-private EditText fiatEqualTextView;
+    //    private NumberPicker fiatCurrencyPicker;
+    private EditText fiatEqualTextView;
     private TextView balanceTextView;
     private EditText receiverAddressEditText;
     private IndicatorSeekBar feeSeekBar;
@@ -60,12 +60,20 @@ private EditText fiatEqualTextView;
     private Double feeBtc;
     private double totalValueBtc;
     private String currentCurrency = "USD";
+    private String pubAddress;
 
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         application = ((WalletApplication) getActivity().getApplication());
+
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            if (bundle.containsKey("address")) {
+                pubAddress = bundle.getString("address");
+            }
+        }
     }
 
     @Nullable
@@ -97,6 +105,8 @@ private EditText fiatEqualTextView;
             InputMethodManager inputManager = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputManager.showSoftInput(amountEditText, InputMethodManager.SHOW_IMPLICIT);
         });
+
+        receiverAddressEditText.setText(pubAddress);
 
 //        fiatCurrencyPicker.setMinValue(1);
 //        fiatCurrencyPicker.setMaxValue(Config.fiatCurrencies.length);
@@ -142,7 +152,7 @@ private EditText fiatEqualTextView;
         });
 
         fromAddressTextView.setText(fromAddress);
-        balanceTextView.setText(balance +" BTC");
+        balanceTextView.setText(balance + " BTC");
 
         amountEditText.addTextChangedListener(new TextWatcher() {
             @Override

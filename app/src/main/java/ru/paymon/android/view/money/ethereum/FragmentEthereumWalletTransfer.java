@@ -79,6 +79,7 @@ public class FragmentEthereumWalletTransfer extends Fragment {
     private BigDecimal bigIntegerWeiAmount;
     private BigDecimal bigIntegerWeiTotal;
     private String currentCurrency = "USD";
+    private String pubAddress;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -89,6 +90,12 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         moneyViewModel.updateMidAndMaxGasPriceData();
         midGasPriceData = moneyViewModel.getMidGasPriceData();
         maxGasPriceData = moneyViewModel.getMaxGasPriceData();
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            if (bundle.containsKey("address")) {
+                pubAddress = bundle.getString("address");
+            }
+        }
     }
 
     @Nullable
@@ -115,6 +122,8 @@ public class FragmentEthereumWalletTransfer extends Fragment {
         ImageView usdBacklight = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_usd_backlight);
         ImageView eurBacklight = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_eur_backlight);
         ImageView localBacklight = (ImageView) view.findViewById(R.id.fragment_ethereum_wallet_local_backlight);
+
+        receiverAddressEditText.setText(pubAddress);
 
         fiatEqualTextView.setOnClickListener((v) -> {
                 amountEditText.requestFocus();

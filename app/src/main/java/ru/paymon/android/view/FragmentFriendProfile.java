@@ -11,13 +11,20 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.bitcoinj.wallet.Wallet;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.ApplicationLoader;
 import ru.paymon.android.R;
+import ru.paymon.android.User;
 import ru.paymon.android.UsersManager;
+import ru.paymon.android.WalletApplication;
 import ru.paymon.android.components.CircularImageView;
 import ru.paymon.android.components.DialogProgress;
+import ru.paymon.android.models.EthereumWallet;
+import ru.paymon.android.models.PaymonWallet;
 import ru.paymon.android.net.NetworkManager;
 import ru.paymon.android.net.RPC;
 import ru.paymon.android.utils.Utils;
@@ -35,6 +42,8 @@ public class FragmentFriendProfile extends Fragment {
     private DialogProgress dialogProgress;
     private boolean isFABOpen = false;
     private RPC.PM_userFull user;
+    private WalletApplication application;
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,6 +56,7 @@ public class FragmentFriendProfile extends Fragment {
 
         dialogProgress = new DialogProgress(getContext());
         dialogProgress.setCancelable(true);
+        application = (WalletApplication) getActivity().getApplication();
     }
 
     @Nullable
@@ -97,10 +107,61 @@ public class FragmentFriendProfile extends Fragment {
                         if (!user.photoURL.url.isEmpty())
                             Utils.loadPhoto(user.photoURL.url, avatar);
 
-                        chatButton.setOnClickListener(view12 -> {
+                        chatButton.setOnClickListener(v -> {
                             final Bundle bundle = new Bundle();
                             bundle.putInt(CHAT_ID_KEY, userId);
                             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
+                        });
+
+                        btcButton.setOnClickListener(v -> {
+                            if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null) {
+                                Toast.makeText(ApplicationLoader.applicationContext, "Необходим BTC кошелек!", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            final Wallet bitcoinWallet = application.getBitcoinWallet();
+
+                            if (bitcoinWallet != null) {
+                                final Bundle bundle = new Bundle();
+                                bundle.putString("address", user.btcAddress);
+                                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentBitcoinWalletTransfer, bundle);
+                            } else {
+                                Toast.makeText(ApplicationLoader.applicationContext, "Необходим BTC кошелек!", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                        ethButton.setOnClickListener(v -> {
+                            if (User.CLIENT_MONEY_ETHEREUM_WALLET_PASSWORD == null) {
+                                Toast.makeText(ApplicationLoader.applicationContext, "Необходим ETH кошелек!", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            final EthereumWallet ethereumWallet = application.getEthereumWallet();
+
+                            if (ethereumWallet != null) {
+                                final Bundle bundle = new Bundle();
+                                bundle.putString("address", user.ethAddress);
+                                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentEthereumWalletTransfer, bundle);
+                            } else {
+                                Toast.makeText(ApplicationLoader.applicationContext, "Необходим ETH кошелек!", Toast.LENGTH_LONG).show();
+                            }
+                        });
+
+                        pmntButton.setOnClickListener(v -> {
+                            if (User.CLIENT_MONEY_PAYMON_WALLET_PASSWORD == null) {
+                                Toast.makeText(ApplicationLoader.applicationContext, "Необходим PMNT кошелек!", Toast.LENGTH_LONG).show();
+                                return;
+                            }
+
+                            final PaymonWallet paymonWallet = application.getPaymonWallet();
+
+                            if (paymonWallet != null) {
+                                final Bundle bundle = new Bundle();
+                                bundle.putString("address", user.pmntAddress);
+                                Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentPaymonWalletTransfer, bundle);
+                            } else {
+                                Toast.makeText(ApplicationLoader.applicationContext, "Необходим PMNT кошелек!", Toast.LENGTH_LONG).show();
+                            }
                         });
 
                         floatMenu.setOnClickListener(view1 -> showFABMenu(!isFABOpen));
