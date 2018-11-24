@@ -327,9 +327,9 @@ public class RPC {
             photoURL = new RPC.PM_photoURL();
             photoURL.readParams(stream, exception);
             confirmed = stream.readBool(exception);
-//            btcAddress = stream.readString(exception);
-//            ethAddress = stream.readString(exception);
-//            pmntAddress = stream.readString(exception);
+            btcAddress = stream.readString(exception);
+            ethAddress = stream.readString(exception);
+            pmntAddress = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
@@ -345,9 +345,9 @@ public class RPC {
             }
             photoURL.serializeToStream(stream);
             stream.writeBool(confirmed);
-//            stream.writeString(btcAddress);
-//            stream.writeString(ethAddress);
-//            stream.writeString(pmntAddress);
+            stream.writeString(btcAddress);
+            stream.writeString(ethAddress);
+            stream.writeString(pmntAddress);
         }
     }
 
@@ -387,9 +387,9 @@ public class RPC {
             photoURL = new RPC.PM_photoURL();
             photoURL.readParams(stream, exception);
             confirmed = stream.readBool(exception);
-//            btcAddress = stream.readString(exception);
-//            ethAddress = stream.readString(exception);
-//            pmntAddress = stream.readString(exception);
+            btcAddress = stream.readString(exception);
+            ethAddress = stream.readString(exception);
+            pmntAddress = stream.readString(exception);
         }
 
         public void serializeToStream(SerializableData stream) {
@@ -404,9 +404,9 @@ public class RPC {
             stream.writeByteArray(token);
             photoURL.serializeToStream(stream);
             stream.writeBool(confirmed);
-//            stream.writeString(btcAddress);
-//            stream.writeString(ethAddress);
-//            stream.writeString(pmntAddress);
+            stream.writeString(btcAddress);
+            stream.writeString(ethAddress);
+            stream.writeString(pmntAddress);
         }
     }
 

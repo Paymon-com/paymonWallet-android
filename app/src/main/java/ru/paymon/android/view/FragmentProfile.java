@@ -43,6 +43,9 @@ public class FragmentProfile extends Fragment {
 
         name.setText(Utils.formatUserName(User.currentUser));
         login.setText(String.format("@%s", User.currentUser.login));
+        publicAddressBTC.setText(User.currentUser.btcAddress);
+        publicAddressETH.setText(User.currentUser.ethAddress);
+        publicAddressPMNT.setText(User.currentUser.pmntAddress);
 
         if (publicAddressBTC.getText().toString().isEmpty())
             publicAddressBTC.setText(R.string.user_profile_not_specified);

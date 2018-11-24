@@ -43,7 +43,9 @@ public abstract class AppDatabase extends RoomDatabase {
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
         public void migrate(final SupportSQLiteDatabase database) {
-            database.execSQL("DROP TABLE UserObject");
+            database.execSQL("ALTER TABLE UserObject ADD pmntAddress VARCHAR(70)");
+            database.execSQL("ALTER TABLE UserObject ADD ethAddress VARCHAR(70)");
+            database.execSQL("ALTER TABLE UserObject ADD btcAddress VARCHAR(70)");
         }
     };
 }

@@ -80,6 +80,9 @@ public class FragmentProfileEdit extends Fragment {
         firstName.setText(User.currentUser.first_name);
         lastName.setText(User.currentUser.last_name);
         email.setText(User.currentUser.email != null ? User.currentUser.email : "");
+        publicAddressBTC.setText(User.currentUser.btcAddress);
+        publicAddressETH.setText(User.currentUser.ethAddress);
+        publicAddressPMNT.setText(User.currentUser.pmntAddress);
 
         deleteAvatar.setOnClickListener(v -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))

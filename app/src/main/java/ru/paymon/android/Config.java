@@ -9,7 +9,7 @@ public class Config {
     public static final boolean DEBUG = true;
 
     public static String HOST = "91.226.80.26";
-    public static short PORT = 7968;
+    public static short PORT = DEBUG ? 7966 : 7968;
 
     public static final String TAG = "paymon-dbg";
     public static final String VERSION_STRING = "1.00";
