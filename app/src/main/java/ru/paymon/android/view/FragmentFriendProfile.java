@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -112,7 +113,7 @@ public class FragmentFriendProfile extends Fragment {
                             bundle.putInt(CHAT_ID_KEY, userId);
                             Navigation.findNavController(getActivity(), R.id.nav_host_fragment).navigate(R.id.fragmentChat, bundle);
                         });
-
+                        Log.e("AAA", user.btcAddress + " QQ " + user.ethAddress + " QQ " + user.pmntAddress);
                         btcButton.setOnClickListener(v -> {
                             if (User.CLIENT_MONEY_BITCOIN_WALLET_PASSWORD == null) {
                                 Toast.makeText(ApplicationLoader.applicationContext, "Необходим BTC кошелек!", Toast.LENGTH_LONG).show();

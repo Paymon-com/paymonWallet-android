@@ -6,7 +6,7 @@ import java.util.HashSet;
 import java.util.Locale;
 
 public class Config {
-    public static final boolean DEBUG = true;
+    public static final boolean DEBUG = false;
 
     public static String HOST = "91.226.80.26";
     public static short PORT = DEBUG ? 7966 : 7968;

@@ -239,7 +239,9 @@ public class FragmentProfileEdit extends Fragment {
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(getContext(), R.style.AlertDialogCustom))
                                     .setMessage(getString(R.string.edit_profile_save_failed))
-                                    .setCancelable(false);
+                                    .setCancelable(true)
+                                    .setPositiveButton(getString(R.string.other_ok), (d, i) -> {
+                                    });
                             AlertDialog alertDialog = builder.create();
                             alertDialog.show();
                         });
