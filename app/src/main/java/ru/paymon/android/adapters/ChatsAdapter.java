@@ -105,11 +105,11 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
         void bind(ChatsItem chatsItem) {
             final String nameString = chatsItem.name != null ? chatsItem.name : "";
             final String lastMessageText = chatsItem.lastMessageText != null ? chatsItem.lastMessageText : "";
-            final String avatarPhotoURL = chatsItem.photoURL.url;
-
-            if (!avatarPhotoURL.isEmpty())
-                Utils.loadPhoto(avatarPhotoURL, avatar);
-
+            if (chatsItem.photoURL != null) {
+                final String avatarPhotoURL = chatsItem.photoURL.url;
+                if (!avatarPhotoURL.isEmpty())
+                    Utils.loadPhoto(avatarPhotoURL, avatar);
+            }
             name.setText(nameString);
             msg.setText(lastMessageText);
             time.setText(chatsItem.time != 0 ? Utils.formatDateTime(chatsItem.time, false) : "");
@@ -203,14 +203,19 @@ public class ChatsAdapter extends PagedListAdapter<ChatsItem, ChatsAdapter.BaseC
         void bind(ChatsItem chatsItem) {
             final String nameString = chatsItem.name != null ? chatsItem.name : "";
             final String lastMessageText = chatsItem.lastMessageText != null ? chatsItem.lastMessageText : "";
-            final String avatarPhotoURL = chatsItem.photoURL.url;
-            final String lastMessagePhotoURL = chatsItem.lastMsgPhotoURL == null ? "" : chatsItem.lastMsgPhotoURL.url;
+            if (chatsItem.photoURL != null) {
+                final String avatarPhotoURL = chatsItem.photoURL.url;
+                if (!avatarPhotoURL.isEmpty())
+                    Utils.loadPhoto(avatarPhotoURL, avatar);
+            }
 
-            if (!avatarPhotoURL.isEmpty())
-                Utils.loadPhoto(avatarPhotoURL, avatar);
+            if (chatsItem.lastMsgPhotoURL != null) {
+                final String lastMessagePhotoURL = chatsItem.lastMsgPhotoURL.url;
+                if (!lastMessagePhotoURL.isEmpty())
+                    Utils.loadPhoto(lastMessagePhotoURL, lastMshPhoto);
+            }
 
-            if (!lastMessagePhotoURL.isEmpty())
-                Utils.loadPhoto(lastMessagePhotoURL, lastMshPhoto);
+
 
             name.setText(nameString);
             msg.setText(lastMessageText);
