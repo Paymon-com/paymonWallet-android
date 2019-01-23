@@ -19,7 +19,7 @@ android {
         applicationId "ru.paymon.android.release"
         minSdkVersion 19
         targetSdkVersion 28
-        versionCode 56
+        versionCode 58
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         renderscriptTargetApi 19
