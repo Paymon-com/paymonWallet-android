@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.navigation.Navigation;
 import ru.paymon.android.R;
@@ -19,6 +20,12 @@ public class FragmentAgreement extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.agreement_layout, container, false);
+        TextView textAgreement = view.findViewById(R.id.agreement_text_view);
+
+        String firstPart = getString(R.string.other_agreements_part1);
+        String secondPart = getString(R.string.other_agreements_part2);
+
+        textAgreement.setText(firstPart + secondPart);
 
         final Button backToRegistration = view.findViewById(R.id.agreement_back_to_registration_button);
 

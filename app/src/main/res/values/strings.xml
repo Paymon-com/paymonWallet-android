@@ -244,7 +244,7 @@
     <string name="notification_type_file">File</string>
 
 
-    <string name="other_agreements">
+    <string name="other_agreements_part1">
 \n1. General Provisions
 \n
 \n1.1 Paymon LLC (hereinafter “Paymon”) offers the use of its services to the Internet User (hereinafter “User”) on the terms set forth in the User Agreement (hereinafter “Agreement”). The Agreement takes effect from the moment of the User’s consent to the provided agreement terms.
@@ -336,7 +336,10 @@
 \n5.4.4 To improve Service quality, usability, and develop new services
 \n
 \n5.4.5 To conduct statistical and other types of studies based оn anonymized data
-\n
+</string>
+
+    <string name="other_agreements_part2">
+        \n
 \n6. User’s Rights and Responsibilities
 \n
 \n6.1 Users have the right tо:
@@ -397,7 +400,7 @@
 \n
 \n9.3 The use of any information and/or materials (as well as downloadable software, letters, any instructions and guidance, etc.) the User accesses while using Paymon services is solely at the risk of the User, who is responsible for the potential consequences of using this information and/or materials, including damage it may cause to the computer of the User or third parties, data loss or other harm.
 \n
-\n9.4 Paymon is not responsible for any loss as a result of the User’s use оf Yandex services and particular service/service functions.
+\n9.4 Paymon is not responsible for any loss as a result of the User’s use оf Paymon services and particular service/service functions.
 \n
 \n9.5 In any circumstances, Paymon’s responsibility, in accordance with article 15 оf the Russian Civil Code, is limited to 10,000 (ten thousand) rubles of the Russian Federation and is imposed in cases of guilt.
 \n
@@ -418,7 +421,8 @@
 \n10.7 This Agreement has been prepared in the Russian language and may be given to the User in a foreign language in some cases. In case of discrepancies between the Russian version and the version in a foreign language, the provisions of the Russian language version shall apply.
 \n
 \n10.8 Any questions about this policy, the collection, use and disclosure of personal data, or the access to data required by law and subject to disclosure should be sent tо privacy@paymon.ru.
-</string>
+\n
+    </string>
 
     <string name="other_privacy_policy">
 \nPrivacy Policy
@@ -536,6 +540,7 @@
 \n9.2 The User may withdraw consent to personal data processing at any time by sending a request tо the Company’s email.
 \n
 \nPublication date: _____________________, 2018
+        \n
     </string>
 
     <string name="money_faq">
