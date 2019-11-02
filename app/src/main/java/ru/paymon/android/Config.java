@@ -8,7 +8,8 @@ import java.util.Locale;
 public class Config {
     public static final boolean DEBUG = false;
 
-    public static String HOST = "91.226.80.26";
+//    public static String HOST = "91.226.80.26";
+    public static String HOST = "185.41.160.122";
     public static short PORT = DEBUG ? 7966 : 7968;
 
     public static final String TAG = "paymon-dbg";
